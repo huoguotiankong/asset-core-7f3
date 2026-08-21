@@ -1,0 +1,55 @@
+/* 我的规则仓库 3.5.3-rc2 - Premium UI system */
+(function(R){
+R.friendlyError=function(e){
+ var s=String(e&&e.message||e||'');
+ if(!s)return'暂时不可用，请稍后重试';
+ if(/云端读取失败|manifest|network|timeout|HTTP|GitHub|Raw|jsDelivr/i.test(s))return'暂时无法连接云端，已优先保留本地可用数据';
+ if(/找不到函数|undefined|not a function/i.test(s))return'页面组件加载异常，请进入更新页重新加载当前测试版';
+ return'操作没有完成，请稍后重试';
+};
+R.compactInfo=function(title,desc,url){return{title:title,desc:desc||'',url:url||'hiker://empty',col_type:'text_1',extra:{lineVisible:false}};};
+R.primaryAction=function(title,url){return{title:title,url:url||'hiker://empty',col_type:'text_2',extra:{lineVisible:false}};};
+R.secondaryAction=function(title,url){return{title:title,url:url||'hiker://empty',col_type:'text_2',extra:{lineVisible:false}};};
+R.metricCard=function(title,value,view,active,key){return{title:(String(active)===String(view)?'● ':'')+title+' '+String(value),col_type:'text_4',url:$('#noLoading#').lazyRule(function(k,v){putMyVar(k,v);refreshPage(false);return'hiker://empty';},key,view),extra:{lineVisible:false}};};
+R.metricInfo=function(title,value){return{title:title+' '+String(value),col_type:'text_4',url:'hiker://empty',extra:{lineVisible:false}};};
+R.categoryTile=function(title,count,id,active,key){return{title:(String(active)===String(id)?'● ':'')+title+' '+String(count||0),col_type:'text_3',url:$('#noLoading#').lazyRule(function(k,v){putMyVar(k,v);if(k==='hc_repo_category'){clearMyVar('hc_repo_sub');clearMyVar('hc_repo_tag');}refreshPage(false);return'hiker://empty';},key,id),extra:{lineVisible:false}};};
+R.quickAction=function(title,icon,url){return{title:title,img:this.uiIcon(icon),pic_url:this.uiIcon(icon),url:url||'hiker://empty',col_type:'icon_4_card',extra:{lineVisible:false}};};
+R.safeDecodeKeyword=function(v){var s=String(v||'');try{return decodeURIComponent(s.replace(/\+/g,'%20'));}catch(e){return s;}};
+R.premiumStatusText=function(item){var s=this.displayStatus(item);if(item&&item.entryType==='channel-group')return'版本中心';return s==='有新版本'?'可更新':(s==='已导入'?'已记录':'未记录');};
+R.itemCard=function(item){
+ var group=item.entryType==='channel-group',st=this.premiumStatusText(item),fav=this.isFav(item),last=this.lastOpenedTime?this.lastOpenedTime(item):0,meta='',desc='',tags=[];
+ if(group){meta='正式版 / 测试版 · 版本中心';desc='统一管理版本、更新与恢复';}
+ else{meta=this.cleanVersion(item.version)+' · '+String(item.categoryName||'程序')+' · '+st;tags=(item.tags||[]).slice(0,3);desc=tags.length?tags.join(' / '):String(item.subCategory||item.desc||'');if(last)desc+=' · '+this.formatShortTime(last)+' 使用';}
+ var extra={lineVisible:false,pageTitle:item.name,hc_repo_item_id:item.id};
+ if(!group)extra.longClick=[
+  {title:'打开',js:$.toString(function(id){var r=$.require('hiker://page/ruleRepoCore'),x=r.findById(id);return x?r.openRule(x):'toast://程序不存在';},item.id)},
+  {title:st==='可更新'?'更新':'导入 / 覆盖',js:$.toString(function(raw){return $.require('hiker://page/ruleRepoCore').importRule(raw);},JSON.stringify(item.raw))},
+  {title:fav?'取消收藏':'收藏',js:$.toString(function(id){var r=$.require('hiker://page/ruleRepoCore'),x=r.findById(id);if(!x)return'toast://程序不存在';var on=r.toggleFav(x);refreshPage(false);return'toast://'+(on?'已收藏':'已取消收藏');},item.id)}
+ ];
+ return{title:(fav?'★ ':'')+item.name+(st==='可更新'?'  ↑':''),desc:meta+'\n'+desc,img:this.iconOf(item),pic_url:this.iconOf(item),url:'hiker://page/ruleRepoDetail?rule=&simple=true',col_type:'icon_1_left_pic',extra:extra};
+};
+R.channelMeta=function(parent){
+ var path=String(parent&&parent.channelsPath||parent&&parent.raw&&parent.raw.channelsPath||''),key=this.statePrefix+'channel_meta_'+String(parent&&parent.id||'default');
+ if(path){try{var x=JSON.parse(this.apiText(path));if(x&&Array.isArray(x.channels)&&x.channels.length){setItem(key,JSON.stringify(x));return x;}}catch(e){}}
+ try{var cached=JSON.parse(String(getItem(key,'')||''));if(cached&&Array.isArray(cached.channels)&&cached.channels.length)return cached;}catch(e){}
+ if(String(parent&&parent.id||'')==='rule-repo')return this.ruleRepoChannelFallback();
+ return null;
+};
+R.ruleRepoChannelFallback=function(){
+ var icon='https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg';
+ return{schema:4,id:'rule-repo',name:'我的规则仓库',updatedAt:'2026-08-21',channels:[
+  {channel:'stable',label:'正式版',id:'rule-repo',name:'我的规则仓库',version:'3.5.2',build:364,displayVersion:'Stable 3.5.2 · Build 364 · Shell 1.5.2',path:'apps/tools/rule-repo/rule_repo_remote_v352.txt',mode:'remote',updatedAt:'2026-08-21',recommended:true,desc:'已验证稳定 · 日常使用与测试版恢复入口',highlights:['稳定日常使用','安全同步与多镜像','测试异常可从正式版恢复'],icon:icon},
+  {channel:'test',label:'测试版',id:'rule-repo-test',name:'我的规则仓库·测试版',version:'3.5.3-rc2',baseVersion:'3.5.2',targetVersion:'3.5.3',build:367,displayVersion:'Test 3.5.3-rc2 · Build 367 · Shell 1.0.14',path:'apps/tools/rule-repo/rule_repo_test_v114.txt',mode:'remote',updatedAt:'2026-08-21',recommended:false,desc:'从 Stable 3.5.2 干净续线 · Premium UI 第二轮',highlights:['先完成 Stable 同基线对齐','首页与版本中心产品化','页面信息层级继续收敛'],icon:icon}
+ ]};
+};
+R.channelInstallRaw=function(parent,c){return{
+ id:String(c.id||''),name:String(c.name||parent.name||''),version:String(c.version||''),desc:String(c.desc||''),path:String(c.path||''),codec:String(c.codec||''),meta:String(c.meta||''),runtime:String(c.runtime||''),localTitle:String(c.localTitle||''),localRuleVersion:c.localRuleVersion,stripAuthor:!!c.stripAuthor,forcedTitle:String(c.forcedTitle||''),forcedRuleVersion:c.forcedRuleVersion,bytes:c.bytes,sha256:String(c.sha256||''),baseVersion:String(c.baseVersion||''),derivedFromChannel:String(c.derivedFromChannel||''),derivedFromVersion:String(c.derivedFromVersion||''),targetVersion:String(c.targetVersion||''),category:parent.category,categoryName:parent.categoryName,subCategory:parent.subCategory,tags:['版本',String(c.channel||'')==='stable'?'正式':(String(c.channel||'')==='test'?'测试':(String(c.channel||'')==='local'?'本地':'其它'))],mode:String(c.mode||'remote'),updatedAt:String(c.updatedAt||''),icon:String(c.icon||this.iconOf(parent)),openTitle:String(c.openTitle||c.name||parent.name||'')
+};};
+R.channelProductCard=function(parent,c,current){
+ var ch=String(c.channel||''),label=ch==='stable'?'正式版 · 推荐':(ch==='test'?'测试版 · 抢先体验':(ch==='local'?'本地版 · 独立安装':'版本')),raw=this.channelInstallRaw(parent,c),line=String(c.version||'');
+ if(current)line+=' · 当前运行';if(ch==='test'&&c.baseVersion)line+=' · 基于 '+String(c.baseVersion);if(ch==='local'&&c.baseVersion)line+=' · 基于 '+String(c.baseVersion);
+ var hl=Array.isArray(c.highlights)?c.highlights.slice(0,2):[],desc=line+'\n'+String(c.desc||'')+(hl.length?'\n'+hl.join(' · '):'');
+ return{title:label,desc:desc,img:String(c.icon||this.iconOf(parent)),pic_url:String(c.icon||this.iconOf(parent)),url:$('#noLoading#').lazyRule(function(x){return $.require('hiker://page/ruleRepoCore').importRule(x);},JSON.stringify(raw)),col_type:'icon_1_left_pic',extra:{lineVisible:false}};
+};
+R.premiumUiVersion='2.0.0';
+})(HikerRuleRepo);

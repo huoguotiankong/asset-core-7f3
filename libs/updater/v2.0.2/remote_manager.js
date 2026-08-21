@@ -1,4 +1,6 @@
-/* runtime Remote Module Manager v2.0.2 */
+/* hiker-cloud Remote Module Manager v2.0.2
+ * v2.0.2: metadata/module multi-mirror fallback + safe lazy callback support via serializable config.
+ */
 var HikerCloudRemote=(function(){
 var MANAGER_VERSION='2.0.2';
 var DEFAULT_TEMPLATES=[

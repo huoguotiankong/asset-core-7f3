@@ -1,0 +1,112 @@
+
+var JDB = {
+    version:'20260819-v3.0.9',
+    apiHost:'https://jdforrepam.com',
+    webHosts:['https://javdb.com','https://javdb521.com'],
+    middle:'lpw6vgqzsp',
+    suffix:'71cf27bb3c0bcdf207b64abecddc970098c7421ee7203b9cdae54478478a199e7d5a6e1a57691123c1a931c057842fb73ba3b3c83bcd69c17ccf174081e3d8aa',
+    uaApi:'Dart/3.5 (dart:io)',
+    uaWeb:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36',
+
+    md5:function(s){
+        let md=java.security.MessageDigest.getInstance('MD5');
+        let bs=md.digest(new java.lang.String(String(s)).getBytes('UTF-8'));
+        let sb=new java.lang.StringBuilder();
+        for(let i=0;i<bs.length;i++){
+            let v=bs[i]&255;
+            if(v<16)sb.append('0');
+            sb.append(java.lang.Integer.toHexString(v));
+        }
+        return String(sb.toString());
+    },
+    signature:function(){
+        let ts=Math.floor(new Date().getTime()/1000);
+        return ts+'.'+this.middle+'.'+this.md5(String(ts)+this.suffix);
+    },
+    qs:function(o){
+        let a=[];
+        Object.keys(o||{}).forEach(k=>{
+            let v=o[k];
+            if(v!==undefined&&v!==null&&String(v)!=='')a.push(encodeURIComponent(k)+'='+encodeURIComponent(String(v)));
+        });
+        return a.join('&');
+    },
+    api:function(path,params,opt){
+        opt=opt||{};
+        let url=this.apiHost+path;
+        let q=this.qs(params||{});
+        if(q)url+=(url.indexOf('?')>=0?'&':'?')+q;
+        let headers={
+            'jdsignature':this.signature(),
+            'user-agent':this.uaApi,
+            'accept':'application/json',
+            'accept-language':'zh-TW'
+        };
+        let token=getItem('jdb3_token','');
+        if(token)headers['authorization']=token;
+        let txt=fetch(url,{headers:headers,timeout:12000});
+        let j=JSON.parse(txt);
+        if(j&&j.success===1)return j.data||{};
+        let act=(j&&j.action)||'APIError', msg=(j&&j.message)||'接口返回异常';
+        throw new Error(act+': '+msg);
+    },
+    apiSafe:function(path,params){
+        try{return {ok:true,data:this.api(path,params||{})};}
+        catch(e){return {ok:false,error:String(e.message||e)};}
+    },
+    clean:function(v){
+        return String(v==null?'':v).replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+    },
+    mask:function(v){
+        let s=this.clean(v);
+        try{
+            let p=decodeURIComponent('%E6%97%A0%E7%A0%81|%E4%B9%B1%E4%BC%A6|%E8%B0%83%E6%95%99|%E5%BC%BA%E5%A5%B8|%E6%80%A7%E7%88%B1|%E6%B7%AB|%E5%86%85%E5%B0%84|%E9%A2%9C%E5%B0%84|%E6%BD%AE%E5%90%B9|%E5%8F%A3%E4%BA%A4|%E8%82%9B%E4%BA%A4|%E8%90%9D%E8%8E%89|%E5%B0%91%E5%A6%87|%E4%BA%BA%E5%A6%BB');
+            return s.replace(new RegExp(p,'g'),m=>Array.from(m).join('\u200B'));
+        }catch(e){return s;}
+    },
+    img:function(u){
+        u=String(u||'').replace(/&amp;/g,'&').trim();
+        if(!u)return '';
+        if(u.indexOf('//')===0)u='https:'+u;
+        else if(u.charAt(0)==='/')u=this.apiHost+u;
+        else if(!/^https?:\/\//i.test(u)&&/^[\w.-]+\//.test(u))u='https://'+u;
+        u=u.replace(/@Referer=.*$/,'');
+        return u+'@Referer=https://javdb.com/';
+    },
+    section:function(t,s){
+        return {title:'▌ '+this.mask(t)+(s?'  '+this.mask(s):''),url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}};
+    },
+    nav:function(d,title,id){
+        let now=getMyVar('jdb3_nav','首页'),on=now===id;
+        d.push({
+            title:on?'““””<b><font color=#FFFFFF>'+title+'</font></b>':title,
+            url:$('#noLoading#').lazyRule((id)=>{putMyVar('jdb3_nav',id);refreshPage(false);return'hiker://empty';},id),
+            col_type:'scroll_button',
+            extra:{backgroundColor:on?'#3BB273':'#08777785',lineVisible:false}
+        });
+    },
+    movieObj:function(x){
+        x=x||{};
+        return {
+            id:String(x.id||''),
+            number:this.mask(x.number||''),
+            title:this.mask(x.title||x.origin_title||x.number||'未命名'),
+            origin:this.mask(x.origin_title||''),
+            img:this.img(x.thumb_url||x.cover_url||''),
+            thumb:this.img(x.thumb_url||x.cover_url||''),
+            cover:this.img(x.cover_url||x.thumb_url||''),
+            duration:x.duration||0,
+            score:x.score||x.rate||'',
+            date:x.release_date||'',
+            magnets:x.magnets_count||0,
+            canPlay:!!x.can_play,
+            cnsub:!!x.has_cnsub,
+            preview:!!x.has_preview_images,
+            previewVideo:!!x.has_preview_video
+        };
+    },
+    movieCard:function(x,col){
+        let m=this.movieObj(x);
+        let meta=[];
+        if(m.number)meta.push(m.number);
+        if(m.date)

@@ -1,0 +1,275 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.4-rc6",
+  "build": 383,
+  "ref": "main",
+  "baseStable": {
+    "version": "3.5.3",
+    "build": 377,
+    "release": "apps/tools/rule-repo/releases/3.5.3/release.json"
+  },
+  "modules": [
+    {
+      "name": "repository",
+      "path": "apps/tools/rule-repo/releases/3.4.1/repository.js"
+    },
+    {
+      "name": "filter",
+      "path": "apps/tools/rule-repo/releases/3.4.0/filter.js"
+    },
+    {
+      "name": "stabilityPatch",
+      "path": "apps/tools/rule-repo/releases/3.4.3/stability_patch.js"
+    },
+    {
+      "name": "testStatePatch",
+      "path": "apps/tools/rule-repo/test/v1.0.0/state_patch.js"
+    },
+    {
+      "name": "management",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc1/management.js"
+    },
+    {
+      "name": "taxonomyPatch",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"
+    },
+    {
+      "name": "repositoryPatch",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"
+    },
+    {
+      "name": "repositoryResilience",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc8/repository_resilience.js"
+    },
+    {
+      "name": "productState",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"
+    },
+    {
+      "name": "design",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc6/design.js"
+    },
+    {
+      "name": "ui",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc6/ui.js"
+    },
+    {
+      "name": "uiFoundation",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc9/ui_foundation.js"
+    },
+    {
+      "name": "channelLocalPatch",
+      "path": "apps/tools/rule-repo/releases/3.5.2/channel_local_patch.js"
+    },
+    {
+      "name": "installProbe",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc5/install_probe.js"
+    },
+    {
+      "name": "premiumUi",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc5/premium_ui.js"
+    },
+    {
+      "name": "productUi4",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc6/product_ui4.js"
+    },
+    {
+      "name": "nativeUi5",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc7/native_ui5.js"
+    },
+    {
+      "name": "visualDensity",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc8/visual_density.js"
+    },
+    {
+      "name": "workspaceHome7",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc10/workspace_home7.js"
+    },
+    {
+      "name": "category",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc8/category.js"
+    },
+    {
+      "name": "search",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc7/search.js"
+    },
+    {
+      "name": "updates",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc7/updates.js"
+    },
+    {
+      "name": "detail",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc7/detail.js"
+    },
+    {
+      "name": "channelPage",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc8/channel_page.js"
+    },
+    {
+      "name": "history",
+      "path": "apps/tools/rule-repo/releases/3.5.0-rc5/history.js"
+    },
+    {
+      "name": "settings",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc7/settings.js"
+    },
+    {
+      "name": "aboutPatch",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc9/about_patch.js"
+    },
+    {
+      "name": "nativeProduct8",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc11/native_product8.js"
+    },
+    {
+      "name": "stableRuntimeContract",
+      "path": "apps/tools/rule-repo/releases/3.5.3-rc11/runtime_contract.js"
+    },
+    {
+      "name": "stablePatch",
+      "path": "apps/tools/rule-repo/releases/3.5.3/stable_patch.js"
+    },
+    {
+      "name": "nativeProduct9",
+      "path": "apps/tools/rule-repo/releases/3.5.4-rc1/native_product9.js"
+    },
+    {
+      "name": "productWorkspace10",
+      "path": "apps/tools/rule-repo/releases/3.5.4-rc2/product_workspace10.js"
+    },
+    {
+      "name": "singleWorkspace13_1",
+      "path": "apps/tools/rule-repo/releases/3.5.4-rc6/single_workspace13_1.js"
+    },
+    {
+      "name": "runtimeContract",
+      "path": "apps/tools/rule-repo/releases/3.5.4-rc6/runtime_contract.js"
+    },
+    {
+      "name": "candidatePatch",
+      "path": "apps/tools/rule-repo/releases/3.5.4-rc6/candidate_patch.js"
+    }
+  ],
+  "contract": {
+    "requiredFunctions": [
+      "home",
+      "categoryPage",
+      "searchPage",
+      "updatesPage",
+      "detailPage",
+      "channelPage",
+      "historyPage",
+      "settingsPage",
+      "aboutPage",
+      "pushNav",
+      "pushSection",
+      "pushSpacer",
+      "pushEmpty",
+      "formatTime",
+      "scopeChip",
+      "itemCard",
+      "selectCard",
+      "recentTile",
+      "actionIcon",
+      "hero",
+      "friendlyError",
+      "compactInfo",
+      "primaryAction",
+      "secondaryAction",
+      "sectionLine",
+      "programLine",
+      "metricCard",
+      "metricInfo",
+      "categoryTile",
+      "quickAction",
+      "quickAction5",
+      "sectionToolbar",
+      "safeDecodeKeyword",
+      "premiumStatusText",
+      "statusLabel",
+      "tagChip",
+      "pushProgram",
+      "categorySplitCell",
+      "channelMeta",
+      "ruleRepoChannelFallback",
+      "channelInstallRaw",
+      "channelProductCard",
+      "pushChannelBlock",
+      "installProbeEnabled",
+      "rulePresence",
+      "actualStatus",
+      "actualInstalled",
+      "clearPresenceCache",
+      "syncManifest",
+      "manifest",
+      "items",
+      "findById",
+      "importRule",
+      "productStatusShort",
+      "infoPair",
+      "sectionTitlePair",
+      "selectRoute",
+      "inputRoute",
+      "uiIconState",
+      "infoRow",
+      "nativeHtml",
+      "nativeVersionText",
+      "nativeStatusMeta",
+      "nativeStatusRich",
+      "nativeProgramSummary",
+      "nativeProgramTags",
+      "nativeProgramMetaRow",
+      "nativeProgramCard",
+      "nativeDigitArt",
+      "nativeMetricArt",
+      "nativeMetaIndent",
+      "nativeCategories",
+      "nativeCategoryTab",
+      "nativeHomeItems",
+      "nativeTool",
+      "nativeTransparentIcon",
+      "nativePaneCell",
+      "nativeEmptyPaneCell",
+      "nativeCategoryTree",
+      "nativeDetailTagRow",
+      "nativeChannelCard",
+      "nativeSearchScope",
+      "nativeSearchMenu",
+      "workspaceMetricDigit",
+      "workspaceScopeCard",
+      "workspaceMainCategoryRow",
+      "workspaceSubCategoryRow",
+      "workspaceSettingCard",
+      "hybridCanWeb",
+      "hybridRuleName",
+      "hybridJson",
+      "hybridDataUrl",
+      "hybridWebItem",
+      "hybridProgramData",
+      "hybridPrograms",
+      "hybridBaseCss",
+      "hybridCommonScript",
+      "hybridBottomNav",
+      "hybridDocument",
+      "hybridHomeHtml",
+      "hybridCategoryHtml",
+      "hybridSearchHtml",
+      "workspaceActionUrl",
+      "workspaceAction",
+      "workspaceChannelData",
+      "workspaceStaticActions",
+      "workspaceData",
+      "workspaceClient",
+      "workspaceHtml",
+      "workspacePage"
+    ]
+  },
+  "verify": {
+    "global": "HikerRuleRepo",
+    "property": "version",
+    "equals": "3.5.4-rc6"
+  },
+  "notes": "3.5.4-rc6 Single Workspace 13.1：修复网页工作台动态动作仍使用 #noLoading# 导致 parseLazyRule 被 HTTP 层拒绝的问题，所有导入、检查、收藏、同步与记录动作统一改用合法 HTTPS 基址；导入口令只交给官方 importRule 接口，并对 toast、copy、confirm 与未知返回值分流防错。首页移除“继续使用”，压缩头部与统计区，把高度优先留给可独立滚动的“我的程序”。Stable 3.5.3 保持隔离。"
+}

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.4.2",
+  "build": 142,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"acfun_core_v018.js"},
+    {"name":"protocol","path":"acfun_patch_v019.js"},
+    {"name":"instant-ui","path":"acfun_ui_v042.js"}
+  ],
+  "verify": {"global":"ac","property":"build","equals":"2026.08.20-v0.4.2"}
+}

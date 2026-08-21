@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "0.5.0-rc2",
+  "build": 151,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"acfun_core_v018.js"},
+    {"name":"protocol","path":"acfun_patch_v019.js"},
+    {"name":"instant-ui","path":"acfun_ui_v042.js"},
+    {"name":"functional-fix","path":"acfun_fix_v043.js"},
+    {"name":"fast-playback","path":"acfun_fix_v045.js"},
+    {"name":"app-source-taxonomy-comics-short","path":"apps/video/acfun/acfun_fix_v047.js"},
+    {"name":"apk197-tags","path":"apps/video/acfun/acfun_fix_v048.js"},
+    {"name":"release-repair","path":"apps/video/acfun/acfun_fix_v049.js"},
+    {"name":"native-ui-rc1","path":"apps/video/acfun/acfun_ui_v050_rc1.js"},
+    {"name":"native-ui-rc2-polish","path":"apps/video/acfun/acfun_ui_v050_rc2.js"}
+  ],
+  "verify": {"global":"ac","property":"build","equals":"2026.08.21-v0.5.0-rc2"}
+}

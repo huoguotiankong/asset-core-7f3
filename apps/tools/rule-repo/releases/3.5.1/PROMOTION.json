@@ -1,0 +1,9 @@
+{
+  "sourceCandidate": "3.5.0-rc9",
+  "sourceBuild": 359,
+  "sourceTestStatus": "passed",
+  "stableVersion": "3.5.1",
+  "stableBuild": 360,
+  "promotedAt": "2026-08-20T17:47:00+08:00",
+  "reason": "RC9 已完成海阔实机恢复验证；正式版需要恢复正式/测试双版本入口，作为测试版故障时的固定恢复入口。"
+}

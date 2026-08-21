@@ -5,5 +5,6 @@
   "version": "3.5.3",
   "build": 377,
   "release": "apps/tools/rule-repo/releases/3.5.3/release.json",
-  "notes": "Stable 3.5.3 Build 377"
+  "notes": "Stable 3.5.3 Build 377：由实机验证的 3.5.3-rc11 晋级，带来 Native Product 8.0 首页、分类、程序详情和版本中心，并保留安全同步与恢复能力。",
+  "changelog": "apps/tools/rule-repo/CHANGELOG.md"
 }

@@ -1,0 +1,30 @@
+{
+  "schema": 3,
+  "id": "acfun",
+  "name": "ACFun",
+  "category": "video",
+  "mode": "remote-module",
+  "shellVersion": "5.11.3",
+  "bootstrap": "apps/video/acfun/bootstrap_v5.js",
+  "latest": "apps/video/acfun/latest.json",
+  "stable": "apps/video/acfun/stable.json",
+  "candidate": "apps/video/acfun/candidate.json",
+  "test": "apps/video/acfun/test.json",
+  "channels": "apps/video/acfun/channels.json",
+  "defaultVersion": "0.4.9",
+  "defaultBuild": 149,
+  "rule": "apps/video/acfun/acfun_remote_v5.txt",
+  "testVersion": "0.6.0-alpha5",
+  "testBuild": 156,
+  "testShellVersion": "6.1.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v061.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v061.txt",
+  "imageDecoderPage": "acfunImageDecoder",
+  "migration": {
+    "stage": "stable-test-cloud-shell-recovery-v61",
+    "legacyRule": "acfun_v019.txt",
+    "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
+    "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。用户实机确认旧 Test Shell 仍固定 Alpha2，且程序内更新因不存在的 manager() 报错；Test/Candidate 因此新建 0.6.0-alpha5 Build156 / Shell6.1，使用全新 Bootstrap URL、规则壳数字 version 与云端仓库入口，导入后 minBuild=156 强制迁移到 Alpha5。Alpha5 继承 Alpha4 的视频搜索、漫画详情/阅读、递归分类、短视频、社区、小说与有声资源恢复；正式 latest.json 不变。"
+  }
+}

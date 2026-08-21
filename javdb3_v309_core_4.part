@@ -1,0 +1,65 @@
+.movie_filter_by='all';}
+        let r=this.apiSafe('/api/v2/search',params);
+        if(!r.ok){d.push({title:'搜索失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        if(type==='movie'||type==='code'){
+            let list=r.data.movies||[];
+            list.forEach(x=>d.push(this.movieCard(x,'movie_2')));
+            if(!list.length&&type==='code'&&r.data.codes){
+                (r.data.codes||[]).forEach(x=>d.push({title:this.mask(x.number||x.name||kw),desc:'番号',url:$('#noLoading#').lazyRule((q)=>{putMyVar('jdb3_kw',q);putMyVar('jdb3_search_type','movie');refreshPage(false);return'hiker://empty';},x.number||x.name||kw),col_type:'text_1'}));
+            }
+        }else{
+            let key=type==='actor'?'actors':type==='series'?'series':type==='maker'?'makers':'directors';
+            (r.data[key]||[]).forEach(x=>{
+                let title=this.mask(x.name||x.name_zht||x.title||'未命名'),img=x.avatar_url||x.cover_url||'';
+                d.push({title:title,desc:(x.videos_count!=null?'作品 '+x.videos_count:''),pic_url:this.img(img),img:this.img(img),url:'hiker://page/javdb3Entity?rule=&simple=true',col_type:'movie_1_left_pic',extra:{jdb3_entity_type:type,jdb3_entity_id:String(x.id||''),pageTitle:title}});
+            });
+        }
+        setResult(d);
+    },
+
+    detail:function(){
+        let d=[],id=(MY_PARAMS&&MY_PARAMS.jdb3_id)||'';
+        let r=this.apiSafe('/api/v4/movies/'+encodeURIComponent(id),{});
+        if(!r.ok){setPageTitle('详情');d.push({title:'App API 详情失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let x=r.data.movie||r.data,m=this.movieObj(x);
+        setPageTitle(m.number||m.title);
+        this.saveLocal('jdb3_history',{id:m.id,title:m.title,number:m.number,img:m.img,date:m.date},120);
+        let meta=[m.number,m.date,m.duration?m.duration+' 分钟':'',m.score?'★'+m.score:''].filter(Boolean).join(' · ');
+        d.push({title:m.title,desc:meta,pic_url:m.cover,img:m.cover,url:'hiker://empty',col_type:'movie_1_left_pic',extra:{lineVisible:false}});
+        let local={id:m.id,title:m.title,number:m.number,img:m.cover||m.img,date:m.date};
+        d.push({title:this.isFav(m.id)?'❤ 已收藏':'♡ 收藏',url:$('#noLoading#').lazyRule((o)=>{eval(fetch('hiker://files/rules/JavDB3/javdb3_core.js'));let on=JDB.toggleFav(o);refreshPage(false);return'toast://'+(on?'已收藏':'已取消');},local),col_type:'text_3',extra:{lineVisible:false}});
+        d.push({title:'🧲 磁链',url:'hiker://page/javdb3Magnets?rule=&simple=true',col_type:'text_3',extra:{jdb3_id:m.id,pageTitle:'磁链'}});
+        d.push({title:'💬 评论',url:'hiker://page/javdb3Reviews?rule=&simple=true',col_type:'text_3',extra:{jdb3_id:m.id,pageTitle:'评论'}});
+        let desc=this.mask(x.description||x.storyline||'');
+        if(desc){d.push(this.section('简介',''));d.push({title:desc,url:'hiker://empty',col_type:'long_text',extra:{lineVisible:false}});}
+        let actors=x.actors||[];
+        if(actors.length){
+            d.push(this.section('演员',actors.length+' 位'));
+            actors.forEach(a=>d.push({title:this.mask(a.name||a.name_zht||''),pic_url:this.img(a.avatar_url||''),img:this.img(a.avatar_url||''),url:'hiker://page/javdb3Entity?rule=&simple=true',col_type:'avatar',extra:{jdb3_entity_type:'actor',jdb3_entity_id:String(a.id||''),pageTitle:this.mask(a.name||a.name_zht||'演员')}}));
+        }
+        let tags=x.tags||[];
+        if(tags.length){
+            d.push(this.section('标签',''));
+            tags.slice(0,30).forEach(t=>d.push({title:this.mask(t.name||t),url:'hiker://empty',col_type:'scroll_button'}));
+        }
+        let previews=x.preview_images||m.preview_images||[];
+        if(previews&&previews.length){
+            d.push(this.section('预览图',previews.length+' 张'));
+            previews.slice(0,12).forEach(p=>{
+                let u=this.img(p.large_url||p.thumb_url||p);
+                d.push({title:'',pic_url:u,img:u,url:'pics://'+u,col_type:'pic_3',extra:{lineVisible:false}});
+            });
+            d.push({title:'查看全部预览图',url:'hiker://page/javdb3Preview?rule=&simple=true',col_type:'text_center_1',extra:{jdb3_id:m.id,pageTitle:'预览图'}});
+        }
+        let rel=this.apiSafe('/api/v1/movies/may_also_like',{movie_id:m.id});
+        if(rel.ok&&(rel.data.movies||[]).length){
+            d.push(this.section('相关推荐',''));
+            (rel.data.movies||[]).slice(0,9).forEach(v=>d.push(this.movieCard(v,'movie_3')));
+        }
+        setResult(d);
+    },
+
+    magnets:function(){
+        setPageTitle('磁链');let d=[],id=(MY_PARAMS&&MY_PARAMS.jdb3_id)||'',r=this.apiSafe('/api/v1/movies/'+encodeURIComponent(id)+'/magnets',{});
+        if(!r.ok){d.push({title:'磁链加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let list=r.data.magnet

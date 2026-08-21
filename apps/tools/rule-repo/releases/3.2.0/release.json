@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.2.0",
+  "build": 320,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.2.0/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.2.0/filter.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.2.0/home.js"},
+    {"name":"pages","path":"apps/tools/rule-repo/releases/3.2.0/pages.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.2.0"},
+  "notes": "极简专业风：首页只保留总览、搜索、状态、一级分类和程序卡片；高级筛选独立成页。"
+}

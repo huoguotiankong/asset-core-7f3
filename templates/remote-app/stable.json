@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "example-app",
+  "version": "1.0.0",
+  "build": 100,
+  "release": "apps/<category>/<app>/releases/1.0.0/release.json",
+  "promotedAt": "",
+  "notes": "Only promote after Release Guard passes and real-device smoke test succeeds."
+}

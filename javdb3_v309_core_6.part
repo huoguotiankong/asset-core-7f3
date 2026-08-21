@@ -1,0 +1,47 @@
+.name||a.name_zht||''),desc:a.videos_count!=null?'作品 '+a.videos_count:'',pic_url:this.img(a.avatar_url||''),img:this.img(a.avatar_url||''),url:'hiker://page/javdb3Entity?rule=&simple=true',col_type:'movie_3',extra:{jdb3_entity_type:'actor',jdb3_entity_id:String(a.id||''),pageTitle:this.mask(a.name||'演员')}}));
+    },
+    localHub:function(d){
+        let tab=getMyVar('jdb3_local_tab','收藏');
+        ['收藏','历史'].forEach(t=>{let on=tab===t;d.push({title:on?'““””<b><font color=#FFFFFF>'+t+'</font></b>':t,url:$('#noLoading#').lazyRule((v)=>{putMyVar('jdb3_local_tab',v);refreshPage(false);return'hiker://empty';},t),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});});
+        let a=tab==='收藏'?this.localArray('jdb3_favs'):this.localArray('jdb3_history');
+        d.push(this.section(tab,a.length+' 条'));
+        a.forEach(x=>d.push(this.movieCard({id:x.id,title:x.title,number:x.number,cover_url:x.img,release_date:x.date},'movie_2')));
+        if(!a.length)d.push({title:'暂无'+tab,url:'hiker://empty',col_type:'text_center_1'});
+    },
+    settings:function(d){
+        d.push(this.section('设置',''));
+        d.push({title:'API 状态',desc:this.apiHost,url:'hiker://page/javdb3Status?rule=&simple=true',col_type:'text_1'});
+        d.push({title:'网页兜底域名',desc:this.webHost(),url:$('#noLoading#').lazyRule(()=>{
+            let ops=['https://javdb.com','https://javdb521.com'];return $(ops,1,'网页域名').select(()=>{setItem('jdb3_web_host',input);refreshPage(false);return'toast://已切换';});
+        }),col_type:'text_1'});
+        d.push({title:'清空本地历史',url:$('#noLoading#').lazyRule(()=>{setItem('jdb3_history','[]');refreshPage(false);return'toast://已清空';}),col_type:'text_1'});
+        d.push({title:'清空本地收藏',url:$('#noLoading#').lazyRule(()=>{setItem('jdb3_favs','[]');refreshPage(false);return'toast://已清空';}),col_type:'text_1'});
+        d.push({title:'账号 Token（预留）',desc:getItem('jdb3_token','')?'已配置':'未配置 · v3.0 暂不自动登录',url:$('粘贴 JavDB App token',getItem('jdb3_token','')).input((v)=>{v=String(v||'').trim();if(v)setItem('jdb3_token',v);else clearItem('jdb3_token');refreshPage(false);return'toast://已保存';}),col_type:'text_1'});
+        d.push({title:'版本',desc:this.version+'\nApp API 优先 + 网页兜底；不依赖 Apollo。',url:'hiker://empty',col_type:'long_text'});
+    },
+    status:function(){
+        setPageTitle('JavDB API 状态');let d=[];
+        let tests=[
+            ['启动接口','/api/v1/startup',{}],
+            ['最新影片','/api/v1/movies/latest',{page:1,limit:2,filter_by:'all'}],
+            ['搜索','/api/v2/search',{q:'IPZZ',page:1,type:'movie'}],
+            ['标签','/api/v2/tags',{type:0}]
+        ];
+        tests.forEach(t=>{
+            let st=new Date().getTime(),r=this.apiSafe(t[1],t[2]),cost=new Date().getTime()-st;
+            d.push({title:(r.ok?'✅ ':'❌ ')+t[0],desc:(r.ok?'正常':'失败：'+r.error)+' · '+cost+'ms',url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}});
+        });
+        let im=this.apiSafe('/api/v1/movies/latest',{page:1,limit:1,filter_by:'all'});
+        if(im.ok&&(im.data.movies||[]).length){
+            let one=im.data.movies[0]||{};
+            d.push({
+                title:'图片字段诊断',
+                desc:'cover_url: '+String(one.cover_url||'')+'\\nthumb_url: '+String(one.thumb_url||'')+'\\n处理后: '+this.img(one.cover_url||one.thumb_url||''),
+                url:'hiker://empty',
+                col_type:'long_text'
+            });
+        }
+        d.push({title:'签名说明',desc:'jdsignature = timestamp.lpw6vgqzsp.md5(timestamp + APK suffix)\\n当前常量来自 jdb_official_v1.9.35.apk。',url:'hiker://empty',col_type:'long_text'});
+        setResult(d);
+    }
+};

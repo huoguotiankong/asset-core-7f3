@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.0-rc5",
+  "build": 354,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"testStatePatch","path":"apps/tools/rule-repo/test/v1.0.0/state_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"productState","path":"apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"},
+    {"name":"uiBase","path":"apps/tools/rule-repo/releases/3.5.0-rc1/ui.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc5/ui.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc5/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc5/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.5.0-rc5/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc5/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc5/detail.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.5.0-rc5/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc5/settings.js"},
+    {"name":"candidatePatch","path":"apps/tools/rule-repo/releases/3.5.0-rc5/candidate_patch.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.0-rc5"},
+  "notes": "Test RC5：与 Stable 持久状态隔离；用于验证产品化首页、最近使用、收藏快捷入口、活动记录、聚焦搜索与新版版本中心。"
+}

@@ -1,0 +1,21 @@
+/* 我的规则仓库 3.5.3-rc3 - native split category center */
+(function(R){
+R.categoryPage=function(){
+ setPageTitle('分类管理');var d=[],items;try{items=this.items(false);}catch(e){setResult([{title:'暂时无法读取分类',desc:this.friendlyError(e),url:'hiker://page/ruleRepoHome?rule=&simple=true',col_type:'text_center_1',extra:{lineVisible:false}}]);return;}
+ var state=this.filterState(),advanced=String(getMyVar('hc_repo_category_advanced','0'))==='1',batch=this.batchMode();this.pushNav(d,'category');
+ this.pushSpacer(d);d.push({title:'主分类',col_type:'text_2',url:'hiker://empty',extra:{lineVisible:false,textAlign:'left'}});d.push({title:'子分类',col_type:'text_2',url:'hiker://empty',extra:{lineVisible:false,textAlign:'left'}});
+ var cats=this.categories(items),subs=this.subCategories(items,state.category),rows=Math.max(cats.length,subs.length),i;
+ for(i=0;i<rows;i++){
+  if(i<cats.length)d.push(this.categorySplitCell(cats[i].name+'  '+cats[i].count,cats[i].id,state.category,'hc_repo_category',true));else d.push({title:'',col_type:'text_2',url:'hiker://empty',extra:{lineVisible:false}});
+  if(i<subs.length)d.push(this.categorySplitCell(subs[i].name+'  '+subs[i].count,subs[i].id,state.subCategory,'hc_repo_sub',false));else d.push({title:'',col_type:'text_2',url:'hiker://empty',extra:{lineVisible:false}});
+ }
+ this.pushSpacer(d);d.push({title:advanced?'收起高级筛选':'高级筛选',url:$('#noLoading#').lazyRule(function(){var on=String(getMyVar('hc_repo_category_advanced','0'))==='1';putMyVar('hc_repo_category_advanced',on?'0':'1');refreshPage(false);return'hiker://empty';}),col_type:'text_2',extra:{lineVisible:false}});d.push({title:'重置筛选',url:$('#noLoading#').lazyRule(function(){var r=$.require('hiker://page/ruleRepoCore');r.clearAllFilters();clearMyVar('hc_repo_category_advanced');r.clearSelection();r.setBatchMode(false);refreshPage(false);return'toast://筛选已重置';}),col_type:'text_2',extra:{lineVisible:false}});
+ if(advanced){
+  var fresh=this.filterState(),tags=this.tagsFor(items,fresh);this.pushSpacer(d);this.pushSection(d,'能力标签','按功能继续缩小范围');d.push(this.scopeChip('全部','all',fresh.tag,'hc_repo_tag'));for(var t=0;t<Math.min(tags.length,10);t++)d.push(this.scopeChip(tags[t].name+' '+tags[t].count,tags[t].name,fresh.tag,'hc_repo_tag'));
+  this.pushSpacer(d);this.pushSection(d,'运行方式','');d.push(this.scopeChip('全部','all',fresh.mode,'hc_repo_mode'));d.push(this.scopeChip('远程','remote',fresh.mode,'hc_repo_mode'));d.push(this.scopeChip('本地','local',fresh.mode,'hc_repo_mode'));
+  this.pushSpacer(d);this.pushSection(d,'排序与管理','');[['默认','default'],['最近更新','updated'],['名称','name'],['版本','version']].forEach(function(x){d.push(R.scopeChip(x[0],x[1],fresh.sort,'hc_repo_sort'));});d.push({title:batch?'退出批量':'批量管理',url:$('#noLoading#').lazyRule(function(){var r=$.require('hiker://page/ruleRepoCore');r.setBatchMode(!r.batchMode());refreshPage(false);return'hiker://empty';}),col_type:'flex_button',extra:{lineVisible:false}});
+ }
+ var current=this.filterState(),result=this.applyFilters(items,current);if(batch){this.pushSpacer(d);this.pushSection(d,'批量管理','已选择 '+this.selectedIds().length+' 个');d.push({title:'收藏',url:$('#noLoading#').lazyRule(function(){var r=$.require('hiker://page/ruleRepoCore'),n=r.batchFavorite(true);refreshPage(false);return'toast://已处理 '+n+' 项';}),col_type:'text_3'});d.push({title:'取消收藏',url:$('#noLoading#').lazyRule(function(){var r=$.require('hiker://page/ruleRepoCore'),n=r.batchFavorite(false);refreshPage(false);return'toast://已处理 '+n+' 项';}),col_type:'text_3'});d.push({title:'清空选择',url:$('#noLoading#').lazyRule(function(){var r=$.require('hiker://page/ruleRepoCore');r.clearSelection();refreshPage(false);return'toast://已清空';}),col_type:'text_3'});}
+ this.pushSpacer(d);this.pushSection(d,'分类结果','共 '+result.length+' 个 · '+this.filterSummary(current));result.forEach(function(x){d.push(batch?R.selectCard(x):R.itemCard(x));});if(!result.length)this.pushEmpty(d,'没有匹配程序','调整分类或重置筛选后再试。');setResult(d);
+};
+})(HikerRuleRepo);

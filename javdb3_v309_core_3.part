@@ -1,0 +1,56 @@
+      });
+            ['可播放','磁链','字幕','预览图','预览视频'].forEach((t,i)=>{
+                let mains=['p','m','c','i','v'],type=getMyVar('jdb3_type','0'),cur=getMyVar('jdb3_main','p'),on=cur===mains[i];
+                d.push({title:on?'““””<b><font color=#FFFFFF>'+t+'</font></b>':t,url:$('#noLoading#').lazyRule((v)=>{putMyVar('jdb3_main',v);let type=getMyVar('jdb3_type','0');putMyVar('jdb3_filter',type+':t:'+v+'::::');refreshPage(false);return'hiker://empty';},mains[i]),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});
+            });
+            d.push({title:'高级标签',desc:'读取 App /api/v2/tags 动态标签',url:'hiker://page/javdb3Filters?rule=&simple=true',col_type:'text_2',extra:{lineVisible:false}});
+            d.push({title:'排序',desc:getMyVar('jdb3_sort','release desc'),url:$('#noLoading#').lazyRule(()=>{
+                let ops=['release desc','release asc','update desc','score desc','hit desc'];
+                return $(ops,1,'排序').select(()=>{putMyVar('jdb3_sort',input);refreshPage(false);return'hiker://empty';});
+            }),col_type:'text_2',extra:{lineVisible:false}});
+            d.push({col_type:'blank_block'});
+        }
+        let sp=getMyVar('jdb3_sort','release desc').split(' '),filter=getMyVar('jdb3_filter',getMyVar('jdb3_type','0')+':t:'+getMyVar('jdb3_main','p')+'::::');
+        let r=this.apiSafe('/api/v1/movies/tags',{filter_by:filter,sort_by:sp[0],order_by:sp[1]||'desc',page:page,limit:48});
+        if(!r.ok){if(page===1)d.push({title:'分类 API 失败',desc:r.error,url:'hiker://page/javdb3Status?rule=&simple=true',col_type:'text_center_1'});return;}
+        let list=r.data.movies||[];
+        if(page===1)d.push(this.section('筛选结果',''));
+        list.forEach(x=>d.push(this.movieCard(x,'movie_3')));
+    },
+    filters:function(){
+        setPageTitle('高级标签');
+        let d=[],type=getMyVar('jdb3_type','0'),r=this.apiSafe('/api/v2/tags',{type:type});
+        if(!r.ok){d.push({title:'标签加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let groups=r.data.tags||[],selected=getMyVar('jdb3_extra','').split(',').filter(Boolean);
+        groups.forEach(g=>{
+            if(g.category_id==='main'||g.category_id==='year'||g.category_id==='duration'||g.category_id==='month')return;
+            d.push(this.section(g.category||g.category_id,''));
+            (g.tags||[]).slice(0,40).forEach(t=>{
+                let id=String(t.id),on=selected.includes(id);
+                d.push({title:on?'““””<b><font color=#FFFFFF>'+this.mask(t.name)+'</font></b>':this.mask(t.name),url:$('#noLoading#').lazyRule((id)=>{
+                    let a=getMyVar('jdb3_extra','').split(',').filter(Boolean),i=a.indexOf(id);if(i>=0)a.splice(i,1);else a.push(id);
+                    putMyVar('jdb3_extra',a.join(','));
+                    let type=getMyVar('jdb3_type','0'),main=getMyVar('jdb3_main','p'),year=getMyVar('jdb3_year',''),dur=getMyVar('jdb3_duration',''),month=getMyVar('jdb3_month','');
+                    putMyVar('jdb3_filter',type+':t:'+main+':'+a.join(',')+':'+year+':'+dur+':'+month);
+                    refreshPage(false);return'hiker://empty';
+                },id),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});
+            });
+        });
+        d.push({title:'清空高级标签',url:$('#noLoading#').lazyRule(()=>{clearMyVar('jdb3_extra');let t=getMyVar('jdb3_type','0'),m=getMyVar('jdb3_main','p');putMyVar('jdb3_filter',t+':t:'+m+'::::');refreshPage(false);return'toast://已清空';}),col_type:'text_center_1'});
+        setResult(d);
+    },
+
+    searchPage:function(){
+        setPageTitle('JavDB 搜索');
+        let d=[],page=MY_PAGE||1,kw=getMyVar('jdb3_kw',''),type=getMyVar('jdb3_search_type','movie');
+        if(page===1){
+            d.push({title:'番号 / 标题 / 演员 / 系列 / 片商 / 导演',url:$.toString(()=>{putMyVar('jdb3_kw',String(input||'').trim());refreshPage(false);}),col_type:'input',extra:{defaultValue:kw,onChange:$.toString(()=>{putMyVar('jdb3_kw',String(input||''));})}});
+            [['影片','movie'],['演员','actor'],['系列','series'],['片商','maker'],['导演','director'],['番号','code']].forEach(x=>{
+                let on=type===x[1];
+                d.push({title:on?'““””<b><font color=#FFFFFF>'+x[0]+'</font></b>':x[0],url:$('#noLoading#').lazyRule((v)=>{putMyVar('jdb3_search_type',v);refreshPage(false);return'hiker://empty';},x[1]),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});
+            });
+        }
+        kw=getMyVar('jdb3_kw','').trim();type=getMyVar('jdb3_search_type','movie');
+        if(!kw){d.push({title:'请输入关键词',url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let params={q:kw,page:page,type:type};
+        if(type==='movie'){params.movie_type='all';params.movie_sort_by='relevance';params

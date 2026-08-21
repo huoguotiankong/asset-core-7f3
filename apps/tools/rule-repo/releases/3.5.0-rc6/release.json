@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.5.0-rc6",
+  "build": 355,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"productState","path":"apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"},
+    {"name":"uiBase","path":"apps/tools/rule-repo/releases/3.5.0-rc1/ui.js"},
+    {"name":"design","path":"apps/tools/rule-repo/releases/3.5.0-rc6/design.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc6/ui.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc6/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc6/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.5.0-rc6/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc6/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc6/detail.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.5.0-rc5/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc6/settings.js"},
+    {"name":"candidatePatch","path":"apps/tools/rule-repo/releases/3.5.0-rc6/candidate_patch.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.0-rc6"},
+  "notes": "Candidate RC6：以 UI/UX 为主的重构，技术信息后置，首页、程序卡片、版本中心、详情、搜索、分类、更新和设置统一到同一套产品设计系统。"
+}

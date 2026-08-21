@@ -1,0 +1,11 @@
+/* 我的规则仓库 v3.5.0-rc6 - calm update center */
+(function(R){
+R.updatesPage=function(){
+setPageTitle('更新');var d=[],m,items;try{m=this.manifest(false);items=(m.items||[]).map(this.normalizeItem.bind(this));}catch(e){setResult([{title:'暂时无法检查更新',desc:String(e.message||e),url:'hiker://empty',col_type:'text_center_1'}]);return;}this.pushNav(d,'updates');var info={};try{if(typeof RuleRepoBoot==='object')info=RuleRepoBoot.info()||{};}catch(e){}var cur=info.current||{version:this.version,build:this.build},prev=info.previous||null,stats=this.stats(items),updates=items.filter(function(x){return x.entryType!=='channel-group'&&R.statusOf(x)==='可更新';});
+d.push(this.hero('更新中心',(this.isTestChannel()?'测试版':'正式版')+' · '+String(cur.version||this.version)+'\n'+(updates.length?updates.length+' 个程序等待更新':'当前没有待更新程序'),this.uiIcon('updates'),'hiker://page/ruleRepoUpdate?rule=&simple=true'));
+d.push({title:'检查 Core 更新',desc:'当前通道独立升级和回退',url:'hiker://page/ruleRepoUpdate?rule=&simple=true',col_type:'text_2',extra:{lineVisible:false}});d.push({title:'同步程序目录',desc:'立即获取云端最新目录',url:$('#noLoading#').lazyRule(function(){showLoading('正在同步…');try{var r=$.require('hiker://page/ruleRepoCore');r.clearManifestCache();r.manifest(true);setItem('hc_repo_updates_last_check',String(Date.now()));hideLoading();refreshPage(false);return'toast://已同步';}catch(e){hideLoading();return'toast://同步失败';}}),col_type:'text_2',extra:{lineVisible:false}});
+this.pushSpacer(d);if(updates.length){this.pushSection(d,'待更新','建议逐项确认后更新');updates.forEach(function(x){d.push(R.itemCard(x));});}else this.pushEmpty(d,'已是最新状态','程序目录变化会自动同步，也可以手动检查。');
+var installed=items.filter(function(x){return x.entryType!=='channel-group'&&R.statusOf(x)==='已同步';});if(installed.length){this.pushSpacer(d);this.pushSection(d,'已导入','通过本仓库导入且当前没有发现更高版本');installed.slice(0,12).forEach(function(x){d.push(R.itemCard(x));});}
+this.pushSpacer(d);this.pushSection(d,'更新保障','新版本先预加载并验证，失败时不切换；测试版与正式版互相独立。');d.push({title:'上一版本',desc:prev?String(prev.version||'可回退'):'暂无回退记录',url:'hiker://page/ruleRepoUpdate?rule=&simple=true',col_type:'text_2',extra:{lineVisible:false}});d.push({title:'最近同步',desc:this.formatShortTime(this.lastManifestTime()),url:'hiker://page/ruleRepoSettings?rule=&simple=true',col_type:'text_2',extra:{lineVisible:false}});setResult(d);
+};
+})(HikerRuleRepo);

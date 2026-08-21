@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.3.0",
+  "build": 130,
+  "ref": "main",
+  "modules": [
+    {"name": "core", "path": "acfun_core_v018.js"},
+    {"name": "protocol", "path": "acfun_patch_v019.js"},
+    {"name": "diagnostics-base", "path": "acfun_diag_v019.js"},
+    {"name": "ui-object-cover", "path": "acfun_ui_v022.js"},
+    {"name": "ui-final-image", "path": "acfun_ui_v023.js"},
+    {"name": "ui-image-headers", "path": "acfun_ui_v024.js"},
+    {"name": "ui-image-dns", "path": "acfun_ui_v025.js"},
+    {"name": "ui-image-local-cache", "path": "acfun_ui_v026.js"},
+    {"name": "ui-image-stream", "path": "acfun_ui_v027.js"},
+    {"name": "ui-image-raw-probe", "path": "acfun_ui_v028.js"},
+    {"name": "ui-image-xor-decrypt", "path": "acfun_ui_v029.js"},
+    {"name": "ui-image-fileutil-bridge", "path": "acfun_ui_v030.js"}
+  ],
+  "verify": {
+    "global": "ac",
+    "property": "build",
+    "equals": "2026.08.20-v0.3.0"
+  }
+}

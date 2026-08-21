@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "channel": "candidate",
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "0.6.0-alpha5",
+  "build": 156,
+  "shellVersion": "6.1.0-test",
+  "managerVersion": "2.0.1",
+  "release": "apps/video/acfun/releases/0.6.0-alpha5/release.json",
+  "updatedAt": "2026-08-21",
+  "notes": "0.6.0 Alpha5 候选。新建 Shell6.1 / Bootstrap v061 / Build156，从云端仓库覆盖导入并强制越过仍停留 Alpha2 的旧 Test 状态；修复旧 Bootstrap 把 requireManager() 写成 manager() 的版本恢复错误。业务能力继承 Alpha4 的视频搜索、递归 Station、漫画详情/阅读、短视频、社区、小说、有声、全站搜索、类型化详情/评论和统一本地收藏。仅用于 Test/Candidate，须经实机回归后才能晋级 Stable。"
+}

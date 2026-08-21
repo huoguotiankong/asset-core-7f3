@@ -1,0 +1,9 @@
+{
+  "sourceCandidate": "3.5.3-rc11",
+  "sourceBuild": 376,
+  "sourceTestStatus": "passed-real-device",
+  "stableVersion": "3.5.3",
+  "stableBuild": 377,
+  "promotedAt": "2026-08-21T17:24:00+08:00",
+  "reason": "用户连续实机验证确认 RC11 主体体验已达到可日常使用水平；按 Stable/Test 隔离原则冻结 RC11 页面基线晋级，后续统计数字、分类占位、信息对齐与搜索细节继续在 3.5.4-rc1 验证。"
+}

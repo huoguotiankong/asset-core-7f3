@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.0-rc10",
+  "build": 361,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"testStatePatch","path":"apps/tools/rule-repo/test/v1.0.0/state_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"repositoryResilience","path":"apps/tools/rule-repo/releases/3.5.0-rc8/repository_resilience.js"},
+    {"name":"productState","path":"apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"},
+    {"name":"design","path":"apps/tools/rule-repo/releases/3.5.0-rc6/design.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc6/ui.js"},
+    {"name":"uiFoundation","path":"apps/tools/rule-repo/releases/3.5.0-rc9/ui_foundation.js"},
+    {"name":"uiPolish","path":"apps/tools/rule-repo/releases/3.5.0-rc10/ui_polish.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc10/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc6/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.5.0-rc6/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc10/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc10/detail.js"},
+    {"name":"channelPage","path":"apps/tools/rule-repo/releases/3.5.0-rc10/channel_page.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.5.0-rc5/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc8/settings.js"},
+    {"name":"runtimeContract","path":"apps/tools/rule-repo/releases/3.5.0-rc9/runtime_contract.js"},
+    {"name":"candidatePatch","path":"apps/tools/rule-repo/releases/3.5.0-rc10/candidate_patch.js"}
+  ],
+  "contract": {
+    "requiredFunctions": ["home","categoryPage","searchPage","updatesPage","detailPage","channelPage","historyPage","settingsPage","aboutPage","pushNav","pushSection","pushSpacer","pushEmpty","formatTime","scopeChip","itemCard","selectCard","recentTile","actionIcon","hero","friendlyError","compactInfo","primaryAction","secondaryAction","syncManifest","manifest","items","findById","importRule"]
+  },
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.0-rc10"},
+  "notes": "Test RC10：重点强化双版本页、首页、详情与更新中心；保留 RC8 安全同步和 RC9 运行时契约，增加版本元数据缓存及内置恢复兜底。"
+}

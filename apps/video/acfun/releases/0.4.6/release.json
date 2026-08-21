@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.4.6",
+  "build": 146,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"acfun_core_v018.js"},
+    {"name":"protocol","path":"acfun_patch_v019.js"},
+    {"name":"instant-ui","path":"acfun_ui_v042.js"},
+    {"name":"functional-fix","path":"acfun_fix_v043.js"},
+    {"name":"fast-playback","path":"acfun_fix_v045.js"},
+    {"name":"native-taxonomy-clean-ui","path":"acfun_fix_v046.js"}
+  ],
+  "verify": {"global":"ac","property":"build","equals":"2026.08.20-v0.4.6"}
+}

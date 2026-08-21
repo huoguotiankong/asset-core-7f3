@@ -1,0 +1,12 @@
+{
+  "schema": 2,
+  "name": "天空的海阔云仓库",
+  "updated": "2026-08-19 08:46",
+  "items": [
+    {"name":"黄豆短剧","version":"1.8.2","desc":"短剧 / 专题 / 收藏 / 历史","importUrl":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/huangdou.txt"},
+    {"name":"麻豆AI","version":"2.6.3","desc":"视频 / 短剧 / 评论 / 收藏","importUrl":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/mdai.txt"},
+    {"name":"Hanime1","version":"1.2.1","desc":"视频 / 漫画 / 搜索 / 多画质","importUrl":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/hanime1.txt"},
+    {"name":"JavBus","version":"2026081903","desc":"视频 / 演员 / 本地收藏 / 收藏页分影片演员 / 修复d未定义","importUrl":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/javbus_2026081903.txt"},
+    {"name":"JavDB v3","version":"3.0.9","desc":"v3.0.8稳定架构 / 一级thumb二级cover / JavDB Referer图片适配 / 搜索 / 分类 / 详情 / 磁链 / 评论 / 本地收藏","importUrl":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/javdb3_v309.txt"}
+  ]
+}

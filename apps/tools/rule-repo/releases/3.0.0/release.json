@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.0.0",
+  "build": 300,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/core/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/core/filter.js"},
+    {"name":"home","path":"apps/tools/rule-repo/ui/home.js"},
+    {"name":"pages","path":"apps/tools/rule-repo/ui/pages.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.0.0"}
+}

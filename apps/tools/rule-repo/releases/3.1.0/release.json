@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.1.0",
+  "build": 310,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.1.0/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.1.0/filter.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.1.0/home.js"},
+    {"name":"pages","path":"apps/tools/rule-repo/releases/3.1.0/pages.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.1.0"},
+  "notes": "UI/体验重构：真实远程图标、无HTML直显、总览卡、状态统计、导入记录、可更新筛选、重排详情/版本/设置。"
+}

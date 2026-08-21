@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.4.9",
+  "build": 149,
+  "release": "apps/video/acfun/releases/0.4.9/release.json",
+  "notes": "发布链修复基线：解决 0.4.8 本地 activeRelease 缓存了错误根目录模块路径的问题。Build 提升到149，v047/v048/v049 使用明确的 apps/video/acfun/ 仓库相对路径；同时保留根目录兼容桥，旧错误0.4.8状态也可恢复。业务功能沿用0.4.8：精选/里番 Station、小分类、动态 classTypeList、APK 1.9.7 getTagsZ→tagTitleList、短视频、漫画详情章节阅读、极速播放和封面缓存。",
+  "changelog": "apps/video/acfun/CHANGELOG.md"
+}

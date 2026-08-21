@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.3.0",
+  "build": 330,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.3.0/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.3.0/filter.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.3.0/ui.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.3.0/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.3.0/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.3.0/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.3.0/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.3.0/detail.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.3.0/settings.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.3.0"},
+  "notes": "专业管理台：独立首页、分类、搜索、更新、设置和详情中心，采用 text_4/text_5/flex_button 原生组件体系。"
+}

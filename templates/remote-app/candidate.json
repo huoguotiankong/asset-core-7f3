@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "channel": "candidate",
+  "id": "example-app",
+  "version": "1.1.0-rc1",
+  "build": 110,
+  "release": "apps/<category>/<app>/releases/1.1.0-rc1/release.json",
+  "createdAt": "",
+  "testStatus": "pending",
+  "notes": "Candidate is never the stable entry until Release Guard and real-device smoke tests pass."
+}

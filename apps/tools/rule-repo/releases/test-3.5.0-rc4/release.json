@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.0-rc4",
+  "build": 353,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"testStatePatch","path":"apps/tools/rule-repo/test/v1.0.0/state_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc1/ui.js"},
+    {"name":"uiPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/ui_patch.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc4/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc1/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.4.0/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc4/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc4/detail.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.4.0/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc4/settings.js"},
+    {"name":"candidatePatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/candidate_patch.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.0-rc4"},
+  "notes": "测试通道 RC4：状态继续与正式版隔离，新增智能索引同步与通用多通道产品入口。"
+}

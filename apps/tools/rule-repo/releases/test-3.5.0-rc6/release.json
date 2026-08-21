@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.0-rc6",
+  "build": 355,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"testStatePatch","path":"apps/tools/rule-repo/test/v1.0.0/state_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"productState","path":"apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"},
+    {"name":"uiBase","path":"apps/tools/rule-repo/releases/3.5.0-rc1/ui.js"},
+    {"name":"design","path":"apps/tools/rule-repo/releases/3.5.0-rc6/design.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc6/ui.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc6/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc6/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.5.0-rc6/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc6/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc6/detail.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.5.0-rc5/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc6/settings.js"},
+    {"name":"candidatePatch","path":"apps/tools/rule-repo/releases/3.5.0-rc6/candidate_patch.js"}
+  ],
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.0-rc6"},
+  "notes": "Test RC6：视觉体验重构，统一导航/卡片/版本/详情/搜索/分类/更新/设置，保持测试状态与正式版隔离。"
+}

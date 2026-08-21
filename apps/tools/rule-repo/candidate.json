@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "candidate",
+  "id": "rule-repo",
+  "version": "3.5.4-rc7",
+  "build": 384,
+  "baseStableVersion": "3.5.3",
+  "baseStableBuild": 377,
+  "targetVersion": "3.5.4",
+  "release": "apps/tools/rule-repo/releases/3.5.4-rc7/release.json",
+  "createdAt": "2026-08-21",
+  "testStatus": "pending",
+  "notes": "Single Workspace 13.2 候选：修复 parseLazyRule 脱离规则上下文后无法解析裸 ruleRepoCore 子页面的问题，所有程序/通道导入与设置动作显式携带当前规则名，并以 Bootstrap v130 作为 Core 恢复通道；错误统一返回页内提示。正式版继续冻结 3.5.3。"
+}

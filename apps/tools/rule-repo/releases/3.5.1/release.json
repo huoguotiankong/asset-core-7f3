@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.5.1",
+  "build": 362,
+  "ref": "main",
+  "modules": [
+    {"name":"repository","path":"apps/tools/rule-repo/releases/3.4.1/repository.js"},
+    {"name":"filter","path":"apps/tools/rule-repo/releases/3.4.0/filter.js"},
+    {"name":"stabilityPatch","path":"apps/tools/rule-repo/releases/3.4.3/stability_patch.js"},
+    {"name":"management","path":"apps/tools/rule-repo/releases/3.5.0-rc1/management.js"},
+    {"name":"taxonomyPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc2/taxonomy_patch.js"},
+    {"name":"repositoryPatch","path":"apps/tools/rule-repo/releases/3.5.0-rc4/repository_patch.js"},
+    {"name":"repositoryResilience","path":"apps/tools/rule-repo/releases/3.5.0-rc8/repository_resilience.js"},
+    {"name":"productState","path":"apps/tools/rule-repo/releases/3.5.0-rc5/product_state.js"},
+    {"name":"design","path":"apps/tools/rule-repo/releases/3.5.0-rc6/design.js"},
+    {"name":"ui","path":"apps/tools/rule-repo/releases/3.5.0-rc6/ui.js"},
+    {"name":"uiFoundation","path":"apps/tools/rule-repo/releases/3.5.0-rc9/ui_foundation.js"},
+    {"name":"home","path":"apps/tools/rule-repo/releases/3.5.0-rc8/home.js"},
+    {"name":"category","path":"apps/tools/rule-repo/releases/3.5.0-rc6/category.js"},
+    {"name":"search","path":"apps/tools/rule-repo/releases/3.5.0-rc6/search.js"},
+    {"name":"updates","path":"apps/tools/rule-repo/releases/3.5.0-rc6/updates.js"},
+    {"name":"detail","path":"apps/tools/rule-repo/releases/3.5.0-rc6/detail.js"},
+    {"name":"channelPage","path":"apps/tools/rule-repo/releases/3.5.0-rc7/channel_page.js"},
+    {"name":"history","path":"apps/tools/rule-repo/releases/3.5.0-rc5/history.js"},
+    {"name":"settings","path":"apps/tools/rule-repo/releases/3.5.0-rc8/settings.js"},
+    {"name":"runtimeContract","path":"apps/tools/rule-repo/releases/3.5.0-rc9/runtime_contract.js"},
+    {"name":"stablePatch","path":"apps/tools/rule-repo/releases/3.5.1/stable_patch.js"},
+    {"name":"javdbChannelPatch","path":"apps/tools/rule-repo/releases/3.5.1/javdb_channel_patch.js"}
+  ],
+  "contract": {
+    "requiredFunctions": ["home","categoryPage","searchPage","updatesPage","detailPage","historyPage","settingsPage","aboutPage","pushNav","pushSection","pushSpacer","pushEmpty","formatTime","scopeChip","itemCard","selectCard","recentTile","actionIcon","hero","syncManifest","manifest","items","findById","importRule"]
+  },
+  "verify": {"global":"HikerRuleRepo","property":"version","equals":"3.5.1"},
+  "notes": "Stable 3.5.1 Build 362：落实普通小程序 Stable/Test 同名覆盖 + 可选 Local 独立第三通道；JavDB 正式版/测试版默认远程，本地版导入后纯本地运行并执行隐私门禁。"
+}

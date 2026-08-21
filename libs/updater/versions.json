@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "stable": "2.0.1",
+  "candidate": "2.0.2",
+  "versions": {
+    "2.0.1": {
+      "path": "libs/updater/v2.0.1/remote_manager.js",
+      "immutable": true,
+      "notes": "Frozen stable snapshot. Existing apps are not migrated automatically."
+    },
+    "2.0.2": {
+      "path": "libs/updater/v2.0.2/remote_manager.js",
+      "immutable": true,
+      "notes": "Recovery candidate: multi-mirror metadata/module fallback for GitHub API/Raw connectivity failures. First adopted by rule-repo recovery shells."
+    }
+  }
+}

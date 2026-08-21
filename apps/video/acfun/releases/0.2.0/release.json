@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.2.0",
+  "build": 120,
+  "ref": "main",
+  "modules": [
+    {"name": "core", "path": "acfun_core_v018.js"},
+    {"name": "protocol", "path": "acfun_patch_v019.js"},
+    {"name": "diagnostics", "path": "acfun_diag_v019.js"},
+    {"name": "ui", "path": "acfun_ui_v020.js"}
+  ],
+  "verify": {
+    "global": "ac",
+    "property": "build",
+    "equals": "2026.08.20-v0.2.0"
+  }
+}

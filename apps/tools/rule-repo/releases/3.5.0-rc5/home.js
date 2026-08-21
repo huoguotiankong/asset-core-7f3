@@ -1,0 +1,20 @@
+/* 我的规则仓库 v3.5.0-rc5 - product dashboard */
+(function(R){
+R.home=function(){
+setPageTitle(this.statePrefix.indexOf('test')>=0?'我的规则仓库·测试版':'我的规则仓库');var d=[],m,items;try{m=this.manifest(false);items=(m.items||[]).map(this.normalizeItem.bind(this));}catch(e){setResult([{title:'仓库暂时不可用',desc:String(e.message||e)+'\n如果之前成功打开过，建议稍后重试或进入设置手动同步。',url:'hiker://page/ruleRepoSettings?rule=&simple=true',col_type:'long_text'}]);return;}
+var stats=this.stats(items),repo=this.findById('rule-repo')||{name:'我的规则仓库',category:'tools'},view=String(getMyVar('hc_repo_home_view','all')||'all'),cat=String(getMyVar('hc_repo_home_category','all')||'all'),test=this.statePrefix.indexOf('test')>=0,edition=test?'Test':'Stable',sum=this.actionSummary(items);
+d.push({title:test?'我的规则仓库 · 测试版':'我的规则仓库',desc:'海阔视界专属 · 云端程序管理中心\n'+edition+' · Core '+this.version+' · '+(sum.revision?'索引 '+sum.revision:'智能同步'),img:this.iconOf(repo),pic_url:this.iconOf(repo),url:'hiker://page/ruleRepoUpdates?rule=&simple=true',col_type:'movie_1_left_pic',extra:{lineVisible:false,pageTitle:'更新中心'}});
+var cats=this.categories(items);for(var ci=0;ci<cats.length;ci++)d.push(this.categoryTab(cats[ci].name,cats[ci].id,cat));
+this.pushNav(d,'home');
+if(stats.updates>0)d.push({title:'发现 '+stats.updates+' 个程序可更新',desc:'进入更新中心查看并逐项确认，避免批量覆盖带来的风险。',url:'hiker://page/ruleRepoUpdates?rule=&simple=true',col_type:'text_1',extra:{lineVisible:false}});
+var statUrl=function(v){return $('#noLoading#').lazyRule(function(x){putMyVar('hc_repo_home_view',x);refreshPage(false);return'hiker://empty';},v);};
+d.push(this.metric('全部',stats.all,statUrl('all')));d.push(this.metric('已记录',stats.installed,statUrl('installed')));d.push(this.metric('可更新',stats.updates,statUrl('updates')));d.push(this.metric('收藏',stats.favorites,statUrl('favorites')));
+var recent=this.recentItems(items,1);if(recent.length){var x=recent[0],t=this.lastOpenedTime(x);this.pushSpacer(d);this.pushSection(d,'继续使用',t?'上次打开 '+this.formatTime(t):'最近使用');d.push({title:x.name,desc:String(x.version||'')+' · '+x.categoryName+' / '+x.subCategory+'\n点击直接打开已安装程序',img:this.iconOf(x),pic_url:this.iconOf(x),url:$('#noLoading#').lazyRule(function(id){var r=$.require('hiker://page/ruleRepoCore'),a=r.findById(id);return a?r.openRule(a):'toast://程序不存在';},x.id),col_type:'movie_1_left_pic',extra:{lineVisible:false}});}
+var favs=this.favoriteItems(items).slice(0,4);if(favs.length){this.pushSpacer(d);this.pushSection(d,'我的收藏','常用程序快速入口');favs.forEach(function(x){d.push(R.compactApp(x,R.statusIcon(x)+' '+R.statusLabel(x)));});}
+this.pushSpacer(d);this.pushSection(d,'程序库','当前 '+(cat==='all'?'全部分类':this.categoryName(cat))+' · '+({all:'全部',installed:'已记录',updates:'可更新',favorites:'收藏'}[view]||view));
+d.push(this.actionChip('排序 · '+({'default':'默认','updated':'最近更新','name':'名称','version':'版本'}[String(getMyVar('hc_repo_home_sort','default')||'default')]||'默认'),$('默认排序,最近更新,名称,版本','选择排序').select(function(){var map={'默认排序':'default','最近更新':'updated','名称':'name','版本':'version'};putMyVar('hc_repo_home_sort',map[String(input||'默认排序')]||'default');refreshPage(false);return'hiker://empty';})));
+d.push(this.actionChip('同步',$('#noLoading#').lazyRule(function(){showLoading('同步云端索引…');try{var r=$.require('hiker://page/ruleRepoCore');r.clearManifestCache();r.manifest(true);hideLoading();refreshPage(false);return'toast://同步完成';}catch(e){hideLoading();return'toast://同步失败：'+String(e.message||e);}})));
+var state={keyword:'',view:view,category:cat,subCategory:'all',tag:'all',sort:String(getMyVar('hc_repo_home_sort','default')||'default'),mode:'all'},filtered=this.applyFilters(items,state);filtered.forEach(function(x){d.push(R.itemCard(x));});if(!filtered.length)this.pushEmpty(d,'这里没有匹配的程序',view==='updates'?'当前记录的程序都已是最新版本。':'可以切换分类或状态查看。');
+d.push({col_type:'blank_block'});d.push({title:'Core '+this.version+' · Schema '+(m.schema||'?'),desc:'上次索引 '+(sum.lastSync?this.formatTime(sum.lastSync):'未记录')+' · 云端变更自动探测 · 网络异常旧缓存兜底',url:'hiker://page/ruleRepoSettings?rule=&simple=true',col_type:'text_center_1',extra:{lineVisible:false}});setResult(d);
+};
+})(HikerRuleRepo);

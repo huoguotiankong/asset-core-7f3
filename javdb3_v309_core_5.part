@@ -1,0 +1,62 @@
+s||[];
+        list.forEach(x=>{
+            let hash=x.hash||'',mag=hash?'magnet:?xt=urn:btih:'+hash:'';
+            d.push({title:this.mask(x.title||hash),desc:[x.size,x.files_count!=null?x.files_count+' 文件':'',x.created_at].filter(Boolean).join(' · '),url:mag||'hiker://empty',col_type:'text_1',extra:{lineVisible:false,longClick:[{title:'复制磁链',js:$.toString((m)=>'copy://'+m,mag)}]}});
+        });
+        if(!list.length)d.push({title:'暂无磁链',url:'hiker://empty',col_type:'text_center_1'});
+        setResult(d);
+    },
+    reviews:function(){
+        setPageTitle('评论');let d=[],id=(MY_PARAMS&&MY_PARAMS.jdb3_id)||'',r=this.apiSafe('/api/v1/movies/'+encodeURIComponent(id)+'/reviews',{});
+        if(!r.ok){d.push({title:'评论加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let list=r.data.reviews||[];
+        list.forEach(x=>{
+            d.push({title:this.mask((x.user&&x.user.username)||x.username||'用户')+(x.score?'  ★'+x.score:''),desc:this.mask(x.content||''),url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}});
+        });
+        if(!list.length)d.push({title:'暂无评论',url:'hiker://empty',col_type:'text_center_1'});
+        setResult(d);
+    },
+    preview:function(){
+        setPageTitle('预览图');let d=[],id=(MY_PARAMS&&MY_PARAMS.jdb3_id)||'',r=this.apiSafe('/api/v4/movies/'+encodeURIComponent(id),{});
+        if(!r.ok){d.push({title:'预览图加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let x=r.data.movie||r.data,list=x.preview_images||[];
+        list.forEach((p,i)=>{let u=this.img(p.large_url||p.thumb_url||p);d.push({title:'',pic_url:u,img:u,url:'pics://'+u,col_type:'pic_1_full',extra:{lineVisible:false}});});
+        if(!list.length)d.push({title:'暂无预览图',url:'hiker://empty',col_type:'text_center_1'});
+        setResult(d);
+    },
+
+    entity:function(){
+        let d=[],type=(MY_PARAMS&&MY_PARAMS.jdb3_entity_type)||'actor',id=(MY_PARAMS&&MY_PARAMS.jdb3_entity_id)||'';
+        let path=type==='actor'?'/api/v1/actors/':type==='series'?'/api/v1/series/':type==='maker'?'/api/v1/makers/':'/api/v1/directors/';
+        let r=this.apiSafe(path+encodeURIComponent(id),{page:MY_PAGE||1});
+        if(!r.ok){setPageTitle('详情');d.push({title:'加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});setResult(d);return;}
+        let root=r.data[type]||r.data.actor||r.data.series||r.data.maker||r.data.director||r.data;
+        let title=this.mask(root.name||root.name_zht||root.title||'详情');setPageTitle(title);
+        if(MY_PAGE===1)d.push({title:title,desc:root.videos_count!=null?'作品 '+root.videos_count:'',pic_url:this.img(root.avatar_url||root.cover_url||''),img:this.img(root.avatar_url||root.cover_url||''),url:'hiker://empty',col_type:'movie_1_left_pic'});
+        let movies=r.data.movies||root.movies||[];
+        if(MY_PAGE===1)d.push(this.section('作品',''));
+        movies.forEach(x=>d.push(this.movieCard(x,'movie_3')));
+        setResult(d);
+    },
+
+    rank:function(d,page){
+        if(page===1){
+            d.push(this.section('排行榜',''));
+            [['有码','0'],['无码','1'],['欧美','2'],['FC2','3']].forEach(x=>{
+                let on=getMyVar('jdb3_rank_type','0')===x[1];
+                d.push({title:on?'““””<b><font color=#FFFFFF>'+x[0]+'</font></b>':x[0],url:$('#noLoading#').lazyRule((v)=>{putMyVar('jdb3_rank_type',v);refreshPage(false);return'hiker://empty';},x[1]),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});
+            });
+            [['日榜','daily'],['周榜','weekly'],['月榜','monthly']].forEach(x=>{
+                let on=getMyVar('jdb3_rank_period','daily')===x[1];
+                d.push({title:on?'““””<b><font color=#FFFFFF>'+x[0]+'</font></b>':x[0],url:$('#noLoading#').lazyRule((v)=>{putMyVar('jdb3_rank_period',v);refreshPage(false);return'hiker://empty';},x[1]),col_type:'scroll_button',extra:{backgroundColor:on?'#3BB273':'#08777785'}});
+            });
+        }
+        let r=this.apiSafe('/api/v1/rankings',{type:getMyVar('jdb3_rank_type','0'),period:getMyVar('jdb3_rank_period','daily'),page:page});
+        if(!r.ok){if(page===1)d.push({title:'排行榜加载失败',desc:r.error,url:'hiker://empty',col_type:'text_center_1'});return;}
+        (r.data.movies||[]).forEach(x=>d.push(this.movieCard(x,'movie_3')));
+    },
+    actorHub:function(d,page){
+        if(page===1)d.push(this.section('演员','推荐 / 搜索'));
+        let r=this.apiSafe('/api/v1/actors/recommend',{page:page,limit:60});
+        if(!r.ok){if(page===1)d.push({title:'推荐演员接口不可用',desc:r.error+'\n可直接使用顶部搜索切换到“演员”。',url:$('hiker://empty?page=fypage').rule(()=>{eval(fetch('hiker://files/rules/JavDB3/javdb3_core.js'));JDB.searchPage();}),col_type:'text_center_1'});return;}
+        (r.data.actors||[]).forEach(a=>d.push({title:this.mask(a

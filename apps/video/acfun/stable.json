@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "acfun",
+  "name": "ACFun",
+  "version": "0.4.9",
+  "build": 149,
+  "shellVersion": "5.11.3",
+  "managerVersion": "2.0.1",
+  "release": "apps/video/acfun/releases/0.4.9/release.json",
+  "rule": "apps/video/acfun/acfun_remote_v5.txt",
+  "promotedAt": "2026-08-21",
+  "notes": "当前实机可用正式基线。保留已验证的极速播放、封面解密与持久缓存、精选/里番 Station、小分类、APP 1.9.7 标签链、短视频以及漫画详情/章节阅读。0.5.x UI 大改只进入 Test/Candidate，实机验证前不修改本 Stable。"
+}
