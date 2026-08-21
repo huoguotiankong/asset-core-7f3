@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha8",
-  "build": 159,
-  "shellVersion": "6.4.0-test",
+  "version": "0.6.0-alpha9",
+  "build": 160,
+  "shellVersion": "6.5.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha8/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha9/release.json",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha8 候选。重点处理 Alpha7 实机确认的交互与资源问题：筛选回归首页三列弹层并原页即时刷新；社区/小说/有声改为同页顶层状态，避免不断堆叠新页面；短视频直接播放保持；漫画章节改海阔 pics:// 原生多图阅读；精选/里番 Station 改独立 classifyId=4/24 严格请求；小说/有声使用 GET+POST findList/tagList 请求矩阵；社区详情递归恢复文本、图片、视频和链接。仅用于 Test/Candidate，完成首页、筛选、精选/里番、漫画、社区、小说/有声、搜索与播放实机回归前不得晋级 Stable。"
+  "notes": "0.6.0 Alpha9 候选。根据 Alpha8 实机继续修复：分类数据重新进入 strict taxonomy/cache 命名空间并清理旧筛选状态；首页筛选按钮去除不受 scroll_button 支持的 HTML，继续使用三列 select 弹层原页刷新；焦点大卡默认关闭；小说/有声在已恢复列表的基础上重点恢复详情封面、章节正文和音频，增加 chapterInfo GET+POST、多组章节 ID、fictionUrl/contentUrl 外链正文与 longFormAudio/voice/media 音频候选；社区详情合并 Feed seed 与 dynamicInfo 并过滤非正文媒体。短视频直接播放与漫画 pics:// 保持不退化。仅用于 Test/Candidate，完成分类、小说正文/有声播放、社区详情、漫画和视频回归前不得晋级 Stable。"
 }
