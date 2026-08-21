@@ -1,0 +1,21 @@
+{
+  "schema": 3,
+  "id": "mdai",
+  "name": "麻豆AI",
+  "category": "video",
+  "mode": "remote-test+local",
+  "test": "apps/video/mdai/test.json",
+  "local": "apps/video/mdai/local.json",
+  "channels": "apps/video/mdai/channels.json",
+  "testVersion": "2.6.3-test.1",
+  "testBuild": 26301,
+  "testShellVersion": "1.0.0-test",
+  "testBootstrap": "apps/video/mdai/bootstrap_test_v1.js",
+  "testRule": "apps/video/mdai/mdai_remote_test_v1.txt",
+  "localPath": "mdai.txt",
+  "migration": {
+    "stage": "remote-test-pilot",
+    "source": "mdai.txt@0710346141c7b2d2acfe438ce0796d9b4474e72d",
+    "note": "保留原完整本地规则；首个远程测试版通过钉住源码快照验证远程运行链，未晋级 Stable。"
+  }
+}

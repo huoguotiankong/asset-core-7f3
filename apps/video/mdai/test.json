@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.6.3-test.1",
+  "baseVersion": "2.6.3",
+  "targetVersion": "2.6.3",
+  "build": 26301,
+  "shellVersion": "1.0.0-test",
+  "shellRuleVersion": 2026082205,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/mdai/releases/2.6.3-test.1/release.json",
+  "rule": "apps/video/mdai/mdai_remote_test_v1.txt",
+  "updatedAt": "2026-08-22",
+  "notes": "远程化迁移测试：与 2.6.3 本地业务基线等价，使用独立 mdai-test Remote Manager 状态。"
+}

@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.6.3-test.1",
+  "build": 26301,
+  "ref": "main",
+  "baseVersion": "2.6.3",
+  "sourceBaseline": {
+    "channel": "legacy-local",
+    "path": "mdai.txt",
+    "blob": "0710346141c7b2d2acfe438ce0796d9b4474e72d"
+  },
+  "modules": [
+    {
+      "name": "runtime-loader",
+      "path": "apps/video/mdai/releases/2.6.3-test.1/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "MDAIRemoteRuntime",
+    "property": "build",
+    "equals": "2.6.3-test.1"
+  },
+  "notes": "首个远程代码测试版。业务逻辑严格钉住 2.6.3 本地基线快照，仅迁移运行形态，不主动改业务逻辑。"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "channel": "local",
+  "id": "mdai-local",
+  "name": "麻豆AI 本地版",
+  "version": "2.6.3-local.1",
+  "baseVersion": "2.6.3",
+  "derivedFromChannel": "legacy-local",
+  "derivedFromVersion": "2.6.3",
+  "build": 26302,
+  "ruleVersion": 2026082207,
+  "path": "mdai.txt",
+  "codec": "javdb_retitle_remote",
+  "forcedTitle": "麻豆AI 本地版",
+  "forcedRuleVersion": 2026082207,
+  "mode": "local",
+  "updatedAt": "2026-08-22",
+  "notes": "沿用原 mdai.txt 完整本地代码；导入时仅按统一规则改名并提升壳 version，导入后不依赖私人 GitHub 运行。"
+}
