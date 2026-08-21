@@ -2,9 +2,10 @@
   "schema": 1,
   "id": "rule-repo",
   "name": "我的规则仓库",
-  "version": "3.5.3",
-  "build": 377,
-  "release": "apps/tools/rule-repo/releases/3.5.3/release.json",
-  "notes": "Stable 3.5.3 Build 377：由实机验证的 3.5.3-rc11 晋级，带来 Native Product 8.0 首页、分类、程序详情和版本中心，并保留安全同步与恢复能力。",
-  "changelog": "apps/tools/rule-repo/CHANGELOG.md"
+  "version": "3.5.4",
+  "build": 384,
+  "ref": "main",
+  "release": "apps/tools/rule-repo/releases/3.5.4/release.json",
+  "updatedAt": "2026-08-22T00:22:00+08:00",
+  "notes": "Stable 3.5.4 · Single Workspace 13.2 · Build 384。由已实机验证的 3.5.4-rc7 晋级，正式通道使用独立 Stable 状态命名空间与 bootstrap_v154.js。"
 }
