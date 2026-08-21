@@ -19,24 +19,24 @@
       "recommended": true,
       "desc": "当前实机可用正式基线 · 播放、封面缓存、短视频与漫画阅读底座保持稳定",
       "highlights": ["当前正式基线", "极速播放已验证", "封面持久缓存", "测试异常可同名覆盖恢复"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/acfun.svg"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     },
     {
       "channel": "test",
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha8",
+      "version": "0.6.0-alpha9",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 159,
-      "displayVersion": "Test 0.6.0-alpha8 · Build 159 · Shell 6.4",
-      "path": "apps/video/acfun/acfun_remote_test_v064.txt",
+      "build": 160,
+      "displayVersion": "Test 0.6.0-alpha9 · Build 160 · Shell 6.5",
+      "path": "apps/video/acfun/acfun_remote_test_v065.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "首页三列弹层即时筛选 + 同页资源切换 + 原生漫画多图阅读 + 小说/有声/社区恢复",
-      "highlights": ["筛选不再开新页", "三列弹层选择", "选中原页即时刷新", "减少页面栈堆叠", "短视频直接播放", "pics:// 原生漫画", "精选/里番独立 Station", "小说/有声 GET+POST", "社区完整详情"],
+      "desc": "严格分类链 + 首页纯文本弹层筛选 + 小说/有声章节正文/音频恢复 + 社区详情合并",
+      "highlights": ["严格分类缓存重建", "清理旧筛选状态", "三列弹层原页刷新", "筛选不再显示原始 HTML", "焦点大卡默认关闭", "小说/有声列表已实机恢复", "chapterInfo GET+POST", "fictionUrl 外链正文", "音频媒体字段恢复", "社区 Feed seed 合并", "短视频直接播放保持", "pics:// 漫画保持"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
