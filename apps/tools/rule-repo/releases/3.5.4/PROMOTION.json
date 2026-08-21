@@ -1,0 +1,16 @@
+{
+  "sourceCandidate": "3.5.4-rc7",
+  "sourceBuild": 384,
+  "sourceTestStatus": "passed-real-device",
+  "stableVersion": "3.5.4",
+  "stableBuild": 384,
+  "stableShellVersion": "1.5.4",
+  "promotedAt": "2026-08-22T00:22:00+08:00",
+  "reason": "用户确认最新测试版已达到可用状态，并明确要求正式版升级到与最新测试版一致。正式发布保持 RC7 Single Workspace 13.2 的业务/UI 能力，只做必要的通道适配：移除 Test 专用状态补丁、恢复 Stable 状态命名空间，并把动作故障恢复 Bootstrap 绑定到正式 bootstrap_v154.js。",
+  "rollback": {
+    "version": "3.5.3",
+    "build": 377,
+    "release": "apps/tools/rule-repo/releases/3.5.3/release.json",
+    "shell": "apps/tools/rule-repo/rule_repo_remote_v353.txt"
+  }
+}
