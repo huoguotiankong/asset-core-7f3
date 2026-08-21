@@ -3,7 +3,7 @@
   "id": "acfun",
   "name": "ACFun",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-21",
+  "updatedAt": "2026-08-22",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha5",
+      "version": "0.6.0-alpha6",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 156,
-      "displayVersion": "Test 0.6.0-alpha5 · Build 156 · Shell 6.1",
-      "path": "apps/video/acfun/acfun_remote_test_v061.txt",
+      "build": 157,
+      "displayVersion": "Test 0.6.0-alpha6 · Build 157 · Shell 6.2",
+      "path": "apps/video/acfun/acfun_remote_test_v062.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-21",
+      "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "Cloud Shell 6.1 强制迁移版 · 从云端仓库覆盖导入后直接进入完整资源恢复 UI",
-      "highlights": ["全新云仓库规则壳", "强制越过 Alpha2 缓存", "修复版本恢复异常", "视频搜索主链接回", "递归完整分类", "漫画详情与阅读", "短视频有限矩阵", "社区/小说/有声"],
+      "desc": "筛选页完全重构 + 资源参数兼容强化 · 通过 Cloud Shell 6.2 覆盖导入进入 Alpha6",
+      "highlights": ["紧凑筛选面板", "分类标签自动换行", "机器分类名清洗", "动漫视频筛选回退", "漫画双站点参数", "短视频 loadType=2 候选", "社区 UI 重排", "小说/有声分类清理"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
