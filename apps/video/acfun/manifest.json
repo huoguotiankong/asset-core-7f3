@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha6",
-  "testBuild": 157,
-  "testShellVersion": "6.2.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v062.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v062.txt",
+  "testVersion": "0.6.0-alpha7",
+  "testBuild": 158,
+  "testShellVersion": "6.3.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v063.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v063.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha6-filter-resource-recovery-v62",
+    "stage": "alpha7-interaction-reader-rebuild-v63",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 实机截图确认 Alpha5 已到达设备，但筛选页仍存在巨大频道图标、横向截断标签和低效操作；动漫/漫画/短视频等 Feed 仍可空，社区/小说还暴露 dyncat-/fictiontag- 机器分类名。Test/Candidate 因此升级到 0.6.0-alpha6 Build157 / Shell6.2：重构筛选 UI，清洗机器分类，增加动漫/视频分类参数兼容、标签空结果回退父分类、漫画 stationId/comicsStationId 双契约，并把 APK 1.9.7 静态出现的 pageSize=30/loadType=2 加入短视频首选候选。新 Bootstrap v062 minBuild=157，必须从云端仓库覆盖导入后做实机回归；正式 latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha6 实机确认：筛选 Chip 墙仍然难用，短视频应该首页直接播放而不是进入常规视频二级页，漫画章节正文顶部章节/页数块应移除并从首图开始铺满，社区仍有数字/测试分类与原始时间/Markdown 链接，小说/有声分类筛选后经常空。Test/Candidate 因此升级到 0.6.0-alpha7 Build158 / Shell6.3：筛选改为列表式选择器；短视频卡直接调用播放链；漫画章节去掉内部标题块；社区进一步清洗分类/时间/详情文本；小说/有声扩大 findList 参数并在分类无结果时自动回退全部。新 Bootstrap v063 minBuild=158，须从云端仓库覆盖导入后实机回归；正式 latest.json 不变。"
   }
 }
