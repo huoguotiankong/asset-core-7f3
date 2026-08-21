@@ -5,7 +5,7 @@
   "name": "麻豆AI 本地版",
   "version": "2.6.3-local.1",
   "baseVersion": "2.6.3",
-  "derivedFromChannel": "legacy-local",
+  "derivedFromChannel": "stable",
   "derivedFromVersion": "2.6.3",
   "build": 26302,
   "ruleVersion": 2026082207,
@@ -15,5 +15,5 @@
   "forcedRuleVersion": 2026082207,
   "mode": "local",
   "updatedAt": "2026-08-22",
-  "notes": "沿用原 mdai.txt 完整本地代码；导入时仅按统一规则改名并提升壳 version，导入后不依赖私人 GitHub 运行。"
+  "notes": "保留完整 mdai.txt 本地业务代码；从规则仓库导入时强制输出 title=麻豆AI 本地版，并提升壳 version。导入完成后不依赖私人 GitHub 远程业务代码运行。"
 }

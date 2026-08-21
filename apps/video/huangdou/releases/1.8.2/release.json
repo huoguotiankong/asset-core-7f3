@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "huangdou",
+  "name": "黄豆短剧",
+  "version": "1.8.2",
+  "build": 18201,
+  "ref": "main",
+  "promotedFrom": {"channel":"test","version":"1.8.2-test.1","build":18201,"release":"apps/video/huangdou/releases/1.8.2-test.1/release.json"},
+  "sourceBaseline": {"channel":"legacy-local","path":"huangdou.txt","blob":"49aa0724e0aee42a582c56b68a8443bc8d31054a"},
+  "modules": [{"name":"runtime-loader","path":"apps/video/huangdou/releases/1.8.2-test.1/runtime.js"}],
+  "verify": {"global":"HuangDouRemoteRuntime","property":"build","equals":"1.8.2-test.1"},
+  "notes": "由用户实机验证通过的 1.8.2-test.1 / Build 18201 原样晋级。Stable 直接复用已验证 immutable Test runtime 与固定本地业务快照，不修改业务逻辑。"
+}

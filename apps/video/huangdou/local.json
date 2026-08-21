@@ -5,7 +5,7 @@
   "name": "黄豆短剧 本地版",
   "version": "1.8.2-local.1",
   "baseVersion": "1.8.2",
-  "derivedFromChannel": "legacy-local",
+  "derivedFromChannel": "stable",
   "derivedFromVersion": "1.8.2",
   "build": 18202,
   "ruleVersion": 2026082208,
@@ -15,5 +15,5 @@
   "forcedRuleVersion": 2026082208,
   "mode": "local",
   "updatedAt": "2026-08-22",
-  "notes": "沿用原 huangdou.txt 完整本地代码；导入时仅统一改名并提升壳 version。"
+  "notes": "保留完整 huangdou.txt 本地业务代码；从规则仓库导入时强制输出 title=黄豆短剧 本地版，并提升壳 version。导入完成后不依赖私人 GitHub 远程业务代码运行。"
 }

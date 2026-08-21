@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mdai",
+  "name": "麻豆AI",
+  "version": "2.6.3",
+  "build": 26301,
+  "release": "apps/video/mdai/releases/2.6.3/release.json",
+  "notes": "2.6.3 Remote Stable。由实机验证正常的 2.6.3-test.1 / Build 26301 晋级，保留完整视频、短剧、搜索、详情播放、评论、收藏和历史能力。",
+  "changelog": "apps/video/mdai/CHANGELOG.md"
+}

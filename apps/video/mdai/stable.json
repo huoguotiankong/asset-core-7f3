@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "mdai",
+  "name": "麻豆AI",
+  "version": "2.6.3",
+  "build": 26301,
+  "shellVersion": "1.0.0",
+  "managerVersion": "2.0.1",
+  "release": "apps/video/mdai/releases/2.6.3/release.json",
+  "rule": "apps/video/mdai/mdai_remote_v1.txt",
+  "promotedFrom": "2.6.3-test.1",
+  "promotedAt": "2026-08-22T02:53:00+08:00",
+  "updatedAt": "2026-08-22",
+  "notes": "用户实机确认 Remote Test 正常后原样晋级 Stable；业务逻辑与 2.6.3-test.1 完全一致。"
+}

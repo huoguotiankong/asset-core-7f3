@@ -3,55 +3,25 @@
   "id": "huangdou",
   "name": "黄豆短剧",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 02:38",
+  "updatedAt": "2026-08-22 02:53",
   "channels": [
     {
-      "channel": "test",
-      "label": "测试版",
-      "id": "huangdou-test",
-      "name": "黄豆短剧",
-      "version": "1.8.2-test.1",
-      "baseVersion": "1.8.2",
-      "targetVersion": "1.8.2",
-      "build": 18201,
-      "displayVersion": "Test 1.8.2 · RemoteTest1",
-      "path": "apps/video/huangdou/huangdou_remote_test_v1.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-22",
-      "recommended": true,
-      "desc": "远程代码测试版 · 首轮迁移验证",
-      "highlights": [
-        "业务严格继承 1.8.2 本地基线",
-        "Remote Manager / release 已独立版本化",
-        "测试通过后再晋级远程 Stable"
-      ],
-      "icon": "https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
+      "channel":"stable","label":"正式版","id":"huangdou","name":"黄豆短剧","version":"1.8.2","build":18201,
+      "displayVersion":"Stable 1.8.2 · Remote","path":"apps/video/huangdou/huangdou_remote_v1.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,
+      "desc":"远程代码正式版 · 已实机验证","highlights":["由 1.8.2-test.1 实机验证后晋级","正式/测试同名覆盖","Remote Stable 日常使用"],
+      "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
-      "channel": "local",
-      "label": "本地版",
-      "id": "huangdou-local",
-      "name": "黄豆短剧 本地版",
-      "version": "1.8.2-local.1",
-      "baseVersion": "1.8.2",
-      "derivedFromChannel": "legacy-local",
-      "derivedFromVersion": "1.8.2",
-      "build": 18202,
-      "displayVersion": "Local 1.8.2 · Pure Local",
-      "path": "huangdou.txt",
-      "codec": "javdb_retitle_remote",
-      "forcedTitle": "黄豆短剧 本地版",
-      "forcedRuleVersion": 2026082208,
-      "mode": "local",
-      "updatedAt": "2026-08-22",
-      "recommended": false,
-      "desc": "原完整本地版 · 独立保留",
-      "highlights": [
-        "仅按统一规则改名为 黄豆短剧 本地版",
-        "完整业务代码仍在本地规则内",
-        "可与远程测试版同时保留"
-      ],
-      "icon": "https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
+      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.8.2-test.1","baseVersion":"1.8.2","targetVersion":"1.8.2","build":18201,
+      "displayVersion":"Test 1.8.2 · RemoteTest1","path":"apps/video/huangdou/huangdou_remote_test_v1.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
+      "desc":"远程代码测试版 · 已完成本轮实机验证","highlights":["与当前 Stable 同业务基线","保留为测试/恢复入口","后续新功能从 Stable 继续向前开发"],
+      "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
+    },
+    {
+      "channel":"local","label":"本地版","id":"huangdou-local","name":"黄豆短剧 本地版","version":"1.8.2-local.1","baseVersion":"1.8.2","derivedFromChannel":"stable","derivedFromVersion":"1.8.2","build":18202,
+      "displayVersion":"Local 1.8.2 · Pure Local","path":"huangdou.txt","codec":"javdb_retitle_remote","forcedTitle":"黄豆短剧 本地版","forcedRuleVersion":2026082208,"mode":"local","updatedAt":"2026-08-22","recommended":false,
+      "desc":"原完整本地版 · 规则名固定为“黄豆短剧 本地版”","highlights":["导入输出程序名固定为 黄豆短剧 本地版","完整业务代码内置","可与正式/测试远程版独立并存"],
+      "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     }
   ]
 }

@@ -3,19 +3,22 @@
   "id": "mdai",
   "name": "麻豆AI",
   "category": "video",
-  "mode": "remote-test+local",
+  "mode": "remote+test+local",
+  "latest": "apps/video/mdai/latest.json",
+  "stable": "apps/video/mdai/stable.json",
   "test": "apps/video/mdai/test.json",
   "local": "apps/video/mdai/local.json",
   "channels": "apps/video/mdai/channels.json",
+  "defaultVersion": "2.6.3",
+  "defaultBuild": 26301,
+  "shellVersion": "1.0.0",
+  "bootstrap": "apps/video/mdai/bootstrap_v1.js",
+  "rule": "apps/video/mdai/mdai_remote_v1.txt",
   "testVersion": "2.6.3-test.1",
   "testBuild": 26301,
   "testShellVersion": "1.0.0-test",
   "testBootstrap": "apps/video/mdai/bootstrap_test_v1.js",
   "testRule": "apps/video/mdai/mdai_remote_test_v1.txt",
   "localPath": "mdai.txt",
-  "migration": {
-    "stage": "remote-test-pilot",
-    "source": "mdai.txt@0710346141c7b2d2acfe438ce0796d9b4474e72d",
-    "note": "保留原完整本地规则；首个远程测试版通过钉住源码快照验证远程运行链，未晋级 Stable。"
-  }
+  "migration": {"stage":"remote-stable-promoted","source":"mdai.txt@0710346141c7b2d2acfe438ce0796d9b4474e72d","note":"2.6.3-test.1 已由用户实机确认正常并晋级 Remote Stable；Local 继续保留并固定命名为 麻豆AI 本地版。"}
 }
