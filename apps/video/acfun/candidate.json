@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha6",
-  "build": 157,
-  "shellVersion": "6.2.0-test",
+  "version": "0.6.0-alpha7",
+  "build": 158,
+  "shellVersion": "6.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha6/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha7/release.json",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha6 候选。针对当前实机暴露的筛选页层级混乱、内容空白、短视频无数据、社区/小说显示机器分类名等问题，重构筛选交互并增加分类/标签/漫画站点/短视频/社区/小说参数兼容。通过新 Shell6.2 / Bootstrap v062 / Build157 强制下发，仅进入 Test/Candidate；须完成首页、筛选、动漫/视频、漫画、短视频、社区、小说/有声、搜索、详情与播放实机回归后才能晋级 Stable。"
+  "notes": "0.6.0 Alpha7 候选。重点处理 Alpha6 实机确认的交互问题：筛选改为列表式逐项选择；短视频首页点击直接播放，不进入常规视频详情；漫画章节移除正文顶部章节/页数块，从首图开始全宽连续阅读；社区继续过滤测试/机器分类并清理详情文本；小说/有声分类无结果自动回退全部并扩大 findList 参数组合。通过新 Shell6.3 / Bootstrap v063 / Build158 强制下发，仅进入 Test/Candidate；完成筛选、短视频、漫画阅读、社区、小说/有声、搜索、详情与播放实机回归前不得晋级 Stable。"
 }
