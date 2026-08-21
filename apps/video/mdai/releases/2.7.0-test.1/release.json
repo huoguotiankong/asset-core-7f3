@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.7.0-test.1",
+  "build": 27001,
+  "ref": "main",
+  "baseStable": {
+    "version": "2.6.3",
+    "build": 26301,
+    "release": "apps/video/mdai/releases/2.6.3/release.json"
+  },
+  "sourceBaseline": {
+    "channel": "stable",
+    "path": "apps/video/mdai/releases/2.6.3-test.1/source_local_2.6.3.txt",
+    "blob": "0710346141c7b2d2acfe438ce0796d9b4474e72d"
+  },
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/mdai/releases/2.7.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.7.0-test.1/ui_base.js"},
+    {"name":"content-pages","path":"apps/video/mdai/releases/2.7.0-test.1/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.7.0-test.1/pages_detail.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.7.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.7.0-test.1"},
+  "notes": "基于 Stable 2.6.3 已验证协议层重构 Native UI 与 PlaybackAdapter。首页/片库/搜索/我的/设置/评论独立页面；播放默认标准 PlayModel 双线路，兼容缓存降为显式策略。仅 Test，待实机截图和播放回归。"
+}
