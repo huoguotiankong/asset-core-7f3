@@ -10,6 +10,7 @@
   "shellVersion": "1.0.30-test",
   "managerVersion": "2.0.2",
   "release": "apps/tools/rule-repo/releases/test-3.5.4-rc7/release.json",
-  "updatedAt": "2026-08-21",
-  "notes": "Single Workspace 13.2 上下文修复版：网页动态动作显式绑定当前规则的 ruleRepoCore 子页面；若页面模块不可用，则由 Bootstrap v130 直接恢复 Core。程序与版本卡导入、打开、检查、收藏、同步、备份、诊断和记录动作统一走双路加载，失败收敛为页内提示，不再触发系统解析错误框。Stable 3.5.3 保持不动。"
+  "updatedAt": "2026-08-22",
+  "status": "verified-promoted-baseline",
+  "notes": "Single Workspace 13.2 / Build 384 已完成实机验证并晋级 Stable 3.5.4。本文件保留为本轮最后一个已验证 Test 基线与恢复参照；下一轮独立开发必须先 rebase Stable 3.5.4，再创建新的 Test/Candidate，不能继续从 3.5.3 分叉。"
 }
