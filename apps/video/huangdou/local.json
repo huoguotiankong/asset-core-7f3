@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "channel": "local",
+  "id": "huangdou-local",
+  "name": "黄豆短剧 本地版",
+  "version": "1.8.2-local.1",
+  "baseVersion": "1.8.2",
+  "derivedFromChannel": "legacy-local",
+  "derivedFromVersion": "1.8.2",
+  "build": 18202,
+  "ruleVersion": 2026082208,
+  "path": "huangdou.txt",
+  "codec": "javdb_retitle_remote",
+  "forcedTitle": "黄豆短剧 本地版",
+  "forcedRuleVersion": 2026082208,
+  "mode": "local",
+  "updatedAt": "2026-08-22",
+  "notes": "沿用原 huangdou.txt 完整本地代码；导入时仅统一改名并提升壳 version。"
+}

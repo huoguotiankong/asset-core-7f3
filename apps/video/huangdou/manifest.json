@@ -1,0 +1,21 @@
+{
+  "schema": 3,
+  "id": "huangdou",
+  "name": "黄豆短剧",
+  "category": "video",
+  "mode": "remote-test+local",
+  "test": "apps/video/huangdou/test.json",
+  "local": "apps/video/huangdou/local.json",
+  "channels": "apps/video/huangdou/channels.json",
+  "testVersion": "1.8.2-test.1",
+  "testBuild": 18201,
+  "testShellVersion": "1.0.0-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v1.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v1.txt",
+  "localPath": "huangdou.txt",
+  "migration": {
+    "stage": "remote-test-pilot",
+    "source": "huangdou.txt@49aa0724e0aee42a582c56b68a8443bc8d31054a",
+    "note": "保留原完整本地规则；首个远程测试版通过钉住源码快照验证远程运行链，未晋级 Stable。"
+  }
+}
