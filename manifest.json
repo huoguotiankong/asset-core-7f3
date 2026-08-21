@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608220023",
+  "revision": "202608220111",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-22 00:23",
+  "updated": "2026-08-22 01:11",
   "taxonomy": {
     "categories": [
       {"id":"tools","name":"工具"},{"id":"video","name":"视频"},{"id":"comic","name":"漫画"},{"id":"cloud","name":"网盘"},{"id":"aggregate","name":"聚合"}
@@ -14,7 +14,7 @@
     {"id":"huangdou","name":"黄豆短剧","version":"1.8.2","desc":"短剧 / 专题 / 收藏 / 历史","path":"huangdou.txt","category":"video","categoryName":"视频","subCategory":"短剧","tags":["短剧","专题","收藏","历史"],"mode":"local","updatedAt":"2026-08-18","sort":10,"icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"},
     {"id":"mdai","name":"麻豆AI","version":"2.6.3","desc":"视频 / 短剧 / 评论 / 收藏","path":"mdai.txt","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["视频","短剧","评论","收藏"],"mode":"local","updatedAt":"2026-08-18","sort":20,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/fallback_video.svg"},
     {"id":"hanime1","name":"Hanime1","version":"1.2.1","desc":"视频 / 漫画 / 搜索 / 多画质","path":"hanime1.txt","category":"video","categoryName":"视频","subCategory":"动漫漫画","tags":["视频","漫画","搜索","多画质"],"mode":"local","updatedAt":"2026-08-18","sort":30,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"},
-    {"id":"acfun","name":"ACFun","version":"Stable 0.4.9 / Test 0.6.0-alpha5 · Shell 6.1","desc":"正式版 0.4.9 继续冻结为实机可用基线；测试版 0.6.0-alpha5 / Build156 新建 Cloud Shell 6.1、Bootstrap v061 和规则入口 v061，修复旧 Test Bootstrap 的 manager() 更新异常，并通过云端仓库同名覆盖导入强制越过手机上残留的 Alpha2。业务层继承 Alpha4 的视频搜索、类型化漫画详情与阅读、递归精选/里番/漫画分类、短视频、社区、小说、有声、五类全站搜索和统一本地收藏。","path":"apps/video/acfun/acfun_remote_v5.txt","entryType":"channel-group","channelsPath":"apps/video/acfun/channels.json","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["远程","测试","视频","漫画","搜索","评论","收藏","标签","版本","界面"],"mode":"remote","updatedAt":"2026-08-21","sort":40,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/acfun.svg"},
+    {"id":"acfun","name":"ACFun","version":"Stable 0.4.9 / Test 0.6.0-alpha6 · Shell 6.2","desc":"正式版 0.4.9 继续冻结为实机可用基线；测试版 0.6.0-alpha6 / Build157 针对当前实机暴露的分类筛选难用、动漫/漫画/短视频空结果、社区/小说机器分类名等问题重构。筛选页改为紧凑栏目 + 自动换行分类/标签 + 展开/收起 + 排序 + 应用/恢复默认；数据层增加分类参数兼容、标签空结果回退父分类、漫画 stationId/comicsStationId 双契约，并把 APK 1.9.7 静态出现的 pageSize=30/loadType=2 加入短视频首选候选。Cloud Shell 6.2 / Bootstrap v062 强制覆盖进入 Build157，仍需实机回归后再考虑晋级正式版。","path":"apps/video/acfun/acfun_remote_v5.txt","entryType":"channel-group","channelsPath":"apps/video/acfun/channels.json","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["远程","测试","视频","漫画","搜索","评论","收藏","标签","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":40,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/acfun.svg"},
     {"id":"javbus","name":"JavBus","version":"2026081903","desc":"视频 / 演员 / 本地收藏 / 收藏页分影片演员","path":"javbus_2026081903.txt","category":"video","categoryName":"视频","subCategory":"影视资料","tags":["视频","演员","收藏","搜索"],"mode":"local","updatedAt":"2026-08-19","sort":50,"icon":"https://img.vinua.cn/images/6808cf424eb61e.webp"},
     {"id":"javdb-v3","name":"JavDB v3","version":"3.9.41 · Stable/Test/Local","desc":"正式版远程稳定 / 测试版远程验证 / 本地版纯本地独立安装 / 搜索 / 高级标签 / 评论 / 播放与收藏","path":"cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt","entryType":"channel-group","channelsPath":"apps/video/javdb/channels.json","category":"video","categoryName":"视频","subCategory":"影视资料","tags":["远程","测试","本地","搜索","标签","评论","收藏","版本"],"mode":"remote","updatedAt":"2026-08-21","sort":60,"featured":true,"icon":"https://javdb.com/favicon.ico"}
   ]
