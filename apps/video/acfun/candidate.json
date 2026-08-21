@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha7",
-  "build": 158,
-  "shellVersion": "6.3.0-test",
+  "version": "0.6.0-alpha8",
+  "build": 159,
+  "shellVersion": "6.4.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha7/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha8/release.json",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha7 候选。重点处理 Alpha6 实机确认的交互问题：筛选改为列表式逐项选择；短视频首页点击直接播放，不进入常规视频详情；漫画章节移除正文顶部章节/页数块，从首图开始全宽连续阅读；社区继续过滤测试/机器分类并清理详情文本；小说/有声分类无结果自动回退全部并扩大 findList 参数组合。通过新 Shell6.3 / Bootstrap v063 / Build158 强制下发，仅进入 Test/Candidate；完成筛选、短视频、漫画阅读、社区、小说/有声、搜索、详情与播放实机回归前不得晋级 Stable。"
+  "notes": "0.6.0 Alpha8 候选。重点处理 Alpha7 实机确认的交互与资源问题：筛选回归首页三列弹层并原页即时刷新；社区/小说/有声改为同页顶层状态，避免不断堆叠新页面；短视频直接播放保持；漫画章节改海阔 pics:// 原生多图阅读；精选/里番 Station 改独立 classifyId=4/24 严格请求；小说/有声使用 GET+POST findList/tagList 请求矩阵；社区详情递归恢复文本、图片、视频和链接。仅用于 Test/Candidate，完成首页、筛选、精选/里番、漫画、社区、小说/有声、搜索与播放实机回归前不得晋级 Stable。"
 }
