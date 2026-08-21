@@ -3,14 +3,15 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.4-rc7",
-  "build": 384,
-  "baseVersion": "3.5.3",
+  "version": "3.5.4-test.1",
+  "build": 385,
+  "baseVersion": "3.5.4",
   "targetVersion": "3.5.4",
-  "shellVersion": "1.0.30-test",
+  "shellVersion": "1.0.31-test",
   "managerVersion": "2.0.2",
-  "release": "apps/tools/rule-repo/releases/test-3.5.4-rc7/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.4-sync1/release.json",
   "updatedAt": "2026-08-22",
-  "status": "verified-promoted-baseline",
-  "notes": "Single Workspace 13.2 / Build 384 已完成实机验证并晋级 Stable 3.5.4。本文件保留为本轮最后一个已验证 Test 基线与恢复参照；下一轮独立开发必须先 rebase Stable 3.5.4，再创建新的 Test/Candidate，不能继续从 3.5.3 分叉。"
+  "status": "stable-aligned-baseline",
+  "previousVerifiedTest": {"version":"3.5.4-rc7","build":384,"release":"apps/tools/rule-repo/releases/test-3.5.4-rc7/release.json"},
+  "notes": "Stable 3.5.4 晋级后的同基线 Test 快照。业务/UI 与 Stable 3.5.4 完全一致，仅保留 Test 独立状态、身份与 Remote Manager state；Build 385 作为下一轮独立开发的干净起点。"
 }
