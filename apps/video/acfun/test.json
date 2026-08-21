@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha6",
-  "build": 157,
-  "shellVersion": "6.2.0-test",
+  "version": "0.6.0-alpha7",
+  "build": 158,
+  "shellVersion": "6.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha6/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v062.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha7/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v063.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha6 筛选与资源恢复测试版。根据 2026-08-22 实机截图，完全重构分类筛选为紧凑栏目 + 自动换行分类/标签 + 展开/收起 + 排序 + 应用/恢复默认；清理 dyncat-/fictiontag- 等机器分类名，社区热门 UP 改为紧凑入口。数据层新增动漫/视频分类参数兼容与标签空结果回退父分类、漫画 stationId/comicsStationId 双契约；短视频优先尝试 APK 1.9.7 静态出现的 pageSize=30/loadType=2，并保留 3/4 兼容链。新建 Shell6.2、Bootstrap v062、Build157，云端仓库覆盖导入后 minBuild=157 强制进入 Alpha6。Stable 0.4.9 / Build149 与 latest.json 保持不变，所有资源链仍需实机回归。"
+  "notes": "0.6.0 Alpha7 交互与阅读体验重构测试版。根据 Alpha6 实机结果，筛选页改为列表式选择器：栏目/频道或分类/标签/排序逐项选择，取消整屏 Chip 墙；短视频卡片不再进入常规视频二级详情，首页点击直接调用播放链；漫画章节去除正文顶部章节/页数信息块，从第一张漫画图开始全宽连续铺满；社区分类进一步过滤数字/测试/机器项并格式化时间，动态详情清理重复 Markdown 链接；小说/有声扩大 findList 参数组合，分类无结果自动回退全部。新建 Shell6.3、Bootstrap v063、Build158，云端仓库覆盖导入后 minBuild=158 强制进入 Alpha7。Stable 0.4.9 / Build149 与 latest.json 保持冻结，Alpha7 仍需实机回归。"
 }
