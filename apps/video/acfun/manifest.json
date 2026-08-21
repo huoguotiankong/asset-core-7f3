@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha7",
-  "testBuild": 158,
-  "testShellVersion": "6.3.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v063.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v063.txt",
+  "testVersion": "0.6.0-alpha8",
+  "testBuild": 159,
+  "testShellVersion": "6.4.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v064.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v064.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha7-interaction-reader-rebuild-v63",
+    "stage": "alpha8-single-page-native-reader-v64",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha6 实机确认：筛选 Chip 墙仍然难用，短视频应该首页直接播放而不是进入常规视频二级页，漫画章节正文顶部章节/页数块应移除并从首图开始铺满，社区仍有数字/测试分类与原始时间/Markdown 链接，小说/有声分类筛选后经常空。Test/Candidate 因此升级到 0.6.0-alpha7 Build158 / Shell6.3：筛选改为列表式选择器；短视频卡直接调用播放链；漫画章节去掉内部标题块；社区进一步清洗分类/时间/详情文本；小说/有声扩大 findList 参数并在分类无结果时自动回退全部。新 Bootstrap v063 minBuild=158，须从云端仓库覆盖导入后实机回归；正式 latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha7 实机确认：短视频首页直接播放已正常；漫画章节虽然移除内部标题块但自定义 pic_1_full 页面仍有大量空白且不符合原生漫画阅读；小说/有声仍无内容；社区帖子详情不完整；独立筛选页与社区/小说/有声顶层入口会持续 push 新页面，返回栈越来越深；精选与里番分类因聚合 Station 请求发生混淆，且部分分类与 APP 不一致。Alpha8 Build159 / Shell6.4 将分类/标签/排序整合回首页，点击即以 select:// col=3 弹层选择并 refreshPage(false) 原页刷新；社区/小说/有声也进入同一个 home section 状态，减少页面堆叠；漫画章节直接返回 Hiker pics:// 原生多图阅读；精选严格优先 classifyId=4，里番严格优先 classifyId=24；小说/有声 findList/tagList 增加 GET+POST 请求矩阵和宽松实体识别；社区详情递归提取正文、嵌套 JSON、图片、视频和链接。Test Shell 使用 v064 / minBuild=159；正式 latest.json 不变。"
   }
 }
