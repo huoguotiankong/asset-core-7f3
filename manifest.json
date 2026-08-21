@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608212230",
+  "revision": "202608220022",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-21 22:30",
+  "updated": "2026-08-22 00:22",
   "taxonomy": {
     "categories": [
       {"id":"tools","name":"工具"},{"id":"video","name":"视频"},{"id":"comic","name":"漫画"},{"id":"cloud","name":"网盘"},{"id":"aggregate","name":"聚合"}
@@ -10,7 +10,7 @@
     "tagOrder": ["远程","测试","本地","搜索","收藏","评论","漫画","多画质","短剧","演员","标签","管理","版本","界面"]
   },
   "items": [
-    {"id":"rule-repo","name":"我的规则仓库","version":"stable-3.5.3-b377","desc":"Stable 3.5.3 保持稳定；Test 3.5.4-rc7 Single Workspace 13.2 为程序/版本导入、同步、备份、诊断和记录动作显式绑定规则上下文，并用 Bootstrap v130 提供 Core 恢复通道；首页局部滚动、固定五栏、35/65 分类和同页详情保持不变","path":"apps/tools/rule-repo/rule_repo_remote_v353.txt","entryType":"channel-group","channelsPath":"apps/tools/rule-repo/channels.json","category":"tools","categoryName":"工具","subCategory":"仓库管理","tags":["远程","测试","管理","搜索","版本","界面"],"mode":"remote","updatedAt":"2026-08-21","sort":0,"featured":true,"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"},
+    {"id":"rule-repo","name":"我的规则仓库","version":"stable-3.5.4-b384","desc":"Stable 3.5.4 / Build 384 已由实机验证的 Test 3.5.4-rc7 Single Workspace 13.2 晋级；正式版同步获得首页局部滚动与固定五栏、35/65 分类原地展开、同页程序详情，以及程序/版本导入、同步、备份、诊断和记录动作的显式规则上下文 + Stable Bootstrap 双路恢复。正式 release 移除 Test 状态补丁并恢复 Stable 状态命名空间。","path":"apps/tools/rule-repo/rule_repo_remote_v354.txt","entryType":"channel-group","channelsPath":"apps/tools/rule-repo/channels.json","category":"tools","categoryName":"工具","subCategory":"仓库管理","tags":["远程","测试","管理","搜索","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":0,"featured":true,"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"},
     {"id":"huangdou","name":"黄豆短剧","version":"1.8.2","desc":"短剧 / 专题 / 收藏 / 历史","path":"huangdou.txt","category":"video","categoryName":"视频","subCategory":"短剧","tags":["短剧","专题","收藏","历史"],"mode":"local","updatedAt":"2026-08-18","sort":10,"icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"},
     {"id":"mdai","name":"麻豆AI","version":"2.6.3","desc":"视频 / 短剧 / 评论 / 收藏","path":"mdai.txt","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["视频","短剧","评论","收藏"],"mode":"local","updatedAt":"2026-08-18","sort":20,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/fallback_video.svg"},
     {"id":"hanime1","name":"Hanime1","version":"1.2.1","desc":"视频 / 漫画 / 搜索 / 多画质","path":"hanime1.txt","category":"video","categoryName":"视频","subCategory":"动漫漫画","tags":["视频","漫画","搜索","多画质"],"mode":"local","updatedAt":"2026-08-18","sort":30,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"},
