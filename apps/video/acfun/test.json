@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha5",
-  "build": 156,
-  "shellVersion": "6.1.0-test",
+  "version": "0.6.0-alpha6",
+  "build": 157,
+  "shellVersion": "6.2.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha5/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v061.txt",
-  "updatedAt": "2026-08-21",
-  "notes": "0.6.0 Alpha5 云端仓库强制迁移版。用户实机仍运行 Alpha2，证明 Alpha4 只更新远程 release、没有发布新的 Test 规则壳；旧 Bootstrap 的更新方法还把 requireManager() 错写成不存在的 manager()。Alpha5 新建 Shell6.1、Bootstrap v061、规则入口 v061 与 Build156，云端仓库覆盖导入后通过 minBuild=156 直接切到新安全基线。业务功能完整继承 Alpha4：视频主搜索、类型化漫画详情/章节阅读、递归精选/里番/漫画分类、短视频有限矩阵、社区、小说、有声、五类搜索与统一本地收藏。Stable 0.4.9 / Build149 与 latest.json 保持不变。"
+  "release": "apps/video/acfun/releases/0.6.0-alpha6/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v062.txt",
+  "updatedAt": "2026-08-22",
+  "notes": "0.6.0 Alpha6 筛选与资源恢复测试版。根据 2026-08-22 实机截图，完全重构分类筛选为紧凑栏目 + 自动换行分类/标签 + 展开/收起 + 排序 + 应用/恢复默认；清理 dyncat-/fictiontag- 等机器分类名，社区热门 UP 改为紧凑入口。数据层新增动漫/视频分类参数兼容与标签空结果回退父分类、漫画 stationId/comicsStationId 双契约；短视频优先尝试 APK 1.9.7 静态出现的 pageSize=30/loadType=2，并保留 3/4 兼容链。新建 Shell6.2、Bootstrap v062、Build157，云端仓库覆盖导入后 minBuild=157 强制进入 Alpha6。Stable 0.4.9 / Build149 与 latest.json 保持不变，所有资源链仍需实机回归。"
 }
