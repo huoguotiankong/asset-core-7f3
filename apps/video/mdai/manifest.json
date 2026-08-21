@@ -14,11 +14,15 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/mdai/bootstrap_v1.js",
   "rule": "apps/video/mdai/mdai_remote_v1.txt",
-  "testVersion": "2.6.3-test.1",
-  "testBuild": 26301,
-  "testShellVersion": "1.0.0-test",
-  "testBootstrap": "apps/video/mdai/bootstrap_test_v1.js",
-  "testRule": "apps/video/mdai/mdai_remote_test_v1.txt",
+  "testVersion": "2.7.0-test.1",
+  "testBuild": 27001,
+  "testShellVersion": "1.1.0-test",
+  "testBootstrap": "apps/video/mdai/bootstrap_test_v2.js",
+  "testRule": "apps/video/mdai/mdai_remote_test_v2.txt",
   "localPath": "mdai.txt",
-  "migration": {"stage":"remote-stable-promoted","source":"mdai.txt@0710346141c7b2d2acfe438ce0796d9b4474e72d","note":"2.6.3-test.1 已由用户实机确认正常并晋级 Remote Stable；Local 继续保留并固定命名为 麻豆AI 本地版。"}
+  "migration": {
+    "stage": "remote-stable-plus-ui-playback-test",
+    "source": "Stable 2.6.3 / Build 26301",
+    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.7.0-test.1 从 Stable 协议层向前重构 Native UI 与 PlaybackAdapter，待实机验证。"
+  }
 }
