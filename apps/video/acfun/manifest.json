@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha8",
-  "testBuild": 159,
-  "testShellVersion": "6.4.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v064.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v064.txt",
+  "testVersion": "0.6.0-alpha9",
+  "testBuild": 160,
+  "testShellVersion": "6.5.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v065.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v065.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha8-single-page-native-reader-v64",
+    "stage": "alpha9-strict-taxonomy-fiction-chapter-v65",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha7 实机确认：短视频首页直接播放已正常；漫画章节虽然移除内部标题块但自定义 pic_1_full 页面仍有大量空白且不符合原生漫画阅读；小说/有声仍无内容；社区帖子详情不完整；独立筛选页与社区/小说/有声顶层入口会持续 push 新页面，返回栈越来越深；精选与里番分类因聚合 Station 请求发生混淆，且部分分类与 APP 不一致。Alpha8 Build159 / Shell6.4 将分类/标签/排序整合回首页，点击即以 select:// col=3 弹层选择并 refreshPage(false) 原页刷新；社区/小说/有声也进入同一个 home section 状态，减少页面堆叠；漫画章节直接返回 Hiker pics:// 原生多图阅读；精选严格优先 classifyId=4，里番严格优先 classifyId=24；小说/有声 findList/tagList 增加 GET+POST 请求矩阵和宽松实体识别；社区详情递归提取正文、嵌套 JSON、图片、视频和链接。Test Shell 使用 v064 / minBuild=159；正式 latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha8 实机确认：短视频直接播放继续正常；小说/有声列表已能加载，证明 findList 恢复方向有效，但 fiction/base/chapterInfo 旧单一路径没有恢复章节正文/音频；首页 scroll_button 不支持任意 HTML，导致筛选按钮直接显示 <font> 标签；焦点大卡在封面字段不稳定时出现灰色/空白大图；社区 Feed 已有真实内容，但作者、正文和媒体详情仍存在不完整；分类/筛选内容仍需进一步按 APP 真实响应校准。Alpha9 Build160 / Shell6.5 新建 a9 taxonomy/cache，按 Station/Class/Tag/Fiction/Community 的明确身份字段提取数据并一次性清理旧选中 ID；精选/里番分别保持 classifyId=4/24 first-nonempty，不再聚合互相污染；首页筛选保留 select:// col=3 原页刷新，但按钮全部改纯文本；焦点大卡默认关闭，仅在手动开启且存在有效图片时显示紧凑横卡。小说/有声详情合并 Feed seed 与 info，扩大封面/作者字段；章节增加 chapterInfo GET+POST、多组 fiction/chapter ID 参数、fictionUrl/contentUrl 外链正文抓取及 longFormAudio/voice/media 音频候选。社区详情合并 Feed 原始对象与 dynamicInfo，并排除头像/徽章等非正文图片。Test Shell 使用 v065 / minBuild=160；正式 latest.json 不变。"
   }
 }
