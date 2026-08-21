@@ -9,14 +9,50 @@
 - 业务底座继续保留已验证链：精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频、漫画详情/章节阅读、极速播放、封面解密和持久缓存。
 - Stable 继续作为 0.5.x / 0.6.x Native UI/UX 大改的恢复基线；大改只进入 Test/Candidate，未完成实机验证前不得覆盖 Stable。
 
-## Test 0.6.0-alpha6 / Build 157 / Test Shell 6.2.0（当前测试）
+## Test 0.6.0-alpha7 / Build 158 / Test Shell 6.3.0（当前测试）
+
+### 2026-08-22 Alpha6 实机输入
+
+- Alpha6 已真实到达设备，证明 Shell6.2 / Bootstrap v062 / Build157 的下发链正常；本轮继续以真实页面体验而不是代码结构作为修改依据。
+- 用户明确反馈 Alpha6 筛选页虽然比 Alpha5 好，但仍然“太难用”，整屏分类 Chip、展开/收起和应用/恢复按钮仍然像配置面板，不符合内容 App 的筛选体验。
+- 短视频被当成常规视频卡处理，点击还会进入普通视频二级详情；用户明确要求短视频入口点击后直接播放，不再经过常规视频详情页。
+- 漫画章节页顶部仍显示“章节名 + 151页”等内部信息块，并在第一张图前占用明显空间；用户要求漫画正文从首图开始、全宽连续铺满内容区。
+- 社区虽然已经能加载动态，但分类仍出现 `11111111 / ceas / 帖子数据` 等明显测试/内部项，时间直接显示 ISO 原始值；动态详情还会把 Markdown 链接重复展示。
+- 小说/有声分类已经能得到中文标签，但分类筛选后经常整页为空，有声“全部”也可能为空；不能把“接口字段存在”当作资源已经恢复。
+
+### Alpha7 交互与阅读重构
+
+- 新增 `acfun_ui_v060_a7_home.js`，筛选页不再使用多排 `flex_button` Chip 墙，改为真正的列表式筛选中心：`当前条件 → 栏目 → 频道/分类 → 标签 → 排序 → 返回首页/恢复默认`。
+- 每个筛选项点击后使用原生 `select://` 选择器展示完整选项；页面只保留当前值，不再要求用户在几十个 Chip 里寻找选中项。
+- 社区、小说、有声也同步改成“分类/排序”列表式选择，不再把低频分类全部常驻页面。
+- 短视频 Feed 新增独立 `shortCard`：保持竖卡布局，但卡片 URL 直接调用当前 ACFun 播放链，**不进入 `acfun_detail` 常规视频二级页**。
+- 短视频请求继续保留 Alpha6 的 `pageSize=30 / loadType=2/3/4` 候选，并额外加入 APK 静态出现的 `video_content_type=shortVideo` 字段兼容；仍不把任何未实机返回的候选记作已验证参数。
+- 新增 `acfun_ui_v060_a7_detail.js`：漫画章节不再渲染章节标题/页数 `rich_text` 块，页面正文第一项就是 `pic_1_full`，保持系统标题栏但让漫画图片从内容区顶部开始全宽连续阅读。
+- 社区动态详情清理重复 Markdown 链接，Feed/详情时间转换为“刚刚/几分钟前/几天前/月-日 时:分”等用户可读格式。
+
+### Alpha7 资源恢复继续强化
+
+- 新增 `acfun_runtime_v060_a7.js`，社区分类在 Alpha6 机器 token 过滤基础上继续剔除纯数字、`ceas/test/debug/demo`、帖子数据/调试/占位等明显非业务分类。
+- 小说/有声 `fiction/base/findList` 扩大有限参数组合：普通小说尝试 `fictionType=1 / type=1 / fictionType=0 / 无类型`；有声尝试 `fictionType=2 + isAudio=1 / fictionType=2 / fictionType=1 + isAudio=1 / longFormAudio=1 / isAudio=1 / type=2 + audio=1`。
+- 小说/有声选择某分类后若完全空，自动再请求一次同模式“全部”数据；成功时记录 `acfun_v060_a7_fiction_fallback`，避免一个无效标签直接造成整页白屏。
+- 以上有声参数仍属于兼容候选，不得在未实机确认前写成“官方确定 fictionType 值”。
+
+### Alpha7 发布边界
+
+- 新建不可变 Release `releases/0.6.0-alpha7/release.json`，Build `158`；在 Alpha6 完整模块链末尾追加 `runtime-a7 / interaction-ui-a7 / reader-detail-a7 / shell-settings-a7`。
+- 新建 `bootstrap_test_v063.js?v=6300` 与 Test Shell `acfun_remote_test_v063.txt`，规则数字版本 `2026082202`，`minBuild=158`；从“我的规则仓库 → ACFun → 测试版 → 导入/覆盖”后强制进入 Alpha7。
+- `test.json / candidate.json / channels.json / manifest.json / registry.json / 根 manifest.json` 全部切到 Alpha7 Test 元数据。
+- Stable `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 继续冻结。
+- Alpha7 必须继续实机验证：新筛选选择器 → 短视频列表与直接播放 → 漫画章节首图位置/连续阅读 → 社区分类/详情 → 小说/有声 → 搜索 → 常规视频详情与播放。未形成实机闭环前不得晋级 Stable。
+
+## Test 0.6.0-alpha6 / Build 157 / Test Shell 6.2.0（上一测试）
 
 ### 2026-08-22 实机输入
 
 - 当前 Alpha5 已真实到达设备，说明 Shell6.1 的云端仓库覆盖链有效；本轮问题已经从“版本没下发”转为真实产品/UI 与数据兼容问题。
 - 分类与筛选页被巨大五栏图标、横向截断标签和低层级操作占满，信息密度低、切换成本高，用户明确要求完全重构。
 - 动漫/漫画筛选后仍可出现“当前条件暂时没有内容”；短视频继续显示“接口暂未返回内容”。
-- 社区分类直接暴露 `dyncat-*` 等服务端机器名，热门 UP 使用大头像纵向占位；小说分类也暴露 `fictiontag-*` 机器名并出现空书库。
+- 社区分类直接暴露 `dyncat-*` 等服务端机器名，热门 UP 使用大头像纵向占位；小说分类也暴露 `fictiontag-*` 机器分类名并出现空书库。
 - 本轮截图因此作为 Alpha6 的真实验收基线；任何“代码里看起来有接口”的结论都不能替代后续实机结果。
 
 ### Alpha6 筛选 UI 完全重构
