@@ -2,6 +2,16 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 release 和 Bootstrap。由于它同时承担安装中心与自举恢复职责，任何更新协议、缓存、通道、recovery 变化都必须写入本日志。
 
+## 3.5.4 Stable（Build 384 / Shell 1.5.4 / Manager 2.0.2）
+
+- 用户确认 `3.5.4-rc7 / Build 384 / Single Workspace 13.2` 已达到可用状态，并明确要求正式版升级到与最新测试版一致，因此本轮正式晋级 **Stable 3.5.4**。
+- 新建不可变 `releases/3.5.4/release.json`，业务/UI 模块保持 RC7 已验证链：首页仅“我的程序”区域独立滚动且五栏固定、分类 35/65 主从结构原地展开、程序信息/搜索/设置在单工作台内切换，以及 RC7 的显式规则上下文动作桥。
+- Stable 晋级不是机械复制 Test release：正式 release **移除 `test/v1.0.0/state_patch.js`**，避免正式版继续使用 `hc_repo_test_*` 收藏/最近/安装/搜索/导入记录；最终 `stable_patch.js` 强制恢复 `hc_repo_*` Stable 状态命名空间并固定 `isTestChannel()=false`。
+- RC7 `context_free_actions.js` 的业务逻辑保持不变，但正式 Stable patch 将故障恢复 Bootstrap 从测试版 `bootstrap_test_v130.js` 重新绑定到 **`bootstrap_v154.js`**，避免正式版动作失败时跨入 Test Remote state。
+- 新建 `bootstrap_v154.js`，Stable `latestPath` 仍为 `latest.json`，`minBuild=384`，默认 release 为 3.5.4；新建完整正式 Shell `rule_repo_remote_v354.txt`，规则数值 version 为 **2026082201**，所有 Raw/jsDelivr/Web Raw 地址显式指向 `huoguotiankong/asset-core-7f3@main`。
+- `candidate.json` 标记 RC7 为 `passed-promoted`；`test.json` 保留 RC7 作为本轮已验证测试恢复基线。下一轮 Test/Candidate 必须先 rebase Stable 3.5.4，不能继续从 3.5.3 分叉。
+- 正式回退基线继续保留 **3.5.3 / Build 377 / Shell 1.5.3**；3.5.4 不覆盖旧 Stable release。发布层已执行新路径、版本、状态隔离、Bootstrap/Shell/main 分支与旧仓依赖静态核对；正式 Shell 覆盖安装后的导入、备份、诊断、同步和回退仍以用户实机结果作为最终运行时判定。
+
 ## 3.5.4-rc7 Candidate / Test（Build 384 / Shell 1.0.30-test）
 
 - 用户 RC6 实机确认首页、分类与单工作台结构已明显改善，但点击普通程序/版本卡导入、设置中的“备份状态”和“诊断信息”都会弹出同一系统错误：`Module "hiker://page/ruleRepoCore" cannot be found`。
@@ -181,9 +191,8 @@
 - 多版本 `channelPage` 同步采用 Target UI 3.0 版本块，继续保留 Stable/Test/Local 关系说明和正式版恢复路径；“我的规则仓库”仍是正式/测试分名并存例外，其他程序继续同名覆盖规则。
 - 新增 Test 专用 `install_probe.js`：实验使用海阔内部 `hiker://home@规则名` 访问结果辅助判断规则是否存在；该探针默认有缓存、失败自动退回仓库导入记录，并且在未完成实机验证前**不得写入 Stable 作为可靠系统安装 API**。
 - 设置页增加安装状态探针开关/状态清理入口，便于实机 A/B 验证；如果探针在不同设备或海阔版本表现不稳定，后续候选直接废弃该能力，不影响 Stable。
-- 新建不可变 `3.5.3-rc5 / build 370` Candidate/Test release、`bootstrap_test_v117.js` 与 `rule_repo_test_v117.txt`；Fresh install Shell 数值 version 为 `2026082106`，符合 32 位有符号整数限制。
-- RC5 继续继承 Stable 3.5.2 的事务式同步、多镜像读取、stale cache、Remote Manager 2.0.2、Recovery 与 Stable/Test/Local 版本谱系；本轮只更新 Test/Candidate 与根目录测试描述，`stable.json` / `latest.json` 不动。
-- RC5 实机重点验收：① 首页是否明显出现新状态卡/程序卡层级；② `Target UI 3.0 · 3.5.3-rc5` 是否确认加载新 Core；③ 分类/搜索程序卡密度；④ 普通详情五项操作；⑤ JavDB/ACFun/规则仓库版本中心；⑥ 安装状态探针是否与海阔实际规则存在情况一致。未通过截图闭环不得晋级 Stable。
+- 新建不可变 `3.5.3-rc5 / build 370` Candidate/Test release、`bootstrap_test_v117.js` 与独立测试 Shell。
+- Stable/latest 继续保持 3.5.2；RC5 仅进入 Test/Candidate 实机验证。
 
 ## 3.5.3-rc4 Candidate / Test（Build 369 / Shell 1.0.16-test）
 
@@ -197,7 +206,7 @@
 - 多版本程序的 `channelPage` 做本轮最大改造：从“只有三张可导入卡片”升级为“版本中心 Hero → 打开程序/返回程序库 → 正式/测试/本地概览 → 版本卡 → 覆盖/恢复关系 → 底部导航”，让 JavDB/ACFun/规则仓库的 Stable/Test/Local 页面更接近目标图中的 App 详情与版本管理中心。
 - 更新中心重构为“当前 Core + 待更新数量 + 程序目录 + 回退能力”的清晰状态页；设置页按“体验与同步 / 数据管理 / 关于”三层收敛，明确清理功能只处理规则仓库记录，不伪装成删除海阔已安装程序。
 - 新建不可变 `3.5.3-rc4 / build 369` Candidate/Test release、`bootstrap_test_v116.js` 与 `rule_repo_test_v116.txt`；Fresh install Shell 数值 version 为 `2026082105`，符合 32 位有符号整数限制。
-- RC4 继续继承 Stable 3.5.2 的事务式 `syncManifest()`、多镜像读取、stale cache、Remote Manager 2.0.2、Stable/Test/Local 版本谱系与本地版隐私门禁；网络失败不得清空最后有效目录。
+- RC4 继续继承 Stable 3.5.2 的事务式 `syncManifest()`、多镜像读取、stale cache、Remote Manager 2.0.2、Stable/Test/Local 版本谱系与本地版隐私门禁；网络失败不得清空最后有效目录缓存。
 - 本轮属于 UI/UX 大改，必须执行 Release Guard 后进入 Test 实机闭环；重点验收：首页一级分类不再显示 HTML、四项状态数字完整、分类双栏、搜索输入、JavDB/ACFun 版本中心、普通详情、更新、设置。未通过实机截图验收不得晋级 Stable。
 
 ## 3.5.3-rc3 Candidate / Test（Build 368 / Shell 1.0.15-test）
