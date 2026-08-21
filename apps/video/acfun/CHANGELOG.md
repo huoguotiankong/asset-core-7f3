@@ -9,7 +9,64 @@
 - 业务底座继续保留已验证链：精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频、漫画详情/章节阅读、极速播放、封面解密和持久缓存。
 - Stable 继续作为 0.5.x / 0.6.x Native UI/UX 大改的恢复基线；大改只进入 Test/Candidate，未完成实机验证前不得覆盖 Stable。
 
-## Test 0.6.0-alpha7 / Build 158 / Test Shell 6.3.0（当前测试）
+## Test 0.6.0-alpha8 / Build 159 / Test Shell 6.4.0（当前测试）
+
+### 2026-08-22 Alpha7 实机输入
+
+- Alpha7 已真实到达设备，且**短视频点击直接播放已经实机确认正常**；后续不得因为其他 UI 重构退化这条已验证链。
+- 漫画章节虽然移除了 Alpha6 的“章节名 + 页数”内部内容块，但 `pic_1_full` 自定义详情页仍出现大面积留白/图片自身留白叠加的阅读体验，且仍保留一个普通二级页壳，不符合用户希望的连续漫画阅读。
+- 小说与有声分类标签已经能够显示，但 Feed 仍然没有内容；Alpha7 的 GET `fiction/base/findList` 参数矩阵不足以证明 APP 实际契约，必须继续扩展请求方法和实体识别，而不能把空结果当“资源不存在”。
+- 社区 Feed 已经恢复实际帖子，但进入帖子后正文仍不完整；动态详情不能只读顶层 `content/dynamicContent`，需要递归恢复嵌套文本、JSON、图片、视频和外链。
+- Alpha7 的独立“筛选”二级页比 Alpha6 Chip 墙更简洁，但交互链仍然是“打开新页 → 选择 → 返回首页看结果”，用户明确要求改为类似实机示例的**当前页面弹层选择**，选择后内容原地刷新。
+- Alpha6/Alpha7 还暴露了明确的页面栈事故：筛选、社区、小说、有声等顶层资源大量通过 `hiker://page/...` 反复 push，新页面越开越多，最终需要连续返回很多次才能回到 ACFun 首页。
+- 精选与里番的频道在 Alpha7 实机出现相同/高度混淆，说明 Alpha4 的 `stationRows()` 使用 Aggregate 合并 `classifyId=4` 与 generic restricted 请求会污染用户可见分类；这不是单纯 UI 排序问题。
+- 当前分类仍有部分与 APP 实际栏目不一致。后续应坚持“APP/APK/实机响应优先”，不能为了填满 UI 把不同 Station/分类响应无条件合并。
+
+### Alpha8 首页原地筛选 / 单页导航
+
+- 新增 `acfun_ui_v060_a8_home.js`，将“筛选页”从正常浏览路径中移除。首页直接显示当前栏目相关的 `频道 / 分类 / 标签 / 排序` 紧凑按钮。
+- 点击筛选项返回海阔原生 `select://`，固定 `col=3` 三列选择面板，视觉和交互接近用户提供的第三张实机参考图，但保留 ACFun 自己的简洁品牌色标题。
+- 选择一个选项后直接修改当前状态并 `refreshPage(false)`，**当前 ACFun 首页原地刷新 Feed**；不需要先进入筛选页、再返回首页，也不会额外增加页面栈。
+- `community / fiction / audio / short` 全部纳入 `ac.__v050Section()` 顶层状态；这些内容入口与精选/漫画/动漫/视频/里番一样在当前首页切换，不再用 `routeView()` 为每次切换新开 `hiker://page`。
+- 保留真正需要独立生命周期的搜索、详情、评论、收藏、历史、设置页；“顶层 Tab/频道切换”和“独立详情页”在架构上明确区分。
+- Alpha7 已验证的 `shortCard → lazyRule → ac.play()` 直接播放保持不变。
+
+### Alpha8 漫画原生阅读
+
+- 海阔开发文档确认 `pics://url1&&url2...` 会进入内置多图/漫画阅读模式；Alpha8 不再用普通二级详情页里的 `pic_1_full` 列表模拟漫画阅读。
+- 新增 `acfun_ui_v060_a8_detail.js`：`comic_chapter` 路由点击后在 lazyRule 中读取 `comics/base/chapterInfo`、拼接章节图片，并直接返回 `pics://` 多图地址。
+- 这样章节点击后由海阔原生多图阅读器负责全屏/连续图片体验，不再额外渲染“第1话 / 151页”或自定义内容头，也避免普通 Page 布局给漫画增加额外留白。
+- 旧 Alpha7 已经打开的 `acfun_detail?content_kind=comic_chapter` 链仍保留兼容入口，可一键转入新的原生阅读模式；新章节点击默认直接走 `pics://`。
+
+### Alpha8 小说 / 有声 Provider 恢复
+
+- 新增 `acfun_runtime_v060_a8.js` 的独立 `requestMatrix`，对 `fiction/other/tagList` 与 `fiction/base/findList` 同时尝试 **GET + POST**，不再假设该 APP 路由只能 GET。
+- 小说候选继续覆盖 `fictionType=1 / fictionType=0 / type=1 / type=fiction / 无类型`；有声候选覆盖 `fictionType=2 + isAudio=1 / fictionType=2 / longFormAudio=1 / isAudio=1 / type=2 + audio=1 / type=audio`。
+- 有分类时同时携带 `tagId / fictionTagId / categoryId / tagIds`，分类完全空时继续有限回退“全部”，但空响应不写成成功缓存。
+- 新增更宽的 fiction 实体采集：识别 `fictionId / bookId / novelId / id` 与 `fictionTitle / bookTitle / novelTitle / title`，同时要求存在小说/章节/封面/音频等语义字段，避免旧递归采集器因为字段名差异漏掉真实列表对象。
+- 上述 GET/POST 与类型值仍属于**待实机验证兼容矩阵**；只有 Alpha8 实机实际出现小说/有声内容后，才能把命中的方法和参数写成已验证契约。
+
+### Alpha8 社区详情恢复
+
+- 动态详情不再只展示一个顶层正文字符串。`ac.__v060a8DynamicPayload()` 递归扫描 `content / dynamicContent / contentText / text / body / markdown / description / summary / remark` 等文本字段。
+- 如果字段本身是 JSON 字符串，继续解析内部对象；同时提取帖子图片、视频/媒体 URL 和普通链接，去重后按正文 → 图片 → 视频 → 链接顺序展示。
+- 继续保留 Alpha7 的时间格式化和 Markdown 重复链接清理；评论入口继续复用类型化评论页。
+
+### Alpha8 精选 / 里番分类边界
+
+- 旧 Alpha4 `stationRows(restricted)` 会 Aggregate `station/stations?classifyId=4&restricted=r` 与不带 `classifyId` 的请求，容易把不同响应中的 Station 混到一个用户列表。
+- Alpha8 改为**first-nonempty 严格请求**：精选只优先 `classifyId=4`；里番优先 `classifyId=24 + restricted=1`，再有限尝试 `classifyId=24` 与 `restricted=1`。
+- 不再把精选和里番的多个 Station 响应无条件聚合；真实分类是否与 APP 完全一致仍需 Alpha8 截图继续校准。
+
+### Alpha8 图标与发布
+
+- ACFun 图标仓库资产：`apps/tools/rule-repo/assets/acfun.svg`。
+- 面向海阔规则/云仓库的推荐地址改为 `https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg`，降低 `raw.githubusercontent.com` 在客户端图片加载上的不确定性。
+- 新建不可变 Release `releases/0.6.0-alpha8/release.json`，Build `159`，在 Alpha7 模块链末尾追加 `runtime-a8 / single-page-ui-a8 / native-reader-detail-a8 / shell-settings-a8`。
+- 新建 `bootstrap_test_v064.js?v=6400` 与 `acfun_remote_test_v064.txt`，规则数字版本 `2026082203`，`minBuild=159`；云端仓库 Test/Candidate、channels、manifest、registry、根 manifest 全部切到 Alpha8。
+- **Stable `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 继续冻结。** Alpha8 仍必须实机验证：首页原地筛选 → 页面返回栈 → 精选/里番分类 → 漫画原生阅读 → 社区详情 → 小说/有声 → 常规视频/短视频播放。未形成闭环前不得晋级 Stable。
+
+## Test 0.6.0-alpha7 / Build 158 / Test Shell 6.3.0（上一测试）
 
 ### 2026-08-22 Alpha6 实机输入
 
