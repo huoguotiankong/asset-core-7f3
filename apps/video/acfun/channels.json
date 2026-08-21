@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha6",
+      "version": "0.6.0-alpha7",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 157,
-      "displayVersion": "Test 0.6.0-alpha6 · Build 157 · Shell 6.2",
-      "path": "apps/video/acfun/acfun_remote_test_v062.txt",
+      "build": 158,
+      "displayVersion": "Test 0.6.0-alpha7 · Build 158 · Shell 6.3",
+      "path": "apps/video/acfun/acfun_remote_test_v063.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "筛选页完全重构 + 资源参数兼容强化 · 通过 Cloud Shell 6.2 覆盖导入进入 Alpha6",
-      "highlights": ["紧凑筛选面板", "分类标签自动换行", "机器分类名清洗", "动漫视频筛选回退", "漫画双站点参数", "短视频 loadType=2 候选", "社区 UI 重排", "小说/有声分类清理"],
+      "desc": "列表式筛选 + 短视频直接播放 + 漫画全宽正文 + 社区/小说继续清洗恢复",
+      "highlights": ["筛选页彻底重构", "栏目/分类/标签使用选择器", "短视频点击直接播放", "漫画正文从首图开始", "社区测试分类过滤", "动态时间与链接清理", "小说分类空结果自动回退", "有声参数组合扩展"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
