@@ -14,5 +14,6 @@
   "promotedToVersion": "3.5.4",
   "promotedToBuild": 384,
   "promotedRelease": "apps/tools/rule-repo/releases/3.5.4/release.json",
-  "notes": "3.5.4-rc7 / Build 384 已由用户实机确认可用并于 2026-08-22 晋级 Stable 3.5.4。正式 release 保持 Single Workspace 13.2 业务/UI，与 RC7 的差异仅为发布通道适配：移除 Test state patch、恢复 Stable 状态命名空间，并把动作 Bootstrap fallback 绑定到正式 bootstrap_v154.js。"
+  "nextTestBaseline": {"version":"3.5.4-test.1","build":385,"release":"apps/tools/rule-repo/releases/test-3.5.4-sync1/release.json"},
+  "notes": "3.5.4-rc7 / Build 384 已由用户实机确认可用并于 2026-08-22 晋级 Stable 3.5.4。正式 release 保持 Single Workspace 13.2 业务/UI，与 RC7 的差异仅为发布通道适配：移除 Test state patch、恢复 Stable 状态命名空间，并把动作 Bootstrap fallback 绑定到正式 bootstrap_v154.js。晋级后活动 Test 已完成 Stable 3.5.4 同基线重建，为 3.5.4-test.1 / Build 385。"
 }
