@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha8",
-  "build": 159,
-  "shellVersion": "6.4.0-test",
+  "version": "0.6.0-alpha9",
+  "build": 160,
+  "shellVersion": "6.5.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha8/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v064.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha9/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v065.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha8 同页交互与资源恢复测试版。根据 Alpha7 实机：短视频直接播放已验证；漫画自定义章节页仍不符合连续阅读体验；小说/有声仍无列表；社区帖子详情不完整；独立筛选页与社区/小说/有声多级页面造成页面栈不断累积；精选与里番 Station 还被聚合请求混在一起。Alpha8 将筛选整合回首页，分类/标签/排序点击后用三列 select 弹层选择并在原页 refreshPage(false) 即时刷新；社区/小说/有声改为首页状态切换，不再为顶层资源反复新开 page；漫画章节点击直接返回海阔 pics:// 原生多图阅读；精选严格用 classifyId=4，里番优先 classifyId=24，不再 Aggregate 混站；小说/有声新增 fiction findList/tagList GET+POST 双请求矩阵和更宽实体识别；社区详情递归恢复文本、嵌套 JSON、图片、视频和链接。Shell6.4 / Bootstrap v064 / Build159 强制进入 Alpha8。Stable 0.4.9 / Build149 与 latest.json 继续冻结，须实机回归。"
+  "notes": "0.6.0 Alpha9 分类、小说/有声正文与社区详情强化测试版。Alpha8 实机已确认小说/有声列表能够加载，但章节仍提示未返回正文或音频；首页筛选 scroll_button 把 <font> HTML 原样显示；焦点大卡缺少可靠封面；社区 Feed 有真实内容但部分作者/正文/媒体仍不完整，且各栏目分类仍需继续按 APP 实际响应校准。Alpha9 新建独立 a9 taxonomy/cache，按明确字段提取分类并在首次迁移时清理旧选中 ID；首页筛选保留三列 select 弹层和原页刷新，但全部改为纯文本按钮；焦点大卡默认关闭，仅在用户开启且存在有效图片时使用紧凑横卡。小说/有声详情合并 Feed seed 与 fiction/base/info，扩大封面/作者字段；章节对 fiction/base/chapterInfo 尝试 GET+POST 与多组 ID 参数，并继续解析 fictionUrl/contentUrl 外链正文、longFormAudio/voice/media 音频。社区详情合并 Feed 原始对象与 dynamicInfo，过滤头像/徽章等非正文图片并继续恢复正文、视频和外链。短视频直接播放与漫画 pics:// 原生多图阅读保持。Shell6.5 / Bootstrap v065 / Build160 强制进入 Alpha9；Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
 }
