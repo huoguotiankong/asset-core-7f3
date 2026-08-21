@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha7",
-  "build": 158,
-  "shellVersion": "6.3.0-test",
+  "version": "0.6.0-alpha8",
+  "build": 159,
+  "shellVersion": "6.4.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha7/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v063.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha8/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v064.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha7 交互与阅读体验重构测试版。根据 Alpha6 实机结果，筛选页改为列表式选择器：栏目/频道或分类/标签/排序逐项选择，取消整屏 Chip 墙；短视频卡片不再进入常规视频二级详情，首页点击直接调用播放链；漫画章节去除正文顶部章节/页数信息块，从第一张漫画图开始全宽连续铺满；社区分类进一步过滤数字/测试/机器项并格式化时间，动态详情清理重复 Markdown 链接；小说/有声扩大 findList 参数组合，分类无结果自动回退全部。新建 Shell6.3、Bootstrap v063、Build158，云端仓库覆盖导入后 minBuild=158 强制进入 Alpha7。Stable 0.4.9 / Build149 与 latest.json 保持冻结，Alpha7 仍需实机回归。"
+  "notes": "0.6.0 Alpha8 同页交互与资源恢复测试版。根据 Alpha7 实机：短视频直接播放已验证；漫画自定义章节页仍不符合连续阅读体验；小说/有声仍无列表；社区帖子详情不完整；独立筛选页与社区/小说/有声多级页面造成页面栈不断累积；精选与里番 Station 还被聚合请求混在一起。Alpha8 将筛选整合回首页，分类/标签/排序点击后用三列 select 弹层选择并在原页 refreshPage(false) 即时刷新；社区/小说/有声改为首页状态切换，不再为顶层资源反复新开 page；漫画章节点击直接返回海阔 pics:// 原生多图阅读；精选严格用 classifyId=4，里番优先 classifyId=24，不再 Aggregate 混站；小说/有声新增 fiction findList/tagList GET+POST 双请求矩阵和更宽实体识别；社区详情递归恢复文本、嵌套 JSON、图片、视频和链接。Shell6.4 / Bootstrap v064 / Build159 强制进入 Alpha8。Stable 0.4.9 / Build149 与 latest.json 继续冻结，须实机回归。"
 }
