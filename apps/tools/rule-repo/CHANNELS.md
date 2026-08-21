@@ -13,8 +13,9 @@
 4. 普通测试版本只更新 GitHub Test Release / `test.json`，不需要下载本地测试包。
 5. 测试通过后创建新的正式 Stable release，再切 `stable.json` / `latest.json`；正式版用户通过远程更新升级。
 6. Candidate 失败时只废弃测试版本，不修改当前正式 Stable。
+7. Stable 晋级时不能机械复制 Test release：必须移除 Test 专用 state patch，并把动作恢复 Bootstrap、状态命名空间和通道身份重新绑定到 Stable。
 
 当前：
 
-- 正式版：3.5.3 / build 377 / Shell 1.5.3。
-- 测试版：3.5.4-rc7 / build 384 / Shell 1.0.30-test，基于正式版 3.5.3；Single Workspace 13.2 为程序/版本导入和设置动作显式绑定当前规则，并以 Bootstrap v130 作为 Core 恢复通道；首页局部滚动、固定五栏、分类原地展开和同页详情继续保持。
+- 正式版：3.5.4 / build 384 / Shell 1.5.4；由已实机验证的 3.5.4-rc7 晋级，业务/UI 保持 Single Workspace 13.2，正式链使用 `bootstrap_v154.js` 与 Stable 状态命名空间。
+- 测试版：3.5.4-rc7 / build 384 / Shell 1.0.30-test；保留为本轮已验证测试恢复基线。下一轮 Test 必须从 Stable 3.5.4 重新派生，不继续从 3.5.3 分叉。
