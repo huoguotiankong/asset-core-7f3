@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha5",
-  "testBuild": 156,
-  "testShellVersion": "6.1.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v061.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v061.txt",
+  "testVersion": "0.6.0-alpha6",
+  "testBuild": 157,
+  "testShellVersion": "6.2.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v062.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v062.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "stable-test-cloud-shell-recovery-v61",
+    "stage": "alpha6-filter-resource-recovery-v62",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。用户实机确认旧 Test Shell 仍固定 Alpha2，且程序内更新因不存在的 manager() 报错；Test/Candidate 因此新建 0.6.0-alpha5 Build156 / Shell6.1，使用全新 Bootstrap URL、规则壳数字 version 与云端仓库入口，导入后 minBuild=156 强制迁移到 Alpha5。Alpha5 继承 Alpha4 的视频搜索、漫画详情/阅读、递归分类、短视频、社区、小说与有声资源恢复；正式 latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 实机截图确认 Alpha5 已到达设备，但筛选页仍存在巨大频道图标、横向截断标签和低效操作；动漫/漫画/短视频等 Feed 仍可空，社区/小说还暴露 dyncat-/fictiontag- 机器分类名。Test/Candidate 因此升级到 0.6.0-alpha6 Build157 / Shell6.2：重构筛选 UI，清洗机器分类，增加动漫/视频分类参数兼容、标签空结果回退父分类、漫画 stationId/comicsStationId 双契约，并把 APK 1.9.7 静态出现的 pageSize=30/loadType=2 加入短视频首选候选。新 Bootstrap v062 minBuild=157，必须从云端仓库覆盖导入后做实机回归；正式 latest.json 不变。"
   }
 }
