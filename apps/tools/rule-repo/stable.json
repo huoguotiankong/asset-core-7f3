@@ -2,11 +2,14 @@
   "schema": 1,
   "channel": "stable",
   "id": "rule-repo",
-  "version": "3.5.3",
-  "build": 377,
-  "shellVersion": "1.5.3",
+  "version": "3.5.4",
+  "build": 384,
+  "shellVersion": "1.5.4",
   "managerVersion": "2.0.2",
-  "release": "apps/tools/rule-repo/releases/3.5.3/release.json",
-  "promotedAt": "2026-08-21",
-  "notes": "由用户实机确认的 3.5.3-rc11 Native Product 8.0 冻结晋级。正式版获得首页状态工作台、程序状态与标签分层、原生双栏分类树、紧凑详情和统一版本中心；事务式同步、多镜像与恢复入口继续保留。"
+  "release": "apps/tools/rule-repo/releases/3.5.4/release.json",
+  "promotedFrom": "3.5.4-rc7",
+  "promotedAt": "2026-08-22T00:22:00+08:00",
+  "rollbackVersion": "3.5.3",
+  "rollbackBuild": 377,
+  "notes": "Single Workspace 13.2 正式稳定版。由已实机验证的 3.5.4-rc7 / Build 384 晋级；业务/UI 与 RC7 一致，正式链移除 Test state patch，并使用 bootstrap_v154.js + Stable 状态命名空间。"
 }
