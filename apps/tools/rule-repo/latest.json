@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "rule-repo",
+  "name": "我的规则仓库",
+  "version": "3.5.3",
+  "build": 377,
+  "release": "apps/tools/rule-repo/releases/3.5.3/release.json",
+  "notes": "Stable 3.5.3 Build 377"
+}
