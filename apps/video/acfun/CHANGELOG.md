@@ -9,7 +9,43 @@
 - 业务底座继续保留已验证链：精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频、漫画详情/章节阅读、极速播放、封面解密和持久缓存。
 - Stable 继续作为 0.5.x / 0.6.x Native UI/UX 大改的恢复基线；大改只进入 Test/Candidate，未完成实机验证前不得覆盖 Stable。
 
-## Test 0.6.0-alpha5 / Build 156 / Test Shell 6.1.0（当前测试）
+## Test 0.6.0-alpha6 / Build 157 / Test Shell 6.2.0（当前测试）
+
+### 2026-08-22 实机输入
+
+- 当前 Alpha5 已真实到达设备，说明 Shell6.1 的云端仓库覆盖链有效；本轮问题已经从“版本没下发”转为真实产品/UI 与数据兼容问题。
+- 分类与筛选页被巨大五栏图标、横向截断标签和低层级操作占满，信息密度低、切换成本高，用户明确要求完全重构。
+- 动漫/漫画筛选后仍可出现“当前条件暂时没有内容”；短视频继续显示“接口暂未返回内容”。
+- 社区分类直接暴露 `dyncat-*` 等服务端机器名，热门 UP 使用大头像纵向占位；小说分类也暴露 `fictiontag-*` 机器名并出现空书库。
+- 本轮截图因此作为 Alpha6 的真实验收基线；任何“代码里看起来有接口”的结论都不能替代后续实机结果。
+
+### Alpha6 筛选 UI 完全重构
+
+- 新增 `acfun_ui_v060_a6_home.js`，不再使用“巨大主栏目图标 + 多排横向 scroll chip + 完成/重置大操作”的旧分类中心。
+- 新筛选页改为：紧凑当前条件 → 单行栏目切换 → 分类自动换行 → 可选标签自动换行 → 排序 → `应用筛选 / 恢复默认`。
+- 分类/标签默认只展示前 12 项，超过后提供“展开全部 / 收起”；当前选中项即使在折叠区也会保留可见，避免用户找不到当前条件。
+- 选中态统一为品牌红色勾选；动漫/视频标签提供“全部”以快速退出细分条件。
+- 首页个人工具从大灰色文字块改为 `icon_small_4`，筛选入口与收藏/历史/设置降为统一工具层；空 Feed 提供“换个筛选 / 恢复默认筛选”，不再只显示诊断文字。
+- 社区资源页把热门 UP 改为紧凑四栏入口，社区分类/排序使用同一套 compact filter；小说/有声也使用统一的分类、排序与“查看全部”恢复逻辑。
+
+### Alpha6 资源兼容修复
+
+- 新增 `acfun_runtime_v060_a6.js`，继续保留 Alpha4 的递归实体采集和非空缓存，但把容易空结果的筛选参数从 UI 中隔离到兼容层。
+- **动漫/视频**：根据 `classTypeList` 行内真实身份尝试 `classifyId / videoTypeId / classTypeId`；标签请求继续以 `tagTitleList` 为主并保留 `queryVideoByTag`。某个标签完全为空时不再让整页白屏，而是有限回退到当前父分类，并记录 `acfun_v060_a6_filter_fallback` 供诊断。
+- **漫画**：`getStationComicsMore` 同时尝试 `stationId / comicsStationId / 两者并带`，再回退 `comics/base/findList`；第一页继续优先使用 Station 响应内嵌漫画。
+- **短视频**：APK 1.9.7 Flutter AOT 静态字符串中发现明确的 `pageSize=30 loadType=2` 请求痕迹。Alpha6 因此把 `loadType=2` 加入首选候选，并继续尝试 3/4 及 `shortVideo` 类型字段。**这只是 APK 静态证据，不记作服务端参数已经实机验证；是否真正返回短视频必须看 Alpha6 实机结果。**
+- **社区/小说**：UserFacing Adapter 过滤 `dyncat-* / fictiontag-* / UUID/长机器 token` 等非人类可读标签；若过滤后无有效分类，页面直接使用“全部”数据而不是展示内部 ID。
+- 社区动态列表在分类/排序参数失败时提供有限无分类回退；动态卡优先寻找内容图片，避免把头像、徽章或装饰框误当帖子主图。
+
+### Alpha6 发布边界
+
+- 新建不可变 Release `releases/0.6.0-alpha6/release.json`，Build `157`，在 Alpha5 完整模块链末尾追加 `runtime-a6 / filter-resource-ui-a6 / shell-settings-a6`。
+- 新建 `bootstrap_test_v062.js?v=6200` 与 Test Shell `acfun_remote_test_v062.txt`，规则数字版本 `2026082201`，`minBuild=157`；从“我的规则仓库 → ACFun → 测试版 → 导入/覆盖”后强制进入 Alpha6，避免继续命中 Alpha5 壳/Bootstrap 缓存。
+- `test.json / candidate.json / channels.json / manifest.json / registry.json / 根 manifest.json` 全部切到 Alpha6 Test 元数据。
+- Stable `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 继续冻结，不因本轮 UI/Provider 试验改变。
+- Alpha6 必须继续实机验证：筛选页 → 动漫/视频 → 漫画 → 短视频 → 社区 → 小说/有声 → 搜索 → 详情/阅读 → 视频播放。未完成截图/运行闭环前不得晋级 Stable。
+
+## Test 0.6.0-alpha5 / Build 156 / Test Shell 6.1.0（上一测试）
 
 ### 实机事实与根因
 
