@@ -3,7 +3,7 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 23:49",
+  "updatedAt": "2026-08-23 00:18",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.7.0-test.3",
+      "version": "2.7.0-test.4",
       "baseVersion": "2.6.3",
       "targetVersion": "2.7.0",
-      "build": 27003,
-      "displayVersion": "Test 2.7.0 · Official Icon Detector",
-      "path": "apps/video/mdai/mdai_remote_test_v4.txt",
+      "build": 27004,
+      "displayVersion": "Test 2.7.0 · Raw Icon Detector 4",
+      "path": "apps/video/mdai/mdai_remote_test_v5.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "片库 UI Test2 基线 + 官网原图标实机检测/复制，待实机验证",
-      "highlights": ["设置页从当前 Host 首页解析 rel=icon / apple-touch-icon","优先站点自己声明的高规格图标，不猜第三方 favicon","片库 UI、播放、详情继续沿用 Test2/Test1 已有模块"],
+      "desc": "片库 UI Test2 基线 + 官网 HTML/manifest 原图标检测，待实机验证",
+      "highlights": ["官网图标检测不再误走 JSON API Client","原始解析 rel=icon / apple-touch-icon / manifest icons","成功后保存并复制官网真实声明地址"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/fallback_video.svg"
     },
     {
