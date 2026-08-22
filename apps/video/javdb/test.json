@@ -10,6 +10,7 @@
   "release": "apps/video/javdb/releases/3.9.42-test.5/release.json",
   "shell": "cloud/javdb/v3.9.42-test.5/javdb_v3.9.42_test5.txt",
   "promotedAt": "2026-08-23",
-  "status": "device-validation-required",
-  "notes": "当前推荐测试入口。继承 Test4 的演员 无码/欧美(女) 映射修正和 UI 精简；共享 JAV Playback 使用 1.0.0-test.4，123AV/Jable 保持已实机可播解析，123AV 固定图标，MissAV 使用搜索真实版本→packed source→最高画质链。Stable 3.9.41 保持不变。"
+  "promotedTo": {"version":"3.9.42","build":2026082301},
+  "status": "promoted-to-stable",
+  "notes": "Test5 已按用户明确要求晋级 Stable 3.9.42。历史 Test5 保留用于对照；下一轮测试必须从 Stable 3.9.42 向前开发，不再继续以 Stable 3.9.41 为基线。"
 }
