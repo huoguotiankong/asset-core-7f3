@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha15",
-  "build": 166,
-  "shellVersion": "7.1.0-test",
+  "version": "0.6.0-alpha16",
+  "build": 167,
+  "shellVersion": "7.2.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha15/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha16/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha15 Clean Rebase 候选。Alpha14 实机仍有全局封面缺失和旧问题持续存在，因此 Alpha12/13/14 不再作为活动 Test 继承链。新 Release 直接从 Stable 0.4.9 的 8 个已验证模块起链，只追加单一 clean runtime/UI：视频 itemInfo/image/playback 与 v047 Station/classTypeList/漫画/短视频保持 Stable 合同，社区/小说/有声用独立 Adapter 增量实现；fiction/base/findList 根据当前实机 GET405/真实请求200 改为 POST-first。仍必须完成首页封面、普通视频播放、短视频直播、漫画章节、小说正文、有声与社区的实机回归后才允许晋级 Stable。"
+  "notes": "Alpha16 候选保持 Alpha15 Clean Rebase 主干，只追加单一 focused media 修复模块。根据 Alpha15 实机：视频封面缺失、普通视频不可播且播放列表混入收藏/评论、漫画章节空白、短视频列表为空、searchCenter 动作未分发；同时有声 fiction/base/findList POST 已成功返回8条，因此小说/有声列表链不改。Alpha16 定点修视频 cover fallback、GET-first PlaybackAdapter、短视频 loadType=2、Alpha12 漫画 Reader 和 Bootstrap action dispatch。必须实机回归后才能晋级 Stable。"
 }
