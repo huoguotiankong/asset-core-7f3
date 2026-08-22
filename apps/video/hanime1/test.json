@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.25",
-  "baseVersion": "2.0.0-test.24",
+  "version": "2.0.0-test.26",
+  "baseVersion": "2.0.0-test.25",
   "targetVersion": "2.0.0",
-  "build": 20025,
+  "build": 20026,
   "shellVersion": "2.0.0-test.4",
   "shellRuleVersion": 2026082230,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.25/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.26/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test25 follows the device-verified Test24 avatar/runtime recovery. Temporary avatar diagnostics are removed. Opening more replies is optimized from the previous multi-request path to one /loadReplies request that parses reply text and XPath avatars together; comment/reply pages no longer call profile() merely to decide whether to show login/reply controls, and a short per-thread cache accelerates immediate reopen."
+  "notes": "Test26 follows the planned creator/UX stage. It keeps the device-verified avatar/runtime chain and Test25 reply performance, adds an author directory plus dedicated author/uploader profile views using the existing hanimeVideoResults route, exposes author discovery from search/filter pages, reorganizes video detail around play/comments/playlist/download primary actions, and simplifies settings while keeping Shell v4 recovery controls."
 }
