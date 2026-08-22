@@ -8,12 +8,12 @@
   "latest": "apps/video/hanime1/latest.json",
   "test": "apps/video/hanime1/test.json",
   "channels": "apps/video/hanime1/channels.json",
-  "defaultVersion": "2.0.0",
-  "defaultBuild": 20029,
-  "stableShellVersion": "2.0.0-stable.5",
-  "stableInstallerBuild": 20029,
-  "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
-  "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
+  "defaultVersion": "2.0.1",
+  "defaultBuild": 20040,
+  "stableShellVersion": "2.0.1-stable.6",
+  "stableInstallerBuild": 20040,
+  "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v6_b20040.js",
+  "rule": "apps/video/hanime1/hanime1_remote_stable_v6_b20040.txt",
   "legacyPath": "hanime1.txt",
   "testVersion": "2.0.0-test.40",
   "testBuild": 20040,
@@ -22,12 +22,15 @@
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20040.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20040.txt",
   "migration": {
-    "stage": "stable-20000-test40-performance-hotfix",
-    "stablePromotedFrom": "2.0.0-test.29",
-    "stableBuild": 20029,
+    "stage": "stable-20101-promoted-test40",
+    "stablePromotedFrom": "2.0.0-test.40",
+    "stableBuild": 20040,
+    "previousStable": "2.0.0",
+    "previousStableBuild": 20029,
     "testBase": "2.0.0-test.39",
+    "nextTestBase": "2.0.1",
     "testBuild": 20040,
     "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28", "2.0.0-test.34"],
-    "note": "Stable 2.0.0 remains frozen. Test40 preserves Test39 search/reply/filter/account parsing repairs while removing the profile recursion and sequential account-network work that caused long blocking on detail/My/Settings navigation."
+    "note": "User approved the current Test40 state as the stage Stable baseline even though account/reply/UI work remains. Stable 2.0.1/Build20040 is a new immutable wrapper over Test40, with its own Stable Shell/Bootstrap; old Stable 2.0.0/Build20029 remains available for rollback. Future Test work must fork from Stable 2.0.1."
   }
 }
