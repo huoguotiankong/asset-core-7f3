@@ -10,14 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.18",
-  "testBuild": 20018,
+  "testVersion": "2.0.0-test.19",
+  "testBuild": 20019,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v3.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "migration": {
-    "stage": "incremental-avatar-repair-after-uploader-verified",
-    "source": "2.0.0-test.17",
-    "note": "Test17 已实机确认上传者真实公开作品可用；Test18 仅修作者头像、评论/回复真实头像解析与圆形兜底。"
+    "stage": "test18-comment-regression-recovery",
+    "source": "2.0.0-test.18",
+    "recoveryBase": "2.0.0-test.17",
+    "note": "Test18 实机出现评论 0 条且作者头像仍灰方块；Test19 完全跳过 Test18，恢复 Test17 评论链，仅以非破坏方式补作者/评论/回复头像，并改用 PNG 圆形兜底。"
   }
 }
