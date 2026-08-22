@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.20",
+  "build": 20020,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.17",
+  "supersedes": "2.0.0-test.19",
+  "modules": [
+    {
+      "name": "recovery20",
+      "path": "apps/video/hanime1/releases/2.0.0-test.20/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.20"
+  },
+  "notes": "Test20 keeps the verified Test17 comment/reply data path, removes Test19 global-image-index avatar enrichment, and extracts real author/comment/reply avatars from their local HTML context with image request headers."
+}
