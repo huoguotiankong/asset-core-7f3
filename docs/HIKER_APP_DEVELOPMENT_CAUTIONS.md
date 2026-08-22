@@ -1,6 +1,6 @@
 # 海阔小程序编写注意事项
 
-版本：3.1  
+版本：3.2  
 首次建立：2026-08-20  
 最近增强：2026-08-22  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
@@ -253,6 +253,46 @@ task 返回结果，listener 集中写；必要时 `syncExecute()`。
 
 ## 30. `input` 与频繁动态刷新注意失焦
 输入区与结果区尽量隔离，优先局部更新。
+
+## 30A. `col_type:'input'` 的 `url` 必须是“可求值并返回 URL 的 JS 表达式”
+Hanime1 Test36–38 连续出现 `未知链接：error:返回的值无效 (JSEngine#13)`。Test38 的典型错误是把 `input.url` 写成顶层语句并在末尾直接 `return`：
+
+```javascript
+putMyVar('q', String(input || ''));
+refreshPage(false);
+return 'hiker://empty';
+```
+
+海阔 input 的 `url` 会被当作表达式求值；顶层 `return` 并不位于函数体内，不能按 `lazyRule(function(){...})` 的写法想当然。
+
+固定写法优先：
+
+```javascript
+"(function(){var q=String(input||'').trim();putMyVar('q',q);return 'hiker://page/search?rule=&simple=true';})()"
+```
+
+或直接使用简单表达式：
+
+```javascript
+"'toast://你输入的是' + input"
+```
+
+`extra.onChange` 可用于只保存输入状态；需要导航时由合法表达式返回固定页面 URL。出现 JSEngine#13 时，先检查 input URL 的**求值语法/返回类型**，不要先怀疑远端搜索 API。
+
+## 30B. `pdfh/pdfa` 的空值必须在 Adapter 层统一归一，禁止把字符串 `null/undefined` 渲染进 UI
+Hanime1 Test38 真实事故：回复数量正确恢复到 33 条，但用户名和正文全部显示字面量 `null`。原因之一是错误节点解析后，值经 `String(...)` 转换，把运行时空值变成了可见文本。
+
+所有 HTML/DOM Adapter 的 clean helper 至少处理：
+
+```text
+null
+undefined
+"null"
+"undefined"
+空白字符串
+```
+
+这些都应归一为 `''` 或结构化 `null`，Renderer 不得把它们当真实业务文本。
 
 ## 31. `updateItem` 的 `extra.id` 必须全局唯一
 推荐 `<app>-<page>-<module>-<entityId>`。
@@ -527,6 +567,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 未启用 Provider 不初始化。
 - [ ] Token/异步轮询有边界。
 - [ ] 只取得 raw identifier 时未制造用户可见伪业务卡片。
+- [ ] HTML/DOM Adapter 已过滤字符串 `null/undefined`，不会直接进入 Renderer。
 
 ## UI
 - [ ] 一眼看懂主任务。
@@ -536,6 +577,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 无大量无意义 blank_block。
 - [ ] 关键跨页 entityId 不只依赖 extra。
 - [ ] 同一选中态没有重复强调。
+- [ ] 所有 `col_type:'input'` 的 URL 都是合法可求值表达式，未使用顶层裸 `return`。
 - [ ] UI 大改完成实机截图闭环。
 
 ## 图片
@@ -595,6 +637,8 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - Test34 同时重写评论、账号、筛选、搜索后多域回归：主评论 0、裸 list ID 假片单、片单详情 0、搜索仍 JSEngine#13、筛选实机与源码不一致 → **坏 Test 不再作为 recovery base，回到最后设备验证基线并分模块重建。**
 - Test34 raw href fallback 把 `playlist?list=<id>` 直接渲染为“片单<id>” → **raw identifier 不是业务实体；没有真实 title/wrapper 就不能建用户卡。**
 - Test34 源码已删除 `>` 但手机仍显示 → **源码覆盖声明不是运行事实；截图冲突时优先查 Remote state/cache/load order。**
+- Test38 更多回复已经恢复到正确数量，但所有字段显示 `null` → **不能全局配对相同 class；必须按上游父子 DOM 分组，并统一过滤 `null/undefined`。**
+- Test38 搜索继续 JSEngine#13 → **`col_type:'input'` 的 url 是表达式求值环境，不得照 lazyRule 函数体写顶层裸 `return`；使用简单表达式或 IIFE。**
 
 ---
 
