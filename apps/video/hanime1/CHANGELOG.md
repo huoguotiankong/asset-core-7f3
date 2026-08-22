@@ -4,7 +4,7 @@
 
 ## 当前基线
 - Legacy：`1.2.1` 仅保留历史/回退记录，不再作为开发运行基线。
-- Test：`2.0.0-test.4` / Build `20004`，Shell rule version `2026082213`。
+- Test：`2.0.0-test.5` / Build `20005`，Shell rule version `2026082214`。
 - Test4 由 2026-08-22 第三轮实机截图驱动，集中处理图片、播放、评论、登录/片库四条主链；仍未晋级 Stable。
 
 ## 已验证实机事实
@@ -39,6 +39,12 @@
 - 搜索分类补全官网当前 `裏番 / 泡面番 / Motion Anime / 3DCG / 2.5D / 2D动画 / AI生成 / MMD / Cosplay`。
 - 设置页版本显示修正为 Test4 / Build 20004。
 
+## Test5 发布前审计修正
+- Test4 原子提交后、交付实机前的模拟调用审计发现：评论模块使用 `textClass(...)` 但未从 Common 显式绑定；语法检查可通过，实际打开有评论的视频时会触发 `ReferenceError`。
+- Test5 只新增新版 Common build marker 与修正后的 Comments 模块，Test4 的 Media / Account / UI 模块继续按已校验 SHA 复用。
+- 本地模拟调用已实际覆盖：原始 `<source>` → 多画质 PlayModel、账号 `/user/<id>/edit` 识别、评论+回复解析；模拟结果均返回预期数据。
+- 因此 Test4 不作为下一轮用户验证版本；下一轮直接测试 Test5。
+
 ## Challenge / Cookie 约束
 - 只有真实 Cloudflare Challenge 才进入自动 `fetchCodeByWebView`，自动处理失败时保留可见 X5 验证页。
 - 账号 Cookie 与 `cf_clearance` 分层；切换受管账号不覆盖浏览器 clearance。
@@ -60,6 +66,10 @@
 
 ---
 ## 版本记录
+### 2.0.0-test.5 / Build 20005 / 2026-08-22
+- Test4 发布前审计修正版；修复 Comments 模块 `textClass` 运行时 helper 未绑定。
+- 复用 Test4 已校验媒体/账号/UI 模块；模拟回归通过播放 source、账号识别、评论与回复。
+
 ### 2.0.0-test.4 / Build 20004 / 2026-08-22
 - 第三轮实机综合修复；发布模块拆分为 Common / Media / Account / Comments / UI，避免单个大热修对象并便于后续独立回归。
 - 修复图片请求头与 main-thumb 选图。

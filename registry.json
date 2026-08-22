@@ -90,7 +90,7 @@
       "category": "video",
       "mode": "legacy-history+remote-test",
       "version": "1.2.1",
-      "testVersion": "2.0.0-test.4",
+      "testVersion": "2.0.0-test.5",
       "shellVersion": "2.0.0-test",
       "managerVersion": "2.0.1",
       "manifest": "apps/video/hanime1/manifest.json",
