@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v23",
-  "updatedAt": "2026-08-22 15:46",
+  "versionPolicy": "legacy-history-remote-test-v24",
+  "updatedAt": "2026-08-22 16:55",
   "channels": [
     {
       "channel": "stable",
@@ -26,24 +26,24 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.23",
-      "baseVersion": "2.0.0-test.17",
+      "version": "2.0.0-test.24",
+      "baseVersion": "2.0.0-test.23",
       "targetVersion": "2.0.0",
-      "build": 20023,
-      "displayVersion": "Test 2.0.0 · XPathAvatar23",
-      "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
+      "build": 20024,
+      "displayVersion": "Test 2.0.0 · ShellRecovery24",
+      "path": "apps/video/hanime1/hanime1_remote_test_v4.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test23：Test22 诊断层没有出现在用户设置页，说明继续依赖自写 HTML 解析与不可见版本标记已经影响排障。当前版本直接回到 Test17 稳定业务链，改用海阔官方内置 XPath 读取作者/主评论/回复真实 DOM，并在设置页明确显示实际运行版本和诊断。",
+      "desc": "Test24：用户实机点击旧设置页“更新测试版”出现 HanimeBoot 未定义，确认序列化 lazyRule 直接引用 Bootstrap 全局对象会导致更新链自锁。发布全新 Shell v4 + Bootstrap v4，并以 minBuild 20024 强制越过旧 active state；头像逻辑保留 Test23 XPath 引擎，不再继续猜头像解析。",
       "highlights": [
-        "运行时设置页明确显示 Test23 / Build 20023，不再展示硬编码 Test12",
-        "主评论头像用 XPath 精确选取 Han1mePlus 每4子节点组的首节点头像",
-        "楼中楼头像用 XPath 精确选取每2子节点组的 body 头像",
-        "作者头像用 #video-user-avatar/following-sibling::img[1] 精确关系",
-        "XPath 数量必须与评论/回复 items 数量一致才批量应用，避免错位",
-        "设置页加入重新加载当前测试版与可见头像诊断",
-        "评论正文、回复数、上传者作品、播放、登录等继续沿用 Test17 稳定链"
+        "新 Shell v4：规则 version 2026082230，使用全新 Bootstrap v4 缓存键",
+        "Bootstrap v4：minBuild 20024，重新导入后自动越过 Test21/22/23 旧状态",
+        "更新/检查/回退/重装按钮的 lazyRule 内显式 require Bootstrap，不再依赖外部 HanimeBoot",
+        "设置页必须显示 2.0.0-test.24 · Build 20024 · Shell v4",
+        "保留 Test23 海阔内置 XPath 作者/主评论/回复头像引擎",
+        "新增恢复 Test24 基线与可见头像诊断",
+        "Stable 1.2.1 不变，登录/播放/选集/片库/漫画继续沿用已验证链"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
