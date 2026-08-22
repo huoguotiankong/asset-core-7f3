@@ -3,7 +3,7 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 22:49",
+  "updatedAt": "2026-08-22 23:49",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.7.0-test.2",
+      "version": "2.7.0-test.3",
       "baseVersion": "2.6.3",
       "targetVersion": "2.7.0",
-      "build": 27002,
-      "displayVersion": "Test 2.7.0 · Library UI 2",
-      "path": "apps/video/mdai/mdai_remote_test_v3.txt",
+      "build": 27003,
+      "displayVersion": "Test 2.7.0 · Official Icon Detector",
+      "path": "apps/video/mdai/mdai_remote_test_v4.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "片库 UI 第二轮 · 分类完整性与原页切换修复，待实机验证",
-      "highlights": ["视频/短剧同页切换，分类/排序不再新增页面","CatalogAdapter 合并稳定分类骨架与动态分类","三级栏目等宽 + 主题 flex + 四栏高级筛选"],
+      "desc": "片库 UI Test2 基线 + 官网原图标实机检测/复制，待实机验证",
+      "highlights": ["设置页从当前 Host 首页解析 rel=icon / apple-touch-icon","优先站点自己声明的高规格图标，不猜第三方 favicon","片库 UI、播放、详情继续沿用 Test2/Test1 已有模块"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/fallback_video.svg"
     },
     {
