@@ -2,30 +2,35 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "remote-stable-20000-test40-legacy-history",
-  "updatedAt": "2026-08-22 21:56",
+  "versionPolicy": "remote-stable-20101-test40-legacy-history",
+  "updatedAt": "2026-08-22 22:20",
   "legacy": {"version":"1.2.1","build":12100,"path":"hanime1.txt","note":"Historical local rule only; no longer a channel baseline."},
   "channels": [
     {
-      "channel":"stable","label":"正式版","id":"hanime1","name":"Hanime1","version":"2.0.0","build":20029,
-      "displayVersion":"Stable 2.0.0 · Fallback29 · Installer20029","path":"apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,
-      "desc":"由用户实机可启动、头像/播放/图标主链正常的 Test29 原样晋级，作为后续测试版的安全兜底；已知更多回复、账号片单和部分 UI 问题不在 Stable 上继续修改。",
-      "highlights":["Test29 实机启动通过，首页与详情 SVG 图标正常","保留 Test24 已验证真实作者/评论头像、登录、播放、真选集、片库和漫画链","Stable Remote Manager 与 Test 独立，后续 Test40+ 失败不会覆盖正式兜底","正式版安装壳/Bootstrap/minBuild/defaultRelease 全部锁定 Build20029"],
+      "channel":"stable","label":"正式版","id":"hanime1","name":"Hanime1","version":"2.0.1","build":20040,
+      "displayVersion":"Stable 2.0.1 · PromotedTest40 · Installer20040","path":"apps/video/hanime1/hanime1_remote_stable_v6_b20040.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,
+      "desc":"用户明确批准将当前 Test40 作为阶段性正式基线晋级。正式版包含已恢复的搜索链和 Test40 对账号递归/串行请求造成长加载的性能隔离；账号片单、收藏、头像、更多回复、作者/上传者页面、筛选与整体 UI 仍有后续优化空间。本次不原地覆盖旧 Stable，Build20029 继续保留用于回退。",
+      "highlights":[
+        "由 2.0.0-test.40 / Build20040 原样业务晋级，使用独立 Stable 2.0.1 release wrapper",
+        "搜索“女友”已在 Test39 实机确认恢复；JSEngine#13 修复随正式版保留",
+        "Test40 切断 profile/browser-session 重入环，并把账号资料联网补全从普通页面移出，降低详情/我的/设置长时间阻塞",
+        "账号分区 90 秒缓存、片单主列表单请求与显式慢补全策略随正式版保留",
+        "Stable Shell v6 / Bootstrap Build20040 / minBuild20040 / defaultRelease20040 完整对齐",
+        "上一正式版 2.0.0 / Build20029 完整保留，可回退"
+      ],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     },
     {
       "channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.40","baseVersion":"2.0.0","targetVersion":"2.0.1","build":20040,
       "displayVersion":"Test 2.0.0 · Performance40 · Installer20040","path":"apps/video/hanime1/hanime1_remote_test_v4_b20040.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
-      "desc":"Test40：Test39 实机已确认搜索恢复，但点击视频详情以及切换“我的/设置”等页面会长时间卡在加载。定位到账号链存在 P.profile → sessionProfile32 → C.activeAccount → browserProfile → P.profile 的重入循环，同时片单列表为补真实标题可能串行请求多张片单详情。Test40 保留 Test39 已恢复功能，只处理性能和请求边界。",
+      "desc":"Test40 是本次 Stable 2.0.1 的晋级来源，继续保留作为历史测试入口。下一轮新测试版必须从 Stable 2.0.1 / Build20040 分叉，不再从旧 Stable 2.0.0 开发。",
       "highlights":[
-        "普通页面上的 P.profile 改为只读本地/stale profile cache，不再隐式联网；视频详情、设置、评论等页面不再被账号资料请求阻塞",
-        "C.activeAccount 增加重入保护，彻底切断 profile/browserProfile 递归环",
-        "账号真实昵称/头像的权威联网同步只在“我的/账号中心/手动同步账号资料”发生，避免跨页面隐式副作用",
-        "我的账号栏目增加 90 秒分区缓存；收藏/稍后看/订阅/历史同一时间窗口内切换返回缓存",
-        "片单列表默认只请求 /user/<id>/playlists 一次并从同页 DOM/raw block 解析真实片单；不再打开页面时自动串行请求最多 16 个片单详情",
-        "仍未从主列表解析出标题的片单只显示待补全数量，不制造片单<ID>伪卡；需要时可点“补全片单资料”显式执行慢路径",
+        "普通页面上的 P.profile 改为只读本地/stale profile cache，不再隐式联网；视频详情、设置、评论等页面不再为了账号资料发额外请求",
+        "C.activeAccount 增加重入保护，切断 profile/browserProfile 递归环",
+        "账号真实昵称/头像的权威联网同步只在“我的/账号中心/手动同步账号资料”发生",
+        "我的账号栏目增加 90 秒分区缓存；片单列表默认仅请求主列表一次，慢补全显式触发",
         "Test39 搜索 IIFE、回复精确分组、null/undefined 清理、片单详情 playlist-item 分段、片库 > 哨兵清理全部保留",
-        "Stable 2.0.0 / Build20029 完全不动"
+        "该版本已被用户批准晋级 Stable 2.0.1；后续 Test 需要新版本号/新 build"
       ],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
