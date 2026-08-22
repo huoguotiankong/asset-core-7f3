@@ -3,7 +3,7 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 00:48",
+  "updatedAt": "2026-08-23 01:17",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.8.0-test.2",
+      "version": "2.8.0-test.3",
       "baseVersion": "2.6.3",
       "targetVersion": "2.8.0",
-      "build": 28002,
-      "displayVersion": "Test 2.8.0 · UI Redesign 2",
-      "path": "apps/video/mdai/mdai_remote_test_v7.txt",
+      "build": 28003,
+      "displayVersion": "Test 2.8.0 · UI Redesign 3",
+      "path": "apps/video/mdai/mdai_remote_test_v8.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "2.8 产品级 UI 重构 Test2 · 真实 PNG 图标 + 导航状态修正，待实机精修",
-      "highlights": ["原站 data-URI 图标已验证真实 PNG 并固化为仓库二进制资产","首页推荐/视频/短剧/社区四栏原页切换","片库分类与高级筛选默认折叠，搜索/我的原页切换不压栈","详情突出主播放，选集控制与集数网格分离","发布前修正收藏/历史与短剧片库跨页状态恢复"],
+      "desc": "2.8 产品级 UI 重构 Test3 · 修复 Test2 启动语法错误，真实 PNG 图标与 UI 方案保持",
+      "highlights": ["修复片库内容结果 section 少一个右括号导致的 eval SyntaxError","首页/片库/详情/我的/设置继续沿用 2.8 重构","真实 PNG 图标继续用于程序和云仓库","PlaybackAdapter 继续复用 2.7，不扩大修复边界"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     },
     {
