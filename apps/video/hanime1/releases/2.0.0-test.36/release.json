@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.36",
+  "build": 20036,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.35",
+  "modules": [
+    {"name":"recovery36","path":"apps/video/hanime1/releases/2.0.0-test.36/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.32",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.36"},
+  "notes": "Test36 is the finalized recovery after Test34 device regressions. It uses the device-proven Test32 runtime, does not load community34, applies account35/library35/search35 plus creator34, and adds settings36 so version/update/reset actions bind to the actual Build20036 shell instead of inherited Test32 constants. Test35 was not handed off for device validation because this preflight mismatch was found before completion. Stable 2.0.0/Build20029 remains unchanged."
+}
