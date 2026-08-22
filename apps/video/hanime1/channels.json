@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v26",
-  "updatedAt": "2026-08-22 17:11",
+  "versionPolicy": "legacy-history-remote-test-v26-installer-locked",
+  "updatedAt": "2026-08-22 17:25",
   "channels": [
     {
       "channel": "stable",
@@ -30,12 +30,12 @@
       "baseVersion": "2.0.0-test.25",
       "targetVersion": "2.0.0",
       "build": 20026,
-      "displayVersion": "Test 2.0.0 · CreatorHub26",
-      "path": "apps/video/hanime1/hanime1_remote_test_v4.txt",
+      "displayVersion": "Test 2.0.0 · CreatorHub26 · Installer20026",
+      "path": "apps/video/hanime1/hanime1_remote_test_v4_b20026.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test26：在 Test24 已验证头像/更新链和 Test25 回复性能基础上，按既定路线进入创作者与产品体验阶段。新增作者目录、作者主页、上传者主页统一体验，并重构详情主操作、搜索/筛选入口和设置页信息层级。",
+      "desc": "Test26：创作者中心/详情 UX 业务 release 不变；修复云端仓库重新导入 Test26 却仍运行 Test24 的交付缺陷。Test 通道现在使用 Build 20026 锁定的 Shell v4 安装壳与 Bootstrap，重新导入后强制进入 >=20026。",
       "highlights": [
         "新增作者目录：支持作者搜索、头像、作品数量与分页",
         "作者卡片进入独立作者主页，展示作者身份与对应影片结果",
@@ -44,7 +44,9 @@
         "搜索页新增同名作者入口；筛选页增加作者目录和综合搜索入口",
         "设置页去掉重复技术信息，把重载/回退/Recovery 收到维护区域",
         "继续保留 Test25 单请求楼中楼、短缓存与 Test24 真实头像链",
-        "Shell v4 / Bootstrap v4 不变，可直接程序内更新"
+        "云端仓库 Test26 安装壳升级为 v4_b20026，规则 version 2026082231",
+        "安装 Bootstrap 使用 minBuild/defaultRelease 20026，重新导入不再停留 Test24",
+        "已安装用户后续仍可继续使用程序内远程更新，不要求每次重装 Shell"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
