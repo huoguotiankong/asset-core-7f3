@@ -15,19 +15,19 @@
   "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
   "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.34",
-  "testBuild": 20034,
+  "testVersion": "2.0.0-test.35",
+  "testBuild": 20035,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20034,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20034.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20034.txt",
+  "testInstallerBuild": 20035,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20035.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20035.txt",
   "migration": {
-    "stage": "stable-20000-test34-original-replies-account-search-filter-creator",
+    "stage": "stable-20000-test35-recover-test32-account-filter-search",
     "stablePromotedFrom": "2.0.0-test.29",
     "stableBuild": 20029,
-    "testBase": "2.0.0",
-    "testBuild": 20034,
-    "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28"],
-    "note": "Stable 2.0.0 remains frozen. Test33 device validation showed fingerprint reply remapping still returned zero, account playlists/detail/avatar remained incomplete, global search returned an invalid-link JSEngine error, and the filter > gate did not match the requested inline interaction. Test34 restores the original direct reply chain and rebuilds those areas without modifying Stable."
+    "testBase": "2.0.0-test.32",
+    "testBuild": 20035,
+    "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28", "2.0.0-test.34"],
+    "note": "Stable 2.0.0 remains frozen. Test34 device validation proved severe multi-domain regression: main comments disappeared, account avatar/library remained broken, playlist fallback fabricated bare list-ID cards with empty detail, full-filter/creator access disappeared, and search still returned JSEngine#13. Test35 no longer uses Test34 as a recovery base; it returns to device-proven Test32 and reapplies isolated account/library/filter/search/creator changes."
   }
 }
