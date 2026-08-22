@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha9",
+      "version": "0.6.0-alpha10",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 160,
-      "displayVersion": "Test 0.6.0-alpha9 · Build 160 · Shell 6.5",
-      "path": "apps/video/acfun/acfun_remote_test_v065.txt",
+      "build": 161,
+      "displayVersion": "Test 0.6.0-alpha10 · Build 161 · Shell 6.6",
+      "path": "apps/video/acfun/acfun_remote_test_v066.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "严格分类链 + 首页纯文本弹层筛选 + 小说/有声章节正文/音频恢复 + 社区详情合并",
-      "highlights": ["严格分类缓存重建", "清理旧筛选状态", "三列弹层原页刷新", "筛选不再显示原始 HTML", "焦点大卡默认关闭", "小说/有声列表已实机恢复", "chapterInfo GET+POST", "fictionUrl 外链正文", "音频媒体字段恢复", "社区 Feed seed 合并", "短视频直接播放保持", "pics:// 漫画保持"],
+      "desc": "Alpha9 隔离后从 Alpha8 恢复 · 封面/播放/小说有声/漫画回归修复",
+      "highlights": ["Alpha9 冻结隔离", "Alpha8 恢复基线", "扩展封面字段", "fresh can/watch 播放", "小说/有声分类恢复", "txt/html 正文源读取", "音频字段独立识别", "同页三列筛选保持", "短视频直播保持", "pics:// 漫画保持", "社区详情合并"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
