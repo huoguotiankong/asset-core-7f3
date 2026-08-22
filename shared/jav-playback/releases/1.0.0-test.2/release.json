@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "name": "JAV Playback SDK",
+  "version": "1.0.0-test.2",
+  "build": 10002,
+  "channel": "test",
+  "entry": "index.js",
+  "providers": ["missav", "123av", "jable"],
+  "contract": ["providers", "normalizeCode", "resolve", "renderInto"],
+  "status": "device-validation-required",
+  "replaces": "1.0.0-test.1",
+  "notes": "修正共享模块导出/加载作用域；MissAV 仅列出实际存在版本并选最高 HLS；123AV 双链解析；Jable 直取/WebView HLS 并优先最高变体。"
+}
