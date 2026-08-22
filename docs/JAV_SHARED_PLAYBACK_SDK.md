@@ -1,6 +1,6 @@
 # JAV 类小程序共享外部播放 SDK
 
-版本：1.1  
+版本：1.2  
 建立：2026-08-22  
 最近更新：2026-08-23  
 适用：JavDB、JavBus 以及后续按番号检索影片的海阔小程序。
@@ -25,27 +25,20 @@ MissAV / 123AV / Jable / 后续 Provider
 
 ## 2. 固定入口与版本治理
 
-固定 Manager：
-
-`shared/jav-playback/manager.js`
-
-通道元数据：
-
-`shared/jav-playback/channels.json`
-
-Release：
-
-`shared/jav-playback/releases/<version>/index.js`
+固定 Manager：`shared/jav-playback/manager.js`  
+通道元数据：`shared/jav-playback/channels.json`  
+Release：`shared/jav-playback/releases/<version>/index.js`
 
 硬规则：
 
-- Stable 业务程序绑定已实机验证的 Stable SDK release。
+- Stable 业务程序只加载 `stable` 指针或显式 immutable release，不直接跟随 `test`。
 - Provider 失效先发新的 SDK Test release，不原地覆盖旧 Stable SDK。
 - 同 URL / 同版本不得依靠覆盖修缓存问题。
 - SDK 失败必须只影响第三方播放，不得拖垮业务小程序详情、搜索、官方播放、磁链、收藏等主链。
 - 每个 Provider 独立解析；新增站点不修改其它 Provider。
 - **某 Provider 已实机可播后默认冻结其解析逻辑。维修另一个 Provider 时不得顺手重写已验证 Provider。**
 - Manager/SDK 使用 `eval` 加载时，必须同时做语法门禁和“加载后外层能读取导出对象”的作用域 smoke test；不能只靠 `node --check`。
+- Stable 指针一旦发布，未来 SDK Test 只移动 `test` 指针；除非经过明确晋级，不得修改 `stable` 指针。
 
 ## 3. SDK 合约
 
@@ -71,7 +64,7 @@ renderInto(d, options)   向海阔页面渲染 Provider 入口
 
 ### MissAV
 
-当前 Test4 使用“搜索驱动”链，不再猜详情 URL：
+当前实现使用“搜索驱动”链，不再猜详情 URL：
 
 ```text
 /cn/search/<番号>
@@ -91,7 +84,7 @@ renderInto(d, options)   向海阔页面渲染 Provider 入口
 - 同时兼容 Dean Edwards `eval(function(p,a,c,k,e,d)...)` 结构；必要时从 seek UUID 构造 `surrit.com/<uuid>/playlist.m3u8` 仅作为后级兼容。
 - master playlist 使用站点 Origin/Referer，最终播放继续携带必要 Header。
 - 默认自动最高画质，不再提供无实际收益的手动画质切换。
-- 当前 Test4 尚待海阔实机确认，未验证前不得作为 Stable 事实。
+- **截至 Stable 3.9.42 晋级时，MissAV 新链尚无新的明确海阔实机成功确认。用户明确要求晋级当前 Test5，因此 Stable 指针保留该实现，但这不等于“MissAV 已验证”。后续若失败，只发新 SDK Test 修 MissAV。**
 
 ### 123AV
 
@@ -116,7 +109,7 @@ video://detail
 - `javplayer.me` 历史播放器需要对应 Referer。
 - 禁止只嗅探网页导致命中广告流后伪装成正片。
 - **2026-08-23 JavDB Test3 实机确认 123AV 可播放；后续维修 MissAV 时冻结 123AV 解析。**
-- 123AV favicon 在实机为空，现改用仓库静态 `shared/jav-playback/assets/123av.svg`，图标显示仍待实机确认。
+- 123AV favicon 在实机为空，现改用仓库静态 `shared/jav-playback/assets/123av.svg`。
 
 ### Jable
 
@@ -131,57 +124,61 @@ video://detail
 
 ### 1.0.0-test.1
 
-发布前发现：通过 `eval()` 执行 IIFE 且把 `this` 当 global 导出时，海阔 JS 环境中的 `this` 可能不是预期全局对象，Manager 后续直接读取 `JAVPlayback` 存在作用域风险。
-
-该版本冻结，不原地修改。
+通过 `eval()` 执行 IIFE 且把 `this` 当 global 导出时存在作用域风险。冻结，不原地修改。
 
 ### 1.0.0-test.2
 
 - 改成显式 `var JAVPlayback = {...}`。
 - Manager 加载后验证 `JAVPlayback.version`。
-- Provider：MissAV / 123AV / Jable。
-- 2026-08-23 JavDB 实机结果：123AV、Jable 可播放；MissAV 不可播放。
-- 因此 Test2 后续作为 123AV/Jable 已验证实现来源，不再整体重写。
+- 2026-08-23 JavDB 实机：123AV、Jable 可播放；MissAV 不可播放。
+- 后续作为 123AV/Jable 已验证实现来源，不再整体重写。
 
 ### 1.0.0-test.3
 
-- 基于 Test2，仅尝试恢复 MissAV 搜索 → 真实详情 → packed source 链，并增加 123AV 仓库图标。
-- 发布后静态复核发现：在 IIFE 内 `eval(Test2)` 得到的 `var JAVPlayback` 可能只存在于 IIFE 局部，而 Manager 在外层校验 `JAVPlayback`，与 JavDB Test2 的 JDB eval-scope 事故同类。
-- **未要求用户实机浪费时间验证，直接冻结，不原地覆盖。**
+- 基于 Test2 尝试恢复 MissAV 搜索 → 真实详情 → packed source，并增加 123AV 仓库图标。
+- 发布后复核发现 IIFE 内 `eval(Test2)` 的导出可能只存在局部，与 JavDB Test2 的 JDB eval-scope 事故同类。
+- **未要求用户实机浪费时间验证，直接冻结。**
 
 ### 1.0.0-test.4
 
-- 顶层先显式声明 `var JAVPlayback`。
-- 加载 Test2 基线时把其 `var JAVPlayback=` 转成对当前稳定导出变量的赋值，再叠加 MissAV 修复；Manager 外层可继续读取同一导出。
+- 顶层显式声明 `var JAVPlayback`。
+- 加载 Test2 时把 `var JAVPlayback=` 转成对当前稳定导出变量的赋值，再叠加 MissAV 修复。
 - 已完成 Manager 风格作用域 smoke test：加载后可读取 `version=1.0.0-test.4`，继承的 123AV/Jable 方法仍可调用。
-- 123AV/Jable 解析逻辑保持 Test2 不变。
-- MissAV 改为搜索驱动的真实详情 + packed source + 自动最高画质。
-- 当前状态：等待海阔实机验证 MissAV 与 123AV 图标；123AV/Jable 播放本身已有 Test2 实机成功证据。
+- 123AV/Jable 解析逻辑保持 Test2 不变；123AV 改仓库静态图标。
+- MissAV 改为搜索驱动真实详情 + packed source + 自动最高画质。
+
+### Stable 指针（2026-08-23）
+
+- 用户明确要求把 JavDB `3.9.42-test.5` 晋级 Stable `3.9.42`。
+- 为避免正式版继续跟随未来 `test` 指针，`shared/jav-playback/channels.json` 的 `stable` 已固定到 immutable `releases/1.0.0-test.4/index.js` / Build10004。
+- 当前 `test` 暂时也指向同一 release，状态为已晋级基线；下一次第三方播放维修必须创建新的 Test release，只移动 `test`。
+- 这次“Stable 指针”表示版本治理已固定，不改变各 Provider 已验证状态：123AV/Jable 有实机成功证据，MissAV 新链仍待后续实机确认。
 
 ## 6. 新程序接入规则
 
 1. 业务程序自己的 Stable/Test 恢复链先确认。
-2. Test 中加载共享 Manager。
-3. 选择 SDK Test channel 或明确版本。
+2. Test 中加载共享 Manager，并选择 SDK `test`。
+3. Stable 只加载 SDK `stable` 或明确 immutable release。
 4. 只传番号，不把业务程序详情模型泄漏给 Provider。
 5. 实机逐站测试冷启动、第二次缓存、Header、最高画质、多线路与失败兜底。
 6. 一个 Provider 已通过后，将其实现视为冻结基线；下一轮只修改失败 Provider。
-7. 验证后再决定 SDK Stable；业务程序 Stable 再绑定 Stable SDK。
+7. 验证并明确晋级后再移动 Stable 指针。
 
 ## 7. 回归清单
 
 - [x] Manager 可加载 SDK Test2，并在 JavDB 显示三个 Provider。
 - [x] 123AV 实机可播放（2026-08-23 JavDB Test3）。
 - [x] Jable 实机可播放（2026-08-23 JavDB Test3）。
-- [ ] Manager 可在海阔实机加载 SDK Test4 并通过 version 校验。
+- [x] SDK Test4 Manager 风格作用域 smoke test 可读取 version。
+- [x] Stable 指针固定到 immutable SDK Test4，正式版不再跟随 test。
+- [ ] Stable/海阔实机加载 SDK Test4 并通过 version 校验。
 - [ ] 123AV 仓库静态图标正常显示。
 - [ ] MissAV 只显示实际存在版本。
 - [ ] MissAV 可播放并自动选择最高 HLS。
 - [ ] 123AV 二次回归仍不误取广告流。
 - [ ] Jable 二次回归仍正常。
 - [ ] 任一 Provider 异常不影响业务程序其它功能。
-- [ ] 新 SDK release 不覆盖旧 Stable 文件。
 
 ## 8. 知识归属
 
-这是跨 JavDB/JavBus/后续 JAV 程序复用的媒体 Provider 架构。JavDB 自身的接入版本和实机结果继续记录在 `apps/video/javdb/CHANGELOG.md`；Provider 的通用架构与版本治理以本文档和全局开发指南为长期依据。
+这是跨 JavDB/JavBus/后续 JAV 程序复用的媒体 Provider 架构。JavDB 自身的接入版本和实机结果记录在 `apps/video/javdb/CHANGELOG.md`；Provider 的通用架构与版本治理以本文档和全局开发指南为长期依据。
