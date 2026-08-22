@@ -14,11 +14,11 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
   "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
-  "testVersion": "1.9.0-test.5",
-  "testBuild": 19005,
-  "testShellVersion": "1.1.4-test",
-  "testBootstrap": "apps/video/huangdou/bootstrap_test_v6.js",
-  "testRule": "apps/video/huangdou/huangdou_remote_test_v6.txt",
+  "testVersion": "1.9.0-test.6",
+  "testBuild": 19006,
+  "testShellVersion": "1.1.5-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v7.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v7.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"stable-182-paid-lock-test-19005","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.5 只增加官网付费/需授权剧集的 🔒 可视标识，PlaybackAdapter 继续完整复用 Test4，不改变授权和媒体协议。"}
+  "migration": {"stage":"stable-182-paid-lock-test-19006","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.6 根据实机确认 text_4 不显示锁 Emoji，付费集改用稳定可见【锁】前缀；播放仍完整复用 Test4，不改变授权和媒体协议。"}
 }
