@@ -7,17 +7,18 @@
 - 程序：JavDB v3
 - App ID：`javdb-v3`
 - Stable：`3.9.41` / build `2026082006` / Remote
-- Test：`3.9.42-test.2` / build `2026082242` / Remote / 待实机验证
-- 上一已验证 Test：`3.9.42-test.1` / build `2026082241`
+- Test：`3.9.42-test.3` / build `2026082243` / Remote / 待实机验证
+- 上一已验证业务基线 Test：`3.9.42-test.1` / build `2026082241`
+- 已知失败 Test：`3.9.42-test.2` / build `2026082242`（首页启动 `ReferenceError: JDB 未定义`，禁止继续作为测试入口）
 - Local：`3.9.41-local` / build `2026082103` / Pure Local
 - Stable 入口：`cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt`
-- Test 入口：`cloud/javdb/v3.9.42-test.2/javdb_v3.9.42_test2.txt`
-- Test Release：`apps/video/javdb/releases/3.9.42-test.2/release.json`
+- Test 入口：`cloud/javdb/v3.9.42-test.3/javdb_v3.9.42_test3.txt`
+- Test Release：`apps/video/javdb/releases/3.9.42-test.3/release.json`
 - Local 构建：`cloud/javdb/v3.9.41/release_meta.json` + `runtime.js`
 - 当前通道元数据：`apps/video/javdb/channels.json`
 - 共用 JAV 播放 Manager：`shared/jav-playback/manager.js`
 - 当前共用播放 Test SDK：`shared/jav-playback/releases/1.0.0-test.2/index.js`
-- 最后登记日期：2026-08-22
+- 最后登记日期：2026-08-23
 
 ## 关键技术索引
 
@@ -34,8 +35,8 @@
 - 演员榜：`GET /api/v1/rankings/actors?type=...&filter_by=daily|weekly|monthly`。
 - 演员推荐：`GET /api/v1/actors/recommend` 返回 `new_actors`、`monthly_actors`、`recommend_actors`，Test1 对应 APP 的“新人 / 月排名 / Fanza(DMM)推荐”。
 - 演员列表：`GET /api/v1/actors?type=...&page=...`。Test1 使用 `type=0..4` 对应 `有码(女) / 有码(男) / 无码 / 欧美(女) / 欧美(男)`；2026-08-22 用户实机确认这些入口均已出现并可用，因此当前作为已验证 UI/API 映射基线继续继承。
-- 影片详情已经具备系列、片商、导演、发行商、演员、标签、相关清单、TA还出演过、相关推荐，不在 Test2 重复造入口。
-- 资讯使用 `GET /api/v1/articles` / `GET /api/v1/articles/%s`，Test2 将资讯收进“更多”聚合页，不再挤占主导航。
+- 影片详情已经具备系列、片商、导演、发行商、演员、标签、相关清单、TA还出演过、相关推荐，不在 Test2/Test3 重复造入口。
+- 资讯使用 `GET /api/v1/articles` / `GET /api/v1/articles/%s`，Test2 起将资讯收进“更多”聚合页，不再挤占主导航。
 
 ### 登录 / 鉴权 / Cookie / 签名
 
@@ -45,8 +46,8 @@
 
 ### 编码 / 解密 / 图片 / 播放
 
-- Stable 3.9.41 的官方播放、图片、登录、评论与收藏在 Test2 继续复用；Test2 只替换外部第三方播放入口。
-- 3.9.42-test.1 使用小型 `app_parity_patch.js` 覆盖分类/排行/演员，已由用户实机确认可用；3.9.42-test.2 在其后叠加 `app_parity_patch2.js`，不重写 Test1 已验证逻辑。
+- Stable 3.9.41 的官方播放、图片、登录、评论与收藏在 Test3 继续复用；Test2/Test3 只替换外部第三方播放入口。
+- 3.9.42-test.1 使用小型 `app_parity_patch.js` 覆盖分类/排行/演员，已由用户实机确认可用；3.9.42-test.2 叠加 `app_parity_patch2.js` 提供 APP 导航/UI/共享播放；3.9.42-test.3 原样复用两个业务补丁，只修 Runtime eval 作用域。
 - 2026-08-22 起第三方番号播放从 JavDB 私有代码拆为共享 `JAV Playback SDK`：固定 Manager 为 `shared/jav-playback/manager.js`，业务小程序只传番号和 Provider ID，解析逻辑集中在版本化 SDK Release。
 - 当前 Test SDK `1.0.0-test.2` Provider：MissAV / 123AV / Jable。Provider UI 只显示站点名，不显示实现备注。
 - MissAV：并发探测默认/中文字幕/无码流出/无码版/流出版，只展示实际存在版本；详情优先解析 packed m3u8 / 直链 m3u8，WebView 兜底；master playlist 自动选择最高分辨率/带宽，不再提供手动画质切换。
@@ -55,12 +56,19 @@
 - SDK `1.0.0-test.1` 在发布前门禁发现 `eval` 后导出作用域可能不稳定，已冻结且不原地覆盖；随后新建 `1.0.0-test.2` 改为显式全局 `var JAVPlayback`。该事故证明共享播放模块同样必须 immutable release + channel pointer。
 - **当前共享播放 SDK Test2 尚未完成海阔实机播放回归**；只有架构、语法和静态链路验证，不能晋级 Stable SDK。
 
+### Runtime / eval 作用域
+
+- 2026-08-23 实机确认 Test2 首页启动失败，错误：`JSEngine#17(eval)#9(eval)` / `ReferenceError: JDB 未定义`。
+- 根因：Test1 的 `core()` 在同一个函数里依次执行 `eval(Core) -> eval(Patch) -> eval(call)`；Test2 为复用抽出 `loadCore()`，导致 `eval(Core)` 产生的 `var JDB` 只存在于 `loadCore()` 局部作用域。`loadCore()` 返回后，外层 `core()` 再 `eval('JDB.home()')` 时已不可见。
+- 修复：Test3 删除 `loadCore()` 作用域跨越，`core()` 与 `javdb3ExternalPlay` 路径均在同一函数作用域完成 Core、Patch1、Patch2、Patch3 和最终调用的 direct eval。
+- 规则：在海阔 JSEngine 中，**依赖 eval 创建局部 `var` 的运行链不得为了“复用”跨函数拆分**；需要拆分时必须显式导出到稳定对象/全局命名空间并实机验证。
+
 ### 缓存 / 状态 / 本地数据
 
 - Stable 与 Test 规则名相同，按同名覆盖切换；Local 使用 `JavDB v3 本地版` 独立命名，可与远程版并存。
-- 3.9.42-test.2 使用新的 Core/custom/patch 缓存键，避免与 Stable/Test1 串线。
+- 3.9.42-test.3 使用全新的 Shell/runtime URL 和 Core/custom/patch 缓存键，避免命中 Test2 已失败缓存。
 - 分类继续使用 `jdb3_cat42_*` 独立筛选状态键。
-- Test2 主导航改为 `首页 / 排行 / 分类 / 演员 / 我的 / 更多`；“我的”聚合本地片库与账号，“更多”聚合资讯、资料库与设置。
+- Test2/Test3 主导航为 `首页 / 排行 / 分类 / 演员 / 我的 / 更多`；“我的”聚合本地片库与账号，“更多”聚合资讯、资料库与设置。
 - Local 版发布前必须执行最终规则隐私扫描，保证不依赖私人 GitHub 运行。
 
 ## 已知风险与禁止回退方案
@@ -69,7 +77,8 @@
 - Test 验证通过前不得直接覆盖 Stable。
 - Local 版不得残留私人 GitHub Raw、Remote Manager 或远程更新链。
 - 未经当前源码验证，不得根据旧 JavDB/JavDB2 或其他站点的解析方式推断本版本协议。
-- Test1 已获实机确认，不得因 Test2 UI/播放问题回退或重写分类、排行、演员整块；新问题应在 Test2 对应模块定点修复。
+- Test1 已获实机确认，不得因 Test2/Test3 UI/播放问题回退或重写分类、排行、演员整块；新问题应定点修复。
+- Test2 已被实机证实为启动失败版本；禁止继续作为活动 Test、禁止通过同 URL 原地覆盖修复，必须使用 Test3 新 Shell/runtime。
 - 第三方 Provider 是 P2/P3 可选能力；任一外站失败不得拖垮详情页或 JavDB 官方播放/磁链等 P0/P1 主链。
 - 共享 JAV Playback Stable 一旦发布必须绑定具体 SDK release；坏站修复发布新 SDK Test，经实机验证后再推进 Stable，禁止原地覆盖旧稳定文件。
 
@@ -78,10 +87,11 @@
 - [x] Test1 分类：有码/无码/欧美/FC2/动漫（2026-08-22 用户实机确认）
 - [x] Test1 分类基本/高级筛选（2026-08-22 用户实机确认整体可用）
 - [x] Test1 排行入口与演员入口（2026-08-22 用户实机确认均已出现并可用）
-- [ ] Test2 主导航：首页/排行/分类/演员/我的/更多
-- [ ] Test2 首页：最新/推荐/磁链更新/可播放更新 + 快速筛选
-- [ ] Test2 我的：本地影片/演员收藏/历史 + JavDB账号
-- [ ] Test2 更多：资讯/系列/片商/导演/设置
+- [ ] Test3 首屏能正常进入，不再出现 `JDB 未定义`
+- [ ] Test3 主导航：首页/排行/分类/演员/我的/更多
+- [ ] Test3 首页：最新/推荐/磁链更新/可播放更新 + 快速筛选
+- [ ] Test3 我的：本地影片/演员收藏/历史 + JavDB账号
+- [ ] Test3 更多：资讯/系列/片商/导演/设置
 - [ ] 搜索
 - [ ] 详情
 - [ ] 评论
@@ -101,6 +111,15 @@
 
 ## 版本记录
 
+### 3.9.42-test.3 / 2026-08-23
+
+- 用户实机截图确认 Test2 在首页启动阶段直接报 `ReferenceError: JDB 未定义`。
+- 根因不是 JavDB API、APP 补丁或共享播放 SDK，而是 Test2 Runtime 把 direct `eval(Core)` 抽进 `loadCore()` 后跨越函数作用域，导致 Core 定义的 `JDB` 在最终调用处不可见。
+- 新建独立 Test3 Release、Runtime、Shell 与缓存键，未原地覆盖 Test2。
+- `core()` 恢复 Test1 的同作用域 `eval(Core) -> Patch1 -> Patch2 -> Patch3 -> call`；`javdb3ExternalPlay` 也在同一 custom 函数作用域完成同样链路。
+- Test2 的 APP 风格首页/我的/更多、Test1 已验证分类/排行/演员、共享 JAV Playback SDK `1.0.0-test.2` 均原样继承，不扩大修改面。
+- 当前状态：等待实机确认首页恢复后，再继续 UI 与 MissAV/123AV/Jable 播放回归。
+
 ### 3.9.42-test.2 / 2026-08-22
 
 - 直接继承用户实机确认正常的 `3.9.42-test.1`，不改其分类/排行/演员业务逻辑。
@@ -110,7 +129,7 @@
 - 修正设置页历史版本文案，显示当前 Test2 与共用播放 SDK 信息。
 - “更多播放”改接共享 JAV Playback SDK，首批 Provider：MissAV、123AV、Jable；JavDB VIP、官方预览和官方磁链继续保留且与第三方代码隔离。
 - Shared SDK Test1 因发布前发现 eval 导出作用域风险而冻结，Test2 使用新 release 修复，没有原地覆盖旧文件。
-- 当前状态：JS 语法门禁、Shell 结构/33 pages 唯一性已通过；UI 和三 Provider 播放待海阔实机验证。
+- **实机结果：启动即失败，`ReferenceError: JDB 未定义`。失败原因为 Runtime eval 作用域，不代表上述业务/UI/Provider 逻辑本身已被实机否定。该版本冻结，不再作为活动 Test。**
 
 ### 3.9.42-test.1 / 2026-08-22
 
