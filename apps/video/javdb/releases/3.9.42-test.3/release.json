@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.42-test.3",
+  "build": 2026082243,
+  "baseVersion": "3.9.41",
+  "baseBuild": 2026082006,
+  "previousTest": "3.9.42-test.2",
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.42-test.3/javdb_v3.9.42_test3.txt",
+  "runtime": "cloud/javdb/v3.9.42-test.3/runtime.js",
+  "modules": [
+    {"name":"appParityPatch1","path":"apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js"},
+    {"name":"appParityPatch2","path":"apps/video/javdb/releases/3.9.42-test.2/app_parity_patch2.js"},
+    {"name":"runtimeScopePatch","path":"apps/video/javdb/releases/3.9.42-test.3/runtime_scope_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"test","sdkVersion":"1.0.0-test.2"}
+  ],
+  "verify": {"global":"JDB","property":"version","equals":"20260823-v3.9.42-test.3"},
+  "scope": ["runtime", "navigation", "mine", "more", "ui", "shared-playback"],
+  "stableUntouched": true,
+  "notes": "修复 Test2 将 Core eval 抽进 loadCore 后导致 JDB 只存在于局部作用域、首页启动 ReferenceError 的问题；Test1 分类/排行/演员和 Test2 APP/UI/共享播放功能原样继承。"
+}
