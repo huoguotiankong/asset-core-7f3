@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.24",
+  "build": 20024,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.23",
+  "supersedes": "2.0.0-test.23",
+  "modules": [
+    {
+      "name": "recovery24",
+      "path": "apps/video/hanime1/releases/2.0.0-test.24/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.24"
+  },
+  "notes": "Test24 is a delivery/runtime recovery release. It keeps the Test23 built-in XPath avatar engine, but fixes the broken in-app updater caused by serialized lazyRule callbacks referencing HanimeBoot without explicitly loading Bootstrap. A new Bootstrap v4 + Shell v4 forces devices below build 20024 onto this release and provides explicit require-based check/update/rollback/reinstall/reset actions."
+}
