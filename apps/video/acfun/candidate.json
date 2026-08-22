@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha12",
-  "build": 163,
-  "shellVersion": "6.8.0-test",
+  "version": "0.6.0-alpha13",
+  "build": 164,
+  "shellVersion": "6.9.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha12/release.json",
-  "updatedAt": "2026-08-22",
-  "notes": "Alpha12 候选。核心变化不是继续扩大猜测字段，而是回到已验证 Stable 合同：视频/短视频恢复 Stable cacheM3u8 单线路；漫画 chapterInfo 首选 Stable v0.4.7 已验证的 {chapterId}，并直接渲染全宽图片页；有声改用直接/选择线路音乐 URL。小说分类和正文成功链保持。仅用于 Test/Candidate，完成视频、短视频、有声和漫画实机回归前不得晋级 Stable。"
+  "release": "apps/video/acfun/releases/0.6.0-alpha13/release.json",
+  "updatedAt": "2026-08-23",
+  "notes": "Alpha13 候选。Alpha12 已实机恢复漫画章节；Alpha13 保留 chapterId 单参数章节合同并切到 pics:// 原生多图阅读。普通视频失败已定位到旧详情播放按钮 eval core v018 导致当前 ac.play 覆盖失效，Alpha13 将普通视频、短视频、有声播放全部绑定当前 Bootstrap v069；播放器同级列表移除收藏/评论，改到长按动作。播放增加 m3u8/player/referer 静态兼容探针，有声增加 playbackAuthKey/authKey 候选；小说/社区/部分视频封面继续以类型化字段评分恢复。仍只用于 Test/Candidate，视频、有声、封面与漫画全屏效果完成实机验证前不得晋级 Stable。"
 }
