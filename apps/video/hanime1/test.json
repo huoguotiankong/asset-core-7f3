@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.2",
-  "baseVersion": "2.0.0-test.1",
+  "version": "2.0.0-test.3",
+  "baseVersion": "2.0.0-test.2",
   "targetVersion": "2.0.0",
-  "build": 20002,
+  "build": 20003,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082211,
+  "shellRuleVersion": 2026082212,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.2/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.3/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Real-device Test1 hotfix: full homepage row parsing + status-independent Cloudflare challenge markers. Test1 booted and reached real Hanime1 content but only parsed the first card."
+  "notes": "Real-device Test2 still showed only banner + first normal card; Test3 replaces Hiker DOM traversal with raw HTML row/card slicing and repairs missing detail cover."
 }
