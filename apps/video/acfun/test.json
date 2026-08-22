@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha14",
-  "build": 165,
-  "shellVersion": "6.10.0-test",
+  "version": "0.6.0-alpha15",
+  "build": 166,
+  "shellVersion": "7.1.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha14/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v070.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha15/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v071.txt",
   "updatedAt": "2026-08-23",
-  "notes": "0.6.0 Alpha14 恢复测试版。Alpha13 实机发生多域回归：漫画由 Alpha12 可读退化为不可读，所有封面同时消失，视频/短视频/有声仍不可播，因此 Alpha13 已隔离且不进入新恢复链。Alpha14 直接从已实机验证的 Alpha12 / Build163 模块链恢复，再只追加四个小范围模块。封面不再使用 Alpha13 会覆盖已有有效 img 的深层评分器；漫画保留 Alpha12 已验证的 chapterInfo {chapterId} + ac.image + pic_1_full 解密渲染，仅给二级页面增加海阔官方 #fullTheme#，不再用 pics:// 承担加密图片。当前实机明确显示 sjacfanapi 对 POST video/can/watch 返回 HTTP405，因此视频播放改为优先复用列表/详情已有媒体 path，缺失时 GET can/watch 优先、POST 仅有限兼容，再进入既有 h5/decode + cacheM3u8。视频详情保留 Feed seed，短视频与有声点击统一进入当前 Bootstrap v070。小说/有声分类和小说正文成功链保持不动。Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
+  "notes": "Alpha14 实机继续出现全局封面缺失、视频详情灰封面，并且此前视频/短视频/有声/漫画等问题仍未形成可靠闭环，证明仅跳过 Alpha13、继续继承 Alpha12 的多层 Test overlay 仍不够干净。Alpha15 因此执行真正 Clean Rebase：活动 Release 只包含 Stable 0.4.9 的 8 个已验证模块 + 1 个全新 clean runtime/UI，Alpha3~14 全部退出活动链。视频 itemInfo、XOR 图片解密、cacheM3u8 播放、v047 Station/classTypeList/漫画/短视频底座不再被 Test 覆盖；社区/小说/有声改为独立 Adapter，其中当前实机已确认 fiction/base/findList GET=405 而真实请求存在 HTTP200，因此 fiction 路由按 POST 优先、GET 后级兼容。UI 继续保留九栏目，但修复 Alpha14 短视频图标错误常亮、独立 > 控制项等问题。Stable/latest 继续冻结。"
 }
