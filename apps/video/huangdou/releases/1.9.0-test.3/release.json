@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "huangdou-test",
+  "name": "黄豆短剧",
+  "version": "1.9.0-test.3",
+  "build": 19003,
+  "ref": "main",
+  "baseStable": {"version":"1.8.2","build":18201,"release":"apps/video/huangdou/releases/1.8.2/release.json"},
+  "previousTest": {"version":"1.9.0-test.2","build":19002,"release":"apps/video/huangdou/releases/1.9.0-test.2/release.json"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/huangdou/releases/1.9.0-test.1/core.js"},
+    {"name":"ui-base","path":"apps/video/huangdou/releases/1.9.0-test.2/ui_base.js"},
+    {"name":"playback-adapter","path":"apps/video/huangdou/releases/1.9.0-test.3/playback.js"},
+    {"name":"content-pages","path":"apps/video/huangdou/releases/1.9.0-test.1/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/huangdou/releases/1.9.0-test.3/pages_detail.js"},
+    {"name":"runtime","path":"apps/video/huangdou/releases/1.9.0-test.3/runtime.js"}
+  ],
+  "verify": {"global":"HuangDouRemoteRuntime","property":"build","equals":"1.9.0-test.3"},
+  "notes": "根据实机播放页与后续剧集回归修复：单线路恢复直接 HLS，不再用 PlayModel；所有剧集统一先尝试 guest/token；取消无效 webRule fallback；正倒序移出集数网格；本地收藏移到详情底部。Stable 1.8.2 不变。"
+}
