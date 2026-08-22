@@ -1,0 +1,14 @@
+/* Hanime1 Test13 complete catalog + author entry */
+(function(C,P,E,H,U,L){
+var pv=H.pv,route=H.route,sec=H.sec,chip=H.chip,state=H.state;
+function setVar(key,val){return $('#noLoading#').lazyRule(function(k,v){if(v===''&&k!=='hanime8_sort')clearMyVar(k);else putMyVar(k,v);refreshPage(false);return 'hiker://empty';},key,String(val));}
+function row(d,title,key,items,cur){d.push({title:'▌ '+title,url:'hiker://empty',col_type:'scroll_button'});for(var i=0;i<(items||[]).length;i++){var x=items[i];d.push({title:(String(cur)===String(x[1])?'● ':'')+x[0],url:setVar(key,x[1]),col_type:'scroll_button'});}d.push({col_type:'line_blank'});}
+var oldLibrary=E.renderLibrary;
+E.renderLibrary=function(d,page){page=Number(page||1);if(page===1){d.push({title:'作者目录',desc:'按官网作者分类浏览',url:route('hanimeArtists',{}),col_type:'text_2',extra:{lineVisible:false}});d.push({title:'完整分类 / 标签',desc:'官方 7 大标签组 + 全部筛选条件',url:route('hanimeVideoFilter',{}),col_type:'text_2',extra:{lineVisible:false}});}oldLibrary(d,page);};
+
+E.videoFilterPage=function(){try{setPageTitle('影片分类');var d=[],cat=P.filterCatalog||{},groups=Object.keys(cat.tags||{}),q=pv('q','').trim(),section=pv('section','');d.push({title:'作者目录',url:route('hanimeArtists',{}),col_type:'text_2',extra:{lineVisible:false}});d.push({title:'返回片库',url:$('#noLoading#').lazyRule(function(){putMyVar('hanime10_tab','library');back(true);return 'hiker://empty';}),col_type:'text_2',extra:{lineVisible:false}});d.push({title:'搜索标签',url:"if(!input)return 'hiker://page/hanimeVideoFilter?rule=&simple=true';return 'hiker://page/hanimeVideoFilter?rule=&simple=true&q='+encodeURIComponent(input);",col_type:'input',extra:{hint:'输入标签名称',defaultValue:q,lineVisible:false}});if(!section&&!q){function one(title,key,a){d.push(sec(title,(a||[]).length+' 项'));for(var i=0;i<(a||[]).length;i++){var o=a[i],p={};p[key]=o[1];d.push(chip(o[0],route('hanimeVideoResults',p)));}}one('影片类型','genre',cat.genres);one('排序方式','sort',cat.sorts);one('发布日期','date',cat.dates);one('影片时长','duration',cat.durations);}
+var total=0;for(var g=0;g<groups.length;g++){var name=groups[g],arr=cat.tags[name]||[],show=[];for(var i=0;i<arr.length;i++)if(!q||String(arr[i]).toLowerCase().indexOf(q.toLowerCase())>=0)show.push(arr[i]);if(section&&section!=='tags'&&section!==name)continue;if(!show.length)continue;total+=show.length;d.push(sec(name,show.length+' 个标签'));for(i=0;i<show.length;i++)d.push(chip(show[i],route('hanimeVideoResults',{tag:show[i]})));}
+if(q)d.unshift(sec('标签搜索','“'+q+'” · '+total+' 个结果'));if(!total&&(q||section==='tags'))d.push(sec('没有匹配标签'));setResult(d);}catch(x){setResult([{title:'分类页加载失败',desc:String(x.message||x),url:'hiker://empty',col_type:'text_center_1'}]);}};
+
+var oldSearch=E.searchPage;E.searchPage=function(){oldSearch();};
+})(HanimeCore,HanimeProvider,HanimePages,HanimeUI9,HanimeUI10,HanimeLayout12);
