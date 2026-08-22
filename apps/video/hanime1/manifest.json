@@ -10,10 +10,10 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.6",
-  "testBuild": 20006,
+  "testVersion": "2.0.0-test.7",
+  "testBuild": 20007,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
-  "migration": {"stage":"remote-web-session-direct-fetch","source":"2.0.0-test.5","note":"Test6 不再叠加 Test3-5 热修链；重置为 Core/Provider + Session6 + Web6 + Base Pages + UI6。WebView 仅负责验证/登录，之后直接请求官网。"}
+  "migration": {"stage":"remote-web-session-direct-fetch-product-split","source":"2.0.0-test.6","note":"Test7 保留 Test6 已实机验证的封面/最高画质播放/漫画链；公开片库与账号数据拆分，网页登录改独立全屏 X5，预告改 YYYYMM，评论/回复 UI 重排。"}
 }
