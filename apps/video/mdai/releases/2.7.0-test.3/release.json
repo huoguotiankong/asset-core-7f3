@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.7.0-test.3",
+  "build": 27003,
+  "ref": "main",
+  "baseStable": {"version":"2.6.3","build":26301,"release":"apps/video/mdai/releases/2.6.3/release.json"},
+  "previousTest": {"version":"2.7.0-test.2","build":27002,"release":"apps/video/mdai/releases/2.7.0-test.2/release.json"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/mdai/releases/2.7.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.7.0-test.1/ui_base.js"},
+    {"name":"content-pages","path":"apps/video/mdai/releases/2.7.0-test.2/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.7.0-test.1/pages_detail.js"},
+    {"name":"settings-icon","path":"apps/video/mdai/releases/2.7.0-test.3/settings_icon.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.7.0-test.3/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.7.0-test.3"},
+  "notes": "在 2.7.0-test.2 片库 UI 基线上新增官网图标实机检测：从当前 Host 首页解析 rel=icon / apple-touch-icon，选择高优先级声明并复制真实地址；不猜第三方 favicon，不改 Stable 2.6.3。"
+}
