@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.27",
+  "build": 20027,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.26",
+  "supersedes": "2.0.0-test.26",
+  "modules": [
+    {
+      "name": "recovery27",
+      "path": "apps/video/hanime1/releases/2.0.0-test.27/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.27"
+  },
+  "notes": "Test27 fixes the Test25/26 replies regression with a one-request per-reply DOM parse and no empty-result cache, replaces the fragile custom author-directory parser with the already proven Provider.search(type=artist) path plus recent-author fallback, and upgrades the home five-tab navigation plus four detail primary actions to repository-hosted SVG icon components. It keeps Test24 avatar delivery, Test25 local login-state optimization, Test26 creator pages, playback, login, library and comic chains unchanged outside these targeted overrides."
+}
