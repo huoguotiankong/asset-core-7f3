@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "javbus",
+  "name": "JavBus",
+  "version": "2026081903",
+  "build": 2026081903,
+  "mode": "legacy-local",
+  "rule": "javbus_2026081903.txt",
+  "updatedAt": "2026-08-19",
+  "frozen": true,
+  "notes": "重写期间冻结的旧本地/Apollo 基线；2.0 Test 未实机验证前不替换。"
+}
