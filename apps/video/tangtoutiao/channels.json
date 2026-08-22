@@ -1,0 +1,16 @@
+{
+  "schema": 4,
+  "id": "tangtoutiao",
+  "name": "汤头条",
+  "versionPolicy": "test-first-v1",
+  "updatedAt": "2026-08-23 02:25",
+  "channels": [
+    {
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.1","build":10101,
+      "displayVersion":"Test 0.1.0 · APK 9.6.2 Protocol 1","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"首个远程重构测试版：恢复 APK 请求加密/签名/响应解密，并建立专业原生 App 信息架构。Stable 暂不存在，必须完成实机闭环后才能晋级。",
+      "highlights":["真实 APK AES-CFB + SHA256→MD5 协议","推荐/短视频/搜索/详情主链","社区与多内容频道中心","本地收藏/历史与协议诊断"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
+    }
+  ]
+}
