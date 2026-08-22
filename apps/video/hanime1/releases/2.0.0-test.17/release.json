@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.17",
+  "build": 20017,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.16",
+  "modules": [
+    {
+      "name": "recovery17",
+      "path": "apps/video/hanime1/releases/2.0.0-test.17/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.17"
+  },
+  "notes": "Minimal Test17 increment on the verified Test16 chain: author avatar fallback from official artist search and uploader public /user/<id> video listing."
+}
