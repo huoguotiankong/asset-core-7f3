@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.1",
-  "baseVersion": "1.2.1",
+  "version": "2.0.0-test.2",
+  "baseVersion": "2.0.0-test.1",
   "targetVersion": "2.0.0",
-  "build": 20001,
+  "build": 20002,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082210,
+  "shellRuleVersion": 2026082211,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.1/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.2/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Hanime1 architecture-first rewrite test: automatic WebView challenge attempt + X5 fallback, multi-account login/library/comments, video/comic split providers and APK-like Explore/Library/Cache/Settings UI."
+  "notes": "Real-device Test1 hotfix: full homepage row parsing + status-independent Cloudflare challenge markers. Test1 booted and reached real Hanime1 content but only parsed the first card."
 }
