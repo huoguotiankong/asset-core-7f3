@@ -14,11 +14,11 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
   "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
-  "testVersion": "1.9.0-test.2",
-  "testBuild": 19002,
-  "testShellVersion": "1.1.1-test",
-  "testBootstrap": "apps/video/huangdou/bootstrap_test_v3.js",
-  "testRule": "apps/video/huangdou/huangdou_remote_test_v3.txt",
+  "testVersion": "1.9.0-test.3",
+  "testBuild": 19003,
+  "testShellVersion": "1.1.2-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v4.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v4.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"stable-182-route-fix-test-19002","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.2 仅修复 Test1 二级页保留参数 url 冲突，UI 与 PlaybackAdapter 其余模块继续沿用 1.9 Test1。"}
+  "migration": {"stage":"stable-182-playback-cleanup-test-19003","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.3 根据 Test2 实机结果修复播放页冗余、选集排序混入网格、locked 误判和无效 webRule fallback。"}
 }
