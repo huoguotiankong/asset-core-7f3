@@ -5,24 +5,24 @@
 ## 当前基线
 - App ID：`huangdou`
 - Remote Stable：`1.8.2 / Build 18201 / Shell 1.0.0`（用户已实机验证，继续冻结）
-- Remote Test：`1.9.0-test.4 / Build 19004 / Shell 1.1.3-test`
+- Remote Test：`1.9.0-test.5 / Build 19005 / Shell 1.1.4-test`
 - Local：`1.8.2-local.1`
 - Stable 入口：`apps/video/huangdou/huangdou_remote_v1.txt`
-- Test 入口：`apps/video/huangdou/huangdou_remote_test_v5.txt`
+- Test 入口：`apps/video/huangdou/huangdou_remote_test_v6.txt`
 - Local：`huangdou.txt`，导入名 `黄豆短剧 本地版`
 
 ## 当前 Test 运行链
 ```text
-huangdou_remote_test_v5.txt / rule version 2026082302
-→ bootstrap_test_v5.js / state id=huangdou-test / minBuild=19004
+huangdou_remote_test_v6.txt / rule version 2026082304
+→ bootstrap_test_v6.js / state id=huangdou-test / minBuild=19005
 → Remote Manager v2.0.1
-→ releases/1.9.0-test.4/release.json
-→ core.js          复用 1.9 Test1 / Stable 1.8.2 协议与 HTML Parser
-→ ui_base.js       复用 Test2 跨页参数修复
-→ playback.js      Test4：Session-aware Token + HLS Probe
+→ releases/1.9.0-test.5/release.json
+→ core.js          复用 Test1 / Stable 1.8.2 协议与 HTML Parser
+→ ui_base.js       复用 Test2 跨页/UI 基线
+→ playback.js      完整复用 Test4 Session-aware Token + HLS Probe
 → pages_content.js 复用 Test1 首页/片库/搜索/我的/专题
-→ pages_detail.js  Test4：locked 提示 + 合法账号会话入口
-→ runtime.js       Test4 组合导出
+→ pages_detail.js  Test5：付费/需授权 Episode 🔒 标识
+→ runtime.js       Test5 组合导出
 ```
 
 ## 数据 / HTML / 图片事实
@@ -36,13 +36,31 @@ POST /account/guest
 → JSON.t
 → /play/<id>/<ep>.m3u8?t=<token>#isVideo=true#
 ```
-- 详情 DOM 同时暴露 `data-ep-free / is-locked / data-pay-method / data-pay-price` 等权限提示字段；这些是页面层提示，不等于播放器已获得授权。
+- 详情 DOM 暴露 `data-ep-free / is-locked / data-pay-method / data-pay-price` 等权限提示字段。
+- 用户 2026-08-23 明确确认：后续无法观看的部分集数属于**付费章节**。
+
+## Test5：付费剧集 UI 标识
+用户要求付费集数直接显示 `🔒`，方便在进入播放器前区分免费与付费内容。
+
+实现规则：
+- 官网详情解析结果 `ep.locked === true` 时，选集按钮显示 `第N集 🔒`。
+- 如果当前 Primary Play 目标本身是 locked 集，主按钮显示 `🔒 第 N 集 · 付费/解锁`。
+- 选集标题增加说明：`🔒 为官网付费/需授权内容`。
+- `🔒` 只表达官网页面给出的付费/授权提示，**不等于最终播放 API 授权结论**；用户已购买/已登录时仍允许 Test4 播放链正常验证合法权益。
+- Test5 不修改 PlaybackAdapter；仍完整复用 Test4 会话保持、Token、HLS 预检与 Header 交付。
+- 不实现、也不记录任何绕过官网付费/会员授权的方案。
+
+待实机确认：
+- [ ] 已知付费集在选集网格清晰显示 `🔒`。
+- [ ] 免费集不误标锁。
+- [ ] 当前继续播放目标是付费集时，Primary Play 也能一眼识别。
+- [ ] 已购买合法权益的账号会话仍按 Test4 播放链处理。
 
 ## 路由事故与固定规则
 ### 1.9.0-test.1 二级页 URL 冲突
 实机报错：`ArticleListModel-HttpRequestError` / `Expected URL scheme 'http' or 'https' but no colon was found`。
 
-根因：业务详情地址放进 `hiker://page/...&url=...`，`url` 与海阔页面模型语义冲突，错误发生在自定义 `detail()` 之前。
+根因：业务详情地址放进 `hiker://page/...&url=...`，`url` 与海阔页面模型语义冲突。
 
 固定规则：
 - 详情使用 `hddj_url`；专题使用 `hddj_topic_url`；标题使用 `hddj_title`。
@@ -50,41 +68,34 @@ POST /account/guest
 - `hiker://page` 跨页业务参数禁止使用通用 `url` 键。
 
 ## 播放连续回归与固定规则
-### Test2 / Test3 实机事实
 用户实机确认：
-1. Test2 详情已可打开，但 `立即播放 / 收藏` 同层、`正序` 混入集数网格、locked 集被提前送入无效 `webRule://https://...`。
-2. Test3 已修复上述 UI/路由问题：单线路恢复直接 HLS、选集网格只剩真实集数、收藏下沉、所有剧集都会尝试 Token；但第 5 集仍能进入播放器后黑屏并显示“播放异常，或者网络不可用”。
-3. Test3 的现象说明：**拿到 Token / 拼出 m3u8 URL ≠ 已经证明该媒体响应是有效 HLS 或当前会话拥有授权。**
-4. Stable 1.8.2 原实现每次播放先 POST guest，再取 Token；这对免费集已验证可用，但若用户已有会员/购买 Cookie，无条件 guest 有覆盖合法会话的风险，因此重构版不能继续把 guest 当无条件第一步。
+1. Test2 二级详情已恢复，但播放主区混收藏、正序混入选集网格、locked 集被提前送入无效 `webRule://https://...`。
+2. Test3 修复 UI/路由后，第5集仍可进入播放器但媒体异常。
+3. 这证明 `Token 存在 / URL 已拼出` 不等于真实媒体已授权或 HLS 有效。
+4. 用户随后确认这些后续失败集属于付费章节。
 
-### Test4 播放策略
+### Test4 播放策略（Test5 原样复用）
 - 优先使用当前 Host 已存在的 Cookie / 合法登录会话请求 `/play/token`。
-- 只有当前会话拿不到 Token 时，才建立 guest 会话后再重试。
-- 拿到 Token 后先用同一 `Cookie + Referer + UA` 对 m3u8 做轻量预检：真正的 HLS 必须以 `#EXTM3U` 开始。
-- 真 HLS 才交给播放器，并通过海阔媒体 Header 合同携带当前 Cookie / Referer / UA。
-- 若响应是 HTML、登录/会员/金币/购买/无权限等授权页面，或官网明确标记 locked 且没有有效 HLS，则产品化提示“需要登录/购买”，提供官网入口。
-- **不绕过官网付费/会员授权。** Test4 只支持用户已有合法账号/购买权益的会话复用。
-- 若 HLS Probe 本身因兼容问题失败，不阻塞已验证直链：仍把媒体 URL + 当前会话 Headers 交给播放器，并把 `PROBE_ERROR` 写入诊断。
-- 诊断只记录 `locked/cookie` 布尔值与阶段，不记录真实 Cookie、Token。
+- 只有当前会话拿不到 Token 时，才建立 guest 后重试。
+- Token 后使用同一 `Cookie + Referer + UA` 对 m3u8 做轻量预检；有效 HLS 应以 `#EXTM3U` 开始。
+- 真 HLS 才交给播放器，并携带当前 Cookie / Referer / UA。
+- 若返回登录/会员/金币/购买/无权限页面，产品化提示需要登录/购买，不让播放器显示模糊黑屏错误。
+- 不绕过官网付费/会员授权；只支持用户已有合法账号/购买权益的会话复用。
+- Probe 自身若因海阔兼容问题异常，可保留已验证直链合同并记录 `PROBE_ERROR`。
+- 诊断不记录真实 Cookie、Token，只记录阶段与布尔状态。
 
 固定规则：
 - 单线路媒体不要为了架构统一强行包装多线路 PlayModel。
-- 页面 locked/free 只作提示；最终授权事实以 Play API / 媒体响应为准。
-- Token 存在不能直接标记 READY，至少应能区分“真实 HLS / 授权 HTML / 无效媒体响应”。
-- 有账号体系的站点不得在每次播放前无条件重建 guest，必须先保护用户已有合法会话。
+- 页面 locked/free 是 UI 权限提示；最终授权事实仍由 Play API / 媒体响应确认。
+- Token 存在不能直接标记 READY。
+- 有账号体系的站点不能无条件 guest 覆盖已有合法会话。
 - 播放主区域只放播放/继续播放/真实线路；收藏、官网、诊断下沉。
-- 选集网格只放真实 Episode；正倒序、范围、筛选属于独立控制层。
-
-待实机验证：
-- [ ] Test4 第 1 集可正常播放。
-- [ ] Test4 第 5 集无合法权益时显示明确授权提示，而不是进入黑屏播放器。
-- [ ] 若账号本身对第 5 集有合法权益：在“设置 → 账号 / 会员会话”官网登录后返回，可直接播放。
-- [ ] 最近播放诊断能区分 `READY / AUTH_FAIL / HLS_FAIL / PROBE_ERROR / TOKEN_FAIL`，且不泄漏秘密。
-- [ ] Stable 1.8.2 仍可随时覆盖恢复。
+- Episode Grid 只放真实剧集；正倒序、范围、筛选属于控制层。
+- 已知付费/锁定 Episode 应在 UI 上明确区分，禁止把明显付费集伪装成普通可播放集后再报“网络异常”。
 
 ## UI / Product Blueprint
 - Home：搜索 → 推荐/魔改/AI漫/真人四栏原地切换 → 片库/专题/我的/设置 → 继续观看/热门/最近更新。
-- Library：7 个已验证分类用 `flex_button` 原地切换；默认三列海报。
+- Library：7 个已验证分类原地切换；默认三列海报。
 - Search / Mine / Topic / Settings 独立 `simple=true` 页面。
 - Detail：Hero → Primary Play → 简介 → 选集 → 猜你喜欢 → 低频本地收藏/官网。
 - 分类、Tab、排序等状态变化统一 `refreshPage(false)`，禁止重复压 `hiker://page` 页面栈。
@@ -100,8 +111,8 @@ POST /account/guest
 - 片库布局：`hddj_col_v190`
 - 选集分组：`hddj_ep_group_v190`
 - 倒序：`hddj_reverse_v190`
-- Test4 播放策略：`hddj_play_strategy_v4`
-- Test4 播放诊断：`hddj_play_diag_v4`
+- Test4/Test5 播放策略：`hddj_play_strategy_v4`
+- Test4/Test5 播放诊断：`hddj_play_diag_v4`
 
 ## 回归 / 恢复
 - 1.9 UI/播放没有完成本轮实机闭环前不得晋级 Stable。
@@ -109,26 +120,26 @@ POST /account/guest
 
 ---
 ## 版本记录
+### 1.9.0-test.5 / 2026-08-23
+- 用户明确确认后续播放失败集属于付费章节。
+- 详情主按钮与选集网格对官网 locked Episode 统一增加 `🔒`，选集区域增加付费/授权说明。
+- PlaybackAdapter 完整复用 Test4，不改授权/媒体合同，不绕过官网购买。
+- Build19005 / Shell v6 / Bootstrap v6。
+
 ### 1.9.0-test.4 / 2026-08-23
-- 根据 Test3 第 5 集“已进播放器但媒体异常”的实机结果继续收敛播放链。
 - 保护现有合法登录/购买 Cookie；Token 优先使用当前会话，失败才 guest fallback。
 - Token 后增加 HLS 预检；媒体播放携带 Cookie / Referer / UA。
-- locked 集保留视觉提示，但不直接判播放结果；无权限时明确进入官网账号/购买流程，不绕过授权。
-- Build19004 / Shell v5 / Bootstrap v5，强制越过 Test3 active state。
+- locked 集不直接判播放结果；无权限时明确官网登录/购买。
 
 ### 1.9.0-test.3 / 2026-08-22
-- 根据 Test2 实机播放页截图与后续剧集失败结果修复。
-- 单线路 PlayModel 回退为直接 HLS；所有剧集先尝试 Token；取消无效 webRule fallback。
-- 正倒序移出集数网格；本地收藏降到详情底部。
-- 实机确认 UI 问题已收敛，但第 5 集仍进入播放器后媒体异常，因此不晋级 Stable。
+- 单线路 PlayModel 回退直接 HLS；所有剧集先尝试 Token；取消无效 webRule fallback。
+- 正倒序移出选集网格；本地收藏下沉。
 
 ### 1.9.0-test.2 / 2026-08-22
 - 修复 Test1 二级页通用 `url` 参数冲突，改为 `hddj_url / hddj_topic_url`。
-- 用户下一轮实机确认详情页已能正常打开。
 
 ### 1.9.0-test.1 / 2026-08-22
 - 从 Stable 1.8.2 开始 Core/UI/Playback/Content/Detail/Runtime 模块化重构。
-- 首轮实机发现二级页路由失败，已冻结。
 
 ### 1.8.2 Stable / 2026-08-22
 - 用户实机确认 `1.8.2-test.1 / Build18201` 正常后原样晋级。
