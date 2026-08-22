@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha13",
+      "version": "0.6.0-alpha14",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 164,
-      "displayVersion": "Test 0.6.0-alpha13 · Build 164 · Shell 6.9",
-      "path": "apps/video/acfun/acfun_remote_test_v069.txt",
+      "build": 165,
+      "displayVersion": "Test 0.6.0-alpha14 · Build 165 · Shell 6.10",
+      "path": "apps/video/acfun/acfun_remote_test_v070.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "漫画章节已恢复 · 切原生全屏漫画 / 修当前播放上下文 / 继续恢复封面",
-      "highlights": ["漫画 chapterId 合同已实机验证", "pics:// 原生多图阅读", "普通视频点击绑定当前 Bootstrap", "短视频绑定当前 Bootstrap", "播放器列表移除收藏评论", "m3u8/player/referer 兼容", "有声 playbackAuthKey 兼容", "小说正文成功链保持", "类型化封面恢复", "Stable 继续冻结"],
+      "desc": "隔离 Alpha13 · 从 Alpha12 恢复漫画/封面底座 · can/watch GET-first 播放修复",
+      "highlights": ["Alpha13 多域回归已隔离", "恢复 Alpha12 漫画解密渲染", "官方 #fullTheme# 全屏阅读", "不覆盖已有有效封面", "Feed/Detail 媒体 path 优先", "can/watch GET 优先", "POST 仅后级兼容", "短视频绑定当前 Bootstrap", "有声绑定当前 Bootstrap", "小说正文成功链保持", "Stable 继续冻结"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
