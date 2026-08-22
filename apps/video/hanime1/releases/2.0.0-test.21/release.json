@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.21",
+  "build": 20021,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.17",
+  "supersedes": "2.0.0-test.20",
+  "modules": [
+    {
+      "name": "recovery21",
+      "path": "apps/video/hanime1/releases/2.0.0-test.21/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.21"
+  },
+  "notes": "Test21 keeps the verified Test17 data path and ports Han1mePlus comment/reply DOM grouping exactly: four direct children per main comment and two per reply. Real avatar img src is extracted inside each group and main comments are matched by reply-section-wrapper commentId. Author avatar extraction now resolves the actual video-user-avatar element boundary before scanning its adjacent image."
+}
