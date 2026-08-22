@@ -3,20 +3,25 @@
   "channel": "stable",
   "id": "hanime1",
   "name": "Hanime1",
-  "version": "2.0.0",
-  "build": 20029,
+  "version": "2.0.1",
+  "build": 20040,
   "mode": "remote",
-  "shellVersion": "2.0.0-stable.5",
-  "shellRuleVersion": 2026082235,
-  "installerBuild": 20029,
-  "installerBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
+  "shellVersion": "2.0.1-stable.6",
+  "shellRuleVersion": 2026082247,
+  "installerBuild": 20040,
+  "installerBootstrap": "apps/video/hanime1/bootstrap_stable_v6_b20040.js",
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0/release.json",
-  "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
+  "release": "apps/video/hanime1/releases/2.0.1/release.json",
+  "rule": "apps/video/hanime1/hanime1_remote_stable_v6_b20040.txt",
   "promotedFrom": {
-    "version": "2.0.0-test.29",
-    "build": 20029
+    "version": "2.0.0-test.40",
+    "build": 20040
+  },
+  "previousStable": {
+    "version": "2.0.0",
+    "build": 20029,
+    "release": "apps/video/hanime1/releases/2.0.0/release.json"
   },
   "updatedAt": "2026-08-22",
-  "notes": "User-approved fallback Stable promoted from the device-running Test29 baseline. Stable is frozen here while all reply/account/recommendation/player-list fixes continue only in Test."
+  "notes": "User explicitly approved the current Test40 state as the stage Stable baseline despite remaining account/reply/UI optimization work. Stable 2.0.1 is a new immutable wrapper over Test40; Stable 2.0.0/Build20029 remains intact for rollback."
 }
