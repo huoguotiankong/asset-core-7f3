@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.21",
-  "baseVersion": "2.0.0-test.17",
+  "version": "2.0.0-test.22",
+  "baseVersion": "2.0.0-test.21",
   "targetVersion": "2.0.0",
-  "build": 20021,
+  "build": 20022,
   "shellVersion": "2.0.0-test",
   "shellRuleVersion": 2026082229,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.21/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.22/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test21 responds to Test20 device feedback showing no visible avatar change. It preserves the verified Test17 comment/reply data path, but replaces heuristic avatar neighborhood matching with the exact Han1mePlus DOM model: four direct child elements form one main comment and two direct children form one reply. Avatar img is extracted from that exact group and main comments are matched back by commentId. Author extraction now resolves the real #video-user-avatar element boundary and adjacent image before exact artist-search fallback."
+  "notes": "Diagnostic Test22 responds to Test21 device feedback: author avatar remains unchanged, main-comment avatars are still mostly absent, while some reply avatars render. Test22 deliberately does not guess another avatar parser. It keeps Test21 behavior and exposes device-side counts for comment root/img/reply wrappers, Test21 DOM groups/avatar matches, and author marker/nearby image evidence in Settings."
 }
