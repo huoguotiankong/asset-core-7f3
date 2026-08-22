@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.11",
-  "baseVersion": "2.0.0-test.10",
+  "version": "2.0.0-test.12",
+  "baseVersion": "2.0.0-test.11",
   "targetVersion": "2.0.0",
-  "build": 20011,
+  "build": 20012,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082220,
+  "shellRuleVersion": 2026082221,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.11/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.12/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test10 device feedback: true playlist works but episode buttons opened another detail page; scroll_button rendered HTML literally; comment user/time duplicated; native login direction diverged from Han1mePlus. Test11 fixes these and switches login to WebView + sync."
+  "notes": "Test12: X5 official web-bridge cookie handoff, no second-step filter popup, clickable author results, refined comments and per-page cover layout settings."
 }
