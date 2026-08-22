@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608222251",
+  "revision": "202608222305",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-22 22:51",
+  "updated": "2026-08-22 23:05",
   "taxonomy": {
     "categories": [
       {"id":"tools","name":"工具"},
@@ -20,6 +20,6 @@
     {"id":"hanime1","name":"Hanime1","version":"Stable 2.0.1 / Test 2.0.0-test.40","desc":"Stable 2.0.1 / Build20040 已按用户明确要求由当前 Test40 阶段性晋级。正式版包含已实机恢复的搜索链，并保留 Test40 对 profile/browser-session 重入和账号首屏串行请求造成长加载的性能隔离；账号片单、收藏、头像、更多回复、作者/上传者页面、筛选与整体 UI 仍有后续优化空间。新 Stable 使用独立 release wrapper、Stable Shell v6 与 Bootstrap Build20040，上一正式版 Build20029 完整保留用于回退。Test40 继续作为本次晋级来源，下一轮测试必须从 Stable 2.0.1 向前开发。","path":"apps/video/hanime1/hanime1_remote_stable_v6_b20040.txt","entryType":"channel-group","channelsPath":"apps/video/hanime1/channels.json","category":"video","categoryName":"视频","subCategory":"动漫漫画","tags":["远程","测试","视频","漫画","搜索","多画质","收藏","评论","演员","标签","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":30,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"},
     {"id":"acfun","name":"ACFun","version":"Stable 0.4.9 / Test 0.6.0-alpha10 · Shell 6.6","desc":"正式版 0.4.9 继续冻结。Alpha9 已由实机确认发生多域回归：小说/有声分类只剩全部，除有声外小说/漫画/视频/短视频封面灰图，常规视频播放异常，小说章节只显示真实 .txt 源地址而未读取正文，小说/有声/漫画不可正常使用。测试版 0.6.0-alpha10 / Build161 按失败 Test 隔离规范不继承 Alpha9，直接从 Alpha8 模块链恢复并定点叠加：扩展 imgUrl/imageUrl/coverPicture 等封面字段；常规视频优先 fresh video/can/watch，短视频直连保持；小说/有声恢复宽字段分类并分模式请求；fictionUrl/contentUrl 的 txt/html 主动读取为正文，longFormAudio/audio/voice 独立识别音频；漫画继续 pics://，社区继续 Feed seed + dynamicInfo。同页 select:// 三列筛选和原页刷新保持。Cloud Shell 6.6 / Bootstrap v066 强制越过 Build160，仍须实机回归后再考虑晋级正式版。","path":"apps/video/acfun/acfun_remote_v5.txt","entryType":"channel-group","channelsPath":"apps/video/acfun/channels.json","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["远程","测试","视频","漫画","搜索","评论","收藏","标签","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":40,"featured":true,"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"},
     {"id":"javbus","name":"JavBus","category":"video","mode":"legacy","version":"2026081903","desc":"视频 / 演员 / 本地收藏 / 收藏页分影片演员","path":"javbus_2026081903.txt","category":"video","categoryName":"视频","subCategory":"影视资料","tags":["视频","演员","收藏","搜索"],"mode":"local","updatedAt":"2026-08-19","sort":50,"icon":"https://img.vinua.cn/images/6808cf424eb61e.webp"},
-    {"id":"javdb-v3","name":"JavDB v3","version":"3.9.41 · Stable/Test/Local","desc":"正式版远程稳定 / 测试版远程验证 / 本地版纯本地独立安装 / 搜索 / 高级标签 / 评论 / 播放与收藏","path":"cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt","entryType":"channel-group","channelsPath":"apps/video/javdb/channels.json","category":"video","categoryName":"视频","subCategory":"影视资料","tags":["远程","测试","本地","搜索","标签","评论","收藏","版本"],"mode":"remote","updatedAt":"2026-08-21","sort":60,"featured":true,"icon":"https://javdb.com/favicon.ico"}
+    {"id":"javdb-v3","name":"JavDB v3","version":"Stable 3.9.41 / Test 3.9.42-test.1 / Local 3.9.41","desc":"Stable 3.9.41 保持冻结；Test 3.9.42-test.1 基于稳定 Core 只覆盖分类、排行榜和演员三块：补齐 APP 基本筛选、六入口排行榜、演员六分类与新人/月排名/Fanza推荐；播放、登录、搜索、详情、评论、收藏继续复用 3.9.41。演员 type 映射和分类“全部”仍需本轮实机确认。","path":"cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt","entryType":"channel-group","channelsPath":"apps/video/javdb/channels.json","category":"video","categoryName":"视频","subCategory":"影视资料","tags":["远程","测试","本地","搜索","标签","评论","收藏","演员","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":60,"featured":true,"icon":"https://javdb.com/favicon.ico"}
   ]
 }
