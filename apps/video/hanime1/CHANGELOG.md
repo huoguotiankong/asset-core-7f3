@@ -4,80 +4,104 @@
 
 ## 当前基线
 - Legacy：`1.2.1` 仅保留历史记录，不再作为开发运行基线。
-- Test：`2.0.0-test.6` / Build `20006` / Shell `2026082215`。
-- 当前目标：不追求 APK 像素级复刻；Han1mePlus/APK 只作为 Cloudflare、Cookie、登录与官网协议参考。海阔主实现以“验证后直接读取官网”为准。
+- Test：`2.0.0-test.7` / Build `20007` / Shell `2026082216`。
+- 当前产品方向：不追求 APK 像素级复刻；Han1mePlus/APK 主要作为 Cloudflare、Cookie、登录和官网协议参考。海阔主实现以“WebView 只负责验证/登录，验证后直接读取官网 HTML/API”为准。
 
 ## 已验证实机事实
 - Test1：Shell/四区 UI 可打开；主站无 Challenge 时能直接进入真实首页。
 - Test3：首页第一分区恢复 12 张卡，详情封面恢复。
-- Test5：评论已能读取真实评论；详情已解析到 720 / 480 / 1080 三条画质；详情封面可见。
-- Test5 仍存在：首页 Banner/卡片图片为空；漫画、预告、片库未获取到有效内容；详情与评论 UI 需要优化；播放线路顺序不是最高画质优先。
+- Test5：评论已能读取真实评论；详情解析到 720 / 480 / 1080 三条画质。
+- Test6：**首页 Banner 与卡片封面已恢复**；**默认最高画质播放已实机通过**；**漫画首页已能获取内容**；评论列表继续能读取真实数据。
+- Test6 当前剩余问题：①“片库”被错误设计成账号私有库，未登录无法使用；②嵌入式 `x5_webview_single` 登录交互失败；③预告页 HTTP 500；④评论页面 avatar 布局导致文字拥挤/重叠；⑤个人库仍需在登录修复后继续回归。
 
-## Test6 架构重置
+## 长期架构
 ### Session / Cloudflare
-- WebView 仅负责两件事：Cloudflare Challenge 与网页登录。
-- 视频站与漫画站按 Origin 独立验证；`ensureSession(url)` 先原生 GET，只有真实 Challenge 才调用 `fetchCodeByWebView`，验证完成后重新原生 GET。
-- Challenge 判定覆盖 `cf-mitigated: challenge`、`cf-chl-`、challenge-form、Turnstile、Just a moment、Verify you are human 等强特征；403/429/503 仅作为辅助。
-- 浏览器 Cookie 继续由海阔 `getCookie()` 读取；通过验证后业务请求直接 fetch 官网，不把 WebView 当正文数据源。
+- WebView 只负责 Cloudflare Challenge 与网页登录。
+- 视频站与漫画站按 Origin 独立验证；正常页面不强制打开 WebView。
+- Challenge 成功后使用海阔 Cookie Jar，业务请求继续原生 `fetch` 官网 HTML/API。
+- Challenge 判定覆盖 `cf-mitigated: challenge`、`cf-chl-`、challenge-form、Turnstile、Just a moment、Verify you are human 等强特征；403/429/503 仅辅助。
+- 交互式 Turnstile/验证码无法保证完全无人值守，必须保留可见 X5 兜底。
+- 账号 Cookie 与 `cf_clearance` 分离；受管多账号可保留，但默认浏览器会话直读。
 
-### 官网直读 Provider
-- Test6 不再加载 Test3/4/5 的热修模块；只保留 Test1 Core/Provider 作为基础协议工具，所有核心数据函数由 `patch_web_base.js` + `patch_web_more.js` 重写。
-- 首页：原始 HTML 按 `horizontal-row-title` / card 分区；图片精确优先读取 `img.main-thumb[src]`，不再优先 data-src，也不再给签名 CDN 图片强加 `@headers`。
-- 视频详情：直接解析 `og:title`、`video#player poster` / `og:image`、作者、观看、日期、简介、相关推荐。
-- 播放：直接解析全部 `<source>`；按画质数字降序排序，最高画质排 PlayModel 第一线路；Header 使用当前 watch 页 Referer。
-- 搜索：直接请求 `/search` 并解析官网视频卡。
-- 预告：直接请求 `/previews/<YYYY-MM>`，从原始 HTML 解析预告卡；解析不到时 UI 保留官网 X5 入口。
-- 漫画：独立站 `https://hanimeone.me`；首页/列表/详情/阅读全部改为 raw HTML；漫画站 Challenge 单独验证。
-- 片库：登录后按当前 tab 单独请求 `/saves`、`/likes`、`/playlists`、`/subscriptions`、`/histories`，避免每次一次性请求全部五页。
-- 评论：继续使用 `/loadComment`、`/loadReplies`、`/createComment`、`/replyComment`，保留已实机验证可读的 raw HTML 解析。
+### Test6 已稳定链
+- 首页：raw HTML 分区 + `img.main-thumb[src]`；Test6 实机封面恢复。
+- 视频详情：官网 HTML 解析标题、poster、作者、观看、日期、简介、相关推荐。
+- 播放：全部 `<source>` 按画质数字降序；Test6 实机确认默认最高画质成功。
+- 漫画：独立站 `https://hanimeone.me` raw HTML；Test6 漫画首页实机成功。
+- 评论：`/loadComment` / `/loadReplies` raw HTML；Test5/Test6 已实机确认真实评论可读。
 
-### UI
-- 详情页以“封面 + 元信息 + 播放/稍后看/收藏/片单/评论/下载”为主；显示“默认优先最高画质”。
-- 评论页系统标题固定为“评论”，视频全名放内容区；评论卡只显示用户名、正文、时间、回复数，避免上一版信息挤在同一行。
-- 片库未登录时明确提示：只需在官网 WebView 登录一次，之后直接用浏览器 Cookie 请求官网。
-- 设置页增加视频站/漫画站独立会话检查与验证入口。
+## Test7 产品结构与修复
+### 公开片库 vs 我的
+- **片库定义为公开影片库，不需要登录。**
+- 公开片库直接使用官网 `/search`：支持最新上传、最新上市、今日/本周/本月/总排行及影片分类筛选。
+- **我的** 专门承载账号私有数据：稍后看、收藏、片单、订阅、历史。
+- 个人数据来自官网账号，因此“我的”这些栏目本身必须登录；这不再阻塞公开“片库”。
 
-## Challenge / Cookie 约束
-- 不允许为了“自动过验证”对正常页面强制打开 WebView。
-- 交互式 Turnstile/验证码无法保证完全无人值守；必须保留可见 X5 验证页兜底。
-- 账号 Cookie 与 `cf_clearance` 不应互相覆盖；受管账号继续可保留，但默认优先浏览器会话直读。
-- 不恢复“盲试多个镜像域名绕挑战”的旧方案。
+### 登录
+- 不再使用 `x5_webview_single` 承担复杂登录表单。海阔官方手册也提示复杂交互不建议使用该组件。
+- Test7 改成独立全屏 `x5://<host>/login` 官方登录页面。
+- 用户登录后返回海阔，再通过 `getCookie()` / `profile()` 检测账号，并可保存为多账号。
+- 登录页步骤固定：①打开独立官网登录 → ②检测登录状态 → ③保存为多账号。
+
+### 预告
+- 根因已确认：Han1mePlus 当前预告接口格式为 `/previews/YYYYMM`，Test6 错写为 `/previews/YYYY-MM`，导致实机 HTTP 500。
+- Test7 Provider 统一把 `2026-08` 转成 `202608` 后再请求。
+- UI 仍显示 `YYYY-MM`，增加上一月/下一月切换。
+
+### 评论 / 回复 UI
+- 评论数据链不改，避免破坏已实机可读能力。
+- 从 `avatar` 样式切换到 `movie_1_left_pic`：用户名与回复数为标题，正文与时间独立显示，避免 Test6 文本挤压重叠。
+- 未登录仍可读评论；发表评论/回复时才引导登录。
+
+### 设置
+- “缓存”不再占主导航；下载中心和本规则历史移动到设置页。
+- 主导航固定：探索 / 片库 / 我的 / 设置。
+
+## 禁止回退方案
+- 不恢复“盲试多个镜像域名绕 Challenge”。
+- 不再把“片库”与“账号收藏库”混为同一产品概念。
+- 不用 `x5_webview_single` 承担复杂登录流程；复杂登录统一独立 X5。
+- 不为已正常显示的签名 CDN 图片重新强加 `@headers`。
+- 不改变已通过实机验证的最高画质排序链，除非出现新的真实播放故障。
 
 ## 回归清单
 - [x] Shell 可打开
-- [x] 首页列表数据可解析
-- [x] 详情封面可见
-- [x] 评论可读取真实评论
-- [x] 详情可解析 720 / 480 / 1080 三条画质
-- [ ] Test6 首页 Banner/卡片封面恢复
-- [ ] Test6 播放默认最高画质
-- [ ] Test6 预告列表
-- [ ] Test6 漫画首页/详情/阅读
-- [ ] Test6 网页登录后片库直读
+- [x] 首页列表数据与封面
+- [x] 详情封面
+- [x] 评论真实数据读取
+- [x] 多画质解析
+- [x] 默认最高画质播放
+- [x] 漫画首页
+- [ ] Test7 公开片库无需登录
+- [ ] Test7 公开片库筛选/翻页
+- [ ] Test7 独立 X5 官网登录
+- [ ] Test7 登录后“我的”稍后看 / 收藏 / 片单 / 订阅 / 历史
+- [ ] Test7 预告 YYYYMM 修复
+- [ ] Test7 评论/回复新版排版
+- [ ] 漫画详情/阅读
 - [ ] 搜索筛选/翻页
-- [ ] 视频站真实 Challenge 自动 WebView 恢复
-- [ ] 漫画站真实 Challenge 自动 WebView 恢复
+- [ ] 视频站真实 Challenge 自动恢复
+- [ ] 漫画站真实 Challenge 自动恢复
 
 ---
 ## 版本记录
+### 2.0.0-test.7 / Build 20007 / 2026-08-22
+- 保留 Test6 已实机通过的首页封面、最高画质播放、漫画首页与评论数据链。
+- 主导航改为探索 / 片库 / 我的 / 设置。
+- 片库改成无需登录的公开官网影片库；账号私有数据移动到“我的”。
+- 登录从嵌入式 X5 改为独立全屏 X5 官网登录 + 返回检测/同步 Cookie。
+- 修复预告月份格式：`YYYY-MM -> YYYYMM`。
+- 评论/回复 UI 改为更适合长文本的卡片布局。
+
 ### 2.0.0-test.6 / Build 20006 / 2026-08-22
 - 架构收敛版：WebView 只做验证/登录，业务全部官网直读。
-- 移除 Test3-5 热修加载链，运行模块从 14 个缩减为 9 个。
-- 首页图片按 `main-thumb[src]` 精确读取，不再追加图片 headers。
-- 播放线路按画质降序，最高画质优先。
-- 重写预告、漫画、片库直读链，并优化详情/评论 UI。
+- 首页封面、默认最高画质、漫画首页后续均通过实机验证。
 
 ### 2.0.0-test.5 / Build 20005
-- Test4 审计修正版；评论真实数据已在后续实机验证可读。
-
-### 2.0.0-test.4 / Build 20004
-- 图片/播放/评论/账号综合热修，后续由 Test6 架构重置取代。
+- 评论真实数据已在后续实机验证可读。
 
 ### 2.0.0-test.3 / Build 20003
-- 原始 HTML 首页分区/卡片解析，实机第一分区恢复 12 条；详情封面恢复。
-
-### 2.0.0-test.2 / Build 20002
-- 首页相邻节点与 Challenge 判定热修。
+- 原始 HTML 首页分区/卡片解析，第一分区实机恢复 12 条。
 
 ### 2.0.0-test.1 / Build 20001
 - 首个 Remote Architecture-First 重写测试版。
