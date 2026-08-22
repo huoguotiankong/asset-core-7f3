@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.30",
+  "build": 20030,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.29",
+  "modules": [
+    {
+      "name": "recovery30",
+      "path": "apps/video/hanime1/releases/2.0.0-test.30/recovery_loader.js"
+    }
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0",
+    "requiredGlobals": [
+      "HanimeCore",
+      "HanimeProvider",
+      "HanimePages",
+      "HanimeUI9",
+      "HanimeUI10",
+      "HanimeLayout12"
+    ]
+  },
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.30"
+  },
+  "notes": "Test30 builds on Stable 2.0.0/Test29 fallback. It removes the redundant public-library intro block, rebuilds comment/reply IDs and reply parsing from the current Han1mePlus DOM contract, separates the play action from secondary detail actions so Hiker does not auto-group them into one playback playlist, compacts the recommendation hero, and repairs account playlist/library parsing with the current upstream selectors."
+}
