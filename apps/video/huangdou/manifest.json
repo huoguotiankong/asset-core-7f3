@@ -14,11 +14,11 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
   "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
-  "testVersion": "1.8.2-test.1",
-  "testBuild": 18201,
-  "testShellVersion": "1.0.0-test",
-  "testBootstrap": "apps/video/huangdou/bootstrap_test_v1.js",
-  "testRule": "apps/video/huangdou/huangdou_remote_test_v1.txt",
+  "testVersion": "1.9.0-test.1",
+  "testBuild": 19001,
+  "testShellVersion": "1.1.0-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v2.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v2.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"remote-stable-promoted","source":"huangdou.txt@49aa0724e0aee42a582c56b68a8443bc8d31054a","note":"1.8.2-test.1 已由用户实机确认正常并晋级 Remote Stable；Local 继续保留并固定命名为 黄豆短剧 本地版。"}
+  "migration": {"stage":"stable-182-native-ui-playback-test-19001","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.1 基于已验证 1.8.2 协议向前重构 UI、页面地图、PlaybackAdapter 和诊断，待实机验证。"}
 }
