@@ -10,15 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.19",
-  "testBuild": 20019,
+  "testVersion": "2.0.0-test.20",
+  "testBuild": 20020,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v3.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "migration": {
-    "stage": "test18-comment-regression-recovery",
-    "source": "2.0.0-test.18",
+    "stage": "test20-avatar-context-recovery",
+    "source": "2.0.0-test.19",
     "recoveryBase": "2.0.0-test.17",
-    "note": "Test18 实机出现评论 0 条且作者头像仍灰方块；Test19 完全跳过 Test18，恢复 Test17 评论链，仅以非破坏方式补作者/评论/回复头像，并改用 PNG 圆形兜底。"
+    "note": "Test19 已恢复评论内容，但用户实机仍确认作者头像为灰块、评论头像未得到真实图片。Test20 不叠加 Test19 的全局图片索引补丁，直接保留 Test17 稳定数据链并使用局部 HTML 上下文提取真实作者/评论/回复头像。"
   }
 }
