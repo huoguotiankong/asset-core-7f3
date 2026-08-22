@@ -1,0 +1,43 @@
+{
+  "schema": 4,
+  "id": "javbus",
+  "name": "JavBus",
+  "versionPolicy": "legacy-stable-remote-test-migration-v1",
+  "updatedAt": "2026-08-23 02:20",
+  "channels": [
+    {
+      "channel": "stable",
+      "label": "正式版",
+      "id": "javbus",
+      "name": "JavBus",
+      "version": "2026081903",
+      "build": 2026081903,
+      "displayVersion": "Stable 2026081903 · Legacy Local",
+      "path": "javbus_2026081903.txt",
+      "mode": "local",
+      "updatedAt": "2026-08-19",
+      "recommended": true,
+      "desc": "旧版稳定基线，重写 Test 验证前冻结保留",
+      "highlights": ["现有影片/演员/搜索仍可回退", "保留旧本地影片/演员收藏", "继续依赖 Apollo 外部更新器，仅作为回退基线"],
+      "icon": "https://img.vinua.cn/images/6808cf424eb61e.webp"
+    },
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "javbus-test",
+      "name": "JavBus",
+      "version": "2.0.0-alpha1",
+      "baseVersion": "2026081903",
+      "targetVersion": "2.0.0",
+      "build": 20001,
+      "displayVersion": "Test 2.0.0-alpha1 · Full Rewrite",
+      "path": "apps/video/javbus/javbus_remote_test_v1_b20001.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": false,
+      "desc": "完全重写第一版：自有 Parser/UI/Magnet/Favorites + 共享 JAV Playback Stable",
+      "highlights": ["脱离 Apollo 外部运行依赖", "有码/无码/欧美 + 分类/演员/搜索", "详情/样品图/相似影片/磁力资源", "MissAV/123AV/Jable 第三方在线播放", "磁力长按联动 123云盘、磁力君、云盘君", "旧影片/演员收藏首次读取自动兼容迁移"],
+      "icon": "https://img.vinua.cn/images/6808cf424eb61e.webp"
+    }
+  ]
+}
