@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.1","build":10101,"release":"apps/video/tangtoutiao/releases/0.1.0-test.1/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/protocol.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/ui.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes": "根据首轮实机截图修复原生组件 HTML 原样显示；响应适配器改为深层递归数组发现与嵌套字段读取；空列表直接显示业务 code/msg/schema，便于下一轮字段定位。"
+}
