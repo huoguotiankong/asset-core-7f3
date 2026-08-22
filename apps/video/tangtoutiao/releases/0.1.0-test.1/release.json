@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.1/protocol.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.1/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.1/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "notes": "首个远程 Test。基于 APK 9.6.2 逆向恢复双域名、路径拼接、公共参数、AES-CFB 请求/响应加解密与 SHA256→MD5 签名；建立首页/短视频/长视频/社区/频道/搜索/详情播放/收藏历史/设置诊断产品骨架。"
+}
