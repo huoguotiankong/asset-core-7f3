@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.6",
-  "baseVersion": "2.0.0-test.5",
+  "version": "2.0.0-test.7",
+  "baseVersion": "2.0.0-test.6",
   "targetVersion": "2.0.0",
-  "build": 20006,
+  "build": 20007,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082215,
+  "shellRuleVersion": 2026082216,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.6/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.7/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Architecture reset after Test5 device feedback: WebView only for Cloudflare/login, official HTML/API direct fetch after clearance; exact main-thumb src; highest quality first; raw previews/comics/library; simplified detail/comments UI."
+  "notes": "Test6 device verification passed homepage covers, highest-quality-first playback, comments data, and comic homepage. Test7 preserves those chains and fixes public library vs personal account structure, fullscreen X5 official login, previews YYYYMM path, and comment/reply layout."
 }
