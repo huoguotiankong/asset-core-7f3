@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.12",
-  "baseVersion": "2.0.0-test.11",
+  "version": "2.0.0-test.13",
+  "baseVersion": "2.0.0-test.12",
   "targetVersion": "2.0.0",
-  "build": 20012,
+  "build": 20013,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082221,
+  "shellRuleVersion": 2026082222,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.12/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.13/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test12: X5 official web-bridge cookie handoff, no second-step filter popup, clickable author results, refined comments and per-page cover layout settings."
+  "notes": "Test13: validated X5 bridge login promoted to account baseline; author/uploader split, avatar repair, author directory/public profile pages, account center/My refinement, complete catalog entry, and comment UI improvement."
 }
