@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha17",
-  "build": 168,
-  "shellVersion": "7.3.0-test",
+  "version": "0.6.0-alpha18",
+  "build": 169,
+  "shellVersion": "7.4.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha17/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v073.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha18/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v074.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha16 实机探针把故障层进一步锁定：视频封面已经解析到真实相对路径 jhimage/...jpg；视频播放 seed 为 jpd/...m3u8 且 /api/m3u8/h5/decode?path=... 已正确构造，但 Alpha16 经 cacheM3u8 后变成 file:///... 仍不可播；短视频 video/list 在 loadType=2 variant=0 明确返回30条，说明空页属于模型/渲染链而不是接口无数据；comic=none 说明 Alpha16 漫画 reader 路由没有真正进入。Alpha17 因此不继承 A16 业务模块，只保留 Stable8 + A15 Clean，再追加四个设备证据模块：jhimage 专门解析到 APK 1.9.7 可确认的 https://cdn.ukaim.com/ 并复用现有明文检测/XOR100图片解码器；普通视频改回 Stable v043 风格直接把远程 decode URL + Header 交给播放器，取消本轮已证明可疑的 cacheM3u8 本地文件步骤；短视频独立 Renderer 使用当前 Bootstrap v073，避免 A15 hardcode v071 重载旧 Release，同时全局 itemInfo 只在 Stable 缺字段时补嵌套 id/cover/media；漫画章节用显式 query 参数路由进入 chapterId-first Reader，并用 #fullTheme#noRecordHistory# + pic_1_full。小说/有声 POST-first 成功链不改，Stable/latest 继续冻结。"
+  "notes": "Alpha18 是 Alpha17 发布前静态复核发现的播放 Seed 精确修正版。Alpha16 实机已证明视频真实 seed 位于 path=jpd/...m3u8；Alpha17 首版 mediaKeys 未把通用 path 纳入候选，可能再次绕回 can/watch。为避免发布一个已知可能漏掉实机有效 seed 的版本，Alpha18 活动 Release 保留 A17 的 jhimage/CDN、短视频当前 Bootstrap Renderer、漫画显式 query Reader，但用新的 validated-seed Playback 替代 A17 播放模块：优先扫描 videoUrl/playUrl/videoUri/m3u8/playPath/sourcePath，再有限接受 path/url，且通用 path/url 必须匹配 m3u8/mp4/jpc/jpd 等媒体形态，防止误把封面 path 当播放地址；随后仍使用 Stable __v043DecodePlayUrl 并把远程 decode URL + Header 直接交给播放器，不调用 cacheM3u8。A16/A17旧播放模块均不进入活动 Release。小说/有声 POST-first 成功链继续不动，Stable/latest 冻结。"
 }
