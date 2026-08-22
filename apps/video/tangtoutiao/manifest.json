@@ -1,0 +1,19 @@
+{
+  "schema": 3,
+  "id": "tangtoutiao",
+  "name": "汤头条",
+  "category": "video",
+  "mode": "remote+test",
+  "test": "apps/video/tangtoutiao/test.json",
+  "channels": "apps/video/tangtoutiao/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "1.0.0-test.1",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt",
+  "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
+  "sourceApk": "ttt_9.6.2_260822_3.apk",
+  "migration": {"stage":"initial-test","note":"全新程序，无既有 Stable；按 Test-first 建立远程模块链。"}
+}
