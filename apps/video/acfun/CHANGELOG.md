@@ -11,9 +11,130 @@
 - 正式 Stable 与 `latest.json` 继续固定在 `0.4.9 / Build149`，是所有 Test 大改失败后的恢复基线。
 - 历史实机已验证：常规视频播放、极速切换、封面 XOR 解密与持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
 - 图片解密固定合同：key `2020-zq3-888`，只 XOR 前 100 字节；正常 JPEG/PNG/GIF/WebP 不重复解密；缓存目录 `hiker://files/cache/acfun_cover`。
-- **Alpha14 仍只进入 Test/Candidate，Stable/latest 不修改。**
+- **Alpha15 仍只进入 Test/Candidate，Stable/latest 不修改。**
 
-### Test 0.6.0-alpha14 / Build 165 / Shell 6.10.0（当前测试）
+### Test 0.6.0-alpha15 / Build 166 / Shell 7.1.0（当前测试）
+
+#### 2026-08-23 Alpha14 实机失败事实
+
+用户实机运行版本明确为：
+
+```text
+ACFun 2026.08.23-v0.6.0-alpha14
+mode = test-ui-v060-alpha14-shell610
+Host = https://sjacfanapi.sexbar.site
+Token = YES
+```
+
+Alpha14 实机结果：
+
+- 首页精选等普通视频卡片封面仍然全部灰图，视频详情封面同样为空。
+- 漫画顶部区域方向虽然做过调整，但漫画/播放等旧问题仍未形成可靠闭环。
+- 用户明确反馈“之前那些问题还是存在”，说明 Alpha14 不能作为继续叠补丁的基线。
+- 诊断显示 `station/getStationMore` 可以返回数据，短视频列表也有成功记录，因此“列表有数据”与“图片/播放真正可用”必须分开判断。
+- 当前实机同时给出新的 Method 事实：
+
+```text
+GET fiction/base/findList -> HTTP 405 Method Not Allowed
+最近真实 fiction/base/findList -> HTTP 200 / code 200
+```
+
+这说明 fiction 路由不能继续默认 GET；结合 Alpha10 历史矩阵，Alpha15 对 fiction 系列改为 POST-first、GET 后级兼容。
+
+#### Alpha15 架构决策：真正 Clean Rebase
+
+Alpha14 虽然跳过了 Alpha13，但仍然直接继承 Alpha12。Alpha12 的 Release 本身已经叠加 Alpha3/A4/A6/A7/A8/A10/A11/A12 多层 Runtime/UI，其中多次重写：
+
+- `ac.itemInfo / __v042FirstMedia`
+- 封面字段 Resolver
+- `ac.play`
+- 漫画/小说/有声 Detail
+- 首页/分类/筛选
+- 资源请求 Method/参数矩阵
+
+因此“跳过最后一个坏模块”并不能消除更早测试层残留。Alpha14 实机继续全局灰封面，证明当前恢复链仍不够干净。
+
+Alpha15 固定改成：
+
+```text
+Stable 0.4.9 的 8 个已验证模块
+  core v018
+  protocol v019
+  UI/cache v042
+  functional v043
+  fast playback v045
+  APP taxonomy/comics/short v047
+  APK tags v048
+  release repair v049
+        ↓
+仅追加 1 个全新 clean runtime/UI a15
+```
+
+**Alpha3 ~ Alpha14 全部退出活动 Release。**
+
+这次不是“继续补 Alpha14”，而是把 Test 主干重新建立在 Stable 0.4.9 上。
+
+#### Alpha15 明确保留的 Stable 合同
+
+以下能力本版禁止被 Test 层再次重写：
+
+1. 普通视频 `ac.itemInfo()`：继续使用 Stable v042 字段映射。
+2. 普通视频 `ac.image()`：继续使用 Stable XOR InputStream 解密 + `_480` + 持久缓存。
+3. 普通视频 `ac.play()`：继续使用 Stable v045 的 `videoUrl/path → decode → cacheM3u8` 合同。
+4. 精选/里番：继续使用 v047 `station/stations → station/getStationMore`。
+5. 动漫/视频：继续使用 v047 `classTypeList → Zone/Tag → getByClassify/queryVideoByZone/tagTitleList`。
+6. 漫画：继续使用 v047 `getComicsStations / getStationComicsMore / info / chapterInfo {chapterId}`，阅读仍为 `ac.image() + pic_1_full`。
+7. 短视频：继续使用 v047 `video/list` 数据底座；Alpha15 只把点击动作重新绑定当前 Bootstrap 后调用 Stable `ac.play()`。
+
+因此如果 Alpha15 仍出现普通视频全局灰封面，就不再猜“深层字段”，而直接查看 Alpha15 新诊断中的：
+
+```text
+原始封面
+渲染地址
+imgDomain
+```
+
+从 Stable 图片 Pipeline 的真实输入开始定位。
+
+#### Alpha15 社区 / 小说 / 有声
+
+这三类不再通过 Alpha10/11 的大 Runtime 覆盖普通视频能力，而是独立 Adapter：
+
+- 小说/有声列表：`fiction/base/findList`，POST-first，GET fallback。
+- 小说/有声分类：`fiction/other/tagList`，POST-first，GET fallback。
+- 小说详情/章节：`fiction/base/info / chapterInfo`，POST-first。
+- 社区：`dynamic/category/tree / community/dynamic/list / dynamicInfo`，独立缓存与路由。
+- 小说/社区封面只读取各自显式字段，不修改全局 `ac.itemInfo`/`__v042FirstMedia`。
+- 有声仅在自己的章节 Adapter 内识别 `playbackDomain / playbackAuthKey / audioSource / sourcePath / playPath`，不覆盖普通视频 PlaybackAdapter。
+
+#### Alpha15 UI
+
+- 保留九栏目：精选 / 漫画 / 动漫 / 视频 / 里番 / 短视频 / 社区 / 小说 / 有声。
+- 修复 Alpha14 首页无论当前栏目是什么都把“短视频”图标画成 active 的错误。
+- 筛选采用明确 `select://`：频道/分类/标签/排序各自独立，不再出现一个单独的 `>` 伪控制卡。
+- 普通视频仍使用 Stable `movie_2 + ac.addVideoCard`，不自行重写视频卡片数据模型。
+- 短视频保持直接播放，不进入普通视频详情。
+- 搜索中心按视频/漫画/小说/有声/社区分型，但普通视频搜索仍使用既有 `queryVideoByTitle → keyWordV2 → keyWord` 主链。
+
+#### Alpha15 发布链
+
+- Immutable Release：`apps/video/acfun/releases/0.6.0-alpha15/release.json`
+- Build：`166`
+- 活动业务模块：Stable 8 + Clean A15 1，共 9 个。
+- Bootstrap：`bootstrap_test_v071.js?v=7100`
+  - 直接 require Stable `bootstrap_v5.js?v=5113`
+  - `minBuild=166`
+  - 不继承任何 Alpha12/13/14 Bootstrap。
+- Shell：`acfun_remote_test_v071.txt`
+  - 规则 version `2026082303`
+- Test/Candidate/channels/app manifest/registry/root manifest 切 Alpha15。
+- Stable 0.4.9 与 `latest.json` 继续冻结。
+- 新 Runtime 与 Bootstrap 已在本地执行 `node --check`；Release JSON、Shell 外层 JSON、`pages` 内层 JSON 已解析通过。
+- **Alpha15 仍必须由海阔实机验证，尤其普通视频封面/播放、漫画章节、短视频、有声、小说正文和社区。**
+
+---
+
+### Test 0.6.0-alpha14 / Build 165 / Shell 6.10.0（已停止继承）
 
 #### 2026-08-23 Alpha13 实机失败事实
 
@@ -202,22 +323,26 @@ final URL 摘要
   - `minBuild=165`
 - Shell：`acfun_remote_test_v070.txt`
   - 规则 version `2026082302`
-- Test/Candidate/channels/app manifest/registry/root manifest 已切 Alpha14。
+- Alpha14 已因后续实机失败停止作为活动恢复基线。
 - Stable 0.4.9 与 `latest.json` 保持冻结。
-- 本轮新增 JS 已通过 `node --check`；四个模块完成最小 load/export smoke，Release JSON 与 Shell 内外 JSON 已本地解析通过。
-- **Alpha14 仍必须实机验证，不能仅凭静态 Guard 宣布漫画、封面或播放完成。**
 
 ---
 
 ## 已验证/隔离测试历史
 
+### Alpha14 / Build165 / Shell6.10 —— 已停止继承
+
+- 目标：隔离 Alpha13、恢复 Alpha12 漫画/图片底座并 GET-first 修播放。
+- 实机：普通视频首页/详情封面仍全局灰图，旧问题仍大量存在。
+- 结论：**只跳过最后一个坏模块不等于干净恢复；如果 recovery base 本身包含多层实验 overlay，必须回到最后稳定发布基线 Clean Rebase。**
+
 ### Alpha13 / Build164 / Shell6.9 —— 已隔离失败测试
 
 - 目标：修播放上下文、切 `pics://`、用评分 Resolver 补封面。
 - 实机：漫画退化、所有封面消失、视频/短视频/有声仍失败。
-- 永久禁止：Alpha13 不得再作为 recovery base；v069 不进入 Alpha14 Bootstrap 继承链。
+- 永久禁止：Alpha13 不得再作为 recovery base；v069 不进入后续 Bootstrap 继承链。
 
-### Alpha12 / Build163 / Shell6.8 —— 当前恢复基线
+### Alpha12 / Build163 / Shell6.8 —— 历史部分成功测试，不再作为主干
 
 - **实机验证漫画章节恢复成功。**
 - 真实关键合同：`comics/base/chapterInfo {chapterId}` 优先。
