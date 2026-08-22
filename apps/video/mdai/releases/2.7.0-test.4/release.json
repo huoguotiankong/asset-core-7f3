@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.7.0-test.4",
+  "build": 27004,
+  "ref": "main",
+  "baseStable": {"version":"2.6.3","build":26301,"release":"apps/video/mdai/releases/2.6.3/release.json"},
+  "previousTest": {"version":"2.7.0-test.3","build":27003,"release":"apps/video/mdai/releases/2.7.0-test.3/release.json"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/mdai/releases/2.7.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.7.0-test.1/ui_base.js"},
+    {"name":"content-pages","path":"apps/video/mdai/releases/2.7.0-test.2/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.7.0-test.1/pages_detail.js"},
+    {"name":"settings-icon","path":"apps/video/mdai/releases/2.7.0-test.4/settings_icon.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.7.0-test.4/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.7.0-test.4"},
+  "notes": "修复 Test3 官网图标检测错误复用 JSON API Client：改为原始 request 获取官网 HTML，解析 rel=icon / apple-touch-icon / msapplication-TileImage / manifest icons，成功后保存并复制真实站点声明地址。"
+}
