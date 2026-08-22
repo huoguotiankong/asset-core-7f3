@@ -1,8 +1,8 @@
 # 海阔小程序编写注意事项
 
-版本：3.4  
+版本：3.5  
 首次建立：2026-08-20  
-最近增强：2026-08-22  
+最近增强：2026-08-23  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
 
 > 本文档保存已经发生过的真实事故、兼容限制和发布硬约束。开发已有程序前必须继续读取目标程序 `CHANGELOG.md`、当前 Stable/Test/Local/Candidate 元数据、release/Bootstrap/Shell/实际模块以及用户当前实机结果。
@@ -138,6 +138,38 @@ python tools/js_syntax_guard.py --root . --path <本次 release 目录>
 - 大型补丁优先拆成 Community / Creator / UI / Settings 等小模块，减少单文件 parse failure domain。
 
 专项记录：`docs/INCIDENT_JS_SYNTAX_RELEASE_20260822.md`。
+
+## 5D. `eval` 生成的局部变量不能跨 helper 作用域假定仍可见
+JavDB `3.9.42-test.2` 真实事故：为了复用把原本同一 `core()` 内的：
+
+```text
+eval(Core)
+→ eval(Patch)
+→ eval('JDB.home()')
+```
+
+抽成：
+
+```text
+loadCore(){ eval(Core); eval(Patch); }
+core(){ loadCore(); eval('JDB.home()'); }
+```
+
+代码通过 `node --check`，但海阔实机启动直接：
+
+```text
+ReferenceError: JDB 未定义
+```
+
+根因是 Core 中通过 direct `eval` 建立的 `var JDB` 只存在于 `loadCore()` 的函数作用域；helper 返回后，外层 `core()` 无法再访问该变量。
+
+固定规则：
+- 依赖 `eval` 创建局部 `var/function` 的链路，不得仅为了“复用”拆到另一个函数后再假设变量仍存在。
+- 如果后续调用依赖 eval 中的局部符号，优先保持 `eval(Core) → eval(Patch) → call` 在**同一函数作用域**。
+- 真正需要跨函数时，Core 必须显式导出到稳定对象/命名空间，并针对目标 JSEngine 实机验证；不能只看浏览器/Node 行为猜测。
+- `node --check` 只能证明 parse 通过，不能证明 eval scope、closure、序列化 lazyRule、海阔 JSEngine 运行语义正确。
+- Remote Runtime/Bootstrap/Loader 发布前增加最小 entry smoke test：至少执行一次“加载 Core → 调用实际导出入口”，而不是只做语法检查。
+- 此类故障一旦进入已发布 URL，继续遵守新 build / 新 Shell / 新 runtime / 新 cache key，禁止原地覆盖赌缓存刷新。
 
 ## 6. 关键索引不能是“单在线通道 + 短缓存 + 无 stale cache”
 正确链：新鲜缓存 → 主通道 → 备用通道 → 上一次有效 stale cache → 诊断错误页。
@@ -642,6 +674,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 
 ## JS/发布工件
 - [ ] 本次新增/修改 JS 已执行 `tools/js_syntax_guard.py` 或 `node --check`。
+- [ ] Remote Core/Runtime/Bootstrap 若依赖 `eval` 产生的符号，已执行真实入口的作用域 smoke test，不能只做语法检查。
 - [ ] Recovery loader / Bootstrap 同样通过语法检查。
 - [ ] release JSON 可解析，模块真实存在。
 - [ ] Cloud Repo advertised build 与 installer/Bootstrap 基线一致。
@@ -746,6 +779,11 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - Test2 将自定义收藏与“立即播放”同层，进入播放器后形成无关操作面板 → **Primary Play 区只保留媒体任务，收藏/设置/诊断下沉。**
 - Test2 将“正序”混入 `text_4` 选集网格 → **选集网格只放真实剧集，排序/分组控制与 EpisodeModel 分离。**
 - Test2 仅凭 DOM locked 标记直接把后续集送入 `webRule://https://...`，实机提示规则有误 → **真实 Play/Token API 决定授权；webRule 不是普通网页前缀，fallback 也必须实机验证。**
+
+## 2026-08-23：JavDB Runtime eval 作用域事故
+- Test2 为复用抽出 `loadCore()`，把 `eval(Core)` 与最终 `JDB.home()` 调用拆到两个函数作用域；静态语法检查全部通过，但实机启动直接 `ReferenceError: JDB 未定义`。
+- 永久教训：**direct eval 产生的局部 `var/function` 不保证跨 helper 可见；Runtime/Bootstrap/Loader 不能只做 node parse guard，必须增加真实入口作用域 smoke test。**
+- 修复策略：冻结 Test2，使用新 Test3 Shell/runtime/cache key；恢复同作用域 `eval(Core) → eval(Patch) → call`，不原地覆盖失败 URL。
 
 ---
 
