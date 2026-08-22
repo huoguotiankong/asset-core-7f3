@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "huangdou-test",
   "name": "黄豆短剧",
-  "version": "1.9.0-test.5",
+  "version": "1.9.0-test.6",
   "baseVersion": "1.8.2",
   "targetVersion": "1.9.0",
-  "build": 19005,
-  "shellVersion": "1.1.4-test",
-  "shellRuleVersion": 2026082304,
+  "build": 19006,
+  "shellVersion": "1.1.5-test",
+  "shellRuleVersion": 2026082307,
   "managerVersion": "2.0.1",
-  "release": "apps/video/huangdou/releases/1.9.0-test.5/release.json",
-  "rule": "apps/video/huangdou/huangdou_remote_test_v6.txt",
+  "release": "apps/video/huangdou/releases/1.9.0-test.6/release.json",
+  "rule": "apps/video/huangdou/huangdou_remote_test_v7.txt",
   "updatedAt": "2026-08-23",
-  "notes": "在 Test4 会话保持/Token/HLS 预检播放链不变的前提下，仅强化付费剧集识别：官网标记 locked 的集数在主按钮和选集统一显示 🔒，并明确为付费/需授权内容；不绕过官网购买和授权。"
+  "notes": "根据 Test5 实机确认 text_4 集数按钮不显示锁 Emoji，改为稳定可见的【锁】文本前缀；主按钮和选集说明同步改为【锁】。播放协议继续完整复用 Test4。"
 }
