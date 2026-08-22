@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "version": "3.9.42",
+  "build": 2026082301,
+  "mode": "remote",
+  "shellRuleVersion": 2026082301,
+  "release": "apps/video/javdb/releases/3.9.42/release.json",
+  "rule": "cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt",
+  "runtime": "cloud/javdb/v3.9.42/runtime.js",
+  "promotedFrom": {
+    "version": "3.9.42-test.5",
+    "build": 2026082245
+  },
+  "previousStable": {
+    "version": "3.9.41",
+    "build": 2026082006,
+    "rule": "cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt"
+  },
+  "sharedPlayback": {
+    "channel": "stable",
+    "version": "1.0.0-test.4",
+    "build": 10004
+  },
+  "updatedAt": "2026-08-23",
+  "notes": "User explicitly requested promotion of the current Test5 state. Stable 3.9.42 uses a new immutable shell/runtime and keeps Stable 3.9.41 intact for rollback."
+}
