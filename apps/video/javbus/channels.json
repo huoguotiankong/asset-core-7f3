@@ -3,7 +3,7 @@
   "id": "javbus",
   "name": "JavBus",
   "versionPolicy": "legacy-stable-remote-test-migration-v1",
-  "updatedAt": "2026-08-23 02:20",
+  "updatedAt": "2026-08-23 01:54",
   "channels": [
     {
       "channel": "stable",
