@@ -5,12 +5,97 @@ function clean(v){return C.clean(String(v==null?'':v));}
 function text(n,s){try{return clean(pdfh(n,s)||'');}catch(e){return '';}}
 function attr(n,s){try{return String(pdfh(n,s)||'').trim();}catch(e){return '';}}
 function abs(base,u){return u?C.abs(base,u):'';}
-function userId(href){var s=String(href||''),k='/user/',i=s.indexOf(k),out='',c='';if(i<0)return '';s=s.slice(i+k.length);for(var n=0;n<s.length;n++){c=s.charAt(n);if(c>='0'&&c<='9')out+=c;else break;}return out;}
-function imageOk(u){var s=String(u||'').toLowerCase();if(!s)return false;if(s.indexOf('data:image')===0)return false;if(s.indexOf('placeholder')>=0)return false;if(s.indexOf('loading')>=0)return false;if(s.indexOf('spinner')>=0)return false;if(s.indexOf('transparent')>=0)return false;return true;}
-function firstImg(base,h,list){for(var i=0;i<list.length;i++){var u=attr(h,list[i]);if(imageOk(u))return abs(base,u);}return '';}
-P.video=function(id){var v=oldVideo(id),h=String(v.raw||''),base=v.base||C.resolveHost(false),dp='';try{dp=pdfh(h,'.video-description-panel&&Html')||h;}catch(e){dp=h;}var artistName=clean(v.artist||text(h,'#video-artist-name&&Text'));var artistAvatar=firstImg(base,h,['#video-user-avatar&&src','#video-user-avatar + img&&src','#video-artist-name&&parent&&img&&src']);if(!artistAvatar&&imageOk(v.artistAvatar))artistAvatar=v.artistAvatar;var uploaderHref=attr(dp,'a[href*=user]&&href');var uploaderName=text(dp,'a[href*=user] span&&Text')||text(dp,'a[href*=user]&&Text');var uploaderAvatar=firstImg(base,dp,['a[href*=user] img&&src','img&&src']);if(uploaderName===artistName&&uploaderHref==='')uploaderName='';v.artist=artistName;v.artistAvatar=artistAvatar;v.uploader={id:userId(uploaderHref),name:uploaderName,avatar:uploaderAvatar,href:abs(base,uploaderHref)};return v;};
+function userId(href){
+  var s=String(href||''),k='/user/',i=s.indexOf(k),out='',c='';
+  if(i<0)return '';
+  s=s.slice(i+k.length);
+  for(var n=0;n<s.length;n++){
+    c=s.charAt(n);
+    if(c>='0'&&c<='9')out+=c;else break;
+  }
+  return out;
+}
+function imageOk(u){
+  var s=String(u||'').toLowerCase();
+  if(!s)return false;
+  if(s.indexOf('data:image')===0)return false;
+  if(s.indexOf('placeholder')>=0)return false;
+  if(s.indexOf('loading')>=0)return false;
+  if(s.indexOf('spinner')>=0)return false;
+  if(s.indexOf('transparent')>=0)return false;
+  return true;
+}
+function firstImg(base,h,list){
+  for(var i=0;i<list.length;i++){
+    var u=attr(h,list[i]);
+    if(imageOk(u))return abs(base,u);
+  }
+  return '';
+}
+P.video=function(id){
+  var v=oldVideo(id),h=String(v.raw||''),base=v.base||C.resolveHost(false),dp='';
+  try{dp=pdfh(h,'.video-description-panel&&Html')||h;}catch(e){dp=h;}
+  var artistName=clean(v.artist||text(h,'#video-artist-name&&Text'));
+  var artistAvatar=firstImg(base,h,['#video-user-avatar&&src','#video-user-avatar + img&&src','#video-artist-name&&parent&&img&&src']);
+  if(!artistAvatar&&imageOk(v.artistAvatar))artistAvatar=v.artistAvatar;
+  var uploaderHref=attr(dp,'a[href*=user]&&href');
+  var uploaderName=text(dp,'a[href*=user] span&&Text')||text(dp,'a[href*=user]&&Text');
+  var uploaderAvatar=firstImg(base,dp,['a[href*=user] img&&src','img&&src']);
+  if(uploaderName===artistName&&uploaderHref==='')uploaderName='';
+  v.artist=artistName;
+  v.artistAvatar=artistAvatar;
+  v.uploader={id:userId(uploaderHref),name:uploaderName,avatar:uploaderAvatar,href:abs(base,uploaderHref)};
+  return v;
+};
 function playUrl(id){return $('#noLoading#').lazyRule(function(x){return $.require('hanime').play(x);},id);}
 function playBtn(title,id,pageTitle,col){return {title:title,url:playUrl(id),col_type:col||'text_3',extra:{lineVisible:false,inheritTitle:false,pageTitle:pageTitle||title}};}
-E.detail=function(){try{var id=H.pv('id','');if(!id)throw new Error('缺少视频 ID');var v=P.video(id),d=[],top=(v.sources&&v.sources.length)?String(v.sources[0].quality||'最高'):'待解析';setPageTitle(v.title);d.push({title:v.title,desc:[v.genre,v.views?('观看 '+v.views):'',v.upload].filter(Boolean).join(' · '),pic_url:v.cover||'',url:playUrl(id),col_type:'movie_1_vertical_pic_blur',extra:{gradient:true,lineVisible:false,inheritTitle:false,pageTitle:v.title}});d.push(playBtn('播放 · '+top,id,v.title));d.push({title:'评论'+(v.commentCount!==undefined?' · '+v.commentCount:''),url:H.route('hanimeComments',{id:id,title:v.title}),col_type:'text_3',extra:{lineVisible:false,pageTitle:'评论'}});d.push({title:v.download?'下载原片':'更多信息',url:v.download?('download://'+v.download):'hiker://empty',col_type:'text_3',extra:{lineVisible:false}});var pl=v.playlist||[];if(pl.length>1){d.push(H.sec('选集 · '+pl.length,'点任意一集直接播放'));for(var p=0;p<pl.length;p++){var x=pl[p],sel=String(x.id)===String(id),lab=(sel?'▶ ':'')+U.epLabel(x,p);d.push(playBtn(lab,x.id,x.title||v.title,'scroll_button'));}d.push({col_type:'line_blank'});}if(v.artist||(v.uploader&&v.uploader.name)){d.push(H.sec('作者与上传者','官网将作品作者与实际上传账号分开显示'));if(v.artist)d.push({title:v.artist,desc:'作者 · 点击查看该作者作品',pic_url:v.artistAvatar||'',url:H.route('hanimeVideoResults',{query:v.artist}),col_type:'avatar',extra:{lineVisible:false}});if(v.uploader&&v.uploader.name)d.push({title:v.uploader.name,desc:'上传者 · 点击查看该上传者作品',pic_url:v.uploader.avatar||'',url:H.route('hanimeVideoResults',{query:v.uploader.name}),col_type:'avatar',extra:{lineVisible:false}});}d.push(H.sec('作品信息'));if(v.genre)d.push(H.chip('类型 · '+v.genre,H.route('hanimeVideoResults',{genre:v.genre})));if(v.views)d.push(H.chip('观看 · '+v.views,'hiker://empty'));if(v.upload)d.push(H.chip('上传 · '+v.upload,'hiker://empty'));if(v.duration)d.push(H.chip('时长 · '+v.duration,'hiker://empty'));if(v.tags&&v.tags.length){d.push(H.sec('内容标签'));for(var i=0;i<Math.min(12,v.tags.length);i++){var tg=v.tags[i];d.push(H.chip(tg.name+(tg.count?' · '+tg.count:''),H.route('hanimeVideoResults',{tag:tg.name})));}if(v.tags.length>12)d.push(H.chip('全部标签 · '+v.tags.length,H.route('hanimeVideoFilter',{section:'tags'})));}if(v.caption)d.push({title:'简介',desc:v.caption,url:'hiker://empty',col_type:'long_text',extra:{lineVisible:false,textSize:16}});if(v.sources&&v.sources.length)d.push(H.sec('画质','默认最高画质 · '+v.sources.map(function(s){return s.quality||'默认';}).join(' / ')));if(v.related&&v.related.length){d.push(H.sec('相关推荐',v.related.length+' 部'));for(var j=0;j<v.related.length;j++)d.push(L.video(v.related[j],'related'));}setResult(d);}catch(x){setResult([{title:'详情加载失败',desc:String(x.message||x),url:'hiker://empty',col_type:'text_center_1'}]);}};
-HanimePages.build='2.0.0-test.16';HanimeCore.build='2.0.0-test.16';HanimeProvider.build='2.0.0-test.16';
+E.detail=function(){
+  try{
+    var id=H.pv('id','');
+    if(!id)throw new Error('缺少视频 ID');
+    var v=P.video(id),d=[],top=(v.sources&&v.sources.length)?String(v.sources[0].quality||'最高'):'待解析';
+    setPageTitle(v.title);
+    d.push({title:v.title,desc:[v.genre,v.views?('观看 '+v.views):'',v.upload].filter(Boolean).join(' · '),pic_url:v.cover||'',url:playUrl(id),col_type:'movie_1_vertical_pic_blur',extra:{gradient:true,lineVisible:false,inheritTitle:false,pageTitle:v.title}});
+    d.push(playBtn('播放 · '+top,id,v.title));
+    d.push({title:'评论'+(v.commentCount!==undefined?' · '+v.commentCount:''),url:H.route('hanimeComments',{id:id,title:v.title}),col_type:'text_3',extra:{lineVisible:false,pageTitle:'评论'}});
+    d.push({title:v.download?'下载原片':'更多信息',url:v.download?('download://'+v.download):'hiker://empty',col_type:'text_3',extra:{lineVisible:false}});
+    var pl=v.playlist||[];
+    if(pl.length>1){
+      d.push(H.sec('选集 · '+pl.length,'点任意一集直接播放'));
+      for(var p=0;p<pl.length;p++){
+        var x=pl[p],sel=String(x.id)===String(id),lab=(sel?'▶ ':'')+U.epLabel(x,p);
+        d.push(playBtn(lab,x.id,x.title||v.title,'scroll_button'));
+      }
+      d.push({col_type:'line_blank'});
+    }
+    if(v.artist||(v.uploader&&v.uploader.name)){
+      d.push(H.sec('作者与上传者','官网将作品作者与实际上传账号分开显示'));
+      if(v.artist)d.push({title:v.artist,desc:'作者 · 点击查看该作者作品',pic_url:v.artistAvatar||'',url:H.route('hanimeVideoResults',{query:v.artist}),col_type:'avatar',extra:{lineVisible:false}});
+      if(v.uploader&&v.uploader.name)d.push({title:v.uploader.name,desc:'上传者 · 点击查看该上传者作品',pic_url:v.uploader.avatar||'',url:H.route('hanimeVideoResults',{query:v.uploader.name}),col_type:'avatar',extra:{lineVisible:false}});
+    }
+    d.push(H.sec('作品信息'));
+    if(v.genre)d.push(H.chip('类型 · '+v.genre,H.route('hanimeVideoResults',{genre:v.genre})));
+    if(v.views)d.push(H.chip('观看 · '+v.views,'hiker://empty'));
+    if(v.upload)d.push(H.chip('上传 · '+v.upload,'hiker://empty'));
+    if(v.duration)d.push(H.chip('时长 · '+v.duration,'hiker://empty'));
+    if(v.tags&&v.tags.length){
+      d.push(H.sec('内容标签'));
+      for(var i=0;i<Math.min(12,v.tags.length);i++){
+        var tg=v.tags[i];
+        d.push(H.chip(tg.name+(tg.count?' · '+tg.count:''),H.route('hanimeVideoResults',{tag:tg.name})));
+      }
+      if(v.tags.length>12)d.push(H.chip('全部标签 · '+v.tags.length,H.route('hanimeVideoFilter',{section:'tags'})));
+    }
+    if(v.caption)d.push({title:'简介',desc:v.caption,url:'hiker://empty',col_type:'long_text',extra:{lineVisible:false,textSize:16}});
+    if(v.sources&&v.sources.length)d.push(H.sec('画质','默认最高画质 · '+v.sources.map(function(s){return s.quality||'默认';}).join(' / ')));
+    if(v.related&&v.related.length){
+      d.push(H.sec('相关推荐',v.related.length+' 部'));
+      for(var j=0;j<v.related.length;j++)d.push(L.video(v.related[j],'related'));
+    }
+    setResult(d);
+  }catch(x){setResult([{title:'详情加载失败',desc:String(x.message||x),url:'hiker://empty',col_type:'text_center_1'}]);}
+};
+HanimePages.build='2.0.0-test.16';
+HanimeCore.build='2.0.0-test.16';
+HanimeProvider.build='2.0.0-test.16';
 })(HanimeCore,HanimeProvider,HanimePages,HanimeUI9,HanimeUI10,HanimeLayout12);
