@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha16",
-  "build": 167,
-  "shellVersion": "7.2.0-test",
+  "version": "0.6.0-alpha17",
+  "build": 168,
+  "shellVersion": "7.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha16/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha17/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha16 候选保持 Alpha15 Clean Rebase 主干，只追加单一 focused media 修复模块。根据 Alpha15 实机：视频封面缺失、普通视频不可播且播放列表混入收藏/评论、漫画章节空白、短视频列表为空、searchCenter 动作未分发；同时有声 fiction/base/findList POST 已成功返回8条，因此小说/有声列表链不改。Alpha16 定点修视频 cover fallback、GET-first PlaybackAdapter、短视频 loadType=2、Alpha12 漫画 Reader 和 Bootstrap action dispatch。必须实机回归后才能晋级 Stable。"
+  "notes": "Alpha17 候选基于 Alpha16 最新实机证据定点收敛：cover 已确认是 jhimage 相对路径，play 已确认 seed/decode 正常而 cacheM3u8 后 file:/// 本地结果仍失败，short 已确认 loadType=2 返回30条，comic probe 未进入。新 Release 刻意排除 Alpha16 业务模块，以 Stable8 + A15 Clean 为底座，只追加 jhimage/ImageModel、direct-decode Playback、current-bootstrap Short Renderer、explicit-query Comic Reader 四个小模块。小说/有声 POST-first 成功链保持。仍需实机验证后才能晋级 Stable。"
 }
