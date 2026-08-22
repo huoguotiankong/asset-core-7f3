@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "javdb-v3",
   "name": "JavDB v3",
-  "version": "3.9.42-test.3",
-  "build": 2026082243,
+  "version": "3.9.42-test.4",
+  "build": 2026082244,
   "baseVersion": "3.9.41",
-  "previousTest": "3.9.42-test.2",
-  "release": "apps/video/javdb/releases/3.9.42-test.3/release.json",
-  "shell": "cloud/javdb/v3.9.42-test.3/javdb_v3.9.42_test3.txt",
+  "previousTest": "3.9.42-test.3",
+  "release": "apps/video/javdb/releases/3.9.42-test.4/release.json",
+  "shell": "cloud/javdb/v3.9.42-test.4/javdb_v3.9.42_test4.txt",
   "promotedAt": "2026-08-23",
   "status": "device-validation-required",
-  "notes": "修复 Test2 首页启动 JDB 未定义：Core/Patch/调用恢复为同一函数作用域直接 eval；Test2 APP UI 与共享 JAV Playback SDK 原样继承。Stable 3.9.41 保持不变。"
+  "notes": "根据实机截图修正演员 无码/欧美(女) type=2/3 映射并精简演员页；共享 JAV Playback 切 1.0.0-test.3，123AV/Jable 保持已验证可播逻辑，123AV 固化图标，MissAV 恢复搜索→真实详情→packed source→最高画质链。Stable 3.9.41 保持不变。"
 }
