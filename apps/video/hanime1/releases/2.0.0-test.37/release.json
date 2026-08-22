@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.37",
+  "build": 20037,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.36",
+  "modules": [
+    {"name":"recovery37","path":"apps/video/hanime1/releases/2.0.0-test.37/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.32",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.37"},
+  "notes": "Test37 is the self-contained device-recovery candidate after Test34 regressions. It uses the device-proven Test32 recovery base and keeps all new recovery modules inside the Test37 release directory: account37, creator37, library37, search37 and settings37. It does not reference broken/quarantined Test34 modules or internal Test35/36 modules. Main comments are restored by not loading community34. Stable 2.0.0/Build20029 remains unchanged."
+}
