@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha9",
-  "build": 160,
-  "shellVersion": "6.5.0-test",
+  "version": "0.6.0-alpha10",
+  "build": 161,
+  "shellVersion": "6.6.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha9/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v065.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha10/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v066.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha9 分类、小说/有声正文与社区详情强化测试版。Alpha8 实机已确认小说/有声列表能够加载，但章节仍提示未返回正文或音频；首页筛选 scroll_button 把 <font> HTML 原样显示；焦点大卡缺少可靠封面；社区 Feed 有真实内容但部分作者/正文/媒体仍不完整，且各栏目分类仍需继续按 APP 实际响应校准。Alpha9 新建独立 a9 taxonomy/cache，按明确字段提取分类并在首次迁移时清理旧选中 ID；首页筛选保留三列 select 弹层和原页刷新，但全部改为纯文本按钮；焦点大卡默认关闭，仅在用户开启且存在有效图片时使用紧凑横卡。小说/有声详情合并 Feed seed 与 fiction/base/info，扩大封面/作者字段；章节对 fiction/base/chapterInfo 尝试 GET+POST 与多组 ID 参数，并继续解析 fictionUrl/contentUrl 外链正文、longFormAudio/voice/media 音频。社区详情合并 Feed 原始对象与 dynamicInfo，过滤头像/徽章等非正文图片并继续恢复正文、视频和外链。短视频直接播放与漫画 pics:// 原生多图阅读保持。Shell6.5 / Bootstrap v065 / Build160 强制进入 Alpha9；Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
+  "notes": "0.6.0 Alpha10 恢复型测试版。Alpha9 已由实机确认发生多域回归：小说/有声分类只剩全部；除有声外小说、漫画、视频、短视频封面大面积灰图；常规视频播放异常；小说章节只暴露原始 .txt 地址而未显示正文；小说/有声/漫画均无法正常使用。按失败 Test 隔离规范，Alpha10 不继承 Alpha9 四个业务模块，直接以 Alpha8 Release 模块链为恢复基线，再追加 a10 定点修复：扩展 imgUrl/imageUrl/coverPicture 等封面包装字段；视频播放优先重新请求 video/can/watch 并提供直连备用；小说/有声分类恢复 Alpha8 宽字段解析并按 fiction/audio 分模式请求；章节把 fictionUrl/contentUrl 的 txt/html 当正文源主动读取，longFormAudio/audio/voice 路径单独识别为音频；社区详情继续合并 Feed seed 与 dynamicInfo。短视频首页直接播放、同页 select:// 筛选和漫画 pics:// 方向保留。Shell6.6 / Bootstrap v066 / Build161 强制越过 Alpha9；Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
 }
