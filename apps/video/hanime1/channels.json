@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v14",
-  "updatedAt": "2026-08-22 13:27",
+  "versionPolicy": "legacy-history-remote-test-v15",
+  "updatedAt": "2026-08-22 13:45",
   "channels": [
     {
       "channel": "stable",
@@ -29,22 +29,22 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.14",
-      "baseVersion": "2.0.0-test.13",
+      "version": "2.0.0-test.15",
+      "baseVersion": "2.0.0-test.12",
       "targetVersion": "2.0.0",
-      "build": 20014,
-      "displayVersion": "Test 2.0.0 · RemoteTest14",
-      "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
+      "build": 20015,
+      "displayVersion": "Test 2.0.0 · Recovery15",
+      "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "修复 Test13 海阔 JS 引擎“不允许的字符：反斜杠”启动错误；从运行链移除含反斜杠的 Test13 模块并用 ES5/海阔兼容实现重写。保留已实机验证的 X5 登录桥接，并继续提供作者/上传者分离、头像修复、作者目录/主页、账号中心和完整分类；程序与云仓统一改用 Hanime1 官方红色 H 标识。",
+      "desc": "Recovery Test15：完全恢复到已由实机验证可启动、可登录、可播放的 Test12 运行链，Test13/Test14 新运行模块全部退出加载；改用全新 Bootstrap v3 / Shell v3 绕开旧缓存。",
       "highlights": [
-        "修复 Test13 首页启动即报 JS SyntaxError",
-        "Test14 新增模块源文件零反斜杠，旧故障模块不再加载",
-        "保留 Test12 已实机验证 X5 bridge 登录链",
-        "作者/上传者、作者主页、账号中心、评论头像继续保留",
-        "Hanime1 小程序与云仓卡片统一官方红色 H 图标"
+        "Test13/Test14 运行模块全部退出加载",
+        "恢复 Test12 已验证运行链",
+        "保留 X5 bridge 登录、播放、封面、漫画和布局设置",
+        "全新 Bootstrap v3 / Shell v3 避免旧缓存",
+        "官方 Hanime1 H 图标继续保留"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
