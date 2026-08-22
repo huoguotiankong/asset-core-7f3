@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v13",
-  "updatedAt": "2026-08-22 13:00",
+  "versionPolicy": "legacy-history-remote-test-v14",
+  "updatedAt": "2026-08-22 13:27",
   "channels": [
     {
       "channel": "stable",
@@ -18,26 +18,35 @@
       "updatedAt": "2026-08-18",
       "recommended": false,
       "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
-      "highlights": ["历史单体规则","不再围绕旧版兼容或优化"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+      "highlights": [
+        "历史单体规则",
+        "不再围绕旧版兼容或优化"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     },
     {
       "channel": "test",
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.13",
-      "baseVersion": "2.0.0-test.12",
+      "version": "2.0.0-test.14",
+      "baseVersion": "2.0.0-test.13",
       "targetVersion": "2.0.0",
-      "build": 20013,
-      "displayVersion": "Test 2.0.0 · RemoteTest13",
+      "build": 20014,
+      "displayVersion": "Test 2.0.0 · RemoteTest14",
       "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "账号与创作者体系强化：Test12 X5 网页桥接登录已由实机确认成功；Test13 分离作者/上传者，修复作者与评论头像，新增作者目录和作者/上传者公开主页，并重构我的/账号中心、完整分类与评论 UI。",
-      "highlights": ["Test12 X5 bridge 登录实机成功，正式作为账号基础链","视频详情分离作者与上传者并显示头像/主页入口","新增官网风格作者目录、作者/上传者公开主页、影片/播放清单标签页","评论头像改按真实评论 body 解析，保留楼中楼与发布评论","我的/账号中心强化：资料、公开主页、稍后看、收藏、片单、订阅、历史、多账号","完整官方类型/排序/日期/时长与 7 大标签组继续全部开放","保留封面、多画质最高画质、真选集、漫画与逐页布局设置"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+      "desc": "修复 Test13 海阔 JS 引擎“不允许的字符：反斜杠”启动错误；从运行链移除含反斜杠的 Test13 模块并用 ES5/海阔兼容实现重写。保留已实机验证的 X5 登录桥接，并继续提供作者/上传者分离、头像修复、作者目录/主页、账号中心和完整分类；程序与云仓统一改用 Hanime1 官方红色 H 标识。",
+      "highlights": [
+        "修复 Test13 首页启动即报 JS SyntaxError",
+        "Test14 新增模块源文件零反斜杠，旧故障模块不再加载",
+        "保留 Test12 已实机验证 X5 bridge 登录链",
+        "作者/上传者、作者主页、账号中心、评论头像继续保留",
+        "Hanime1 小程序与云仓卡片统一官方红色 H 图标"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
   ]
 }
