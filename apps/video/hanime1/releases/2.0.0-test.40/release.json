@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.40",
+  "build": 20040,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.39",
+  "modules": [
+    {"name":"recovery40","path":"apps/video/hanime1/releases/2.0.0-test.40/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.39",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.40"},
+  "notes": "Test40 is a performance hotfix after Test39 device evidence. Test39 search is confirmed working, but profile resolution introduced a re-entrant P.profile -> sessionProfile32 -> C.activeAccount -> browserProfile -> P.profile cycle and account playlist discovery could issue many sequential detail requests. Test40 keeps Test39 search/reply/filter/account parsing fixes, makes profile reads cache-only on ordinary pages, performs controlled profile sync only in My/Account, caches account sections, and makes playlist discovery single-request by default with explicit completion for unresolved metadata. Stable 2.0.0/Build20029 remains frozen."
+}
