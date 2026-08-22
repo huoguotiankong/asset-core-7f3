@@ -1,6 +1,6 @@
 # 海阔小程序编写注意事项
 
-版本：3.2  
+版本：3.3  
 首次建立：2026-08-20  
 最近增强：2026-08-22  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
@@ -240,6 +240,27 @@ task 返回结果，listener 集中写；必要时 `syncExecute()`。
 
 ## 27. 并发不是把所有接口/图片打满
 按 P0/P1/P2/P3 分级，有并发上限、超时、停止条件，注意风控。
+
+## 27A. Auth/Profile/Session Resolver 禁止形成互相回调环
+Hanime1 Test39 真实事故：
+
+```text
+P.profile()
+→ P.sessionProfile32()
+→ C.activeAccount()
+→ browserProfile()
+→ P.profile()
+→ ...
+```
+
+browser-session 模式下形成重入闭环，导致视频详情、我的、设置等**并不需要补全账号资料的页面**也长时间卡在加载。
+
+固定规则：
+- 覆盖 `profile()/activeAccount()/sessionProfile()` 前先画调用图，确认没有回边。
+- 如果 `activeAccount()` 的 browser fallback 可能调用 `profile()`，那么 `profile()` 内禁止再调用 `activeAccount/sessionProfile()`。
+- 通用 getter（详情页、设置页、评论页可能调用）默认只读本地/stale cache；网络补全必须是显式 `refresh/sync` 动作或限定在账号页面。
+- 身份 Resolver 必须有 re-entry guard；检测到重入时立即返回缓存/空结果，不继续向下递归。
+- “登录态判断”与“拉取完整昵称/头像/邮箱”分层：前者应轻量，后者可以较慢但不能污染所有页面。
 
 ---
 
@@ -510,6 +531,29 @@ NO_SOURCE / AUTH_FAIL / SOURCE_PARSE / DECODE_FAIL / EXPIRED / HEADER_FAIL / HLS
 ## 80. 缩略图/详情图/阅读原图不能同一资源预算
 不同页面不同分辨率与缓存生命周期。
 
+## 80A. 列表缺 metadata 时禁止首屏串行 N+1 详情请求
+Hanime1 Test39 为了补齐片单真实标题，在“我的”片单列表缺 title 时逐个请求多个 `/playlist?list=<id>` 详情；与 profile 重入叠加后，打开“我的”会长时间卡住。
+
+默认策略：
+
+```text
+一次主列表请求
+→ 同响应 DOM/raw block 尽量补 metadata
+→ stale/fresh cache
+→ 仍缺字段：显示明确“待补全”状态
+→ 用户显式点补全 / 后台低优先级补全 / 有界并发
+```
+
+禁止：
+
+```text
+首屏发现 N 个实体缺标题
+→ for 循环同步请求 N 个详情
+→ 全部结束后才 setResult
+```
+
+即便每个请求都只有 1–2 秒，N+1 串行也会把普通页面变成十几秒甚至几十秒的“假死”。
+
 ---
 
 # P0/P1：自用 / Local / 分享 / 隐私
@@ -566,6 +610,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 缓存 schema 可失效。
 - [ ] 未启用 Provider 不初始化。
 - [ ] Token/异步轮询有边界。
+- [ ] Auth/Profile/Session Resolver 调用图无回边；存在 browser fallback 时有 re-entry guard。
 - [ ] 只取得 raw identifier 时未制造用户可见伪业务卡片。
 - [ ] HTML/DOM Adapter 已过滤字符串 `null/undefined`，不会直接进入 Renderer。
 
@@ -579,6 +624,11 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 同一选中态没有重复强调。
 - [ ] 所有 `col_type:'input'` 的 URL 都是合法可求值表达式，未使用顶层裸 `return`。
 - [ ] UI 大改完成实机截图闭环。
+
+## 性能
+- [ ] 普通详情/设置/评论页不会为了完整账号头像/昵称隐式联网。
+- [ ] 首屏没有“列表 N 个实体 → 串行请求 N 个详情补 metadata”的 N+1 链。
+- [ ] 可复用账号/列表数据有短缓存或 stale cache，切页不会重复拉相同数据。
 
 ## 图片
 - [ ] Header 正确。
@@ -639,6 +689,8 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - Test34 源码已删除 `>` 但手机仍显示 → **源码覆盖声明不是运行事实；截图冲突时优先查 Remote state/cache/load order。**
 - Test38 更多回复已经恢复到正确数量，但所有字段显示 `null` → **不能全局配对相同 class；必须按上游父子 DOM 分组，并统一过滤 `null/undefined`。**
 - Test38 搜索继续 JSEngine#13 → **`col_type:'input'` 的 url 是表达式求值环境，不得照 lazyRule 函数体写顶层裸 `return`；使用简单表达式或 IIFE。**
+- Test39 搜索已恢复，但详情/我的/设置长时间加载 → **Profile/Auth Resolver 出现 P.profile→sessionProfile→activeAccount→browserProfile→P.profile 重入环；通用 getter 必须 cache-only + re-entry guard，账号完整资料改显式同步。**
+- Test39 我的片单为了补标题串行打开多个详情 → **列表 metadata 不完整不能在首屏做 N+1 同步请求；默认单请求解析 + cache，慢补全显式触发。**
 
 ---
 
