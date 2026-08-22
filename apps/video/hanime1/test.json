@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.5",
-  "baseVersion": "2.0.0-test.4",
+  "version": "2.0.0-test.6",
+  "baseVersion": "2.0.0-test.5",
   "targetVersion": "2.0.0",
-  "build": 20005,
+  "build": 20006,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082214,
+  "shellRuleVersion": 2026082215,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.5/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.6/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Pre-handoff audit caught a comments runtime helper reference in Test4. Test5 fixes that binding and is the version for the next real-device regression; media/image/playback/account/UI remain the verified Test4 split modules."
+  "notes": "Architecture reset after Test5 device feedback: WebView only for Cloudflare/login, official HTML/API direct fetch after clearance; exact main-thumb src; highest quality first; raw previews/comics/library; simplified detail/comments UI."
 }
