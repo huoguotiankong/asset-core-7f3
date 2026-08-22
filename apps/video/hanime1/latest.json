@@ -2,9 +2,9 @@
   "schema": 1,
   "id": "hanime1",
   "name": "Hanime1",
-  "version": "2.0.0",
-  "build": 20029,
-  "release": "apps/video/hanime1/releases/2.0.0/release.json",
-  "notes": "Stable 2.0.0 fallback promoted from device-running Test29. Future product fixes continue in the test channel.",
+  "version": "2.0.1",
+  "build": 20040,
+  "release": "apps/video/hanime1/releases/2.0.1/release.json",
+  "notes": "Stable 2.0.1 promoted from user-approved Test40. It includes the recovered search path and Test40 performance isolation; remaining account/reply/UI improvements continue in future Test builds.",
   "changelog": "apps/video/hanime1/CHANGELOG.md"
 }
