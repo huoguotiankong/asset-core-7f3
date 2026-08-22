@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.33",
+  "build": 20033,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.32",
+  "modules": [
+    {"name":"recovery33","path":"apps/video/hanime1/releases/2.0.0-test.33/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.32",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeUI10","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.33"},
+  "notes": "Test33 follows Test32 device validation. It keeps browser-session account recognition, compact recommendation and clean playback list; restores playlist-card parsing without comma-selector dependence; resolves reply threads by author+content fingerprint and parses reply DOM with the XPath path that previously proved reliable for real avatars; replaces the two-strip library filter with a Netflav-like five-row compact filter; and redesigns author directory plus author/uploader profile pages toward the Hanime website structure. Stable 2.0.0/Build20029 remains frozen."
+}
