@@ -10,16 +10,17 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.27",
-  "testBuild": 20027,
+  "testVersion": "2.0.0-test.28",
+  "testBuild": 20028,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20027,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20027.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20027.txt",
+  "testInstallerBuild": 20028,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20028.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20028.txt",
   "migration": {
-    "stage": "test27-replies-creator-icon-ux",
+    "stage": "test28-syntax-recovery",
     "source": "2.0.0-test.26",
-    "recoveryBase": "2.0.0-test.24",
-    "note": "User device confirmed Test26 delivery is now real, then exposed three product issues: more replies no longer open correctly, author directory is unusable, and the main home/detail action rows still look like plain text buttons. Test27 keeps Test24 avatar/runtime and Test26 creator baseline, replaces replies with one-request per-reply parsing plus no-empty-cache, reuses Provider.search(type=artist) for author discovery with recent-author fallback, and adds repository-hosted SVG icons to the five home tabs and four detail primary actions. Cloud import artifacts are build-locked to 20027."
+    "brokenRelease": "2.0.0-test.27",
+    "recoveryBase": "2.0.0-test.26",
+    "note": "Test27 is quarantined: device startup reports SyntaxError at line 41. Source inspection confirms the repliesPage d.push(H.sec(...)) expression is missing one closing parenthesis, so Test27 cannot be part of any recovery chain. Test28 starts directly from the last bootable Test26 recovery and loads four separately syntax-checked modules for replies, creator directory, icon UI and settings. Cloud import artifacts are build-locked to 20028."
   }
 }
