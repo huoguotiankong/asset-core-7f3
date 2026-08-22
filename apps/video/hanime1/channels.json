@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v11",
-  "updatedAt": "2026-08-22 12:00",
+  "versionPolicy": "legacy-history-remote-test-v12",
+  "updatedAt": "2026-08-22 12:29",
   "channels": [
     {
       "channel": "stable",
@@ -18,10 +18,7 @@
       "updatedAt": "2026-08-18",
       "recommended": false,
       "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
-      "highlights": [
-        "历史单体规则",
-        "不再围绕旧版兼容或优化"
-      ],
+      "highlights": ["历史单体规则","不再围绕旧版兼容或优化"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     },
     {
@@ -29,24 +26,17 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.11",
-      "baseVersion": "2.0.0-test.10",
+      "version": "2.0.0-test.12",
+      "baseVersion": "2.0.0-test.11",
       "targetVersion": "2.0.0",
-      "build": 20011,
-      "displayVersion": "Test 2.0.0 · RemoteTest11",
+      "build": 20012,
+      "displayVersion": "Test 2.0.0 · RemoteTest12",
       "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test10 实机反馈修复：真选集保持，但点击集数改为直接播放；所有筛选/Tab/选中态去掉 HTML 富文本；评论清理重复时间；登录回归 Han1mePlus 的 WebView 登录 + Cookie 同步。",
-      "highlights": [
-        "选集按钮点任意一集直接播放，不再二跳详情",
-        "scroll_button 全部使用纯文本选中标记，杜绝 <b><font> 原样显示",
-        "秒数时长格式化为 mm:ss / h:mm:ss",
-        "评论用户名与时间去重，正文改紧凑长文本卡片",
-        "登录撤掉自造原生账号密码 POST，改官方同路线 WebView 登录后同步 Cookie",
-        "保留已实机通过的封面、默认最高画质播放和漫画数据链"
-      ],
+      "desc": "交互与登录桥接重构：X5 内直接读取真实 Cookie 回传规则侧；一级片库取消二次选择弹窗；作者直达作品搜索；评论继续压缩；新增逐页面封面排版设置。",
+      "highlights": ["X5 fy_bridge_app.getCookie + putVar 回传 HttpOnly 会话 Cookie","类型/排序/日期/时长横向完整直选，标签直达完整分类页，不再二次 > 弹窗","视频详情作者点击进入作者关键词作品结果","推荐/片库/搜索/分类结果/相关推荐/漫画首页/漫画列表可独立切换三列、两列、单列图文","评论卡片改为头像元信息 + 正文 + 明确回复入口","保留已验证封面、默认最高画质播放、真选集和漫画链"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     }
   ]
