@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.39",
+  "build": 20039,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.38",
+  "modules": [
+    {"name":"recovery39","path":"apps/video/hanime1/releases/2.0.0-test.39/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.38",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.39"},
+  "notes": "Test39 is a focused corrective release after Test38 device results: replies no longer parse global comment-index-text pairs and instead mirror upstream reply-start direct-child grouping; literal null/undefined parser artifacts are normalized away. Search input uses a valid IIFE expression and fixed hanimeSearch handoff instead of top-level return, addressing JSEngine#13. Account profile is re-read from upstream name/email/avatar fields; avatar rendering adds Referer. Playlist discovery may fetch each list detail to recover real titles, and playlist content parses exact playlist-item-* blocks before raw fallback. Legacy > sentinel filter items are removed. Stable 2.0.0/Build20029 remains frozen."
+}
