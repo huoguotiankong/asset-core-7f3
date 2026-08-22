@@ -11,203 +11,146 @@
 - 当前正式 Stable 与 `latest.json` 固定在 `0.4.9 / Build149`，仍是 Test 大改失败时的恢复基线。
 - 已验证能力包括：常规视频播放、极速切换、封面 XOR 解密与持久缓存、精选/里番 Station 底座、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
 - 0.4.9 修复过 0.4.8 activeRelease 缓存错误根目录模块路径的问题；正式 release 使用 `apps/video/acfun/` 明确仓库相对路径，并保留旧状态恢复兼容。
-- **Alpha12 仍只进入 Test/Candidate，Stable/latest 不得修改。**
+- **Alpha13 仍只进入 Test/Candidate，Stable/latest 不得修改。**
 
-### Test 0.6.0-alpha12 / Build 163 / Shell 6.8.0（当前测试）
+### Test 0.6.0-alpha13 / Build 164 / Shell 6.9.0（当前测试）
 
-#### 2026-08-22 Alpha11 实机与诊断结论
+#### 2026-08-23 Alpha12 实机事实
 
-- 用户实机确认 Alpha11 仍然“不行”，并提供诊断：`ACFun 2026.08.22-v0.6.0-alpha11 | a6-comic|6932cd0f1952ca164bbd02c4|0|4 -> comics/station/getStationComicsMore #1 (8) | no-error`。
-- 这条诊断**只证明漫画列表 `getStationComicsMore` 返回 8 条**，并不能证明漫画章节 `comics/base/chapterInfo` 已命中，也不是 Alpha11 的 `acfun_v060_a11_comic_probe`。
-- 继续复核 Stable v0.4.7 源码后找到一个明确回归：历史已验证的 `ac.__v047ComicReader()` 调 `comics/base/chapterInfo` 时，参数只有 `{chapterId}`；Alpha11 的章节矩阵却遗漏这个真实合同，先尝试 `{comicsId,chapterId}` / `{comicId,chapterId}` 等组合。这是比“继续扩大图片字段”更直接的根因线索。
-- Alpha11 同时仍没有形成视频/短视频/有声播放实机闭环。因此 Alpha12 不再继续增加不确定的多线路候选，而回到已验证 Stable 合同。
+- **漫画章节已经真正恢复可读。** 用户实机截图确认连续章节图片已经返回并正常显示，因此 `comics/base/chapterInfo` 首选仅 `{chapterId}` 的恢复方向正式形成闭环。这个事实优先级高于 Alpha11 以前所有猜测参数。
+- Alpha12 漫画仍经普通 `hiker://page/acfun_detail` + `pic_1_full` 渲染，因此系统二级页标题栏仍占据顶部区域。用户明确要求去掉这段区域，让漫画图片覆盖阅读页面。
+- 普通视频仍播放失败，播放器显示“播放异常”。用户截图同时显示播放器的同级列表被“播放 / 收藏 / 评论”污染；这些并不是播放线路，不应该进入播放器列表。
+- 本轮普通资源诊断 `station-more|0|1|1|3 -> station/getStationMore #0 (8)` 只证明精选 Station 列表返回 8 条，不是播放探针，不能据此判断 `can/watch`、decode、m3u8 或播放器阶段成功。
+- 封面方面：**短视频和有声封面已经恢复**；漫画已有部分恢复；小说、社区及部分普通视频仍然缺图或长期灰图。由于同一图片解码器已经能显示短视频/有声/漫画图片，继续把问题归因于“统一 XOR 解密器失效”是不成立的，剩余重点仍是字段/包装结构/真实媒体 URL 选择。
 
-#### Alpha12 漫画修复
+#### Alpha13 明确根因：视频详情点击时重置了 Runtime
 
-- 新增 `acfun_runtime_v060_a12.js` 与 `acfun_ui_v060_a12_detail.js`。
-- 漫画章节 `comics/base/chapterInfo` 的请求顺序改成：
-  1. `{chapterId}` GET
-  2. `{chapterId}` POST
-  3. `{comicsId,chapterId}` GET/POST
-  4. `{comicId,chapterId}` GET
-- 其中 `{chapterId}` 是 Stable v0.4.7 **已经实机验证过的真实调用合同**；其它组合只是后级兼容，不再反过来覆盖 Stable 事实。
-- `imgList / imageList / chapterImgList / images / pageList / pics / pictures` 继续支持数组、对象和 JSON 字符串包装，并结合 `domain/imgDomain/imageDomain` 补全相对地址。
-- Alpha11 的漫画章节会先打开一个“打开漫画阅读”中间页，再 lazyRule 返回 `pics://`；Alpha12 取消这层中转。章节点击后直接进入 `acfun_detail` 的 `comic_chapter` 阅读态，页面只渲染连续 `pic_1_full` 图片，不再增加章节标题/页数内容块。
-- 这样既避免旧 Bootstrap/lazyRule 重入问题，也优先恢复 Stable 已验证的普通全宽图片阅读能力。后续如果当前海阔版本 `pics://` 再次实机验证稳定，可以再作为可选阅读模式，而不是把未验证的 `pics://` 当唯一入口。
-- 失败时页面直接显示并可复制 `acfun_v060_a12_comic_probe`，下一轮可以明确看到 `chapterId-GET/POST` 是否命中、图片数量和 `canWatch`。
+复核实际模块加载链后找到普通视频持续失败的一个明确运行时错误：
 
-#### Alpha12 视频 / 短视频播放回归 Stable 合同
-
-- Alpha11 为了兼容 `/api/m3u8/play` 等候选，构造了多个播放线路；这不是 Stable 实机成功时的最小合同，且首线路可能先命中一个能构造但不能实际播放的 URL。
-- Alpha12 直接恢复 Stable v0.4.5 的核心播放行为：
+- `acfun_ui_v060_a3_detail.js` 的旧播放按钮 lazyRule 在点击时执行：
 
 ```text
-Feed 的 videoUrl/playUrl/videoUri/path
-若无则 POST video/can/watch {videoId}
-→ ac.__v043DecodePlayUrl(path)
-→ /api/m3u8/h5/decode?path=...
-→ cacheM3u8(...#isM3u8#, headers)
-→ 单线路 JSON urls/names/headers
+getItem('acfun_core_src_v018')
+→ eval(core v018)
+→ ac.play(...)
 ```
 
-- 不再把 `/api/m3u8/play`、`/m3u8/play` 之类 APK 静态字符串放在主线路之前。
-- 短视频仍保持“首页卡片点击直接 `ac.play()`”，不会重新退回普通视频详情页。
-- 新探针 `acfun_v060_a12_play_probe` 记录 path、decode URL、最终 URL、cacheHit、watchErr、cacheErr。
+- 这会在用户真正点击“播放”的那个执行上下文里重新定义整个 `ac`，把 Alpha10/11/12 后置模块已经覆盖的 `ac.play()` 重置回 Core v0.1.8。
+- 因此此前即使首页/详情页启动时已经加载 Alpha12 Runtime，**点击播放时仍可能根本没有执行 Alpha12 的播放修复**。这是“代码看起来已修、实机连续几版仍完全相同”的关键原因之一。
+- 同一个旧详情页还显式创建了三个同级动作项：`播放 / 收藏 / 评论`，海阔播放器把这些兄弟项带进播放列表，形成用户截图中的无关列表项。
 
-#### Alpha12 有声音频出口
+Alpha13 修复：
 
-- Alpha11 使用“多线路 JSON + 每条 URL 附 `#isMusic=true#`”作为音乐播放器出口，当前海阔实机兼容性没有得到证明。
-- Alpha12 保留 Alpha11 已经做好的 `longFormAudio/audioSource/sourcePath/playPath/playbackDomain` 候选提取，但改写最终播放器：
-  - 只有 1 条音频：直接返回 `url#isMusic=true#`。
-  - 多条音频：先弹 `select://` 选择线路，再返回所选 `url#isMusic=true#`。
-  - M3U8 音频仍先 `cacheM3u8`。
-- 新探针 `acfun_v060_a12_audio_probe` 只记录真正准备交给播放器的最终候选，避免“解析到了 6 条但没有任何一条真正进入播放器”的假阳性。
+- 普通视频详情的播放 lazyRule 不再 `eval(core v018)`；点击时显式 `require(bootstrap_test_v069.js)` + `ACFunBoot.loadOnly()`，再调用**当前 Build164 Runtime** 的 `ac.play()`。
+- 短视频首页也覆盖 Alpha10 遗留的 `bootstrap_test_v066.js` 点击入口，统一绑定当前 Bootstrap v069。
+- 有声章节点击同样绑定当前 Bootstrap v069，避免解析模块与真正播放时的模块版本不一致。
+- 视频详情不再生成独立的“播放 / 收藏 / 评论”三张动作卡。页面只保留一个真正的播放入口；收藏、评论、复制标题改为封面长按动作，避免污染播放器线路列表。
 
-#### Alpha12 发布链
+#### Alpha13 漫画阅读 UI
 
-- 不可变 Release：`releases/0.6.0-alpha12/release.json`，Build `163`。
-- Alpha11 模块链末尾追加：`runtime-a12 / direct-comic-detail-a12 / shell-settings-a12`。
-- 新 Bootstrap：`bootstrap_test_v068.js?v=6800`，`minBuild=163`。v068 继承 v067 的 Loader/Manager 能力，但在运行前替换活动 defaultRelease 为 Alpha12，不修改 Stable。
-- 新 Shell：`acfun_remote_test_v068.txt`，规则数值 version `2026082207`。
-- Test/Candidate/channels/app manifest/registry/根 manifest 已切到 Alpha12；共享文件写入前重新读取，只修改 ACFun 项，其它并行程序状态保持原样。
+- `chapterInfo {chapterId}` Provider 保持 Alpha12 已实机验证的实现，不再改动成功协议。
+- 正常章节路由从普通二级页面改为当前 Bootstrap v069 lazyRule：
+
+```text
+chapterId
+→ Alpha12 已验证 chapterInfo
+→ imgList/imageList/...
+→ ac.image()
+→ pics://url1&&url2&&...
+```
+
+- 目标是直接交给海阔原生多图/漫画阅读模式，去掉普通二级页标题栏和顶部空白，使图片成为阅读主体。
+- 不使用会导致系统标题叠加的 `immersiveTheme` 详情页方案；如果用户当前海阔版本对 `pics://` 的实际 UI 与预期仍不同，以实机截图为准继续调整。
+
+#### Alpha13 视频 / 短视频播放链
+
+- 保留已经验证过的 `video/can/watch → path → /api/m3u8/h5/decode?path=... → cacheM3u8` 主链，不把静态 APK 字符串当成已验证协议。
+- 新增当前 Runtime 的实际点击探针 `acfun_v060_a13_play_probe`，记录：`paths / attempts / final / source / referer`，以后不再用列表路由诊断替代播放诊断。
+- APK 1.9.7 静态字符串确认存在 `m3u8/player/referer` 与 `fetch player referer failed:`。Alpha13 因此有限尝试该接口获取播放器 Referer，并写入 `Referer / X-Referer / Origin`；这仍属于待实机验证的兼容层。
+- `/api/m3u8/play?path=` 只作为 decode/cacheM3u8 失败后的后级候选，不提升为已验证主协议。
+
+#### Alpha13 有声音频
+
+- Alpha10 已验证有声列表/分类可用，但音频播放未形成闭环。
+- APK 1.9.7 静态字符串进一步确认 `playbackDomain / playbackAuthKey / authKey / audioSource / sourcePath / playPath` 等字段存在。
+- Alpha13 在 Alpha11 已有音频候选解析基础上，保存旧 Resolver 引用后再扩展，避免覆盖后递归调用自身；同时生成：
+  - `playbackDomain + sourcePath/playPath`
+  - `auth_key=<playbackAuthKey>` 候选
+  - `authKey=<playbackAuthKey>` 候选
+  - 原始无 auth 候选
+- M3U8 音频仍先进入 `cacheM3u8`；最终播放出口携带当前播放器 Header。
+- 新探针：`acfun_v060_a13_audio_probe`。
+
+#### Alpha13 封面恢复
+
+- 不重写已经成功工作的 XOR 图片解密器。
+- 新 Resolver 按内容类型给字段打分，优先：`coverImg / videoCover / fictionCover / fictionImg / verticalImg / poster / thumbnail`；社区额外提高 `dynamicImg / backImg / backgroundImg / cardImg / quoteSubImg` 权重。
+- 排除 `avatar / headImg / userInfo / profile / icon / logo / badge / frame / emoji / medal` 等用户头像/装饰资源，避免“有 URL 但不是内容封面”的假命中。
+- 支持 JSON 字符串包装和转义 URL；相对图片继续经 `imgDomain/imageDomain/cdnDomain` 与 `ac.__v042Plain()` 恢复。
+- 缺图时分别保存 `acfun_v060_a13_cover_probe_video / fiction / dynamic`，下一轮可直接看到缺图样本的原始字段片段。
+
+#### Alpha13 发布链
+
+- 不可变 Release：`releases/0.6.0-alpha13/release.json`，Build `164`。
+- Alpha12 模块链末尾追加：`runtime-a13 / current-short-home-a13 / fullscreen-current-detail-a13 / shell-settings-a13`。
+- 新 Bootstrap：`bootstrap_test_v069.js?v=6900`，`minBuild=164`。
+- 新 Shell：`acfun_remote_test_v069.txt`，规则数值 version `2026082301`。
+- Test/Candidate/channels/app manifest/registry/根 manifest 切到 Alpha13；共享文件写入前重新读取，仅修改 ACFun 项并保留黄豆短剧 Test3、麻豆AI Test3、JavDB Test3 等并行对话最新状态。
 - `latest.json` 与 Stable 0.4.9 / Build149 / Shell5.11.3 继续冻结。
+- **Alpha13 仍必须经过实机验证；尤其 `pics://` 最终显示效果、m3u8/player/referer、playbackAuthKey 都不能仅凭代码或 APK 静态字符串宣布完成。**
 
 ---
 
-### Test 0.6.0-alpha11 / Build 162 / Shell 6.7.0（上一测试）
+## Test 0.6.0-alpha12 / Build 163 / Shell 6.8.0
 
-#### 2026-08-22 Alpha10 实机结果
+- Alpha11 诊断只证明漫画列表 `getStationComicsMore` 成功。复核 Stable v0.4.7 后确认真正已验证的漫画章节合同是 `comics/base/chapterInfo {chapterId}`。
+- Alpha12 将章节请求顺序改为 `{chapterId}` GET → `{chapterId}` POST → 带 comicsId/comicId 兼容组合。
+- **实机结果：漫画章节恢复成功。** 这是 Alpha12 最重要的闭环。
+- 漫画页面改为纯 `pic_1_full` 后仍有系统二级页顶部区域，因此 Alpha13 再切 `pics://`。
+- 视频/短视频尝试回归 Stable v0.4.5 的 decode→cacheM3u8 单线路合同，但普通视频实机仍失败；后在 Alpha13 找到“点击时 eval core v018”覆盖 Runtime 的真正上下文问题。
+- 有声改为直接/选择线路出口，但实机播放仍未闭环。
 
-Alpha10 已真正运行到设备，结论必须作为 Alpha11 的事实边界：
+## Test 0.6.0-alpha11 / Build 162 / Shell 6.7.0
 
-- **小说和有声分类已经恢复。** Alpha10 从 Alpha8 恢复宽字段分类与分模式请求的方向有效。
-- **小说正文已经恢复。** `fictionUrl/contentUrl/...txt` 外部正文源主动读取、净化并显示的 Source Resolver 已形成实机闭环，Alpha11 不得破坏。
-- **有声仍无法播放。** 分类和列表可用不代表音频链完成。
-- **常规视频仍无法播放。** Alpha10 的 fresh `video/can/watch` 虽能构造候选，但实机播放仍失败。
-- **短视频仍无法播放。** Alpha7/Alpha8 曾实机验证短视频直接播放正常，因此这是后续覆盖层造成的回归，不应重新改成普通视频二级页。
-- **漫画仍无法阅读。** 不能因为代码里存在 `pics://` 就判定漫画完成。
-- **封面部分恢复但不完整且首屏偏慢：** 漫画和部分普通视频等待一段时间后能出现，说明 XOR 解密/持久缓存本身仍工作；部分普通视频、全部短视频、小说、社区仍缺封面，说明主要问题仍在媒体字段/包装结构提取，而不是统一解密器整体失效。
+- 保留 Alpha10 已恢复的小说/有声分类与小说正文，只尝试恢复视频/短视频、有声/漫画和封面。
+- 视频恢复 `cacheM3u8 + headers` 并加入 `/api/m3u8/play` 候选；实机仍失败。
+- 有声合并章节 seed + `chapterInfo`，递归解析 `longFormAudio/audioSource/sourcePath/playPath`；实机仍失败。
+- 漫画章节矩阵遗漏 Stable 真正已验证的 `{chapterId}` 单参数调用，因此失败。
+- 封面扩展 JSON 包装与 `dynamicImg/shortCover/videoImg/verticalImg`；只得到部分恢复。
 
-#### Alpha11 目标与修改边界
+## Test 0.6.0-alpha10 / Build 161 / Shell 6.6.0
 
-Alpha11 不重构已经恢复的小说正文和分类，只定点处理四个剩余域：播放、音频、漫画章节、封面。
+- Alpha9 多域回归后，Alpha10 以 Alpha8 为恢复基线重新叠加。
+- **已实机验证成功：小说/有声分类恢复；小说正文恢复，真实 `.txt` 章节源可以主动读取并显示。**
+- 有声音频、常规视频、短视频、漫画章节仍失败；封面仍部分缺失。
 
-##### 1. 视频 / 短视频播放恢复
+## Test 0.6.0-alpha9 / Build 160 / Shell 6.5.0（隔离失败测试）
 
-复核 Stable/Alpha8 后发现，历史实机可用链不是“拿到 decode URL 就直接扔播放器”，而是：
-
-```text
-列表/详情已有媒体 path
-或 POST video/can/watch {videoId}
-→ /api/m3u8/h5/decode?path=...
-→ cacheM3u8(...#isM3u8#, headers)
-→ JSON urls/names/headers
-→ 海阔播放器
-```
-
-Alpha10 覆盖的 `ac.play()` 跳过了这层 `cacheM3u8` 规范化，普通视频与短视频又同时失败。Alpha11 因此恢复 Stable/Alpha8 的播放合同：
-
-- Feed 已有 path 时优先使用，不无意义阻塞首击。
-- Feed 无 path 时才请求 `video/can/watch`；Feed 有 path 时额外保留一次 fresh `can/watch` 作为次线路。
-- 继续使用旧的 `/api/m3u8/h5/decode?path=` 解码链。
-- 根据 APK 1.9.7 静态字符串，有限加入 `/api/m3u8/play?path=` 与 `/m3u8/play?path=` 兼容候选，但不把静态字符串当已验证协议。
-- HLS 在交给播放器前重新执行 `cacheM3u8`，并补 UA / Referer / Origin Header。
-- 短视频继续首页卡片直接 `lazyRule → ac.play()`，不恢复常规详情页。
-- 诊断保存 `acfun_v060_a11_play_probe`，下一轮可区分 path、候选线路和播放器阶段。
-
-##### 2. 有声音频链
-
-APK 1.9.7 静态复核除 `longFormAudio` 外还发现 `audioSource / sourcePath / playPath / playbackDomain / dataSource` 等字段。Alpha10 只识别部分显式 URL，且详情页直接 `url#isMusic=true#`，对需要 Header、HLS 缓存或“祖先节点是 audio、叶子只叫 url/path”的结构不够稳。
-
-Alpha11：
-
-- 保存章节目录中的原始 chapter row 为 `chapter seed`，进入章节后与 `fiction/base/chapterInfo` 合并，避免详情接口比列表数据更少时丢失音频。
-- 携带完整祖先路径递归识别 `longFormAudio/audioSource/sourcePath/playPath/dataSource` 及嵌套 `source.url/path`。
-- 相对音频路径结合 `playbackDomain/audioDomain/mediaDomain` 恢复完整地址。
-- M3U8 音频先 `cacheM3u8`，MP3/M4A/AAC/WAV/OGG 等保留直链。
-- 最终通过 JSON `urls/names/headers` + `#isMusic=true#` 返回多线路，不再只拼裸 URL。
-- 诊断保存 `acfun_v060_a11_audio_probe`。
-
-##### 3. 漫画章节链
-
-复核 Alpha8 发现一个重要运行时风险：当时的 `nativeComicUrl()` lazyRule 内部写死了 `bootstrap_test_v064.js?v=6400`。即使当前 Release 已经升到 Alpha10/11，用户点击章节时仍可能重新装载旧 Test Bootstrap；此外旧实现仅尝试 `{comicsId, chapterId}` 单一参数。
-
-Alpha11：
-
-- 在 release 最末重新覆盖漫画章节路由，lazyRule 显式绑定当前 `bootstrap_test_v067.js?v=6700`。
-- `comics/base/chapterInfo` 有限尝试 GET/POST 与 `{comicsId,chapterId}`、`{comicId,chapterId}`、`{id,chapterId}`、`{comicsId,id:chapterId}`。
-- `imgList / imageList / images / chapterImgList / pageList / pics / pictures` 支持数组、对象和 JSON 字符串包装。
-- 结合 `imgDomain/imageDomain/domain` 补全相对地址，再交给既有 `ac.image()` 解密，最终返回 `pics://url1&&url2...`。
-- 诊断保存 `acfun_v060_a11_comic_probe`。
-
-##### 4. 封面恢复与首屏速度
-
-Alpha10 实机说明图片解密器不是全局坏掉：一部分漫画/视频经过等待能够显示。Alpha11 不重写 XOR 解密器，继续使用已经验证的 `2020-zq3-888 / XOR 前100字节 / 持久缓存`。
-
-本轮扩展媒体包装解析：
-
-- 支持 JSON 字符串中的数组/对象和转义 URL。
-- 新增/加强 `dynamicImg / shortVideoCover / shortCover / videoImg / verticalImg / backgroundImg / cardImg / quoteSubImg / imageURL / pictureUrl`，并保留 `coverImg / videoCover / fictionImg / comicsCover / generatedCoverImg / templateCoverImg` 等。
-- 深层扫描排除 `avatar / head / user / profile / icon / logo / badge / frame / emoji / medal / domain / host`，避免拿头像、图标或 CDN 域名当内容封面。
-- 视频、漫画、小说、社区统一先恢复真实媒体 URL，再进入同一个 `ac.image()`。
-- 首次遇到加密图仍可能需要网络下载 + 解密；真正命中持久缓存后的重复访问才应明显加快，因此 Alpha11 不承诺所有首次封面零等待，重点先解决“永远没有封面”的字段缺失。
-
-#### Alpha11 发布链与静态 Guard
-
-- 不可变 Release：`releases/0.6.0-alpha11/release.json`，Build `162`。
-- 在 Alpha10 模块链末尾追加 `runtime-a11 / current-comic-audio-detail-a11 / shell-settings-a11`。
-- 新 Bootstrap：`bootstrap_test_v067.js?v=6700`，`minBuild=162`。
-- 新 Shell：`acfun_remote_test_v067.txt`，规则数值 version `2026082206`。
-- Test/Candidate/channels/app manifest/registry/根 manifest 切到 Alpha11；Stable 0.4.9 与 `latest.json` 保持冻结。
-- 三个 Alpha11 JS + Bootstrap 均通过 `node --check`；release JSON、规则壳 JSON、内嵌 pages JSON 均解析通过；媒体 Mock 验证 JSON-string cover、`longFormAudio.source.sourcePath` 与 comic `imgList` JSON 字符串可以正确拆分。
-- **这些 Guard 只证明代码/发布结构可加载，不代表视频、有声、漫画、封面已经实机成功。**
-
----
-
-## Test 0.6.0-alpha10 / Build 161 / Shell 6.6.0（上一测试）
-
-- Alpha9 因实机同时退化分类、封面、播放、小说/有声、漫画而被隔离；Alpha10 直接以 Alpha8 Build159 为恢复基线再追加四个修复模块。
-- Bootstrap v066 / Shell6.6 / minBuild161 强制越过 Alpha9 Build160；Stable/latest 未动。
-- **已实机验证成功：** 小说/有声分类恢复；小说正文恢复，真实 `.txt` 章节源可以被读取并显示。
-- **仍失败：** 有声音频、常规视频、短视频、漫画章节；部分封面仍缺失或首次加载较慢。
-
----
-
-## Test 0.6.0-alpha9 / Build 160 / Shell 6.5.0（已隔离失败测试）
-
-- Alpha8 已真实运行到设备：短视频点击卡片直接播放正常；小说/有声列表能获取内容，但章节正文/音频仍失败。
-- Alpha8 已解决顶层页面不断 push 的页面栈事故，9 个栏目同页切换；漫画章节已进入 `pics://` 原生多图方向。
-- Alpha9 strict taxonomy 收得过窄，实机小说/有声分类只剩“全部”。
-- Alpha9 封面字段处理发生大面积退化；除有声外小说、漫画、视频、短视频大量灰图。
-- Alpha9 常规视频播放回归；小说虽拿到真实 `sjacfanapi/.../word/...txt`，却只显示 URL，没有读取正文。
-- 因同一 Test 同时回归多个核心域，Alpha9 不允许作为后续 recovery base；文件仅保留用于事故追溯。
+- strict taxonomy 过度收窄，导致小说/有声分类只剩“全部”。
+- 封面发生大面积退化；常规视频播放回归；小说虽拿到 `.txt` URL 但没有读取正文。
+- 不允许作为后续 recovery base。
 
 ## Test 0.6.0-alpha8 / Build 159 / Shell 6.4.0
 
-- 筛选从独立页面合并回 ACFun 首页；频道/分类/标签/排序使用 `select:// col=3`，选择后原页刷新。
-- `community / fiction / audio / short` 与五大主栏目统一在首页 Section 切换，解决页面栈不断增长问题。
-- 漫画章节切为 `pics://` 原生多图阅读。
-- 精选/里番停止 Aggregate Station，分别按 classifyId 4/24 请求。
-- 小说/有声 `fiction/base/findList` 增加 GET+POST、`fictionType/type/isAudio/longFormAudio` 有限矩阵；实机确认列表恢复。
-- 社区详情开始递归解析正文/图片/视频/链接。
+- 筛选从独立页面合并回首页，`select:// col=3` 选择后原页刷新。
+- community / fiction / audio / short 与五大主栏目统一同页切换，解决页面栈不断增长。
+- 小说/有声列表恢复方向后经 Alpha10 实机确认有效。
+- **短视频点击卡片直接播放曾在 Alpha8 实机验证正常。**
 
 ## Test 0.6.0-alpha7 / Build 158 / Shell 6.3.0
 
-- 首次把短视频卡从常规视频二级页剥离，首页点击直接 `ac.play()`；后经 Alpha8 实机确认正常。
-- 漫画去除章节顶部冗余块，为后续 `pics://` 做准备。
-- 社区继续过滤数字/机器分类并格式化时间；小说/有声扩大 findList 参数和分类空回退。
+- 首次把短视频从常规视频详情页剥离，首页直接播放。
+- 漫画去除章节顶部冗余块，为后续原生多图方向做准备。
 
 ## Test 0.6.0-alpha6 / Build 157 / Shell 6.2.0
 
-- Alpha5 到设备后确认旧分类 UI 巨大图标、横向截断标签、整屏 Chip 难用，Alpha6 开始 UI 大重构。
-- 加入分类字段兼容、漫画 `stationId/comicsStationId`、社区/小说机器标签清洗与有限回退。
-- APK 1.9.7 静态发现 `pageSize=30 loadType=2`；只作为探针候选，不将静态字符串误记为已验证业务语义。
+- 开始对筛选 UI、分类字段、漫画 Station、社区/小说机器标签进行大重构。
+- APK 1.9.7 静态发现 `pageSize=30 loadType=2`；仅作为探针候选。
 
 ## Test 0.6.0-alpha5 / Build 156 / Shell 6.1.0
 
-- Alpha4 实际未到手机，根因是 Test 复用同一 Shell/Bootstrap，旧 activeRelease 继续启动 Alpha2。
-- 旧 Test Bootstrap 还曾把 `requireManager()` 错写成不存在的 `manager()`。
-- Alpha5 起固定采用“新 Build + 新 Bootstrap 文件名/缓存键 + 新 Shell 数值 version + minBuild + 云仓库覆盖导入”处理不兼容 Test 迁移。
+- 修复 Test 复用同一 Shell/Bootstrap 导致旧 activeRelease 继续启动旧版本的问题。
+- 从此不兼容 Test 升级固定采用“新 Build + 新 Bootstrap 文件名/缓存键 + 新 Shell 数值 version + minBuild”。
 
 ## Test 0.6.0-alpha4 / Build 155
 
@@ -217,13 +160,12 @@ Alpha10 实机说明图片解密器不是全局坏掉：一部分漫画/视频�
 - 漫画：`comics/station/getComicsStations`、`getStationComicsMore`、`comics/base/findList/info/chapterInfo/queryChange/getRec`、`comics/comment/commentList`。
 - 小说/有声：`fiction/other/tagList`、`fiction/base/findList/info/chapterInfo`、`fiction/commentList`、`fictionType / longFormAudio`。
 - 社区：`dynamic/category/tree`、`community/dynamic/list/dynamicInfo/commentList/person/list`、`coterie/list`。
-- 建立 video/comic/comic_chapter/fiction/fiction_chapter/dynamic 类型化路由，关键 entity ID 写 URL query；空结果不写成功缓存。
 
 ## Test 0.6.0-alpha3 / Build154、alpha2 / Build153、alpha1 / Build152
 
-- Alpha3 首次证明新 Native UI 真正到达设备，同时暴露漫画分类混入布局项、短视频空白和部分详情“未命名 + 无封面”。由此确定关键实体参数必须写 URL query，详情需要 Provider 恢复。
+- Alpha3 首次证明新 Native UI 真正到达设备，同时暴露关键实体参数与详情恢复问题。
 - Alpha2 修复 activeRelease/Shell 缓存，使 Native UI 真正可达设备。
-- Alpha1/RC1/RC2 属于早期 UI 试验，不再作为当前恢复目标；只保留其中被后续实机验证的协议/播放/图片经验。
+- Alpha1/RC1/RC2 仅保留后续被实机验证的协议/播放/图片经验。
 
 ---
 
