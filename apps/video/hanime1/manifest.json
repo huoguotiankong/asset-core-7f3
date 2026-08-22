@@ -10,14 +10,14 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.11",
-  "testBuild": 20011,
+  "testVersion": "2.0.0-test.12",
+  "testBuild": 20012,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "migration": {
-    "stage": "direct-play-plain-ui-webview-login-test",
-    "source": "2.0.0-test.10",
-    "note": "Test11 根据实机修复选集二跳、scroll_button HTML 原样显示、评论时间重复与原始秒数；登录回归 Han1mePlus 当前 WebView 登录后读取 Cookie 的真实路线。"
+    "stage": "web-bridge-layout-filter-test",
+    "source": "2.0.0-test.11",
+    "note": "Test12 根据实机继续修复：X5 网页桥接 Cookie、取消筛选二次弹窗、作者直达作品结果、评论重排和逐页面封面布局设置。"
   }
 }
