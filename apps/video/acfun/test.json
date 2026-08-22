@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha10",
-  "build": 161,
-  "shellVersion": "6.6.0-test",
+  "version": "0.6.0-alpha11",
+  "build": 162,
+  "shellVersion": "6.7.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha10/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v066.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha11/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v067.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha10 恢复型测试版。Alpha9 已由实机确认发生多域回归：小说/有声分类只剩全部；除有声外小说、漫画、视频、短视频封面大面积灰图；常规视频播放异常；小说章节只暴露原始 .txt 地址而未显示正文；小说/有声/漫画均无法正常使用。按失败 Test 隔离规范，Alpha10 不继承 Alpha9 四个业务模块，直接以 Alpha8 Release 模块链为恢复基线，再追加 a10 定点修复：扩展 imgUrl/imageUrl/coverPicture 等封面包装字段；视频播放优先重新请求 video/can/watch 并提供直连备用；小说/有声分类恢复 Alpha8 宽字段解析并按 fiction/audio 分模式请求；章节把 fictionUrl/contentUrl 的 txt/html 当正文源主动读取，longFormAudio/audio/voice 路径单独识别为音频；社区详情继续合并 Feed seed 与 dynamicInfo。短视频首页直接播放、同页 select:// 筛选和漫画 pics:// 方向保留。Shell6.6 / Bootstrap v066 / Build161 强制越过 Alpha9；Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
+  "notes": "0.6.0 Alpha11 定点恢复测试版。Alpha10 实机已确认小说/有声分类恢复、小说正文恢复；仍失败的是有声音频、常规视频、短视频播放与漫画章节阅读。封面方面漫画和部分视频能在等待后恢复，但部分视频、全部短视频、小说与社区仍缺图。Alpha11 保留 Alpha10 已恢复的小说分类/正文，不再改动该成功链；视频与短视频重新恢复 Stable/Alpha8 已验证的 cacheM3u8 + Header 播放合同，并兼容 APK 1.9.7 中 /api/m3u8/play 与 /m3u8/play 候选；有声合并章节列表 seed 与 chapterInfo，递归识别 longFormAudio/audioSource/sourcePath/playPath/playbackDomain，并通过带 Header 的多线路音乐播放；漫画章节改用当前 Bootstrap v067，而不是 Alpha8 内捕获的旧 v064，chapterInfo 同时尝试 comicsId/comicId GET+POST 并解析 JSON 字符串 imgList/imageList；封面扩大到 JSON 字符串包装、dynamicImg、shortCover、videoImg、verticalImg 等字段并排除头像/图标。Shell6.7 / Bootstrap v067 / Build162 强制越过 Alpha10。Stable 0.4.9 / Build149 与 latest.json 继续冻结。" 
 }
