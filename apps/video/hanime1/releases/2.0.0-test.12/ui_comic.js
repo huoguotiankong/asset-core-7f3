@@ -1,0 +1,4 @@
+/* Hanime1 Test12 comic list layout */
+(function(C,P,E,H,L){var pv=H.pv,route=H.route,sec=H.sec,btn=H.btn;
+E.comicBrowse=function(){try{var path=pv('path','/comics'),page=Number(pv('page','1')||1),r=P.comicBrowse(path,page),d=[];setPageTitle('漫画列表');d.push({title:'漫画分类',url:route('hanimeComicFilter',{}),col_type:'text_center_1',extra:{lineVisible:false}});d.push(sec('漫画结果','第 '+page+' 页 · '+(r.items||[]).length+' 部'));for(var i=0;i<(r.items||[]).length;i++)d.push(L.comic(r.items[i],'comicList'));if(page>1)d.push(btn('‹ 上一页',route('hanimeComicBrowse',{path:path,page:page-1})));if(page<Number(r.totalPages||page))d.push(btn('下一页 ›',route('hanimeComicBrowse',{path:path,page:page+1})));setResult(d);}catch(x){setResult([{title:'漫画列表失败',desc:String(x.message||x),url:'hiker://empty',col_type:'text_center_1'}]);}};
+})(HanimeCore,HanimeProvider,HanimePages,HanimeUI9,HanimeLayout12);
