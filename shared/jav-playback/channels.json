@@ -1,14 +1,21 @@
 {
   "schema": 1,
   "name": "JAV Playback SDK",
-  "updatedAt": "2026-08-23 01:24",
-  "stable": null,
+  "updatedAt": "2026-08-23 01:34",
+  "stable": {
+    "version": "1.0.0-test.4",
+    "build": 10004,
+    "path": "releases/1.0.0-test.4/index.js",
+    "status": "promoted-by-user",
+    "providers": ["MissAV", "123AV", "Jable"],
+    "notes": "Pinned immutable release for Stable callers. 123AV/Jable retain the device-confirmed playable logic; 123AV uses the repository icon. MissAV uses the search→real detail→packed source→master HLS→highest-quality chain from Test5 promotion. Future SDK tests must move only the test pointer and must not change this stable pointer in place."
+  },
   "test": {
     "version": "1.0.0-test.4",
     "build": 10004,
     "path": "releases/1.0.0-test.4/index.js",
-    "status": "device-validation-required",
+    "status": "promoted-to-stable-baseline",
     "providers": ["MissAV", "123AV", "Jable"],
-    "notes": "冻结 test.3 的嵌套 eval 导出作用域风险；test.4 显式顶层导出 JAVPlayback。123AV/Jable 保持已实机可播解析；123AV 使用仓库固定图标；MissAV 使用搜索真实版本→详情 packed source→master HLS→自动最高画质，待实机验证。"
+    "notes": "Current test baseline is identical to the promoted stable SDK. The next provider change must create a new immutable test release."
   }
 }
