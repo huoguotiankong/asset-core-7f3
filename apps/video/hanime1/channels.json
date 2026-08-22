@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v2",
-  "updatedAt": "2026-08-22 08:20",
+  "versionPolicy": "legacy-history-remote-test-v3",
+  "updatedAt": "2026-08-22 08:31",
   "channels": [
     {
       "channel": "stable",
@@ -18,10 +18,7 @@
       "updatedAt": "2026-08-18",
       "recommended": false,
       "desc": "仅保留历史/回退记录；用户实机确认旧版无法通过当前站点验证，不再作为开发基线。",
-      "highlights": [
-        "历史单体规则",
-        "不再围绕旧版兼容或优化"
-      ],
+      "highlights": ["历史单体规则","不再围绕旧版兼容或优化"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     },
     {
@@ -29,20 +26,21 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.2",
-      "baseVersion": "2.0.0-test.1",
+      "version": "2.0.0-test.3",
+      "baseVersion": "2.0.0-test.2",
       "targetVersion": "2.0.0",
-      "build": 20002,
-      "displayVersion": "Test 2.0.0 · RemoteTest2",
+      "build": 20003,
+      "displayVersion": "Test 2.0.0 · RemoteTest3",
       "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test1 实机热修：修复首页只解析首卡，并强化真实 Cloudflare Challenge 识别。",
+      "desc": "第二轮实机热修：首页彻底改为原始 HTML 分区/卡片切块解析，并修复详情页空封面。",
       "highlights": [
-        "按官网 DOM 直接解析全部首页横向分区，不再依赖 next&&Html",
-        "Challenge 标记不再绑定 HTTP 403；仍仅在站点真实挑战时触发验证链",
-        "保留多账号、官网片库/评论、视频/漫画与四区 UI"
+        "不再依赖 Hiker 对官网复杂 DOM 的列表遍历",
+        "按 horizontal-row-title / horizontal-card 原始 HTML 切块解析",
+        "详情封面从 video poster / og:image 双重补全",
+        "保留 Challenge 自动校验链、账号/片库/评论、视频/漫画与四区 UI"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     }
