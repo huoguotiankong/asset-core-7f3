@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.42-test.5",
+  "build": 2026082245,
+  "baseVersion": "3.9.41",
+  "baseBuild": 2026082006,
+  "previousTest": "3.9.42-test.4",
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.42-test.5/javdb_v3.9.42_test5.txt",
+  "runtime": "cloud/javdb/v3.9.42-test.5/runtime.js",
+  "modules": [
+    {"name":"appParityPatch1","path":"apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js"},
+    {"name":"appParityPatch2","path":"apps/video/javdb/releases/3.9.42-test.2/app_parity_patch2.js"},
+    {"name":"runtimeScopePatch","path":"apps/video/javdb/releases/3.9.42-test.3/runtime_scope_patch.js"},
+    {"name":"actorUiPatch4","path":"apps/video/javdb/releases/3.9.42-test.4/actor_ui_patch4.js"},
+    {"name":"releasePatch5","path":"apps/video/javdb/releases/3.9.42-test.5/release_patch5.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"test","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"JDB","property":"version","equals":"20260823-v3.9.42-test.5"},
+  "scope": ["runtime", "actor-mapping", "actor-ui", "shared-playback"],
+  "stableUntouched": true,
+  "notes": "继承 Test4 演员 无码/欧美(女) 映射修正和 UI 收敛；冻结预发布检查发现有 SDK 导出作用域风险的 JAV Playback test.3，改用 1.0.0-test.4 显式顶层 JAVPlayback 导出。123AV/Jable 已实机可播解析保持不变，123AV 固定图标；MissAV 使用搜索真实版本→详情 packed source→master HLS→自动最高画质链，待实机验证。"
+}
