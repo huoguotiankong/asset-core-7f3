@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.25",
+  "build": 20025,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.24",
+  "supersedes": "2.0.0-test.24",
+  "modules": [
+    {
+      "name": "recovery25",
+      "path": "apps/video/hanime1/releases/2.0.0-test.25/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.25"
+  },
+  "notes": "Test25 keeps the device-verified Test24 avatar/runtime chain, removes the temporary avatar diagnostic UI, and optimizes comment reply opening. Replies now perform one /loadReplies request that parses content and XPath avatars together instead of the previous data request plus a second avatar request. Comment/reply pages also use the locally persisted active account for button state instead of calling profile() on every page open, removing extra account HTTP requests. A 45-second per-thread reply cache makes immediate reopen fast and is invalidated after posting a reply."
+}
