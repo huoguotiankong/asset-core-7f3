@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "mdai-test",
   "name": "麻豆AI",
-  "version": "2.7.0-test.2",
+  "version": "2.7.0-test.3",
   "baseVersion": "2.6.3",
   "targetVersion": "2.7.0",
-  "build": 27002,
-  "shellVersion": "1.1.1-test",
-  "shellRuleVersion": 2026082214,
+  "build": 27003,
+  "shellVersion": "1.1.2-test",
+  "shellRuleVersion": 2026082218,
   "managerVersion": "2.0.1",
-  "release": "apps/video/mdai/releases/2.7.0-test.2/release.json",
-  "rule": "apps/video/mdai/mdai_remote_test_v3.txt",
+  "release": "apps/video/mdai/releases/2.7.0-test.3/release.json",
+  "rule": "apps/video/mdai/mdai_remote_test_v4.txt",
   "updatedAt": "2026-08-22",
-  "notes": "根据 Test1 实机片库截图修复：分类/排序/筛选全部改为当前页状态刷新，不再连续打开新页面；CatalogAdapter 合并稳定分类骨架与动态分类，避免接口缺项/排序波动；三级栏目改等宽布局并压缩高级筛选。播放、详情、Stable/Local 均不改。"
+  "notes": "在 2.7.0-test.2 片库 UI 基线上新增官网图标实机检测：从当前 Host 首页解析 rel=icon / apple-touch-icon，选择高优先级站点声明并复制真实地址；不猜第三方 favicon，不改 Stable 2.6.3。"
 }
