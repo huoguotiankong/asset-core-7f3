@@ -2,26 +2,25 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-stable-remote-test-v1",
-  "updatedAt": "2026-08-22 08:01",
+  "versionPolicy": "legacy-history-remote-test-v2",
+  "updatedAt": "2026-08-22 08:20",
   "channels": [
     {
       "channel": "stable",
-      "label": "正式版",
+      "label": "旧版（历史）",
       "id": "hanime1",
       "name": "Hanime1",
       "version": "1.2.1",
       "build": 12100,
-      "displayVersion": "Stable 1.2.1 · Legacy Local",
+      "displayVersion": "Legacy 1.2.1 · Historical",
       "path": "hanime1.txt",
       "mode": "local",
       "updatedAt": "2026-08-18",
-      "recommended": true,
-      "desc": "当前实机稳定基线；本轮保持不变",
+      "recommended": false,
+      "desc": "仅保留历史/回退记录；用户实机确认旧版无法通过当前站点验证，不再作为开发基线。",
       "highlights": [
-        "视频 / 漫画 / 搜索 / 多画质",
-        "继续作为 Test 2.0.0 的回退基线",
-        "未被本轮重写覆盖"
+        "历史单体规则",
+        "不再围绕旧版兼容或优化"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     },
@@ -30,20 +29,20 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.1",
-      "baseVersion": "1.2.1",
+      "version": "2.0.0-test.2",
+      "baseVersion": "2.0.0-test.1",
       "targetVersion": "2.0.0",
-      "build": 20001,
-      "displayVersion": "Test 2.0.0 · RemoteTest1",
+      "build": 20002,
+      "displayVersion": "Test 2.0.0 · RemoteTest2",
       "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
-      "recommended": false,
-      "desc": "Han1mePlus/APK 体验导向的架构级重写测试版；待实机回归",
+      "recommended": true,
+      "desc": "Test1 实机热修：修复首页只解析首卡，并强化真实 Cloudflare Challenge 识别。",
       "highlights": [
-        "自动 WebView Challenge 尝试 + 可见 X5 验证兜底",
-        "完整账号/片库/评论入口与多账号隔离",
-        "视频/漫画双 Provider + Explore/Library/Cache/Settings 四区 UI"
+        "按官网 DOM 直接解析全部首页横向分区，不再依赖 next&&Html",
+        "Challenge 标记不再绑定 HTTP 403；仍仅在站点真实挑战时触发验证链",
+        "保留多账号、官网片库/评论、视频/漫画与四区 UI"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     }
