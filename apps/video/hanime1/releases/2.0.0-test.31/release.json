@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.31",
+  "build": 20031,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.30",
+  "modules": [
+    {
+      "name": "recovery31",
+      "path": "apps/video/hanime1/releases/2.0.0-test.31/recovery_loader.js"
+    }
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.30",
+    "requiredGlobals": ["HanimeCore", "HanimeProvider", "HanimePages", "HanimeUI9"]
+  },
+  "verify": {"global": "HanimePages", "property": "build", "equals": "2.0.0-test.31"},
+  "notes": "Test31 is a pre-device-validation hardening layer over Test30. It fixes two selector correctness risks found during post-publish static review: comment reply IDs are now extracted from raw reply-section-wrapper HTML instead of relying on a bare pdfh id selector, and account playlist href matching uses the quoted upstream playlist?list= selector. Stable 2.0.0 remains unchanged."
+}
