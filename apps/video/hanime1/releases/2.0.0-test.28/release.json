@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.28",
+  "build": 20028,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.26",
+  "supersedes": "2.0.0-test.27",
+  "modules": [
+    {"name":"recovery28","path":"apps/video/hanime1/releases/2.0.0-test.28/recovery_loader.js"}
+  ],
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.28"},
+  "notes": "Emergency recovery from broken Test27. Test27 is skipped entirely because patch_experience27.js has a syntax error on the replies page definition. Test28 rebuilds from the last bootable Test26 baseline and loads four syntax-checked modules: replies recovery, creator directory recovery, icon-first home/detail UI, and build-aware settings. No Test27 runtime module is required."
+}
