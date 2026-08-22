@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha13",
-  "testBuild": 164,
-  "testShellVersion": "6.9.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v069.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v069.txt",
+  "testVersion": "0.6.0-alpha14",
+  "testBuild": 165,
+  "testShellVersion": "6.10.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v070.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v070.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha13-current-context-playback-fullscreen-comic-v69",
+    "stage": "alpha14-alpha12-recovery-get-first-fulltheme-v70",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha12 实机已经确认漫画章节可读，正式验证 comics/base/chapterInfo {chapterId} 单参数优先合同；Alpha13 保留该成功链，把漫画章节普通 hiker 二级页改为 pics:// 原生多图阅读，以去掉顶部标题/空白区域。Alpha12 普通视频仍失败后复核代码发现明确运行时根因：Alpha3 视频详情播放 lazyRule 会 eval 本地 core v018 后直接 ac.play，后置 Alpha12 ac.play 被重新覆盖，实际没有进入当前测试播放实现；Alpha13 普通视频详情、短视频和有声点击全部显式加载当前 Bootstrap v069 再调用当前 Runtime。视频详情不再生成独立播放/收藏/评论三个同级动作，播放器列表只保留真实播放项，收藏/评论移到封面长按。播放继续以 can/watch→h5/decode→cacheM3u8 为主，并根据 APK1.9.7 静态字符串有限接入 m3u8/player/referer；有声同时兼容 playbackDomain/playbackAuthKey/authKey。封面增加视频/小说/社区类型化评分提取及缺图探针。Test Bootstrap v069 / minBuild=164 强制越过 Alpha12；latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha13 实机发生多域回归：Alpha12 已确认可读的漫画再次不可读、全部封面同时消失、视频/短视频/有声仍不可播，因此 Alpha13 已隔离且 Bootstrap v070 不再继承 v069，而是直接 require v068 / Alpha12。复核 Alpha13 代码确认其深层封面评分会在找到任意高分候选时无条件覆盖旧 itemInfo 已经解析出的有效 img，这是全局封面退化的直接风险；Alpha14 完全移除该覆盖。漫画恢复 Alpha12 chapterInfo {chapterId} + ac.image + pic_1_full 的实机成功链，只在 hiker 页面 URL 加海阔官方 #fullTheme#，不再把带 @js/InputStream 解密的图片转交未验证的 pics://。当前实机诊断又确认 sjacfanapi 的 POST video/can/watch 返回 HTTP405；Alpha14 播放因此改为优先复用 Feed/Detail 已有 videoUrl/path，缺失时 GET can/watch 优先，POST 只作后级兼容，再进入既有 h5/decode + cacheM3u8。视频详情用 seed+detail 合并避免详情响应覆盖掉列表媒体路径；短视频、有声点击绑定当前 Bootstrap v070。Test Bootstrap v070 / minBuild=165 强制越过 Alpha13；latest.json 不变。"
   }
 }
