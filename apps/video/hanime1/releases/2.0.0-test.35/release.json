@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.35",
+  "build": 20035,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.34",
+  "modules": [
+    {"name":"recovery35","path":"apps/video/hanime1/releases/2.0.0-test.35/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.32",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.35"},
+  "notes": "Test35 quarantines Test34 regressions and recovers from the device-proven Test32 base. Main comments are restored by not overriding the working Test32 comment provider. Account/library parsing follows upstream Han1mePlus selectors with selector-splitting and no fake playlist-ID fallback. Library shows complete inline filter rows plus Full Filter and Creator Directory buttons. Home search stores the query then opens the native search page without the invalid encoded return path. Creator34 three-column directory remains layered on top. Stable 2.0.0/Build20029 is unchanged."
+}
