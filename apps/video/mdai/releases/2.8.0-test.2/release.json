@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.8.0-test.2",
+  "build": 28002,
+  "ref": "main",
+  "baseStable": {"version":"2.6.3","build":26301,"release":"apps/video/mdai/releases/2.6.3/release.json"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/mdai/releases/2.7.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.8.0-test.1/ui_base.js"},
+    {"name":"content-pages","path":"apps/video/mdai/releases/2.8.0-test.1/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.8.0-test.1/pages_detail.js"},
+    {"name":"settings","path":"apps/video/mdai/releases/2.8.0-test.1/settings.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.8.0-test.2/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.8.0-test.2"},
+  "notes": "在 2.8.0-test.1 UI 重构基础上，仅做发布前导航状态与图标稳健性修正：Mine mode / Library type 跨页参数在 Runtime 进入前显式同步到页面状态；正式图标改为仓库真实 PNG 二进制资产。UI/数据/播放业务不变。"
+}
