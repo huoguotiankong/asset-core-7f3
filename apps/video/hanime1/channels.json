@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v24",
-  "updatedAt": "2026-08-22 16:55",
+  "versionPolicy": "legacy-history-remote-test-v25",
+  "updatedAt": "2026-08-22 17:00",
   "channels": [
     {
       "channel": "stable",
@@ -26,24 +26,24 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.24",
-      "baseVersion": "2.0.0-test.23",
+      "version": "2.0.0-test.25",
+      "baseVersion": "2.0.0-test.24",
       "targetVersion": "2.0.0",
-      "build": 20024,
-      "displayVersion": "Test 2.0.0 · ShellRecovery24",
+      "build": 20025,
+      "displayVersion": "Test 2.0.0 · ReplyFast25",
       "path": "apps/video/hanime1/hanime1_remote_test_v4.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test24：用户实机点击旧设置页“更新测试版”出现 HanimeBoot 未定义，确认序列化 lazyRule 直接引用 Bootstrap 全局对象会导致更新链自锁。发布全新 Shell v4 + Bootstrap v4，并以 minBuild 20024 强制越过旧 active state；头像逻辑保留 Test23 XPath 引擎，不再继续猜头像解析。",
+      "desc": "Test25：Test24 已实机确认作者/评论头像恢复，证明此前主要问题是旧更新链没有真正把新 Release 送到设备。当前版保留已验证头像与 Shell v4，移除临时头像诊断，并重点优化“查看更多回复”速度。",
       "highlights": [
-        "新 Shell v4：规则 version 2026082230，使用全新 Bootstrap v4 缓存键",
-        "Bootstrap v4：minBuild 20024，重新导入后自动越过 Test21/22/23 旧状态",
-        "更新/检查/回退/重装按钮的 lazyRule 内显式 require Bootstrap，不再依赖外部 HanimeBoot",
-        "设置页必须显示 2.0.0-test.24 · Build 20024 · Shell v4",
-        "保留 Test23 海阔内置 XPath 作者/主评论/回复头像引擎",
-        "新增恢复 Test24 基线与可见头像诊断",
-        "Stable 1.2.1 不变，登录/播放/选集/片库/漫画继续沿用已验证链"
+        "保留 Test24 已实机通过的作者/评论/回复头像链",
+        "取消设置页头像诊断区域",
+        "楼中楼从“正文请求 + 头像二次请求”改为单次 /loadReplies 同时解析正文和 XPath 头像",
+        "评论/回复页不再每次打开都调用 profile() 做登录状态探测，改用本地 activeAccount",
+        "同一回复线程增加 45 秒短缓存，立即再次打开基本走本地",
+        "发表回复后自动清除对应线程缓存",
+        "Shell v4 / Bootstrap v4 / 更新链保持 Test24 已修复结构"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
