@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha11",
-  "build": 162,
-  "shellVersion": "6.7.0-test",
+  "version": "0.6.0-alpha12",
+  "build": 163,
+  "shellVersion": "6.8.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha11/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v067.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha12/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v068.txt",
   "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha11 定点恢复测试版。Alpha10 实机已确认小说/有声分类恢复、小说正文恢复；仍失败的是有声音频、常规视频、短视频播放与漫画章节阅读。封面方面漫画和部分视频能在等待后恢复，但部分视频、全部短视频、小说与社区仍缺图。Alpha11 保留 Alpha10 已恢复的小说分类/正文，不再改动该成功链；视频与短视频重新恢复 Stable/Alpha8 已验证的 cacheM3u8 + Header 播放合同，并兼容 APK 1.9.7 中 /api/m3u8/play 与 /m3u8/play 候选；有声合并章节列表 seed 与 chapterInfo，递归识别 longFormAudio/audioSource/sourcePath/playPath/playbackDomain，并通过带 Header 的多线路音乐播放；漫画章节改用当前 Bootstrap v067，而不是 Alpha8 内捕获的旧 v064，chapterInfo 同时尝试 comicsId/comicId GET+POST 并解析 JSON 字符串 imgList/imageList；封面扩大到 JSON 字符串包装、dynamicImg、shortCover、videoImg、verticalImg 等字段并排除头像/图标。Shell6.7 / Bootstrap v067 / Build162 强制越过 Alpha10。Stable 0.4.9 / Build149 与 latest.json 继续冻结。" 
+  "notes": "0.6.0 Alpha12 精确恢复测试版。Alpha11 实机仍失败后，依据 Stable 0.4.9 的已验证实现做合同级回归：常规视频/短视频不再使用 Alpha11 多候选首线路逻辑，恢复 Stable v0.4.5 的 path → /api/m3u8/h5/decode → cacheM3u8 → Header 单线路合同；漫画修复确认的参数错误，Stable v0.4.7 章节实际只请求 comics/base/chapterInfo {chapterId}，Alpha11 却遗漏该调用并优先附加 comicsId，Alpha12 改为 chapterId GET/POST 首选，再有限回退 comicsId/comicId。漫画章节取消中间“打开漫画阅读”按钮，直接进入只含 pic_1_full 的全宽阅读页。有声播放器改为单线路直接返回或先选线路再 #isMusic=true#，避开多线路 JSON 音乐兼容歧义。小说/有声分类与小说正文成功链保持不动。Shell6.8 / Bootstrap v068 / Build163 强制越过 Alpha11；Stable 0.4.9 / Build149 与 latest.json 不变。"
 }
