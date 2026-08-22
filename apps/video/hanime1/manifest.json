@@ -10,14 +10,14 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.8",
-  "testBuild": 20008,
+  "testVersion": "2.0.0-test.9",
+  "testBuild": 20009,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "migration": {
-    "stage": "official-taxonomy-professional-filter-test",
-    "source": "2.0.0-test.7",
-    "note": "Test8 保留 Test6/7 已验证播放/封面/漫画首页链；改用官网真实 search_key，增加专业视频/漫画分类、详情标签元数据、评论紧凑 UI 和预告多线路回退。"
+    "stage": "direct-result-filter-native-login-test",
+    "source": "2.0.0-test.8",
+    "note": "Test9 保留已验证封面/播放/漫画链；筛选改点即结果，详情标签直达结果；登录由 X5 Cookie 同步改为原生 CSRF 表单 + Cookie 兜底，预告按上游故障降级。"
   }
 }
