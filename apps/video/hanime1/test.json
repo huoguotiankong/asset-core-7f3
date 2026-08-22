@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.17",
-  "baseVersion": "2.0.0-test.16",
+  "version": "2.0.0-test.18",
+  "baseVersion": "2.0.0-test.17",
   "targetVersion": "2.0.0",
-  "build": 20017,
+  "build": 20018,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082227,
+  "shellRuleVersion": 2026082228,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.17/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.18/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test17 minimal increment on the recovered Test16 chain: refill missing author avatars from official artist search cards; uploader click now reads the real public /user/<id> page/video tab instead of keyword search."
+  "notes": "Test18 minimal increment on verified Test17: repair real author avatars from detail HTML and official artist cards; parse real comment avatars using the official 4-node comment / 2-node reply structure; use a round SVG fallback when the site has no avatar."
 }
