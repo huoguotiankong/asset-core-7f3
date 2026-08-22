@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "huangdou-test",
+  "name": "黄豆短剧",
+  "version": "1.9.0-test.6",
+  "build": 19006,
+  "ref": "main",
+  "baseStable": {"version":"1.8.2","build":18201,"release":"apps/video/huangdou/releases/1.8.2/release.json"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/huangdou/releases/1.9.0-test.1/core.js"},
+    {"name":"ui-base","path":"apps/video/huangdou/releases/1.9.0-test.2/ui_base.js"},
+    {"name":"playback-adapter","path":"apps/video/huangdou/releases/1.9.0-test.4/playback.js"},
+    {"name":"content-pages","path":"apps/video/huangdou/releases/1.9.0-test.1/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/huangdou/releases/1.9.0-test.6/pages_detail.js"},
+    {"name":"runtime","path":"apps/video/huangdou/releases/1.9.0-test.6/runtime.js"}
+  ],
+  "verify": {"global":"HuangDouRemoteRuntime","property":"build","equals":"1.9.0-test.6"},
+  "notes": "根据 Test5 实机确认 text_4 不显示锁 Emoji，将付费集网格标识改成稳定文本【锁】前缀；授权与 PlaybackAdapter 完整复用 Test4。"
+}
