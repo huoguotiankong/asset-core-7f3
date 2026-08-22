@@ -2,51 +2,10 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v5",
-  "updatedAt": "2026-08-22 09:00",
+  "versionPolicy": "legacy-history-remote-test-v6",
+  "updatedAt": "2026-08-22 09:20",
   "channels": [
-    {
-      "channel": "stable",
-      "label": "旧版（历史）",
-      "id": "hanime1",
-      "name": "Hanime1",
-      "version": "1.2.1",
-      "build": 12100,
-      "displayVersion": "Legacy 1.2.1 · Historical",
-      "path": "hanime1.txt",
-      "mode": "local",
-      "updatedAt": "2026-08-18",
-      "recommended": false,
-      "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
-      "highlights": [
-        "历史单体规则",
-        "不再围绕旧版兼容或优化"
-      ],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
-    },
-    {
-      "channel": "test",
-      "label": "测试版",
-      "id": "hanime1-test",
-      "name": "Hanime1",
-      "version": "2.0.0-test.5",
-      "baseVersion": "2.0.0-test.4",
-      "targetVersion": "2.0.0",
-      "build": 20005,
-      "displayVersion": "Test 2.0.0 · RemoteTest5",
-      "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-22",
-      "recommended": true,
-      "desc": "Test4 发布审计修正后版本：封面、播放、评论、登录/片库综合修复，评论运行时 helper 绑定已补齐。",
-      "highlights": [
-        "首页卡片优先 main-thumb，并统一追加图片 Referer/UA",
-        "视频原始 HTML 提取 source，播放 Referer 对齐 watch 页面",
-        "评论/回复原始 HTML 解析 + URL 参数解码，运行时 helper 绑定已通过模拟调用",
-        "浏览器会话可直接识别账号并进入片库，再按需同步为受管账号",
-        "补全官网 2.5D / 2D动画 / AI生成 / MMD / Cosplay 分类"
-      ],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
-    }
+    {"channel":"stable","label":"旧版（历史）","id":"hanime1","name":"Hanime1","version":"1.2.1","build":12100,"displayVersion":"Legacy 1.2.1 · Historical","path":"hanime1.txt","mode":"local","updatedAt":"2026-08-18","recommended":false,"desc":"仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。","highlights":["历史单体规则","不再围绕旧版兼容或优化"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"},
+    {"channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.6","baseVersion":"2.0.0-test.5","targetVersion":"2.0.0","build":20006,"displayVersion":"Test 2.0.0 · RemoteTest6","path":"apps/video/hanime1/hanime1_remote_test_v2.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,"desc":"验证/会话架构收敛版：WebView 只负责 Cloudflare 与网页登录；通过后所有业务直接读取官网 HTML/API。","highlights":["视频站与漫画站分别检查/维护浏览器验证会话","首页精确读取 img.main-thumb[src]，不再给签名 CDN 图片强加额外 headers","播放按数字画质降序，最高画质默认第一线路","预告/漫画/片库/评论改为官网原始 HTML/API 直读","详情和评论改成简洁海阔原生 UI"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"}
   ]
 }
