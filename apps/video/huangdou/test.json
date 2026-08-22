@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "huangdou-test",
   "name": "黄豆短剧",
-  "version": "1.9.0-test.2",
+  "version": "1.9.0-test.3",
   "baseVersion": "1.8.2",
   "targetVersion": "1.9.0",
-  "build": 19002,
-  "shellVersion": "1.1.1-test",
-  "shellRuleVersion": 2026082216,
+  "build": 19003,
+  "shellVersion": "1.1.2-test",
+  "shellRuleVersion": 2026082217,
   "managerVersion": "2.0.1",
-  "release": "apps/video/huangdou/releases/1.9.0-test.2/release.json",
-  "rule": "apps/video/huangdou/huangdou_remote_test_v3.txt",
+  "release": "apps/video/huangdou/releases/1.9.0-test.3/release.json",
+  "rule": "apps/video/huangdou/huangdou_remote_test_v4.txt",
   "updatedAt": "2026-08-22",
-  "notes": "根据 1.9.0-test.1 实机二级页报错修复：业务详情 URL 不再使用海阔保留参数 url，统一改为 hddj_url / hddj_topic_url，并增加 MY_PARAMS/getParam/absolute URL 校验。UI 与 PlaybackAdapter 其余部分保持 Test1 不变。"
+  "notes": "根据 Test2 实机播放页/选集回归修复：单线路恢复直接 HLS，不再用 PlayModel；所有剧集统一先尝试 guest/token，不再因页面 locked 标记直接 webRule；正倒序移出集数网格；本地收藏移到详情底部；官网回退改普通 http 页面。Stable 1.8.2 不变。"
 }
