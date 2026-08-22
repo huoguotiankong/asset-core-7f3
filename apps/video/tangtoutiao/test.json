@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082302,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "APK 9.6.2 协议恢复后的首轮 Test；等待海阔实机验证真实列表、封面、详情媒体字段和 UI。"
+}
