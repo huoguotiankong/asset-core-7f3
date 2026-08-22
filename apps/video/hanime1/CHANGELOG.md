@@ -3,100 +3,73 @@
 > 程序级长期技术记忆。事实以用户当前实机结果 > main 当前 Shell/Bootstrap/Release/源码 > 本文件 > registry/manifest > 历史规划为准。
 
 ## 当前基线
-- Legacy `1.2.1`：仅保留历史，不再作为运行/开发基线。
-- Test：`2.0.0-test.10` / Build `20010` / Shell `2026082219`。
-- 产品方向：Han1mePlus/APK 主要用于研究 Cloudflare、Cookie、官网 DOM/API 和系列结构；海阔 UI 采用原生组件重新设计，不追求像素级复制。
+- Legacy `1.2.1`：仅保留历史。
+- Test：`2.0.0-test.11` / Build `20011` / Shell `2026082220`。
+- Stable 尚未晋级；Test11 继续等待海阔实机回归。
 
 ## 已验证实机事实
-- 首页真实内容、多分区和封面已恢复。
-- 视频详情封面可显示。
-- 视频源可解析 1080 / 720 / 480，默认最高画质播放实机通过。
-- 评论接口可读取真实评论和回复。
-- 漫画首页和漫画分类链可读取。
-- 公开片库无需登录可浏览。
-- 官网预告页当前自身 HTTP 500；程序按上游故障降级，不继续伪修。
-- Test9 实机：账号密码登录仍失败；详情缺真正“选集”；播放器界面已经带出稍后看/收藏/片单/评论，详情顶部再放同类按钮造成重复；分类切换和评论 UI 仍需重构。
-
-## 验证 / 会话架构
-- WebView 仅用于 Cloudflare Challenge 与必要网页登录；正常业务直接 fetch 官网。
-- 视频站与漫画站按 Origin 独立验证。
-- Challenge 强特征：`cf-mitigated: challenge`、`cf-chl-`、challenge-form、Turnstile、Just a moment、Verify you are human 等。
-- 账号 Cookie 与 `cf_clearance` 分离保存；交互式 Turnstile 仍必须保留可见浏览器兜底。
+- 首页真实内容、多分区和封面可用。
+- 视频详情封面可显示；1080 / 720 / 480 可解析，默认最高画质播放通过。
+- 漫画首页和分类链可用；公开片库无需登录可浏览。
+- 评论接口能读取真实评论。
+- Test10 已确认 `#playlist-scroll .playlist-hover-wrap` 真选集解析正确，示例详情可得到 4 集。
+- Test10 实机问题：点击其它集会再进一个详情页，而用户期望直接播放；当前集/筛选/顶部 Tab 的 `<b><font>` 在 `scroll_button` 被原样显示；时长仍显示原始秒数；评论用户名与时间存在重复；登录仍未成立。
+- Test10 登录诊断：`HTTP 200 · CSRF 正常 · Cookie XSRF-TOKEN, hanime1_session`。这只证明匿名 Laravel 会话存在，不代表账号认证成功。
 
 ## 系列选集
-- Han1mePlus 当前并不是把相关推荐当选集；真正系列列表来自视频详情 DOM：`#playlist-scroll .playlist-hover-wrap`。
-- Test1-Test9 只解析 `#related-tabcontent`，因此始终没有选集。
-- Test10 在 Provider 层新增 playlist 解析：优先 Hiker CSS 选择器，失败回退原始 HTML `playlist-scroll` 区块扫描。
-- UI 将 `video.playlist` 独立展示为“选集 · N”，当前集高亮；相关推荐继续独立展示，禁止混用。
+- 真选集来源固定为 `#playlist-scroll .playlist-hover-wrap`；`#related-tabcontent` 仅为相关推荐，禁止混用。
+- Test11：详情选集按钮直接调用 `play(episodeId)`；当前集以 `▶` 标记，点击当前集也直接播放。
+
+## UI 兼容
+- 用户当前海阔环境中，`scroll_button` 上 `<b><font ...>` 被按普通字符串显示。
+- Test11 顶层 Tab、片库五行筛选、选集全部改为纯文本状态：`●` / `▌` / `▶`，不再依赖 HTML 着色。
+- 原始秒数统一格式化为 `mm:ss` 或 `h:mm:ss`。
+
+## 评论
+- Test11 对评论/回复元数据做规范化：从时间字符串提取“回复数”，删除用户名末尾重复的相对时间，并去掉时间字段中的“· N 回复”重复信息。
+- 评论正文改 `long_text` + 分隔线，头像行只承担用户/时间/回复数。
 
 ## 登录
-- Han1mePlus 当前主登录实现是 InAppWebView 登录后直接读取 WebView Cookie；同时官方项目也保留“手动 Cookie 登录”。
-- 海阔 X5 与规则 `getCookie()` 的 Cookie Jar 在本机实测不能可靠自动同步，因此 Test7/8 X5 同步失败。
-- Test9 尝试普通 `fetch` POST CSRF 表单，实机仍失败。
-- 海阔官方文档明确提供 `fetchCookie(url, options)`，专门返回响应 Cookie；Test10 改为：
-  `GET /login -> CSRF -> fetchCookie(POST /login) -> 合并 Cookie -> 用显式 Cookie 请求首页/资料页 -> 校验账号 -> 保存账号`。
-- 仍保留“粘贴 Cookie 登录”作为可靠备用；密码只暂存在 MyVar，提交或离开页面立即清除。
-- Test10 原生 Cookie 捕获链仍需真实账号实机验证，未验证前不得宣称完整账号功能完成。
-
-## Test10 UI / 产品结构
-### 顶层导航
-- 收敛为：推荐 / 片库 / 漫画 / 我的 / 设置。
-- 不再在“探索”下面重复放视频/漫画二级切换。
-
-### 片库筛选
-- 参考用户提供的网飞猫截图的信息密度与筛选交互，但不照抄视觉。
-- 每个筛选维度单独一行：左侧绿色维度名 + 常用选项 + 右侧 `›`。
-- 常用项点击立即刷新当前片库；`›` 使用海阔 `select://` 三列弹层展示完整选项。
-- 行：类型 / 排序 / 日期 / 时长 / 标签。
-- 完整分类页仅作为低频 exhaustive taxonomy，不再是日常筛选必经路径。
-
-### 视频详情
-- 顶部主操作只保留：播放 / 评论 / 下载。
-- 稍后看 / 收藏 / 加入片单不再在详情顶部重复堆叠，避免和海阔播放器内已经出现的操作重复。
-- 新增独立选集行。
-- 标签默认只展示前 12 个，剩余标签通过“三列全部标签弹层”查看并直接进入结果，避免详情页被几十个标签淹没。
-- 作品信息、简介、画质、相关推荐继续保留。
-
-### 评论
-- 每条评论拆成两层：`avatar` 仅显示头像/用户名/时间/回复数；正文使用独立 rich_text。
-- 每页 15 条，楼中楼相同结构，避免用户名和长正文互相挤压。
+- Han1mePlus 当前主登录并非原生邮箱密码 POST：它直接使用 InAppWebView 打开 `/login`，成功跳离登录页后读取 WebView Cookie；同时保留手动 Cookie 登录。
+- Test9/Test10 的原生表单/fetchCookie 登录属于海阔侧额外尝试，实机未成功，因此 Test11 停止继续猜表单。
+- Test11 登录页直接嵌入 `x5_webview_single` 官方登录页；用户在网页完成登录后点击“同步登录状态”，程序读取 `getCookie(base)` 并用 `profile()` 明确校验账号，再保存账号。
+- 若当前海阔版本 X5 Cookie 与 `getCookie()` 仍不共享，保留手动 Cookie 登录；在实机确认前不得宣称完整账号功能已完成。
 
 ## 已验证且禁止破坏
 - 首页/片库签名封面链。
 - 视频多画质及最高画质优先顺序。
 - 漫画首页/分类/详情基本数据链。
-- 评论真实数据接口。
 - 官网筛选 canonical `search_key`。
 
-## 待 Test10 实机回归
-- [ ] playlist 选集数量、顺序、当前集高亮、切集
-- [ ] 播放后播放器是否不再重复显示由详情顶部带入的账号按钮
-- [ ] 片库五行筛选的常用项直点与 `›` 三列完整弹层
-- [ ] Test10 首页/漫画顶层导航排版
-- [ ] 评论头像头部 + 正文布局
-- [ ] `fetchCookie` 登录能否真实建立账号会话
-- [ ] 登录后“我的”五个账号栏目
-- [ ] 长标签详情的“前 12 + 全部标签弹层”
+## 待 Test11 实机回归
+- [ ] 选集 4 集是否全部显示，点击任意一集是否直接进播放器
+- [ ] 顶部 Tab / 五行筛选 / 当前选集是否彻底没有 `<b><font>` 原样文本
+- [ ] 966 秒是否显示为 `16:06`
+- [ ] 评论用户名/时间是否不再重复，长评论排版是否更紧凑
+- [ ] WebView 官网登录成功后“同步登录状态”能否识别账号
+- [ ] 登录后的我的/稍后看/收藏/片单/订阅/历史
 
 ## 技术债
-- Test10 为保证实机增量安全，继续在 Test9 后追加覆盖模块，Release 模块数量偏多。
-- Test10 核心交互验证通过后，应建立新的 consolidated Candidate runtime，把 Test1-10 热修链压缩为 Core / Provider / Pages / Account / Runtime 少量模块，再考虑 Stable。
+- Test11 为低风险实机增量，Release 暂时继续叠加覆盖模块。
+- 等上述核心链稳定后建立 consolidated Candidate runtime，压缩 Test1-11 热修链，再考虑 Stable。
 
 ---
 ## 版本记录
-### 2.0.0-test.10 / Build 20010 / 2026-08-22
-- 补官网 `#playlist-scroll .playlist-hover-wrap` 真正系列选集。
-- 片库改为成熟影视 App 式五行筛选 + 三列完整弹层。
-- 顶层导航收敛，视频详情去除与播放器重复账号按钮。
-- 登录改 `fetchCookie` 捕获会话 Cookie + 显式 Cookie 校验。
-- 评论改头像头部 + 独立正文，每页 15 条。
-- 标签默认折叠为前 12 个 + 全部标签弹层。
+### 2.0.0-test.11 / Build 20011 / 2026-08-22
+- 选集点击改为直接播放。
+- Tab/筛选/选集去 HTML，改纯文本状态标记。
+- 时长秒数格式化。
+- 评论用户名/时间/回复数去重并压缩排版。
+- 登录回归 Han1mePlus 的 WebView 登录 + Cookie 同步路线。
+
+### 2.0.0-test.10 / Build 20010
+- 补官网真选集、五行筛选、详情去重复操作、fetchCookie 登录尝试、评论头像头部。
 
 ### 2.0.0-test.9 / Build 20009
-- 筛选点即结果、详情标签直达结果、普通 CSRF 表单登录尝试、预告上游故障降级。
+- 筛选点即结果、详情标签直达结果、普通 CSRF 表单登录尝试。
 
 ### 2.0.0-test.8 / Build 20008
-- 官网真实 canonical search_key、完整视频/漫画 taxonomy、signed lazy cover、详情标签元信息。
+- 官网 canonical search_key、完整视频/漫画 taxonomy、signed lazy cover、详情标签元信息。
 
 ### 2.0.0-test.6 / Build 20006
 - WebView 只负责验证/登录，业务官网直读；封面、最高画质播放、漫画首页随后通过实机。

@@ -90,7 +90,7 @@
       "category": "video",
       "mode": "legacy-history+remote-test",
       "version": "1.2.1",
-      "testVersion": "2.0.0-test.10",
+      "testVersion": "2.0.0-test.11",
       "shellVersion": "2.0.0-test",
       "managerVersion": "2.0.1",
       "manifest": "apps/video/hanime1/manifest.json",
@@ -100,7 +100,7 @@
       "legacyPath": "hanime1.txt",
       "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "changelog": "apps/video/hanime1/CHANGELOG.md",
-      "migration": "series-ui-cookie-login-test"
+      "migration": "direct-play-plain-ui-webview-login-test"
     },
     {
       "id": "acfun",
