@@ -15,19 +15,19 @@
   "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
   "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.32",
-  "testBuild": 20032,
+  "testVersion": "2.0.0-test.33",
+  "testBuild": 20033,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20032,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20032.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20032.txt",
+  "testInstallerBuild": 20033,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20033.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20033.txt",
   "migration": {
-    "stage": "stable-20000-test32-session-reply-creator",
+    "stage": "stable-20000-test33-reply-playlist-creator-ui",
     "stablePromotedFrom": "2.0.0-test.29",
     "stableBuild": 20029,
     "testBase": "2.0.0",
-    "testBuild": 20032,
+    "testBuild": 20033,
     "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28"],
-    "note": "Stable 2.0.0 freezes the user-approved Test29 baseline. Test31 device validation confirmed the compact recommendation and clean playback-list changes but exposed browser-session/auth-state mismatch, still-empty replies, blank author directory, and filter density. Test32 keeps the verified Test31 improvements and addresses those remaining areas without changing Stable."
+    "note": "Stable 2.0.0 remains frozen. Test32 device validation confirmed browser-session account entry now works, while replies still returned zero, playlist cards disappeared, the two-strip filter was too messy, and creator pages needed website-aligned layout. Test33 addresses those areas without modifying Stable."
   }
 }
