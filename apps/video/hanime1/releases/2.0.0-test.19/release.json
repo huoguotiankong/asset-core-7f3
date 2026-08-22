@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.19",
+  "build": 20019,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.17",
+  "modules": [
+    {
+      "name": "recovery19",
+      "path": "apps/video/hanime1/releases/2.0.0-test.19/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.19"
+  },
+  "notes": "Recovery Test19: skip broken Test18 comment override, restore verified Test17 comments, then enrich author/comment/reply avatars without replacing comment data."
+}
