@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.9",
-  "baseVersion": "2.0.0-test.8",
+  "version": "2.0.0-test.10",
+  "baseVersion": "2.0.0-test.9",
   "targetVersion": "2.0.0",
-  "build": 20009,
+  "build": 20010,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082218,
+  "shellRuleVersion": 2026082219,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.9/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.10/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test8 device feedback: filters work but are too indirect, detail tags should open results directly, upstream previews are currently broken, and X5 login still fails. Test9 changes to direct-result filtering, native CSRF login, graceful preview degradation, and refined UI."
+  "notes": "Test9 device feedback: login still fails, video detail misses official series playlist, player duplicates account actions, filters/comments need a more professional app-style layout. Test10 adds official playlist episodes, Netflix-style direct filter rows, fetchCookie login capture, and UI cleanup."
 }
