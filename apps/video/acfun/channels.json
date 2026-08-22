@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha15",
+      "version": "0.6.0-alpha16",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 166,
-      "displayVersion": "Test 0.6.0-alpha15 · Build 166 · Shell 7.1",
-      "path": "apps/video/acfun/acfun_remote_test_v071.txt",
+      "build": 167,
+      "displayVersion": "Test 0.6.0-alpha16 · Build 167 · Shell 7.2",
+      "path": "apps/video/acfun/acfun_remote_test_v072.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Clean Rebase Stable 0.4.9 · 移除 Alpha3~14 活动覆盖链 · 重建九栏目 Adapter/UI",
-      "highlights": ["真正从 Stable 0.4.9 起链", "仅 8 个 Stable 模块 + 1 个 Clean 模块", "视频封面解析保持 Stable", "XOR 图片解密保持 Stable", "视频播放保持 Stable cacheM3u8 合同", "v047 漫画/短视频底座保持 Stable", "fiction POST-first", "社区/小说/有声独立 Adapter", "修复错误常亮栏目图标", "Stable 继续冻结"],
+      "desc": "Alpha15 Clean Rebase + 单一媒体修复层 · 视频封面/播放/短视频/漫画/searchCenter 定点修复",
+      "highlights": ["Alpha15 Clean Rebase 保持", "有声 POST-first 成功链不动", "视频封面 fallback-only", "GET-first can/watch", "播放器只提交真实播放项", "收藏评论退出播放列表", "短视频 loadType=2 恢复", "Alpha12 chapterId-first 漫画 Reader", "章节 #fullTheme#", "searchCenter/category 分发修复", "Stable 继续冻结"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
