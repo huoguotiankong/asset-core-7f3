@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.38",
+  "build": 20038,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.37",
+  "modules": [
+    {"name":"recovery38","path":"apps/video/hanime1/releases/2.0.0-test.38/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.37",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.38"},
+  "notes": "Test38 follows Test37 device validation. Main comments remain intact; replies restore the Test24 direct commentId -> loadReplies contract with single-request avatar parsing and non-empty short cache. Search no longer returns a navigation URL from the input callback: it refreshes inline first-page results and keeps a dedicated result page. Account avatar is re-probed authoritatively; library/playlist parsing adds raw-HTML watch-link fallback, playlist pagination merge, full account-center actions, and a two-row native account navigation. Stable 2.0.0/Build20029 remains frozen."
+}
