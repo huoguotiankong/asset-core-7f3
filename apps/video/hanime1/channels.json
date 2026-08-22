@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v17",
-  "updatedAt": "2026-08-22 14:25",
+  "versionPolicy": "legacy-history-remote-test-v18",
+  "updatedAt": "2026-08-22 14:36",
   "channels": [
     {
       "channel": "stable",
@@ -26,22 +26,24 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.17",
-      "baseVersion": "2.0.0-test.16",
+      "version": "2.0.0-test.18",
+      "baseVersion": "2.0.0-test.17",
       "targetVersion": "2.0.0",
-      "build": 20017,
-      "displayVersion": "Test 2.0.0 · Incremental17",
+      "build": 20018,
+      "displayVersion": "Test 2.0.0 · Incremental18",
       "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test17：在已恢复正常的 Test16 链上，仅修作者头像 fallback，并把上传者点击改为真实 /user/<id> 公开上传作品列表。",
+      "desc": "Test18：在已实机确认上传者公开作品可用的 Test17 上，只修作者头像、评论/回复真实头像与圆形兜底。",
       "highlights": [
-        "Test16 首页/详情启动已恢复",
-        "作者头像缺失时从官网作者搜索卡回填",
-        "上传者不再按关键词搜索，直接读取公开用户页影片",
-        "不改登录、播放、片库、漫画稳定链",
-        "新增模块保持零反斜杠字符"
+        "Test17 上传者 /user/<id> 公开作品已实机通过",
+        "作者头像优先从详情真实 HTML 邻域解析",
+        "作者搜索卡作为第二级头像 fallback",
+        "主评论按官网 4 节点一组解析真实头像",
+        "楼中楼回复按官网 2 节点一组解析真实头像",
+        "无真实头像时使用圆形 SVG，不再出现灰色方块",
+        "不改登录、播放、选集、片库、漫画稳定链"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
