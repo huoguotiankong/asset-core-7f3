@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "huangdou-test",
   "name": "黄豆短剧",
-  "version": "1.9.0-test.4",
+  "version": "1.9.0-test.5",
   "baseVersion": "1.8.2",
   "targetVersion": "1.9.0",
-  "build": 19004,
-  "shellVersion": "1.1.3-test",
-  "shellRuleVersion": 2026082302,
+  "build": 19005,
+  "shellVersion": "1.1.4-test",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/huangdou/releases/1.9.0-test.4/release.json",
-  "rule": "apps/video/huangdou/huangdou_remote_test_v5.txt",
+  "release": "apps/video/huangdou/releases/1.9.0-test.5/release.json",
+  "rule": "apps/video/huangdou/huangdou_remote_test_v6.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test3 实机第5集进入播放器后仍播放异常继续收敛：优先保留现有登录/购买会话，缺 Token 才建立 guest；Token 后预检 HLS，并带 Cookie/Referer/UA 交给播放器；页面 locked 只做提示，最终以站点真实媒体授权为准。无权限时明确引导官网账号/购买，不绕过站点授权。"
+  "notes": "在 Test4 会话保持/Token/HLS 预检播放链不变的前提下，仅强化付费剧集识别：官网标记 locked 的集数在主按钮和选集统一显示 🔒，并明确为付费/需授权内容；不绕过官网购买和授权。"
 }
