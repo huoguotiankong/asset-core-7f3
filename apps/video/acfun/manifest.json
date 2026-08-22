@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha14",
-  "testBuild": 165,
-  "testShellVersion": "6.10.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v070.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v070.txt",
+  "testVersion": "0.6.0-alpha15",
+  "testBuild": 166,
+  "testShellVersion": "7.1.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v071.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v071.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha14-alpha12-recovery-get-first-fulltheme-v70",
+    "stage": "alpha15-clean-rebase-stable049-v71",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha13 实机发生多域回归：Alpha12 已确认可读的漫画再次不可读、全部封面同时消失、视频/短视频/有声仍不可播，因此 Alpha13 已隔离且 Bootstrap v070 不再继承 v069，而是直接 require v068 / Alpha12。复核 Alpha13 代码确认其深层封面评分会在找到任意高分候选时无条件覆盖旧 itemInfo 已经解析出的有效 img，这是全局封面退化的直接风险；Alpha14 完全移除该覆盖。漫画恢复 Alpha12 chapterInfo {chapterId} + ac.image + pic_1_full 的实机成功链，只在 hiker 页面 URL 加海阔官方 #fullTheme#，不再把带 @js/InputStream 解密的图片转交未验证的 pics://。当前实机诊断又确认 sjacfanapi 的 POST video/can/watch 返回 HTTP405；Alpha14 播放因此改为优先复用 Feed/Detail 已有 videoUrl/path，缺失时 GET can/watch 优先，POST 只作后级兼容，再进入既有 h5/decode + cacheM3u8。视频详情用 seed+detail 合并避免详情响应覆盖掉列表媒体路径；短视频、有声点击绑定当前 Bootstrap v070。Test Bootstrap v070 / minBuild=165 强制越过 Alpha13；latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha14 实机仍然显示首页和详情封面全局缺失，且此前视频/短视频/有声/漫画等问题没有可靠闭环，证明只跳过 Alpha13 但继续继承 Alpha12 的 Test overlay 链仍会把旧实验 Parser/Media 覆盖带回来。Alpha15 因此执行真正 Clean Rebase：Bootstrap v071 直接 require Stable bootstrap_v5，活动 Release 只有 Stable 0.4.9 的 core/protocol/v042/v043/v045/v047/v048/v049 八个模块，再追加单一 clean runtime/UI；Alpha3~14 全部退出活动链。视频 itemInfo、ac.image XOR InputStream、Stable cacheM3u8 播放、v047 Station/classTypeList/漫画 chapterInfo/短视频接口均不再被测试层重写。社区/小说/有声作为独立 Adapter 增量实现；当前设备诊断明确显示 fiction/base/findList GET 返回405而真实调用存在HTTP200，因此 fiction 路由改为 POST-first、GET 后级兼容。九栏目 UI 保留，但修复 Alpha14 短视频图标错误常亮与独立 > 控制项。Test minBuild=166 强制越过 Alpha14；latest.json 不变。"
   }
 }
