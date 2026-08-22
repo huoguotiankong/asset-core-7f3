@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha13",
-  "build": 164,
-  "shellVersion": "6.9.0-test",
+  "version": "0.6.0-alpha14",
+  "build": 165,
+  "shellVersion": "6.10.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha13/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha14/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha13 候选。Alpha12 已实机恢复漫画章节；Alpha13 保留 chapterId 单参数章节合同并切到 pics:// 原生多图阅读。普通视频失败已定位到旧详情播放按钮 eval core v018 导致当前 ac.play 覆盖失效，Alpha13 将普通视频、短视频、有声播放全部绑定当前 Bootstrap v069；播放器同级列表移除收藏/评论，改到长按动作。播放增加 m3u8/player/referer 静态兼容探针，有声增加 playbackAuthKey/authKey 候选；小说/社区/部分视频封面继续以类型化字段评分恢复。仍只用于 Test/Candidate，视频、有声、封面与漫画全屏效果完成实机验证前不得晋级 Stable。"
+  "notes": "Alpha14 恢复候选。Alpha13 因实机出现漫画回归、全部封面消失且播放仍失败，按多域回归规则隔离，不作为 recovery base。Alpha14 直接从 Alpha12 Build163 恢复：保留已经实机验证的漫画 chapterId 单参数、pic_1_full 与 ac.image 解密链，只用官方 #fullTheme# 去掉页面 chrome；移除 Alpha13 会覆盖已有有效图片的评分器。播放按当前实机事实调整为 Feed/Detail path 优先，can/watch GET 优先、POST 后级兼容，再走 h5/decode + cacheM3u8；短视频、有声、普通视频点击统一进入当前 Bootstrap v070。仍必须完成漫画、封面、视频、短视频和有声实机回归后才允许晋级 Stable。"
 }
