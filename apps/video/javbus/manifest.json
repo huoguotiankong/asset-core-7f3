@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "javbus",
+  "name": "JavBus",
+  "category": "video",
+  "stable": "apps/video/javbus/stable.json",
+  "test": "apps/video/javbus/test.json",
+  "channels": "apps/video/javbus/channels.json",
+  "changelog": "apps/video/javbus/CHANGELOG.md",
+  "updatedAt": "2026-08-23"
+}
