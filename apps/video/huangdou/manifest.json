@@ -14,11 +14,11 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
   "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
-  "testVersion": "1.9.0-test.3",
-  "testBuild": 19003,
-  "testShellVersion": "1.1.2-test",
-  "testBootstrap": "apps/video/huangdou/bootstrap_test_v4.js",
-  "testRule": "apps/video/huangdou/huangdou_remote_test_v4.txt",
+  "testVersion": "1.9.0-test.4",
+  "testBuild": 19004,
+  "testShellVersion": "1.1.3-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v5.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v5.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"stable-182-playback-cleanup-test-19003","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.3 根据 Test2 实机结果修复播放页冗余、选集排序混入网格、locked 误判和无效 webRule fallback。"}
+  "migration": {"stage":"stable-182-session-hls-test-19004","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.4 根据 Test3 第5集播放器异常，保留合法站点会话并对 Token HLS 做媒体预检和 Header 交付；无授权时明确引导官网登录/购买，不绕过权限。"}
 }
