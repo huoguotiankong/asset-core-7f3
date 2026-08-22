@@ -1,0 +1,2 @@
+/* Hanime1 Test13 settings/build marker */
+(function(C,P,E,H){var route=H.route,sec=H.sec;var old=E.renderSettings;E.renderSettings=function(d){old(d);d.push(sec('内容入口','作者目录与账号公开主页已独立成页。'));d.push({title:'作者目录',url:route('hanimeArtists',{}),col_type:'text_center_1',extra:{lineVisible:false}});d.push(sec('Test13','2.0.0-test.13 · Build 20013 · 登录链实机通过 / 作者上传者分离 / 头像修复 / 作者主页 / 账号中心强化'));};E.build='2.0.0-test.13';P.build='2.0.0-test.13';C.build='2.0.0-test.13';})(HanimeCore,HanimeProvider,HanimePages,HanimeUI9);
