@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.42-test.1",
+  "build": 2026082241,
+  "baseVersion": "3.9.41",
+  "baseBuild": 2026082006,
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.42-test.1/javdb_v3.9.42_test1.txt",
+  "runtime": "cloud/javdb/v3.9.42-test.1/runtime.js",
+  "modules": [
+    {
+      "name": "appParityPatch",
+      "path": "apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "JDB",
+    "property": "version",
+    "equals": "20260822-v3.9.42-test.1"
+  },
+  "scope": ["category", "rankings", "actors", "ui"],
+  "stableUntouched": true,
+  "notes": "基于 Stable 3.9.41 只覆盖分类、排行榜和演员入口；播放、登录、评论、收藏、搜索与自定义模块继续复用稳定基线。演员 type=0..4 与当前 APP 五个分类标签的映射进入实机验证，不在验证前晋级 Stable。"
+}
