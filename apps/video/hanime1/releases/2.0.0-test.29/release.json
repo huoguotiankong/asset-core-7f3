@@ -10,6 +10,11 @@
   "modules": [
     {"name":"recovery29","path":"apps/video/hanime1/releases/2.0.0-test.29/recovery_loader.js"}
   ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.26",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"],
+    "forbiddenGlobals": ["HanimeUI11"]
+  },
   "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.29"},
   "notes": "Test29 emergency runtime-dependency recovery. Test28 passed syntax checks but ui28 invoked a nonexistent global HanimeUI11; the actual Test11 compatibility helper extends HanimeUI10. Test29 bypasses Test27/Test28 UI modules, rebuilds from the last bootable Test26 chain, runs an explicit runtime-global preflight, reuses the individually safe Test28 replies/creator modules, and loads a new ui29 that contains its own episode-label helper and depends only on known Test26 globals."
 }
