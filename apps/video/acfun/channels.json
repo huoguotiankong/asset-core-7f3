@@ -3,7 +3,7 @@
   "id": "acfun",
   "name": "ACFun",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22",
+  "updatedAt": "2026-08-23",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha12",
+      "version": "0.6.0-alpha13",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 163,
-      "displayVersion": "Test 0.6.0-alpha12 · Build 163 · Shell 6.8",
-      "path": "apps/video/acfun/acfun_remote_test_v068.txt",
+      "build": 164,
+      "displayVersion": "Test 0.6.0-alpha13 · Build 164 · Shell 6.9",
+      "path": "apps/video/acfun/acfun_remote_test_v069.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "回归 Stable 精确合同 · 修漫画 chapterId 参数 / 视频短视频播放 / 有声音乐出口",
-      "highlights": ["小说/有声分类已实机恢复", "小说正文已实机恢复", "Stable cacheM3u8 单线路恢复", "漫画 chapterId 单参数优先", "取消漫画中间打开页", "全宽 pic_1_full 阅读", "有声直接/选择线路播放", "Alpha11 诊断纠偏", "Stable 继续冻结"],
+      "desc": "漫画章节已恢复 · 切原生全屏漫画 / 修当前播放上下文 / 继续恢复封面",
+      "highlights": ["漫画 chapterId 合同已实机验证", "pics:// 原生多图阅读", "普通视频点击绑定当前 Bootstrap", "短视频绑定当前 Bootstrap", "播放器列表移除收藏评论", "m3u8/player/referer 兼容", "有声 playbackAuthKey 兼容", "小说正文成功链保持", "类型化封面恢复", "Stable 继续冻结"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
