@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 02:25",
+  "updatedAt": "2026-08-23 02:26",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.1","build":10101,
-      "displayVersion":"Test 0.1.0 · APK 9.6.2 Protocol 1","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"首个远程重构测试版：恢复 APK 请求加密/签名/响应解密，并建立专业原生 App 信息架构。Stable 暂不存在，必须完成实机闭环后才能晋级。",
-      "highlights":["真实 APK AES-CFB + SHA256→MD5 协议","推荐/短视频/搜索/详情主链","社区与多内容频道中心","本地收藏/历史与协议诊断"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.2","build":10102,
+      "displayVersion":"Test 0.1.0 · Response Adapter 2","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"首轮实机反馈修复版：去除海阔原生组件不兼容 HTML，增加深层递归列表/字段适配和可见响应结构诊断。Stable 仍不存在。",
+      "highlights":["修复推荐标签/分区标题显示 HTML 源码","列表结构递归探测到 8 层","扩展嵌套视频 ID/标题/封面字段","空列表直接显示 code/msg/schema"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
