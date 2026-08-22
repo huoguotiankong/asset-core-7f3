@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v22",
-  "updatedAt": "2026-08-22 15:31",
+  "versionPolicy": "legacy-history-remote-test-v23",
+  "updatedAt": "2026-08-22 15:46",
   "channels": [
     {
       "channel": "stable",
@@ -26,25 +26,24 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.22",
-      "baseVersion": "2.0.0-test.21",
+      "version": "2.0.0-test.23",
+      "baseVersion": "2.0.0-test.17",
       "targetVersion": "2.0.0",
-      "build": 20022,
-      "displayVersion": "Test 2.0.0 · AvatarDiag22",
+      "build": 20023,
+      "displayVersion": "Test 2.0.0 · XPathAvatar23",
       "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test22：根据 Test21 实机结果，作者仍无真实头像、主评论头像仍大面积缺失，但楼中楼已有部分真实头像可显示。停止继续猜 DOM，保留 Test21 行为并在设置页暴露真实头像诊断计数。",
+      "desc": "Test23：Test22 诊断层没有出现在用户设置页，说明继续依赖自写 HTML 解析与不可见版本标记已经影响排障。当前版本直接回到 Test17 稳定业务链，改用海阔官方内置 XPath 读取作者/主评论/回复真实 DOM，并在设置页明确显示实际运行版本和诊断。",
       "highlights": [
-        "不再发布无证据的第六套头像选择器",
-        "记录最近打开的视频 ID",
-        "诊断 comment-start、img、reply-section-wrapper 数量",
-        "显示 Test21 commentGroups / groupImg / matched 实机命中数",
-        "显示 replyGroups / replyGroupAvatars 实机命中数",
-        "显示作者 video-user-avatar 标记和附近 img 证据",
-        "诊断结果可在设置页直接截图或点击复制",
-        "评论正文、楼中楼、上传者、播放、登录等保持 Test21/Test17 稳定链"
+        "运行时设置页明确显示 Test23 / Build 20023，不再展示硬编码 Test12",
+        "主评论头像用 XPath 精确选取 Han1mePlus 每4子节点组的首节点头像",
+        "楼中楼头像用 XPath 精确选取每2子节点组的 body 头像",
+        "作者头像用 #video-user-avatar/following-sibling::img[1] 精确关系",
+        "XPath 数量必须与评论/回复 items 数量一致才批量应用，避免错位",
+        "设置页加入重新加载当前测试版与可见头像诊断",
+        "评论正文、回复数、上传者作品、播放、登录等继续沿用 Test17 稳定链"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
