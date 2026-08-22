@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha11",
-  "testBuild": 162,
-  "testShellVersion": "6.7.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v067.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v067.txt",
+  "testVersion": "0.6.0-alpha12",
+  "testBuild": 163,
+  "testShellVersion": "6.8.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v068.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v068.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha11-playback-comic-audio-cover-v67",
+    "stage": "alpha12-stable-contract-chapterid-playback-v68",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha10 实机已经确认两项恢复成功：小说/有声分类可用、小说正文可读；因此 Alpha11 不触碰这两条成功链的 Provider/Source Resolver 主体。Alpha10 剩余实机失败为有声音频、常规视频、短视频播放与漫画阅读；封面则为漫画/部分视频等待后可出现，但部分视频、全部短视频、小说、社区仍缺图。Alpha11 Build162 / Shell6.7 在 Alpha10 后追加定点覆盖：ac.play 恢复 Stable/Alpha8 cacheM3u8 + Header 合同，并保留 /api/m3u8/play 与 /m3u8/play 兼容候选；有声将章节列表原始对象保存为 seed，与 chapterInfo 合并后递归读取 longFormAudio/audioSource/sourcePath/playPath/playbackDomain，并返回带 Header 的音乐多线路；漫画不再使用 Alpha8 lazy 中写死的 bootstrap v064，而以当前 v067 重新请求 comics/base/chapterInfo，尝试 comicsId/comicId GET+POST 并解析 JSON 字符串 imgList/imageList 后返回 pics://；封面解析新增 JSON 字符串包装、dynamicImg、shortCover、videoImg、verticalImg 等字段并排除 avatar/icon/logo/domain。Test Bootstrap v067 / minBuild=162 强制越过 Alpha10，latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。Alpha10 已实机恢复小说/有声分类与小说正文；Alpha11 继续失败后，最新诊断仅显示 a6-comic 列表路由成功，并未证明 chapterInfo 命中。复核 Stable v0.4.7 源码发现章节已验证合同实际是 comics/base/chapterInfo 只传 {chapterId}，Alpha11 却遗漏该精确调用并优先带 comicsId/comicId。Alpha12 Build163 / Shell6.8 因此将 {chapterId} GET/POST 放到漫画章节首选，并直接进入只渲染 pic_1_full 的全宽阅读页，取消中间“打开漫画阅读”。视频/短视频同时回退到 Stable v0.4.5 的 path→/api/m3u8/h5/decode→cacheM3u8→headers 单线路合同，不再使用 Alpha11 多候选首线路；有声改成单线路直接返回或 select:// 选择后 #isMusic=true#，避免音乐多线路 JSON 兼容歧义。Test Bootstrap v068 / minBuild=163 强制越过 Alpha11；latest.json 不变。"
   }
 }
