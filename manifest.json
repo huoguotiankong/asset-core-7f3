@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608221455",
+  "revision": "202608221800",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-22 14:55",
+  "updated": "2026-08-22 18:00",
   "taxonomy": {
     "categories": [
       {"id":"tools","name":"工具"},
@@ -24,7 +24,7 @@
       "id":"mdai","name":"麻豆AI","version":"Stable 2.6.3 / Test 2.7.0 / Local 2.6.3","desc":"正式版 2.6.3 继续作为实机可用基线；Test 2.7.0-test.1 重构 Native UI 和 PlaybackAdapter，新增独立片库/搜索/我的/设置/评论页面、详情 Hero 与分段选集、标准 PlayModel 双线路和播放诊断；待实机截图与播放回归后再决定是否晋级。","path":"apps/video/mdai/mdai_remote_v1.txt","entryType":"channel-group","channelsPath":"apps/video/mdai/channels.json","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["远程","测试","本地","视频","短剧","评论","收藏","界面","版本"],"mode":"remote","updatedAt":"2026-08-22","sort":20,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/fallback_video.svg"
     },
     {
-      "id":"hanime1","name":"Hanime1","version":"Legacy 1.2.1 / Test 2.0.0-test.19","desc":"旧 1.2.1 仅保留历史。Test18 实机出现作者头像仍灰方块且评论退化为 0 条，已判定失败并退出运行链。Test19 直接恢复到 Test17 已验证基线，再以非破坏方式补作者、评论和楼中楼头像：先保留原评论数据，头像请求失败也不会清空评论；作者卡补齐 lazy image 字段；无真实头像时使用仓库 PNG 圆形兜底。上传者公开作品、X5 bridge 登录、最高画质播放、真选集、片库、漫画与布局设置保持 Test17 稳定链。","path":"hanime1.txt","entryType":"channel-group","channelsPath":"apps/video/hanime1/channels.json","category":"video","categoryName":"视频","subCategory":"动漫漫画","tags":["远程","测试","视频","漫画","搜索","多画质","收藏","评论","演员","标签","版本","界面"],"mode":"mixed","updatedAt":"2026-08-22","sort":30,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
+      "id":"hanime1","name":"Hanime1","version":"Legacy 1.2.1 / Test 2.0.0-test.28","desc":"旧 1.2.1 仅保留历史。Test27 因启动期 JavaScript 语法错误已隔离，不再进入恢复链。Test28 从最后可启动的 Test26 直接重建，保留 Test24 已实机验证的真实作者/评论头像、登录/播放/真选集/片库/漫画链，并重新加入更多回复单请求恢复、作者目录复用 Provider.search(type=artist)、首页五导航与详情四主操作静态 SVG 图标化。Test28 Cloud Shell/Bootstrap/minBuild/defaultRelease 全部锁定 Build20028。","path":"hanime1.txt","entryType":"channel-group","channelsPath":"apps/video/hanime1/channels.json","category":"video","categoryName":"视频","subCategory":"动漫漫画","tags":["远程","测试","视频","漫画","搜索","多画质","收藏","评论","演员","标签","版本","界面"],"mode":"mixed","updatedAt":"2026-08-22","sort":30,"featured":true,"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     },
     {
       "id":"acfun","name":"ACFun","version":"Stable 0.4.9 / Test 0.6.0-alpha9 · Shell 6.5","desc":"正式版 0.4.9 继续冻结为实机可用基线；测试版 0.6.0-alpha9 / Build160 根据 Alpha8 实机继续强化：小说/有声列表已经恢复，但章节正文和音频仍需修复；首页筛选出现 scroll_button 原样显示 HTML、焦点大卡无可靠封面、社区详情不完整，分类仍需继续按 APP 真实响应校准。Alpha9 新建严格 taxonomy/cache 并清理旧筛选 ID，精选/里番保持 classifyId=4/24 first-nonempty；筛选按钮改纯文本三列弹层并原页刷新；焦点大卡默认关闭。小说/有声详情合并列表 seed，章节增加 chapterInfo GET+POST、多组 ID、fictionUrl/contentUrl 外链正文与 longFormAudio/voice/media 音频候选；社区详情合并 Feed seed 与 dynamicInfo，过滤非正文头像/徽章。短视频直接播放和 pics:// 漫画阅读继续保持。Cloud Shell 6.5 / Bootstrap v065 强制覆盖进入 Build160，仍需实机回归后再考虑晋级正式版。","path":"apps/video/acfun/acfun_remote_v5.txt","entryType":"channel-group","channelsPath":"apps/video/acfun/channels.json","category":"video","categoryName":"视频","subCategory":"综合视频","tags":["远程","测试","视频","漫画","搜索","评论","收藏","标签","版本","界面"],"mode":"remote","updatedAt":"2026-08-22","sort":40,"featured":true,"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
