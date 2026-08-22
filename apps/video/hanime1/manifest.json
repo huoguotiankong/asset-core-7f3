@@ -10,15 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.25",
-  "testBuild": 20025,
+  "testVersion": "2.0.0-test.26",
+  "testBuild": 20026,
   "testShellVersion": "2.0.0-test.4",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v4.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "migration": {
-    "stage": "test25-reply-performance-after-runtime-recovery",
-    "source": "2.0.0-test.24",
+    "stage": "test26-creator-hub-product-ux",
+    "source": "2.0.0-test.25",
     "recoveryBase": "2.0.0-test.24",
-    "note": "Test24 经用户实机确认真实头像已经恢复，证明此前连续多版看似头像未修复的核心原因之一是设备实际没有进入后续 Release；该交付事故已单独记录到 docs/INCIDENT_REMOTE_RELEASE_NOT_APPLIED_20260822.md。Test25 保留 Test24 已验证头像/Shell v4 运行链，移除头像诊断，并把楼中楼从旧的两次 /loadReplies 请求优化为单次请求同时解析正文与 XPath 头像，同时删除页面打开时无必要的 profile() 网络探测并增加短缓存。"
+    "note": "Test26 keeps the device-verified Shell v4/Bootstrap v4 avatar recovery and Test25 single-request reply performance. The next planned stage adds an author directory plus dedicated author/uploader profile views without changing Shell pages by reusing hanimeVideoResults routing. Video detail, search/filter discovery, and settings hierarchy are also refined."
   }
 }
