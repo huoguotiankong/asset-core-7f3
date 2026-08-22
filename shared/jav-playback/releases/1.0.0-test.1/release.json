@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "name": "JAV Playback SDK",
+  "version": "1.0.0-test.1",
+  "build": 10001,
+  "channel": "test",
+  "entry": "index.js",
+  "providers": ["missav", "123av", "jable"],
+  "contract": ["providers", "normalizeCode", "resolve", "renderInto"],
+  "status": "device-validation-required",
+  "notes": "共享给 JavDB/JavBus 等番号类小程序。MissAV 只显示实际存在版本并自动取最高 HLS；123AV 使用 player(JSON.parse) + 旧 AJAX 播放链双解析并保留 video:// 最后兜底；Jable 优先直取 HLS、WebView 兜底。"
+}
