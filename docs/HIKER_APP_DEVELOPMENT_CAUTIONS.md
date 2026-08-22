@@ -1,8 +1,8 @@
 # 海阔小程序编写注意事项
 
-版本：2.8
+版本：2.9
 首次建立：2026-08-20  
-最近增强：2026-08-21  
+最近增强：2026-08-22  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
 
 > 本文档专门保存“容易踩坑、已经发生事故、跨对话最容易遗忘”的硬约束。开发已有程序前，除三份全局文档外，必须继续读取目标程序 `CHANGELOG.md`、当前 Stable/Test/Local/Candidate 元数据、release/Bootstrap/Shell/实际模块以及用户实机结果。
@@ -93,6 +93,38 @@ Shell/Bootstrap 不兼容或需要强制迁移时，必须成套发布：
 ```
 
 程序内更新只处理当前 Shell 能兼容的 Remote Release，不能替代规则仓库导入。序列化的 `lazyRule` 也不得引用不存在的继承方法或外部局部变量；回调依赖的 Bootstrap URL/version 要显式传参，管理器统一通过当前 Bootstrap 已声明的入口取得。
+
+## 5B. 云端仓库“广告 Build”必须等于实际安装工件基线
+
+2026-08-22 Hanime1 再次出现同类交付事故：`test.json / channels / registry` 已广告 `Test26 / Build20026`，但 Cloud Repo 仍指向旧 `hanime1_remote_test_v4.txt`；这个 Shell 固定引用 `bootstrap_test_v4.js?v=20024`，而 Bootstrap 的 `minBuild/defaultRelease` 都是 20024。Remote Manager `load()` 正常启动不会 fetch latest，所以用户从云端仓库“重新导入 Test26”后仍真实运行 Test24。
+
+因此以后不能只检查业务 release 是否已经升版，还必须检查**安装工件闭环**：
+
+```text
+channel/test advertised build
+== release.json build
+== installerBuild（若使用该字段）
+<= Bootstrap minBuild
+<= Bootstrap defaultRelease.build
+```
+
+更准确地说，Cloud Repo 卡片广告 `Build N` 时，其 `rule` 指向的 Shell/Bootstrap 必须能保证新装或重新导入用户进入 `Build >= N`。如果逻辑 Shell 架构无需变化，可以保留同一逻辑版本号，但安装文件要按 build 版本化，例如：
+
+```text
+hanime1_remote_test_v4_b20026.txt
+→ bootstrap_test_v4_b20026.js
+→ minBuild/defaultRelease = 20026
+```
+
+现有已安装用户仍可走程序内 update，不要求每次业务升版都重新安装；但**云端仓库当前 Test/Candidate 的安装入口**不能长期复用一个默认只安装旧 Build 的壳。
+
+发布前必须运行：
+
+```text
+python tools/remote_installer_guard.py --root .
+```
+
+或至少对本次通道运行 `--channel <path/to/test.json>`。该 Guard 专门拦截 advertised build 高于 Bootstrap `minBuild/defaultRelease.build` 的情况。
 
 ## 6. 关键索引不能是“单在线通道 + 短缓存 + 无 stale cache”
 
@@ -669,6 +701,7 @@ Guard 不能替代海阔实机 JS、布局、登录态、API 风控、图片解�
 - [ ] Stable release 未原地覆盖。
 - [ ] 新版使用新 version/build/cache key。
 - [ ] 壳 version <= 2147483647。
+- [ ] Remote Test/Candidate 的云仓库 advertised build、release build、installer rule/Bootstrap `minBuild/defaultRelease` 已对齐，并运行 `tools/remote_installer_guard.py`。
 
 ## 架构/数据
 
@@ -760,6 +793,12 @@ Guard 不能替代海阔实机 JS、布局、登录态、API 风控、图片解�
 - **规则仓库 RC1 纯几何 data-SVG 仍显示错图** → 关键数字使用版本化静态远程资产 + 原生文本兜底，不在同一 data-URI 解码链继续换写法。
 - **低透明 SVG 占位仍显示破图** → 分类结构不得依赖透明图片补齐双栏。
 - **四个带数量的横向项仍出现 `>`、`text_3` 标签形成灰墙** → 按实机标题宽度选等宽/可换行组件，不按项目数猜测。
+
+## 2026-08-22：Remote Runtime Delivery 二次复发
+
+- **Hanime1 Test22/23 发布但设备实际未进入，旧更新按钮报 `HanimeBoot 未定义`** → 序列化 lazyRule 内显式 require Bootstrap；先验 Runtime 再改业务。
+- **Hanime1 Cloud Repo 已显示 Test26/Build20026，重新导入后仍是 Test24/Build20024** → `test/channels/registry` 广告版本不能继续指向旧安装 Shell；安装 Bootstrap 的 `minBuild/defaultRelease` 必须覆盖 advertised build；新增 build-locked installer artifact 与 `tools/remote_installer_guard.py`。
+- 专项复盘：`docs/INCIDENT_REMOTE_RELEASE_NOT_APPLIED_20260822.md`。
 
 ---
 
