@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha14",
-  "build": 165,
-  "shellVersion": "6.10.0-test",
+  "version": "0.6.0-alpha15",
+  "build": 166,
+  "shellVersion": "7.1.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha14/release.json",
+  "release": "apps/video/acfun/releases/0.6.0-alpha15/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha14 恢复候选。Alpha13 因实机出现漫画回归、全部封面消失且播放仍失败，按多域回归规则隔离，不作为 recovery base。Alpha14 直接从 Alpha12 Build163 恢复：保留已经实机验证的漫画 chapterId 单参数、pic_1_full 与 ac.image 解密链，只用官方 #fullTheme# 去掉页面 chrome；移除 Alpha13 会覆盖已有有效图片的评分器。播放按当前实机事实调整为 Feed/Detail path 优先，can/watch GET 优先、POST 后级兼容，再走 h5/decode + cacheM3u8；短视频、有声、普通视频点击统一进入当前 Bootstrap v070。仍必须完成漫画、封面、视频、短视频和有声实机回归后才允许晋级 Stable。"
+  "notes": "Alpha15 Clean Rebase 候选。Alpha14 实机仍有全局封面缺失和旧问题持续存在，因此 Alpha12/13/14 不再作为活动 Test 继承链。新 Release 直接从 Stable 0.4.9 的 8 个已验证模块起链，只追加单一 clean runtime/UI：视频 itemInfo/image/playback 与 v047 Station/classTypeList/漫画/短视频保持 Stable 合同，社区/小说/有声用独立 Adapter 增量实现；fiction/base/findList 根据当前实机 GET405/真实请求200 改为 POST-first。仍必须完成首页封面、普通视频播放、短视频直播、漫画章节、小说正文、有声与社区的实机回归后才允许晋级 Stable。"
 }
