@@ -10,14 +10,14 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.14",
-  "testBuild": 20014,
+  "testVersion": "2.0.0-test.15",
+  "testBuild": 20015,
   "testShellVersion": "2.0.0-test",
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v3.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "migration": {
-    "stage": "hiker-js-compat-official-icon-test",
-    "source": "2.0.0-test.13",
-    "note": "Test14 修复 Test13 海阔 JS 引擎非法反斜杠启动错误；移除故障模块并兼容重写，同时切换官方 H 图标。"
+    "stage": "recovery-test12-clean-baseline",
+    "source": "2.0.0-test.12",
+    "note": "Test15 彻底撤出 Test13/Test14 运行模块，恢复已实机验证的 Test12 运行链，并换用全新 Bootstrap/Shell 缓存键。"
   }
 }
