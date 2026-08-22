@@ -10,16 +10,16 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.26",
-  "testBuild": 20026,
+  "testVersion": "2.0.0-test.27",
+  "testBuild": 20027,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20026,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20026.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20026.txt",
+  "testInstallerBuild": 20027,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20027.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20027.txt",
   "migration": {
-    "stage": "test26-cloud-import-build-lock",
-    "source": "2.0.0-test.25",
+    "stage": "test27-replies-creator-icon-ux",
+    "source": "2.0.0-test.26",
     "recoveryBase": "2.0.0-test.24",
-    "note": "2026-08-22 17:24 user re-imported the cloud-repository entry advertised as Test26 but the settings page still showed Test24/Build20024 and avatar diagnostics. Root cause: metadata advertised build 20026 while the install artifact still reused hanime1_remote_test_v4.txt, whose main page hardcoded bootstrap_test_v4.js?v=20024. That Bootstrap has minBuild/defaultRelease 20024, and Remote Manager load() intentionally never fetches latest on normal startup, so re-import did not advance the persisted active release. Test26 now uses a release-specific Shell v4 installer artifact v4_b20026 plus bootstrap v4_b20026 with minBuild/defaultRelease 20026. Existing installed users keep the normal in-app update path; cloud-repository fresh/re-import installs must match the advertised build."
+    "note": "User device confirmed Test26 delivery is now real, then exposed three product issues: more replies no longer open correctly, author directory is unusable, and the main home/detail action rows still look like plain text buttons. Test27 keeps Test24 avatar/runtime and Test26 creator baseline, replaces replies with one-request per-reply parsing plus no-empty-cache, reuses Provider.search(type=artist) for author discovery with recent-author fallback, and adds repository-hosted SVG icons to the five home tabs and four detail primary actions. Cloud import artifacts are build-locked to 20027."
   }
 }
