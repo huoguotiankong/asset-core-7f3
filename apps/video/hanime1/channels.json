@@ -2,10 +2,10 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v6",
-  "updatedAt": "2026-08-22 09:20",
+  "versionPolicy": "legacy-history-remote-test-v7",
+  "updatedAt": "2026-08-22 10:15",
   "channels": [
     {"channel":"stable","label":"旧版（历史）","id":"hanime1","name":"Hanime1","version":"1.2.1","build":12100,"displayVersion":"Legacy 1.2.1 · Historical","path":"hanime1.txt","mode":"local","updatedAt":"2026-08-18","recommended":false,"desc":"仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。","highlights":["历史单体规则","不再围绕旧版兼容或优化"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"},
-    {"channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.6","baseVersion":"2.0.0-test.5","targetVersion":"2.0.0","build":20006,"displayVersion":"Test 2.0.0 · RemoteTest6","path":"apps/video/hanime1/hanime1_remote_test_v2.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,"desc":"验证/会话架构收敛版：WebView 只负责 Cloudflare 与网页登录；通过后所有业务直接读取官网 HTML/API。","highlights":["视频站与漫画站分别检查/维护浏览器验证会话","首页精确读取 img.main-thumb[src]，不再给签名 CDN 图片强加额外 headers","播放按数字画质降序，最高画质默认第一线路","预告/漫画/片库/评论改为官网原始 HTML/API 直读","详情和评论改成简洁海阔原生 UI"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"}
+    {"channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.7","baseVersion":"2.0.0-test.6","targetVersion":"2.0.0","build":20007,"displayVersion":"Test 2.0.0 · RemoteTest7","path":"apps/video/hanime1/hanime1_remote_test_v2.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,"desc":"在 Test6 已验证的封面/最高画质播放/漫画/评论数据链上，修正产品结构与账号体验：公开片库无需登录，个人数据迁到“我的”；登录改独立全屏 X5；预告修正 YYYYMM 请求格式；评论/回复重新排版。","highlights":["公开片库：无需登录，直接用官网搜索/排序浏览影片","我的：稍后看/收藏/片单/订阅/历史仅在账号登录后显示","登录改为独立全屏 X5 官网表单，返回后检测并同步 Cookie","预告路径从 YYYY-MM 修正为官网 YYYYMM","评论卡片改为左图右文，避免 avatar 样式文字重叠","保留 Test6 已实机通过的封面、最高画质优先播放和漫画首页链"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"}
   ]
 }
