@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.1",
-  "build": 10101,
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026082302,
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026082303,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt",
   "updatedAt": "2026-08-23",
-  "notes": "APK 9.6.2 协议恢复后的首轮 Test；等待海阔实机验证真实列表、封面、详情媒体字段和 UI。"
+  "notes": "根据 Test1 首轮实机截图修复原生组件 HTML 标签原样显示；列表适配改为深层递归发现并扩展嵌套字段；空列表直接显示业务 code/msg/schema。"
 }
