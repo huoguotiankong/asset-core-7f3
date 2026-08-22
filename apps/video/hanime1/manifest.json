@@ -10,14 +10,10 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.5",
-  "testBuild": 20005,
+  "testVersion": "2.0.0-test.6",
+  "testBuild": 20006,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
-  "migration": {
-    "stage": "remote-rewrite-test-device-loop",
-    "source": "2.0.0-test.4",
-    "note": "Test5 是 Test4 发布审计后的运行修正版；保留 Test4 媒体/账号/UI，修复评论 helper 绑定，并作为下一轮实机验证入口。"
-  }
+  "migration": {"stage":"remote-web-session-direct-fetch","source":"2.0.0-test.5","note":"Test6 不再叠加 Test3-5 热修链；重置为 Core/Provider + Session6 + Web6 + Base Pages + UI6。WebView 仅负责验证/登录，之后直接请求官网。"}
 }
