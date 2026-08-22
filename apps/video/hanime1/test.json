@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.19",
+  "version": "2.0.0-test.20",
   "baseVersion": "2.0.0-test.17",
   "targetVersion": "2.0.0",
-  "build": 20019,
+  "build": 20020,
   "shellVersion": "2.0.0-test",
   "shellRuleVersion": 2026082229,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.19/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.20/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Recovery19: Test18 is removed from runtime after device regression. Load verified Test17 directly, preserve its comment/reply data first, and only enrich author/comment/reply avatars as a non-destructive layer with PNG round fallback."
+  "notes": "Test20 supersedes Test19 avatar enrichment while preserving the verified Test17 comment/reply data path. Author avatars now prefer the exact detail-page adjacent image used by Han1mePlus, with raw-HTML fallback; comment/reply avatars are bound to their local comment context instead of a global image list, and real image URLs carry Referer/UA headers."
 }
