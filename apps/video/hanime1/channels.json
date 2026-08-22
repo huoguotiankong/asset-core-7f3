@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v18",
-  "updatedAt": "2026-08-22 14:36",
+  "versionPolicy": "legacy-history-remote-test-v19",
+  "updatedAt": "2026-08-22 14:55",
   "channels": [
     {
       "channel": "stable",
@@ -26,24 +26,23 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.18",
+      "version": "2.0.0-test.19",
       "baseVersion": "2.0.0-test.17",
       "targetVersion": "2.0.0",
-      "build": 20018,
-      "displayVersion": "Test 2.0.0 · Incremental18",
+      "build": 20019,
+      "displayVersion": "Test 2.0.0 · Recovery19",
       "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test18：在已实机确认上传者公开作品可用的 Test17 上，只修作者头像、评论/回复真实头像与圆形兜底。",
+      "desc": "Test19：撤出实机回归失败的 Test18，恢复 Test17 已验证评论数据链；头像只做附加增强，失败不再影响评论内容。",
       "highlights": [
-        "Test17 上传者 /user/<id> 公开作品已实机通过",
-        "作者头像优先从详情真实 HTML 邻域解析",
-        "作者搜索卡作为第二级头像 fallback",
-        "主评论按官网 4 节点一组解析真实头像",
-        "楼中楼回复按官网 2 节点一组解析真实头像",
-        "无真实头像时使用圆形 SVG，不再出现灰色方块",
-        "不改登录、播放、选集、片库、漫画稳定链"
+        "完全跳过 Test18 评论覆盖",
+        "恢复 Test17 评论与楼中楼数据链",
+        "作者卡补齐 lazy image 字段解析",
+        "评论和回复仅按顺序补真实头像，不替换原评论数据",
+        "无真实头像时使用仓库 PNG 圆形兜底",
+        "上传者公开作品、登录、播放、选集、片库、漫画保持 Test17 稳定链"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
