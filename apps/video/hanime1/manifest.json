@@ -10,17 +10,17 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.28",
-  "testBuild": 20028,
+  "testVersion": "2.0.0-test.29",
+  "testBuild": 20029,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20028,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20028.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20028.txt",
+  "testInstallerBuild": 20029,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20029.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20029.txt",
   "migration": {
-    "stage": "test28-syntax-recovery",
+    "stage": "test29-runtime-dependency-recovery",
     "source": "2.0.0-test.26",
-    "brokenRelease": "2.0.0-test.27",
+    "brokenReleases": ["2.0.0-test.27","2.0.0-test.28"],
     "recoveryBase": "2.0.0-test.26",
-    "note": "Test27 is quarantined: device startup reports SyntaxError at line 41. Source inspection confirms the repliesPage d.push(H.sec(...)) expression is missing one closing parenthesis, so Test27 cannot be part of any recovery chain. Test28 starts directly from the last bootable Test26 recovery and loads four separately syntax-checked modules for replies, creator directory, icon UI and settings. Cloud import artifacts are build-locked to 20028."
+    "note": "Test27 is quarantined for parse-time SyntaxError. Test28 is also quarantined: although all new files passed syntax checking, ui28 invoked nonexistent global HanimeUI11 at module top level. Test11's compatibility helper actually mutates HanimeUI10. Test29 rebuilds from Test26, performs runtime-global preflight, reuses only safe replies28/creator28 modules, and loads ui29/settings29 with no phantom dependency. Cloud import artifacts are build-locked to 20029."
   }
 }
