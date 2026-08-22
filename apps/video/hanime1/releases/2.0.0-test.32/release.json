@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.32",
+  "build": 20032,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.31",
+  "modules": [
+    {"name":"recovery32","path":"apps/video/hanime1/releases/2.0.0-test.32/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.31",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.32"},
+  "notes": "Test32 follows Test31 device validation. It keeps the verified compact recommendation and clean Hiker playback list, compacts public-library filters into two horizontal strips, makes browser-session login count as an active account across My/detail/account flows, restores account library content in the account center, resolves reply threads by fresh video comment index before loading replies, and rebuilds artist-directory discovery with direct artist search plus homepage/video fallbacks. Stable 2.0.0/Build20029 remains frozen."
+}
