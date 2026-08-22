@@ -3,7 +3,7 @@
   "id": "huangdou",
   "name": "黄豆短剧",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 00:48",
+  "updatedAt": "2026-08-23 01:17",
   "channels": [
     {
       "channel":"stable","label":"正式版","id":"huangdou","name":"黄豆短剧","version":"1.8.2","build":18201,
@@ -12,9 +12,9 @@
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
-      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.5","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19005,
-      "displayVersion":"Test 1.9.0 · Paid Lock UI 5","path":"apps/video/huangdou/huangdou_remote_test_v6.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,
-      "desc":"1.9 产品级重构 Test5 · 付费/需授权剧集统一显示 🔒；播放协议继续复用 Test4","highlights":["官网 locked 剧集在主播放入口和选集按钮统一显示 🔒","选集标题明确说明 🔒 表示付费/需授权内容","PlaybackAdapter 继续复用 Test4 会话保持/Token/HLS 预检，不绕过官网权限"],
+      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.6","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19006,
+      "displayVersion":"Test 1.9.0 · Paid Lock UI 6","path":"apps/video/huangdou/huangdou_remote_test_v7.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,
+      "desc":"1.9 产品级重构 Test6 · 修复 text_4 不显示锁 Emoji，改为稳定可见【锁】前缀；播放协议继续复用 Test4","highlights":["官网 locked 剧集在主播放入口和选集按钮统一显示【锁】","选集标题明确说明【锁】表示官网付费/需授权内容","PlaybackAdapter 继续复用 Test4 会话保持/Token/HLS 预检，不绕过官网权限"],
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
