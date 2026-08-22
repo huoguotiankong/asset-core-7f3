@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "version": "3.9.42",
+  "build": 2026082301,
+  "release": "apps/video/javdb/releases/3.9.42/release.json",
+  "rule": "cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt",
+  "notes": "Stable 3.9.42 promoted from the user-approved Test5 state. Previous Stable 3.9.41 remains available for rollback.",
+  "changelog": "apps/video/javdb/CHANGELOG.md"
+}
