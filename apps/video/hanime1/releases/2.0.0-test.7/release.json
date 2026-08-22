@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.7",
+  "build": 20007,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.6",
+  "modules": [
+    {"name":"core","path":"apps/video/hanime1/releases/2.0.0-test.1/core.js"},
+    {"name":"provider","path":"apps/video/hanime1/releases/2.0.0-test.1/provider.js"},
+    {"name":"session6","path":"apps/video/hanime1/releases/2.0.0-test.6/patch_session.js"},
+    {"name":"web6-base","path":"apps/video/hanime1/releases/2.0.0-test.6/patch_web_base.js"},
+    {"name":"web6-more","path":"apps/video/hanime1/releases/2.0.0-test.6/patch_web_more.js"},
+    {"name":"pages-explore","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_explore.js"},
+    {"name":"pages-library","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_library.js"},
+    {"name":"pages-account","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_account.js"},
+    {"name":"ui6","path":"apps/video/hanime1/releases/2.0.0-test.6/patch_ui.js"},
+    {"name":"test7-provider","path":"apps/video/hanime1/releases/2.0.0-test.7/patch_provider.js"},
+    {"name":"test7-ui","path":"apps/video/hanime1/releases/2.0.0-test.7/patch_ui.js"}
+  ],
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.7"},
+  "notes": "Test7 keeps Test6 verified cover/playback/comic chains and fixes product structure + account UX: public library without login, personal library moved to My, fullscreen X5 official login, preview YYYYMM format, cleaner comments/replies UI."
+}
