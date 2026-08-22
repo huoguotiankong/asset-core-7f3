@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.22",
+  "build": 20022,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.21",
+  "supersedes": "2.0.0-test.21",
+  "modules": [
+    {
+      "name": "recovery22",
+      "path": "apps/video/hanime1/releases/2.0.0-test.22/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.22"
+  },
+  "notes": "Diagnostic Test22 keeps Test21 behavior unchanged and exposes the existing avatar diagnostics in Settings. It records the last opened video, comment root/img/reply-wrapper counts, Test21 group/avatar match counts, and author marker/nearby-image evidence so the next fix is based on the device's real HTML rather than another parser guess."
+}
