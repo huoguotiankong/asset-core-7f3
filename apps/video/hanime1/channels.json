@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v3",
-  "updatedAt": "2026-08-22 08:31",
+  "versionPolicy": "legacy-history-remote-test-v4",
+  "updatedAt": "2026-08-22 08:40",
   "channels": [
     {
       "channel": "stable",
@@ -17,8 +17,11 @@
       "mode": "local",
       "updatedAt": "2026-08-18",
       "recommended": false,
-      "desc": "仅保留历史/回退记录；用户实机确认旧版无法通过当前站点验证，不再作为开发基线。",
-      "highlights": ["历史单体规则","不再围绕旧版兼容或优化"],
+      "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
+      "highlights": [
+        "历史单体规则",
+        "不再围绕旧版兼容或优化"
+      ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     },
     {
@@ -26,21 +29,22 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.3",
-      "baseVersion": "2.0.0-test.2",
+      "version": "2.0.0-test.4",
+      "baseVersion": "2.0.0-test.3",
       "targetVersion": "2.0.0",
-      "build": 20003,
-      "displayVersion": "Test 2.0.0 · RemoteTest3",
+      "build": 20004,
+      "displayVersion": "Test 2.0.0 · RemoteTest4",
       "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "第二轮实机热修：首页彻底改为原始 HTML 分区/卡片切块解析，并修复详情页空封面。",
+      "desc": "第三轮实机综合修复：封面、播放、评论、登录/片库四条链一起处理。",
       "highlights": [
-        "不再依赖 Hiker 对官网复杂 DOM 的列表遍历",
-        "按 horizontal-row-title / horizontal-card 原始 HTML 切块解析",
-        "详情封面从 video poster / og:image 双重补全",
-        "保留 Challenge 自动校验链、账号/片库/评论、视频/漫画与四区 UI"
+        "首页卡片优先 main-thumb，并统一追加图片 Referer/UA",
+        "视频详情直接从原始 HTML 提取 source，播放 Referer 对齐 watch 页面",
+        "评论按官网当前 4 子节点结构解析，修复 URL 编码标题",
+        "浏览器会话可直接识别账号并进入片库，再按需同步为受管账号",
+        "补全官网 2.5D / 2D动画 / AI生成 / MMD / Cosplay 分类"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
     }

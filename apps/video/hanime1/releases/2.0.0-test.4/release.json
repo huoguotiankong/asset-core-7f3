@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.4",
+  "build": 20004,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.3",
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/hanime1/releases/2.0.0-test.1/core.js"
+    },
+    {
+      "name": "provider",
+      "path": "apps/video/hanime1/releases/2.0.0-test.1/provider.js"
+    },
+    {
+      "name": "raw-html-hotfix",
+      "path": "apps/video/hanime1/releases/2.0.0-test.3/hotfix.js"
+    },
+    {
+      "name": "test4-common",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_common.js"
+    },
+    {
+      "name": "test4-media",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_media.js"
+    },
+    {
+      "name": "test4-account",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_account.js"
+    },
+    {
+      "name": "test4-comments",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_comments.js"
+    },
+    {
+      "name": "pages-explore",
+      "path": "apps/video/hanime1/releases/2.0.0-test.1/pages_explore.js"
+    },
+    {
+      "name": "pages-library",
+      "path": "apps/video/hanime1/releases/2.0.0-test.1/pages_library.js"
+    },
+    {
+      "name": "pages-account",
+      "path": "apps/video/hanime1/releases/2.0.0-test.1/pages_account.js"
+    },
+    {
+      "name": "test4-ui-common",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_ui_common.js"
+    },
+    {
+      "name": "test4-ui-explore",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_ui_explore.js"
+    },
+    {
+      "name": "test4-ui-account",
+      "path": "apps/video/hanime1/releases/2.0.0-test.4/patch_ui_account.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.4"
+  },
+  "notes": "Test4 real-device repair, split into isolated common/media/account/comments/UI patches: image request headers/main-thumb selection, raw video sources with watch-page Referer, comments/replies, decoded params, browser-session library, official filters."
+}

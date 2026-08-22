@@ -10,14 +10,14 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.3",
-  "testBuild": 20003,
+  "testVersion": "2.0.0-test.4",
+  "testBuild": 20004,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "migration": {
     "stage": "remote-rewrite-test-device-loop",
-    "source": "2.0.0-test.2",
-    "note": "旧 1.2.1 仅保留历史记录；Test3 根据第二次实机结果改为原始 HTML 分区/卡片解析，并修复详情空封面。"
+    "source": "2.0.0-test.3",
+    "note": "旧 1.2.1 仅保留历史记录；Test4 根据第三轮实机结果集中修复图片、播放、评论和浏览器会话片库。"
   }
 }

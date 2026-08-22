@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.3",
-  "baseVersion": "2.0.0-test.2",
+  "version": "2.0.0-test.4",
+  "baseVersion": "2.0.0-test.3",
   "targetVersion": "2.0.0",
-  "build": 20003,
+  "build": 20004,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082212,
+  "shellRuleVersion": 2026082213,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.3/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.4/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Real-device Test2 still showed only banner + first normal card; Test3 replaces Hiker DOM traversal with raw HTML row/card slicing and repairs missing detail cover."
+  "notes": "Test3 real-device: first section restored to 12 cards and detail cover works, but homepage card images are blank, playback has no source, comments appear empty/encoded title, and library stays at login gate. Test4 repairs all four chains together."
 }
