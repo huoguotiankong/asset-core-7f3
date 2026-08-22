@@ -8,10 +8,12 @@
   "targetVersion": "2.0.0",
   "build": 20026,
   "shellVersion": "2.0.0-test.4",
-  "shellRuleVersion": 2026082230,
+  "shellRuleVersion": 2026082231,
+  "installerBuild": 20026,
+  "installerBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20026.js",
   "managerVersion": "2.0.1",
   "release": "apps/video/hanime1/releases/2.0.0-test.26/release.json",
-  "rule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
+  "rule": "apps/video/hanime1/hanime1_remote_test_v4_b20026.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test26 follows the planned creator/UX stage. It keeps the device-verified avatar/runtime chain and Test25 reply performance, adds an author directory plus dedicated author/uploader profile views using the existing hanimeVideoResults route, exposes author discovery from search/filter pages, reorganizes video detail around play/comments/playlist/download primary actions, and simplifies settings while keeping Shell v4 recovery controls."
+  "notes": "Test26 business release is unchanged. Delivery hotfix: the cloud-repository Test26 entry now points to a build-locked Shell v4 installer artifact. The previous entry reused hanime1_remote_test_v4.txt -> bootstrap_test_v4.js?v=20024; Remote Manager load() intentionally does not fetch latest, so a re-import could remain on persisted Test24. The new installer shell uses rule version 2026082231 and bootstrap_test_v4_b20026.js with minBuild/defaultRelease 20026, guaranteeing fresh/re-imported Test26 enters build >= 20026 while existing users may continue using in-app update for later releases."
 }
