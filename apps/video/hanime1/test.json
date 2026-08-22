@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.15",
-  "baseVersion": "2.0.0-test.12",
+  "version": "2.0.0-test.16",
+  "baseVersion": "2.0.0-test.15",
   "targetVersion": "2.0.0",
-  "build": 20015,
+  "build": 20016,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082224,
+  "shellRuleVersion": 2026082225,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.15/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.16/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Recovery Test15: restore the last device-verified Test12 runtime chain, remove all Test13/Test14 runtime modules, use new Bootstrap v3/Shell v3, preserve validated X5 bridge login/playback/cover/comic/layout features."
+  "notes": "Test16: first safe incremental layer after Recovery15. Keep validated login/playback/cover/comic/layout chain; add only author/uploader separation and avatar recovery on video detail."
 }
