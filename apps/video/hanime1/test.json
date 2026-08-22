@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.14",
-  "baseVersion": "2.0.0-test.13",
+  "version": "2.0.0-test.15",
+  "baseVersion": "2.0.0-test.12",
   "targetVersion": "2.0.0",
-  "build": 20014,
+  "build": 20015,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082223,
+  "shellRuleVersion": 2026082224,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.14/release.json",
-  "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
+  "release": "apps/video/hanime1/releases/2.0.0-test.15/release.json",
+  "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test14: fix Test13 Hiker JS illegal backslash syntax by removing the offending Test13 modules from the release chain; preserve validated X5 bridge login, author/uploader/account improvements, and use official Hanime1 H icon."
+  "notes": "Recovery Test15: restore the last device-verified Test12 runtime chain, remove all Test13/Test14 runtime modules, use new Bootstrap v3/Shell v3, preserve validated X5 bridge login/playback/cover/comic/layout features."
 }
