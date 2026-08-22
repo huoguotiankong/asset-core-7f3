@@ -5,13 +5,77 @@
 ## 当前活动基线
 - Stable：`2.0.0` / Build `20029`，由 Test29 实机可启动基线晋级，继续冻结为独立兜底。
 - Stable Shell：`apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt`；Bootstrap：`bootstrap_stable_v5_b20029.js`。
-- Test：`2.0.0-test.39` / Build `20039`。
-- Test Shell：`apps/video/hanime1/hanime1_remote_test_v4_b20039.txt` / 规则 version `2026082245`。
-- Test Bootstrap：`apps/video/hanime1/bootstrap_test_v4_b20039.js` / `minBuild=20039` / `defaultRelease=20039`。
-- Test recovery base：`2.0.0-test.38`；深层恢复链仍经过 Test37 → Test32。
+- Test：`2.0.0-test.40` / Build `20040`。
+- Test Shell：`apps/video/hanime1/hanime1_remote_test_v4_b20040.txt` / 规则 version `2026082246`。
+- Test Bootstrap：`apps/video/hanime1/bootstrap_test_v4_b20040.js` / `minBuild=20040` / `defaultRelease=20040`。
+- Test recovery base：`2.0.0-test.39`；深层恢复链仍经过 Test38 → Test37 → Test32。
 - Remote Manager：Stable id=`hanime1`；Test id=`hanime1-test`；manager `2.0.1`。
 - Legacy `1.2.1` 仅保留历史文件 `hanime1.txt`。
 - Test27 / Test28 / Test34 为 broken/quarantined，不允许作为恢复基线。
+
+## 2026-08-22 21:49–21:52：Test39 实机结果 → Test40
+
+### Test39 实机已确认
+1. **搜索正式恢复**：输入“女友”后能进入独立搜索页，并返回 59 部真实搜索结果；说明 Test39 的 input IIFE / 固定 `hanimeSearch` 跳转方向正确，JSEngine#13 已解决。
+2. **出现新的严重性能回归**：从搜索结果点击视频详情（例如“少女弹珠汽水 6”）会长时间停留在空白加载；在首页切换到“我的”“设置”等栏目也会长时间卡住。
+3. 当前截图说明不是搜索接口慢，而是**进入目标页面后运行时被额外同步工作阻塞**。
+
+### 根因：Profile/Auth Resolver 形成重入闭环
+Test32 为 browser-session 登录设计了：
+
+```text
+C.activeAccount()
+→ browserProfile()
+→ P.profile()
+```
+
+而 Test39 `account39.js` 又在新的 `P.profile()` 内调用：
+
+```text
+P.profile()
+→ P.sessionProfile32()
+→ C.activeAccount()
+→ browserProfile()
+→ P.profile()
+```
+
+于是 browser-session、未保存为 managed account 的情况下形成真实重入环：
+
+```text
+P.profile
+→ sessionProfile32
+→ C.activeAccount
+→ browserProfile
+→ P.profile
+→ ...
+```
+
+内部 try/catch 虽可能最终吞掉栈溢出/异常，但已经造成大量重复调用与等待。与此同时，Test39 为恢复“我的全部片单”又允许在 `/user/<id>/playlists` 缺标题时**逐个打开最多 16 个片单详情补 metadata**；因此“我的”首屏还可能叠加多次串行网络请求。
+
+这两点共同解释了：
+- 普通视频详情也可能被账号状态查询拖住；
+- 设置页调用 `C.activeAccount()` 也会触发同一循环；
+- 我的页既有 profile 重入，又有片单串行补全，最容易卡死。
+
+### Test40 处理边界
+Test40 不重写 Test39 已恢复的搜索/回复/片库逻辑，只做运行时性能隔离：
+- 普通页面的 `P.profile()` 改为**只读本地/stale profile cache**，不允许隐式联网。
+- `C.activeAccount()` 增加 re-entry guard，切断 `activeAccount ↔ browserProfile ↔ profile` 环。
+- 真实昵称/头像权威同步只允许在“我的 / 账号中心 / 手动同步账号资料”发生；不再把账号补全放进每个页面可能调用的 Provider getter。
+- 账号分区结果（片单/收藏/稍后看/订阅/历史）缓存 90 秒；同一时间窗口切换不重复请求。
+- “我的片单”默认只请求一次 `/user/<id>/playlists`，同时用 DOM + raw block 从**同一个响应**提取真实 title/cover/count。
+- 如果只得到真实 listId 但没有真实标题，不再自动串行打开所有详情；只显示“还有 N 个片单名称未解析”，用户主动点“补全片单资料”才执行 Test39 的慢路径。
+- 继续禁止 `片单<ID>` 伪卡。
+- Stable `2.0.0 / Build20029` 完全不动。
+
+### Test40 验收顺序
+- [ ] 设置页显示 `2.0.0-test.40 · Build 20040 · Shell v4`。
+- [ ] 搜索“女友”仍正常，不能回归 JSEngine#13。
+- [ ] 从搜索结果点击“少女弹珠汽水 6”等视频，详情应明显更快进入，不再长时间空白加载。
+- [ ] 推荐/片库/漫画/我的/设置来回切换，普通栏目切换不应再被账号 profile 联网阻塞。
+- [ ] “我的”首次进入允许一次账号主页/片单主列表请求，但不能再出现逐个片单串行请求造成的长卡顿。
+- [ ] 账号头像/昵称若尚未同步，点“同步账号资料”后再确认；该慢操作必须是显式行为，不能污染其它页面。
+- [ ] 泡面番 6 部、更多回复、片库 `>` 清理继续回归，确保 Test40 没破坏 Test39 功能修复。
 
 ## 2026-08-22 21:26–21:27：Test38 实机结果 → Test39
 
@@ -130,10 +194,10 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 - Stable `2.0.0 / Build20029` 完全未修改。
 
 ## Test39 实机验收顺序
-- [ ] 设置页显示 `2.0.0-test.39 · Build 20039 · Shell v4`。
+- [x] 首页输入“女友”并点击右侧搜索：Test39 实机已确认进入真实搜索结果页并返回 59 部，JSEngine#13 修复成立。
+- [ ] 设置页显示 `2.0.0-test.39 · Build 20039 · Shell v4`。（已被 Test40 取代）
 - [ ] 主评论仍正常，不能回归为 0。
 - [ ] 再打开刚才“33条回复”的评论：用户名和正文应不再是 `null`；记录实际正常显示多少条。
-- [ ] 首页输入“女友”并点击右侧搜索：不得再出现 JSEngine#13，应进入真实搜索结果页。
 - [ ] “我的”顶部看真实昵称和头像是否恢复。
 - [ ] “我的片单”确认不只一张真实片单；若账号实际有多张，逐项对数量。
 - [ ] “泡面番”官方 6 部：详情实际应向 6 部收敛；若仍少于 6，记录实际数量和哪几部出现。
@@ -142,6 +206,7 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 - [ ] 推荐 / 播放 / 真选集 / 漫画链不回归。
 
 ## 关键已验证事实
+- Test39：**搜索已实机恢复**；但 profile/browser-session 重入与片单 metadata 串行请求造成详情/我的/设置长时间阻塞，因此不能晋级 Stable。
 - Test38：回复 thread 身份链恢复到正确数量，但字段解析错误为 null；两行三列账号导航通过；片单详情从 0 改善到 1 但仍远少于官方 6；搜索仍 JSEngine#13；账号头像/昵称仍失败；筛选遗留 `>`。
 - Test37：主评论恢复；真实片单标题/封面/数量恢复；完整筛选与作者目录入口恢复。
 - Test32：browser Cookie 登录态能直接被“我的”识别；主评论仍存在。
@@ -169,6 +234,8 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 - Test34：同时覆盖 Community / Account / Library / Search 导致多域严重回归；永久 quarantine。
 - Test38：全局 `.comment-index-text` 两两配对会得到正确数量但错误字段，海阔空值还会显示成字符串 `null`；禁止复用。
 - Test38：`input.url` 顶层语句 + `return` 在海阔 input eval 链仍触发 JSEngine#13；以后 input URL 必须是合法表达式/IIFE。
+- Test39：**禁止在 `P.profile()` 内再调用可能经 `browserProfile()` 回调 `P.profile()` 的 `sessionProfile/activeAccount` 链；任何身份 Resolver 必须先画调用图并做 re-entry guard。**
+- Test39：账号片单列表首屏禁止为了补 metadata 无上限/高上限串行请求每张片单详情；默认单请求 + cache，慢补全必须显式触发。
 - 已工作的评论/回复 identity mapping 不允许为了性能优化而重写；先优化重复请求、缓存、渲染。
 - 禁止把浏览器 CSS selector 能力直接等同于海阔 `pdfa/pdfh`；关键列表必须有 XPath/raw 分段 fallback。
 - 禁止只解析到 raw identifier 就制造用户可见业务卡片。
@@ -178,21 +245,17 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 
 ## 当前恢复链
 ```text
-hanime1_remote_test_v4_b20039.txt
-→ bootstrap_test_v4_b20039.js
+hanime1_remote_test_v4_b20040.txt
+→ bootstrap_test_v4_b20040.js
 → Remote Manager id=hanime1-test
-→ 2.0.0-test.39 release
+→ 2.0.0-test.40 release
+→ Test40 recovery_loader
 → Test39 recovery_loader
-→ Test38 recovery_loader
-   → Test37 recovery_loader
-      → Test32 recovery_loader（browser-session + 主评论深层恢复点）
-      → account37 / creator37 / library37 / search37 / settings37
-   → community38 / account38 / search38 / settings38
-→ community39
-→ account39
-→ library39
-→ search39
-→ settings39
+   → Test38 recovery_loader
+      → Test37 recovery_loader
+         → Test32 recovery_loader（browser-session + 主评论深层恢复点）
+→ performance40（profile re-entry guard / stale-first / account cache / single-request playlist）
+→ settings40
 ```
 
 Stable：
@@ -204,7 +267,8 @@ hanime1_remote_stable_v5_b20029.txt
 ```
 
 ## 版本记录
-- `2.0.0-test.39 / Build20039`：Test38 实机定向修正；精确 reply DOM 分组 + null 归一、合法 input IIFE 搜索、权威账号资料/Referer 头像、全片单 metadata 补取、playlist-item 分段解析、筛选 `>` 哨兵清理。
+- `2.0.0-test.40 / Build20040`：Test39 实机性能热修；切断 profile/browser-session 重入，普通页面 profile cache-only，账号同步显式化，账号分区 90 秒缓存，片单主列表单请求 + 显式慢补全。
+- `2.0.0-test.39 / Build20039`：Test38 实机定向修正；搜索已实机恢复，但出现 profile 重入/账号串行请求导致的长加载性能回归。
 - `2.0.0-test.38 / Build20038`：回复数量恢复但字段全 null；账号两行导航通过；片单 6 部只解析 1；搜索/头像仍失败。
 - `2.0.0-test.37 / Build20037`：主评论、真实片单卡、完整筛选/作者入口恢复。
 - `2.0.0-test.34 / Build20034`：多域严重回归，永久隔离。
