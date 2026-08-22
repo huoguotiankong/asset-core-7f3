@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.1",
-  "defaultBuild": 10101,
-  "testVersion": "0.1.0-test.1",
-  "testBuild": 10101,
-  "testShellVersion": "1.0.0-test.1",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v1_b10101.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v1_b10101.txt",
+  "defaultVersion": "0.1.0-test.2",
+  "defaultBuild": 10102,
+  "testVersion": "0.1.0-test.2",
+  "testBuild": 10102,
+  "testShellVersion": "1.0.0-test.2",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v2_b10102.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"initial-test","note":"全新程序，无既有 Stable；按 Test-first 建立远程模块链。"}
+  "migration": {"stage":"test2-response-adapter","note":"Test1 首轮实机截图确认协议有响应但列表未适配，并暴露原生组件 HTML 不解析；Test2 只修适配、诊断与 UI 兼容。"}
 }
