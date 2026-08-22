@@ -14,15 +14,15 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/mdai/bootstrap_v1.js",
   "rule": "apps/video/mdai/mdai_remote_v1.txt",
-  "testVersion": "2.7.0-test.3",
-  "testBuild": 27003,
-  "testShellVersion": "1.1.2-test",
-  "testBootstrap": "apps/video/mdai/bootstrap_test_v4.js",
-  "testRule": "apps/video/mdai/mdai_remote_test_v4.txt",
+  "testVersion": "2.7.0-test.4",
+  "testBuild": 27004,
+  "testShellVersion": "1.1.3-test",
+  "testBootstrap": "apps/video/mdai/bootstrap_test_v5.js",
+  "testRule": "apps/video/mdai/mdai_remote_test_v5.txt",
   "localPath": "mdai.txt",
   "migration": {
-    "stage": "remote-stable-plus-icon-detector-test3",
+    "stage": "remote-stable-plus-raw-icon-detector-test4",
     "source": "Stable 2.6.3 / Build 26301",
-    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.7.0-test.3 在片库 Test2 基线上新增官网原图标实机检测/复制，不修改播放与详情业务。"
+    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.7.0-test.4 修复 Test3 图标检测把官网 HTML 误交给 JSON API Client 的问题，改用原始 HTML + manifest 资源解析。"
   }
 }
