@@ -14,7 +14,7 @@
   "modules": [
     {"name":"appParityPatch1","path":"apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js"},
     {"name":"appParityPatch2","path":"apps/video/javdb/releases/3.9.42-test.2/app_parity_patch2.js"},
-    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"test","sdkVersion":"1.0.0-test.1"}
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"test","sdkVersion":"1.0.0-test.2"}
   ],
   "verify": {"global":"JDB","property":"version","equals":"20260822-v3.9.42-test.2"},
   "scope": ["navigation", "mine", "more", "ui", "shared-playback"],
