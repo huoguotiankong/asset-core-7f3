@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.23",
-  "baseVersion": "2.0.0-test.17",
+  "version": "2.0.0-test.24",
+  "baseVersion": "2.0.0-test.23",
   "targetVersion": "2.0.0",
-  "build": 20023,
-  "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082229,
+  "build": 20024,
+  "shellVersion": "2.0.0-test.4",
+  "shellRuleVersion": 2026082230,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.23/release.json",
-  "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
+  "release": "apps/video/hanime1/releases/2.0.0-test.24/release.json",
+  "rule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test23 replaces the failed/missing Test22 diagnostic layer and Test21 raw-HTML avatar parser with Hiker's built-in XPath engine. Main comments follow the Han1mePlus 4-direct-child contract, replies the 2-direct-child contract, and author avatar uses the exact #video-user-avatar following-sibling img relation. Settings now displays the actual Test23 runtime build and includes visible avatar diagnostics plus reinstall."
+  "notes": "Test24 is a Shell/Bootstrap recovery release triggered by device evidence that the Test21-era settings updater throws HanimeBoot undefined inside serialized lazyRule callbacks, preventing the device from reaching Test22/Test23. Shell v4 uses a new immutable Bootstrap v4 cache key and forces builds below 20024 to the Test24 recovery release. Test24 keeps the Test23 XPath avatar engine and rewrites updater buttons so each serialized callback explicitly requires Bootstrap before calling HanimeBoot."
 }
