@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "huangdou-test",
+  "name": "黄豆短剧",
+  "version": "1.9.0-test.4",
+  "build": 19004,
+  "ref": "main",
+  "baseStable": {"version":"1.8.2","build":18201,"release":"apps/video/huangdou/releases/1.8.2/release.json"},
+  "sourceBaseline": {"channel":"stable","path":"apps/video/huangdou/releases/1.8.2-test.1/source_local_1.8.2.txt","blob":"49aa0724e0aee42a582c56b68a8443bc8d31054a"},
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/huangdou/releases/1.9.0-test.1/core.js"},
+    {"name":"ui-base","path":"apps/video/huangdou/releases/1.9.0-test.2/ui_base.js"},
+    {"name":"playback-adapter","path":"apps/video/huangdou/releases/1.9.0-test.4/playback.js"},
+    {"name":"content-pages","path":"apps/video/huangdou/releases/1.9.0-test.1/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/huangdou/releases/1.9.0-test.4/pages_detail.js"},
+    {"name":"runtime","path":"apps/video/huangdou/releases/1.9.0-test.4/runtime.js"}
+  ],
+  "verify": {"global":"HuangDouRemoteRuntime","property":"build","equals":"1.9.0-test.4"},
+  "notes": "根据 Test3 实机第5集播放器异常继续收敛：保留已有登录会话，不再无条件 guest 覆盖；Token 后预检 HLS，媒体交付附当前 Cookie/Referer/UA；页面 locked 仅作提示，真实授权以媒体响应为准；无权限时明确引导官网登录/购买，不绕过站点权限。"
+}
