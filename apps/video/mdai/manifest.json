@@ -14,15 +14,15 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/mdai/bootstrap_v1.js",
   "rule": "apps/video/mdai/mdai_remote_v1.txt",
-  "testVersion": "2.7.0-test.2",
-  "testBuild": 27002,
-  "testShellVersion": "1.1.1-test",
-  "testBootstrap": "apps/video/mdai/bootstrap_test_v3.js",
-  "testRule": "apps/video/mdai/mdai_remote_test_v3.txt",
+  "testVersion": "2.7.0-test.3",
+  "testBuild": 27003,
+  "testShellVersion": "1.1.2-test",
+  "testBootstrap": "apps/video/mdai/bootstrap_test_v4.js",
+  "testRule": "apps/video/mdai/mdai_remote_test_v4.txt",
   "localPath": "mdai.txt",
   "migration": {
-    "stage": "remote-stable-plus-library-ui-test2",
+    "stage": "remote-stable-plus-icon-detector-test3",
     "source": "Stable 2.6.3 / Build 26301",
-    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.7.0-test.2 根据 Test1 实机片库截图修复分类完整性、分类排版和筛选连续开新页问题，播放与详情模块不变。"
+    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.7.0-test.3 在片库 Test2 基线上新增官网原图标实机检测/复制，不修改播放与详情业务。"
   }
 }
