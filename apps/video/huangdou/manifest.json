@@ -9,16 +9,16 @@
   "test": "apps/video/huangdou/test.json",
   "local": "apps/video/huangdou/local.json",
   "channels": "apps/video/huangdou/channels.json",
-  "defaultVersion": "1.8.2",
-  "defaultBuild": 18201,
-  "shellVersion": "1.0.0",
-  "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
-  "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
+  "defaultVersion": "1.9.0",
+  "defaultBuild": 19006,
+  "shellVersion": "1.1.5",
+  "bootstrap": "apps/video/huangdou/bootstrap_v2.js",
+  "rule": "apps/video/huangdou/huangdou_remote_v2.txt",
   "testVersion": "1.9.0-test.6",
   "testBuild": 19006,
   "testShellVersion": "1.1.5-test",
   "testBootstrap": "apps/video/huangdou/bootstrap_test_v7.js",
   "testRule": "apps/video/huangdou/huangdou_remote_test_v7.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"stable-182-paid-lock-test-19006","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.6 根据实机确认 text_4 不显示锁 Emoji，付费集改用稳定可见【锁】前缀；播放仍完整复用 Test4，不改变授权和媒体协议。"}
+  "migration": {"stage":"stable-190-promoted-test6","source":"1.9.0-test.6 / Build 19006","note":"按用户明确发布指令，Test6 业务模块原样晋级 Stable 1.9.0；Stable 使用独立 release/bootstrap/shell/state，Local 继续保持 1.8.2 派生基线。"}
 }
