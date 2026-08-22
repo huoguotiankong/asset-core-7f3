@@ -3,15 +3,48 @@
 > 程序级长期技术记忆。事实优先级：用户当前实机结果 > main 当前 Shell/Bootstrap/Stable/Release/源码 > 本文件 > registry/manifest > 历史规划。
 
 ## 当前活动基线
-- Stable：`2.0.0` / Build `20029`，由 Test29 实机可启动基线晋级，继续冻结为独立兜底。
-- Stable Shell：`apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt`；Bootstrap：`bootstrap_stable_v5_b20029.js`。
-- Test：`2.0.0-test.40` / Build `20040`。
+- Stable：`2.0.1` / Build `20040`，由用户明确批准将当前 Test40 作为阶段性正式基线晋级；仍保留已知账号/更多回复/UI 等待优化项，不等价于“全部问题已解决”。
+- Stable Shell：`apps/video/hanime1/hanime1_remote_stable_v6_b20040.txt` / 规则 version `2026082247`；Bootstrap：`bootstrap_stable_v6_b20040.js` / `minBuild=20040` / `defaultRelease=20040`。
+- Stable release：`apps/video/hanime1/releases/2.0.1/release.json`，运行体直接复用 immutable `2.0.0-test.40` 恢复链，再叠加 Stable settings overlay。
+- 上一正式版：`2.0.0` / Build `20029` 继续完整保留，可由 Stable Remote Manager previous/rollback 回退。
+- Test：`2.0.0-test.40` / Build `20040`，作为本次晋级来源与历史测试基线；下一轮 Test 必须从 Stable `2.0.1` 向前开发，不得重新从旧 Stable 2.0.0 分叉。
 - Test Shell：`apps/video/hanime1/hanime1_remote_test_v4_b20040.txt` / 规则 version `2026082246`。
 - Test Bootstrap：`apps/video/hanime1/bootstrap_test_v4_b20040.js` / `minBuild=20040` / `defaultRelease=20040`。
 - Test recovery base：`2.0.0-test.39`；深层恢复链仍经过 Test38 → Test37 → Test32。
 - Remote Manager：Stable id=`hanime1`；Test id=`hanime1-test`；manager `2.0.1`。
 - Legacy `1.2.1` 仅保留历史文件 `hanime1.txt`。
 - Test27 / Test28 / Test34 为 broken/quarantined，不允许作为恢复基线。
+
+## 2026-08-22 22:20：Test40 → Stable 2.0.1
+
+### 用户决策
+用户明确表示当前仍有很多地方需要继续优化，但本轮先暂停继续追问题，并要求把**当前测试版状态更新为正式版**。因此本次属于“阶段性最佳可用基线晋级”，不是宣称 Test40 所有验收项都已通过。
+
+### 晋级范围
+- 新建 immutable Stable release：`2.0.1 / Build20040`，`promotedFrom = 2.0.0-test.40 / Build20040`。
+- Stable recovery loader 直接加载 Test40 recovery chain，确保业务行为与当前 Test40 一致，不重新手工复制业务模块。
+- 新建 `settings_stable.js` 覆盖 Test40 的测试版设置页/更新入口，运行时 build 最终固定显示 `2.0.1`。
+- 新建 Stable Bootstrap `bootstrap_stable_v6_b20040.js`，`id=hanime1`、`latestPath=apps/video/hanime1/latest.json`、`minBuild=20040`、`defaultRelease=Stable 2.0.1`。
+- 新建 Stable Shell `hanime1_remote_stable_v6_b20040.txt`，规则 version=`2026082247`，明确加载 `@main` 上的新 Bootstrap。
+- Stable Remote Manager 与 Test Remote Manager 继续使用不同 app id，因此测试通道后续失败不会直接覆盖正式通道状态。
+- 旧 Stable 2.0.0 / Build20029、旧 Shell/Bootstrap/release 全部保留，不原地覆盖。
+
+### 当前正式版已包含
+- Test39 已实机确认恢复的首页搜索链：输入“女友”可进入独立搜索页并返回真实结果，JSEngine#13 已解决。
+- Test40 对 Test39 性能回归的隔离：切断 profile/browser-session 重入环，普通页面不再隐式联网补账号资料，账号栏目加短缓存，片单列表默认单请求而不是首屏 N+1 串行补详情。
+- Test39 的回复 DOM 精确分组/null 归一、片单详情 playlist-item 分段、片库 `>` 哨兵清理等实现继续随恢复链保留。
+- Test31 已验证的推荐页与播放器列表隔离、Test29/24/17 已验证的播放/头像/作者公开作品等历史能力仍在深层恢复链中。
+
+### 已知未完成项
+- 用户明确指出“还有很多需要优化的地方”；账号片单/收藏/头像、更多回复、作者/上传者页面、分类筛选与整体 UI 仍属于下一轮重点，不因晋级 Stable 被视为关闭。
+- Stable 2.0.1 的定位是当前阶段比旧 Stable 2.0.0 更接近目标体验的**可继续日用基线**。
+- 下一轮开发必须先从 `2.0.1 / Build20040` 建立新 Test，不允许再把 Build20029 当默认开发基线。
+
+### 发布门禁
+- Stable `release.json / recovery_loader.js / settings_stable.js / Bootstrap` 均使用新路径，不覆盖旧 Stable 文件。
+- 新增 JS 在发布前按等价本地内容执行 `node --check`，通过后再写入 GitHub；写入后又从 `main` 回读 Release/Bootstrap/Shell 核对 Build、路径与规则 version。
+- 新 Stable Shell 的 `2026082247` 在海阔 32 位有符号整数安全范围内。
+- Stable advertised build、release build、installer build、Bootstrap `minBuild/defaultRelease.build` 均为 `20040`。
 
 ## 2026-08-22 21:49–21:52：Test39 实机结果 → Test40
 
@@ -66,7 +99,7 @@ Test40 不重写 Test39 已恢复的搜索/回复/片库逻辑，只做运行时
 - “我的片单”默认只请求一次 `/user/<id>/playlists`，同时用 DOM + raw block 从**同一个响应**提取真实 title/cover/count。
 - 如果只得到真实 listId 但没有真实标题，不再自动串行打开所有详情；只显示“还有 N 个片单名称未解析”，用户主动点“补全片单资料”才执行 Test39 的慢路径。
 - 继续禁止 `片单<ID>` 伪卡。
-- Stable `2.0.0 / Build20029` 完全不动。
+- 当时 Stable `2.0.0 / Build20029` 保持不动；随后已按用户 22:20 指令晋级为 Stable 2.0.1。
 
 ### Test40 验收顺序
 - [ ] 设置页显示 `2.0.0-test.40 · Build 20040 · Shell v4`。
@@ -206,12 +239,13 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 - [ ] 推荐 / 播放 / 真选集 / 漫画链不回归。
 
 ## 关键已验证事实
-- Test39：**搜索已实机恢复**；但 profile/browser-session 重入与片单 metadata 串行请求造成详情/我的/设置长时间阻塞，因此不能晋级 Stable。
+- Stable 2.0.1 / Build20040：用户在明确知道仍有待优化问题的前提下，批准以当前 Test40 作为阶段性正式基线；因此“已晋级”是发布决策，不应被误写成所有 Test40 验收项都已通过。
+- Test39：**搜索已实机恢复**；但 profile/browser-session 重入与片单 metadata 串行请求造成详情/我的/设置长时间阻塞，因此 Test39 本身不能晋级 Stable。
 - Test38：回复 thread 身份链恢复到正确数量，但字段解析错误为 null；两行三列账号导航通过；片单详情从 0 改善到 1 但仍远少于官方 6；搜索仍 JSEngine#13；账号头像/昵称仍失败；筛选遗留 `>`。
-- Test37：主评论恢复；真实片单标题/封面/数量恢复；完整筛选与作者目录入口恢复。
+- Test37：主评论恢复；真实片单标题/封面/数量恢复；完整筛选/作者入口恢复。
 - Test32：browser Cookie 登录态能直接被“我的”识别；主评论仍存在。
 - Test31：推荐页紧凑布局实机可用；播放器列表只剩真实播放项。
-- Test29：实机启动正常；首页/详情 SVG 图标正常；当前 Stable 来源。
+- Test29：实机启动正常；首页/详情 SVG 图标正常；上一 Stable 来源。
 - Test24：作者头像、主评论头像、部分楼中楼真实头像可显示；更多回复当时可打开但偏慢，是 reply identity mapping 最后已知工作基线。
 - Test17：上传者 `/user/<id>` 公开作品链实机通过。
 - 视频详情封面可用；1080 / 720 / 480 可解析并播放。
@@ -244,6 +278,21 @@ Test39 `library39.js` 在 catalog 标准化阶段过滤：
 - 禁止 Cloud manifest 广告 Build 高于实际 Shell/Bootstrap/minBuild/defaultRelease。
 
 ## 当前恢复链
+Stable：
+```text
+hanime1_remote_stable_v6_b20040.txt
+→ bootstrap_stable_v6_b20040.js
+→ Remote Manager id=hanime1
+→ Stable 2.0.1 / Build20040
+→ apps/video/hanime1/releases/2.0.1/recovery_loader.js
+→ immutable Test40 recovery_loader
+→ Test39 → Test38 → Test37 → Test32 ...
+→ performance40
+→ settings40（随后被 Stable settings overlay 覆盖）
+→ apps/video/hanime1/releases/2.0.1/settings_stable.js
+```
+
+Test：
 ```text
 hanime1_remote_test_v4_b20040.txt
 → bootstrap_test_v4_b20040.js
@@ -258,7 +307,7 @@ hanime1_remote_test_v4_b20040.txt
 → settings40
 ```
 
-Stable：
+上一 Stable 保留：
 ```text
 hanime1_remote_stable_v5_b20029.txt
 → bootstrap_stable_v5_b20029.js
@@ -267,6 +316,7 @@ hanime1_remote_stable_v5_b20029.txt
 ```
 
 ## 版本记录
+- `2.0.1 / Build20040`：当前正式版；用户批准由 Test40 阶段性晋级，使用独立 Stable release/Bootstrap/Shell，并保留 Build20029 回退链。
 - `2.0.0-test.40 / Build20040`：Test39 实机性能热修；切断 profile/browser-session 重入，普通页面 profile cache-only，账号同步显式化，账号分区 90 秒缓存，片单主列表单请求 + 显式慢补全。
 - `2.0.0-test.39 / Build20039`：Test38 实机定向修正；搜索已实机恢复，但出现 profile 重入/账号串行请求导致的长加载性能回归。
 - `2.0.0-test.38 / Build20038`：回复数量恢复但字段全 null；账号两行导航通过；片单 6 部只解析 1；搜索/头像仍失败。
@@ -274,6 +324,6 @@ hanime1_remote_stable_v5_b20029.txt
 - `2.0.0-test.34 / Build20034`：多域严重回归，永久隔离。
 - `2.0.0-test.32 / Build20032`：browser-session 登录态 + 主评论深层恢复点。
 - `2.0.0-test.31 / Build20031`：推荐页、播放器列表隔离实机通过。
-- `2.0.0 / Build20029`：当前正式兜底。
+- `2.0.0 / Build20029`：上一正式兜底，完整保留用于 rollback。
 - `2.0.0-test.24 / Build20024`：真实头像出现；更多回复可打开但偏慢。
 - `2.0.0-test.17 / Build20017`：上传者公开作品链实机通过。
