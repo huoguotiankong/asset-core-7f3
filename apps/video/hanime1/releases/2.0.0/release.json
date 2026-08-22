@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "hanime1",
+  "name": "Hanime1",
+  "version": "2.0.0",
+  "build": 20029,
+  "ref": "main",
+  "promotedFrom": {
+    "channel": "test",
+    "version": "2.0.0-test.29",
+    "build": 20029,
+    "release": "apps/video/hanime1/releases/2.0.0-test.29/release.json"
+  },
+  "modules": [
+    {
+      "name": "stable-recovery",
+      "path": "apps/video/hanime1/releases/2.0.0/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0"
+  },
+  "notes": "Stable 2.0.0 is the user-approved fallback promoted from the actually running Test29 baseline. It intentionally freezes Test29 behavior, including known non-blocking defects in replies/account playlist/recommendation UX, while future fixes continue only in Test."
+}
