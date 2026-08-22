@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.23",
+  "build": 20023,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.17",
+  "supersedes": "2.0.0-test.22",
+  "modules": [
+    {
+      "name": "recovery23",
+      "path": "apps/video/hanime1/releases/2.0.0-test.23/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.23"
+  },
+  "notes": "Test23 returns to the verified Test17 business data path and replaces the custom raw-HTML avatar parser with Hiker's built-in XPath engine. Main-comment avatars are selected from the first child of each 4-node Han1mePlus comment group, reply avatars from the first child of each 2-node reply group, and author avatar from #video-user-avatar following-sibling img. Settings now shows the actual runtime build and exposes a visible XPath diagnostic/reinstall control."
+}
