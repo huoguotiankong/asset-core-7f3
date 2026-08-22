@@ -10,15 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.21",
-  "testBuild": 20021,
+  "testVersion": "2.0.0-test.22",
+  "testBuild": 20022,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v3.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "migration": {
-    "stage": "test21-exact-avatar-dom-grouping",
-    "source": "2.0.0-test.20",
-    "recoveryBase": "2.0.0-test.17",
-    "note": "Test20 实机确认作者仍灰块、评论仍是海阔字母占位，说明局部邻域启发式没有命中真实 img。Test21 保留 Test17 稳定评论数据，直接移植 Han1mePlus 对 /loadComment 和 /loadReplies 的 DOM 分组契约：主评论 4 个直接子元素一组，回复 2 个直接子元素一组，组内读取真实 img，并按 commentId 回绑。"
+    "stage": "test22-avatar-diagnostic-gate",
+    "source": "2.0.0-test.21",
+    "recoveryBase": "2.0.0-test.21",
+    "note": "Test21 实机确认作者头像仍未恢复、主评论头像仍大面积缺失，而楼中楼已有部分头像可显示。Test22 不继续猜 DOM/图片规则，保持 Test21 运行行为，仅增加设备侧头像诊断：comment-start/img/reply-wrapper 数量、Test21 分组/头像匹配数、作者标记/邻近图片证据。拿到真实计数后再实施下一版修复。"
   }
 }
