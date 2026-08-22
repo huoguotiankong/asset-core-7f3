@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.3",
+  "build": 20003,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.2",
+  "modules": [
+    {"name":"core","path":"apps/video/hanime1/releases/2.0.0-test.1/core.js"},
+    {"name":"provider","path":"apps/video/hanime1/releases/2.0.0-test.1/provider.js"},
+    {"name":"raw-html-hotfix","path":"apps/video/hanime1/releases/2.0.0-test.3/hotfix.js"},
+    {"name":"pages-explore","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_explore.js"},
+    {"name":"pages-library","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_library.js"},
+    {"name":"pages-account","path":"apps/video/hanime1/releases/2.0.0-test.1/pages_account.js"}
+  ],
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.3"},
+  "notes": "Test2 still rendered only banner plus the first video. Test3 replaces homepage DOM traversal with raw HTML section/card slicing and repairs missing detail cover from video poster/og:image."
+}
