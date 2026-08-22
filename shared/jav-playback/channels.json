@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "name": "JAV Playback SDK",
-  "updatedAt": "2026-08-22 23:30",
+  "updatedAt": "2026-08-22 23:39",
   "stable": null,
   "test": {
-    "version": "1.0.0-test.1",
-    "build": 10001,
-    "path": "releases/1.0.0-test.1/index.js",
+    "version": "1.0.0-test.2",
+    "build": 10002,
+    "path": "releases/1.0.0-test.2/index.js",
     "status": "device-validation-required",
     "providers": ["MissAV", "123AV", "Jable"]
   }
