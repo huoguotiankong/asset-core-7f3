@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "0.6.0-alpha16",
+  "build": 167,
+  "ref": "main",
+  "modules": [
+    {"name": "core", "path": "acfun_core_v018.js"},
+    {"name": "protocol", "path": "acfun_patch_v019.js"},
+    {"name": "instant-ui", "path": "acfun_ui_v042.js"},
+    {"name": "functional-fix", "path": "acfun_fix_v043.js"},
+    {"name": "fast-playback", "path": "acfun_fix_v045.js"},
+    {"name": "app-source-taxonomy-comics-short", "path": "apps/video/acfun/acfun_fix_v047.js"},
+    {"name": "apk197-tags", "path": "apps/video/acfun/acfun_fix_v048.js"},
+    {"name": "release-repair", "path": "apps/video/acfun/acfun_fix_v049.js"},
+    {"name": "clean-rebase-runtime-ui-a15", "path": "apps/video/acfun/acfun_runtime_v060_a15_clean.js"},
+    {"name": "focused-media-repair-a16", "path": "apps/video/acfun/acfun_fix_v060_a16_media.js"}
+  ],
+  "verify": {"global": "ac", "property": "build", "equals": "2026.08.23-v0.6.0-alpha16"}
+}
