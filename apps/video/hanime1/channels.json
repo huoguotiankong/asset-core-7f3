@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v25",
-  "updatedAt": "2026-08-22 17:00",
+  "versionPolicy": "legacy-history-remote-test-v26",
+  "updatedAt": "2026-08-22 17:11",
   "channels": [
     {
       "channel": "stable",
@@ -26,24 +26,25 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.25",
-      "baseVersion": "2.0.0-test.24",
+      "version": "2.0.0-test.26",
+      "baseVersion": "2.0.0-test.25",
       "targetVersion": "2.0.0",
-      "build": 20025,
-      "displayVersion": "Test 2.0.0 · ReplyFast25",
+      "build": 20026,
+      "displayVersion": "Test 2.0.0 · CreatorHub26",
       "path": "apps/video/hanime1/hanime1_remote_test_v4.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test25：Test24 已实机确认作者/评论头像恢复，证明此前主要问题是旧更新链没有真正把新 Release 送到设备。当前版保留已验证头像与 Shell v4，移除临时头像诊断，并重点优化“查看更多回复”速度。",
+      "desc": "Test26：在 Test24 已验证头像/更新链和 Test25 回复性能基础上，按既定路线进入创作者与产品体验阶段。新增作者目录、作者主页、上传者主页统一体验，并重构详情主操作、搜索/筛选入口和设置页信息层级。",
       "highlights": [
-        "保留 Test24 已实机通过的作者/评论/回复头像链",
-        "取消设置页头像诊断区域",
-        "楼中楼从“正文请求 + 头像二次请求”改为单次 /loadReplies 同时解析正文和 XPath 头像",
-        "评论/回复页不再每次打开都调用 profile() 做登录状态探测，改用本地 activeAccount",
-        "同一回复线程增加 45 秒短缓存，立即再次打开基本走本地",
-        "发表回复后自动清除对应线程缓存",
-        "Shell v4 / Bootstrap v4 / 更新链保持 Test24 已修复结构"
+        "新增作者目录：支持作者搜索、头像、作品数量与分页",
+        "作者卡片进入独立作者主页，展示作者身份与对应影片结果",
+        "上传者公开主页统一成创作者主页样式，保留真实 /user/<id> 作品链",
+        "详情页主操作重排为播放 / 评论 / 加入片单 / 下载原片",
+        "搜索页新增同名作者入口；筛选页增加作者目录和综合搜索入口",
+        "设置页去掉重复技术信息，把重载/回退/Recovery 收到维护区域",
+        "继续保留 Test25 单请求楼中楼、短缓存与 Test24 真实头像链",
+        "Shell v4 / Bootstrap v4 不变，可直接程序内更新"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
