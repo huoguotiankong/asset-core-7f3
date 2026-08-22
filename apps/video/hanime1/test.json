@@ -8,10 +8,10 @@
   "targetVersion": "2.0.0",
   "build": 20016,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082225,
+  "shellRuleVersion": 2026082226,
   "managerVersion": "2.0.1",
   "release": "apps/video/hanime1/releases/2.0.0-test.16/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test16: first safe incremental layer after Recovery15. Keep validated login/playback/cover/comic/layout chain; add only author/uploader separation and avatar recovery on video detail."
+  "notes": "Test16 hotfix: keep Recovery15/Test12 stable chain and creator/uploader detail patch; rebuild Shell from the device-verified Test15 escaping structure after the first Test16 shell was over-escaped and failed in Hiker eval(Function)."
 }
