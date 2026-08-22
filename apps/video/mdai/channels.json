@@ -19,25 +19,25 @@
       "recommended": true,
       "desc": "远程代码正式版 · 已实机验证",
       "highlights": ["2.6.3 稳定基线继续冻结","正式/测试同名覆盖","Remote Stable 日常使用"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.svg"
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     },
     {
       "channel": "test",
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.8.0-test.1",
+      "version": "2.8.0-test.2",
       "baseVersion": "2.6.3",
       "targetVersion": "2.8.0",
-      "build": 28001,
-      "displayVersion": "Test 2.8.0 · UI Redesign 1",
-      "path": "apps/video/mdai/mdai_remote_test_v6.txt",
+      "build": 28002,
+      "displayVersion": "Test 2.8.0 · UI Redesign 2",
+      "path": "apps/video/mdai/mdai_remote_test_v7.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "2.8 产品级 UI 重构首版 · 正式图标/首页/片库/详情/我的/设置统一重做，待实机精修",
-      "highlights": ["原站图标已还原为仓库正式资产并用于 Test/云仓库","首页推荐/视频/短剧/社区四栏原页切换","片库分类与高级筛选默认折叠，搜索/我的原页切换不压栈","详情突出主播放，选集控制与集数网格分离"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.svg"
+      "desc": "2.8 产品级 UI 重构 Test2 · 真实 PNG 图标 + 导航状态修正，待实机精修",
+      "highlights": ["原站 data-URI 图标已验证真实 PNG 并固化为仓库二进制资产","首页推荐/视频/短剧/社区四栏原页切换","片库分类与高级筛选默认折叠，搜索/我的原页切换不压栈","详情突出主播放，选集控制与集数网格分离","发布前修正收藏/历史与短剧片库跨页状态恢复"],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     },
     {
       "channel": "local",
@@ -59,7 +59,7 @@
       "recommended": false,
       "desc": "原完整本地版 · 规则名固定为“麻豆AI 本地版”",
       "highlights": ["导入输出程序名固定为 麻豆AI 本地版","完整业务代码内置","可与正式/测试远程版独立并存"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.svg"
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     }
   ]
 }
