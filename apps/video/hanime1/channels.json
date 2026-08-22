@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v19",
-  "updatedAt": "2026-08-22 14:55",
+  "versionPolicy": "legacy-history-remote-test-v20",
+  "updatedAt": "2026-08-22 15:20",
   "channels": [
     {
       "channel": "stable",
@@ -26,23 +26,24 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.19",
+      "version": "2.0.0-test.20",
       "baseVersion": "2.0.0-test.17",
       "targetVersion": "2.0.0",
-      "build": 20019,
-      "displayVersion": "Test 2.0.0 · Recovery19",
+      "build": 20020,
+      "displayVersion": "Test 2.0.0 · Avatar20",
       "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test19：撤出实机回归失败的 Test18，恢复 Test17 已验证评论数据链；头像只做附加增强，失败不再影响评论内容。",
+      "desc": "Test20：保留 Test17 已验证评论/楼中楼数据链，替换 Test19 仍未成功的头像增强。作者头像按详情页真实相邻图片解析；评论/回复头像按各自 HTML 上下文绑定，并为真实图片补 Referer/UA。",
       "highlights": [
-        "完全跳过 Test18 评论覆盖",
-        "恢复 Test17 评论与楼中楼数据链",
-        "作者卡补齐 lazy image 字段解析",
-        "评论和回复仅按顺序补真实头像，不替换原评论数据",
-        "无真实头像时使用仓库 PNG 圆形兜底",
-        "上传者公开作品、登录、播放、选集、片库、漫画保持 Test17 稳定链"
+        "不再使用全局图片数组按序硬配评论头像",
+        "作者头像优先复刻 Han1mePlus 当前详情页解析路径",
+        "Hiker CSS 邻接选择失败时改用局部原始 HTML 定位真实 img",
+        "评论正文、回复数量和楼中楼继续沿用 Test17 稳定链",
+        "评论头像利用 commentId/用户名局部上下文取图，避免错位",
+        "真实头像 URL 增加 Referer 与 User-Agent 图片请求头",
+        "上传者作品、登录、播放、选集、片库、漫画保持 Test17 稳定链"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
