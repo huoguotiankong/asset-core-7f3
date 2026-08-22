@@ -2,7 +2,7 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "remote-stable-20000-test35-legacy-history",
+  "versionPolicy": "remote-stable-20000-test36-legacy-history",
   "updatedAt": "2026-08-22 20:32",
   "legacy": {"version":"1.2.1","build":12100,"path":"hanime1.txt","note":"Historical local rule only; no longer a channel baseline."},
   "channels": [
@@ -10,23 +10,24 @@
       "channel":"stable","label":"正式版","id":"hanime1","name":"Hanime1","version":"2.0.0","build":20029,
       "displayVersion":"Stable 2.0.0 · Fallback29 · Installer20029","path":"apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,
       "desc":"由用户实机可启动、头像/播放/图标主链正常的 Test29 原样晋级，作为后续测试版的安全兜底；已知更多回复、账号片单和部分 UI 问题不在 Stable 上继续修改。",
-      "highlights":["Test29 实机启动通过，首页与详情 SVG 图标正常","保留 Test24 已验证真实作者/评论头像、登录、播放、真选集、片库和漫画链","Stable Remote Manager 与 Test 独立，后续 Test35+ 失败不会覆盖正式兜底","正式版安装壳/Bootstrap/minBuild/defaultRelease 全部锁定 Build20029"],
+      "highlights":["Test29 实机启动通过，首页与详情 SVG 图标正常","保留 Test24 已验证真实作者/评论头像、登录、播放、真选集、片库和漫画链","Stable Remote Manager 与 Test 独立，后续 Test36+ 失败不会覆盖正式兜底","正式版安装壳/Bootstrap/minBuild/defaultRelease 全部锁定 Build20029"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     },
     {
-      "channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.35","baseVersion":"2.0.0","targetVersion":"2.0.1","build":20035,
-      "displayVersion":"Test 2.0.0 · Recovery32AccountFilter35 · Installer20035","path":"apps/video/hanime1/hanime1_remote_test_v4_b20035.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
-      "desc":"Test35：Test34 实机出现多域严重回归后，不再继续叠加 Test34。运行基线回到已经实机确认‘我的’浏览器登录态可识别、主评论仍存在的 Test32；本轮只隔离重做账号/片单/收藏等解析、片库筛选入口和搜索路由，并保留 Test34 已认可的三列作者目录样式。更多回复本轮暂不继续改，优先恢复主评论和核心功能。",
+      "channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.36","baseVersion":"2.0.0","targetVersion":"2.0.1","build":20036,
+      "displayVersion":"Test 2.0.0 · Recovery32Final36 · Installer20036","path":"apps/video/hanime1/hanime1_remote_test_v4_b20036.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
+      "desc":"Test36：Test34 实机多域严重回归后，最终恢复候选。直接以已实机验证 browser-session 登录态和主评论仍正常的 Test32 为运行基线；不加载 community34；隔离重做账号/片单/收藏等解析、片库全部分类入口和首页搜索，并保留三列作者目录。Test36 额外修复继承 Test32 settings 导致版本/更新/恢复按钮仍指向 Build20032 的预检问题，所有维护动作锁定 Build20036。",
       "highlights":[
-        "Test34 实机确认主评论从可见退化为 0 条，因此 Test35 完全不加载 community34，不再覆盖 Test32 已工作的 P.comments",
-        "Test34 账号片单退化成裸 list ID 假卡片且详情 0 部；Test35 禁止裸 ID fallback，只展示同时解析到真实标题的片单卡",
-        "账号头像按上游 Han1mePlus 的 edit 页 img#playlist-avatar 与首页 user-modal/profile-avatar selector 分路读取",
-        "收藏/稍后看/历史按 div[class^=user-tab-item-wrapper]，订阅按 div[class^=video-item-container]，片单详情按 .playlist-video-list > div.user-tab-item-wrapper 解析",
-        "片库所有类型/排序/日期/时长选项直接横向展开，不再依赖 >；同时恢复 全部筛选 / 作者目录 / 清空筛选 三个入口",
-        "首页搜索改为只保存关键词后进入 hanimeSearch，避免回调拼接编码 URL 导致 JSEngine#13",
-        "作者目录继续使用三列方图 + 下方作者名/作品信息",
+        "主评论优先恢复：Test36 不覆盖 Test32 已工作 P.comments；更多回复暂不作为本轮目标",
+        "账号片单禁止裸 list ID 假卡；只有同时取得真实 title + list id 才渲染",
+        "头像/收藏/稍后看/历史/订阅/片单详情按当前 Han1mePlus 上游 selector 分拆解析",
+        "片库完整类型/排序/日期/时长选项直接横向展示，并恢复 全部筛选 / 作者目录 / 清空筛选",
+        "首页搜索只保存关键词再进入固定 hanimeSearch 页面，规避 JSEngine#13 输入回调 URL",
+        "作者目录保持三列方图 + 下方作者名/作品信息",
+        "settings36 将检查更新/更新/重装/恢复全部绑定 bootstrap_test_v4_b20036.js 与 Build20036",
         "Stable 2.0.0 / Build20029 完全不动",
-        "Test35 account/library/search/recovery 新模块已过 node --check 与顶层 smoke；Cloud Shell/Bootstrap/minBuild/defaultRelease 锁定 Build20035"
+        "Test35 在交付前预检发现 settings 继承旧 Build20032，未作为实机验收版本；Test36 supersede",
+        "account35/library35/search35/recovery36/settings36 与 Bootstrap 已完成语法门禁；Shell/Bootstrap/minBuild/defaultRelease 锁定 Build20036"
       ],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
