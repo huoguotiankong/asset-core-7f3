@@ -9,9 +9,73 @@
 - 当前正式 Stable 与 `latest.json` 继续固定在 `0.4.9 / Build149`，是 Test 大改失败时的恢复基线。
 - 已验证能力继续包括：常规视频播放、极速切换、封面 XOR 解密与持久缓存、精选/里番 Station 底座、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
 - 0.4.9 修复过 0.4.8 activeRelease 缓存错误根目录模块路径的问题；v047/v048/v049 正式路径使用 `apps/video/acfun/` 仓库相对路径，并保留旧状态恢复兼容。
-- **Alpha9 仍不得修改 Stable/latest。**
+- **Alpha10 仍不得修改 Stable/latest；当前 Alpha10 只进入 Test/Candidate。**
 
-### Test 0.6.0-alpha9 / Build 160 / Shell 6.5.0（当前测试）
+### Test 0.6.0-alpha10 / Build 161 / Shell 6.6.0（当前测试）
+
+#### 2026-08-22 Alpha9 实机回归结论
+
+- Alpha9 已真实运行到设备，发布链本身有效，但出现**多域功能回归**，必须按失败 Test 隔离处理，不能继续在 Alpha9 上叠补丁。
+- 小说/有声列表仍有内容，但分类弹层只剩“全部”，说明 Alpha9 strict fiction taxonomy 收得过窄，真实分类字段被过滤掉。
+- 除有声外，小说、漫画、常规视频、短视频封面大面积变灰；有声封面仍能显示，说明图片解密/显示能力并非整体失效，更可能是通用封面字段提取退化。
+- 常规视频实机出现“播放异常，或者网络不可用”，历史已验证播放链发生回归；短视频直接播放此前已由 Alpha7/Alpha8 实机验证，后续不得因为修常规视频再次破坏。
+- 小说章节“男友的寝取游戏（一）”已经返回真实外部正文地址：`https://sjacfanapi.sexbar.site/word/...txt`，但 Alpha9 只把源地址显示在页面，没有把 `.txt` 内容读取为正文。这证明当前问题不是“完全没有正文源”，而是 Source Resolver 没有完成最后一步。
+- 用户同时确认小说、有声、漫画均不能正常阅读/播放；因此 Alpha9 不能作为 Alpha10 的继承基线。
+- 用户明确将当前对话固定为 ACFun 专用，同时在其他对话并行开发其他程序。共享 `registry.json / 根 manifest.json` 的修改必须只手术式更新 ACFun 项，写入前重新读取最新内容，禁止覆盖其他对话的并行成果。
+
+#### Alpha10 隔离与恢复策略
+
+- 新建不可变 Release `releases/0.6.0-alpha10/release.json`，Build `161`。
+- **Release 模块链直接复制 Alpha8 Build159 作为恢复基线，不加载任何 Alpha9 模块**；然后仅追加 `runtime-a10 / recovery-home-a10 / fiction-community-detail-a10 / shell-settings-a10` 四个修复模块。
+- 这是一次 Regression Recovery，而不是普通向前叠加：Alpha9 保留在仓库用于事故追溯，但不参与 Alpha10 运行链。
+- 新建 `bootstrap_test_v066.js?v=6600`，Shell `6.6.0-test`，`minBuild=161`。Alpha9 Build160 的现有 Test activeRelease 会被强制越过到 Alpha10 默认 Release。
+- 新建规则壳 `acfun_remote_test_v066.txt`，安全整数 version `2026082205`；图标继续使用 `asset-core-7f3@main` 的 CDN 资源。
+- Stable `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 完全不变。
+
+#### Alpha10 封面恢复
+
+- 复核 Alpha8/Stable 图片链后确认：`ac.__v042FirstMedia()` 历史只递归 `url/src/path/image/img/cover/value`，而当前 APK 1.9.7 静态字段还明确出现 `imgUrl / imageUrl / coverPicture / videoCover / generatedCoverImg / templateCoverImg` 等包装形式。
+- Alpha10 扩展通用 FirstMedia 与深层封面解析，增加 `imgUrl / imageUrl / coverUrl / coverPicture / videoCoverImg / comicsCoverImg / fictionCoverImg / thumb / thumbnail / poster / verticalCover / generatedCoverImg / templateCoverImg`。
+- 视频、漫画、小说统一先恢复真实媒体 URL，再交给原有 `ac.image()`；`.asigoo.com` 仍沿用已经验证的 XOR 前100字节解密和持久缓存，不另造第二套图片解密器。
+- 相对图片继续尝试当前对象内 `imgDomain / imageDomain / cdnDomain / domain`，再回到既有 `__v042Plain()` 解析。
+- UI 不再用空灰卡作为正常结果；真实封面仍缺失时使用对应程序图标作为明确 fallback。是否真正恢复仍必须看 Alpha10 实机。
+
+#### Alpha10 视频播放恢复
+
+- 直接保留 Stable/Alpha8 已验证的 `video/can/watch → path → /api/m3u8/h5/decode?path=` 协议基础。
+- 常规视频点击后优先重新执行 fresh `POST video/can/watch {videoId}`，避免继续复用 Alpha9/旧 Feed 中可能失效的媒体字段或过期本地 HLS。
+- 如果列表/详情本身带有有效 `videoUrl/playUrl/videoUri/path/m3u8/playPath`，作为备用线路加入返回结果，而不是覆盖 fresh can/watch。
+- 短视频仍允许已实机验证的列表直链优先；Alpha10 不恢复“短视频先进常规详情页”的旧行为。
+- 播放结果记录 `acfun_v060_a10_play_id / acfun_v060_a10_play_lines`，下一轮如仍失败可以直接区分“取 path 失败 / decode 失败 / 播放器失败”。
+
+#### Alpha10 小说 / 有声分类与章节
+
+- 分类不继续沿用 Alpha9 的过窄 strict fiction extractor。Alpha10 恢复 Alpha8 已让列表可用的宽字段提取方式，并优先分别尝试 `fictionType=1`（小说）和 `fictionType=2`（有声），再有限兼容 `type`、GET/POST 和无类型请求。
+- 用户可见标签继续过滤 `fictiontag-* / category-*` 等明显机器名，但允许 `fictionTagName / tagName / categoryName / classifyName / tagTitle / name / title` 等真实返回字段。
+- 小说/有声 Feed 继续使用 Alpha8 `fiction/base/findList` GET+POST 矩阵；某个标签无内容时只有限回退同模式“全部”，不跨模式串数据。
+- 章节详情继续尝试 `fiction/base/chapterInfo` 的 `{fictionId,chapterId}`、`fictionChapterId`、`bookId`、`novelId` 等有限参数组合。
+- `fictionUrl / contentUrl / readUrl / chapterUrl / sourceUrl` 统一作为**章节外部源**；`.txt/.html` 不再被有声模式误判为音频。
+- Source Resolver 先尝试海阔 `request()`，再 `fetch()`，读取到 JSON 时继续按正文/音频字段解析；读取到 TXT/HTML 时直接净化成正文。
+- 音频解析改成携带祖先路径判断，确保 `longFormAudio → source → url` 这类嵌套结构即使叶子字段只叫 `url/path` 也能识别；MP3/M4A/AAC/WAV/OGG/M3U8 同样识别。
+- Alpha10 不再把原始正文 URL 直接展示给普通用户；失败时只显示产品化错误态，诊断记录保留 source 数量与首个地址。
+- 本地 Mock 已对 `{fictionUrl: *.txt, longFormAudio.source.url: *.mp3, chapterContent: 正文}` 验证：正文、音频、外部源三类不会互相串型。真实服务端是否成功仍以实机为准。
+
+#### Alpha10 漫画、社区与 UI 边界
+
+- 漫画不使用 Alpha9 任何模块；详情/章节继续继承 Alpha8 `pics://` 原生多图阅读链，避免普通 `pic_1_full` 二级页回归。
+- 社区继续保留 Alpha8 Feed，并在详情页合并 `acfun_v060_dynamic_seed_<id>` 与 `community/dynamic/dynamicInfo`；正文图片继续排除 avatar/head/badge/frame/icon/logo。
+- 首页继续保持 Alpha8 已验证方向：9 个顶层栏目在同一页面切换；频道/分类/标签/排序使用 `select:// col=3` 原生弹层，选择后 `refreshPage(false)` 原页刷新，不制造页面栈。
+- Alpha10 取消 Hero 主卡路径，先以稳定 Feed 为首屏主体；分类按钮继续使用纯文本，避免 `<font>` 在 `scroll_button` 原样显示。
+
+#### Alpha10 本轮静态 Guard
+
+- `acfun_runtime_v060_a10.js`、`acfun_ui_v060_a10_home.js`、`acfun_ui_v060_a10_detail.js`、`acfun_ui_v060_a10_delivery.js` 与 `bootstrap_test_v066.js` 在发布前均通过 `node --check`。
+- `release.json` 通过 JSON 解析；规则壳 JSON 与内嵌 `pages` JSON 均完成本地解析检查，规则数值 version `2026082205` 未超 32 位整数。
+- **这些静态 Guard 只证明发布包结构/语法正确，不等价于海阔实机功能完成。** Alpha10 必须继续回归：分类 → 封面 → 常规视频 → 短视频 → 小说正文 → 有声音频 → 漫画 → 社区。
+
+---
+
+### Test 0.6.0-alpha9 / Build 160 / Shell 6.5.0（已隔离失败测试）
 
 #### 2026-08-22 Alpha8 实机事实
 
@@ -66,7 +130,7 @@
 - 同时识别音频/媒体：字段名含 `audio / voice / sound / longForm / media / play` 或地址扩展名为 MP3/M4A/AAC/WAV/OGG/M3U8。
 - 如果章节响应只给 `fictionUrl / contentUrl / readUrl / chapterUrl / sourceUrl`，Alpha9 会有限抓取外链：JSON 继续按字段解析；HTML 先剥脚本/样式/标签再转正文。最多处理少量候选，避免无限请求。
 - 有声模式下检测到音频候选后使用海阔音乐播放标记 `#isMusic=true#`；正文与音频可同时存在。
-- **这部分仍是 Alpha9 待实机验证核心。** 只有设备真正出现正文/能播放音频后，才能把命中的字段与参数晋升为“已验证协议”。
+- **Alpha9 这条实现后来已被实机证伪：真实 `.txt` 源只被展示，没有转成正文。该失败方案不得直接复活。**
 
 #### Alpha9 社区详情恢复
 
@@ -78,24 +142,22 @@
 
 #### Alpha9 发布边界
 
-- 新建不可变 Release：`releases/0.6.0-alpha9/release.json`，Build `160`。
-- Alpha8 模块链末尾新增：`runtime-a9 / clean-inline-ui-a9 / fiction-community-detail-a9 / shell-settings-a9`。
-- 新建 `bootstrap_test_v065.js?v=6500`，Test Shell `6.5.0-test`，`minBuild=160`。
-- 新建规则壳 `acfun_remote_test_v065.txt`，规则数值 version `2026082204`，图标使用 CDN：`https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg`。
-- Test/Candidate/channels/app manifest/registry/根 manifest 已切到 Alpha9；Stable `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 不变。
-- Alpha9 实机验收顺序：**分类弹层与结果一致性 → 精选/里番分类边界 → 小说正文 → 有声音频 → 小说/有声封面 → 社区帖子详情 → 漫画 pics:// → 短视频直接播放 → 常规视频播放/搜索。**
+- 不可变 Release：`releases/0.6.0-alpha9/release.json`，Build `160`。
+- Alpha8 模块链末尾追加过 `runtime-a9 / clean-inline-ui-a9 / fiction-community-detail-a9 / shell-settings-a9`。
+- `bootstrap_test_v065.js?v=6500` / Shell `6.5.0-test` / `minBuild=160`。
+- **2026-08-22 后该版本状态改为 quarantined/失败测试，只保留历史，不再作为后续 Test 恢复基线。**
 
 ---
 
-## Test 0.6.0-alpha8 / Build 159 / Shell 6.4.0（上一测试）
+## Test 0.6.0-alpha8 / Build 159 / Shell 6.4.0（恢复参考基线）
 
 - 把筛选从独立二级页合并回 ACFun 首页；频道/分类/标签/排序使用 `select:// col=3`，选择后原页刷新。
 - 把 `community / fiction / audio / short` 纳入同一个首页 Section，解决 Alpha6/Alpha7 顶层入口不断 push 新页面、返回栈越来越深的问题。
 - 漫画章节切到海阔 `pics://url1&&url2...` 原生多图阅读，不再用普通 `pic_1_full` 页面模拟漫画正文。
 - 精选/里番停止 Aggregate Station，初步分成 `classifyId=4/24` first-nonempty 请求。
-- 小说/有声列表增加 `fiction/base/findList` GET+POST、`fictionType/type/isAudio/longFormAudio` 有限矩阵和更宽实体识别。Alpha8 实机确认“列表已经恢复”，但章节正文/音频仍失败，交由 Alpha9 继续。
+- 小说/有声列表增加 `fiction/base/findList` GET+POST、`fictionType/type/isAudio/longFormAudio` 有限矩阵和更宽实体识别。Alpha8 实机确认“列表已经恢复”，但章节正文/音频仍失败。
 - 社区详情增加递归正文/图片/视频/链接，但 Alpha8 实机仍显示部分作者/正文/媒体不完整。
-- Alpha8 的两个明确失败点：`scroll_button` 使用 `<font>` 后原样显示 HTML；Hero 封面字段不稳定时出现灰/空大卡。Alpha9 已针对修正。
+- Alpha8 的两个明确失败点：`scroll_button` 使用 `<font>` 后原样显示 HTML；Hero 封面字段不稳定时出现灰/空大卡。Alpha10 UI 已避免这两条失败路径。
 
 ## Test 0.6.0-alpha7 / Build 158 / Shell 6.3.0（历史）
 
