@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha9",
-  "testBuild": 160,
-  "testShellVersion": "6.5.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v065.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v065.txt",
+  "testVersion": "0.6.0-alpha10",
+  "testBuild": 161,
+  "testShellVersion": "6.6.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v066.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v066.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha9-strict-taxonomy-fiction-chapter-v65",
+    "stage": "alpha10-recovery-from-alpha8-media-play-fiction-v66",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha8 实机确认：短视频直接播放继续正常；小说/有声列表已能加载，证明 findList 恢复方向有效，但 fiction/base/chapterInfo 旧单一路径没有恢复章节正文/音频；首页 scroll_button 不支持任意 HTML，导致筛选按钮直接显示 <font> 标签；焦点大卡在封面字段不稳定时出现灰色/空白大图；社区 Feed 已有真实内容，但作者、正文和媒体详情仍存在不完整；分类/筛选内容仍需进一步按 APP 真实响应校准。Alpha9 Build160 / Shell6.5 新建 a9 taxonomy/cache，按 Station/Class/Tag/Fiction/Community 的明确身份字段提取数据并一次性清理旧选中 ID；精选/里番分别保持 classifyId=4/24 first-nonempty，不再聚合互相污染；首页筛选保留 select:// col=3 原页刷新，但按钮全部改纯文本；焦点大卡默认关闭，仅在手动开启且存在有效图片时显示紧凑横卡。小说/有声详情合并 Feed seed 与 info，扩大封面/作者字段；章节增加 chapterInfo GET+POST、多组 fiction/chapter ID 参数、fictionUrl/contentUrl 外链正文抓取及 longFormAudio/voice/media 音频候选。社区详情合并 Feed 原始对象与 dynamicInfo，并排除头像/徽章等非正文图片。Test Shell 使用 v065 / minBuild=160；正式 latest.json 不变。"
+    "note": "Stable 继续冻结在 0.4.9 Build149 / Shell5.11.3。2026-08-22 Alpha9 实机确认属于多域回归：小说/有声分类弹层只剩全部；除有声外小说、漫画、视频、短视频封面大面积灰图；常规视频播放异常；小说章节已经暴露真实 sjacfanapi/.../word/...txt 源地址但未读成正文；小说、有声、漫画均不可正常使用。根据失败 Test 隔离规则，Alpha10 Build161 / Shell6.6 不加载任何 Alpha9 模块，而是直接复制 Alpha8 Release 模块链并追加四个 a10 修复模块。A10 扩展 __v042FirstMedia 对 imgUrl/imageUrl/coverPicture/videoCoverImg/comicsCoverImg 等包装字段识别；常规视频优先 fresh video/can/watch，短视频保留直连；小说/有声分类恢复 Alpha8 宽字段提取并按 mode 请求 tagList；fictionUrl/contentUrl/readUrl/chapterUrl 的 txt/html 被视为正文源主动 request/fetch，longFormAudio/audio/voice/media 独立作为音频；社区继续 Feed seed + dynamicInfo 合并。同页 select:// 筛选与 pics:// 漫画方向保留。Test Bootstrap v066 / minBuild=161 强制越过 Alpha9，正式 latest.json 不变。"
   }
 }
