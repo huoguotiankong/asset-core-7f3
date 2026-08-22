@@ -6,14 +6,14 @@
 - 程序：黄豆短剧
 - App ID：`huangdou`
 - Remote Stable：`1.8.2 / Build 18201 / Shell 1.0.0`
-- Remote Test：`1.9.0-test.1 / Build 19001 / Shell 1.1.0-test`
+- Remote Test：`1.9.0-test.2 / Build 19002 / Shell 1.1.1-test`
 - Local：`1.8.2-local.1`
 - Stable 入口：`apps/video/huangdou/huangdou_remote_v1.txt`
-- Test 入口：`apps/video/huangdou/huangdou_remote_test_v2.txt`
+- Test 入口：`apps/video/huangdou/huangdou_remote_test_v3.txt`
 - Local 源码：`huangdou.txt`
 - Local 导入规则名：`黄豆短剧 本地版`
 - Stable 状态：1.8.2 已实机验证，继续冻结作为恢复基线。
-- Test 状态：1.9.0-test.1 已完成静态 JS/JSON/Shell 检查并发布，等待海阔实机 UI 与播放回归。
+- Test 状态：1.9.0-test.1 首轮实机发现所有短剧二级页在页面模型阶段报 `Expected URL scheme 'http' or 'https' but no colon was found`；已在 1.9.0-test.2 定点修复，等待实机复测。
 
 ## 当前运行链
 ### Stable
@@ -25,23 +25,23 @@
 → 已验证 1.8.2 immutable runtime/source snapshot
 ```
 
-### Test 1.9
+### Test 1.9.0-test.2
 ```text
-黄豆短剧 Test Shell v2（7 个独立 page path）
-→ bootstrap_test_v2.js / state id=huangdou-test / minBuild=19001
+黄豆短剧 Test Shell v3（7 个独立 page path）
+→ bootstrap_test_v3.js / state id=huangdou-test / minBuild=19002
 → Remote Manager v2.0.1
-→ releases/1.9.0-test.1/release.json
-→ core.js            Stable 1.8.2 协议/HTML Parser 桥
-→ ui_base.js         Native Design System / Card / Route / State helpers
-→ playback.js        PlaybackAdapter
-→ pages_content.js   Home / Library / Topic Index / Search / Mine
-→ pages_detail.js    Detail / Topic Detail / Settings
-→ runtime.js         组合并导出 hddj
+→ releases/1.9.0-test.2/release.json
+→ core.js            复用 Test1 / Stable 1.8.2 协议与 HTML Parser 桥
+→ ui_base.js         Test2：跨页参数修复
+→ playback.js        复用 Test1 PlaybackAdapter
+→ pages_content.js   复用 Test1 Home / Library / Topic Index / Search / Mine
+→ pages_detail.js    Test2：详情/专题参数恢复与 URL 校验
+→ runtime.js         Test2 组合并导出 hddj
 ```
 
 - Stable 1.8.2 与 Local 1.8.2 本轮不修改。
-- Test Shell 从 3 个 page path 扩展为 7 个，所以必须通过云端仓库重新覆盖导入 `huangdou_remote_test_v2.txt`；只点旧壳内远程更新不足以新增页面声明。
-- Test Remote Manager 状态 ID 继续为 `huangdou-test`，`minBuild=19001` 强制越过旧 1.8.2-test.1 active state。
+- Test Shell 从旧 1.9 Test1 的 v2 提升为 v3，规则数值 version `2026082216`；Bootstrap `minBuild=19002`，用于越过设备上的 19001 active state。
+- 需要从“我的规则仓库”重新覆盖导入 Test2，以确保新 Shell/Bootstrap 生效。
 
 ## 1.9 Product / UI Blueprint
 页面地图：
@@ -53,11 +53,13 @@
 - Detail：模糊 Hero → 立即/继续播放 + 收藏 → 简介 → 分组选集 → 猜你喜欢 → 官网/登录解锁。
 - Settings：体验 / 播放 / 网络 / 本地数据分组；技术诊断后置。
 
-UI 规则：
+UI / 路由规则：
 - 首页一级 Tab 固定四等宽 `text_4`，不使用会产生窄屏溢出箭头的 `scroll_button`。
 - 片库大量分类使用 `flex_button`，分类切换只写状态 + `refreshPage(false)`，不压新的 `hiker://page`。
 - 短剧列表/收藏/历史默认 `movie_3` 竖海报；专题卡使用 `movie_2`；详情 Hero 使用 `movie_1_vertical_pic_blur`。
-- 跨页详情 URL 至少携带真实 `url/title/cover` query，不再只依赖 `extra`。
+- **海阔 `hiker://page` 的业务跨页参数禁止使用通用键 `url`。** 1.9.0-test.1 使用 `?url=<真实详情地址>` 后，实机在页面规则执行前由 ArticleListModel 抛出 HTTP URL scheme 异常。
+- Test2 统一改为：详情 `hddj_url`、专题 `hddj_topic_url`、标题 `hddj_title`；参数恢复顺序为 `MY_PARAMS → getParam → URL 合法性/相对地址 c.abs()`。
+- 卡片同时把专用参数写入 page query 与 `extra`，但业务正确性不再依赖保留参数名。
 - 主导航图标使用仓库内稳定 SVG，不用 Emoji 承担正式图标。
 
 ## 数据 / HTML / 图片事实
@@ -85,6 +87,8 @@ POST /account/guest
 - 播放成功继续写 `hddj_last_<id>`，保持续播兼容。
 
 待实机验证：
+- [ ] Test2 短剧详情页正常打开，不再出现 ArticleListModel URL scheme 弹窗。
+- [ ] 专题详情正常打开。
 - [ ] smart 普通免费集首次播放。
 - [ ] smart 连续第二集/二次播放。
 - [ ] PlayModel Header 不导致已验证旧链回归。
@@ -116,6 +120,14 @@ POST /account/guest
 
 ---
 ## 版本记录
+### 1.9.0-test.2 / 2026-08-22
+- 用户实机确认 Test1 二级详情页直接触发海阔系统错误：`ArticleListModel-HttpRequestError` / `Expected URL scheme 'http' or 'https' but no colon was found`。
+- 根因：Test1 卡片把真实详情地址放入 `hiker://page/...&url=...`；`url` 与海阔页面模型内部 URL 语义冲突，错误发生在页面自定义 `detail()` 执行前。
+- 修复：详情改 `hddj_url`，专题改 `hddj_topic_url`，标题改 `hddj_title`；同时写入 query + extra。
+- Detail/Topic 增加 `MY_PARAMS → getParam → safeHttp/c.abs` 三层恢复，非法地址直接显示产品化错误态，不再交给 ArticleListModel 发起错误请求。
+- 仅替换 UI Base / Detail Pages / Runtime；Core、Content、PlaybackAdapter 继续复用 Test1，避免扩大回归范围。
+- 新 Build19002 / Shell v3 / Bootstrap v3 强制越过 Test1 缓存。
+
 ### 1.9.0-test.1 / 2026-08-22
 - 基于已实机验证的 Stable 1.8.2 协议/HTML Parser 向前重构，不改 Stable。
 - 从单体 hddj God Object 拆出 CoreBridge / UI Base / PlaybackAdapter / Content Pages / Detail Pages / Runtime。
@@ -123,7 +135,7 @@ POST /account/guest
 - 分类、首页 Tab、Mine Tab 统一采用同页状态刷新，落实跨程序“State Change ≠ Navigation”规则。
 - 播放改成结构化 Token API → PlayModel；保留 legacy 对照和 webRule 后级降级；新增脱敏播放诊断。
 - 新增点击触发的线路自检，不在启动阶段做多域探测。
-- 当前只发布 Test；本地 JS 全量 `node --check`、release JSON、Shell 外层/内层 pages JSON 均已通过，并用 Git blob SHA 对照远端关键模块。
+- Test1 首轮实机证明首页可进入，但二级详情路由因 `url` 参数冲突失败，已冻结，不原地覆盖。
 
 ### 1.8.2 Stable / 2026-08-22
 - 用户实机确认 `1.8.2-test.1 / Build 18201` 正常后原样晋级 Remote Stable。
