@@ -4,10 +4,11 @@
 
 ## 当前基线
 - Legacy `1.2.1`：仅保留历史，不再作为当前站点兼容基线。
-- Test：`2.0.0-test.23` / Build `20023` / Shell `2026082229`。
+- Test：`2.0.0-test.24` / Build `20024` / Shell v4 / 规则 version `2026082230`。
+- Test Shell：`apps/video/hanime1/hanime1_remote_test_v4.txt`。
+- Test Bootstrap：`apps/video/hanime1/bootstrap_test_v4.js`。
 - Stable 尚未晋级。
-- Test23 **直接回到已验证 Test17 业务数据链**，不加载 Test18/19/20/21/22 的头像补丁；头像层改用海阔官方内置 XPath。
-- Shell / Bootstrap 暂不改；已安装 Test21/22 的用户通过程序内“更新测试版”切到 Test23。
+- **Test24 是交付/运行链恢复版**：保留 Test23 的海阔内置 XPath 头像引擎，但通过全新 Shell v4 + Bootstrap v4 强制把旧设备越过 Test21/22/23 的自锁更新状态。
 
 ## 已验证实机事实
 - Recovery15：首页恢复正常，证明“退回 Test12 已验证链 + 新 Bootstrap/Shell 缓存键”的恢复方案有效。
@@ -17,10 +18,46 @@
 - Test19：评论正文恢复，但作者/评论真实头像仍未恢复；“全局收集 img 再按数组顺序回填”判定无效。
 - Test20：用户实机确认“还是一样，没有区别”。作者仍灰方块，主评论仍字母占位；上传者头像正常。局部 commentId/用户名邻域找图方案判定无效。
 - Test21：2026-08-22 15:30 用户实机确认：**作者头像仍与原来一样；主评论头像大部分仍没有；楼中楼只有小部分显示真实自定义头像。** 回复截图中至少一条真实粉色头像成功显示，其余多条显示灰色默认人物图。该结果证明海阔 `avatar` 组件可以显示站点头像，`/loadReplies` 头像链至少部分成功，主评论/作者问题主要在 DOM/URL 提取而非图片组件完全失效。
-- **Test22：2026-08-22 15:41 用户实机截图确认设置页仍没有“头像诊断”，且旧 Test12 设置模块仍显示硬编码 `2.0.0-test.12 · Build 20012`。** 这个文本本身不能证明真实运行 Build，因为它从 Test12 起就是硬编码；但“诊断区完全没有出现”说明 Test22 诊断补丁没有进入当前页面渲染上下文（可能是远程更新未生效、模块缓存/页面上下文未重载，或补丁加载失败）。因此后续版本必须同时解决“运行版本不可观测”问题，禁止继续拿硬编码版本文案判断实际运行链。
+- Test22：2026-08-22 15:41 用户实机截图确认设置页没有“头像诊断”，且旧 Test12 设置模块仍显示硬编码 `2.0.0-test.12 · Build 20012`。这个文案本身不能证明真实运行 Build，但诊断区未出现说明 Test22 没有进入当前页面运行上下文。
+- **Test23 未真正送达设备验证。2026-08-22 16:49 用户再次点击旧设置页“更新测试版”，设备直接提示 `“HanimeBoot” 未定义。` 设置页仍没有 Test23 的“运行版本/头像诊断”。** 根因已经明确：Test12 起沿用的 `renderSettings()` 把 `HanimeBoot.check/update/rollback()` 直接写在序列化 `lazyRule` 回调中；回调执行时没有 Bootstrap 模块的外部全局上下文，因此 `HanimeBoot` 不存在。设备因此卡在旧 active release，后续 Test22/Test23 即使 GitHub 元数据已经发布也无法通过程序内更新进入手机。
 - Test12 X5 WebView bridge 登录实机成功：WebView Cookie → 规则侧导入 → profile 校验 → 保存账号。
 - 首页真实内容、多分区、封面可用；视频详情封面可显示；1080/720/480 可解析并播放；真选集可直接播放；漫画首页/分类/详情基本链可用；公开片库无需登录可浏览。
 - 官网预告页当前自身 HTTP 500，上游恢复前保持故障降级。
+
+## 当前恢复链：Test24
+```text
+我的规则仓库重新覆盖导入 Hanime1 测试版
+→ hanime1_remote_test_v4.txt / rule version 2026082230
+→ bootstrap_test_v4.js?v=20024 / require build 20024
+→ Remote Manager v2.0.1
+→ minBuild 20024
+→ 若设备 current < 20024，强制切 defaultRelease Test24
+→ Test24 recovery_loader
+→ Test23 recovery（Test17 稳定业务链 + XPath 头像层）
+→ patch_runtime24（更新链/设置页恢复）
+```
+
+### 为什么必须重新覆盖导入 Shell
+旧设备当前已经出现 `HanimeBoot 未定义`，说明**程序内“更新测试版”按钮本身坏了**。继续只改 `test.json/release.json` 无法让这台设备自救，因为它无法成功调用 Remote Manager 的 update。
+
+因此 Test24 按仓库/远程模块规范成套发布：
+- 新 Shell 文件名：`hanime1_remote_test_v4.txt`。
+- 新规则数值 version：`2026082230`。
+- 新 Bootstrap 文件名：`bootstrap_test_v4.js`。
+- 新 Bootstrap require cache key/build：`20024`。
+- Bootstrap `minBuild=20024`，默认 release 直接绑定 Test24。
+- registry/channels/manifest/test 全部切到 v4 路径。
+
+### Test24 更新按钮的正确写法
+序列化 `lazyRule` **不再直接引用外部 `HanimeBoot`**。每次检查/更新/回退/重装/恢复都在回调内部显式：
+
+```text
+require(bootstrap_test_v4.js?v=20024, ..., 20024)
+→ 当前回调上下文获得 HanimeBoot
+→ HanimeBoot.check/update/rollback/reinstall/reset
+```
+
+Bootstrap URL 和 version 通过 `lazyRule` 参数显式传入，不依赖模块局部变量闭包。
 
 ## 上游 Han1mePlus 当前源码确认的头像契约
 2026-08-22 已重新核对 `1wc10086/Han1mePlus@main`。
@@ -56,20 +93,13 @@
 - Test19：`#comment-start img` 全局数组按 index 回填。评论恢复但头像失败；禁用。
 - Test20：commentId/用户名固定字符邻域找 `<img>`。实机无变化；禁用。
 - Test21：自写轻量 HTML 元素边界 + 顶层 children 分组。合成 fixture 能工作，但实机主评论/作者仍未通过；不能再以自写 HTML parser 作为首选。
-- Test22：只增加诊断，但设备设置页没有出现诊断区；说明“诊断本身不可见”也会阻断闭环。后续诊断必须和真实运行版本标记一起直接覆盖设置页。
+- Test22：只增加诊断，但设备设置页没有出现诊断区；不能证明其头像实现失败，因为设备未可靠进入该 release。
+- **Test23 XPath 头像方案尚未得到真实设备运行验证，不能再把“旧页面看起来没变化”误记为 Test23 头像失败。必须先让 Shell v4/Test24 真正进入设备，再看诊断。**
 
-## Test23：海阔内置 XPath 头像恢复 + 运行链可观测
-### 为什么改用 XPath
-海阔官方开发者手册提供 `xpath()` / `xpathArray()`（缩写 `xpa`）直接对 HTML 执行 XPath。Test23 不再维护自写 HTML 栈解析器，而把 Han1mePlus 已知 DOM 契约直接表达为 XPath。
+## Test23 / Test24 头像引擎
+Test23 回到 Test17 已验证业务数据链，用海阔内置 `xpathArray/xpa` 直接表达 Han1mePlus DOM 契约；Test24 沿用该引擎，不再追加第七套头像解析猜测。
 
-### 运行链
-```text
-Test17 已验证业务数据链
-→ Test23 patch_avatar_xpath.js
-→ 只增强作者/评论/回复头像 + 设置页运行版本/诊断
-```
-
-### 作者头像 XPath
+### 作者
 ```text
 //*[@id="video-user-avatar"]/following-sibling::img[1]/@src
 → //*[@id="video-user-avatar"]/@src
@@ -77,29 +107,31 @@ Test17 已验证业务数据链
 → 精确作者搜索 fallback
 ```
 
-### 主评论头像 XPath
-严格对应 Han1mePlus “每 4 个 root.children 一组”，只取每组第 1 个直接子元素内部的第一张头像：
+### 主评论
 ```text
 //*[@id="comment-start"]/*[position() mod 4 = 1]//img[1]/@src
 ```
+只有 XPath 返回头像数量与 Test17 `items.length` 完全一致时才整体应用，避免错位。
 
-安全门：**XPath 返回头像数量必须等于 Test17 `items.length` 才整体应用**。数量不一致时不按序硬塞，避免再次出现头像错位。
-
-### 回复头像 XPath
+### 回复
 ```text
 //div[starts-with(@id,"reply-start")]/*[position() mod 2 = 1]//img[1]/@src
 ```
-同样要求 XPath 数量与回复 items 数量一致才批量应用。
+同样要求 XPath 数量与回复 items 数量一致才应用。
 
-### 设置页可观测性
-Test23 完全覆盖旧 `renderSettings()`，不再显示 Test12 的硬编码版本。设置页顶部和“测试版本”区域都明确显示：
+### Test24 可见诊断
+设置页必须明确显示：
 ```text
-2.0.0-test.23 · Build 20023
+运行版本
+2.0.0-test.24 · Build 20024 · Shell v4
 ```
-新增：
-- `重新加载当前测试版`：调用 `HanimeBoot.reinstall()` 清理并重载当前 release 模块缓存。
-- `运行头像诊断`：显示 XPath 是否可用、作者是否取到 URL、主评论 items/XPath头像/已应用数量、回复 items/XPath头像/已应用数量。
-- 诊断不输出 Cookie / Token / Authorization / 密码。
+并提供：
+- 重新加载当前测试版。
+- 恢复 Test24 基线。
+- 检查远程更新 / 更新测试版 / 回退上一测试版。
+- 头像诊断。
+
+头像诊断返回：XPath 是否可用、作者是否取到 URL、主评论 items/XPath头像/已应用数量、回复 items/XPath头像/已应用数量；不输出 Cookie、Token、Authorization 或密码。
 
 ## 登录架构（当前正确链）
 ```text
@@ -114,33 +146,41 @@ X5 官网 /login
 
 硬约束：不保存账号密码；只保存账号 Cookie；只看到 session 类 Cookie 不等于登录成功；登录成功以能识别真实 `/user/<id>` 和账号资料为准。
 
-## Test23 待实机回归
-- [ ] 点击“更新测试版”后，重新进入 Hanime1 设置页，必须明确看到 `运行版本 2.0.0-test.23 · Build 20023`。若仍看见旧 Test12 文案且没有“运行版本”，说明新 release 仍未进入当前页面，不再继续测试头像。
-- [ ] 设置页必须出现“重新加载当前测试版”和“头像诊断”。
-- [ ] 目标视频详情作者若 XPath 取得 URL，应显示真实头像；上传者头像不能退化。
-- [ ] 主评论数据保持正常；若 `XPath头像 == items`，应全部应用站点真实/默认头像，不再显示 Q/S/H/W 字母占位。
-- [ ] 楼中楼数据保持正常；若 `XPath头像 == items`，应全部应用站点真实/默认头像。
-- [ ] 若 XPath 数量不等于 items，截图诊断即可精确决定下一步，不再猜 DOM。
-- [ ] 登录、播放、选集、片库、漫画无回归。
+## Test24 待实机回归
+- [ ] **不要再用当前旧页面的“更新测试版”按钮升级**；从“我的规则仓库”重新覆盖导入 Hanime1 测试版。
+- [ ] 覆盖导入后重新进入设置页，必须看到 `2.0.0-test.24 · Build 20024 · Shell v4`。看不到就停止头像测试，继续修 Shell 交付链。
+- [ ] 点击“检查远程更新”不再出现 `HanimeBoot 未定义`。
+- [ ] 点击“重新加载当前测试版”能正常返回成功/错误信息，不出现全局对象未定义。
+- [ ] 设置页出现“头像诊断”。
+- [ ] 打开目标视频和一条回复后运行诊断，记录作者 URL、主评论 XPath 数量、回复 XPath 数量。
+- [ ] 只有确认 Test24 真正在设备运行后，才判断 Test23 XPath 头像方案是否有效。
+- [ ] 登录、播放、真选集、片库、漫画无回归。
 
 ## 后续顺序
-1. Test23：先确认真实运行 Build 和 XPath 头像命中数。
-2. 头像链通过后，再做作者目录 + 独立作者主页。
-3. 再通过后：评论点赞/点踩、举报等官网元信息与交互。
-4. 再做账号中心/订阅作者增强。
-5. 主要功能稳定后做 Consolidated Candidate，压缩历史增量链。
+1. Test24：先闭环 Shell v4/Bootstrap v4 到设备的真实交付和更新链。
+2. Test24 真正运行后，用可见诊断判断 XPath 头像命中；只修失败的头像层。
+3. 头像链通过后，再做作者目录 + 独立作者主页。
+4. 再通过后：评论点赞/点踩、举报等官网元信息与交互。
+5. 再做账号中心/订阅作者增强。
+6. 主要功能稳定后做 Consolidated Candidate，压缩历史增量链。
 
 ---
 ## 版本记录
+### 2.0.0-test.24 / Build 20024 / Shell v4 / 2026-08-22
+- 用户实机确认旧设置页“更新测试版”报 `HanimeBoot 未定义`，明确定位远程更新链自锁根因。
+- 发布 `hanime1_remote_test_v4.txt`，规则 version `2026082230`。
+- 发布 `bootstrap_test_v4.js`，新缓存键/build 20024，`minBuild=20024`，默认 release 绑定 Test24。
+- 所有更新类 `lazyRule` 回调改为内部显式 require Bootstrap，再调用 `HanimeBoot`。
+- 新增 `resetToDefault` 对应“恢复 Test24 基线”。
+- 头像引擎沿用 Test23 XPath，不在运行链未恢复前继续盲改头像。
+
 ### 2.0.0-test.23 / Build 20023 / 2026-08-22
 - 回到 Test17 稳定业务链，不叠加 Test18~22 头像补丁。
 - 头像解析切换为海阔内置 XPath，直接表达 Han1mePlus 4/2 子节点契约。
-- 设置页改为真实运行版本标记，加入当前 release 重装和可见 XPath 诊断。
-- 主评论/回复只有在 XPath 数量与 items 数量一致时才批量应用，避免错位。
+- 计划覆盖设置页真实运行版本/可见诊断；**由于旧设备更新链自锁，未得到真实设备运行验证。**
 
 ### 2.0.0-test.22 / Build 20022 / 2026-08-22
-- 计划只增加设置页头像诊断。
-- 实机：诊断区未出现；旧 Test12 硬编码版本文案仍在，判定诊断/版本可观测性失败，被 Test23 替代。
+- 计划只增加设置页头像诊断；设备未可靠进入该 release。
 
 ### 2.0.0-test.21 / Build 20021 / 2026-08-22
 - 自写 HTML parser 移植 4 子节点主评论 / 2 子节点回复契约。
