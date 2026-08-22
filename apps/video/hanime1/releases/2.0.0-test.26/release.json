@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.26",
+  "build": 20026,
+  "ref": "main",
+  "baseVersion": "2.0.0-test.25",
+  "supersedes": "2.0.0-test.25",
+  "modules": [
+    {
+      "name": "recovery26",
+      "path": "apps/video/hanime1/releases/2.0.0-test.26/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.0-test.26"
+  },
+  "notes": "Test26 begins the planned creator/product UX stage after Test24 avatar recovery and Test25 reply performance work. It adds an author directory and dedicated author/uploader profile experience without requiring a new Shell page, reusing hanimeVideoResults routing. Search and filter pages expose author discovery, video detail is reorganized around a four-action primary row (play/comments/playlist/download), creator cards open their own profile views, and settings is simplified while preserving Shell v4 updater/recovery safety."
+}
