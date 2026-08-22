@@ -3,7 +3,7 @@
   "id": "huangdou",
   "name": "黄豆短剧",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 23:49",
+  "updatedAt": "2026-08-23 00:18",
   "channels": [
     {
       "channel":"stable","label":"正式版","id":"huangdou","name":"黄豆短剧","version":"1.8.2","build":18201,
@@ -12,9 +12,9 @@
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
-      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.3","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19003,
-      "displayVersion":"Test 1.9.0 · Playback Cleanup 3","path":"apps/video/huangdou/huangdou_remote_test_v4.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
-      "desc":"1.9 产品级重构 Test3 · 播放页降噪/剧集直连修复，待实机复测","highlights":["单线路恢复直接 HLS，取消无必要 PlayModel","所有剧集先尝试 guest/token，不再被 locked 标记提前拦截","正倒序移出选集网格，本地收藏移到详情底部"],
+      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.4","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19004,
+      "displayVersion":"Test 1.9.0 · Session HLS 4","path":"apps/video/huangdou/huangdou_remote_test_v5.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,
+      "desc":"1.9 产品级重构 Test4 · 后续集会话/HLS 授权诊断修复，待实机复测","highlights":["保留已有账号/购买会话，缺 Token 才降级 guest","Token 后预检真实 HLS，并携带 Cookie/Referer/UA 播放","锁定集不绕过官网权限；无授权明确提示登录/购买"],
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
