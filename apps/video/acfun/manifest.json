@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha17",
-  "testBuild": 168,
-  "testShellVersion": "7.3.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v073.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v073.txt",
+  "testVersion": "0.6.0-alpha18",
+  "testBuild": 169,
+  "testShellVersion": "7.4.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v074.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v074.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha17-device-evidence-chain-v73",
+    "stage": "alpha18-validated-seed-device-chain-v74",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha16 最新实机探针已把故障层锁定：视频封面字段不是空，而是相对 jhimage/...；播放 seed jpd/...m3u8 与 /api/m3u8/h5/decode?path=... 构造均正确，但经过 cacheM3u8 后得到 file:/// 本地地址仍不可播；短视频 loadType=2 variant=0 明确返回30条，因此空页是模型/Renderer/运行链问题；comic=none 表明 A16 Reader 没真正进入。Alpha17 不继承 A16 业务模块，直接以 Stable8 + A15 Clean 为主干，追加四个设备证据小模块：jhimage 只映射 APK 1.9.7 可确认的 https://cdn.ukaim.com/ 并复用现有明文检测/XOR前100字节图片解码器；播放恢复 Stable v043 风格的远程 decode URL + Header 直交播放器，移除本轮可疑 cacheM3u8；短视频全局 itemInfo 仅缺失时补嵌套字段，并使用 v073 独立 Renderer，避免 A15 hardcode v071 重载旧 Release；漫画章节改显式 query ids + chapterId-first robust image extractor + #fullTheme#noRecordHistory# + pic_1_full。小说/有声 POST-first 成功链保持不动。minBuild=168 强制越过 Alpha16，latest 不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha16 实机探针已确认 jhimage 相对封面、path=jpd/...m3u8 有效 Seed、decode URL 构造正确、cacheM3u8 后 file:/// 仍不可播、短视频 loadType=2 返回30条、comic probe 未进入。Alpha17 据此建立 jhimage→cdn.ukaim.com、短视频当前 Bootstrap Renderer 和漫画显式 query Reader。发布前静态复核又发现 Alpha17 首版 Playback 没把通用 path 纳入 Seed，可能丢掉当前设备已证明的 jpd 路径，因此 Alpha18 使用新 validated-seed Playback：优先明确视频字段，再有限接受 path/url，且通用字段必须匹配 m3u8/mp4/jpc/jpd 等媒体形态；之后走 Stable __v043DecodePlayUrl，将远程 decode URL + Header 直接交播放器，不调用 cacheM3u8。活动 Release 为 Stable8 + A15 Clean + A17 Image/Short/Comic + A18 Playback，A16 和 A17旧播放模块均不进入。小说/有声 POST-first 成功链不改。minBuild=169，latest 不变。"
   }
 }
