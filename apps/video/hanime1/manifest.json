@@ -10,15 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.24",
-  "testBuild": 20024,
+  "testVersion": "2.0.0-test.25",
+  "testBuild": 20025,
   "testShellVersion": "2.0.0-test.4",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v4.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "migration": {
-    "stage": "test24-shell-bootstrap-updater-recovery",
-    "source": "2.0.0-test.23",
-    "recoveryBase": "2.0.0-test.23",
-    "note": "用户 2026-08-22 16:49 实机点击旧设置页更新按钮出现 HanimeBoot 未定义，并且页面仍未出现 Test23 运行版本/头像诊断。这证明设备没有进入 Test23，根因是旧设置模块的序列化 lazyRule 直接引用 HanimeBoot，回调上下文中该全局对象不存在，导致程序内更新链自锁。Test24 通过新 Shell v4 + Bootstrap v4 + minBuild 20024 强制恢复；更新类回调全部在 lazyRule 内显式 require Bootstrap 后再调用 HanimeBoot。头像解析沿用尚未真正送达设备验证的 Test23 XPath 引擎。"
+    "stage": "test25-reply-performance-after-runtime-recovery",
+    "source": "2.0.0-test.24",
+    "recoveryBase": "2.0.0-test.24",
+    "note": "Test24 经用户实机确认真实头像已经恢复，证明此前连续多版看似头像未修复的核心原因之一是设备实际没有进入后续 Release；该交付事故已单独记录到 docs/INCIDENT_REMOTE_RELEASE_NOT_APPLIED_20260822.md。Test25 保留 Test24 已验证头像/Shell v4 运行链，移除头像诊断，并把楼中楼从旧的两次 /loadReplies 请求优化为单次请求同时解析正文与 XPath 头像，同时删除页面打开时无必要的 profile() 网络探测并增加短缓存。"
   }
 }
