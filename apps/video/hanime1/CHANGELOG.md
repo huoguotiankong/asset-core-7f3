@@ -4,8 +4,16 @@
 
 ## 当前基线
 - Legacy `1.2.1`：仅保留历史，不再作为当前站点兼容基线。
-- Test：`2.0.0-test.13` / Build `20013` / Shell `2026082222`。
-- Stable 尚未晋级；Test13 等待海阔实机回归。
+- Test：`2.0.0-test.14` / Build `20014` / Shell `2026082223`。
+- Stable 尚未晋级；Test14 等待海阔实机回归。
+
+
+## Test13 实机失败 / Test14 修复
+- Test13 手机上启动即报：`SyntaxError: 不允许的字符："反斜杠"`，来源 `JSEngine#8(eval)#89(Function)`，属于海阔 JS 引擎解析兼容问题，不是登录/API 故障。
+- 本地 Node/Rhino 均能解析 Test13，因此以后 Hanime 发布 Guard 不能只依赖桌面 JS 解析器；新增“新模块源码反斜杠扫描”作为该运行链的兼容检查。
+- 定位 Test13 新增模块时，只有 `patch_provider.js` 与 `ui_detail_comments.js` 含反斜杠字符；Test14 不在其后简单覆盖，而是从 Release 加载链中完全移除这两个 Test13 文件，并用零反斜杠写法重写对应能力。
+- Test12 已实机验证成功的 X5 `fy_bridge_app.getCookie -> putVar -> importCookie -> profile` 登录链保持不变。
+- 图标统一改为 Hanime1 官网红色 `H` 标识，新资产：`apps/video/hanime1/assets/hanime1_official.svg`；Shell、channels、根 manifest 同步切换新路径以避开旧图标缓存。
 
 ## 已验证实机事实
 - 首页真实内容、多分区与封面可用。
@@ -84,7 +92,7 @@ X5 官网 /login
 - 官网筛选 canonical `search_key`。
 - 逐页面封面布局设置。
 
-## 待 Test13 实机回归
+## 待 Test14 实机回归
 - [ ] 作者头像是否恢复。
 - [ ] 评论/回复头像是否恢复。
 - [ ] 详情是否正确区分作者与上传者，且两者名称/头像与官网一致。
@@ -96,11 +104,17 @@ X5 官网 /login
 - [ ] 评论新布局与楼中楼入口是否更舒服。
 
 ## 技术债
-- Test1-13 仍是增量覆盖链，Test13 累计 56 个模块。
+- Test1-14 仍是增量覆盖链，Test14 累计 56 个模块。
 - 核心功能稳定后必须建立 consolidated Candidate runtime，压缩为 Core / Provider / Pages / Account / UI / Runtime 少量模块，再考虑 Stable。
 
 ---
 ## 版本记录
+### 2.0.0-test.14 / Build 20014 / 2026-08-22
+- 修复 Test13 海阔 JS 引擎非法反斜杠启动错误。
+- Release 彻底移除 Test13 两个故障模块并零反斜杠兼容重写。
+- 保留已验证登录链、作者/上传者、账号、头像、评论、分类能力。
+- Hanime1 小程序与云仓卡片统一切换官方红色 H 图标。
+
 ### 2.0.0-test.13 / Build 20013 / 2026-08-22
 - Test12 X5 bridge 登录由实机确认成功，正式升级为账号基线。
 - 作者/上传者分离，修复头像解析。
