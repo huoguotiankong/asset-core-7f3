@@ -3,22 +3,22 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 01:17",
+  "updatedAt": "2026-08-23 01:38",
   "channels": [
     {
       "channel": "stable",
       "label": "正式版",
       "id": "mdai",
       "name": "麻豆AI",
-      "version": "2.6.3",
-      "build": 26301,
-      "displayVersion": "Stable 2.6.3 · Remote",
-      "path": "apps/video/mdai/mdai_remote_v1.txt",
+      "version": "2.8.0",
+      "build": 28003,
+      "displayVersion": "Stable 2.8.0 · Remote",
+      "path": "apps/video/mdai/mdai_remote_v2.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "远程代码正式版 · 已实机验证",
-      "highlights": ["2.6.3 稳定基线继续冻结","正式/测试同名覆盖","Remote Stable 日常使用"],
+      "desc": "2.8 产品级 UI 重构正式版 · 由 Test3 原样晋级",
+      "highlights": ["首页/片库/详情/搜索/我的/设置完成 2.8 信息架构重构","真实 PNG 官方图标已固化","片库分类与筛选原页切换，不再压新页面","继续复用 2.7 PlaybackAdapter，正式业务模块与 Test3 完全一致"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     },
     {
@@ -35,8 +35,8 @@
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "2.8 产品级 UI 重构 Test3 · 修复 Test2 启动语法错误，真实 PNG 图标与 UI 方案保持",
-      "highlights": ["修复片库内容结果 section 少一个右括号导致的 eval SyntaxError","首页/片库/详情/我的/设置继续沿用 2.8 重构","真实 PNG 图标继续用于程序和云仓库","PlaybackAdapter 继续复用 2.7，不扩大修复边界"],
+      "desc": "本次 Stable 2.8.0 的晋级来源；下一轮 Test 必须先 rebase 新 Stable",
+      "highlights": ["修复 Test2 ContentPages 语法错误","业务模块与 Stable 2.8.0 相同","Remote Manager state 与 Stable 独立"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     },
     {
@@ -57,8 +57,8 @@
       "mode": "local",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "原完整本地版 · 规则名固定为“麻豆AI 本地版”",
-      "highlights": ["导入输出程序名固定为 麻豆AI 本地版","完整业务代码内置","可与正式/测试远程版独立并存"],
+      "desc": "原完整本地版 · 暂保持 2.6.3 派生基线，可与 Remote Stable/Test 独立并存",
+      "highlights": ["导入输出程序名固定为 麻豆AI 本地版","完整业务代码内置","本次 Stable 晋级不重打 Local"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     }
   ]
