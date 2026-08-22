@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v16",
-  "updatedAt": "2026-08-22 14:00",
+  "versionPolicy": "legacy-history-remote-test-v17",
+  "updatedAt": "2026-08-22 14:25",
   "channels": [
     {
       "channel": "stable",
@@ -18,10 +18,7 @@
       "updatedAt": "2026-08-18",
       "recommended": false,
       "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
-      "highlights": [
-        "历史单体规则",
-        "不再围绕旧版兼容或优化"
-      ],
+      "highlights": ["历史单体规则","不再围绕旧版兼容或优化"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     },
     {
@@ -29,22 +26,22 @@
       "label": "测试版",
       "id": "hanime1-test",
       "name": "Hanime1",
-      "version": "2.0.0-test.16",
-      "baseVersion": "2.0.0-test.15",
+      "version": "2.0.0-test.17",
+      "baseVersion": "2.0.0-test.16",
       "targetVersion": "2.0.0",
-      "build": 20016,
-      "displayVersion": "Test 2.0.0 · Incremental16",
+      "build": 20017,
+      "displayVersion": "Test 2.0.0 · Incremental17",
       "path": "apps/video/hanime1/hanime1_remote_test_v3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": true,
-      "desc": "Test16：在已实机恢复正常的 Recovery15/Test12 稳定链上，只增加详情页作者/上传者分离与头像恢复；不改首页、登录、播放、片库、漫画和布局设置。",
+      "desc": "Test17：在已恢复正常的 Test16 链上，仅修作者头像 fallback，并把上传者点击改为真实 /user/<id> 公开上传作品列表。",
       "highlights": [
-        "Recovery15 首页已实机恢复",
-        "只增加作者/上传者详情层",
-        "作者与上传者分别显示头像与身份",
-        "点击作者/上传者直接查看相关作品",
-        "新增模块零反斜杠，继续规避海阔 JS 兼容风险"
+        "Test16 首页/详情启动已恢复",
+        "作者头像缺失时从官网作者搜索卡回填",
+        "上传者不再按关键词搜索，直接读取公开用户页影片",
+        "不改登录、播放、片库、漫画稳定链",
+        "新增模块保持零反斜杠字符"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/hanime1/assets/hanime1_official.svg"
     }
