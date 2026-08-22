@@ -1,6 +1,6 @@
 # 海阔小程序编写注意事项
 
-版本：3.5  
+版本：3.6  
 首次建立：2026-08-20  
 最近增强：2026-08-23  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
@@ -170,6 +170,24 @@ ReferenceError: JDB 未定义
 - `node --check` 只能证明 parse 通过，不能证明 eval scope、closure、序列化 lazyRule、海阔 JSEngine 运行语义正确。
 - Remote Runtime/Bootstrap/Loader 发布前增加最小 entry smoke test：至少执行一次“加载 Core → 调用实际导出入口”，而不是只做语法检查。
 - 此类故障一旦进入已发布 URL，继续遵守新 build / 新 Shell / 新 runtime / 新 cache key，禁止原地覆盖赌缓存刷新。
+
+## 5E. `lazyRule` 点击时不得只重新 `eval` 基础 Core 再调用已被补丁覆盖的方法
+ACFun Alpha12 真实事故：页面首次渲染已经按 Release 顺序加载 Core → 多层 Runtime，仓库代码也能看到最新版 `ac.play()`；但旧视频详情的播放 `lazyRule` 在用户真正点击时又执行：
+
+```text
+getItem(core_src)
+→ eval(Core)
+→ ac.play(...)
+```
+
+这会在**点击执行上下文**里把同名命名空间重新初始化，导致后置 Runtime/Patch 已覆盖的方法全部丢失。结果是“页面显示最新 Build，但点击仍执行老 Core”，连续多版播放修复看起来完全无效。
+
+固定规则：
+- Remote 模块化程序中，序列化 `lazyRule/rule` 若要调用当前业务对象，默认应重新进入**当前 Bootstrap/Loader**，而不是只 eval 某个历史 Core 源字符串。
+- 推荐：`require(currentBootstrap, cacheKey) → loadOnly() → CurrentNamespace.method()`，Bootstrap URL/version 作为参数显式传入 lazyRule。
+- 如果为了性能确实要 eval 本地缓存，必须缓存并恢复**同一个活动 Release 的完整导出**；不能只恢复基础 Core 后假装后置覆盖仍存在。
+- 发布前除了“启动入口 smoke test”，还要对关键点击路径做 **action smoke test**：首页点击播放/章节/登录时，记录实际 Runtime build/method owner，确认没有在 lazyRule 内降级到旧 Core。
+- 当“源码已经覆盖、设备仍表现像旧逻辑”时，除了查 Remote state/cache/load order，还必须查按钮自身 lazyRule 是否重建了旧运行时。
 
 ## 6. 关键索引不能是“单在线通道 + 短缓存 + 无 stale cache”
 正确链：新鲜缓存 → 主通道 → 备用通道 → 上一次有效 stale cache → 诊断错误页。
@@ -675,6 +693,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 ## JS/发布工件
 - [ ] 本次新增/修改 JS 已执行 `tools/js_syntax_guard.py` 或 `node --check`。
 - [ ] Remote Core/Runtime/Bootstrap 若依赖 `eval` 产生的符号，已执行真实入口的作用域 smoke test，不能只做语法检查。
+- [ ] 序列化 lazyRule/rule 的关键点击动作已做 action smoke test，确认点击时仍加载当前 Release，而不是只 eval 历史 Core。
 - [ ] Recovery loader / Bootstrap 同样通过语法检查。
 - [ ] release JSON 可解析，模块真实存在。
 - [ ] Cloud Repo advertised build 与 installer/Bootstrap 基线一致。
@@ -784,6 +803,11 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - Test2 为复用抽出 `loadCore()`，把 `eval(Core)` 与最终 `JDB.home()` 调用拆到两个函数作用域；静态语法检查全部通过，但实机启动直接 `ReferenceError: JDB 未定义`。
 - 永久教训：**direct eval 产生的局部 `var/function` 不保证跨 helper 可见；Runtime/Bootstrap/Loader 不能只做 node parse guard，必须增加真实入口作用域 smoke test。**
 - 修复策略：冻结 Test2，使用新 Test3 Shell/runtime/cache key；恢复同作用域 `eval(Core) → eval(Patch) → call`，不原地覆盖失败 URL。
+
+## 2026-08-23：ACFun lazyRule 重新 eval Core 导致播放补丁失效
+- Alpha12 页面加载时已经进入最新 Release，但旧视频详情播放按钮在点击时仅 `eval(core v018)` 再调用 `ac.play`，把 Alpha12 后置 Runtime 覆盖掉；因此源码看似连续修复，实机实际一直执行旧播放逻辑。
+- 永久教训：**关键 lazyRule 不能只恢复基础 Core；必须重新进入当前 Bootstrap/活动 Release，或显式恢复完整导出。启动成功不等于点击动作运行在当前 Runtime。**
+- 同一详情页把“播放 / 收藏 / 评论”作为同级可点击结果，进入播放器后形成无关播放列表；再次验证 Primary Play 区必须只包含真实媒体任务。
 
 ---
 
