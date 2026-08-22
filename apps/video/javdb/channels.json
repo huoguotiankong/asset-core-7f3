@@ -3,7 +3,7 @@
   "id": "javdb-v3",
   "name": "JavDB v3",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 23:41",
+  "updatedAt": "2026-08-23 00:05",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "javdb-v3-test",
       "name": "JavDB v3",
-      "version": "3.9.42-test.2",
+      "version": "3.9.42-test.3",
       "baseVersion": "3.9.41",
       "targetVersion": "3.9.42",
-      "build": 2026082242,
-      "displayVersion": "Test 3.9.42 · APP体验增强2",
-      "path": "cloud/javdb/v3.9.42-test.2/javdb_v3.9.42_test2.txt",
+      "build": 2026082243,
+      "displayVersion": "Test 3.9.42 · APP体验增强3",
+      "path": "cloud/javdb/v3.9.42-test.3/javdb_v3.9.42_test3.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "远程代码测试版 · APP导航/UI第二轮 + 共用JAV第三方播放模块",
-      "highlights": ["继承Test1已验证分类排行演员", "主导航收敛为首页/排行/分类/演员/我的/更多", "我的整合本地片库与账号", "更多整合资讯资料库和设置", "MissAV/123AV/Jable改接共享播放SDK"],
+      "desc": "远程代码测试版 · 修复 Test2 启动作用域错误，保留 APP 导航/UI 与共享 JAV 播放 SDK",
+      "highlights": ["修复首页 JDB 未定义", "继承Test1已验证分类排行演员", "继承Test2首页/我的/更多UI", "MissAV/123AV/Jable继续走共享播放SDK"],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
