@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha16",
-  "build": 167,
-  "shellVersion": "7.2.0-test",
+  "version": "0.6.0-alpha17",
+  "build": 168,
+  "shellVersion": "7.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha16/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v072.txt",
+  "release": "apps/video/acfun/releases/0.6.0-alpha17/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v073.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha15 Clean Rebase 后实机确认：动漫/漫画封面恢复，但视频分类仍无封面；普通视频仍不可播且播放器列表混入收藏/评论；漫画章节图片再次不显示并出现多余顶部；短视频列表为空；全站搜索因 Bootstrap 未分发 searchCenter 动作直接报未知动作。新增诊断同时确认有声 fiction/base/findList POST 可返回8条，因此有声/小说 POST-first 列表链保持不动。Alpha16 只追加一个 focused media 模块：视频封面仅在 Stable itemInfo 缺图时补 generatedCoverImg/templateCoverImg 等 APP 明确字段；视频播放改为 seed→GET can/watch→POST fallback→decode/cacheM3u8，并只返回单一真实播放项；视频详情的收藏/评论改成 scroll_button，不进入播放器线路；短视频迁移回已实机成功的 loadType=2 并保留有限 fallback；漫画恢复 Alpha12 已验证的 chapterId-first + robust imageList + ac.image + pic_1_full，并仅在章节路由加 #fullTheme#；Bootstrap v072 显式支持 searchCenter/category 动作。Stable/latest 不动。"
+  "notes": "Alpha16 实机探针把故障层进一步锁定：视频封面已经解析到真实相对路径 jhimage/...jpg；视频播放 seed 为 jpd/...m3u8 且 /api/m3u8/h5/decode?path=... 已正确构造，但 Alpha16 经 cacheM3u8 后变成 file:///... 仍不可播；短视频 video/list 在 loadType=2 variant=0 明确返回30条，说明空页属于模型/渲染链而不是接口无数据；comic=none 说明 Alpha16 漫画 reader 路由没有真正进入。Alpha17 因此不继承 A16 业务模块，只保留 Stable8 + A15 Clean，再追加四个设备证据模块：jhimage 专门解析到 APK 1.9.7 可确认的 https://cdn.ukaim.com/ 并复用现有明文检测/XOR100图片解码器；普通视频改回 Stable v043 风格直接把远程 decode URL + Header 交给播放器，取消本轮已证明可疑的 cacheM3u8 本地文件步骤；短视频独立 Renderer 使用当前 Bootstrap v073，避免 A15 hardcode v071 重载旧 Release，同时全局 itemInfo 只在 Stable 缺字段时补嵌套 id/cover/media；漫画章节用显式 query 参数路由进入 chapterId-first Reader，并用 #fullTheme#noRecordHistory# + pic_1_full。小说/有声 POST-first 成功链不改，Stable/latest 继续冻结。"
 }
