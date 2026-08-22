@@ -10,14 +10,14 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.12",
-  "testBuild": 20012,
+  "testVersion": "2.0.0-test.13",
+  "testBuild": 20013,
   "testShellVersion": "2.0.0-test",
   "testBootstrap": "apps/video/hanime1/bootstrap_test_v2.js",
   "testRule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "migration": {
-    "stage": "web-bridge-layout-filter-test",
-    "source": "2.0.0-test.11",
-    "note": "Test12 根据实机继续修复：X5 网页桥接 Cookie、取消筛选二次弹窗、作者直达作品结果、评论重排和逐页面封面布局设置。"
+    "stage": "account-author-profile-test",
+    "source": "2.0.0-test.12",
+    "note": "Test13 在已实机验证的 X5 bridge 登录基础上强化账号与创作者体系：作者/上传者分离、头像修复、作者目录/主页、账号中心/My 与评论/分类 UI。"
   }
 }
