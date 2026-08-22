@@ -5,26 +5,26 @@
 ## 当前基线
 - App ID：`mdai`
 - Remote Stable：`2.6.3 / Build 26301 / Shell 1.0.0`（已实机验证，继续冻结）
-- Remote Test：`2.8.0-test.2 / Build 28002 / Shell 1.2.1-test`
+- Remote Test：`2.8.0-test.3 / Build 28003 / Shell 1.2.2-test`
 - Local：`2.6.3-local.1`
 - Stable 入口：`apps/video/mdai/mdai_remote_v1.txt`
-- Test 入口：`apps/video/mdai/mdai_remote_test_v7.txt`
+- Test 入口：`apps/video/mdai/mdai_remote_test_v8.txt`
 - Local：`mdai.txt`，导入名 `麻豆AI 本地版`
 - 正式图标资产：`apps/video/mdai/assets/mdai_official.png`
 
 ## 当前 Test 运行链
 ```text
-mdai_remote_test_v7.txt / rule version 2026082305
-→ bootstrap_test_v7.js / state id=mdai-test / minBuild=28002
+mdai_remote_test_v8.txt / rule version 2026082306
+→ bootstrap_test_v8.js / state id=mdai-test / minBuild=28003
 → Remote Manager v2.0.1
-→ releases/2.8.0-test.2/release.json
+→ releases/2.8.0-test.3/release.json
 → core.js          复用 Stable 2.6.3 协议数据桥
 → playback.js      复用 2.7 Test1 PlaybackAdapter
 → ui_base.js       复用 2.8 Test1 Native UI Design System
-→ pages_content.js 复用 2.8 Test1 首页 / 片库 / 搜索 / 我的 / 评论
+→ pages_content.js Test3：Pinned Test1 ContentPages + 单点 Syntax hotfix
 → pages_detail.js  复用 2.8 Test1 详情与选集信息架构
 → settings.js      复用 2.8 Test1 分组设置
-→ runtime.js       Test2：跨页状态恢复 + PNG 正式图标注入
+→ runtime.js       Test3：继承 Test2 跨页状态恢复 + PNG 图标注入
 ```
 
 ## 2.8 产品级 UI 重构
@@ -67,12 +67,38 @@ Detail
 - 2.8 首轮只重构 UI / Product 层，不改 2.7 PlaybackAdapter，避免 UI 与播放协议同时变化。
 
 ### Test2 发布前修正
-发布 Test1 后静态走查发现两个导航状态风险，未等用户实机踩坑即升 Test2：
-- 首页点“收藏/历史”时，Runtime 会先把 query `mode` 同步到 `mdai_mine_tab_v280`，不受上一次“我的”页状态污染。
-- 短剧详情进入片库时，Runtime 会先把 query `type=drama` 同步到 `mdai_library_type_v280`，避免打开后仍显示上一次视频片库。
+- 首页点“收藏/历史”时，Runtime 会先把 query `mode` 同步到 `mdai_mine_tab_v280`。
+- 短剧详情进入片库时，Runtime 会先把 query `type=drama` 同步到 `mdai_library_type_v280`。
 - 这两个修正只发生在 Runtime，不重写 Test1 UI 模块。
 
+### Test2 实机启动事故 → Test3
+用户实机启动 `2.8.0-test.2` 后直接报：
+
+```text
+麻豆AI解析失败
+SyntaxError: 在参数列表的后面缺少“)”
+来源: eval code#1
+行数: 83
+```
+
+回读实际远程 `pages_content.js` 后确认根因不是 Remote Manager，也不是 Runtime，而是片库这一行少一个右括号：
+
+```js
+d.push(U.line());d.push(U.section(c,'内容结果',selected?catLabel(c,selected):(menuName(menu)+' · 全部'));
+```
+
+正确应为：
+
+```js
+d.push(U.line());d.push(U.section(c,'内容结果',selected?catLabel(c,selected):(menuName(menu)+' · 全部')));
+```
+
+Test3 只修这一处语法错误；UI/数据/详情/播放边界全部保持。为保持 Test1/Test2 release 不可变，Test3 使用 pinned Test1 ContentPages 作为不可变基线，在新 release 模块中做精确单点替换后再 eval。
+
+**固定发布规则：** 大 UI 文件不能只检查 Runtime/Bootstrap；每一个实际会被 Remote Manager eval 的 JS 模块都必须逐文件执行语法检查或等价 parser 校验，且检查对象必须与远端 blob 一致。单个组合 Runtime 通过 `node --check` 不能证明其它模块可执行。
+
 待实机闭环：
+- [ ] Test3 可以正常启动进入首页，不再出现 eval SyntaxError。
 - [ ] 首页推荐 / 视频 / 短剧 / 社区四栏比例、间距和长标题表现自然。
 - [ ] 片库默认高度明显下降，分类可展开/收起且不会压新页面。
 - [ ] 搜索页连续换关键词仍在同一页面。
@@ -95,14 +121,14 @@ data:image/jpeg;base64,iVBORw0KGgo...
 - 不再依赖运行时 favicon 探测作为正式程序图标。
 - 不使用第三方 Favicon API 作为长期资产源。
 - 不用 AI 近似重绘，因为已经获得真实原始像素。
-- Test1 曾先建立 SVG 包装资产作为过渡，但发布前考虑 Android/海阔 SVG `<image data:...>` 兼容不确定性，Test2 再固化**真实 PNG 二进制文件**：`apps/video/mdai/assets/mdai_official.png`。
+- Test1 曾先建立 SVG 包装资产作为过渡，但考虑 Android/海阔 SVG `<image data:...>` 兼容不确定性，Test2 固化真实 PNG 二进制文件：`apps/video/mdai/assets/mdai_official.png`。
 - Test Shell、云仓库主卡以及 Stable/Test/Local 三个 channel card 统一引用 PNG 资产。
 - 业务 Stable 2.6.3 本身未因图标改版；当前只更新仓库展示/通道事实源与 Test Shell。
 
 固定规则：**数据 API Client 与 Raw Resource Client 必须分层；Data URI 图标若是正式来源，应先解码验证真实格式，再固化为项目静态二进制资产，不把超长 Data URI 长期塞进 manifest，也不依赖 SVG 内嵌 raster 作为唯一正式路径。**
 
 ## PlaybackAdapter 2.7
-2.8 Test2 继续沿用 Test1，不在本轮改播放：
+2.8 Test3 继续沿用 Test1，不在本轮改播放：
 - `smart`：稳定代理 + 原始直链。
 - `direct`：原始直链优先。
 - `proxy`：只走站点稳定代理。
@@ -141,11 +167,16 @@ data:image/jpeg;base64,iVBORw0KGgo...
 
 ---
 ## 版本记录
+### 2.8.0-test.3 / 2026-08-23
+- 根据 Test2 实机启动 SyntaxError 精确修复 ContentPages 片库 section 少一个右括号。
+- 保持 Test1/Test2 release 不可变，新 release 使用 pinned Test1 ContentPages + 单点替换。
+- Build28003 / Shell v8 / Bootstrap v8；PNG 图标、2.8 UI、详情、2.7 PlaybackAdapter 全部不变。
+
 ### 2.8.0-test.2 / 2026-08-23
-- 完整继承 Test1 UI 重构，不再重写页面模块。
+- 完整继承 Test1 UI 重构。
 - 发布前补收藏/历史、短剧片库的跨页状态恢复。
-- 将原站图标从过渡 SVG 包装升级为真实 PNG 二进制资产，Test Shell/云仓库/通道卡片统一引用 PNG。
-- Build28002 / Shell v7 / Bootstrap v7；Stable 2.6.3 与 PlaybackAdapter 不变。
+- 将原站图标从过渡 SVG 包装升级为真实 PNG 二进制资产。
+- 实机发现 ContentPages 语法错误，已冻结并由 Test3 修复。
 
 ### 2.8.0-test.1 / 2026-08-23
 - 从 2.7 局部优化升级为完整产品级 UI 重构。
