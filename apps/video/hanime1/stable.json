@@ -3,10 +3,20 @@
   "channel": "stable",
   "id": "hanime1",
   "name": "Hanime1",
-  "version": "1.2.1",
-  "build": 12100,
-  "mode": "legacy-local",
-  "rule": "hanime1.txt",
-  "updatedAt": "2026-08-18",
-  "notes": "Current verified legacy/local baseline. Frozen while 2.0.0-test.1 is under device validation."
+  "version": "2.0.0",
+  "build": 20029,
+  "mode": "remote",
+  "shellVersion": "2.0.0-stable.5",
+  "shellRuleVersion": 2026082235,
+  "installerBuild": 20029,
+  "installerBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
+  "managerVersion": "2.0.1",
+  "release": "apps/video/hanime1/releases/2.0.0/release.json",
+  "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
+  "promotedFrom": {
+    "version": "2.0.0-test.29",
+    "build": 20029
+  },
+  "updatedAt": "2026-08-22",
+  "notes": "User-approved fallback Stable promoted from the device-running Test29 baseline. Stable is frozen here while all reply/account/recommendation/player-list fixes continue only in Test."
 }
