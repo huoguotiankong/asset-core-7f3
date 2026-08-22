@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "huangdou-test",
   "name": "黄豆短剧",
-  "version": "1.9.0-test.3",
+  "version": "1.9.0-test.4",
   "baseVersion": "1.8.2",
   "targetVersion": "1.9.0",
-  "build": 19003,
-  "shellVersion": "1.1.2-test",
-  "shellRuleVersion": 2026082217,
+  "build": 19004,
+  "shellVersion": "1.1.3-test",
+  "shellRuleVersion": 2026082302,
   "managerVersion": "2.0.1",
-  "release": "apps/video/huangdou/releases/1.9.0-test.3/release.json",
-  "rule": "apps/video/huangdou/huangdou_remote_test_v4.txt",
-  "updatedAt": "2026-08-22",
-  "notes": "根据 Test2 实机播放页/选集回归修复：单线路恢复直接 HLS，不再用 PlayModel；所有剧集统一先尝试 guest/token，不再因页面 locked 标记直接 webRule；正倒序移出集数网格；本地收藏移到详情底部；官网回退改普通 http 页面。Stable 1.8.2 不变。"
+  "release": "apps/video/huangdou/releases/1.9.0-test.4/release.json",
+  "rule": "apps/video/huangdou/huangdou_remote_test_v5.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "根据 Test3 实机第5集进入播放器后仍播放异常继续收敛：优先保留现有登录/购买会话，缺 Token 才建立 guest；Token 后预检 HLS，并带 Cookie/Referer/UA 交给播放器；页面 locked 只做提示，最终以站点真实媒体授权为准。无权限时明确引导官网账号/购买，不绕过站点授权。"
 }
