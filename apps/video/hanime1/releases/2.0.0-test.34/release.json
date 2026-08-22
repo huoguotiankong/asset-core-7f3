@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.0-test.34",
+  "build": 20034,
+  "ref": "main",
+  "baseVersion": "2.0.0",
+  "supersedes": "2.0.0-test.33",
+  "modules": [
+    {"name":"recovery34","path":"apps/video/hanime1/releases/2.0.0-test.34/recovery_loader.js"}
+  ],
+  "runtimeContract": {
+    "recoveryBase": "2.0.0-test.33",
+    "requiredGlobals": ["HanimeCore","HanimeProvider","HanimePages","HanimeUI9","HanimeLayout12"]
+  },
+  "verify": {"global":"HanimePages","property":"build","equals":"2.0.0-test.34"},
+  "notes": "Test34 follows Test33 device results. It restores the original direct comment-id to /loadReplies chain instead of further heuristic thread mapping; rebuilds account avatar, playlist list and playlist detail with XPath-first parsing; exposes full library filter options directly in horizontal rows with no > gate; replaces the broken shell/global search result path; and keeps the accepted three-column creator grid while adding visible text under every creator image. Stable 2.0.0/Build20029 remains frozen."
+}
