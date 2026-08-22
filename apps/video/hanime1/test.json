@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.24",
-  "baseVersion": "2.0.0-test.23",
+  "version": "2.0.0-test.25",
+  "baseVersion": "2.0.0-test.24",
   "targetVersion": "2.0.0",
-  "build": 20024,
+  "build": 20025,
   "shellVersion": "2.0.0-test.4",
   "shellRuleVersion": 2026082230,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.24/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.25/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test24 is a Shell/Bootstrap recovery release triggered by device evidence that the Test21-era settings updater throws HanimeBoot undefined inside serialized lazyRule callbacks, preventing the device from reaching Test22/Test23. Shell v4 uses a new immutable Bootstrap v4 cache key and forces builds below 20024 to the Test24 recovery release. Test24 keeps the Test23 XPath avatar engine and rewrites updater buttons so each serialized callback explicitly requires Bootstrap before calling HanimeBoot."
+  "notes": "Test25 follows the device-verified Test24 avatar/runtime recovery. Temporary avatar diagnostics are removed. Opening more replies is optimized from the previous multi-request path to one /loadReplies request that parses reply text and XPath avatars together; comment/reply pages no longer call profile() merely to decide whether to show login/reply controls, and a short per-thread cache accelerates immediate reopen."
 }
