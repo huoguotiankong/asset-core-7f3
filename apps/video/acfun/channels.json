@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha16",
+      "version": "0.6.0-alpha17",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 167,
-      "displayVersion": "Test 0.6.0-alpha16 · Build 167 · Shell 7.2",
-      "path": "apps/video/acfun/acfun_remote_test_v072.txt",
+      "build": 168,
+      "displayVersion": "Test 0.6.0-alpha17 · Build 168 · Shell 7.3",
+      "path": "apps/video/acfun/acfun_remote_test_v073.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Alpha15 Clean Rebase + 单一媒体修复层 · 视频封面/播放/短视频/漫画/searchCenter 定点修复",
-      "highlights": ["Alpha15 Clean Rebase 保持", "有声 POST-first 成功链不动", "视频封面 fallback-only", "GET-first can/watch", "播放器只提交真实播放项", "收藏评论退出播放列表", "短视频 loadType=2 恢复", "Alpha12 chapterId-first 漫画 Reader", "章节 #fullTheme#", "searchCenter/category 分发修复", "Stable 继续冻结"],
+      "desc": "设备探针定点版 · jhimage真实域名/直连decode播放/短视频当前运行链/漫画显式Reader路由",
+      "highlights": ["Stable8 + A15 Clean 保持", "Alpha16业务模块退出活动Release", "jhimage → cdn.ukaim.com", "复用安全XOR图片解码器", "播放取消cacheM3u8本地文件步骤", "远程decode直交播放器", "短视频loadType=2已证实30条", "短视频独立当前Bootstrap渲染", "漫画显式query路由", "chapterId-first + pic_1_full", "小说/有声POST-first不动", "Stable继续冻结"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
