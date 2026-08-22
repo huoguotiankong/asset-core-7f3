@@ -3,6 +3,7 @@
   "name": "天空城海阔小程序索引",
   "repository": "huoguotiankong/asset-core-7f3",
   "branch": "main",
+  "globalCautions": ["docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md"],
   "categories": [
     {"id":"video","name":"视频影视"},
     {"id":"comic","name":"漫画"},
