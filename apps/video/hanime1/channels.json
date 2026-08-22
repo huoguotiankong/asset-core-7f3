@@ -2,10 +2,53 @@
   "schema": 4,
   "id": "hanime1",
   "name": "Hanime1",
-  "versionPolicy": "legacy-history-remote-test-v7",
-  "updatedAt": "2026-08-22 10:15",
+  "versionPolicy": "legacy-history-remote-test-v8",
+  "updatedAt": "2026-08-22 10:23",
   "channels": [
-    {"channel":"stable","label":"旧版（历史）","id":"hanime1","name":"Hanime1","version":"1.2.1","build":12100,"displayVersion":"Legacy 1.2.1 · Historical","path":"hanime1.txt","mode":"local","updatedAt":"2026-08-18","recommended":false,"desc":"仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。","highlights":["历史单体规则","不再围绕旧版兼容或优化"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"},
-    {"channel":"test","label":"测试版","id":"hanime1-test","name":"Hanime1","version":"2.0.0-test.7","baseVersion":"2.0.0-test.6","targetVersion":"2.0.0","build":20007,"displayVersion":"Test 2.0.0 · RemoteTest7","path":"apps/video/hanime1/hanime1_remote_test_v2.txt","mode":"remote","updatedAt":"2026-08-22","recommended":true,"desc":"在 Test6 已验证的封面/最高画质播放/漫画/评论数据链上，修正产品结构与账号体验：公开片库无需登录，个人数据迁到“我的”；登录改独立全屏 X5；预告修正 YYYYMM 请求格式；评论/回复重新排版。","highlights":["公开片库：无需登录，直接用官网搜索/排序浏览影片","我的：稍后看/收藏/片单/订阅/历史仅在账号登录后显示","登录改为独立全屏 X5 官网表单，返回后检测并同步 Cookie","预告路径从 YYYY-MM 修正为官网 YYYYMM","评论卡片改为左图右文，避免 avatar 样式文字重叠","保留 Test6 已实机通过的封面、最高画质优先播放和漫画首页链"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"}
+    {
+      "channel": "stable",
+      "label": "旧版（历史）",
+      "id": "hanime1",
+      "name": "Hanime1",
+      "version": "1.2.1",
+      "build": 12100,
+      "displayVersion": "Legacy 1.2.1 · Historical",
+      "path": "hanime1.txt",
+      "mode": "local",
+      "updatedAt": "2026-08-18",
+      "recommended": false,
+      "desc": "仅保留历史/回退记录；旧版本无法通过当前站点验证，不再作为开发基线。",
+      "highlights": [
+        "历史单体规则",
+        "不再围绕旧版兼容或优化"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+    },
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "hanime1-test",
+      "name": "Hanime1",
+      "version": "2.0.0-test.8",
+      "baseVersion": "2.0.0-test.7",
+      "targetVersion": "2.0.0",
+      "build": 20008,
+      "displayVersion": "Test 2.0.0 · RemoteTest8",
+      "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-22",
+      "recommended": true,
+      "desc": "分类/详情/UI 强化版：修复官网真实 search_key、签名懒加载封面、专业视频/漫画筛选、视频/漫画详情标签元数据、评论排版，并为预告加入多主站与 Getchu 回退。",
+      "highlights": [
+        "排序/类型/日期/时长使用官网当前 canonical search_key，排行筛选真正生效",
+        "专业影片筛选页：类型/排序/日期/时长/分组内容标签/broad 多选",
+        "漫画增加标签/作者/角色/同人/社团/语言/分类目录",
+        "搜索/片库/相关推荐封面支持 src/data-src/data-srcset/srcset 签名懒加载",
+        "视频/漫画详情补充元数据和可点击标签",
+        "评论改无空白头像的大文本卡片并分页",
+        "预告依次尝试多个 Hanime 主站，失败自动回退 Getchu 月度新番"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+    }
   ]
 }

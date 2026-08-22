@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.7",
-  "baseVersion": "2.0.0-test.6",
+  "version": "2.0.0-test.8",
+  "baseVersion": "2.0.0-test.7",
   "targetVersion": "2.0.0",
-  "build": 20007,
+  "build": 20008,
   "shellVersion": "2.0.0-test",
-  "shellRuleVersion": 2026082216,
+  "shellRuleVersion": 2026082217,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.7/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.8/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v2.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Test6 device verification passed homepage covers, highest-quality-first playback, comments data, and comic homepage. Test7 preserves those chains and fixes public library vs personal account structure, fullscreen X5 official login, previews YYYYMM path, and comment/reply layout."
+  "notes": "Test7 device feedback: exact official search_key values, complete professional filters, lazy signed cover repair, comic taxonomy/detail tags, video detail metadata/tags, compact comments, and previews multi-host + Getchu fallback."
 }
