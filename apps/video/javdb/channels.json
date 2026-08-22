@@ -3,7 +3,7 @@
   "id": "javdb-v3",
   "name": "JavDB v3",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 00:05",
+  "updatedAt": "2026-08-23 01:20",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "javdb-v3-test",
       "name": "JavDB v3",
-      "version": "3.9.42-test.3",
+      "version": "3.9.42-test.4",
       "baseVersion": "3.9.41",
       "targetVersion": "3.9.42",
-      "build": 2026082243,
-      "displayVersion": "Test 3.9.42 · APP体验增强3",
-      "path": "cloud/javdb/v3.9.42-test.3/javdb_v3.9.42_test3.txt",
+      "build": 2026082244,
+      "displayVersion": "Test 3.9.42 · 分类映射/播放修复4",
+      "path": "cloud/javdb/v3.9.42-test.4/javdb_v3.9.42_test4.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "远程代码测试版 · 修复 Test2 启动作用域错误，保留 APP 导航/UI 与共享 JAV 播放 SDK",
-      "highlights": ["修复首页 JDB 未定义", "继承Test1已验证分类排行演员", "继承Test2首页/我的/更多UI", "MissAV/123AV/Jable继续走共享播放SDK"],
+      "desc": "远程代码测试版 · 修正演员分类映射并接入 JAV Playback SDK test.3",
+      "highlights": ["无码/欧美(女)分类映射纠正", "演员页去重复搜索入口", "123AV/Jable已验证播放逻辑冻结", "123AV仓库固定图标", "MissAV恢复搜索驱动直解最高画质"],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
