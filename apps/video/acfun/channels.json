@@ -36,7 +36,7 @@
       "updatedAt": "2026-08-22",
       "recommended": false,
       "desc": "Alpha9 隔离后从 Alpha8 恢复 · 封面/播放/小说有声/漫画回归修复",
-      "highlights": ["Alpha9 冻结隔离", "Alpha8 恢复基线", "扩展封面字段", "fresh can/watch 播放", "小说/有声分类恢复", "txt/html 正文源读取", "音频字段独立识别", "同页三列筛选保持", "短视频直播保持", "pics:// 漫画保持", "社区详情合并"],
+      "highlights": ["Alpha9 冻结隔离", "Alpha8 恢复基线", "扩展封面字段", "fresh can/watch 播放", "小说/有声分类恢复", "txt/html 正文源读取", "音频字段独立识别", "同页三列筛选保持", "短视频直接播放保持", "pics:// 漫画保持", "社区详情合并"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
