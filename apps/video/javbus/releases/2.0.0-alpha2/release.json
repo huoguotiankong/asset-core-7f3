@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "javbus-test",
+  "name": "JavBus",
+  "channel": "test",
+  "version": "2.0.0-alpha2",
+  "build": 20002,
+  "baseVersion": "2026081903",
+  "baseBuild": 2026081903,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/javbus/releases/2.0.0-alpha1/core.js"},
+    {"name":"compat","path":"apps/video/javbus/releases/2.0.0-alpha1/compat.js"},
+    {"name":"runtime","path":"apps/video/javbus/releases/2.0.0-alpha1/runtime.js"},
+    {"name":"alpha2Patch","path":"apps/video/javbus/releases/2.0.0-alpha2/patch_alpha2.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"JavBusRemoteRuntime","property":"version","equals":"2.0.0-alpha2"},
+  "stableUntouched": true,
+  "notes": "Device-feedback alpha2: actress list uses /actresses/{page} + .item contract, same-page type tabs, explicit search action, official JavBus favicon, detail/actor UI refresh and dedicated magnet page."
+}
