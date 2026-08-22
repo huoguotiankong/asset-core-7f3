@@ -4,23 +4,20 @@
 
 ## 当前基线
 - Legacy `1.2.1`：仅保留历史，不再作为当前站点兼容基线。
-- Test：`2.0.0-test.22` / Build `20022` / Shell `2026082229`。
+- Test：`2.0.0-test.23` / Build `20023` / Shell `2026082229`。
 - Stable 尚未晋级。
-- Test22 以 Test21 为直接运行基线；Test21 又以已验证 Test17 为业务数据基线。Test22 **不再猜新的头像 DOM/图片规则，只增加设备侧可见诊断**。
-- Shell / Bootstrap 未改；已安装 Test21 的用户可通过程序内“更新测试版”切到 Test22。
+- Test23 **直接回到已验证 Test17 业务数据链**，不加载 Test18/19/20/21/22 的头像补丁；头像层改用海阔官方内置 XPath。
+- Shell / Bootstrap 暂不改；已安装 Test21/22 的用户通过程序内“更新测试版”切到 Test23。
 
 ## 已验证实机事实
-- Recovery15：用户实机确认首页恢复正常，证明“退回 Test12 已验证链 + 新 Bootstrap/Shell 缓存键”的恢复方案有效。
-- Test16：视频详情成功区分作者与上传者；上传者头像可显示；作者作品搜索可用；作者头像仍为空。首次 Shell 曾因多转义反斜杠导致海阔 SyntaxError，按成功 Shell 原文重建后恢复。
-- Test17：上传者真实 `/user/<id>` 公共作品页链通过；评论 `/loadComment`、楼中楼 `/loadReplies` 保持可用。
+- Recovery15：首页恢复正常，证明“退回 Test12 已验证链 + 新 Bootstrap/Shell 缓存键”的恢复方案有效。
+- Test16：详情成功区分作者与上传者；上传者头像可显示；作者作品搜索可用；作者头像仍为空。首次 Shell 曾因反斜杠多转义导致海阔 SyntaxError，按成功 Shell 原文重建后恢复。
+- Test17：上传者真实 `/user/<id>` 公共作品页链通过；评论 `/loadComment`、楼中楼 `/loadReplies` 可用。
 - Test18：作者仍灰方块，同时评论退化成 `0 条评论`。Test18 直接覆盖评论解析的方案永久禁用。
 - Test19：评论正文恢复，但作者/评论真实头像仍未恢复；“全局收集 img 再按数组顺序回填”判定无效。
 - Test20：用户实机确认“还是一样，没有区别”。作者仍灰方块，主评论仍字母占位；上传者头像正常。局部 commentId/用户名邻域找图方案判定无效。
-- Test21：2026-08-22 15:30 用户实机确认：**作者头像仍与原来一样；主评论头像大部分仍没有；楼中楼只有小部分显示真实自定义头像。** 当前回复截图中至少有一条真实粉色头像成功显示，其余多条显示站点/组件的灰色默认人物图。这个结果非常关键：
-  - 评论/回复正文数据链继续正常；
-  - 海阔 `avatar` 组件可以显示站点头像图片；
-  - `/loadReplies` 的头像链至少部分成功；
-  - 主评论与作者失败已经不能再归因于“海阔完全不能显示头像”，必须读取真实 DOM 命中计数再修。
+- Test21：2026-08-22 15:30 用户实机确认：**作者头像仍与原来一样；主评论头像大部分仍没有；楼中楼只有小部分显示真实自定义头像。** 回复截图中至少一条真实粉色头像成功显示，其余多条显示灰色默认人物图。该结果证明海阔 `avatar` 组件可以显示站点头像，`/loadReplies` 头像链至少部分成功，主评论/作者问题主要在 DOM/URL 提取而非图片组件完全失效。
+- **Test22：2026-08-22 15:41 用户实机截图确认设置页仍没有“头像诊断”，且旧 Test12 设置模块仍显示硬编码 `2.0.0-test.12 · Build 20012`。** 这个文本本身不能证明真实运行 Build，因为它从 Test12 起就是硬编码；但“诊断区完全没有出现”说明 Test22 诊断补丁没有进入当前页面渲染上下文（可能是远程更新未生效、模块缓存/页面上下文未重载，或补丁加载失败）。因此后续版本必须同时解决“运行版本不可观测”问题，禁止继续拿硬编码版本文案判断实际运行链。
 - Test12 X5 WebView bridge 登录实机成功：WebView Cookie → 规则侧导入 → profile 校验 → 保存账号。
 - 首页真实内容、多分区、封面可用；视频详情封面可显示；1080/720/480 可解析并播放；真选集可直接播放；漫画首页/分类/详情基本链可用；公开片库无需登录可浏览。
 - 官网预告页当前自身 HTTP 500，上游恢复前保持故障降级。
@@ -29,8 +26,6 @@
 2026-08-22 已重新核对 `1wc10086/Han1mePlus@main`。
 
 ### 作者头像
-`han1me_api.dart` 当前顺序：
-
 ```text
 #video-user-avatar + img
 → #video-user-avatar
@@ -38,79 +33,73 @@
 → 读取元素 src
 ```
 
-UI 在 `artistAvatarUrl == null` 时才退化为作者首字符。
-
 ### 主评论头像
-
 ```text
 /loadComment
 → #comment-start
 → root.children
 → 每 4 个直接子元素组成一条主评论
-→ 4 节点 wrapper.querySelector('img').src
-→ wrapper 内 reply-section-wrapper-* 提取 commentId
+→ 组内第一张 img.src
 ```
 
 ### 楼中楼头像
-
 ```text
 /loadReplies
 → div[id^="reply-start"]
 → root.children
 → 每 2 个直接子元素组成一条回复
-→ 第 1 个 body 元素 querySelector('img').src
+→ 第 1 个 body 元素内第一张 img.src
 ```
 
 ## 已证伪头像方案
 - Test18：用海阔 `pdfa` 直接模拟 Flutter DOM 的 4/2 节点分组，同时重写评论数据。结果评论 0 条；禁用。
 - Test19：`#comment-start img` 全局数组按 index 回填。评论恢复但头像失败；禁用。
 - Test20：commentId/用户名固定字符邻域找 `<img>`。实机无变化；禁用。
-- Test21：自写轻量 HTML 元素边界 + 顶层 children 分组，合成 fixture 能工作，但实机主评论/作者仍未通过。说明**合成 HTML 正确不代表真实站点 HTML 被当前轻量 parser 正确分组**。
+- Test21：自写轻量 HTML 元素边界 + 顶层 children 分组。合成 fixture 能工作，但实机主评论/作者仍未通过；不能再以自写 HTML parser 作为首选。
+- Test22：只增加诊断，但设备设置页没有出现诊断区；说明“诊断本身不可见”也会阻断闭环。后续诊断必须和真实运行版本标记一起直接覆盖设置页。
 
-## Test22：头像诊断门禁
-Test22 的目标不是“再试一套头像选择器”，而是把 Test21 已经存在但未暴露的诊断能力真正送到设备 UI。
+## Test23：海阔内置 XPath 头像恢复 + 运行链可观测
+### 为什么改用 XPath
+海阔官方开发者手册提供 `xpath()` / `xpathArray()`（缩写 `xpa`）直接对 HTML 执行 XPath。Test23 不再维护自写 HTML 栈解析器，而把 Han1mePlus 已知 DOM 契约直接表达为 XPath。
 
 ### 运行链
 ```text
-Test21 当前行为
-→ Test22 patch_avatar_diag.js
-→ 只记录/展示诊断
-→ 不改变评论正文、头像解析结果、作者/上传者、播放、登录等业务逻辑
+Test17 已验证业务数据链
+→ Test23 patch_avatar_xpath.js
+→ 只增强作者/评论/回复头像 + 设置页运行版本/诊断
 ```
 
-### 自动记录
-- 每次打开视频详情，记录最近 `videoId`。
-- 设置页新增“头像诊断”区域。
-- 点击“运行最近视频头像诊断”后，把结果缓存到设置页并刷新显示；诊断文本可点击复制。
-
-### 诊断字段
+### 作者头像 XPath
 ```text
-Build / videoId
-artist / artistMethod
-artistMarker / artistNearImg
-commentItems
-commentRoot
-commentImg
-commentReplyWrap
-Test21 commentGroups
-commentGroupAvatars
-commentMatchedAvatars
-replyGroups
-replyGroupAvatars
-commentSamples
-artistSamples
+//*[@id="video-user-avatar"]/following-sibling::img[1]/@src
+→ //*[@id="video-user-avatar"]/@src
+→ //div[contains(@class,"video-description-panel")]//a[contains(@href,"/user/")]//img[1]/@src
+→ 精确作者搜索 fallback
 ```
 
-不输出 Cookie / Token / Authorization / 密码。
+### 主评论头像 XPath
+严格对应 Han1mePlus “每 4 个 root.children 一组”，只取每组第 1 个直接子元素内部的第一张头像：
+```text
+//*[@id="comment-start"]/*[position() mod 4 = 1]//img[1]/@src
+```
 
-### 判读规则
-- `commentImg > 0` 但 `commentGroups = 0`：Test21 的真实 root/children 边界解析失败。
-- `commentGroups > 0` 但 `commentGroupAvatars = 0`：分组存在，但组内 `<img>` 抽取方式与真实标签属性不匹配。
-- `commentGroupAvatars > 0` 但 `matched = 0`：commentId 回绑失败，应修 ID 映射而不是图片解析。
-- `matched > 0` 但 UI 仍是字母：才进入图片 URL/Header/缓存显示链排查。
-- `replyGroupAvatars > 0` 且楼中楼实机已有真实头像：可把回复链作为“已成功样本”反推主评论差异。
-- `artistMarker = 0`：当前详情 HTML 根本没有 `video-user-avatar` 标记，不能继续围绕该节点修。
-- `artistMarker = 1` 但 `artistNearImg = 0`：应进一步确认真实邻接 DOM 或作者本身是否没有头像资源。
+安全门：**XPath 返回头像数量必须等于 Test17 `items.length` 才整体应用**。数量不一致时不按序硬塞，避免再次出现头像错位。
+
+### 回复头像 XPath
+```text
+//div[starts-with(@id,"reply-start")]/*[position() mod 2 = 1]//img[1]/@src
+```
+同样要求 XPath 数量与回复 items 数量一致才批量应用。
+
+### 设置页可观测性
+Test23 完全覆盖旧 `renderSettings()`，不再显示 Test12 的硬编码版本。设置页顶部和“测试版本”区域都明确显示：
+```text
+2.0.0-test.23 · Build 20023
+```
+新增：
+- `重新加载当前测试版`：调用 `HanimeBoot.reinstall()` 清理并重载当前 release 模块缓存。
+- `运行头像诊断`：显示 XPath 是否可用、作者是否取到 URL、主评论 items/XPath头像/已应用数量、回复 items/XPath头像/已应用数量。
+- 诊断不输出 Cookie / Token / Authorization / 密码。
 
 ## 登录架构（当前正确链）
 ```text
@@ -125,24 +114,36 @@ X5 官网 /login
 
 硬约束：不保存账号密码；只保存账号 Cookie；只看到 session 类 Cookie 不等于登录成功；登录成功以能识别真实 `/user/<id>` 和账号资料为准。
 
+## Test23 待实机回归
+- [ ] 点击“更新测试版”后，重新进入 Hanime1 设置页，必须明确看到 `运行版本 2.0.0-test.23 · Build 20023`。若仍看见旧 Test12 文案且没有“运行版本”，说明新 release 仍未进入当前页面，不再继续测试头像。
+- [ ] 设置页必须出现“重新加载当前测试版”和“头像诊断”。
+- [ ] 目标视频详情作者若 XPath 取得 URL，应显示真实头像；上传者头像不能退化。
+- [ ] 主评论数据保持正常；若 `XPath头像 == items`，应全部应用站点真实/默认头像，不再显示 Q/S/H/W 字母占位。
+- [ ] 楼中楼数据保持正常；若 `XPath头像 == items`，应全部应用站点真实/默认头像。
+- [ ] 若 XPath 数量不等于 items，截图诊断即可精确决定下一步，不再猜 DOM。
+- [ ] 登录、播放、选集、片库、漫画无回归。
+
 ## 后续顺序
-1. Test22：只采集一轮真实头像诊断结果。
-2. 根据诊断明确根因后做 Test23；只修改失败层，不再同时改作者、评论数据结构和 UI。
-3. 头像链实机通过后，再做作者目录 + 独立作者主页。
-4. 再通过后：评论点赞/点踩、举报等官网元信息与交互。
-5. 再做账号中心/订阅作者增强。
-6. 主要功能稳定后做 Consolidated Candidate，压缩历史增量链。
+1. Test23：先确认真实运行 Build 和 XPath 头像命中数。
+2. 头像链通过后，再做作者目录 + 独立作者主页。
+3. 再通过后：评论点赞/点踩、举报等官网元信息与交互。
+4. 再做账号中心/订阅作者增强。
+5. 主要功能稳定后做 Consolidated Candidate，压缩历史增量链。
 
 ---
 ## 版本记录
+### 2.0.0-test.23 / Build 20023 / 2026-08-22
+- 回到 Test17 稳定业务链，不叠加 Test18~22 头像补丁。
+- 头像解析切换为海阔内置 XPath，直接表达 Han1mePlus 4/2 子节点契约。
+- 设置页改为真实运行版本标记，加入当前 release 重装和可见 XPath 诊断。
+- 主评论/回复只有在 XPath 数量与 items 数量一致时才批量应用，避免错位。
+
 ### 2.0.0-test.22 / Build 20022 / 2026-08-22
-- 根据 Test21 实机“作者仍无、主评论大部分无、回复小部分有”的结果，停止继续猜头像 DOM。
-- 保留 Test21 运行行为，只增加设置页可见头像诊断。
-- 诊断包含真实 HTML 的 root/img/reply-wrapper 数量、Test21 group/avatar/matched 数量，以及作者 marker/附近图片证据。
-- 诊断不采集任何登录秘密。
+- 计划只增加设置页头像诊断。
+- 实机：诊断区未出现；旧 Test12 硬编码版本文案仍在，判定诊断/版本可观测性失败，被 Test23 替代。
 
 ### 2.0.0-test.21 / Build 20021 / 2026-08-22
-- 移植 Han1mePlus 当前 4 子节点主评论 / 2 子节点回复 DOM 分组契约。
+- 自写 HTML parser 移植 4 子节点主评论 / 2 子节点回复契约。
 - 实机：作者仍未恢复；主评论头像大部分仍无；楼中楼部分头像已显示。
 
 ### 2.0.0-test.20 / Build 20020 / 2026-08-22
