@@ -1,45 +1,91 @@
 # Hanime1 Changelog
 
-> 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、registry 和当前运行入口。只记录已验证事实，未知信息标记“待确认”。
+> 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、registry 和当前运行入口。已验证事实与待实机验证内容必须分开记录。
 
 ## 当前基线
 - 程序：Hanime1
 - App ID：`hanime1`
-- 当前登记版本：`1.2.1`
-- 发布形态：`legacy / local`
-- 当前入口：`hanime1.txt`
-- 已登记能力：视频 / 漫画 / 搜索 / 多画质
-- 最后登记日期：2026-08-18
+- Stable：`1.2.1`，legacy/local，入口 `hanime1.txt`，本轮保持不变。
+- Test：`2.0.0-test.1` / Build `20001`，远程模块化重写，入口 `apps/video/hanime1/hanime1_remote_test_v2.txt`。
+- Test Shell rule version：`2026082210`。
+- Test 状态：代码/元数据静态检查完成，**待海阔实机验证，禁止晋级 Stable**。
+- 最后更新：2026-08-22。
 
 ## 关键技术索引
 ### 数据源 / API
-- 待下一次维修时从当前稳定源码与实机请求补录。
-### 登录 / 鉴权 / 签名
-- 待确认。
-### 编码 / 解密 / 图片 / 播放
-- 已知具备多画质能力；具体播放源、解析路径、是否存在加密/签名待从当前源码确认。
-- 漫画图片获取/阅读链路待确认。
-### 缓存 / 状态 / 本地数据
-- 待确认。
+- 视频主站候选：`https://hanime1.com`、`https://hanime1.me`、`https://www.hanime2.sbs`；Test 运行时按可用 HTML 自动选择并缓存 6 小时，异常时顺序回退。
+- 视频首页：解析 Hanime1 首页横向卡片结构；搜索走 `/search`，支持 query / genre / sort / date / duration / type / page。
+- 视频详情：`/watch?v=<id>`；优先解析 `video#player > source`，输出海阔多线路 PlayModel（urls/names/headers）。
+- 预告：`/previews/<YYYY-MM>`。
+- 漫画独立站：`https://hanimeone.me`；首页 `/comics`，详情 `/comic/<id>` + `/comic/<id>/1`，按 `data-prefix` / `data-pages` / extension 表生成 `pics://` 图片序列。
+
+### 验证 / Cookie / 登录
+- Test 2.0.0 参考 Han1mePlus/APK 的会话模型重写，但未直接复制其 Flutter 源码。
+- Cloudflare/站点校验检测：HTTP 403 + `cf-mitigated: challenge`，或页面含 `cf-chl-` / `challenge-form` / `Just a moment` / `Attention Required` 等特征。
+- 首次挑战时自动调用海阔 `fetchCodeByWebView`，使用与参考客户端一致的移动 UA 执行真实浏览器 JS；WebView Cookie 落地后自动重试原生请求。
+- 自动校验仍失败时进入独立 `x5_webview_single` 验证页，由用户完成站点要求的交互校验后再检测。
+- Cookie 分层：账号 Cookie 与 `cf_clearance` 分离保存；切换账号时仅切账号 Cookie，浏览器校验 Cookie继续复用。
+- 网页登录：内嵌 X5 打开 `/login`，完成登录后“同步当前登录”读取当前浏览器 Cookie，解析账号资料并写入多账号存储。
+- 账号切换/移除：本地最多保留 8 个账号 Cookie 条目；账号 ID、昵称、邮箱、头像用于管理显示。
+
+### 官网账号 / 片库 / 评论
+- 账号资料：`/user/<id>/edit`；支持昵称/邮箱原生表单更新。
+- 密码修改：原生表单 `_method=patch,type=password,password_old,password_new,password_new_confirm`。
+- 稍后看：`/user/<id>/saves`；加入使用 `/save` 且 `input_id=save`。
+- 收藏：`/user/<id>/likes`；写操作 `/like`。
+- 片单：`/user/<id>/playlists`、`/playlist?list=<id>`、`/createPlaylist`、`/playlist/<id>`。
+- 订阅：`/subscriptions?page=1`；写操作 `/subscribe`。
+- 历史：`/user/<id>/histories?sort=latest&page=1`；删除 `/user/tab-item/<videoId>`。
+- 评论：`/loadComment`、`/loadReplies`、`/createComment`、`/replyComment`；Test 初版已接入读写，回复 ID 解析需实机重点回归。
+
+### UI / 页面结构
+- Test 参考附件 APK 的信息架构，用海阔原生组件重构为四区：探索 / 片库 / 缓存 / 设置。
+- 探索内可切视频/漫画，并提供搜索、预告、详情、相关推荐。
+- 片库对应官网稍后看 / 收藏 / 片单 / 订阅 / 历史。
+- 缓存复用海阔下载中心与规则历史；不复制 APK 自有下载引擎。
+- 设置包含账号中心、网页登录、浏览器验证、线路重测和 Test Remote Manager 更新/回退。
+- 二级页统一使用独立 `hiker://page/<path>?rule=&simple=true`，实体 ID 写入 URL query，并保留 MY_PARAMS fallback。
 
 ## 已知风险与禁止回退方案
-- Legacy 程序，尚未迁移标准 Remote Module / Stable-Test。
-- 视频与漫画属于两条业务链，后续维修时必须分别回归，不能只验证其中一种内容。
+- Stable 1.2.1 仍是当前安全基线；2.0.0-test.1 未实机验证前不得覆盖 Stable。
+- “自动过检验”依赖海阔 WebView 能正常执行站点校验脚本并写入 Cookie；若站点要求交互式 Turnstile/验证码，只能自动完成非交互部分，必须保留可见验证页兜底。
+- 视频与漫画是两条独立域名/解析链，必须分别回归。
+- 账号写操作涉及 CSRF 与当前账号 Cookie；必须测试：浏览器账号同步、受管账号切换、资料修改、密码修改、收藏/稍后看/片单/订阅/历史/评论。
+- 评论 DOM 容易受官网结构变化影响；Test 初版的评论/楼中楼需要用真实账号实机核对。
+- 不允许恢复“只靠多个镜像域名盲试来绕过挑战”的旧思路；域名回退只能解决主站可达性，Challenge 必须走浏览器验证/Cookie 复用链。
 
 ## 回归测试清单
-- [ ] 首页/视频列表
-- [ ] 搜索
-- [ ] 视频详情
-- [ ] 多画质播放
-- [ ] 漫画列表/详情
-- [ ] 漫画阅读
+- [ ] Test Shell 首次导入可打开，Stable 1.2.1 仍可独立使用
+- [ ] 首次无 Cookie 自动校验并进入首页
+- [ ] 校验失败时可见 X5 验证页可恢复
+- [ ] 首页视频卡片/图片/分区
+- [ ] 搜索与筛选/翻页
+- [ ] 视频详情与多画质播放
+- [ ] 下载入口
+- [ ] 漫画首页/详情/`pics://` 阅读
+- [ ] 网页登录 + 同步当前账号
+- [ ] 多账号切换/移除
+- [ ] 昵称/邮箱修改
+- [ ] 密码修改
+- [ ] 稍后看 / 收藏 / 片单创建与读取
+- [ ] 订阅 / 历史
+- [ ] 评论 / 回复
+- [ ] Remote Test 检查更新 / 更新 / 回退
 
 ## 故障与恢复记录
-暂无结构化历史。后续重要 Bug 固定记录：症状 → 根因 → 修复 → 证伪方案 → 回归结果。
+- 2026-08-22：旧 1.2.1 为 legacy/local 单体规则，账号/挑战链无结构化长期记录；本轮不在原文件上直接大改，改为隔离发布 2.0.0-test.1 Remote Test，以 1.2.1 作为回退基线。
 
 ---
 ## 版本记录
+### 2.0.0-test.1 / Build 20001 / 2026-08-22
+- 首个 Architecture-First 重写测试版。
+- 新增 Challenge/Auth/Cookie Core、Video/Comic/Account Provider、Native Pages 三层模块与 Remote Runtime。
+- 新增自动 WebView 校验 + 可见 X5 兜底。
+- 新增完整账号入口、官网片库和评论写操作、多账号切换。
+- UI 按附件 APK 的 Explore / Library / Cache / Settings 四区重新组织。
+- Stable 1.2.1 未修改。
+- 状态：静态检查通过，待海阔实机回归。
+
 ### 1.2.1 / 2026-08-18
-- 当前云仓库登记基线。
+- 原云仓库登记基线。
 - 已知能力：视频 / 漫画 / 搜索 / 多画质。
-- 其余技术细节待下一次基于当前源码和实机验证补录。

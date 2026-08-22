@@ -1,0 +1,51 @@
+{
+  "schema": 4,
+  "id": "hanime1",
+  "name": "Hanime1",
+  "versionPolicy": "legacy-stable-remote-test-v1",
+  "updatedAt": "2026-08-22 08:01",
+  "channels": [
+    {
+      "channel": "stable",
+      "label": "正式版",
+      "id": "hanime1",
+      "name": "Hanime1",
+      "version": "1.2.1",
+      "build": 12100,
+      "displayVersion": "Stable 1.2.1 · Legacy Local",
+      "path": "hanime1.txt",
+      "mode": "local",
+      "updatedAt": "2026-08-18",
+      "recommended": true,
+      "desc": "当前实机稳定基线；本轮保持不变",
+      "highlights": [
+        "视频 / 漫画 / 搜索 / 多画质",
+        "继续作为 Test 2.0.0 的回退基线",
+        "未被本轮重写覆盖"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+    },
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "hanime1-test",
+      "name": "Hanime1",
+      "version": "2.0.0-test.1",
+      "baseVersion": "1.2.1",
+      "targetVersion": "2.0.0",
+      "build": 20001,
+      "displayVersion": "Test 2.0.0 · RemoteTest1",
+      "path": "apps/video/hanime1/hanime1_remote_test_v2.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-22",
+      "recommended": false,
+      "desc": "Han1mePlus/APK 体验导向的架构级重写测试版；待实机回归",
+      "highlights": [
+        "自动 WebView Challenge 尝试 + 可见 X5 验证兜底",
+        "完整账号/片库/评论入口与多账号隔离",
+        "视频/漫画双 Provider + Explore/Library/Cache/Settings 四区 UI"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/assets/hanime1.svg"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "hanime1",
+  "name": "Hanime1",
+  "version": "1.2.1",
+  "build": 12100,
+  "mode": "legacy-local",
+  "rule": "hanime1.txt",
+  "updatedAt": "2026-08-18",
+  "notes": "Current verified legacy/local baseline. Frozen while 2.0.0-test.1 is under device validation."
+}
