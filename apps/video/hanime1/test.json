@@ -3,15 +3,15 @@
   "channel": "test",
   "id": "hanime1-test",
   "name": "Hanime1",
-  "version": "2.0.0-test.22",
-  "baseVersion": "2.0.0-test.21",
+  "version": "2.0.0-test.23",
+  "baseVersion": "2.0.0-test.17",
   "targetVersion": "2.0.0",
-  "build": 20022,
+  "build": 20023,
   "shellVersion": "2.0.0-test",
   "shellRuleVersion": 2026082229,
   "managerVersion": "2.0.1",
-  "release": "apps/video/hanime1/releases/2.0.0-test.22/release.json",
+  "release": "apps/video/hanime1/releases/2.0.0-test.23/release.json",
   "rule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
   "updatedAt": "2026-08-22",
-  "notes": "Diagnostic Test22 responds to Test21 device feedback: author avatar remains unchanged, main-comment avatars are still mostly absent, while some reply avatars render. Test22 deliberately does not guess another avatar parser. It keeps Test21 behavior and exposes device-side counts for comment root/img/reply wrappers, Test21 DOM groups/avatar matches, and author marker/nearby image evidence in Settings."
+  "notes": "Test23 replaces the failed/missing Test22 diagnostic layer and Test21 raw-HTML avatar parser with Hiker's built-in XPath engine. Main comments follow the Han1mePlus 4-direct-child contract, replies the 2-direct-child contract, and author avatar uses the exact #video-user-avatar following-sibling img relation. Settings now displays the actual Test23 runtime build and includes visible avatar diagnostics plus reinstall."
 }
