@@ -3,6 +3,7 @@
   "id": "javbus",
   "name": "JavBus",
   "category": "video",
+  "icon": "https://www.javbus.com/favicon.ico",
   "stable": "apps/video/javbus/stable.json",
   "test": "apps/video/javbus/test.json",
   "channels": "apps/video/javbus/channels.json",
