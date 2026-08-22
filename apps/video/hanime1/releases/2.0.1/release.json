@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "hanime1",
+  "name": "Hanime1",
+  "version": "2.0.1",
+  "build": 20040,
+  "ref": "main",
+  "promotedFrom": {
+    "channel": "test",
+    "version": "2.0.0-test.40",
+    "build": 20040,
+    "release": "apps/video/hanime1/releases/2.0.0-test.40/release.json"
+  },
+  "modules": [
+    {
+      "name": "stable-recovery",
+      "path": "apps/video/hanime1/releases/2.0.1/recovery_loader.js"
+    }
+  ],
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.1"
+  },
+  "notes": "Stable 2.0.1 is the user-approved promotion of Test40. It keeps the recovered search path and the Test40 performance isolation while preserving known account/reply/UI issues for later test-channel work."
+}
