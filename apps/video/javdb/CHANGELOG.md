@@ -6,20 +6,22 @@
 
 - 程序：JavDB v3
 - App ID：`javdb-v3`
-- Stable：`3.9.41` / build `2026082006` / Remote
-- 当前 Test：`3.9.42-test.5` / build `2026082245` / Remote / 待实机验证
+- Stable：`3.9.42` / build `2026082301` / Remote
+- Stable 入口：`cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt`
+- Stable Release：`apps/video/javdb/releases/3.9.42/release.json`
+- Previous Stable：`3.9.41` / build `2026082006` / `cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt`
+- Test：`3.9.42-test.5` / build `2026082245` / 已晋级 Stable 3.9.42，保留用于对照
 - 上一已验证启动/UI 基线：`3.9.42-test.3` / build `2026082243`
 - 上一已验证分类/排行/演员总体基线：`3.9.42-test.1` / build `2026082241`
 - 已知失败 Test：`3.9.42-test.2` / build `2026082242`（首页启动 `ReferenceError: JDB 未定义`）
-- 预发布冻结 Test：`3.9.42-test.4` / build `2026082244`（JavDB 本身补丁可用，但其声明的共享 SDK test.3 在最终回读时发现导出作用域风险，因此不作为用户测试入口）
+- 预发布冻结 Test：`3.9.42-test.4` / build `2026082244`（其声明的共享 SDK test.3 在最终回读时发现导出作用域风险，不作为用户测试入口）
 - Local：`3.9.41-local` / build `2026082103` / Pure Local
-- Stable 入口：`cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt`
-- Test 入口：`cloud/javdb/v3.9.42-test.5/javdb_v3.9.42_test5.txt`
-- Test Release：`apps/video/javdb/releases/3.9.42-test.5/release.json`
 - Local 构建：`cloud/javdb/v3.9.41/release_meta.json` + `runtime.js`
 - 当前通道元数据：`apps/video/javdb/channels.json`
+- Stable 元数据：`apps/video/javdb/stable.json`
+- Latest 元数据：`apps/video/javdb/latest.json`
 - 共用 JAV 播放 Manager：`shared/jav-playback/manager.js`
-- 当前共用播放 Test SDK：`shared/jav-playback/releases/1.0.0-test.4/index.js`
+- 共用播放 Stable 指针：`shared/jav-playback/channels.json -> stable -> releases/1.0.0-test.4/index.js`
 - 最后登记日期：2026-08-23
 
 ## 关键技术索引
@@ -37,7 +39,7 @@
 - 演员榜：`GET /api/v1/rankings/actors?type=...&filter_by=daily|weekly|monthly`。
 - 演员推荐：`GET /api/v1/actors/recommend` 返回 `new_actors`、`monthly_actors`、`recommend_actors`，对应 APP 的“新人 / 月排名 / Fanza(DMM)推荐”。
 - 演员列表：`GET /api/v1/actors?type=...&page=...`。
-- **2026-08-23 实机进一步校正演员分类：当前 UI 的 `无码` 与 `欧美(女)` 在 Test1/Test3 映射写反。截图中 UI `无码`（tab=2）返回 Mia Malkova / Lana Rhoades / Lena Paul 等欧美演员；UI `欧美(女)`（tab=3）返回日文名演员。因此 Test5 对演员列表请求定点交换：UI tab2 → API type3，UI tab3 → API type2。有码女/有码男/欧美男保持原映射。此修正只作用 `/api/v1/actors`，不改影片分类 type 与排行榜。**
+- **2026-08-23 实机进一步校正演员分类：Test1/Test3 的 UI `无码` 与 `欧美(女)` 映射写反。截图中 UI `无码`（tab=2）返回 Mia Malkova / Lana Rhoades / Lena Paul 等欧美演员；UI `欧美(女)`（tab=3）返回日文名演员。因此 3.9.42 对演员列表请求定点交换：UI tab2 → API type3，UI tab3 → API type2。有码女/有码男/欧美男保持原映射。此修正只作用 `/api/v1/actors`，不改影片分类 type 与排行榜。**
 - 影片详情已具备系列、片商、导演、发行商、演员、标签、相关清单、TA还出演过、相关推荐。
 - 资讯使用 `GET /api/v1/articles` / `GET /api/v1/articles/%s`。
 
@@ -49,7 +51,7 @@
 
 ### 编码 / 图片 / 官方播放
 
-- Stable 3.9.41 的官方播放、图片、登录、评论、收藏继续作为 Test5 基线，不因第三方 Provider 维修而重写。
+- 3.9.42 继续继承 3.9.41 已有官方播放、图片、登录、评论、收藏主链，不因第三方 Provider 维修而重写。
 - JavDB VIP 在线播放、官方预览、官方磁链与第三方播放保持隔离；第三方 Provider 失败不得影响官方链。
 
 ### 共享 JAV Playback SDK
@@ -57,15 +59,16 @@
 - 2026-08-22 起第三方番号播放从 JavDB 私有代码拆为共享 `JAV Playback SDK`：Manager 为 `shared/jav-playback/manager.js`，版本化实现位于 `shared/jav-playback/releases/<version>/index.js`。
 - Provider UI 当前只显示站点名：MissAV / 123AV / Jable。
 - **2026-08-23 Test3 实机结果：123AV 可播放、Jable 可播放、MissAV 完全不可播放；123AV 图标为空。**
-- 因此从 SDK test.4 起执行“已验证 Provider 冻结”原则：修 MissAV 不重写 123AV/Jable。
-- 123AV 当前已验证链：当前 `player(JSON.parse(...))` 优先；失败后走 `detail/search → page-video ID → /ajax/v/<id>/videos → watch[] → player page → m3u8`；最终才 `video://detail`。多线路保持 urls/names/headers 对齐。Test5 只把图标改为仓库静态 `shared/jav-playback/assets/123av.svg`，播放解析不动。
-- Jable 当前已验证链：`/videos/<code>/` → HTML HLS → WebView 兜底 → master 自动最高画质 → 最终 `video://detail`。Test5 不修改解析。
-- MissAV SDK test.2 使用猜详情 URL/多 root 探测和脆弱 packed 解析，实机失败，禁止再把该方案当已验证链。
-- MissAV SDK test.4 恢复历史海阔实际成功思路：`/cn/search/<code>` → 只取搜索页真实存在详情 → 执行 `eval(...source...)` / Dean Edwards packed player → 得到 master m3u8 → 按 RESOLUTION/BANDWIDTH 自动最高画质；普通 fetch 不足时再用 WebView 获取动态详情。当前仍待实机验证。
+- 从 SDK test.4 起执行“已验证 Provider 冻结”原则：修 MissAV 不重写 123AV/Jable。
+- 123AV 已验证链：`player(JSON.parse(...))` 优先；失败后 `detail/search → page-video ID → /ajax/v/<id>/videos → watch[] → player page → m3u8`；最终才 `video://detail`。多线路保持 urls/names/headers 对齐。3.9.42 只把图标改为仓库静态 `shared/jav-playback/assets/123av.svg`，播放解析不动。
+- Jable 已验证链：`/videos/<code>/` → HTML HLS → WebView 兜底 → master 自动最高画质 → 最终 `video://detail`。3.9.42 不修改解析。
+- MissAV SDK test.2 使用猜详情 URL/多 root 探测和脆弱 packed 解析，实机失败，禁止再作为已验证链。
+- MissAV SDK test.4 恢复历史海阔成功思路：`/cn/search/<code>` → 只取搜索页真实存在详情 → 执行 `eval(...source...)` / Dean Edwards packed player → master m3u8 → 按 RESOLUTION/BANDWIDTH 自动最高画质；普通 fetch 不足时再用 WebView 获取动态详情。**该 MissAV 新链在晋级 3.9.42 时仍未取得新的明确实机播放确认，后续如有问题只发新 SDK Test 修 MissAV，不改 123AV/Jable 和 JavDB 主链。**
 - SDK test.1：导出方式有作用域风险，冻结。
 - SDK test.2：显式 `var JAVPlayback`；123AV/Jable 已由 Test3 实机验证，MissAV 失败。
-- SDK test.3：尝试 MissAV 修复并加 123AV 图标，但发布后回读发现又在 IIFE 内嵌套 `eval(test.2)`，Manager 外层可能读不到局部 `JAVPlayback`；在用户测试前即冻结。
-- SDK test.4：顶层显式声明 `var JAVPlayback`，加载 test.2 基线时将 `var JAVPlayback=` 转成对当前导出变量赋值；已完成 Manager 风格作用域 smoke test，外层可读取 `version=1.0.0-test.4`，123AV/Jable 继承方法可调用。
+- SDK test.3：发布后回读发现 IIFE 内嵌套 `eval(test.2)` 的导出作用域风险，在用户测试前冻结。
+- SDK test.4：顶层显式声明 `var JAVPlayback`，加载 test.2 基线时将 `var JAVPlayback=` 转成对当前导出变量赋值；已完成 Manager 风格作用域 smoke test。
+- **2026-08-23 用户明确要求把当前 Test5 晋级正式版，因此 Shared Playback `stable` 指针固定到 immutable `1.0.0-test.4`；未来新 Provider/修复只移动 `test` 指针，不得原地改变 Stable 指针。**
 
 ### Runtime / eval 作用域
 
@@ -73,31 +76,33 @@
 - 根因：Test1 在同一个 `core()` 内 `eval(Core) -> eval(Patch) -> eval(call)`；Test2 抽出 `loadCore()` 后，Core 中 `var JDB` 只活在 `loadCore()` 局部作用域。
 - Test3 修复：`core()` 与 `javdb3ExternalPlay` 均恢复同一函数作用域 direct eval。
 - 2026-08-23 用户 Test3 截图证明小程序已正常进入首页/演员/更多播放，故 **Test3 启动作用域修复已实机确认有效**。
+- Stable 3.9.42 使用独立 `runtime.js` 和独立 cache key，继续保持 Core/Patch/最终调用同一作用域，不复活 Test2 的 `loadCore()` 方案。
 - 通用规则已同步到 `HIKER_APP_DEVELOPMENT_CAUTIONS.md`：依赖 eval 创建局部符号的加载链不能跨 helper 假定可见；语法门禁之外必须做真实导出/entry smoke test。
 
 ### UI / 信息架构
 
-- Test2 起主导航收敛为 `首页 / 排行 / 分类 / 演员 / 我的 / 更多`。
+- 主导航为 `首页 / 排行 / 分类 / 演员 / 我的 / 更多`。
 - “我的”聚合本地影片收藏、演员收藏、历史及 JavDB 账号内容；“更多”聚合资讯、系列/片商/导演、自定义搜索、封面布局、API 状态和设置。
 - Test3 实机截图确认主框架可正常渲染。
-- Test5 只做轻量 UI 收敛：演员页删除重复的“搜索演员 / 按姓名搜索”行，因为顶部全局搜索已经覆盖演员搜索；不再扩大整体 UI 改版范围。
+- 3.9.42 删除演员页重复“搜索演员 / 按姓名搜索”行，统一使用顶部全局搜索；其余 UI 暂不扩大改版范围。
 
 ### 缓存 / 状态 / 本地数据
 
 - Stable 与 Test 同名覆盖；Local 使用 `JavDB v3 本地版` 独立命名。
-- 每个新 Test 使用新 Shell/runtime URL 和新 Core/custom/patch 缓存键，避免命中失败版本缓存。
+- Stable 3.9.42 使用新 Shell `version=2026082301`、新 runtime URL 和 `3942stable` 独立缓存键，不覆盖 3.9.41 文件。
 - 分类状态继续使用 `jdb3_cat42_*`。
-- Local 发布前必须最终规则隐私扫描，不依赖私人 GitHub 才合格。
+- Local 当前仍是 3.9.41-local；如需更新本地版，必须从已确认的 Stable 3.9.42 另行派生并做隐私扫描，不直接把远程 Shell 当本地版。
 
 ## 已知风险与禁止回退方案
 
-- Stable 3.9.41 未经实机验证的新功能不得直接覆盖。
+- 当前 Stable 为 3.9.42；3.9.41 保留为完整 rollback，不原地覆盖或删除。
 - Test1 已验证分类/排行总体结构，不因播放问题整块重写。
 - Test2 已证实启动失败，禁止作为活动 Test 或 recovery base。
-- Test4 不作为用户测试入口：JavDB actor 补丁保留并继承到 Test5，但共享 SDK test.3 的导出风险已经在发布后回读时发现。
+- Test4 不作为用户测试入口；其有效演员补丁已继承到 3.9.42，Shared SDK test.3 继续冻结。
 - 第三方 Provider 属于可选能力，任一外站失败不得拖垮 JavDB 官方功能。
 - 123AV/Jable 已实机可播；后续修 MissAV 时默认冻结它们的解析链。
-- Shared Playback Stable 将来必须绑定明确已验证 release，禁止让 Stable 无边界跟随 test channel。
+- Shared Playback Stable 已固定到 immutable SDK test.4；后续不得让 Stable 无边界跟随 test channel。
+- 下一轮 JavDB Test 必须从 Stable 3.9.42 向前开发，不再从 3.9.41 或失败 Test2 恢复。
 - 未经当前源码/实机证据，不从其它 JAV 站、旧 JavDB/JavDB2 推断协议事实。
 
 ## 回归测试清单
@@ -111,15 +116,15 @@
 - [x] Shared SDK Test2 / Jable 可播放（2026-08-23）
 - [x] Shared SDK Test2 / MissAV 不可播放，已确认为待修项（2026-08-23）
 - [x] Test3 / 123AV 图标为空，已确认为 UI 缺陷（2026-08-23）
-- [ ] Test5 演员 `无码` 应显示非欧美无码演员，`欧美(女)` 应显示欧美女演员
-- [ ] Test5 演员页重复搜索行已消失
-- [ ] SDK Test4 Manager 在海阔实机加载/version 校验正常
+- [ ] Stable 3.9.42 演员 `无码` / `欧美(女)` 新映射实机回归
+- [ ] Stable 3.9.42 演员页重复搜索行已消失
+- [ ] Shared SDK Stable / Manager 在海阔实机加载/version 校验正常
 - [ ] 123AV 固定图标正常显示，播放仍正常
 - [ ] Jable 二次回归仍正常
 - [ ] MissAV 只展示真实存在版本
 - [ ] MissAV 选中版本后可播放并自动最高画质
 - [ ] 搜索 / 详情 / 评论 / 官方播放 / 磁链无回归
-- [ ] Stable ↔ Test 同名覆盖正常
+- [ ] Stable 3.9.42 同名覆盖安装正常
 - [ ] Local 独立安装与隐私扫描
 
 ## 故障与恢复记录
@@ -130,6 +135,18 @@
 
 ## 版本记录
 
+### 3.9.42 Stable / 2026-08-23
+
+- 用户明确要求把当前 Test5 状态晋级正式版。
+- 新建独立 `apps/video/javdb/releases/3.9.42/`、`cloud/javdb/v3.9.42/runtime.js` 和 `javdb_v3.9.42_cloud.txt`，没有原地覆盖 Stable 3.9.41。
+- Stable Build：`2026082301`；规则壳 version：`2026082301`。
+- 继承 Test1 分类/排行/演员扩展、Test3 eval 作用域修复、Test4 演员 type2/type3 校正和 Test5 UI/共享播放指针。
+- Stable 专用 Patch 把 `J.javPlaybackChannel` 从 `test` 切为 `stable`，避免正式版随未来 SDK Test 指针漂移。
+- Shared JAV Playback Stable 指针固定到 immutable SDK `1.0.0-test.4`；123AV/Jable 保留已验证解析，MissAV 保留当前新链，后续若再修只发新 SDK Test。
+- 新增 `stable.json` / `latest.json`，registry/manifest/channels 同步到 Stable 3.9.42。
+- Previous Stable 3.9.41 完整保留用于回退。
+- Local 暂不跟随晋级，继续保持 3.9.41-local。
+
 ### 3.9.42-test.5 / 2026-08-23
 
 - 继承 Test4 的演员映射修正：仅在 `/api/v1/actors` 中交换 UI `无码`/`欧美(女)` 对应的 API type3/type2，不修改影片分类和排行榜。
@@ -137,8 +154,8 @@
 - 因共享 SDK test.3 在最终发布回读时发现与 JDB 事故同类的嵌套 eval 导出风险，未让用户浪费时间测试，直接冻结。
 - 新建共享 SDK `1.0.0-test.4`：显式稳定导出 `JAVPlayback`，已做 Manager 风格作用域 smoke test。
 - 123AV/Jable 解析代码继续继承已实机成功的 SDK test.2；123AV 仅更换仓库固定图标。
-- MissAV 单独改为“搜索真实结果 → 详情 packed source → master HLS → 自动最高画质”，等待实机播放回归。
-- Stable 3.9.41 保持不变。
+- MissAV 单独改为“搜索真实结果 → 详情 packed source → master HLS → 自动最高画质”。
+- 后按用户明确要求晋级 Stable 3.9.42。
 
 ### 3.9.42-test.4 / 2026-08-23
 
@@ -169,8 +186,8 @@
 
 ### 3.9.41 Stable / 2026-08-21
 
-- 当前远程正式基线，日常稳定使用。
-- Stable/Test 同名覆盖；Test 异常可重新导入 Stable 恢复。
+- 上一远程正式基线，现完整保留用于回退。
+- Stable/Test 同名覆盖；异常时可重新导入该旧 Stable 恢复。
 - 已登记能力：搜索 / 高级标签 / 评论 / 播放 / 收藏。
 
 ### 3.9.41-test.1 / 2026-08-21
