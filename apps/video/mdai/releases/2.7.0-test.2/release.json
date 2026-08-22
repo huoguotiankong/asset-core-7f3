@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.7.0-test.2",
+  "build": 27002,
+  "ref": "main",
+  "baseStable": {
+    "version": "2.6.3",
+    "build": 26301,
+    "release": "apps/video/mdai/releases/2.6.3/release.json"
+  },
+  "previousTest": {
+    "version": "2.7.0-test.1",
+    "build": 27001,
+    "release": "apps/video/mdai/releases/2.7.0-test.1/release.json"
+  },
+  "modules": [
+    {"name":"core-bridge","path":"apps/video/mdai/releases/2.7.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.7.0-test.1/ui_base.js"},
+    {"name":"content-pages","path":"apps/video/mdai/releases/2.7.0-test.2/pages_content.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.7.0-test.1/pages_detail.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.7.0-test.2/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.7.0-test.2"},
+  "notes": "片库 UI 第二轮：分类/排序全部改为当前页状态切换；三级栏目固定等宽；CatalogAdapter 合并已验证分类基线与动态接口，避免接口缺项导致分类消失；高级筛选压缩为四栏。Stable 2.6.3、PlaybackAdapter、详情页与协议层保持不变。"
+}
