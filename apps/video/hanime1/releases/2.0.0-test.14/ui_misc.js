@@ -1,0 +1,2 @@
+/* Hanime1 Test14 build marker */
+(function(C,P,E,H){var route=H.route,sec=H.sec;var old=E.renderSettings;E.renderSettings=function(d){old(d);d.push(sec('内容入口','作者目录与账号公开主页已独立成页。'));d.push({title:'作者目录',url:route('hanimeArtists',{}),col_type:'text_center_1',extra:{lineVisible:false}});d.push(sec('Test14','2.0.0-test.14 · Build 20014 · 修复海阔非法反斜杠语法 / 官方 H 图标 / 保留 Test12 已验证登录链'));};E.build='2.0.0-test.14';P.build='2.0.0-test.14';C.build='2.0.0-test.14';})(HanimeCore,HanimeProvider,HanimePages,HanimeUI9);
