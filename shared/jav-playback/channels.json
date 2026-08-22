@@ -1,13 +1,14 @@
 {
   "schema": 1,
   "name": "JAV Playback SDK",
-  "updatedAt": "2026-08-22 23:39",
+  "updatedAt": "2026-08-23 01:18",
   "stable": null,
   "test": {
-    "version": "1.0.0-test.2",
-    "build": 10002,
-    "path": "releases/1.0.0-test.2/index.js",
+    "version": "1.0.0-test.3",
+    "build": 10003,
+    "path": "releases/1.0.0-test.3/index.js",
     "status": "device-validation-required",
-    "providers": ["MissAV", "123AV", "Jable"]
+    "providers": ["MissAV", "123AV", "Jable"],
+    "notes": "123AV/Jable 保持 Test2 已实机可播解析；123AV 使用仓库固定图标；MissAV 改为搜索页发现真实版本，再执行 packed player 取得 source 并自动选择最高画质。"
   }
 }
