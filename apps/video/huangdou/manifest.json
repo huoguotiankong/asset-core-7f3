@@ -14,11 +14,11 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/huangdou/bootstrap_v1.js",
   "rule": "apps/video/huangdou/huangdou_remote_v1.txt",
-  "testVersion": "1.9.0-test.1",
-  "testBuild": 19001,
-  "testShellVersion": "1.1.0-test",
-  "testBootstrap": "apps/video/huangdou/bootstrap_test_v2.js",
-  "testRule": "apps/video/huangdou/huangdou_remote_test_v2.txt",
+  "testVersion": "1.9.0-test.2",
+  "testBuild": 19002,
+  "testShellVersion": "1.1.1-test",
+  "testBootstrap": "apps/video/huangdou/bootstrap_test_v3.js",
+  "testRule": "apps/video/huangdou/huangdou_remote_test_v3.txt",
   "localPath": "huangdou.txt",
-  "migration": {"stage":"stable-182-native-ui-playback-test-19001","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.1 基于已验证 1.8.2 协议向前重构 UI、页面地图、PlaybackAdapter 和诊断，待实机验证。"}
+  "migration": {"stage":"stable-182-route-fix-test-19002","source":"Stable 1.8.2 / Build 18201","note":"Stable/Local 继续冻结；1.9.0-test.2 仅修复 Test1 二级页保留参数 url 冲突，UI 与 PlaybackAdapter 其余模块继续沿用 1.9 Test1。"}
 }
