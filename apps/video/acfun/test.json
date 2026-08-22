@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha12",
-  "build": 163,
-  "shellVersion": "6.8.0-test",
+  "version": "0.6.0-alpha13",
+  "build": 164,
+  "shellVersion": "6.9.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha12/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v068.txt",
-  "updatedAt": "2026-08-22",
-  "notes": "0.6.0 Alpha12 精确恢复测试版。Alpha11 实机仍失败后，依据 Stable 0.4.9 的已验证实现做合同级回归：常规视频/短视频不再使用 Alpha11 多候选首线路逻辑，恢复 Stable v0.4.5 的 path → /api/m3u8/h5/decode → cacheM3u8 → Header 单线路合同；漫画修复确认的参数错误，Stable v0.4.7 章节实际只请求 comics/base/chapterInfo {chapterId}，Alpha11 却遗漏该调用并优先附加 comicsId，Alpha12 改为 chapterId GET/POST 首选，再有限回退 comicsId/comicId。漫画章节取消中间“打开漫画阅读”按钮，直接进入只含 pic_1_full 的全宽阅读页。有声播放器改为单线路直接返回或先选线路再 #isMusic=true#，避开多线路 JSON 音乐兼容歧义。小说/有声分类与小说正文成功链保持不动。Shell6.8 / Bootstrap v068 / Build163 强制越过 Alpha11；Stable 0.4.9 / Build149 与 latest.json 不变。"
+  "release": "apps/video/acfun/releases/0.6.0-alpha13/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v069.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "0.6.0 Alpha13 实机驱动恢复测试版。Alpha12 已确认漫画章节恢复，证明 comics/base/chapterInfo {chapterId} 是当前可用合同；Alpha13 保留该成功链并把章节入口改成 pics:// 原生多图阅读，去掉普通二级页顶部标题/空白区域。普通视频仍失败的明确运行时根因已找到：旧 Alpha3 视频详情的播放 lazyRule 会 eval 仅 core v018，再调用被重置后的 ac.play，导致 Alpha12 后置播放修复没有真正执行；Alpha13 普通视频详情、短视频和有声全部改为点击时重新加载当前 Bootstrap v069 后调用当前 Runtime。播放器同级结果中移除收藏/评论按钮，只保留真正播放项，收藏/评论移到封面长按动作。播放链继续使用 can/watch + h5/decode/cacheM3u8，并根据 APK1.9.7 静态证据有限加入 m3u8/player/referer；有声同时兼容 playbackDomain/playbackAuthKey/authKey。封面新增类型化评分解析，继续处理小说、社区及部分普通视频缺图。Shell6.9 / Bootstrap v069 / Build164 强制越过 Alpha12；Stable 0.4.9 / Build149 与 latest.json 继续冻结。"
 }
