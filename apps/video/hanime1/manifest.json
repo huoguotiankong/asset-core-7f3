@@ -10,15 +10,15 @@
   "defaultVersion": "1.2.1",
   "defaultBuild": 12100,
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.23",
-  "testBuild": 20023,
-  "testShellVersion": "2.0.0-test",
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v3.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v3.txt",
+  "testVersion": "2.0.0-test.24",
+  "testBuild": 20024,
+  "testShellVersion": "2.0.0-test.4",
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4.txt",
   "migration": {
-    "stage": "test23-builtin-xpath-avatar-recovery",
-    "source": "2.0.0-test.22",
-    "recoveryBase": "2.0.0-test.17",
-    "note": "Test22 的可见诊断没有出现在用户设置页，且旧设置模块仍硬编码显示 Test12，导致运行版本不可观测。Test23 直接回到 Test17 稳定业务链，头像解析改用海阔官方内置 XPath：作者按 #video-user-avatar 的相邻 img，主评论按每4个直接子节点组的首节点 img，回复按每2个直接子节点组的 body img；设置页同时显示真实运行 Build、重新加载按钮和 XPath 命中诊断。"
+    "stage": "test24-shell-bootstrap-updater-recovery",
+    "source": "2.0.0-test.23",
+    "recoveryBase": "2.0.0-test.23",
+    "note": "用户 2026-08-22 16:49 实机点击旧设置页更新按钮出现 HanimeBoot 未定义，并且页面仍未出现 Test23 运行版本/头像诊断。这证明设备没有进入 Test23，根因是旧设置模块的序列化 lazyRule 直接引用 HanimeBoot，回调上下文中该全局对象不存在，导致程序内更新链自锁。Test24 通过新 Shell v4 + Bootstrap v4 + minBuild 20024 强制恢复；更新类回调全部在 lazyRule 内显式 require Bootstrap 后再调用 HanimeBoot。头像解析沿用尚未真正送达设备验证的 Test23 XPath 引擎。"
   }
 }
