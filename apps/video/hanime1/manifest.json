@@ -15,19 +15,19 @@
   "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
   "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.35",
-  "testBuild": 20035,
+  "testVersion": "2.0.0-test.36",
+  "testBuild": 20036,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20035,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20035.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20035.txt",
+  "testInstallerBuild": 20036,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20036.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20036.txt",
   "migration": {
-    "stage": "stable-20000-test35-recover-test32-account-filter-search",
+    "stage": "stable-20000-test36-recover-test32-finalized",
     "stablePromotedFrom": "2.0.0-test.29",
     "stableBuild": 20029,
     "testBase": "2.0.0-test.32",
-    "testBuild": 20035,
+    "testBuild": 20036,
     "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28", "2.0.0-test.34"],
-    "note": "Stable 2.0.0 remains frozen. Test34 device validation proved severe multi-domain regression: main comments disappeared, account avatar/library remained broken, playlist fallback fabricated bare list-ID cards with empty detail, full-filter/creator access disappeared, and search still returned JSEngine#13. Test35 no longer uses Test34 as a recovery base; it returns to device-proven Test32 and reapplies isolated account/library/filter/search/creator changes."
+    "note": "Stable 2.0.0 remains frozen. Test36 is the device-recovery candidate after Test34 multi-domain regression. It returns to Test32 and reapplies isolated account/library/search/creator patches; settings36 ensures maintenance actions bind to Build20036. Test35 was superseded during preflight before device handoff."
   }
 }
