@@ -5,25 +5,25 @@
 ## 当前基线
 - App ID：`mdai`
 - Remote Stable：`2.6.3 / Build 26301 / Shell 1.0.0`（已实机验证，继续冻结）
-- Remote Test：`2.7.0-test.3 / Build 27003 / Shell 1.1.2-test`
+- Remote Test：`2.7.0-test.4 / Build 27004 / Shell 1.1.3-test`
 - Local：`2.6.3-local.1`
 - Stable 入口：`apps/video/mdai/mdai_remote_v1.txt`
-- Test 入口：`apps/video/mdai/mdai_remote_test_v4.txt`
+- Test 入口：`apps/video/mdai/mdai_remote_test_v5.txt`
 - Local：`mdai.txt`，导入名 `麻豆AI 本地版`
 
 ## 当前 Test 运行链
 ```text
-mdai_remote_test_v4.txt / rule version 2026082218
-→ bootstrap_test_v4.js / state id=mdai-test / minBuild=27003
+mdai_remote_test_v5.txt / rule version 2026082301
+→ bootstrap_test_v5.js / state id=mdai-test / minBuild=27004
 → Remote Manager v2.0.1
-→ releases/2.7.0-test.3/release.json
+→ releases/2.7.0-test.4/release.json
 → core.js          复用 Stable 2.6.3 协议数据桥
 → playback.js      复用 2.7 Test1 PlaybackAdapter
 → ui_base.js       复用 2.7 Test1 Native Design System
 → pages_content.js 复用 Test2 CatalogAdapter / 原页筛选
 → pages_detail.js  复用 Test1 Detail
-→ settings_icon.js Test3：官网原图标实机检测/复制
-→ runtime.js       Test3 组合导出
+→ settings_icon.js Test4：Raw HTML / Manifest 官网图标检测
+→ runtime.js       Test4 组合导出
 ```
 
 ## 2.7 UI / Catalog 现状
@@ -41,26 +41,45 @@ Test2 已修复：
 - [ ] 连续切换分类后返回一次即可退出片库。
 - [ ] 分类骨架完整且动态新增可追加。
 
-## 官网图标：2.7.0-test.3
-用户确认此前手动尝试 `https://mdcmai4.xyz/favicon.ico` 无效，而且当前服务端环境无法可靠解析官网域名，因此禁止继续猜 `/favicon.png`、`/logo.png` 或依赖第三方 favicon API。
+## 官网图标检测事故：Test3 → Test4
+### Test3 实机失败
+用户实机点击“设置 → 官网图标检测”后提示：
 
-Test3 新增“设置 → 官网图标检测”：
-1. 在用户手机当前可访问的 `mdai_host` 环境请求官网首页。
-2. 解析页面所有 `<link>`，筛选 `rel=icon / shortcut icon / apple-touch-icon`。
-3. 相对地址转为当前 Host 的绝对地址；忽略 data URI。
-4. `apple-touch-icon`、shortcut icon、带较大 `sizes` 的站点声明提高优先级。
-5. 检测成功写入 `mdai_official_icon_detected`，并立即返回 `copy://<真实地址>`，方便用户手动填写海阔程序图标。
-6. 设置页再次打开会显示缓存地址，并提供“复制已检测图标地址”。
+```text
+图标检测失败：接口返回不是有效 JSON：<!DOCTYPE html> ...
+```
 
-固定原则：**第三方 favicon 服务只做发现器，不作为正式图标事实源；站点真实 icon 以用户可访问环境中的 HTML 声明为准。**
+这证明官网首页本身已经成功返回 HTML，但 Test3 错误复用了 `m.request('/')`。该 Core Request Client 面向 `/api/v1/*` JSON 数据，会在 HTML 资源解析器真正执行前先做 JSON 断言，因此 HTML 被误判为“接口错误”。
+
+### 固定规则
+- **数据 API Client 与 Raw Resource Client 必须分层。** 强制 JSON/schema 的 API Client 不能直接复用来获取官网 HTML、favicon、manifest、robots、静态脚本或图片元数据。
+- ResourceDetector 应直接使用原始 `request/fetch`，先按响应类型判断，再交给 HTML/Manifest/Image Adapter。
+- “收到 `<!DOCTYPE html>`”在 HTML ResourceDetector 中是正常输入，不应被 JSON Client 先拦截。
+- 图标来源优先级：站点 HTML/manifest 自己声明 > 已验证仓库静态资产 > 第三方 favicon 发现服务；禁止继续猜 `/favicon.ico`、`/logo.png`。
+
+### Test4 实现
+1. 直接 `request(currentHost + '/')` 获取原始 HTML，不经过 `m.request()`。
+2. 解析：
+   - `rel=icon`
+   - `apple-touch-icon`
+   - `msapplication-TileImage`
+   - `rel=manifest` → `manifest.icons[]`
+3. 相对地址统一转为当前 Host 绝对地址，忽略 data URI。
+4. 根据图标类型与 `sizes` 评分，优先站点自己声明的高规格资源。
+5. 成功后保存：
+   - `mdai_official_icon_detected`
+   - `mdai_official_icon_source`
+6. 直接返回 `copy://<真实地址>`；设置页再次打开可继续复制缓存结果。
+7. 若 HTML + manifest 都没有声明图标，明确提示“未声明可用图标”，不猜地址。
 
 待实机确认：
-- [ ] 点击“官网图标检测”能拿到并复制地址。
-- [ ] 复制地址在浏览器/海阔图标字段可直接显示真实站点图标。
-- [ ] 若页面未声明 icon，应明确提示“官网首页没有声明可用 icon”，不继续猜地址。
+- [ ] Test4 点击“官网图标检测”不再出现 JSON 错误。
+- [ ] 成功复制真实站点 icon URL。
+- [ ] 复制 URL 可在浏览器/海阔规则图标字段直接显示。
+- [ ] 确认真实地址后，把图标固化到 MDAI Stable/Test/Local/仓库 manifest assets，不长期依赖运行时检测。
 
 ## PlaybackAdapter 2.7
-当前仍沿用 Test1，未在 Test3 修改：
+当前仍沿用 Test1，Test4 没修改播放：
 - `smart`：稳定代理 + 原始直链。
 - `direct`：原始直链优先。
 - `proxy`：只走站点稳定代理。
@@ -80,7 +99,8 @@ Test3 新增“设置 → 官网图标检测”：
 - Core 快照：`mdai_core_snapshot_263_v270`
 - 播放策略：`mdai_play_strategy_v2`
 - 播放诊断：`mdai_play_diag_v2`
-- Test3 官网图标：`mdai_official_icon_detected`
+- 官网图标：`mdai_official_icon_detected`
+- 官网图标来源：`mdai_official_icon_source`
 
 ## 回归 / 恢复
 - 2.7 UI 与播放没有完成实机闭环前不得晋级 Stable。
@@ -88,10 +108,15 @@ Test3 新增“设置 → 官网图标检测”：
 
 ---
 ## 版本记录
+### 2.7.0-test.4 / 2026-08-23
+- 根据 Test3 实机 `<!DOCTYPE html>` 被误判为非法 JSON 的结果修复官网图标检测。
+- ResourceDetector 改为原始 HTML request，新增 manifest icon 支持。
+- 不修改 Test2 已修好的片库，也不修改 PlaybackAdapter/详情业务。
+- Build27004 / Shell v5 / Bootstrap v5 强制越过 Test3 active state。
+
 ### 2.7.0-test.3 / 2026-08-22
 - 在 Test2 片库 UI 基线上新增官网原图标实机检测/复制。
-- 新增独立 `settings_icon.js`，不修改 Content/Detail/Playback 主业务模块。
-- Build27003 / Shell v4 / Bootstrap v4 强制越过 Test2 active state。
+- 实机确认检测错误复用了 JSON API Client，收到正常 HTML 后被提前判错；已冻结并在 Test4 修复。
 
 ### 2.7.0-test.2 / 2026-08-22
 - 根据实机截图修复片库分类完整性、溢出 `>` 和分类连续开新页面问题。
