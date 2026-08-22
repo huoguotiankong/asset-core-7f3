@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.6.0-alpha10",
+      "version": "0.6.0-alpha11",
       "baseVersion": "0.4.9",
       "targetVersion": "0.6.0",
-      "build": 161,
-      "displayVersion": "Test 0.6.0-alpha10 · Build 161 · Shell 6.6",
-      "path": "apps/video/acfun/acfun_remote_test_v066.txt",
+      "build": 162,
+      "displayVersion": "Test 0.6.0-alpha11 · Build 162 · Shell 6.7",
+      "path": "apps/video/acfun/acfun_remote_test_v067.txt",
       "mode": "remote",
       "updatedAt": "2026-08-22",
       "recommended": false,
-      "desc": "Alpha9 隔离后从 Alpha8 恢复 · 封面/播放/小说有声/漫画回归修复",
-      "highlights": ["Alpha9 冻结隔离", "Alpha8 恢复基线", "扩展封面字段", "fresh can/watch 播放", "小说/有声分类恢复", "txt/html 正文源读取", "音频字段独立识别", "同页三列筛选保持", "短视频直接播放保持", "pics:// 漫画保持", "社区详情合并"],
+      "desc": "保留小说正文成功链 · 重做视频/短视频/有声/漫画与剩余封面",
+      "highlights": ["小说/有声分类已实机恢复", "小说正文已实机恢复", "cacheM3u8 播放合同恢复", "视频与短视频带 Header 多线路", "有声章节 seed 合并", "longFormAudio/audioSource 解析", "当前 v067 漫画章节链", "comicsId/comicId GET+POST", "JSON 字符串封面兼容", "dynamicImg/shortCover 扩展", "Stable 继续冻结"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
