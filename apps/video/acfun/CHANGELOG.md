@@ -11,9 +11,70 @@
 - 当前正式 Stable 与 `latest.json` 固定在 `0.4.9 / Build149`，仍是 Test 大改失败时的恢复基线。
 - 已验证能力包括：常规视频播放、极速切换、封面 XOR 解密与持久缓存、精选/里番 Station 底座、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
 - 0.4.9 修复过 0.4.8 activeRelease 缓存错误根目录模块路径的问题；正式 release 使用 `apps/video/acfun/` 明确仓库相对路径，并保留旧状态恢复兼容。
-- **Alpha11 仍只进入 Test/Candidate，Stable/latest 不得修改。**
+- **Alpha12 仍只进入 Test/Candidate，Stable/latest 不得修改。**
 
-### Test 0.6.0-alpha11 / Build 162 / Shell 6.7.0（当前测试）
+### Test 0.6.0-alpha12 / Build 163 / Shell 6.8.0（当前测试）
+
+#### 2026-08-22 Alpha11 实机与诊断结论
+
+- 用户实机确认 Alpha11 仍然“不行”，并提供诊断：`ACFun 2026.08.22-v0.6.0-alpha11 | a6-comic|6932cd0f1952ca164bbd02c4|0|4 -> comics/station/getStationComicsMore #1 (8) | no-error`。
+- 这条诊断**只证明漫画列表 `getStationComicsMore` 返回 8 条**，并不能证明漫画章节 `comics/base/chapterInfo` 已命中，也不是 Alpha11 的 `acfun_v060_a11_comic_probe`。
+- 继续复核 Stable v0.4.7 源码后找到一个明确回归：历史已验证的 `ac.__v047ComicReader()` 调 `comics/base/chapterInfo` 时，参数只有 `{chapterId}`；Alpha11 的章节矩阵却遗漏这个真实合同，先尝试 `{comicsId,chapterId}` / `{comicId,chapterId}` 等组合。这是比“继续扩大图片字段”更直接的根因线索。
+- Alpha11 同时仍没有形成视频/短视频/有声播放实机闭环。因此 Alpha12 不再继续增加不确定的多线路候选，而回到已验证 Stable 合同。
+
+#### Alpha12 漫画修复
+
+- 新增 `acfun_runtime_v060_a12.js` 与 `acfun_ui_v060_a12_detail.js`。
+- 漫画章节 `comics/base/chapterInfo` 的请求顺序改成：
+  1. `{chapterId}` GET
+  2. `{chapterId}` POST
+  3. `{comicsId,chapterId}` GET/POST
+  4. `{comicId,chapterId}` GET
+- 其中 `{chapterId}` 是 Stable v0.4.7 **已经实机验证过的真实调用合同**；其它组合只是后级兼容，不再反过来覆盖 Stable 事实。
+- `imgList / imageList / chapterImgList / images / pageList / pics / pictures` 继续支持数组、对象和 JSON 字符串包装，并结合 `domain/imgDomain/imageDomain` 补全相对地址。
+- Alpha11 的漫画章节会先打开一个“打开漫画阅读”中间页，再 lazyRule 返回 `pics://`；Alpha12 取消这层中转。章节点击后直接进入 `acfun_detail` 的 `comic_chapter` 阅读态，页面只渲染连续 `pic_1_full` 图片，不再增加章节标题/页数内容块。
+- 这样既避免旧 Bootstrap/lazyRule 重入问题，也优先恢复 Stable 已验证的普通全宽图片阅读能力。后续如果当前海阔版本 `pics://` 再次实机验证稳定，可以再作为可选阅读模式，而不是把未验证的 `pics://` 当唯一入口。
+- 失败时页面直接显示并可复制 `acfun_v060_a12_comic_probe`，下一轮可以明确看到 `chapterId-GET/POST` 是否命中、图片数量和 `canWatch`。
+
+#### Alpha12 视频 / 短视频播放回归 Stable 合同
+
+- Alpha11 为了兼容 `/api/m3u8/play` 等候选，构造了多个播放线路；这不是 Stable 实机成功时的最小合同，且首线路可能先命中一个能构造但不能实际播放的 URL。
+- Alpha12 直接恢复 Stable v0.4.5 的核心播放行为：
+
+```text
+Feed 的 videoUrl/playUrl/videoUri/path
+若无则 POST video/can/watch {videoId}
+→ ac.__v043DecodePlayUrl(path)
+→ /api/m3u8/h5/decode?path=...
+→ cacheM3u8(...#isM3u8#, headers)
+→ 单线路 JSON urls/names/headers
+```
+
+- 不再把 `/api/m3u8/play`、`/m3u8/play` 之类 APK 静态字符串放在主线路之前。
+- 短视频仍保持“首页卡片点击直接 `ac.play()`”，不会重新退回普通视频详情页。
+- 新探针 `acfun_v060_a12_play_probe` 记录 path、decode URL、最终 URL、cacheHit、watchErr、cacheErr。
+
+#### Alpha12 有声音频出口
+
+- Alpha11 使用“多线路 JSON + 每条 URL 附 `#isMusic=true#`”作为音乐播放器出口，当前海阔实机兼容性没有得到证明。
+- Alpha12 保留 Alpha11 已经做好的 `longFormAudio/audioSource/sourcePath/playPath/playbackDomain` 候选提取，但改写最终播放器：
+  - 只有 1 条音频：直接返回 `url#isMusic=true#`。
+  - 多条音频：先弹 `select://` 选择线路，再返回所选 `url#isMusic=true#`。
+  - M3U8 音频仍先 `cacheM3u8`。
+- 新探针 `acfun_v060_a12_audio_probe` 只记录真正准备交给播放器的最终候选，避免“解析到了 6 条但没有任何一条真正进入播放器”的假阳性。
+
+#### Alpha12 发布链
+
+- 不可变 Release：`releases/0.6.0-alpha12/release.json`，Build `163`。
+- Alpha11 模块链末尾追加：`runtime-a12 / direct-comic-detail-a12 / shell-settings-a12`。
+- 新 Bootstrap：`bootstrap_test_v068.js?v=6800`，`minBuild=163`。v068 继承 v067 的 Loader/Manager 能力，但在运行前替换活动 defaultRelease 为 Alpha12，不修改 Stable。
+- 新 Shell：`acfun_remote_test_v068.txt`，规则数值 version `2026082207`。
+- Test/Candidate/channels/app manifest/registry/根 manifest 已切到 Alpha12；共享文件写入前重新读取，只修改 ACFun 项，其它并行程序状态保持原样。
+- `latest.json` 与 Stable 0.4.9 / Build149 / Shell5.11.3 继续冻结。
+
+---
+
+### Test 0.6.0-alpha11 / Build 162 / Shell 6.7.0（上一测试）
 
 #### 2026-08-22 Alpha10 实机结果
 
