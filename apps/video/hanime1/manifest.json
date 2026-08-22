@@ -15,19 +15,19 @@
   "stableBootstrap": "apps/video/hanime1/bootstrap_stable_v5_b20029.js",
   "rule": "apps/video/hanime1/hanime1_remote_stable_v5_b20029.txt",
   "legacyPath": "hanime1.txt",
-  "testVersion": "2.0.0-test.39",
-  "testBuild": 20039,
+  "testVersion": "2.0.0-test.40",
+  "testBuild": 20040,
   "testShellVersion": "2.0.0-test.4",
-  "testInstallerBuild": 20039,
-  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20039.js",
-  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20039.txt",
+  "testInstallerBuild": 20040,
+  "testBootstrap": "apps/video/hanime1/bootstrap_test_v4_b20040.js",
+  "testRule": "apps/video/hanime1/hanime1_remote_test_v4_b20040.txt",
   "migration": {
-    "stage": "stable-20000-test39-device-corrections",
+    "stage": "stable-20000-test40-performance-hotfix",
     "stablePromotedFrom": "2.0.0-test.29",
     "stableBuild": 20029,
-    "testBase": "2.0.0-test.38",
-    "testBuild": 20039,
+    "testBase": "2.0.0-test.39",
+    "testBuild": 20040,
     "brokenReleases": ["2.0.0-test.27", "2.0.0-test.28", "2.0.0-test.34"],
-    "note": "Stable 2.0.0 remains frozen. Test39 is a focused correction over Test38 after device evidence: exact reply DOM grouping and null normalization, valid input-IIFE search handoff, authoritative profile/avatar rendering, all-playlist metadata recovery, exact playlist-item parsing, and removal of legacy > filter sentinels."
+    "note": "Stable 2.0.0 remains frozen. Test40 preserves Test39 search/reply/filter/account parsing repairs while removing the profile recursion and sequential account-network work that caused long blocking on detail/My/Settings navigation."
   }
 }
