@@ -3,7 +3,7 @@
   "id": "huangdou",
   "name": "黄豆短剧",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 23:08",
+  "updatedAt": "2026-08-22 23:24",
   "channels": [
     {
       "channel":"stable","label":"正式版","id":"huangdou","name":"黄豆短剧","version":"1.8.2","build":18201,
@@ -12,9 +12,9 @@
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
-      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.1","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19001,
-      "displayVersion":"Test 1.9.0 · Native UI / Playback","path":"apps/video/huangdou/huangdou_remote_test_v2.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
-      "desc":"1.9 产品级重构 Test · 待实机 UI/播放回归","highlights":["首页/片库/专题/搜索/我的/设置独立化","分类与 Tab 原地刷新，不压新页面栈","PlaybackAdapter：Token API → PlayModel → webRule 降级 + 旧链对照"],
+      "channel":"test","label":"测试版","id":"huangdou-test","name":"黄豆短剧","version":"1.9.0-test.2","baseVersion":"1.8.2","targetVersion":"1.9.0","build":19002,
+      "displayVersion":"Test 1.9.0 · Route Fix 2","path":"apps/video/huangdou/huangdou_remote_test_v3.txt","mode":"remote","updatedAt":"2026-08-22","recommended":false,
+      "desc":"1.9 产品级重构 Test2 · 修复二级页 URL 保留参数冲突，待实机复测","highlights":["详情/专题改用 hddj_url 专用跨页参数","MY_PARAMS + getParam + URL 合法性三层恢复","UI/PlaybackAdapter 继续沿用 1.9 Test1，隔离修复范围"],
       "icon":"https://d3rorc0p4i1kyz.cloudfront.net/assets/sites/4/logo/195feebd61ee417086f0287acde8671a.png"
     },
     {
