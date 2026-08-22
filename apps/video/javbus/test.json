@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "javbus-test",
+  "appId": "javbus",
+  "name": "JavBus",
+  "version": "2.0.0-alpha1",
+  "baseVersion": "2026081903",
+  "targetVersion": "2.0.0",
+  "build": 20001,
+  "shellVersion": "2.0.0-test.1",
+  "shellRuleVersion": 2026082301,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/javbus/releases/2.0.0-alpha1/release.json",
+  "rule": "apps/video/javbus/javbus_remote_test_v1_b20001.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "首次完全重写测试版：脱离 Apollo；原生 UI；有码/无码/欧美、搜索、分类、演员、详情、样品图、相似影片、磁力、收藏；第三方播放复用 JAV Playback Stable；磁力长按联动 123云盘/磁力君/云盘君。"
+}
