@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "0.6.0-alpha17",
+  "build": 168,
+  "ref": "main",
+  "modules": [
+    {"name": "core", "path": "acfun_core_v018.js"},
+    {"name": "protocol", "path": "acfun_patch_v019.js"},
+    {"name": "instant-ui", "path": "acfun_ui_v042.js"},
+    {"name": "functional-fix", "path": "acfun_fix_v043.js"},
+    {"name": "fast-playback", "path": "acfun_fix_v045.js"},
+    {"name": "app-source-taxonomy-comics-short", "path": "apps/video/acfun/acfun_fix_v047.js"},
+    {"name": "apk197-tags", "path": "apps/video/acfun/acfun_fix_v048.js"},
+    {"name": "release-repair", "path": "apps/video/acfun/acfun_fix_v049.js"},
+    {"name": "clean-rebase-runtime-ui-a15", "path": "apps/video/acfun/acfun_runtime_v060_a15_clean.js"},
+    {"name": "device-image-model-a17", "path": "apps/video/acfun/acfun_fix_v060_a17_image.js"},
+    {"name": "device-playback-a17", "path": "apps/video/acfun/acfun_fix_v060_a17_play.js"},
+    {"name": "device-short-a17", "path": "apps/video/acfun/acfun_fix_v060_a17_short.js"},
+    {"name": "device-comic-a17", "path": "apps/video/acfun/acfun_fix_v060_a17_comic.js"}
+  ],
+  "verify": {"global": "ac", "property": "build", "equals": "2026.08.23-v0.6.0-alpha17"}
+}
