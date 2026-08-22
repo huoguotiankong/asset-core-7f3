@@ -1,6 +1,6 @@
 # 海阔小程序编写注意事项
 
-版本：3.0  
+版本：3.1  
 首次建立：2026-08-20  
 最近增强：2026-08-22  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
@@ -147,6 +147,30 @@ HTML 限流页、502/503、登录页都可能非空。写缓存前校验 HTTP/�
 
 ## 8. 严重事故不要补丁叠补丁
 Shell/Bootstrap/Core/Manager/cache 同时变化会迅速失去可观测性。冻结坏版本，新建隔离 release，完整验证。
+
+## 8A. 多域同时回归的 Test/Candidate 不得继续当 recovery base
+Hanime1 Test34 真实事故：同一版同时覆盖 Community / Account / Library / Search 后，主评论从可见退化为 0、账号片单变成伪卡、搜索仍报错、筛选入口也与源码意图不一致。
+
+出现这种情况时固定执行：
+
+```text
+当前失败 Test 冻结/quarantine
+→ 找最后一个用户实机证明“关键旧功能仍正常”的 build
+→ 新 build 直接从该实机基线恢复
+→ 每次只重新叠加小范围、可独立验收的模块
+```
+
+不要因为失败版本“代码看起来更先进”就继续继承它。
+
+## 8B. 只解析到 raw identifier 时禁止制造用户可见伪成功卡片
+例如扫描到 `playlist?list=192779`，但没有解析到真实 title/cover/wrapper，不得直接展示成“片单192779”。
+
+正确策略：真实业务字段齐全才建卡；否则标记“解析失败/待确认”并保留诊断。**宁可显式失败，不要伪造成功数据。**
+
+## 8C. 仓库源码显示“已覆盖”不代表设备运行时真的执行了该覆盖
+Hanime1 Test34 源码删除了筛选行 `>`，实机仍然出现 `>`，说明 Remote Manager active state、require cache、模块覆盖顺序或页面函数后续重绑定都可能使源码意图与设备结果不一致。
+
+截图与源码冲突时：用户实机优先；先查 Shell → Bootstrap → Remote state → Release → module load order，再决定是否改业务 parser。
 
 ## 9. 自举工具必须有仓库外 Recovery
 规则仓库等“自己管理自己”的程序至少有正常更新中心 + 不依赖当前首页/manifest/active Core 的独立 recovery。
@@ -502,6 +526,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 缓存 schema 可失效。
 - [ ] 未启用 Provider 不初始化。
 - [ ] Token/异步轮询有边界。
+- [ ] 只取得 raw identifier 时未制造用户可见伪业务卡片。
 
 ## UI
 - [ ] 一眼看懂主任务。
@@ -532,6 +557,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 ## 发布/恢复
 - [ ] Guard 通过。
 - [ ] Candidate/Test 核心路径实机通过。
+- [ ] 若当前 Test 多域回归，下一版已从最后实机可用基线恢复，而不是继续继承坏 Test。
 - [ ] 网络失败缓存/备用通道符合设计。
 - [ ] Local/分享版隐私扫描通过。
 - [ ] 更新/回退闭环通过。
@@ -565,7 +591,10 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 ## 2026-08-22：Hanime1 连续发布事故
 - Test22/23 GitHub 已有头像补丁但手机未真正进入 Release → 先验证 Runtime build，不再盲改业务。
 - Test26 Cloud Repo 广告 20026、Bootstrap 默认 20024 → 新增 remote_installer_guard。
-- Test27 JS 少一个右括号，启动即 SyntaxError → 新增 `tools/js_syntax_guard.py`；坏 Release 隔离，Test28 从最后可启动 Test26 重建。
+- Test27 JS 少一个右括号，启动即 SyntaxError → 新增 `tools/js_syntax_guard.py`；坏 Release 隔离，后续从最后可启动基线重建。
+- Test34 同时重写评论、账号、筛选、搜索后多域回归：主评论 0、裸 list ID 假片单、片单详情 0、搜索仍 JSEngine#13、筛选实机与源码不一致 → **坏 Test 不再作为 recovery base，回到最后设备验证基线并分模块重建。**
+- Test34 raw href fallback 把 `playlist?list=<id>` 直接渲染为“片单<id>” → **raw identifier 不是业务实体；没有真实 title/wrapper 就不能建用户卡。**
+- Test34 源码已删除 `>` 但手机仍显示 → **源码覆盖声明不是运行事实；截图冲突时优先查 Remote state/cache/load order。**
 
 ---
 
