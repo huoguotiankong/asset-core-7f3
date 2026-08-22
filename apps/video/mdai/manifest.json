@@ -14,15 +14,15 @@
   "shellVersion": "1.0.0",
   "bootstrap": "apps/video/mdai/bootstrap_v1.js",
   "rule": "apps/video/mdai/mdai_remote_v1.txt",
-  "testVersion": "2.8.0-test.1",
-  "testBuild": 28001,
-  "testShellVersion": "1.2.0-test",
-  "testBootstrap": "apps/video/mdai/bootstrap_test_v6.js",
-  "testRule": "apps/video/mdai/mdai_remote_test_v6.txt",
+  "testVersion": "2.8.0-test.2",
+  "testBuild": 28002,
+  "testShellVersion": "1.2.1-test",
+  "testBootstrap": "apps/video/mdai/bootstrap_test_v7.js",
+  "testRule": "apps/video/mdai/mdai_remote_test_v7.txt",
   "localPath": "mdai.txt",
   "migration": {
-    "stage": "stable-263-ui-redesign-test-28001",
+    "stage": "stable-263-ui-redesign-test-28002",
     "source": "Stable 2.6.3 / Build 26301",
-    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.8.0-test.1 使用从用户实机 favicon 数据还原并固化的正式图标资产，重构首页、片库、搜索、我的、详情和设置；播放继续复用 2.7 Adapter，避免 UI 与协议同时变化。"
+    "note": "Stable 2.6.3 与 Local 2.6.3 保持冻结；2.8.0-test.2 完整继承 Test1 UI 重构，发布前补跨页导航状态恢复，并将用户实机取得的原站图标固化为真实 PNG 二进制仓库资产。播放继续复用 2.7 Adapter。"
   }
 }
