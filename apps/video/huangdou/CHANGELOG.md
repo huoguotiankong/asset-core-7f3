@@ -5,24 +5,24 @@
 ## 当前基线
 - App ID：`huangdou`
 - Remote Stable：`1.8.2 / Build 18201 / Shell 1.0.0`（用户已实机验证，继续冻结）
-- Remote Test：`1.9.0-test.5 / Build 19005 / Shell 1.1.4-test`
+- Remote Test：`1.9.0-test.6 / Build 19006 / Shell 1.1.5-test`
 - Local：`1.8.2-local.1`
 - Stable 入口：`apps/video/huangdou/huangdou_remote_v1.txt`
-- Test 入口：`apps/video/huangdou/huangdou_remote_test_v6.txt`
+- Test 入口：`apps/video/huangdou/huangdou_remote_test_v7.txt`
 - Local：`huangdou.txt`，导入名 `黄豆短剧 本地版`
 
 ## 当前 Test 运行链
 ```text
-huangdou_remote_test_v6.txt / rule version 2026082304
-→ bootstrap_test_v6.js / state id=huangdou-test / minBuild=19005
+huangdou_remote_test_v7.txt / rule version 2026082307
+→ bootstrap_test_v7.js / state id=huangdou-test / minBuild=19006
 → Remote Manager v2.0.1
-→ releases/1.9.0-test.5/release.json
+→ releases/1.9.0-test.6/release.json
 → core.js          复用 Test1 / Stable 1.8.2 协议与 HTML Parser
 → ui_base.js       复用 Test2 跨页/UI 基线
 → playback.js      完整复用 Test4 Session-aware Token + HLS Probe
 → pages_content.js 复用 Test1 首页/片库/搜索/我的/专题
-→ pages_detail.js  Test5：付费/需授权 Episode 🔒 标识
-→ runtime.js       Test5 组合导出
+→ pages_detail.js  Test6：Pinned Test5 Detail + 【锁】兼容标识热修
+→ runtime.js       Test6 组合导出
 ```
 
 ## 数据 / HTML / 图片事实
@@ -37,23 +37,28 @@ POST /account/guest
 → /play/<id>/<ep>.m3u8?t=<token>#isVideo=true#
 ```
 - 详情 DOM 暴露 `data-ep-free / is-locked / data-pay-method / data-pay-price` 等权限提示字段。
-- 用户 2026-08-23 明确确认：后续无法观看的部分集数属于**付费章节**。
+- 用户 2026-08-23 明确确认：后续无法观看的部分集数属于付费章节。
 
-## Test5：付费剧集 UI 标识
-用户要求付费集数直接显示 `🔒`，方便在进入播放器前区分免费与付费内容。
+## Test5 → Test6：付费剧集 UI 标识
+Test5 使用 `🔒` 标识官网 locked Episode。用户实机确认：
+- 点击付费集时授权提示正确，说明 `locked` 判断已经生效。
+- 但 `text_4` 集数按钮里 `🔒` 字形没有显示；选集说明的 `text_1` 中却能显示 `🔒`。
 
-实现规则：
-- 官网详情解析结果 `ep.locked === true` 时，选集按钮显示 `第N集 🔒`。
-- 如果当前 Primary Play 目标本身是 locked 集，主按钮显示 `🔒 第 N 集 · 付费/解锁`。
-- 选集标题增加说明：`🔒 为官网付费/需授权内容`。
-- `🔒` 只表达官网页面给出的付费/授权提示，**不等于最终播放 API 授权结论**；用户已购买/已登录时仍允许 Test4 播放链正常验证合法权益。
-- Test5 不修改 PlaybackAdapter；仍完整复用 Test4 会话保持、Token、HLS 预检与 Header 交付。
-- 不实现、也不记录任何绕过官网付费/会员授权的方案。
+结论：这是**海阔组件/字体渲染兼容问题，不是权限判断失败**。某些 `text_4` 场景会吞掉 supplementary-plane Emoji，因此付费状态不能只依赖 Emoji 字形表达。
+
+Test6 固定方案：
+- 付费集按钮改为 `【锁】第N集`，使用普通中文/BMP 文本确保可见。
+- 当前 Primary Play 是付费集时显示 `【锁】第 N 集 · 付费/解锁`。
+- 选集说明改为 `【锁】为官网付费/需授权内容`。
+- Test6 不修改 PlaybackAdapter；继续复用 Test4 会话保持、Token、HLS 预检与 Header 交付。
+- 不绕过官网付费/会员授权。
+
+固定规则：**关键状态（付费、锁定、失败、警告）不能只靠 Emoji 表达。对 `text_4/flex_button/scroll_button` 等组件，必须有可读文本 fallback，例如 `【锁】/付费/VIP`；Emoji 只能作为增强，不得作为唯一信息载体。**
 
 待实机确认：
-- [ ] 已知付费集在选集网格清晰显示 `🔒`。
+- [ ] 已知付费集在选集网格稳定显示 `【锁】`。
 - [ ] 免费集不误标锁。
-- [ ] 当前继续播放目标是付费集时，Primary Play 也能一眼识别。
+- [ ] 当前继续播放目标是付费集时 Primary Play 明确显示锁定状态。
 - [ ] 已购买合法权益的账号会话仍按 Test4 播放链处理。
 
 ## 路由事故与固定规则
@@ -74,7 +79,7 @@ POST /account/guest
 3. 这证明 `Token 存在 / URL 已拼出` 不等于真实媒体已授权或 HLS 有效。
 4. 用户随后确认这些后续失败集属于付费章节。
 
-### Test4 播放策略（Test5 原样复用）
+### Test4 播放策略（Test6 原样复用）
 - 优先使用当前 Host 已存在的 Cookie / 合法登录会话请求 `/play/token`。
 - 只有当前会话拿不到 Token 时，才建立 guest 后重试。
 - Token 后使用同一 `Cookie + Referer + UA` 对 m3u8 做轻量预检；有效 HLS 应以 `#EXTM3U` 开始。
@@ -111,8 +116,8 @@ POST /account/guest
 - 片库布局：`hddj_col_v190`
 - 选集分组：`hddj_ep_group_v190`
 - 倒序：`hddj_reverse_v190`
-- Test4/Test5 播放策略：`hddj_play_strategy_v4`
-- Test4/Test5 播放诊断：`hddj_play_diag_v4`
+- Test4/Test6 播放策略：`hddj_play_strategy_v4`
+- Test4/Test6 播放诊断：`hddj_play_diag_v4`
 
 ## 回归 / 恢复
 - 1.9 UI/播放没有完成本轮实机闭环前不得晋级 Stable。
@@ -120,11 +125,16 @@ POST /account/guest
 
 ---
 ## 版本记录
+### 1.9.0-test.6 / 2026-08-23
+- 根据 Test5 实机确认：授权判断正确，但 `text_4` 不显示 `🔒` Emoji。
+- 付费集 UI 改为稳定文本 `【锁】第N集`，Primary Play 和选集说明同步使用 `【锁】`。
+- PlaybackAdapter 完整复用 Test4，不改授权/媒体合同。
+- Build19006 / Shell v7 / Bootstrap v7。
+
 ### 1.9.0-test.5 / 2026-08-23
 - 用户明确确认后续播放失败集属于付费章节。
-- 详情主按钮与选集网格对官网 locked Episode 统一增加 `🔒`，选集区域增加付费/授权说明。
-- PlaybackAdapter 完整复用 Test4，不改授权/媒体合同，不绕过官网购买。
-- Build19005 / Shell v6 / Bootstrap v6。
+- 详情主按钮与选集网格尝试对官网 locked Episode 增加 `🔒`。
+- 实机确认 `text_4` 集数按钮不显示该 Emoji，已冻结并由 Test6 改用文本 fallback。
 
 ### 1.9.0-test.4 / 2026-08-23
 - 保护现有合法登录/购买 Cookie；Token 优先使用当前会话，失败才 guest fallback。
