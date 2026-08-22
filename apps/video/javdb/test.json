@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "version": "3.9.42-test.1",
+  "build": 2026082241,
+  "baseVersion": "3.9.41",
+  "release": "apps/video/javdb/releases/3.9.42-test.1/release.json",
+  "shell": "cloud/javdb/v3.9.42-test.1/javdb_v3.9.42_test1.txt",
+  "promotedAt": "2026-08-22",
+  "status": "device-validation-required",
+  "notes": "APP 分类/排行榜/演员分类补全测试版；Stable 3.9.41 保持不变。"
+}
