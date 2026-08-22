@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.42-test.2",
+  "build": 2026082242,
+  "baseVersion": "3.9.41",
+  "baseBuild": 2026082006,
+  "previousTest": "3.9.42-test.1",
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.42-test.2/javdb_v3.9.42_test2.txt",
+  "runtime": "cloud/javdb/v3.9.42-test.2/runtime.js",
+  "modules": [
+    {"name":"appParityPatch1","path":"apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js"},
+    {"name":"appParityPatch2","path":"apps/video/javdb/releases/3.9.42-test.2/app_parity_patch2.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"test","sdkVersion":"1.0.0-test.1"}
+  ],
+  "verify": {"global":"JDB","property":"version","equals":"20260822-v3.9.42-test.2"},
+  "scope": ["navigation", "mine", "more", "ui", "shared-playback"],
+  "stableUntouched": true,
+  "notes": "继承用户实机确认正常的 3.9.42-test.1 分类/排行/演员能力；主导航按 APP 信息架构收敛为首页/排行/分类/演员/我的/更多；新增我的聚合页、更多聚合页；更多播放改接共享 JAV Playback SDK。"
+}
