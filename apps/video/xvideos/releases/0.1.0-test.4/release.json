@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "xvideos-test",
+  "name": "XVideos",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/xvideos/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/xvideos/releases/0.1.0-test.1/runtime.js"},
+    {"name":"corePatch2","path":"apps/video/xvideos/releases/0.1.0-test.2/core_patch.js"},
+    {"name":"runtimePatch2","path":"apps/video/xvideos/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"coreProductPatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/core_product_patch.js"},
+    {"name":"uiProductPatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/ui_product_patch.js"},
+    {"name":"routePatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/route_patch.js"},
+    {"name":"coreAccountPatch4","path":"apps/video/xvideos/releases/0.1.0-test.4/core_account_patch.js"},
+    {"name":"uiAccountPatch4","path":"apps/video/xvideos/releases/0.1.0-test.4/ui_account_patch.js"}
+  ],
+  "verify": {"global":"XVideosRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "previous": {"version":"0.1.0-test.3","build":10103,"release":"apps/video/xvideos/releases/0.1.0-test.3/release.json"},
+  "notes": "Test4 hardens X5 account-session correctness and auth-cache isolation, adds home pagination/account recommendation state, safer private-list parsing, broader real comment recovery, local-list cleanup and current-build settings actions."
+}
