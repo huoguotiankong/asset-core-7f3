@@ -3,30 +3,30 @@
   "id": "911baoliao",
   "name": "911爆料",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 20:40",
+  "updatedAt": "2026-08-23 21:02",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "911baoliao-test",
       "name": "911爆料",
-      "version": "0.1.0-test.3",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/911baoliao/911baoliao_remote_test_v3_b10103.txt",
+      "version": "0.1.0-test.4",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/911baoliao/911baoliao_remote_test_v4_b10104.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "Test3 修复海阔实机无法访问 raw.githubusercontent.com 导致的 Bootstrap 启动失败：Shell 与运行时回调改走 jsDelivr，Bootstrap 升级 Remote Manager 2.0.2 并启用 jsDelivr/WebRaw/Raw 多镜像回退；保留 Test2 中文规则名路由修复。",
+      "desc": "Test4 根据实机截图收紧 911 专用内容链：首页过滤广告/导航伪条目，封面优先解析卡片真实 lazy/srcset 图片并避免邻近 Logo 串图；详情清理站点推广段落；播放只交付规范化且通过 http/https 校验的 MP4/HLS 地址。",
       "highlights": [
-        "修复 Raw GitHub Bootstrap 加载失败",
-        "Shell 默认使用 jsDelivr",
-        "Remote Manager 2.0.2 多镜像回退",
-        "lazyRule 回调同步切换 CDN Bootstrap",
-        "保留 Test2 中文规则名路由修复",
-        "无评论、投稿、下载功能"
+        "移除首页广告/导航伪视频",
+        "修复列表封面误抓 911 Logo/占位图",
+        "增强 lazy/srcset/background 封面解析",
+        "修复媒体 URL 缺少合法 scheme",
+        "无效播放线路自动剔除",
+        "保留 Test2 路由与 Test3 CDN 容灾"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/911baoliao/assets/icon.svg?v=10103"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/911baoliao/assets/icon.svg?v=10104"
     }
   ]
 }
