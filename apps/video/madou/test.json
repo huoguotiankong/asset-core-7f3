@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.10",
-  "build": 10110,
-  "shellVersion": "1.0.0-test.10",
-  "shellRuleVersion": 2026082310,
+  "version": "0.1.0-test.11",
+  "build": 10111,
+  "shellVersion": "1.0.0-test.11",
+  "shellRuleVersion": 2026082311,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.10/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v10_b10110.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.11/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v11_b10111.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test10 性能重构：活动 Release 从 Test9 的 9 层补丁缩减为 Core + Runtime + 单一 Performance Runtime，减少二级页重复模块装载。分类层级改成小型结构化索引持久缓存，切换同组分类不再重新请求首页；最近 6 个分类保存最多 30 张解析后卡片，20 分钟内回切直接本地渲染。列表卡把标题/封面/摘要作为 seed 传给详情，因此正常影片详情首屏默认零网络请求；标签与相关推荐改为用户主动加载。所有热路径网络请求采用单次 6.5 秒预算，不再 fetch→request→WebView 连续兜底拖住页面。"
+  "notes": "Test11 增加全局详情扩展加载设置：手动加载、自动标签、自动标签+相关推荐。播放默认切为严格 HTTP-only 纯免嗅：只使用详情/player/script/API 请求和静态 JS 解码（escaped/percent/Base64/P.A.C.K.E.R）解析真实 M3U8/MP4，命中后直接交播放器并缓存30分钟；默认完全不启动 WebView/video://。兼容嗅探只作为用户在设置中明确开启的失败兜底。"
 }
