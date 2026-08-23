@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 11:24",
+  "updatedAt": "2026-08-23 11:40",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.3",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/myav/myav_remote_test_v3_b10103.txt",
+      "version": "0.1.0-test.4",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/myav/myav_remote_test_v4_b10104.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "第二轮实机修复：恢复欧美/国产频道并重构首页与详情 UI；完成多频道实机回归前不建立 Stable。",
+      "desc": "第三轮实机修复：分类中心补齐原站菜单树与索引钻取，磁力页重构资源信息与筛选排序；完成分类/磁链实机回归前不建立 Stable。",
       "highlights": [
-        "欧美真实详情路径 /c4/、国产 /c3/ 已纳入列表 Parser",
-        "频道入口从当前站点导航动态发现，无码继续走实时筛选链接",
-        "首页改为品牌区 + 频道切换 + 图标工具栏 + 双列海报流",
-        "详情改为主视觉 + 信息芯片 + 播放区 + 快捷动作 + 分组资料",
-        "保留 Test2 真封面链、Shared JAV Playback 与磁力长按云盘链"
+        "分类中心覆盖资源频道、9 类标签索引、有码热门、片商新番、排行榜和三类搜索",
+        "修复 cat 索引实际 /t/ 条目此前被 parseIndex 排除导致的无响应",
+        "女优等索引页支持原生分页，并在有图片时使用双列卡片",
+        "磁链从资源块恢复标题、大小、日期、字幕/高清标记，过滤无意义 [javlist.me]",
+        "磁力页支持全部/字幕/高清筛选以及默认/大小/日期排序"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/myav/assets/icon.svg"
     }
