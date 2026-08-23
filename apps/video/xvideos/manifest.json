@@ -6,17 +6,17 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xvideos/test.json",
   "channels": "apps/video/xvideos/channels.json",
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "1.0.0-test.4",
-  "testBootstrap": "apps/video/xvideos/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/xvideos/xvideos_remote_test_v4_b10104.txt",
-  "testRelease": "apps/video/xvideos/releases/0.1.0-test.4/release.json",
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "1.0.0-test.5",
+  "testBootstrap": "apps/video/xvideos/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/xvideos/xvideos_remote_test_v5_b10105.txt",
+  "testRelease": "apps/video/xvideos/releases/0.1.0-test.5/release.json",
   "changelog": "apps/video/xvideos/CHANGELOG.md",
   "sourceSite": "https://www.xvideos.com/",
   "icon": "apps/video/xvideos/assets/brand.svg",
   "migration": {
-    "stage": "test4-account-session-hardening",
-    "note": "Test4 preserves the real-device-successful Test2 parser and Test3 product pass, while hardening X5 account session correctness, auth-cache isolation, private-list parsing and home pagination."
+    "stage": "test5-private-kv-rescue-and-product-ui",
+    "note": "Test5 preserves the verified Test2 parser and Test3/Test4 feature chain, but replaces hot-path private-KV writes with file/in-memory state and uses a direct immutable Bootstrap after the user's real-device 1MB private-storage failure."
   }
 }
