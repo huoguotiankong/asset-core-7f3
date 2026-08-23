@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.13",
-  "defaultBuild": 10113,
-  "testVersion": "0.1.0-test.13",
-  "testBuild": 10113,
-  "testShellVersion": "1.0.0-test.13",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v13_b10113.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v13_b10113.txt",
+  "defaultVersion": "0.1.0-test.14",
+  "defaultBuild": 10114,
+  "testVersion": "0.1.0-test.14",
+  "testBuild": 10114,
+  "testShellVersion": "1.0.0-test.14",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v14_b10114.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test13-short-direct-adaptive-image","note":"Test12 PWA 短视频列表已恢复，但短视频播放被长视频完整性校验和 MP4→M3U8 误分类阻断；Test13 拆出短视频专用播放链，免费短视频优先 source_origin MP4 直放，图片升级为 plain/CBC/legacy-CFB 自适应，推荐/长视频列表优先 PWA 以提高封面一致性。"}
+  "migration": {"stage":"test14-reference-authorized-rewrite","note":"恢复 App featuredAv 大列表以修复推荐/长视频仅 3 条；短视频与免费/已购买长视频增加用户上传参考规则的 long 主机兼容写法，收费未解锁内容仍只允许官方试看/正常汤币解锁。"}
 }
