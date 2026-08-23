@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan-test",
+  "name": "溏心次元",
+  "channel": "test",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "modules": [
+    {"name":"coreBase","path":"apps/video/tangxincyuan/releases/0.1.0-test.1/core.js"},
+    {"name":"runtimeBase","path":"apps/video/tangxincyuan/releases/0.1.0-test.1/runtime.js"},
+    {"name":"corePatch3","path":"apps/video/tangxincyuan/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"runtimePatch3","path":"apps/video/tangxincyuan/releases/0.1.0-test.3/runtime_patch.js"},
+    {"name":"coreSessionPatch4","path":"apps/video/tangxincyuan/releases/0.1.0-test.4/core_session_patch.js"},
+    {"name":"runtimeSessionPatch4","path":"apps/video/tangxincyuan/releases/0.1.0-test.4/runtime_session_patch.js"},
+    {"name":"coreTransportPatch5","path":"apps/video/tangxincyuan/releases/0.1.0-test.5/core_transport_patch.js"},
+    {"name":"runtimeTransportPatch5","path":"apps/video/tangxincyuan/releases/0.1.0-test.5/runtime_transport_patch.js"}
+  ],
+  "verify":{"global":"TxcyRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "previous":{"version":"0.1.0-test.4","build":10104,"release":"apps/video/tangxincyuan/releases/0.1.0-test.4/release.json"},
+  "notes":"Test5 stops treating getCookie as the only success condition. After the official Cloudflare page is completed, the app tries fetchCodeByWebView as a browser-source transport fallback and automatically uses it for home/category/search/detail when native fetch remains on the challenge page."
+}
