@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"navigationUiPatch","path":"apps/video/madou/releases/0.1.0-test.3/navigation_ui_patch.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/madou/releases/0.1.0-test.2/release.json"},
+  "notes": "Test3 fixes Chinese mini-app routing by using rule=& for internal hiker://page routes, replaces placeholder quick-action circles with real SVG icons, routes home search through an internal page, and filters obvious arrow/navigation pseudo-cards."
+}
