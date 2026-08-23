@@ -1,0 +1,19 @@
+{
+  "schema":1,
+  "channel":"stable",
+  "id":"myav",
+  "name":"MyAv",
+  "version":"0.1.0",
+  "build":10112,
+  "mode":"remote",
+  "shellVersion":"0.1.0-stable.1",
+  "shellRuleVersion":2026082322,
+  "managerVersion":"2.0.1",
+  "release":"apps/video/myav/releases/0.1.0/release.json",
+  "rule":"apps/video/myav/myav_remote_stable_v1_b10112.txt",
+  "bootstrap":"apps/video/myav/bootstrap_stable_v1_b10112.js",
+  "promotedFrom":{"version":"0.1.0-test.11","build":10111},
+  "sharedPlayback":{"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "updatedAt":"2026-08-23",
+  "notes":"First MyAv Stable, promoted by explicit user request from Test11."
+}
