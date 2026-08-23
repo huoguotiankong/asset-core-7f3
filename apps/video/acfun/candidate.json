@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha1",
-  "build": 10001,
-  "shellVersion": "8.0.0-test",
+  "version": "1.0.0-alpha2",
+  "build": 10002,
+  "shellVersion": "8.1.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha1/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha2/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha1 候选。完全独立于旧 0.6.0 Alpha 补丁活动链，重新建立 APP 1.9.7 协议、内容 Provider、媒体/图片 Adapter 与产品 UI。Stable 0.4.9 冻结不动；本候选只有在首页/分类/搜索/视频播放/短视频/漫画/小说有声/社区及返回栈完成海阔实机回归后才允许晋级。"
+  "notes": "Clean Rewrite Alpha2 候选。基于 Alpha1 首轮实机结果修复封面域/解码、专题参数编码、HLS识别与APP播放凭据候选、漫画GET-first。正式版仍冻结在 Stable 0.4.9；本候选需要继续完成视频封面/普通播放、专题标题、漫画详情与章节、短视频、小说有声、社区的实机回归后才能晋级。"
 }
