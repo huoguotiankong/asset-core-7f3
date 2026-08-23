@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
-  "testShellVersion": "1.0.0-test.10",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/video/madou/madou_remote_test_v10_b10110.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.10/release.json",
+  "testVersion": "0.1.0-test.11",
+  "testBuild": 10111,
+  "testShellVersion": "1.0.0-test.11",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v11_b10111.js",
+  "testRule": "apps/video/madou/madou_remote_test_v11_b10111.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.11/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test10-performance-rebase","note":"Test10 removes the Test3-Test9 patch stack from the hot Release and keeps only base Core + base Runtime + one consolidated performance runtime. Category hierarchy and recent parsed feeds are small bounded caches; normal detail pages render from list-card seed data without a network request. Expensive detail metadata and playback protocol work are deferred from the detail first screen."}
+  "migration": {"stage":"test11-detail-settings-http-nosniff","note":"Test11 keeps Test10's performance rebase and adds one focused overlay. Detail expansion is globally selectable (manual, auto tags, auto tags+recommendations). Playback defaults to strict HTTP-only no-sniff using detail/player/script/API requests plus escaped/percent/Base64/P.A.C.K.E.R static decoding, direct M3U8/MP4 handoff and bounded media cache. Browser sniffing is disabled unless the user explicitly enables compatibility fallback."}
 }
