@@ -1,5 +1,52 @@
 # Pornhub CHANGELOG
 
+## 0.1.0-test.5 / Build 10105 — 2026-08-23
+
+### 第四轮实机结论
+- Test4 详情页继续确认多画质播放基线正常：当前样例显示 `4 个 HLS 画质`，本轮不改 Test1/Test2 已验证的 HLS 解析/交付链。
+- 用户点击 Test4“评论”后不是进入解析空态，而是 JSEngine 直接报 `TypeError: 找不到函数 comments。`；因此本次首先按 P0 Runtime 导出事故处理，而不是继续盲改评论 DOM。
+- 根因已确认：Test1 Runtime 的 `R.module()` 返回固定方法白名单，Test4 后置 Patch 虽然新增 `R.comments / R.playlistDetail`，但这两个新方法没有进入旧白名单；Shell 中存在页面声明并不代表 `PornhubBoot.module()` 真正导出了对应函数。
+- 用户实机详情页创作者 `Ruth Lee` 仍显示字母占位头像，说明视频详情 Author Adapter 只找到人物实体，没有稳定恢复该创作者的真实头像。
+- Test4 原生分类页能同步约 `241` 个分类，但以大量英文 slug 平铺，和用户给出的 Pornhub 中文网页“异性恋/男同/女女 + 热门图片卡 + 所有色情片类型”产品结构差距明显。
+- 首页“搜索”仍先弹输入对话框；用户明确要求改为独立搜索页面。
+
+### Runtime 导出修复
+- Test5 最终覆盖 `R.module=function(){return R;};`，使活动 Runtime 后续 Patch 新增的方法也能被 Shell 直接取得；`comments` 与同样受影响的 `playlistDetail` 一并恢复导出。
+- 发布前新增 module smoke：完整 Runtime 加载后确认 `typeof module.comments / categories / searchPage === 'function'`，不再把“JS 文件里有函数”误当作“Shell 能调用函数”。
+- 新增跨程序事故文档：`docs/INCIDENT_RUNTIME_MODULE_EXPORT_SNAPSHOT_20260823.md`；以后 Remote Runtime 新增页面必须检查 `Shell pages ↔ module actual exports` 一致性。
+
+### 分类页重构 / 中文化
+- 分类页改成官网式信息架构：顶部 `异性恋 / 男同 / 女女` 为同页状态切换，继续使用 `putMyVar → refreshPage(false)`，不会产生新的返回栈。
+- 新增“热门色情片类型”：从 Pornhub 分类 HTML 恢复带图分类实体，以 `movie_2` 双列图片卡展示，视觉结构贴近用户提供的官网截图。
+- 新增“所有色情片类型”：保留完整站点分类数据，但用户可见标签统一中文化，不再直接显示 `amateur-gay / big-tits-lesbian / behind-the-scenes` 等原始 slug。
+- 中文分类名优先尝试从 `cn.pornhub.com/categories` 学习官方中文显示名并短缓存；当前网络/区域不可用时回退项目内置映射，并对 `-gay / -lesbian` 后缀做中文派生。
+- 视频详情里的“分类 / 标签”也复用同一中文 Category Adapter，避免详情页继续出现一半英文、一半中文。
+
+### 独立搜索页
+- 首页搜索图标现在直接进入 `pornhubSearch`，不再先弹 `input://` 输入对话框。
+- 搜索页内保留原生输入框，并增加 `视频 / 创作者` 同页范围切换。
+- 视频搜索继续支持相关/最新/最多观看/最高评分、专业/自制、时长过滤；所有筛选继续同页刷新，不压栈。
+- 创作者搜索在同一搜索 Workspace 中独立渲染人物卡。
+
+### 详情创作者头像
+- 重写视频页 `authorFrom` 候选评分：优先 `Video Underplayer / usernameBadgesWrapper / videoUploader / userInfo` 等视频上传者上下文，不再简单取整页第一个 profile anchor。
+- 先在创作者锚点附近恢复头像；仍缺失时再请求该创作者个人页，经现有 `#getAvatar / topProfileHeader / profileAvatar` 链获取真实头像，并使用独立轻量缓存。
+- 详情页仍保留最终占位兜底，但本轮目标是尽量显示真实人物头像；是否命中 Ruth Lee 需下一轮实机截图确认。
+
+### 评论与操作栏
+- Test5 评论入口已先修复 Runtime 导出，因此不再出现 Test4 的“找不到函数 comments”这一层错误。
+- Comment Adapter 先解析初始详情 HTML；若无评论，再有限扫描页面真实 comment/AJAX 相关地址，并兼容 JSON 中 `html/content/comments/result/template` 包装后的 HTML；仍不实现发评论。
+- 视频详情的 `评论 / 本地收藏 / 在线收藏` 改为海阔 `icon_small_3` 三栏动作，新增 `comment.svg / local.svg`，在线收藏继续复用 `favorite.svg`，解决 Test4 只有文字 chip 且末尾出现 `>` 的视觉问题。
+- 创作者详情的在线订阅 / 本地收藏 / 官方主页也改为统一图标操作栏。
+
+### 回归门禁
+- Test5 `core_patch.js / ui_patch.js / Bootstrap` 已通过 `node --check`。
+- Shell JSON 已验证可解析，仍包含 20 个页面声明，并包含 `pornhubComments / pornhubPlaylistDetail`。
+- Runtime module smoke 已确认新增页面方法真实可导出。
+- 分类中文映射 smoke：`mature → 熟女`、`asian-gay → 亚洲男同`，分组可识别 gay/lesbian/straight。
+- Test4 的 X5 登录会话、账号私有缓存按 Cookie 指纹隔离、在线视频收藏/订阅合同保持不变；Test1/Test2 已实机验证的公开详情和多画质 HLS 播放链不做结构性修改。
+- Test5 仍只进入 Test；评论真实数据、Ruth Lee 等创作者头像、官网式分类图片与中文标签、独立搜索页都需要用户实机继续验收。
+
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23
 
 ### 第三轮实机结论
