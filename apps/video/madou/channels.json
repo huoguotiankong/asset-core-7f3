@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 15:28",
+  "updatedAt": "2026-08-23 15:58",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.8",
-      "build":10108,
-      "displayVersion":"Test 0.1.0-test.8 · Build 10108",
-      "path":"apps/video/madou/madou_remote_test_v8_b10108.txt",
+      "version":"0.1.0-test.9",
+      "build":10109,
+      "displayVersion":"Test 0.1.0-test.9 · Build 10109",
+      "path":"apps/video/madou/madou_remote_test_v9_b10109.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test8 重做详情视觉并加入免嗅优先播放链。横向封面使用全宽 Hero，删除源站固定简介，只保留真正有用的标题、时间、播放、标签、推荐和收藏；播放先从详情 HTML、iframe/player 页面及一层嵌套 player 结构化提取真实 M3U8/MP4，命中后直接播放，video:// 仅作未命中兜底。",
-      "highlights":["详情全宽 Hero 重排","移除固定简介文案","结构化免嗅优先","跟随 iframe/player 页面取真实媒体","8 分钟小型媒体缓存","video:// 降级为兜底"],
+      "desc":"Test9 专门修复 Test8 的详情/播放性能回归。详情渲染严格限制为一次详情请求，不再在首屏同步追踪多个 player/iframe 页面；播放若当前 HTML 已有真实媒体则直接播放，否则只加载目标播放器页，用 webRule 快速读取 video/currentSrc 或网络资源中的 M3U8/MP4，并屏蔽图片与广告。",
+      "highlights":["详情只做一次网络请求","删除 Test8 同步多跳播放器解析","直链命中立即播放","只加载目标播放器页","webRule 每250ms快速返回媒体","图片/广告资源拦截"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
