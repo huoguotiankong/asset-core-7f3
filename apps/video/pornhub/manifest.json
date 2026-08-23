@@ -12,9 +12,9 @@
   "defaultBuild": 10108,
   "stableVersion": "0.1.0",
   "stableBuild": 10108,
-  "stableShellVersion": "0.1.0-stable.1",
+  "stableShellVersion": "0.1.0-stable.2",
   "stableBootstrap": "apps/video/pornhub/bootstrap_stable_v1_b10108.js",
-  "stableRule": "apps/video/pornhub/pornhub_remote_stable_v1_b10108.txt",
+  "stableRule": "apps/video/pornhub/pornhub_remote_stable_v2_b10108.txt",
   "stableRelease": "apps/video/pornhub/releases/0.1.0/release.json",
   "testVersion": "0.1.0-test.7",
   "testBuild": 10107,
@@ -25,5 +25,5 @@
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
-  "migration": {"stage":"stable-010-promoted-test7","note":"Stable 0.1.0 / Build10108 was promoted from Test7 by explicit user request without changing business logic. Test7 remains unchanged as the promotion source; future Test work should rebase from the new Stable."}
+  "migration": {"stage":"stable-010-icon-hotfix-shell2","note":"Stable business release remains 0.1.0 / Build10108. Shell v2 only changes the app icon delivery URL to jsDelivr; Test7 remains unchanged as the promotion source."}
 }
