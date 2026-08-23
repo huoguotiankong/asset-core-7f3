@@ -3,15 +3,20 @@
   "channel": "test",
   "id": "18av",
   "name": "18AV",
-  "version": "0.1.0-test.1",
-  "build": 10101,
+  "version": "0.1.0-test.2",
+  "build": 10102,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026082324,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026082325,
   "managerVersion": "2.0.4",
-  "release": "apps/video/18av/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/18av/18av_remote_test_v1_b10101.txt",
-  "bootstrap": "apps/video/18av/bootstrap_test_v1_b10101.js",
+  "release": "apps/video/18av/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/18av/18av_remote_test_v2_b10102.txt",
+  "bootstrap": "apps/video/18av/bootstrap_test_v2_b10102.js",
   "updatedAt": "2026-08-23",
-  "notes": "Initial Test: video/comic/photo/novel separated adapters, dual-domain navigation, native UI, local favorites/history and diagnostics. Requires real-device validation before Stable."
+  "previousTest": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/video/18av/releases/0.1.0-test.1/release.json"
+  },
+  "notes": "Pre-device Test2: fix Remote Manager 2.0.4 pointer id alignment and route the home category-library shortcut correctly. Test1 remains immutable."
 }

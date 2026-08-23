@@ -4,6 +4,11 @@
   "name": "18AV",
   "default": "test",
   "channels": {
-    "test": {"metadata":"apps/video/18av/test.json","version":"0.1.0-test.1","build":10101,"rule":"apps/video/18av/18av_remote_test_v1_b10101.txt"}
+    "test": {
+      "metadata": "apps/video/18av/test.json",
+      "version": "0.1.0-test.2",
+      "build": 10102,
+      "rule": "apps/video/18av/18av_remote_test_v2_b10102.txt"
+    }
   }
 }

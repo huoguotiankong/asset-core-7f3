@@ -1,5 +1,14 @@
 # 18AV CHANGELOG
 
+## 0.1.0-test.2 / Build 10102 — 2026-08-23
+
+状态：**首轮实机前修正版；未经过海阔实机验证，禁止晋级 Stable。**
+
+- 保持 Test1 不可变，不覆盖已发布 Release。
+- 修复 Remote Manager 2.0.4 身份契约：Bootstrap / Release / `test.json` 统一使用 `id=18av`，避免 `pointerOk()` 严格校验导致活动 Test 指针失效。
+- 修复首页快捷入口：`影片类别库` 不再误进普通 Feed，而是直接进入独立 `av18Genres` 大类库页面。
+- Test1 的站点协议、四类 Adapter、UI、内容安全过滤与实机验收清单全部继承。
+
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
 状态：**全新程序第一版 Test；未经过海阔实机验证，禁止晋级 Stable。**
