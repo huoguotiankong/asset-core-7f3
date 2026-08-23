@@ -5,122 +5,88 @@
 ## 当前基线（2026-08-23）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.3` / Build `10103`
-- Shell：`apps/video/myav/myav_remote_test_v3_b10103.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v3_b10103.js`
-- Release：`apps/video/myav/releases/0.1.0-test.3/release.json`
-- Release 链：Test1 Core → Test2 `image_patch.js` → Test3 `core_patch.js` → Test1 Runtime → Test2 `runtime_patch.js` → Test3 `ui_patch.js`。
-- 图标：`apps/video/myav/assets/icon.svg`；首页工具图标位于同目录 `search/filter/category/rank/favorite/magnet/preview.svg`。
+- 当前仅 Test：`0.1.0-test.4` / Build `10104`
+- Shell：`apps/video/myav/myav_remote_test_v4_b10104.txt`
+- Bootstrap：`apps/video/myav/bootstrap_test_v4_b10104.js`
+- Release：`apps/video/myav/releases/0.1.0-test.4/release.json`
+- Release 链：Test1 Core → Test2 `image_patch.js` → Test3 `core_patch.js` → Test4 `core_patch.js` → Test1 Runtime → Test2 `runtime_patch.js` → Test3 `ui_patch.js` → Test4 `ui_patch.js`。
+- 图标：`apps/video/myav/assets/icon.svg`；工具图标：`search/filter/category/rank/favorite/magnet/preview.svg`。
 - 数据源：`https://javlist.me/`
 - Remote Manager：`libs/updater/remote_manager.js` v2.0.1
 - Shared JAV Playback Stable：`1.0.0-test.4` / MissAV + 123AV + Jable
-- Stable：尚未建立；必须完成多频道与新 UI 实机回归后才允许晋级。
+- Stable：尚未建立；必须完成分类中心、磁力页和多频道实机回归后才允许晋级。
 
-## 2026-08-23 · Test2 第二轮实机结果 → Test3
+## 2026-08-23 · Test3 第三轮实机结果 → Test4
 ### 已确认
-- Test2 图片修复有效：有码首页大部分真实海报已经恢复，不再统一显示 `AVLIST` 灰色占位图。
-- Test2 同 href 聚合有效：卡片番号不再全部串成同一个 `VRKM-1890`，可见 `VRKM-1890 / VRKM-1905 / VRKM-1873 / VRKM-1904 / URVRSP-602 / URVRSP-608` 等独立条目。
-- Test2 详情封面恢复有效：`vrkm-1873` 详情顶部已经显示真实封面。
-- 仓库自有 MyAv SVG 图标在实机顶部正常显示。
-- 详情主体继续可解析：`VRKM-1873 · 2026-09-24 · 4201秒`、第三方播放区、`预览 21`、原站预览媒体地址与档案区均可见。
+- Test3 UI 相比 Test2 明显改善：首页/详情进入产品化结构，详情 Hero、信息芯片、在线播放、磁力/预览/收藏/原站快捷动作、简介和资料分组均可正常渲染。
+- 欧美条目详情已正常工作，例如日期式编号 `26.08.21.Dace` 能显示真实封面、标题、日期、磁力 4、预览 14 和简介。
+- 有码条目详情继续正常，例如 `START-613` 可显示真实封面、番号/日期/时长、MissAV/123AV/Jable、磁力 10、预览 21 和原站预览。
+- 说明 Test2 图片链 + Test3 `/c /c3 /c4` 多详情族修复均有效。
 
-### 第二轮 P0 问题
-1. 首页/详情 UI 仍是“功能堆叠”风格：灰色文字按钮过多、层级弱；详情连续纵向段落较长，主视觉、播放、工具动作和资料信息没有形成清晰产品层级。
-2. 只有有码频道有内容；欧美、国产在海阔中为空。
-3. 无码需要按原站当前动态 hash 筛选工作，不能被当成固定独立页面处理。
+### 第三轮实机暴露的问题
+1. **磁力页信息价值不足**：4 条磁链标题几乎都只显示 `[javlist.me]`，部分只有日期，没有大小、字幕/高清信息；页面纵向留白大，缺少筛选与排序。
+2. **分类不完整**：Test3 “分类索引”只展示 9 个标签入口，但原站真实菜单还包含“分类 / 标签分类 / 有码热门 / 片商新番 / 排行榜 / 搜索”等完整导航体系。
+3. **部分分类点击后无内容/像没反应**：原站 `cat.py` 索引页的真实条目链接大量使用 `/t/<opaque-hash>`；旧 `parseIndex()` 只允许 `cat.py/default.cpp/western/domestic` 等路径，主动把 `/t/` 条目排除了。
+4. 女优等索引原站存在完整分页和图片卡，Test3 原生索引没有充分利用这些数据。
 
-### 多频道根因（已通过当前原站重新确认）
-- 有码列表详情族：`/c/<opaque>`。
-- 欧美列表真实页面：`western.java`，当前详情链接族是 **`/c4/<opaque>`**；原站当前约 48 页并有完整条目。
-- 国产列表真实页面：`domestic_index.js`，当前详情链接族是 **`/c3/<opaque>`**；原站当前约 3 页并有完整条目。
-- Test1/Test2 `parseMovies()` 只匹配 `/c/`，所以欧美/国产页面虽然成功取得 HTML，却会得到 0 个影片实体。
-- 无码不是独立详情族；当前原站通过有码 `default.cpp` 的“其它 → 無碼流出”动态筛选 URL 工作，query 中 `other/year` 值为站点当前 hash，禁止写死。
+### 当前原站菜单事实（2026-08-23）
+- 分类：有码 / 欧美 / 国产 / 无码 / FC2磁力查询 / 视频在线 / 18H次元漫画 / 韩漫 / 小说。
+- 标签分类：有码片商 / 有码女优 / 男优 / 有码TAG / 欧美片商 / 欧美女优 / 欧美TAG / 国产女优 / 国产TAG。
+- 有码热门：单体作品 / 最佳女优 / 漫画改编 / 新人出道 / 无码破解 / 巨乳 / 辣妹 / 熟女 / 人妻 / 大屁股 / 超乳 / 巨大的根 / 猫耳 / 全部标签。
+- 片商新番：MOODYZ / Madonna / kawaii / 本中 / Fitch / OPPAI / S1 / Hunter / E-BODY / Attackers。
+- 排行榜：独立入口。
+- 搜索：有码查询 / 欧美查询 / 国产查询。
+- 有码女优索引当前约 561 页；有码片商索引当前约 20 页，说明索引必须支持真正分页，不能只做首页按钮。
 
-### Test3 Core 修复
-- `core_patch.js` 将影片详情路径实体扩展为 `/c/`、`/c3/`、`/c4/`。
-- `sectionUrl()` 改成从当前首页“分类”导航动态发现有码/欧美/国产真实入口；固定文件名仅作为兜底。
-- 无码继续从当前页面“其它”区域动态发现 `無碼流出/无码流出` 链接；没有真实链接才退回有码根页，不伪造 hash。
-- 增加 `detailFamily()`：`/c4/ → western`、`/c3/ → domestic`、`/c/ → normal`。
-- 欧美编号兼容 `26.08.22.Mitzi.X` 一类日期式资源 ID；国产兼容 `EP31 / MD-0355 / MFK-0112 / MDSR-0013-2 / TZ-210` 等站点当前可见编号。
-- Test2 图片优先级、placeholder 过滤、href 聚合与详情封面恢复全部保留。
+## Test4 修复
+### 分类中心
+- `分类索引` 产品概念升级为 `分类中心`，原生页面分为：
+  1. 资源频道
+  2. 标签分类
+  3. 有码热门
+  4. 片商新番
+  5. 排行榜 / 三类搜索
+- 菜单链接从当前首页真实导航动态解析，不写死 `/t/<hash>`。
+- FC2 / 18H漫画 / 小说使用当前已确认稳定的外围站点入口；视频在线 / 韩漫在原站没有稳定直链时明确 toast，不伪造地址。
+- `parseIndexEntries()` 改为只扫描索引正文（首个“首页”分页锚点到尾部分页前），避免把全站顶部菜单误当索引内容。
+- 索引实体正式允许 `/t/<opaque>`，修复之前“按钮可见但进入后无条目”的根因。
+- 索引条目带真实图片时使用双列卡片；纯文字索引使用紧凑按钮。
+- 索引页继续复用原站真实分页模板，支持大量页数。
 
-### Test3 UI 重构
-#### Home
-- 顶部改成 MyAv 品牌/当前频道状态区。
-- 有码 / 欧美 / 国产 / 无码保留同级 `putMyVar → refreshPage(false)` 切换，不制造返回栈。
-- 搜索 / 筛选 / 分类 / 排行改为独立图标快捷入口。
-- 收藏 / 历史 / 更多 / 设置收敛为第二层工具行。
-- 影片流由 Test2 三列紧凑卡改成双列海报流，提升封面面积与标题可读性。
-- 当前频道标题明确区分“有码主库 / 欧美库 / 国产库 / 无码流出筛选”。
+### 磁链 Parser
+- 不再把 `[javlist.me]` 当作有效资源标题。
+- 优先从 magnet `dn=` 恢复真实标题；没有 `dn` 时读取磁链所在 `tr/li/p/div` 局部资源块。
+- 从局部资源块恢复：大小、日期、字幕、高清/1080p/2160p 标记。
+- 纯“字幕/高清”等标签不允许冒充资源标题；无有效标题时回退为 `番号 · 资源 01/02/...`。
+- 继续保持磁链去重。
 
-#### Detail
-- Hero 改为左图右信息主视觉，不再使用 Test2 顶部大面积 blur 结构。
-- 番号 / 日期 / 时长作为首屏信息芯片。
-- 番号型 JAV 条目继续显示 MissAV / 123AV / Jable；欧美/国产编号体系不同，Test3 不把它们强行提交到 JAV Playback 制造假失败。
-- 磁力 / 预览 / 收藏 / 原站改为四个图标快捷动作。
-- 原站预览视频从连续多条文本入口收敛为一个主播放入口，避免详情页出现大段“播放预览1/2/3”。
-- 简介前置，档案与导演/片商/系列/类别/演员/男优/TAG 分组展示。
-- 详情不再同时铺出磁力/预览的大量快速列表；完整内容进入对应独立页面查看。
+### 磁力页 UI
+- 顶部显示当前番号/封面和资源数量。
+- 增加同页筛选：全部 / 字幕 / 高清。
+- 增加同页排序：默认 / 按大小 / 按日期。
+- 每条资源显示：标题、大小、日期、字幕/高清标签。
+- 点击仍为复制磁链；长按合同保持：迅雷 / PikPak / 123云盘 / 光鸭 / 复制。
+- 筛选/排序使用 `putMyVar → refreshPage(false)`，不制造额外返回栈。
 
-## 2026-08-23 · Test1 首轮实机结果 → Test2
-### 已确认
-- 云仓链补齐后 MyAv Test1 可看到、导入、启动。
-- 首页/详情基本结构、第三方播放、磁力/预览/收藏/原站入口可渲染。
-- `vrkm-1905` 详情能打开并识别 `预览 20`。
-
-### Test1 图片故障与根因
-- 所有封面误显示 AVLIST 占位图；多个卡片番号串成 `vrkm01890`；详情 Hero 封面为空；网站 favicon 不可靠。
-- 原因一：单个正则 `data-original|data-src|...|src` 实际按 HTML 属性位置命中，`src=占位图` 在前时会先被抓到，alternation 顺序不能代表 lazy-load 优先级。
-- 原因二：按详情锚点前后几 KB raw HTML 抓番号/图片会吃到相邻卡片；同一个影片的图片锚点和标题锚点又被首次 `seen[href]` 截断。
-- 原因三：详情全页泛扫 `<img>` 缺少 `og:image/JSON-LD/详情首屏` 优先级。
-
-### Test2 修复
-- 图片逐字段读取：`data-original → data-src → data-lazy-src → data-lazy → data-url → data-echo → data-cover → data-ks-lazyload → data-thumb → src → srcset/style`。
+## Test2 → Test3 已验证基础
+### 图片链
+- lazy-load 图片逐字段读取：`data-original → data-src → data-lazy-src → data-lazy → data-url → data-echo → data-cover → data-ks-lazyload → data-thumb → src → srcset/style`。
 - 过滤 loading/lazy/placeholder/blank/spacer/transparent/noimage/default/favicon/logo/avatar。
-- 同一详情 href 聚合全部图片/标题锚点，再从当前实体可见文本恢复番号/日期。
-- 详情封面：`og:image/twitter:image → image_src → JSON-LD image → 预览区之前的详情图片 → 全页评分兜底`。
-- 程序图标改为仓库自有 `assets/icon.svg`。
-- 第二轮实机已证明以上图片链有效。
+- 同一详情 href 聚合图片与标题锚点，避免相邻番号串卡。
+- 详情封面：`og:image/twitter:image → image_src → JSON-LD image → 详情首屏 → 全页评分兜底`。
+- Test2/3 实机已证明真实封面与自有 MyAv 图标有效。
 
-## Product Blueprint
-### 页面地图
-- Home：有码 / 欧美 / 国产 / 无码四个同级工作区。
-- Filters：当前频道动态年份 / 标签 / 资源状态，原页刷新。
-- Indices：有码片商 / 有码女优 / 男优 / 有码TAG / 欧美片商 / 欧美女优 / 欧美TAG / 国产女优 / 国产TAG。
-- Rankings：热门 TOP20 / 周作品排名 / 月作品排名。
-- Search：有码 / 欧美 / 国产三类搜索，优先动态解析原站表单。
-- Detail：主视觉、共享第三方播放（适用番号型 JAV）、磁力/预览/收藏/原站、简介、档案与关系标签。
-- Magnets：完整磁力列表，点击复制，长按调用云盘小程序。
-- Preview：独立原图预览。
-- Favorites / History：手机本地 JSON。
-- More：FC2、18H漫画、欧美独立站、小说区、MyAv 原站；视频在线/韩漫没有稳定直链时不伪造。
-- Settings：运行信息、导航重发现、Remote Test 更新/回退。
-
-## 当前网站事实（2026-08-23）
-- 主站公开导航：有码、欧美、国产、无码、FC2磁力查询、视频在线、18H次元漫画、韩漫、小说。
-- 标签分类 9 类：有码片商 / 有码女优 / 男优 / 有码TAG / 欧美片商 / 欧美女优 / 欧美TAG / 国产女优 / 国产TAG。
-- 有码根：`default.cpp`；欧美：`western.java`；国产：`domestic_index.js`。
-- 有码详情 `/c/`；欧美详情 `/c4/`；国产详情 `/c3/`。
-- 无码流出为 `default.cpp` 当前动态 `other=<hash>` 筛选，不是固定详情族。
-- 筛选至少包含年份、标签、全部/磁力/無碼流出/高清/字幕。
-- 排行页 `top100.php`：热门TOP20 / 周作品排名 / 月作品排名。
-- 搜索：`search.php` / `western_search.java` / `domestic_search.php`。
-- 新片可以真实地暂时没有磁力，不能把“0 磁力”自动当成 Parser 失败。
-
-## Protocol / Parser
-- Base：`https://javlist.me`。
-- 普通 HTML 请求优先 `fetch`；响应为空、过短或 challenge 时用 `fetchCodeByWebView` 兜底。
-- 首页导航成功 HTML 缓存 20 分钟；设置页可清除并重新发现。
-- 影片主键始终使用真实 opaque 详情 URL，不逆推 opaque ID。
-- 当前详情路径 family：`/c/ | /c3/ | /c4/`。
-- 分页先从当前 HTML 读取真实 `page=2` 模板，再替换页码，保留 year/tag/other/sort/hash。
-- 筛选和频道入口从当前页面读取真实 href，禁止把历史 hash 写死。
-- 搜索优先解析 `<form>` action/method/input/hidden fields；失败才做有限兼容尝试，并显式失败，不造假结果。
+### 多频道
+- 有码列表详情族：`/c/<opaque>`。
+- 欧美：`western.java`，详情族 `/c4/<opaque>`。
+- 国产：`domestic_index.js`，详情族 `/c3/<opaque>`。
+- 无码：有码 `default.cpp` 当前“其它 → 無碼流出”动态 hash 筛选，不是固定独立详情族。
+- 频道入口和无码 hash 均从当前页面读取真实 href，禁止历史常量。
 
 ## 第三方播放
-- 统一复用 `shared/jav-playback/manager.js` Stable，不在 MyAv 复制 Provider Parser。
+- MyAv 不复制 Provider Parser，统一复用 `shared/jav-playback/manager.js` Stable。
 - 当前 SDK：`1.0.0-test.4`；Provider：MissAV / 123AV / Jable。
-- Test3 只对适合的番号型 JAV 条目显示共享 JAV Playback；欧美/国产默认不伪匹配。
+- 番号型 JAV 条目显示共享播放；欧美/国产编号体系不同，默认不强行提交，避免制造假失败。
 
 ## 磁力长按跨小程序合同
 1. 迅雷：`hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`
@@ -129,44 +95,51 @@
 4. 光鸭云盘：`hiker://page/magnet?rule=光鸭云盘&realurl=<encodeURIComponent(magnet)>`
 5. 复制磁力。
 
-调用前检查目标小程序是否安装；未安装只 toast。
+调用前检查目标小程序是否安装；未安装只 toast，不伪造替代入口。
 
 ## 收藏 / 历史
 - 收藏：`hiker://files/rules/MyAv/favorites.json`
 - 历史：`hiker://files/rules/MyAv/history.json`
-- 读取 `fetchPC()`，写入 `writeFile()`。
+- 读取使用 `fetchPC()`，写入使用 `writeFile()`。
 - 收藏主键为真实详情 URL；不保存 Cookie/Token。
 
 ## UI / Navigation 硬约束
-- 普通 title/desc 纯文本，不用 `<font>/<b>`。
-- 首页频道、筛选、排行、搜索类型均是同级状态刷新，禁止反复新建相同功能页。
-- 列表→详情、索引→结果、详情→磁力/预览才是真正钻取。
-- 第三方播放是 Primary Action；磁力/预览/收藏/原站是工具动作。
-- 预览视频不得用连续多个同类入口把详情变成伪播放列表。
-- 无数据显式显示空状态，不制造假卡片。
+- 普通 title/desc 使用纯文本，不依赖 `<font>/<b>`。
+- 首页频道、筛选、排行、搜索类型、磁链筛选/排序全部属于同级状态更新，使用 `putMyVar → refreshPage(false)`。
+- 列表→详情、索引→结果、详情→磁力/预览才创建钻取页面。
+- 第三方播放为 Primary Action；磁力/预览/收藏/原站为工具动作。
+- 无数据显式显示空状态，禁止制造假卡片或假成功。
 
-## 云仓发布事故记忆
-- `registry.json` 不是手机“我的规则仓库”的展示清单；真实目录读取 root `manifest.json`。
-- root `manifest.json` 变更必须同步 `manifest_meta.json` revision，否则设备可能继续命中旧缓存。
-- app `channels.json` 必须使用规则仓库统一 `channels:[{channel,...}]` 协议。
-- 固定发布检查：`app modules → release → bootstrap → shell → test/channels/manifest → registry → root manifest → manifest_meta → GitHub main 回读 → 海阔实机同步/导入`。
+## 云端仓库发布链
+- 手机“我的规则仓库”读取根 `manifest.json`，不是 `registry.json`。
+- `manifest_meta.json` revision 必须与根 manifest 同步，否则设备可能继续使用旧目录缓存。
+- 发布新 Test 固定检查：`Release → Bootstrap → Shell → test.json → channels.json → app manifest → registry → root manifest → manifest_meta → GitHub main 回读 → 实机导入`。
+- 2026-08-23 Test4 发布时发现 root manifest 已由并行任务更新到 ACFun Alpha8 / 汤头条 Test9，而 `manifest_meta` 仍停留旧 revision；MyAv 发布必须保留并行最新状态并重新把 root/meta 对齐，禁止用旧快照覆盖。
 
-## Test3 实机回归（待确认）
-- [ ] 云仓显示 `Test 0.1.0-test.3 · Build 10103` 并可覆盖导入。
-- [ ] 首页新版品牌区、4 频道、4 个图标快捷入口、双列海报流布局正常。
-- [ ] 有码首页封面继续正常，无 Test2 图片回退。
-- [ ] 欧美频道能显示当前原站条目，至少可见 `26.08.xx...` 一类 ID；点击 `/c4/` 详情可打开。
-- [ ] 国产频道能显示当前原站条目，至少可见 `EPxx / MD-xxxx / MFK-xxxx / TZ-xxx`；点击 `/c3/` 详情可打开。
-- [ ] 无码频道能通过当前动态 hash 筛选显示结果，而不是固定空白。
-- [ ] 详情新版 Hero、番号/日期/时长、播放、4 快捷动作、简介与资料分组排版正常。
-- [ ] `vrkm-1873` 封面和预览图片继续正常。
-- [ ] MissAV / 123AV / Jable 在有码番号条目不退化。
-- [ ] 磁力点击复制与长按迅雷/PikPak/123云盘/光鸭云盘不退化。
+## Test4 静态门禁
+- [x] `core_patch.js` `node --check`。
+- [x] `ui_patch.js` `node --check`。
+- [x] Bootstrap `node --check`。
+- [x] Release JSON parse。
+- [x] Shell 外层 JSON + 14 pages parse。
+- [x] synthetic smoke：完整菜单分组 / `/t/` 索引条目 / actor 图片候选 / magnet `dn` / 大小 / 日期 / 字幕 / 高清。
+- [x] Test1-Test4 Release 模块顺序确认，Test2 图片链和 Test3 多频道链不会被 Test4 覆盖。
+- [ ] 海阔 Test4 实机分类/磁力回归。
+
+## Test4 实机回归重点
+- [ ] 分类中心能看到资源频道、9 类标签分类、有码热门、片商新番、排行和三类搜索。
+- [ ] 随机测试：有码女优 / 有码片商 / 有码TAG / 欧美女优 / 国产女优，索引页能显示内容并翻页。
+- [ ] 随机进入 3 个 `/t/` 索引条目，能继续打开真实影片列表，不再“点了没反应”。
+- [ ] 有码女优等带图片索引，图片和名字不串卡。
+- [ ] `26.08.21.Dace` 磁力 4 页不再全部显示 `[javlist.me]`；至少应显示番号资源名/大小/日期中的有效信息。
+- [ ] 磁力页全部/字幕/高清筛选正常；按大小/按日期排序正常。
+- [ ] 点击复制与长按四个云盘合同不退化。
+- [ ] 有码/欧美/国产/无码首页、详情、预览和 Shared JAV Playback 不因 Test4 回退。
 
 ## 禁止回退
-- 禁止只匹配 `/c/`；必须兼容当前 `/c3/`、`/c4/`。
-- 禁止把无码当固定页面或写死 `other/year` hash。
-- 禁止用一个 alternation 正则冒充 lazy-load 属性优先级。
-- 禁止在影片锚点前后几 KB raw HTML 直接抓番号。
-- 禁止重新依赖 `javlist.me/favicon.ico`。
-- 禁止在 Test3 实机验证前建立 Stable。
+- 禁止再只把 9 个标签索引当成“完整分类”。
+- 禁止把 `/t/<hash>` 当成无关链接过滤掉；当前原站索引和专题大量依赖它。
+- 禁止写死 `/t/` hash、无码 other hash、年份/tag hash。
+- 禁止把 `[javlist.me]` 作为磁力有效标题。
+- 禁止用全页宽上下文扫描磁链元数据；必须优先局部资源块。
+- 禁止原地覆盖已发布 Test；任何实机修复继续新 Build。
