@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.3",
-  "build": 10103,
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082304,
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082305,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v3_b10103.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v4_b10104.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test2 实机明确的 401 用户已过期与 APK 启动链复核：system_oauth_id/system_iid 共用同一持久设备 ID；内容请求前自动调用 getOpenAdsAndVersion 取得 AppConfigBean.token；401 自动重握手一次。快捷导航改远程 SVG。"
+  "notes": "根据 Test3 实机修复三条 P0：推荐不再递归误选 banner/widget 广告，固定解析 SeeMoreDataBean.data.list[].list；封面固定读取 ListLikeVideoBean.thumb_cover；播放固定 source_240/480/720/1080，并按 APP player_cfg.dekey 用 AES-CFB 解密 M3U8 后经 Hiker 代理播放，同时修复详情标题 URL 编码。"
 }
