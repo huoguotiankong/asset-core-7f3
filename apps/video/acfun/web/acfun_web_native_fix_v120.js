@@ -103,7 +103,7 @@ W.bridgeScript=function(kind,id,title,chapterId,chapterTitle){
             if(c.kind==='video'&&p>=2){var play=best(['播放','立即播放','开始播放','play'],true);if(play){tap(play);phase(3);return;}}
         }
         if(!window.__acfWeb3Timer){window.__acfWeb3Timer=setInterval(tick,700);setTimeout(tick,180);}
-    }+'('+JSON.stringify(cfg)+');';
+    }+')('+JSON.stringify(cfg)+');';
 };
 W.bridge=function(){
     var kind=A.param('acf_web_kind')||'video',id=A.param('acf_web_id'),title=A.param('acf_web_title')||'ACFun',chapterId=A.param('acf_web_chapter'),chapterTitle=A.param('acf_web_chapter_title');
