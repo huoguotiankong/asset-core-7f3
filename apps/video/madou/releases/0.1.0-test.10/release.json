@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.10",
+  "build": 10110,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"performanceRuntime","path":"apps/video/madou/releases/0.1.0-test.10/performance_runtime.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.10"},
+  "previous": {"version":"0.1.0-test.9","build":10109,"release":"apps/video/madou/releases/0.1.0-test.9/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test10 is a performance rebase. The hot release chain is reduced from nine layered patches to core + runtime + one performance runtime. Category hierarchy is persisted as compact JSON so category switching never re-fetches the homepage; recently visited category feeds use a bounded parsed-card cache. Detail pages are seed-first: list cards pass title/cover/desc so detail renders without any network request, while tags/recommendations become explicit on-demand expansion. Network hot paths use one 6.5s fetch budget and never perform automatic fetch->request or player-chain retries before rendering."
+}
