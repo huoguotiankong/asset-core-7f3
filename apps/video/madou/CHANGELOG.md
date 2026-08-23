@@ -1,5 +1,29 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.2 / Build 10102
+
+### 实机故障
+- Test1 首次启动直接报错：`InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`。
+- 用户实机截图优先于代码推测，确认故障发生在首页解析阶段，不是 DOM、分类或播放协议本身。
+
+### 根因
+- Test1 `MadouCore.fetchHtml()` 把完整网页 HTML 直接 `setItem(key, h)` 持久化。
+- `madoup2.cc` 首页实际 HTML 体积超过海阔私有存储约 1MB 限制，因此在内容解析前就被 JSEngine 中止。
+- 大型网页原文不属于适合 `setItem` 的状态数据；私有 KV 只应保存小型状态、索引、时间戳和诊断值。
+
+### Test2 修复
+- 冻结 Test1，不原地覆盖；新建 Test2 / Build10102。
+- 新增 `storage_patch.js`，覆盖 `fetchHtml()`：完整 HTML 只保留当前运行内存，不再写入 `setItem`。
+- 每次请求前清理同 URL 的旧 raw HTML 缓存槽；启动时额外清理 Test1 首页已知缓存 key。
+- 仅持久化 `HTML length / fetch timestamp` 等很小的诊断值。
+- `cachePrefix` 升为 `madou_v2_`，避免后续继续碰撞 Test1 HTML KV。
+- 保留分页模板、收藏、历史等小型 KV，不扩大修改边界。
+- 新 Bootstrap/Shell 指向 Test2，Remote Manager `minBuild` 提升到 10102。
+
+### 回归重点
+- Test2 首先验证“可以进入首页且不再弹 1MB 存储错误”。
+- 启动恢复后，再继续观察真实首页 HTML、动态分类、内容卡、详情与播放链；本次不把尚未验证的解析功能误判为已完成。
+
 ## 2026-08-23 · 0.1.0-test.1 / Build 10101
 
 ### 基线
