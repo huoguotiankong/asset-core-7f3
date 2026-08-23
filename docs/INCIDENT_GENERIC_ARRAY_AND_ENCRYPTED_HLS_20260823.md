@@ -1,7 +1,7 @@
 # 通用数组误选、加密图片与加密 HLS 播放事故（2026-08-23）
 
 ## 1. 背景
-汤头条 Test3/Test4 已经打通 API、加密签名、匿名会话和内容请求，实机连续暴露了一组具有跨程序复用价值的事故：
+汤头条 Test3-Test7 已经打通 API、加密签名、匿名会话和内容请求，实机连续暴露了一组具有跨程序复用价值的事故：
 
 1. 通用递归“找最像内容的数组”误把 `banner/widget/ads` 当真实推荐，页面看似成功但业务语义完全错误。
 2. 真实模型字段已经存在于 APK 时仍靠通用字段猜测，遗漏 `thumb_cover`，导致标题正常但全部灰封面。
@@ -10,6 +10,9 @@
 5. 海阔多线路播放返回严格 `JSON.stringify({urls,names,headers})` 时，部分运行链会把整个 JSON 当“未知链接”；播放协议必须按海阔已验证对象字面量格式或先使用单线路 `#isVideo=true#` 做隔离验证。
 6. 非媒体首页接口（例如漫画 home）可能返回“分类配置”，不能因为存在数组就套 `movie_*` 内容卡；必须按真实 Bean/DTO 语义分流。
 7. 诊断子页若使用错误的 `rule/ArticleListModel` 路由，普通文本或空 URL 可能被当 HTTP 地址并报 `Expected URL scheme http or https`；诊断信息应优先直接显示在当前设置页。
+8. 手工拼 `<url>@js=require(...)` 可能在图片线程里静默不执行模块加载，表现为 URL 已正确但全灰图，且连图片诊断都没有生成。图片解密应优先使用海阔官方 `$(url, headers).image(function...){...}` 生成入口，并在图片回调内使用 `$.require(...)`。
+9. “播放器能播放”也不等于已经拿到真实业务视频。服务端可能根据旧客户端版本返回一个可正常播放、但只有数秒的“版本停止维护/请升级”占位片。必须同时校验启动 `versionMsg.version`、实际 M3U8 时长和内容语义。
+10. 新版本逻辑若依赖启动迁移，不能只在“没有 Token”时执行。旧版本遗留 Token 可能使新 Build 永远跳过启动迁移；需要独立 migration gate/version flag。
 
 ## 2. 固定结论：精确模型优先于通用递归
 当 APK / 官方前端 / 已验证接口已经给出具体 DTO/Bean 结构时：
@@ -46,13 +49,16 @@ list
 2. 该字段是否本身是 JSON、多分辨率对象、绝对 URL 或相对路径。
 3. 原 App 是否注册了自定义 ModelLoader / Decoder / OkHttp Interceptor。
 4. URL 已正确得到但字节不是 JPEG/PNG/GIF/WEBP/BMP 时，再恢复对应图片解密器。
-5. 海阔侧优先使用 `pic_url: <url>@js=...` 的 InputStream 图片解密能力，让 UI 仍使用标准图片组件，而不是先下载成临时文件。
+5. 海阔侧优先使用官方 `$(url, headers).image(...)` 生成 `pic_url` 图片处理入口；图片回调里调用远程模块时使用 `$.require(...)`，不要手拼 `@js=require(...)`。
+6. 若封面仍灰且 `ttt_last_image_diag` 之类的回调诊断完全不存在，优先判断“图片 JS 根本未执行”，而不是继续修改 AES 算法。
 
 汤头条已恢复的实际链：
 
 ```text
 ListLikeVideoBean.thumb_cover
 → 若为 JSON：优先选择 720 / 720p / 360 / ori 等实际 URL
+→ $(url, headers).image(...)
+→ 图片回调 $.require(ImageAdapter)
 → HTTP InputStream
 → 若已有 JPEG/PNG/GIF/WEBP/BMP magic：直接返回
 → legacy 分支：HEX + 固定图片 secret → AES/CFB/NoPadding
@@ -63,7 +69,7 @@ ListLikeVideoBean.thumb_cover
 
 因此“字段找到了”不能被当作“图片完成”。源码里存在自定义 GlideAppModule / ModelLoader 时必须继续追完整链。
 
-## 4. 加密 HLS：URL 可见不代表可以播放
+## 4. 加密 HLS：URL 可见、甚至能播放，都不代表业务播放完成
 若原 APP 有自定义 Player DataSource / Interceptor，必须恢复完整播放 Pipeline，而不是只找 `.m3u8` URL。
 
 汤头条验证链：
@@ -85,11 +91,17 @@ source_240 / source_480 / source_720 / source_1080
 
 因此播放器显示 `127.0.0.1` / `192.168.x.x` 本地代理地址本身不是故障；判断标准是代理是否输出合法 M3U8、是否产生码率、TS/KEY 是否可继续访问。
 
+另外必须增加**业务占位片检测**：
+- 统计 M3U8 `#EXTINF` 总时长；极短（例如 <4 秒）时标记 `suspiciousShort=true`。
+- 结合画面/标题判断是否为“版本停止维护/升级提示”等服务端占位片。
+- 启动配置若返回 `versionMsg.version`，需要比较当前 `system_version`，必要时保存服务端版本、清旧 Token，并以新版本重新执行启动握手后再请求内容。
+- 原 APP 明确默认从某一画质起播时优先复刻原默认值；汤头条 `VideoDetailPlayerActivity` 首播使用 `source_240`，高画质属于后续切换。
+
 ## 5. 海阔播放协议：先单线路，再多线路
 当媒体代理本身尚未实机验证时，不应同时引入“多线路 JSON 协议”这个第二变量。固定调试顺序：
 
 ```text
-单一最高画质 URL + #isVideo=true#
+单一默认画质 URL + #isVideo=true#
 → 单独 1080P / 720P / 480P / 240P 按钮
 → 确认代理与解密真实可播
 → 再增加播放器内多线路切换
@@ -106,15 +118,13 @@ source_240 / source_480 / source_720 / source_1080
 ## 6. 非视频域必须按业务语义建模
 同一个大型 APP 中，`home` 不一定代表内容列表。例如汤头条 `/api/comic/home` 实机返回的是漫画分类/标签配置，而不是漫画作品。
 
-正确链应是：
+如果服务端已经直接下发动态合同：
 
 ```text
-comic/home → 分类 Bean
-→ 分类导航
-→ book/list_filter(page, sort, categories, type)
-→ ComicListBean.data.list
-→ 漫画详情/章节
+current / id / name / show_style / type / api_list / params_list
 ```
+
+就应优先执行每个分类自己的 `api_list + params_list`，而不是继续硬编码某个猜测的列表 API。动态入口本身就是客户端路由合同。
 
 禁止把分类 Bean 直接套 `movie_3`，否则会出现大面积空白图片卡 + 只有分类名的伪内容页。
 
@@ -125,15 +135,33 @@ comic/home → 分类 Bean
 - 原 M3U8 是 plaintext 还是 AES-CFB 解密。
 - 解密后是否以 `#EXTM3U` 开头。
 - `fixM3u8` 后长度/嵌套 master 情况。
+- M3U8 `#EXTINF` 总时长，以及极短占位片标记。
 - 失败层级：取源 / Header / 拉索引 / 解密 / M3U8 格式 / TS/KEY。
 
 图片诊断至少记录：
 - 选出的图片候选是否为 HTTP(S)。
+- 是否成功生成海阔 image helper 链（例如是否包含 `@js=`）。
+- 图片回调是否实际执行。
 - 输入/输出字节长度。
 - `plain / legacy-aes-cfb / aes-cbc / raw-fallback` 模式。
 - 不记录密钥、Token、Cookie。
 
-## 8. 诊断 UI 不要反过来制造错误
+## 8. 启动迁移必须独立于旧 Token
+版本、域名、播放器配置、设备协议等升级若需要“重新启动握手”，不能把条件写成：
+
+```text
+if (!token) bootstrap()
+```
+
+因为旧版本 Token 仍存在时，新 Build 的迁移逻辑会永远不执行。应使用独立的迁移标记，例如：
+
+```text
+if (migration_version < required_version) bootstrapMigration()
+```
+
+或者在新 Release 增加独立 Protocol Gate。发布后才发现此类问题时，不允许原地覆盖同 Build；继续派生更高 Build，并保留中间版本用于回退。
+
+## 9. 诊断 UI 不要反过来制造错误
 设备调试页应优先把无敏感诊断字符串直接作为当前页 `long_text` 展示，并使用 `hiker://empty`。只有已经验证独立页面路由时才跳转诊断子页。
 
 看到：
@@ -145,8 +173,8 @@ Expected URL scheme 'http' or 'https' but no colon was found
 
 时，应先检查诊断条目的 `url`/子规则是否把普通文本、空字符串或 `hiker://` 上下文误交给 HTTP ArticleListModel，而不是误判成远端业务 API 又失效。
 
-## 9. URL 参数编码
+## 10. URL 参数编码
 通过 `hiker://page/...?...` 传递中文标题后，目标页不得假设 `getParam` 一定返回已解码文本。若看到 `%E7...` 出现在系统标题/播放器标题，应在统一参数 Adapter 中安全执行 `decodeURIComponent`，而不是每个页面分别修。
 
-## 10. 发布规则
+## 11. 发布规则
 此类问题必须使用新 Test Build/Release/Bootstrap/Shell 缓存键，不原地覆盖旧 URL。真实设备截图优先于代码推断；只有推荐真实、图片真实、播放真实三条主链都通过实机回归后才允许晋级 Stable。
