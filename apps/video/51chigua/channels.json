@@ -3,12 +3,12 @@
   "id": "51chigua",
   "name": "51吃瓜",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 18:10",
+  "updatedAt": "2026-08-23 18:26",
   "channels": [{
-    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.3","build":10103,
-    "displayVersion":"Test 0.1.0-test.3 · Build 10103","path":"apps/video/51chigua/51chigua_remote_test_v3_b10103.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-    "desc":"实机回归后的产品化增强版：真实评论 JSON、播放上下文隔离、首页/详情图标化、分类分组与真实路由修复。",
-    "highlights":["/comments/<postId>.json 真实评论源","Primary Play 独立，播放器不再混入收藏/评论/正文","首页搜索/分类/收藏/历史图标化","详情收藏/评论/分类/原站图标化","分类中心按官网导航分组","首页分类直接进入内容 Feed","分类与搜索路径按当前站点真实规则修复","DPlayer 多视频保留实际视频名"],
+    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.4","build":10104,
+    "displayVersion":"Test 0.1.0-test.4 · Build 10104","path":"apps/video/51chigua/51chigua_remote_test_v4_b10104.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+    "desc":"评论页重做 + 独立搜索页：评论按头像/昵称/时间/正文分层，楼中楼缩进；搜索从首页弹窗改为独立页面内搜索。",
+    "highlights":["评论卡片重新排版","楼中楼回复缩进展示","增强 nested user/author/avatar 评论字段解析","首页搜索改为独立 cg51Search 页面","搜索页内输入并展示结果","保留 Test3 已验证的封面、详情、播放与分类链"],
     "icon":"https://51cg1.com/favicon.ico"
   }]
 }
