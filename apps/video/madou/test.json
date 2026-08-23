@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.2",
-  "build": 10102,
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082302,
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082303,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v2_b10102.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v3_b10103.txt",
   "updatedAt": "2026-08-23",
-  "notes": "修复 Test1 首页 HTML 超过 1MB 时写入 setItem 导致启动崩溃。完整 HTML 不再持久化到私有存储，只保留内存缓存和小型诊断值，并清理旧 raw HTML 缓存槽。"
+  "notes": "修复中文规则名被 encodeURIComponent 后作为 rule 参数导致海阔提示找不到小程序的问题；内部二级页统一改用 rule=& 继承当前规则上下文。首页四个快捷入口改为真实 SVG 图标，并过滤 arrow 等导航伪卡。"
 }
