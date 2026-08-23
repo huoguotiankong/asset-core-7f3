@@ -1,5 +1,53 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.6 / Build 10106
+
+### 实机结果
+- Test5 已能正常启动，分类解析也已经确认识别出 `14 个大分类 / 373 个小分类`，说明 Test5 恢复链和新的层级解析基线有效。
+- 影片详情仍报：`InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`。
+- 当前分类页虽然层级正确，但大分类逐条纵向排列、占屏过高，交互密度差；用户要求重新设计。
+- 直接进入搜索页时标题显示 `搜索 ·` 且列表出现首页内容，属于空关键词被误当成成功搜索结果的产品逻辑错误。
+
+### 详情 1MB 的进一步根因
+- Test2/Test5 已经停止把新 HTML 写入 `setItem`，但 Test1/Test3 曾经对具体详情 URL 使用 `fetchHtml(detail,true)`，因此历史设备上可能仍残留：
+  - `madou_v1_<hash(detailUrl)>`
+  - `madou_v2_<hash(detailUrl)>`
+  这类完整详情 HTML 私有 KV。
+- Test5 详情改成 `fetchPlainHtml()` 后反而不会再经过 `clearHtmlCache(detailUrl)`，所以旧的大值可能一直留在私有存储里。
+- 海阔这里表现为**整个私有存储接近/超过 1MB 后，后续任何新的 `setItem` 都可能失败**；真正触发崩溃的往往只是详情里一个很小的浏览历史写入，并不代表该次写入本身很大。
+
+### Test6 修复
+- 保留 Test5 作为恢复基线，不再回碰隔离的 Test4。
+- 新增 `detail_search_ux_patch.js`：
+  - 详情页进入后、执行任何持久写入前，按当前详情 URL 精确计算并清理 Test1/Test3 的 `madou_v1_ / madou_v2_` raw HTML key 与 `_ts` key。
+  - 首页旧 raw HTML key 也在模块加载时再次清理。
+  - `readList()` 增加异常大 JSON 门禁；超过约 260k 字符时直接丢弃损坏/异常列表，避免把旧污染继续带入新版本。
+  - `writeList()` 把历史/收藏控制到更保守的约 180k 字符以内，并捕获 `setItem` 配额异常；历史/收藏属于辅助能力，写失败时**禁止再让影片详情整体崩溃**。
+  - `addHistory()` 返回是否成功保存，详情页仍正常渲染与播放；即使私有 KV 尚未完全释放，也只降级浏览记录，不再阻断主任务。
+- 分类页重新设计：
+  - 顶部只保留一条横向大分类选择栏；
+  - 当前大分类以 `●` 标识；
+  - 下方只显示当前大类标题、子分类数量与三列小分类网格；
+  - 不再把 14 个大分类做成 14 组纵向展开列表。
+- 搜索页重新设计：
+  - 无关键词时只显示明确的“搜索全站内容”入口和热门大分类，不再伪造首页搜索结果；
+  - 输入关键词后通过 `madouSearch?kw=` 进入真实搜索状态；
+  - 有关键词时显示“重新搜索 + 搜索结果”，结果仍使用双列影片卡。
+
+### 发布门禁
+- `detail_search_ux_patch.js` 已本地执行 `node --check` 通过。
+- `bootstrap_test_v6_b10106.js` 已本地执行 `node --check` 通过。
+- `release.json` 已执行 JSON 解析检查。
+- 新 Shell 由脚本生成，规则 version 为 `2026082306`，所有内部页直接加载 Test6 Bootstrap。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 切到 Test6；云仓 revision 同步为 `202608231449`，当前 itemCount 为 12（并保留同时间加入云仓的 Pornhub 条目，不覆盖其它程序更新）。
+
+### 下一轮回归顺序
+1. 同步目录后确认 `Test 0.1.0-test.6 · Build 10106`。
+2. 打开影片详情，先确认不再出现 1MB `setItem` 崩溃。
+3. 再检查新的分类中心是否为“横向大类 + 三列小类”。
+4. 打开搜索页，空关键词时不应再出现影片列表；输入关键词后再确认搜索结果是否真正匹配。
+5. 详情页恢复后再单独测试“立即播放”，若失败再进入真实播放器/HLS/JS 二次取源阶段。
+
 ## 2026-08-23 · 0.1.0-test.5 / Build 10105
 
 ### 实机故障
@@ -115,7 +163,7 @@
 - 冻结 Test1，不原地覆盖；新建 Test2 / Build10102。
 - 新增 `storage_patch.js`，覆盖 `fetchHtml()`：完整 HTML 只保留当前运行内存，不再写入 `setItem`。
 - 每次请求前清理同 URL 的旧 raw HTML 缓存槽；启动时额外清理 Test1 首页已知缓存 key。
-- 仅持久化 `HTML length / fetch timestamp` 等很小的诊断值。
+- 仅持久化 HTML 长度、时间戳等很小的诊断值。
 - `cachePrefix` 升为 `madou_v2_`，避免后续继续碰撞 Test1 HTML KV。
 - 保留分页模板、收藏、历史等小型 KV，不扩大修改边界。
 - 新 Bootstrap/Shell 指向 Test2，Remote Manager `minBuild` 提升到 10102。
