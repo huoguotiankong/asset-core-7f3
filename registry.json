@@ -3,7 +3,7 @@
   "name": "天空城海阔小程序索引",
   "repository": "huoguotiankong/asset-core-7f3",
   "branch": "main",
-  "globalCautions": ["docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md","docs/INCIDENT_NATIVE_TEXT_HTML_RENDERING_20260823.md","docs/INCIDENT_GENERIC_ARRAY_AND_ENCRYPTED_HLS_20260823.md"],
+  "globalCautions": ["docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md","docs/INCIDENT_NATIVE_TEXT_HTML_RENDERING_20260823.md","docs/INCIDENT_GENERIC_ARRAY_AND_ENCRYPTED_HLS_20260823.md","docs/INCIDENT_CLOUD_REPOSITORY_PUBLISH_CHAIN_20260823.md"],
   "categories": [
     {"id":"video","name":"视频影视"},
     {"id":"comic","name":"漫画"},
