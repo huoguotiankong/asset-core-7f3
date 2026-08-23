@@ -72,15 +72,17 @@ A.__a11CredentialSources=function(id,path,watch,refresh){
         {name:'video+path',p:{videoId:A.n(id),path:A.s(path)}}
     ];
     for(var pi=0;pi<params.length;pi++){
-        var rr=A.__a11Exact(host,'api/m3u8/player/referer',params[pi].p,'GET');log.push('referer '+params[pi].name+' '+rr.status+' '+rr.error+' keys='+rr.keys.join(','));if(rr.ok)take('player-referer-'+params[pi].name,rr.data);
+        var rr=A.__a11Exact(host,'api/m3u8/player/referer',params[pi].p,'GET');log.push('referer GET '+params[pi].name+' '+rr.status+' '+rr.error+' keys='+rr.keys.join(','));if(rr.ok)take('player-referer-'+params[pi].name,rr.data);
     }
+    if(!b.secrets.length&&!b.tokens.length){var rp=A.__a11Exact(host,'api/m3u8/player/referer',{videoId:A.n(id),path:A.s(path)},'POST');log.push('referer POST video+path '+rp.status+' '+rp.error+' keys='+rp.keys.join(','));if(rp.ok)take('player-referer-post',rp.data);}
     var routes=['sys/getDynamicDomain','api/sys/getDynamicDomain','sys/sdk-config','api/sys/sdk-config'],probeHosts=[],phSeen={};
     function addPH(v){var h0=A.__a11Origin(v);if(h0&&!phSeen[h0]){phSeen[h0]=1;probeHosts.push(h0);}}
     addPH(host);addPH('https://api2.uszim.com');for(var ah=0;ah<hostList.length&&probeHosts.length<2;ah++)addPH(hostList[ah]);
     for(var hi=0;hi<probeHosts.length;hi++){
         var hh=probeHosts[hi];for(var ri=0;ri<routes.length;ri++){
-            var ex=A.__a11Exact(hh,routes[ri],{videoId:A.n(id),path:A.s(path),app:'acfan',chCode:A.channel},'GET');
-            log.push(A.__a11Origin(hh)+' /'+routes[ri]+' '+ex.status+' '+ex.error+' keys='+ex.keys.join(','));if(ex.ok)take('route:'+A.__a11Origin(hh)+'/'+routes[ri],ex.data);
+            var ex=A.__a11Exact(hh,routes[ri],{},'GET');
+            log.push(A.__a11Origin(hh)+' /'+routes[ri]+' bare '+ex.status+' '+ex.error+' keys='+ex.keys.join(','));if(ex.ok)take('route:'+A.__a11Origin(hh)+'/'+routes[ri]+'-bare',ex.data);
+            if(!b.secrets.length&&!b.tokens.length){var ex2=A.__a11Exact(hh,routes[ri],{app:'acfan',chCode:A.channel},'GET');log.push(A.__a11Origin(hh)+' /'+routes[ri]+' app '+ex2.status+' '+ex2.error+' keys='+ex2.keys.join(','));if(ex2.ok)take('route:'+A.__a11Origin(hh)+'/'+routes[ri]+'-app',ex2.data);}
             if(b.secrets.length||b.tokens.length)break;
         }
         if(b.secrets.length||b.tokens.length)break;
