@@ -1,5 +1,49 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.7 / Build 10107 — 2026-08-23
+
+状态：**Test5 实机合同继续收敛 + Test6 发布门禁补丁版，仍为 Test；禁止晋级 Stable。**
+
+### Test5 实机事实
+- 推荐数据已经确认是真实视频：`data.list[3]` 最终展开为 **403 条**视频，首条真实 ID `3080972`，四档 `source_240/480/720/1080` 均存在。此前广告误识别问题已经结束。
+- 视频详情已经确认真实：标题、作者、时长、播放量、ID 与四档 `source_*` 均正确，详情 schema 也稳定在 `data.detail`。
+- `thumb_cover` 已确认能选出普通 HTTPS JPEG，例如 `https://picx.yrfmba.cn/...jpeg`，但实机仍全灰，同时诊断中完全没有 `ttt_last_image_diag`。这说明 Test5 更可能是**图片 JS 回调根本没有执行**，而不是继续修改 AES 参数即可解决。
+- Test5 单线路播放已经真正进入海阔播放器并有画面/进度，不再是 0 kb/s；但播放内容只有约 2 秒，是“汤头条 ttt.tips / 该版本已停止维护，请前往官网下载最新版本”的服务器业务占位片。结论：**播放器技术链已通，但拿到的不是实际业务视频。**
+- 启动响应 schema 明确包含 `versionMsg{id,version,type,apk,tips,must}`，而此前海阔客户端一直固定发送 `system_version=9.6.2`。结合 2 秒“版本停止维护”占位片，必须把服务端版本配置纳入启动迁移链。
+- 原 APP `VideoDetailPlayerActivity` 再次复核：首播使用 `source_240`，不是最高画质；1080/720/480 属于用户后续切换。因此海阔默认首播也应先复刻 `source_240`。
+- `/api/comic/home` 实机真实响应是**顶层 array[12]**，每项字段包含 `current/id/name/show_style/type/api_list/params_list`。Test5 错误只读 `data.categories`，因此显示“0 个分类”。服务端已经直接下发动态路由合同，应原样执行 `api_list + params_list`。
+- 排行榜 `/api/RankList/getPlayRank` 实机明确返回 `code 551 · type值只能为:daily,weekly,monthly,all`，因此必须补 `type`，并提供总/日/周/月四种切换。
+- `/api/MvList/style` 的无参数诊断请求继续返回 `551 参数不全`；APK 的内容调用参数为 `id/page/size/orderBy`，因此无参数 smoke probe 本身就是无效测试，不再使用。
+
+### 海阔图片入口复核
+- 海阔官方图片处理能力应通过 `$(url, headers).image(function...)` 生成图片 URL，而不是手工拼接 `@js=` 字符串。
+- 图片回调在独立图片线程中加载远程模块时应使用 `$.require(...)`。Test5 手工使用 `@js=require(...)`，与“封面全灰且没有任何图片回调诊断”高度吻合。
+- Test6/7 因此改成：真实 HTTPS JPEG → `$(url,headers).image(...)` → 回调 `$.require(ImageAdapter).decrypt(input)` → 明文 magic / legacy AES-CFB / AES-CBC 三态检测。
+- 新增 `ttt_last_image_link` 用于区分“image helper 是否生成成功”，`ttt_last_image_diag` 用于证明图片回调是否真的执行。
+
+### Test6 / Build 10106 中间版本
+- Protocol：首次启动读取 `versionMsg.version`；若与当前 `system_version` 不同，保存为 `ttt_effective_version`，清旧 Token，再以服务端版本重新执行 `/api/home/getOpenAdsAndVersion`，随后再进入业务接口。
+- Protocol：`system_version` 不再永远固定 9.6.2，而是优先使用经过启动验证的 `ttt_effective_version`；同时记录 `ttt_last_version_info` 与 bootstrap 的 request/effective/server version。
+- Playback：默认“立即播放”改为原 APP 同样的 `source_240`；1080/720/480/240 仍提供手动切换。
+- Playback：代理统计 M3U8 所有 `#EXTINF` 总时长；短于 4 秒记录 `suspiciousShort=true`，专门识别可播放但业务错误的升级/维护占位片。
+- Comic：`comic/home` 直接把顶层 array[12] 解析为动态分类，点击后执行每项服务端下发的 `api_list + params_list`，不再硬编码分类参数。
+- Rank：增加 `all/daily/weekly/monthly` 四种 type；协议诊断也不再调用无参数 `MvList/style`，改为已知合法的排行榜请求。
+- Image：切换到海阔官方 `$(url,headers).image(...) + $.require(...)` 调用方式。
+
+### 发布门禁发现与 Test7
+- Test6 工件写入后、用户尚未测试前，发布回读发现一个迁移漏洞：旧 Test5 `ttt_token` 仍存在时，普通 `Protocol.call()` 只在“Token 为空”时调用 `bootstrapSession(false)`，因此新的 `versionMsg.version` 迁移逻辑可能永远不执行。
+- 按不可变 Release 规则，**没有原地覆盖 Test6 / Build10106**。Test6 保留为可回退的中间版本。
+- Test7 / Build10107 新增独立 `protocol_gate.js`：只要 `ttt_version_checked !== 1`，即使已有旧 Token，也必须先执行启动/版本迁移握手，然后才允许业务请求。
+- Test7 其余图片、播放、漫画、排行模块全部原样复用已经完成静态门禁的 Test6 工件，修改边界只增加会话迁移门禁。
+
+### Test7 实机验收
+1. 从 Test5 升级 Test7 后**不要先手工重置身份**；第一次打开首页应自动触发版本迁移。设置页应出现 `ttt_last_version_info`，并在 `ttt_last_bootstrap` 中显示 `requestVersion/effectiveVersion/serverVersion`。
+2. 首页封面应开始真实显示；若仍灰，设置页必须至少出现 `ttt_last_image_link`。若 image helper 已生成且回调执行，则还应出现 `ttt_last_image_diag`，据此再判断 `plain/legacy-cfb/aes-cbc/fallback-raw`。
+3. 视频详情先点击默认“立即播放（240P）”。若仍出现 2 秒维护片，查看 `ttt_last_play_diag.duration` 与 `suspiciousShort`，同时结合版本诊断判断服务端是否仍对当前版本返回占位源。
+4. 漫画页应显示约 12 个服务端真实分类；点击“韩漫/日漫/国漫”等后应实际调用该分类自身的 `api_list + params_list` 并进入作品列表。
+5. 排行榜应出现“总榜/日榜/周榜/月榜”，不再报 type 551。
+6. 只有封面、真实业务视频、漫画动态列表和排行榜全部完成实机闭环后，才继续扩漫画详情/章节、社区完整互动、小说/有声等其它功能。
+
 ## 0.1.0-test.5 / Build 10105 — 2026-08-23
 
 状态：**Test4 实机媒体兼容修复版，仍为 Test；禁止晋级 Stable。**
