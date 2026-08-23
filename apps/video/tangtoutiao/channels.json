@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 02:26",
+  "updatedAt": "2026-08-23 09:20",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.2","build":10102,
-      "displayVersion":"Test 0.1.0 · Response Adapter 2","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"首轮实机反馈修复版：去除海阔原生组件不兼容 HTML，增加深层递归列表/字段适配和可见响应结构诊断。Stable 仍不存在。",
-      "highlights":["修复推荐标签/分区标题显示 HTML 源码","列表结构递归探测到 8 层","扩展嵌套视频 ID/标题/封面字段","空列表直接显示 code/msg/schema"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.3","build":10103,
+      "displayVersion":"Test 0.1.0 · Session Handshake 3","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v3_b10103.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"第二轮实机明确 401 后的启动会话修复版：按 APK 首次启动链统一设备身份、先获取匿名 Token 再请求内容，并在 401 时自动重新握手一次。Stable 仍不存在。",
+      "highlights":["system_oauth_id/system_iid 统一为同一持久设备 ID","getOpenAdsAndVersion 自动取得并保存 AppConfigBean.token","401 自动清 Token 并重握手","快捷导航使用远程 SVG，移除 data URI 占位头像问题","首页主标签精简为推荐/短视频/长视频/社区"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
