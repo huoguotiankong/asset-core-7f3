@@ -1,0 +1,15 @@
+/* 汤头条 0.1.0-test.16 Pages / compact short-video grid, playback frozen */
+var TangTouTiaoPagesV024=(function(){
+  var B=TangTouTiaoPagesV023,P=TangTouTiaoProtocolV015,W=TangTouTiaoPwaV020,C=TangTouTiaoCoreV024,U=TangTouTiaoUIV015,O={};for(var k in B)if(B.hasOwnProperty(k))O[k]=B[k];
+  var HOME='ttt_home_tab_v010';
+  function searchInput(d){d.push({title:'搜索视频、创作者、关键词',col_type:'input',url:$.toString(function(){var w=String(input||'').trim();if(!w)return'toast://请输入搜索关键词';putMyVar('ttt_search_kw',w);return'hiker://page/tttSearch?rule=&simple=true&kw='+encodeURIComponent(w);}),extra:{defaultValue:'',titleVisible:true,onChange:$.toString(function(){})}});}
+  function quick(d){var a=[['频道','channel',C.page('tttChannels')],['社区','community',C.page('tttCommunity')],['排行榜','rank',C.page('tttRank')],['我的','mine',C.page('tttMine')]];for(var i=0;i<a.length;i++)d.push(U.icon(a[i][0],a[i][1],a[i][2]));}
+  function header(d){searchInput(d);var tab=getMyVar(HOME,'recommend')||'recommend',tabs=[['recommend','推荐'],['short','短视频'],['long','长视频'],['community','社区']];for(var i=0;i<tabs.length;i++)d.push(U.chip(tabs[i][1],tab===tabs[i][0],U.state(HOME,tabs[i][0])));d.push(U.blank());quick(d);d.push(U.line());return tab;}
+  function shortFeed(){try{var r=W.shortVideos(1,'recommend'),list=C.normalize(r,'short')||[];if(list.length){setItem('ttt_last_short_provider',JSON.stringify({time:Date.now(),provider:'pwa',count:list.length}));return list;}}catch(e){}try{var ar=P.call('/api/MvList/smallVideoByTag',{page:1,tag:'recommend'}),al=C.normalize(ar,'short')||[];setItem('ttt_last_short_provider',JSON.stringify({time:Date.now(),provider:'app',count:al.length}));return al;}catch(e2){return[];}}
+  function record(it){var r=C.plainRecord?C.plainRecord(it):it;r.preview=it.preview||r.preview||'';return JSON.stringify(r);}
+  function shortCard(it){var m=[];if(it.author)m.push(it.author);if(it.duration)m.push(it.duration);if(it.plays)m.push(it.plays);return{title:it.title||'未命名',desc:m.join(' · '),img:it.cover||'',pic_url:it.cover||'',url:$('#noLoading#').lazyRule(function(x){try{return $.require('ttt').playShortStable(x);}catch(e){return'toast://播放失败：'+String(e.message||e);}},record(it)),col_type:'movie_2',extra:{lineVisible:false,inheritTitle:false,ttt_id:it.id,ttt_direct_play:true}};}
+  function shortSection(d,a){d.push(U.section('热门短视频','视频 '+a.length+' 条'));for(var i=0;i<a.length;i++)d.push(shortCard(a[i]));if(!a.length)d.push(U.empty('短视频暂时没有数据',''));}
+  function home(){var tab=getMyVar(HOME,'recommend')||'recommend';if(tab!=='short'){B.home();return;}var d=[],pg=Number(MY_PAGE||1);setPageTitle('汤头条');if(pg>1){setResult(d);return;}header(d);try{shortSection(d,shortFeed());}catch(e){d.push(U.error('短视频加载失败',e,C.page('tttSettings')));}setResult(d);}
+  function channel(){var type=C.param('type','');if(type!=='short'){B.channel();return;}var d=[];setPageTitle(C.param('title','短视频'));try{shortSection(d,shortFeed());}catch(e){d.push(U.error('短视频加载失败',e,C.page('tttSettings')));}setResult(d);}
+  O.home=home;O.channel=channel;O.version='0.1.0-test.16';return O;
+})();
