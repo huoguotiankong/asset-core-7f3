@@ -1,0 +1,12 @@
+{
+  "schema":1,
+  "id":"myav",
+  "name":"MyAv",
+  "version":"0.1.0",
+  "build":10112,
+  "release":"apps/video/myav/releases/0.1.0/release.json",
+  "rule":"apps/video/myav/myav_remote_stable_v1_b10112.txt",
+  "bootstrap":"apps/video/myav/bootstrap_stable_v1_b10112.js",
+  "notes":"First MyAv Stable promoted from 0.1.0-test.11 by explicit user request.",
+  "changelog":"apps/video/myav/CHANGELOG.md"
+}
