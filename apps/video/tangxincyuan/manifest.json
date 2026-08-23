@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan",
+  "name": "溏心次元",
+  "category": "video",
+  "mode": "remote/self-use",
+  "repository": "huoguotiankong/asset-core-7f3",
+  "branch": "main",
+  "source": "https://txcy-online.buzz/banshu/",
+  "test": "apps/video/tangxincyuan/test.json",
+  "channels": "apps/video/tangxincyuan/channels.json",
+  "changelog": "apps/video/tangxincyuan/CHANGELOG.md"
+}
