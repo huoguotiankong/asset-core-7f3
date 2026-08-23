@@ -1,0 +1,19 @@
+{
+  "schema": 3,
+  "id": "51chigua",
+  "name": "51吃瓜",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/51chigua/test.json",
+  "channels": "apps/video/51chigua/channels.json",
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "1.0.0-test.1",
+  "testBootstrap": "apps/video/51chigua/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/51chigua/51chigua_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/51chigua/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/51chigua/CHANGELOG.md",
+  "sourceSite": "https://51cg1.com/",
+  "icon": "apps/video/51chigua/assets/icon.svg",
+  "migration": {"stage":"initial-remote-test","note":"Clean Test1 baseline. No Stable exists until device verification."}
+}
