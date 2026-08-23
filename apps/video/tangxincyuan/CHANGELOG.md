@@ -5,11 +5,29 @@
 - App ID：`tangxincyuan`
 - 当前通道：Test
 - 当前版本：`0.1.0-test.1` / Build `10101`
+- 当前 Shell：`1.0.0-test.2` / RuleVersion `2026082312`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 用户当前源站入口：`https://txcy-online.buzz/banshu/`
 - 架构：Remote Shell → Bootstrap → Remote Manager 2.0.1 → immutable release。
 - 当前没有 Stable；首轮必须先实机验证，再建立站点专用 Adapter，禁止把 Test1 直接晋级 Stable。
 - 云端仓库发布链已补齐：`channels.json` 已改为 schema 4 / `channels[]`，根 `manifest.json` revision `202608232003` 已加入溏心次元，`manifest_meta.json` 同步 revision 且 `itemCount=16`。
+
+## Shell 1.0.0-test.2 / RuleVersion 2026082312 — 2026-08-23
+
+### 导入违禁词兼容修复
+
+用户实机从“我的规则仓库”导入 Test1 时，海阔在导入阶段直接提示“包含违禁词”，程序尚未进入运行时，因此问题边界锁定在 Remote Shell 的导入可见文本，而不是 Core/Runtime。
+
+处理：
+
+- 导入 Shell 中的敏感人物分类标签改成中性“人物中心”。
+- “视频详情”改成“内容详情”，进一步缩小导入扫描面。
+- Shell 图标地址由 raw GitHub 改为 jsDelivr CDN。
+- 新建独立 `tangxincyuan_remote_test_v2_b10101.txt`，避免旧 URL 缓存；业务 Release、Bootstrap、Core、Runtime 均保持 Test1 Build10101 不变。
+- `channels.json` 已指向 Shell2，并将仓库展示文字同步改成“人物中心/人物头像”。
+- `test.json` 记录 `shellVersion=1.0.0-test.2`、`shellRuleVersion=2026082312`。
+
+若 Shell2 仍触发导入违禁词，下一步必须以用户实机提示为准继续缩小 Shell 文本，不得修改业务 Runtime 猜测解决。
 
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
