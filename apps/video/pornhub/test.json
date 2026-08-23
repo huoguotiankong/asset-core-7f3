@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "pornhub-test",
   "name": "Pornhub",
-  "version": "0.1.0-test.3",
-  "build": 10103,
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082303,
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/pornhub/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
+  "release": "apps/video/pornhub/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v4_b10104.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test3：重构创作者中心为双列资料卡；Pornstars 按真实列表项分组解析，数字排名不再当姓名，头像优先 #getAvatar / topProfileHeader；账号同步改为 /user/security 身份验证，取消从首页任意 /users/ 链接猜账号，无法可靠识别时要求手动绑定。"
+  "notes": "Test4：账号登录统一切回与 getCookie 同容器的 X5 全屏登录；私有账号请求使用实时 X5 Cookie + Cookie 指纹缓存隔离，并只解析账号主内容区域；创作者、视频排序、搜索筛选、本地收藏分类等同级切换全部改为原页刷新；新增影片在线收藏与本地收藏、创作者在线订阅与本地收藏、片单在线操作与本地收藏，以及视频评论只读页。"
 }
