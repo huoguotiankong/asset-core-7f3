@@ -11,5 +11,5 @@
   "createdAt": "2026-08-23",
   "testStatus": "awaiting-real-device",
   "previousTest": {"version":"3.5.5-rc1","build":387,"release":"apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json"},
-  "notes": "图标交付完整候选。用户实机截图确认首页激活图标(jsDelivr)正常，而未激活底栏和麻豆AI/Hanime1/汤头条等 Raw GitHub 图标破图。RC1 已统一 UI/程序卡图标 CDN；RC2 继续把 channelMeta 中 Stable/Test/Local 版本卡图标纳入同一转换，避免进入版本中心再次破图。Stable 3.5.4 保持不动。"
+  "notes": "图标交付 + 更新协议完整候选。实机先确认未激活底栏及部分 Raw GitHub 程序图标破图；RC1/RC2 完成程序卡、版本卡和底栏图标 CDN 统一。随后实机更新页显示 current 3.5.4-test.1 / Build385 且错误提示已是最新，确认 Remote Manager 2.0.2 优先读取 jsDelivr @main 的旧 test.json 指针。现升级 Manager 2.0.3：可变 test/latest/release 元数据 GitHub API 优先；Fresh Shell v1.0.34 固定 Bootstrap v1.0.33 的 Git commit，Bootstrap/Manager 运行依赖也固定不可变 commit。Stable 3.5.4 保持不动，等待实机验证 RC2。"
 }
