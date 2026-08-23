@@ -3,7 +3,9 @@
   "id": "xvideos",
   "name": "XVideos",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 21:12",
+  "updatedAt": "2026-08-23 22:14",
+  "republish": "cloud-channels-cache-bust-r1",
+  "cloudSnapshot": "apps/video/xvideos/channels_v6_b10106_r1.json",
   "channels": [
     {
       "channel": "test",
@@ -17,20 +19,20 @@
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "人物与账号链强化：演员/频道/创作者独立路由，地区不再混入人物卡；频道显示视频数；人物主页头像和视频载荷增强；账号私有列表 POST 优先；评论继续扩大真实 AJAX 恢复。",
+      "desc": "Test6 云仓重发：业务 Build10106 不变；云仓版本中心改用新的不可变 Channels 快照，避免远端读取异常时继续显示旧 Test4 缓存。人物与账号链保持 Test6。",
       "highlights": [
+        "云仓版本中心 Test6 元数据重新发布",
+        "不可变 Channels 快照避免旧 Test4 缓存",
         "演员/频道/创作者路由彻底隔离",
-        "地区/导航不再伪装成人物",
         "频道卡显示真实视频数",
         "人物主页 profile-pic 头像优先",
         "创作者 /videos/best 载荷增强解析",
         "账号喜欢/稍后看/历史 POST 优先",
-        "增强账号身份与我的主页",
         "评论 video_id + GET/POST AJAX 恢复",
         "保留 Test5 私有 KV 救援模式",
         "保留已验证最高画质播放链"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/xvideos/assets/brand.svg?v=2026082360"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/xvideos/assets/brand.svg?v=2026082361"
     }
   ]
 }
