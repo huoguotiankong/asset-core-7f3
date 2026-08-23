@@ -4,13 +4,69 @@
 
 - App ID：`tangxincyuan`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.4` / Build `10104`
-- 当前 Shell：`1.0.0-test.5` / RuleVersion `2026082315`
-- 当前 Bootstrap：`bootstrap_test_v4_b10104.js`
-- 当前加载器：`cdn-direct-3.0`
+- 当前版本：`0.1.0-test.5` / Build `10105`
+- 当前 Shell：`1.0.0-test.6` / RuleVersion `2026082316`
+- 当前 Bootstrap：`bootstrap_test_v5_b10105.js`
+- 当前加载器：`cdn-direct-4.0`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 用户当前源站入口：`https://txcy-online.buzz/banshu/`
-- 当前没有 Stable；Cloudflare 会话桥、真实 DOM / 图片 / 搜索 / 播放链仍需继续实机验证，禁止直接晋级 Stable。
+- 当前没有 Stable；浏览器源码传输、真实 DOM / 图片 / 搜索 / 播放链仍需继续实机验证，禁止直接晋级 Stable。
+
+## 0.1.0-test.5 / Build 10105 — 2026-08-23
+
+### Test4 实机结果：X5 已通过验证，但 `getCookie()` 仍不可见
+
+用户在 Test4 的官方 X5 页面已经完成站点 Cloudflare 验证并进入正常网页，返回小程序点击“验证完成，检查会话”后，实机仍明确显示：
+
+```text
+当前还没有检测到浏览器 Cookie
+尚未确认通过 · 未检测到 clearance
+```
+
+并提示“还没有读取到浏览器会话”。因此当前设备已经证明：**X5 页面能够通过站点验证，不等于 `getCookie()` 一定能读取到该浏览器容器的 Cookie。** Test4 把 Cookie 可见性作为验证成功的必要条件是不成立的，继续反复同步 Cookie 不会解决问题。
+
+### Test5 传输策略
+
+Test5 不再把 `getCookie()` 作为唯一成功条件，改成双传输层：
+
+```text
+原生 fetch + 当前可见 Cookie
+        ↓ 失败 / 仍是 Challenge
+fetchCodeByWebView 浏览器渲染源码
+        ↓
+等待 Cloudflare 页面离开 Challenge 状态
+        ↓
+取得真实业务 HTML
+        ↓
+首页 / 分类 / 人物 / 搜索 / 详情继续走现有 Provider
+```
+
+- 若当前设备确实能读取 Cookie，且原生请求已经取得正常 HTML，则继续使用 `native-cookie`，性能优先。
+- 若 X5 已通过验证但原生请求仍是 Challenge / Cookie 不可见，则自动使用海阔 `fetchCodeByWebView()` 获取浏览器环境渲染后的真实源码。
+- `checkJs` 只负责等待页面离开 Cloudflare Challenge 并出现正常 DOM；不破解验证码、不伪造 `cf_clearance`、不调用第三方打码。
+- 浏览器源码传输成功后记录为 `webview` 模式；首页、分类、搜索、详情的 `C.request()` 自动复用该传输层，不需要每个页面各写一套验证逻辑。
+- 新增 `txcy_transport_v5`、`txcy_web_diag_v5`、`txcy_cf_session_v5` 和 `txcy_fetch_diag_v5`，诊断可区分 native-cookie / webview / auto。
+- 验证页文案重做：Cookie 为空会明确显示“未读取到（不再作为唯一成功条件）”；第二步改为“已进入网站，读取真实页面”。
+- 设置页新增最近浏览器取源码 HTML 长度、耗时和错误，方便下一轮实机判断到底是浏览器源码链失败还是已经拿到真实 DOM。
+- 播放仍保持保守边界：浏览器源码模式下如果没有结构化媒体地址，继续交给 `video://` 网页媒体提取，不制造虚假的 Cookie/令牌。
+
+### 发布链
+
+- 新建不可变 `0.1.0-test.5 / Build10105` Release，不覆盖 Test4。
+- 新增 `core_transport_patch.js` 与 `runtime_transport_patch.js`。
+- 新建 `bootstrap_test_v5_b10105.js`，独立状态键 `txcy_cdn_state_v4`，最低恢复基线 Build10105。
+- 新建 `tangxincyuan_remote_test_v6_b10105.txt`，Shell `1.0.0-test.6` / RuleVersion `2026082316`。
+- Test5 新增 JS、Bootstrap 已在发布前通过 `node --check`；Shell 内嵌规则 JSON 已通过本地解析校验。
+
+### Test5 首轮实机验收
+
+1. 云仓同步并覆盖导入 Test5 / Build10105。
+2. 打开“安全验证”页 → `① 打开官网验证`，直到 X5 真正进入网站首页。
+3. 返回后点击 `② 已进入网站，读取真实页面`。
+4. 如果成功，应提示“验证后的真实页面已读取成功”，状态显示“当前传输：浏览器会话源码”，即使 Cookie 仍为空也算通过这一层。
+5. 返回首页观察是否开始出现真实 HTML / 内容；同时测试分类、人物、搜索是否仍回到 Challenge。
+6. 如果浏览器源码仍失败，截图 Test5 验证页的“当前状态”与设置页“最近浏览器请求”，下一轮转为持续 X5 页面桥接，不再继续猜 Cookie。
+7. 如果真实 HTML 已恢复但卡片仍为 0，则 Cloudflare 层结束，下一版直接根据真实 DOM/API 建立溏心次元专用 Adapter。
 
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23
 
