@@ -1,41 +1,37 @@
 # 汤头条 CHANGELOG
 
-## 0.1.0-test.15 / Build 10115 — 2026-08-23
+## 0.1.0-test.16 / Build 10116 — 2026-08-23
 
-状态：**Test14 实机否定裸 URL 兼容实验后的播放交付/封面恢复版，仍为 Test；禁止晋级 Stable。**
+状态：**Test15 播放成功后的封面/UI 定向修复版，仍为 Test；禁止晋级 Stable。**
 
-### Test14 实机事实
-- 推荐/长视频已从 PWA recommend 的 3 条恢复到 App `featuredAv` 的 36 条，说明主列表应继续使用大列表模型。
-- 恢复 App 大列表后长视频封面再次大面积灰；短视频仍有可见封面，说明列表 Provider 与图片字段/请求合同存在差异。
-- 用户上传参考规则的 `preview_video → long host → remove seconds=30` 裸 URL 改写，在当前海阔/当前 CDN 环境下短视频仍“播放异常”；免费/已购买长视频的“兼容线路”同样失败。
-- 因此参考规则的 URL 改写只能作为候选来源，不能继续当作完整播放实现。
+### Test15 实机事实
+- **短视频已能正常播放。**
+- **免费长视频已能正常播放。**
+- **官方预览已能正常播放。**
+- 因此 Test15 的 `playback.js + playback_bridge.js` 已冻结为当前播放基线，本轮不修改短视频、免费长视频、预览的媒体交付逻辑。
+- 所有列表/详情封面均不显示，页面只剩灰色占位区域。
+- 短视频当前使用 `pic_1_card`，形成单列超大横卡，信息密度低、滚动效率差，与推荐/长视频的双列设计不一致。
 
-### 已验证的跨程序播放依据
-- 黄豆短剧 Stable：播放前探 HLS，最终 URL 显式带 `User-Agent / Referer / Cookie`。
-- 麻豆AI Stable：HLS 优先 `cacheM3u8`，失败才走带 Header 的代理/直连，并附 `#isVideo=true#`。
-- Shared JAV Playback Stable：统一使用 `#isVideo=true#;{Referer@...&&Origin@...&&User-Agent@...}`；必要时先解析 master/最高画质。
-- 结论：**媒体 URL 可访问不等于播放器后续请求能继承正确 Header/鉴权；播放器交付层必须独立设计。**
+### Test16 修改
+- **撤销 Test15 错误的 placeholder 图片交付方式**：不再使用 `1×1 placeholder → $().image() → callback 自取流` 作为最终卡片图片。
+- **恢复实机证明过的图片交付模型**：最终封面回到 `真实远程图片 URL@js=字节转换`。
+- **保留 Test15 的选图改进**：仍优先 `thumb_cover_str`，其次 `thumb_cover / cover / thumb / cover_url / img_url`，因此不是简单回滚 Test13。
+- **继续三态图片判型**：真实图片字节先判断明文；否则尝试 PWA AES-CBC；仍失败再尝试 App legacy AES-CFB。
+- **短视频改为双列卡片**：`pic_1_card` → `movie_2`，保留标题、作者/时长/播放数信息；点击仍直接调用 Test15 已验证的 `playShortStable()`，不进入详情页。
+- 推荐/长视频数量、详情结构、免费/收费边界、购买行为均不在本轮修改范围。
+- 新增专项事故：`docs/INCIDENT_IMAGE_PLACEHOLDER_CALLBACK_20260823.md`。
+- 新增 `compat.js / pages_patch.js / runtime.js` 均通过 `node --check`；Bootstrap Test16 同样通过语法检查。
+- Release / Bootstrap / Shell 派生为不可变 Test16 / Build10116；Shell rule version `2026082317`。
 
-### Test15 修改
-- **短视频/PWA 稳定交付桥**：新增 `playback_bridge.js`。候选地址先做响应探测；识别 HLS 时优先 `cacheM3u8(url, headers, name)`，成功后直接交本地缓存；否则使用 `#isVideo=true#` 并显式附带 `User-Agent / Referer / X-Auth`。
-- **短视频多候选回退**：免费/已购买短视频依次尝试参考 `long.` 候选、原始 PWA preview、App `source_origin`、App `source_240`、App preview；不再把裸改写 URL 当唯一线路。
-- **收费边界不变**：locked 短视频只允许官方 preview；不会通过参考改写或自动消费汤币绕过授权。
-- **App 长视频不推倒重写**：普通长视频继续使用 Test10 已经实机验证过的 `source_* → HLS sniff/dekey → 时长完整性 → 本地代理` 链。
-- **移除普通详情的“兼容线路”主入口**：避免继续暴露已经被实机否定的裸改写方案；普通免费/已购视频只保留正常“立即播放”。
-- **大列表保持最多 36 条**：推荐/长视频先尝试 PWA `/api/MvList/featuredAv`；如果 PWA 能返回至少 12 条，则直接使用其列表；否则回退 App `/api/MvList/featuredAv`。
-- **图片最终适配重建**：最终 Adapter 优先 `thumb_cover_str`，再回 `thumb_cover`；统一使用本地占位图触发 JS，由 ImageLoader 自己 fetch 真实图片。请求依次尝试 okhttp/browser/PWA Referer/站点 Referer/player Referer，字节再自动判定明文图片 → PWA AES-CBC → App legacy AES-CFB。
-- 新增诊断：`ttt_last_pwa_featured`、`ttt_last_handoff`；继续保留 `ttt_last_short_play / ttt_last_image_policy / ttt_last_image_diag / ttt_last_source_probe`。
-- 新增跨程序事故：`docs/INCIDENT_MEDIA_HANDOFF_VS_URL_REWRITE_20260823.md`。
-- Release / Bootstrap / Shell 派生为不可变 Test15 / Build10115；Shell rule version `2026082316`。
-
-### Test15 实机验收
-1. 推荐/长视频仍应有约 36 条，而不是退回 3 条。
-2. 观察长视频封面：新的 `ttt_last_image_policy.mode` 应为 `self-fetch-thumb-cover-str-first`；仍灰时只提供 `ttt_last_image_diag`。
-3. 短视频继续点击卡片直接播放。若失败，提供 `ttt_last_short_play + ttt_last_handoff`，即可判断失败在 cacheM3u8、Header 直连还是所有候选都不可用。
-4. 免费普通长视频只测试“立即播放”；Test15 不再要求测试已被否定的兼容按钮。若失败，提供 `ttt_last_source_probe + ttt_last_play_diag`。
-5. 收费视频仅测试官方试看；不要为了回归确认真实汤币消费。
+### Test16 实机验收
+1. 推荐、长视频、短视频卡片应重新出现真实封面；详情页头图也应恢复。
+2. 短视频页应变成双列紧凑布局，不再出现单张封面占据接近整屏宽度的情况。
+3. 随机点击 2～3 个短视频，确认仍能直接播放。
+4. 随机测试一个免费长视频和一个官方预览，确认 Test15 播放能力没有回归。
+5. 若仍有封面为空，只提供 `ttt_last_image_policy + ttt_last_image_diag`；Test16 正常策略应看到 `inline-thumb-cover-str-first`。
 
 ## 历史版本
+- Test15：[`CHANGELOG_HISTORY_TEST15.md`](./CHANGELOG_HISTORY_TEST15.md)
 - Test14：[`CHANGELOG_HISTORY_TEST14.md`](./CHANGELOG_HISTORY_TEST14.md)
 - Test11–Test13：[`CHANGELOG_HISTORY_TEST11_TO_TEST13.md`](./CHANGELOG_HISTORY_TEST11_TO_TEST13.md)
 - Test8–Test10：[`CHANGELOG_HISTORY_TEST8_TO_TEST10.md`](./CHANGELOG_HISTORY_TEST8_TO_TEST10.md)
