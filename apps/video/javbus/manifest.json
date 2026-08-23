@@ -5,8 +5,10 @@
   "category": "video",
   "icon": "https://www.javbus.com/favicon.ico",
   "stable": "apps/video/javbus/stable.json",
+  "latest": "apps/video/javbus/latest.json",
   "test": "apps/video/javbus/test.json",
   "channels": "apps/video/javbus/channels.json",
+  "domainConfig": "apps/video/javbus/domains.json",
   "changelog": "apps/video/javbus/CHANGELOG.md",
   "updatedAt": "2026-08-23"
 }
