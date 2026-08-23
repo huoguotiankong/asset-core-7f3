@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.19",
-  "defaultBuild": 10119,
-  "testVersion": "0.1.0-test.19",
-  "testBuild": 10119,
-  "testShellVersion": "1.0.0-test.19",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v19_b10119.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v19_b10119.txt",
+  "defaultVersion": "0.1.0-test.20",
+  "defaultBuild": 10120,
+  "testVersion": "0.1.0-test.20",
+  "testBuild": 10120,
+  "testShellVersion": "1.0.0-test.20",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v20_b10120.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v20_b10120.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test19-release-dependency-hotfix","note":"Test19 修复 Test18 Release 漏载 Test17 pages_patch.js 导致 TangTouTiaoPagesV025 未定义的启动故障；仅修加载依赖，不改 Test18 业务实现。"}
+  "migration": {"stage":"test20-content-contracts-and-comic-reader","note":"Test20 从 Test19 可启动基线继续：修排行榜/创作者参数，动态解析小说/有声/社区 api_list+params_list，补创作者作品、社区详情、小说/有声章节，以及漫画详情→章节→正文阅读链；播放与封面稳定基线不动。"}
 }
