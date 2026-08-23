@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/pornhub/test.json",
   "channels": "apps/video/pornhub/channels.json",
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "1.0.0-test.6",
-  "testBootstrap": "apps/video/pornhub/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/pornhub/pornhub_remote_test_v6_b10106.txt",
-  "testRelease": "apps/video/pornhub/releases/0.1.0-test.6/release.json",
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "1.0.0-test.7",
+  "testBootstrap": "apps/video/pornhub/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
+  "testRelease": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
-  "migration": {"stage":"test6-account-home-workspace-shorts-polish","note":"Test6 keeps the verified comment/avatar/HLS baseline, makes authenticated recommendations the default home feed, promotes online/local collection-history actions to the first screen, compacts account UI, adds Shorts view_video fallback, and polishes search/category/entity decoding. No Stable channel exists yet."}
+  "migration": {"stage":"test7-shorts-playlist-compact-icons","note":"Test7 keeps the verified account recommendation/comment/avatar/HLS baseline, rewrites Shorts around /shorties/<id>, rebuilds playlist identity and chunked detail loading, and compresses all home actions into icon_small_4. No Stable channel exists yet."}
 }
