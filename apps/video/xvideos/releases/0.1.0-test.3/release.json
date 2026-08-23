@@ -12,9 +12,10 @@
     {"name":"corePatch2","path":"apps/video/xvideos/releases/0.1.0-test.2/core_patch.js"},
     {"name":"runtimePatch2","path":"apps/video/xvideos/releases/0.1.0-test.2/runtime_patch.js"},
     {"name":"coreProductPatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/core_product_patch.js"},
-    {"name":"uiProductPatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/ui_product_patch.js"}
+    {"name":"uiProductPatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/ui_product_patch.js"},
+    {"name":"routePatch3","path":"apps/video/xvideos/releases/0.1.0-test.3/route_patch.js"}
   ],
   "verify": {"global":"XVideosRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
   "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/xvideos/releases/0.1.0-test.2/release.json"},
-  "notes": "Test3 product pass: dedicated search + history, structured categories, creator/profile recovery, isolated detail playback and highest-quality-first source ordering."
+  "notes": "Test3 product pass: dedicated search + history, structured categories, creator/profile recovery, isolated detail playback and highest-quality-first source ordering, plus single generic route page."
 }
