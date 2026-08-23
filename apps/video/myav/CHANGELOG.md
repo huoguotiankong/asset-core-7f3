@@ -1,19 +1,39 @@
 # MyAv Changelog
 
-> 程序级长期技术记忆。开发前必须先读全局项目文档、仓库迁移规范、`registry.json`、本文件、当前 Test/Release/Bootstrap/Shell 和用户最新实机结果。
+> 程序级长期技术记忆。开发前必须先读全局项目文档、仓库迁移规范、`registry.json`、本文件、当前 Stable/Test/Release/Bootstrap/Shell 和用户最新实机结果。
 
-## 当前基线（2026-08-23 13:31）
+## 当前基线（2026-08-23 13:42）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.11` / Build `10111`
-- Shell Rule Version：`2026082321`
-- Shell：`apps/video/myav/myav_remote_test_v11_b10111.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v11_b10111.js`
-- Release：`apps/video/myav/releases/0.1.0-test.11/release.json`
-- Stable：未建立，必须继续经过海阔实机回归。
+- 当前 Stable：`0.1.0` / Build `10112`
+- Stable Shell Rule Version：`2026082322`
+- Stable Shell：`apps/video/myav/myav_remote_stable_v1_b10112.txt`
+- Stable Bootstrap：`apps/video/myav/bootstrap_stable_v1_b10112.js`
+- Stable Release：`apps/video/myav/releases/0.1.0/release.json`
+- 晋级来源 Test：`0.1.0-test.11` / Build `10111`，继续保留用于对照。
 - 数据源：`https://javlist.me/`
 - Shared JAV Playback Stable：`1.0.0-test.4`，Provider：MissAV / 123AV / Jable。
 - 云仓 MyAv 图标：`https://thumbsnap.com/i/uc3CZiMx.jpg`。
+
+## 2026-08-23 · Test11 → Stable 0.1.0
+### 发布决定
+- 用户明确要求“发布正式版”，因此按当前最新 Test11 业务链直接晋级首个 Stable。
+- Stable 版本号按当前测试序列去掉 `-test.11` 后确定为 `0.1.0`；Stable Build 使用新不可变 Build `10112`，不覆盖 Test11 / Build10111。
+- Test11 保留为本次晋级来源；后续新的 Test 版本必须从 Stable 0.1.0 重新 rebase，不继续把旧测试身份当长期基线。
+
+### Stable 结构
+- 新增 `apps/video/myav/releases/0.1.0/stable_patch.js`：只负责 Stable 身份和正式版维护入口，不改 Test11 已有业务 Parser/UI。
+- 新增 Stable Release：完整复用 Test1→Test11 模块链，最后加载 Stable Patch，verify 要求 `MyAvRemoteRuntime.version === '0.1.0'`。
+- 新增 Stable Bootstrap：`bootstrap_stable_v1_b10112.js`，`latestPath` 指向 `apps/video/myav/stable.json`，最低 Build `10112`。
+- 新增 Stable Shell：`myav_remote_stable_v1_b10112.txt`，Shell Rule Version `2026082322`，继续使用中性导入页名与分组。
+- 新增 `stable.json` / `latest.json`，并将 `channels.json` 升级为 Stable + Test 双通道；Stable 为推荐通道，Test11 标记为 Promotion Source。
+- Stable 设置页改为正式版维护动作：检查 Stable、更新 Stable、回退上一 Stable、重新加载当前 Stable；页面排版和本地数据设置继续保留。
+- `registry.json`、程序 `manifest.json`、根云仓 `manifest.json` 与 `manifest_meta.json` 均切换到 Stable 0.1.0；云仓 revision `202608231342`。
+
+### 晋级边界
+- Stable 0.1.0 包含：Test2 图片链、Test3 多频道、Test4 分类/磁链、Test5 实体页、Test6 双收藏/排版/搜索增强、Test7 中性导入壳、Test8 排行榜排版、Test9 九类索引兜底、Test10 详情资料净化与收藏排版拆分、Test11 高级筛选控制链与结果链分离。
+- 本次晋级不新增新的站点协议和业务 Parser，只改变发布身份、更新链与云仓默认通道。
+- Test11 最后一轮“完整标签/玩法”修复在晋级前尚未收到用户新的实机截图；这是用户明确要求直接发布 Stable 后保留的验证事项，后续如有问题必须从 Stable 派生新 Test 修复，禁止原地修改 Stable Build10112。
 
 ## 2026-08-23 · Test10 实机结果 → Test11
 ### 实机事实
@@ -143,17 +163,15 @@
 5. 复制磁力。
 
 ## 发布与风险规则
-- 新版本禁止原地覆盖旧 Test；任何修复必须新 Build。
+- 新版本禁止原地覆盖旧 Test/Stable；任何修复必须新 Build。
 - 手机“我的规则仓库”读取根 `manifest.json`；`manifest_meta.json` revision 必须同步。
-- 固定发布链：`Release → Bootstrap → Shell → test.json → channels.json → app manifest → registry → root manifest → manifest_meta → main 回读 → 实机导入`。
+- 固定发布链：`Release → Bootstrap → Shell → stable/test/latest.json → channels.json → app manifest → registry → root manifest → manifest_meta → main 回读 → 实机导入`。
 - 总索引更新后必须检查其它程序未被旧快照覆盖，并检查云仓卡片 `version/desc/path/entryType/channelsPath/categoryName/subCategory`。
 - 原站专用高风险术语尽量留在远程运行时解析层，导入 Shell 和云仓可见元数据优先使用中性产品命名。
 
-## Test11 待实机确认
-- [ ] MyAv Test11 / Build10111 可正常导入。
-- [ ] 高级筛选即使已经选中 2026，年份数量也应明显高于 Test10 的 21 项，并接近原站完整年份区。
-- [ ] 标签数量应明显高于 Test10 的 22 项；若 WebView DOM可取得完整原站结构，应恢复原站大量标签。
-- [ ] “玩法”分组必须出现，不再整组缺失。
-- [ ] 点击任意年份/标签/玩法后，完整控制区仍保持，不因结果 URL 改变退回精简模式。
-- [ ] 筛选结果影片列表与分页正常，不因控制 URL 使用 Ttype=2 而被错误替换。
-- [ ] Test10 详情资料净化、双收藏排版、Test9 九类索引、排行榜、磁链和 Shared Playback 不退化。
+## Stable 0.1.0 发布后待实机确认
+- [ ] 云仓同步后 MyAv 默认显示 Stable 0.1.0 / Build10112，Test11 仍可作为测试来源选择。
+- [ ] Stable 可正常导入，设置页显示 Stable 0.1.0 / Build10112，不再显示 Test 更新文案。
+- [ ] 高级筛选即使已经选中 2026，完整控制区仍保持，标签数量不再退回 Test10 的 22 项，玩法组可见。
+- [ ] `MCY-0233` 等详情页继续不出现导航垃圾词。
+- [ ] 九类索引、排行榜排版、影片/演员收藏独立排版、磁链、预览和 Shared Playback 不退化。
