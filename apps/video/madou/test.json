@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.3",
-  "build": 10103,
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082303,
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v3_b10103.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v4_b10104.txt",
   "updatedAt": "2026-08-23",
-  "notes": "修复中文规则名被 encodeURIComponent 后作为 rule 参数导致海阔提示找不到小程序的问题；内部二级页统一改用 rule=& 继承当前规则上下文。首页四个快捷入口改为真实 SVG 图标，并过滤 arrow 等导航伪卡。"
+  "notes": "重做分类中心为大分类→可展开小分类层级；详情/播放取页停止使用可能触发 >1MB 私有存储错误的 fetchCodeByWebView 回传，改用普通网络请求并限制本地历史/收藏体积；所有内部页面直接加载 Test4 Bootstrap，避免升级后命中旧页面模块。"
 }
