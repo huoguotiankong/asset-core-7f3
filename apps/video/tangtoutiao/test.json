@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.7",
-  "build": 10107,
-  "shellVersion": "1.0.0-test.7",
-  "shellRuleVersion": 2026082308,
+  "version": "0.1.0-test.8",
+  "build": 10108,
+  "shellVersion": "1.0.0-test.8",
+  "shellRuleVersion": 2026082309,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.7/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.8/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v8_b10108.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test6 在发布门禁发现旧 Test5 token 会让业务 call 跳过 bootstrapSession，从而服务端 versionMsg.version 迁移不执行。Test7 增加 session migration gate：只要 version_checked 未建立，即使已有旧 token 也必须先完成启动/版本重握手。其余 Test6 修复保持：官方 image helper + $.require、默认 source_240、动态漫画 api_list/params_list、排行榜 type。"
+  "notes": "根据 Test7 实机精修：短视频图片已可显示、部分真实长视频已可播放，但长视频部分封面仍灰、部分 source_* 是数秒维护占位片；详情页多个媒体返回项还触发海阔连续选集/播放列表上下文；排行榜真实返回创作者对象。Test8 只保留一个媒体播放入口，清晰度改状态选择；播放前预检并过滤短占位片、自动回退；picx 普通 JPEG 直显；排行榜按创作者模型渲染。"
 }
