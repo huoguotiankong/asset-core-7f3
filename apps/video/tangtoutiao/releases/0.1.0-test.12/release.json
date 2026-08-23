@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.12",
+  "build": 10112,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {
+    "version": "0.1.0-test.11",
+    "build": 10111,
+    "release": "apps/video/tangtoutiao/releases/0.1.0-test.11/release.json"
+  },
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/image.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/compat.js"},
+    {"name":"pwa","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pwa.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pagesAccess","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.12"},
+  "notes": "参考用户上传汤头条2规则建立 App+PWA 双 Provider：PWA 使用同站 dpi4.tbrapi.org、client=pwa AES-CFB 合同补短视频/搜索；图片改为参考规则已验证的 AES/CBC/PKCS5Padding 直接输入流解密；短视频点击按 ID 回 App 详情取合法 source 播放；收费内容继续保留试看/显式汤币解锁，不复制删 seconds 参数绕过试看；社区首页改为紧凑频道并尝试真实 list_post。"
+}
