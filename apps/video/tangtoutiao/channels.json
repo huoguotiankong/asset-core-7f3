@@ -6,10 +6,10 @@
   "updatedAt": "2026-08-23 10:25",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.6","build":10106,
-      "displayVersion":"Test 0.1.0 · Runtime Contract 6","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test5 实机确认推荐/详情/source_* 主链已通，但封面回调未执行、播放拿到2秒旧版本维护占位片、漫画首页是动态接口配置、排行榜缺 type。Test6 按海阔官方 image helper 与 APK 真实默认 source_240 修复，并自动跟随启动 versionMsg.version 重握手。Stable 仍不存在。",
-      "highlights":["首次 Test6 运行强制检查 versionMsg.version，必要时切换 system_version 后重新握手","默认播放按原 APP 使用 source_240，高画质继续手动可选","M3U8 诊断增加总时长与 suspiciousShort 标记","封面使用 $(url,headers).image + $.require 执行图片解密回调","漫画按服务端 api_list/params_list 动态路由，不再硬编码分类参数","排行榜支持总榜/日榜/周榜/月榜 type"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.7","build":10107,
+      "displayVersion":"Test 0.1.0 · Runtime Contract 7","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test5 实机确认403条真实推荐和 source_* 播放技术链成立，但封面回调未执行、媒体为2秒旧版本维护占位片、漫画为动态接口配置、排行榜缺 type。Test6 完成四条修复；Test7 再补发布门禁发现的旧 Token 版本迁移问题，确保首次升级一定按 versionMsg.version 重握手。Stable 仍不存在。",
+      "highlights":["旧 Token 存在时也强制完成首次服务端版本迁移握手","封面使用海阔官方 $(url,headers).image + $.require 图片回调","默认播放按原 APP source_240，M3U8 记录 suspiciousShort 占位片诊断","漫画严格执行服务器 api_list/params_list 动态接口","排行榜支持总榜/日榜/周榜/月榜 type","Test6 不原地覆盖，完整保留用于回退"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
