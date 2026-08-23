@@ -1,5 +1,26 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.19 / Build 10119 — 2026-08-23
+
+状态：**Test18 启动依赖链热修版，仍为 Test；禁止晋级 Stable。**
+
+### Test18 实机事故
+- 用户覆盖导入 Test18 后，首页在业务请求前直接报错：`ReferenceError: TangTouTiaoPagesV025 未定义`。
+- 根因不是短视频、分类接口或海阔播放器，而是 Test18 `pages_patch.js` 明确以 `TangTouTiaoPagesV025` 为基座，但 Test18 `release.json` 模块列表漏掉了 Test17 `pages_patch.js`。
+- 因此 Test18 新页面补丁在 eval 阶段就失败，所有 Test18 业务逻辑均未真正进入实机执行。
+
+### Test19 修复
+- 冻结 Test18，不原地覆盖任何已发布 Test18 工件。
+- 新建 Test19 / Build10119，并在 Release 中显式恢复加载顺序：`Test16 pages → Test17 pages_patch.js (TangTouTiaoPagesV025) → Test18 pages_patch.js (TangTouTiaoPagesV026) → Test19 runtime`。
+- Test19 只修 Release 依赖链，不修改 Test18 的 APP `smallVideoByTag` 短视频 Provider、视频分类参数、内容频道、图片解密、长视频、官方试看、收费权限和缓存逻辑。
+- Test18 仍完整保留为不可变回退工件；活动 Test、Manifest、Channels、Registry、云仓库均切换到 Test19 / Build10119。
+- 发布硬规则新增：新补丁若通过 `var B=PreviousGlobal` / 继承上一层命名空间，Release Guard 必须同时验证 `PreviousGlobal` 的定义模块存在且位于当前补丁之前；仅检查“当前文件存在 + node --check”不足以防止运行时依赖缺失。
+
+### Test19 实机验收
+1. 覆盖导入云仓库里的 Test19 / Build10119，确认首页不再出现 `TangTouTiaoPagesV025 未定义`。
+2. 启动恢复后再继续 Test18 原计划：短视频随机 3 个、频道→视频分类、图集/小说/有声/合集等页面。
+3. 如果仍有启动级异常，直接提供完整错误弹窗；此时优先继续排查 Release 模块顺序，不先改业务 API。
+
 ## 0.1.0-test.18 / Build 10118 — 2026-08-23
 
 状态：**Test17 缓存已验证、短视频仍只有 2–3 秒后的 Provider 修正 + 分类中心第一阶段，仍为 Test；禁止晋级 Stable。**
