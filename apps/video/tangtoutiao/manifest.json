@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.7",
-  "defaultBuild": 10107,
-  "testVersion": "0.1.0-test.7",
-  "testBuild": 10107,
-  "testShellVersion": "1.0.0-test.7",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v7_b10107.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt",
+  "defaultVersion": "0.1.0-test.8",
+  "defaultBuild": 10108,
+  "testVersion": "0.1.0-test.8",
+  "testBuild": 10108,
+  "testShellVersion": "1.0.0-test.8",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v8_b10108.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v8_b10108.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test7-session-version-gate","note":"Test6 已恢复官方图片入口、服务端版本握手、source_240 默认播放、动态漫画路由和排行榜 type；发布门禁额外发现旧 token 会跳过版本握手，Test7 用独立 protocolGate 强制首次版本迁移。"}
+  "migration": {"stage":"test8-single-play-preflight-image-split","note":"Test7 实机已出现真实视频可播与短视频封面可见，剩余问题收敛为页面连续媒体项触发播放列表语义、部分 source 为数秒维护片、picx 普通 JPEG 被过度走图片解密、排行榜其实是创作者模型。Test8 分链修复。"}
 }
