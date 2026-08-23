@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.6",
-  "build": 10106,
-  "shellVersion": "1.0.0-test.6",
-  "shellRuleVersion": 2026082307,
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "shellVersion": "1.0.0-test.7",
+  "shellRuleVersion": 2026082308,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.6/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.7/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test5 实机：真实视频403条与 source_* 已通，播放器能播但返回2秒旧版本维护占位片；封面候选为真实 HTTPS JPEG 但 image @js 回调没有诊断；comic/home 为顶层12项动态 api_list/params_list；排行榜要求 type。Test6 改用海阔官方 image helper + $.require，首次运行强制读取 versionMsg.version 并以服务端版本重握手，默认播放回归 APP source_240；漫画完全执行动态 API/参数，排行榜补 all/daily/weekly/monthly。"
+  "notes": "Test6 在发布门禁发现旧 Test5 token 会让业务 call 跳过 bootstrapSession，从而服务端 versionMsg.version 迁移不执行。Test7 增加 session migration gate：只要 version_checked 未建立，即使已有旧 token 也必须先完成启动/版本重握手。其余 Test6 修复保持：官方 image helper + $.require、默认 source_240、动态漫画 api_list/params_list、排行榜 type。"
 }
