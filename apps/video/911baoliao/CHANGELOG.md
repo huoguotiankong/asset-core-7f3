@@ -4,12 +4,32 @@
 
 - App ID：`911baoliao`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.1` / Build `10101`
+- 当前版本：`0.1.0-test.2` / Build `10102`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://begin.mrbyudbq.com/`
 - 架构：Remote Shell → Bootstrap → Remote Manager 2.0.1 → immutable release。
 - 该程序不实现评论、匿名投稿或下载功能。
 - 已进入“我的规则仓库”动态目录：根 `manifest.json` → `apps/video/911baoliao/channels.json` → Test Shell。
+
+## 0.1.0-test.2 / Build 10102 — 2026-08-23 20:17
+
+### 中文规则名内部路由实机修复
+
+用户实机截图确认：911 首页已经可以正常打开并识别到官网内容，但点击首页按钮、分类或内容卡时弹出：
+
+`找不到“911%E7%88%86%E6%96%99”这个小程序`
+
+回读 Test1 源码后确认根因不是页面注册缺失，而是 `Bl911Core.page()` 把 `MY_RULE.title = 911爆料` 通过 `encodeURIComponent()` 写入 `hiker://page/...?...rule=`。当前海阔实机不会把该 `rule` 参数自动解码回规则名，而是直接拿 percent-encode 字符串查找小程序，因此匹配失败。
+
+Test2 采用单点不可变补丁：
+
+- 内部 `hiker://page/<path>?rule=` 改为保留原始中文规则名，不再 percent-encode `rule` 值。
+- `cat_url / post_url / q` 等普通业务参数继续 URL 编码，避免参数串扰。
+- 独立搜索输入回调同步修复，避免输入关键词后再次把规则名编码。
+- 首页、分类、详情、收藏、历史、设置等页面均继续复用 Test1 Shell 页面声明，不改页面 path。
+- Test1 首页 UI、通用 Parser、图片/播放链、本地收藏和历史逻辑保持不变，只修路由。
+
+本次实机也确认 Test1 至少完成了两项事实闭环：① 云仓卡片和程序导入链已经工作；② 首页可以请求到站点并输出真实分类/内容卡。下一轮重点转向分类结构、封面真实性、详情正文和播放协议。
 
 ## 云端仓库发布链修复 — 2026-08-23 19:59
 
