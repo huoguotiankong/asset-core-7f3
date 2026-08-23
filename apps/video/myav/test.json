@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.10",
-  "build": 10110,
-  "shellVersion": "1.0.0-test.10",
-  "shellRuleVersion": 2026082320,
+  "version": "0.1.0-test.11",
+  "build": 10111,
+  "shellVersion": "1.0.0-test.11",
+  "shellRuleVersion": 2026082321,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.10/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v10_b10110.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.11/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v11_b10111.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test10 修复详情片商/系列/演员/TAG被导航垃圾词污染；影片收藏与演员收藏改为独立2列/3列排版；有码高级筛选切到用户确认的 default.cpp?Ttype=2 完整模式，补齐分类/年份/标签/玩法/资源状态。"
+  "notes": "Test11 修复高级筛选完整标签在选中年份后退回精简模式：筛选结果 URL 与完整控制区 URL 分离，控制区保留当前条件并强制 Ttype=2；普通 HTML 不完整时使用 WebView 渲染 DOM 补全。"
 }
