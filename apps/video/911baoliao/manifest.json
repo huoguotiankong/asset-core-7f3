@@ -7,6 +7,13 @@
   "repository": "huoguotiankong/asset-core-7f3",
   "branch": "main",
   "source": "https://begin.mrbyudbq.com/",
+  "verifiedBases": [
+    "https://911bl.com",
+    "https://911bla.com",
+    "https://911bg7.com",
+    "https://d10cq29fdobmmg.cloudfront.net"
+  ],
+  "articleContract": "/archives/<numeric-id>/",
   "test": "apps/video/911baoliao/test.json",
   "channels": "apps/video/911baoliao/channels.json",
   "changelog": "apps/video/911baoliao/CHANGELOG.md"
