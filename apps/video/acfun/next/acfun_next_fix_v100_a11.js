@@ -86,8 +86,6 @@ A.__a11CredentialSources=function(id,path,watch,refresh){
         if(b.secrets.length||b.tokens.length)break;
     }
     try{var vi=A.tryApi('video/getVideoById',{videoId:A.n(id)},['GET'],{timeout:2200});take('video-detail',vi);log.push('video-detail OK keys='+Object.keys(vi||{}).slice(0,40).join(','));}catch(e2){log.push('video-detail ERR '+A.s(e2.message||e2));}
-    // De-duplicate recovered credentials. APK channel constants were tested offline against the observed
-    // Type-A signatures and are deliberately NOT auto-used: no evidence currently ties them to HLS signing.
     var sk={},ss=[];for(var s=0;s<b.secrets.length;s++){var sv=b.secrets[s].value;if(sk[sv])continue;sk[sv]=1;ss.push(b.secrets[s]);}b.secrets=ss;
     var pub={secretCount:b.secrets.length,tokenCount:b.tokens.length,domainCount:b.domains.length,refererCount:b.referers.length,mediaCount:b.media.length,secrets:[],tokens:[],domains:[]};
     for(var a=0;a<b.secrets.length;a++)pub.secrets.push({source:b.secrets[a].source,key:b.secrets[a].key,meta:A.__a11RedactValue(b.secrets[a].value)});
@@ -100,8 +98,8 @@ A.__a11ProbePair=function(seg,key,domain){
     var su=A.__a11ReplaceOrigin(seg,domain),ku=A.__a11ReplaceOrigin(key,domain),sp=A.__a10ProbeBinary(su,'segment'),kp=A.__a10ProbeBinary(ku,'key');
     return{domain:A.__a11Origin(domain),segment:sp,key:kp,ok:sp.status>=200&&sp.status<300&&sp.hexLen>0&&kp.status>=200&&kp.status<300&&kp.hexLen>=32};
 };
-A.__a11FindHostRepair=function(seg,key,domains){var seen={},logs=[],chosen=null;function add(v){var d=A.__a11Origin(v);if(!d||seen[d]||chosen)return;seen[d]=1;var su=A.__a11ReplaceOrigin(seg,d),sp=A.__a10ProbeBinary(su,'segment');logs.push(d+' seg='+sp.status+'/'+sp.ct+'/hex'+sp.hexLen+(sp.body?('/'+sp.body):''));if(sp.status>=200&&sp.status<300&&sp.hexLen>0){var ku=A.__a11ReplaceOrigin(key,d),kp=A.__a10ProbeBinary(ku,'key');logs.push('  key='+kp.status+'/'+kp.ct+'/hex'+kp.hexLen+(kp.body?('/'+kp.body):''));if(kp.status>=200&&kp.status<300&&kp.hexLen>=32)chosen={domain:d,segment:sp,key:kp,ok:true};}}add(seg);for(var i=0;i<(domains||[]).length;i++)add(domains[i]);A.setDiag('play_host_repair',logs.join('\n').slice(0,6000));return chosen;};
-A.__a11RewriteOrigin=function(body,domain){return A.s(body).replace(/https?:\/\/[^\s"'<>]+/g,function(u){return A.__a11ReplaceOrigin(u,domain);});};
+A.__a11FindHostRepair=function(seg,key,domains){var seen={},logs=[],chosen=null,keyOrig=null;function keyOriginal(){if(keyOrig)return keyOrig;keyOrig=A.__a10ProbeBinary(key,'key-orig');logs.push('  key-orig='+keyOrig.status+'/'+keyOrig.ct+'/hex'+keyOrig.hexLen+(keyOrig.body?('/'+keyOrig.body):''));return keyOrig;}function add(v){var d=A.__a11Origin(v);if(!d||seen[d]||chosen)return;seen[d]=1;var su=A.__a11ReplaceOrigin(seg,d),sp=A.__a10ProbeBinary(su,'segment');logs.push(d+' seg='+sp.status+'/'+sp.ct+'/hex'+sp.hexLen+(sp.body?('/'+sp.body):''));if(sp.status>=200&&sp.status<300&&sp.hexLen>0){var ko=keyOriginal();if(ko.status>=200&&ko.status<300&&ko.hexLen>=32){chosen={domain:d,segmentDomain:d,keyDomain:A.__a11Origin(key),segment:sp,key:ko,ok:true};return;}var ku=A.__a11ReplaceOrigin(key,d),kp=A.__a10ProbeBinary(ku,'key-swap');logs.push('  key-swap='+kp.status+'/'+kp.ct+'/hex'+kp.hexLen+(kp.body?('/'+kp.body):''));if(kp.status>=200&&kp.status<300&&kp.hexLen>=32)chosen={domain:d,segmentDomain:d,keyDomain:d,segment:sp,key:kp,ok:true};}}add(seg);for(var i=0;i<(domains||[]).length;i++)add(domains[i]);A.setDiag('play_host_repair',logs.join('\n').slice(0,6000));return chosen;};
+A.__a11RewriteHlsDomains=function(body,segmentDomain,keyDomain){var lines=A.s(body).split(/\r?\n/),out=[];for(var i=0;i<lines.length;i++){var line=lines[i];if(/^#EXT-X-KEY:/i.test(line)){line=line.replace(/URI=["']([^"']+)["']/i,function(all,u){return 'URI="'+A.__a11ReplaceOrigin(u,keyDomain||segmentDomain)+'"';});}else if(!/^#/.test(A.s(line).trim())&&/^https?:\/\//i.test(A.s(line).trim()))line=A.__a11ReplaceOrigin(A.s(line).trim(),segmentDomain);out.push(line);}return out.join('\n');};
 
 A.__a11TryEndpointAuth=function(path,cred){
     var host=A.__a9Host(),logs=[],chosen=null,vals=[];
@@ -131,7 +129,7 @@ A.play=function(id,raw,direct){
     var cred=A.__a11CredentialSources(id,path,watchData,refresh),domains=[];if(wm.playPath)domains.push(wm.playPath);try{var ce=A.__a4CdnEntries(refresh);for(var ci=0;ci<ce.length;ci++)if(ce[ci].domain)domains.push(ce[ci].domain);}catch(e1){}for(var cd=0;cd<cred.domains.length;cd++)domains.push(cred.domains[cd].value);
     var out={urls:[],names:[],headers:[]},selected=null;
 
-    if(res.segment&&res.key){var hr=A.__a11FindHostRepair(res.segment,res.key,domains);if(hr){var fixed=A.__a11RewriteOrigin(manifest.body,hr.domain),local=A.__a11Write(id,fixed,'host');if(local){out.urls.push(local+'#isM3u8#');out.names.push('签名线路修复');out.headers.push({});selected={mode:'host-repair',domain:hr.domain};}}}
+    if(res.segment&&res.key){var hr=A.__a11FindHostRepair(res.segment,res.key,domains);if(hr){var fixed=A.__a11RewriteHlsDomains(manifest.body,hr.segmentDomain||hr.domain,hr.keyDomain||hr.domain),local=A.__a11Write(id,fixed,'host');if(local){out.urls.push(local+'#isM3u8#');out.names.push('签名线路修复');out.headers.push({});selected={mode:'host-repair',domain:hr.domain};}}}
 
     if(!selected&&path){var ea=A.__a11TryEndpointAuth(path,cred);if(ea&&ea.manifest&&ea.manifest.ok){var body=ea.manifest.body,local2=A.__a11Write(id,body,'auth');if(local2){out.urls.push(local2+'#isM3u8#');out.names.push('原生凭据HLS');out.headers.push({});}out.urls.push(ea.manifest.url+'#isM3u8#');out.names.push('原生凭据实时');out.headers.push(A.__a9AppHeaders());selected={mode:'endpoint-auth',source:ea.credential.source,key:ea.credential.key,domain:ea.domain};}}
 
