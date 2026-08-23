@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"navigationUiPatch","path":"apps/video/madou/releases/0.1.0-test.3/navigation_ui_patch.js"},
+    {"name":"recoveryHierarchyPatch","path":"apps/video/madou/releases/0.1.0-test.5/recovery_hierarchy_patch.js"},
+    {"name":"detailSearchUxPatch","path":"apps/video/madou/releases/0.1.0-test.6/detail_search_ux_patch.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.6"},
+  "previous": {"version":"0.1.0-test.5","build":10105,"release":"apps/video/madou/releases/0.1.0-test.5/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test6 keeps the device-startable Test5 recovery baseline and fixes the remaining real-device issues: legacy Test1/Test3 raw detail HTML keys are purged before detail-side writes, history/favorite writes are quota-safe and non-fatal, categories are redesigned as one horizontal major-category selector plus a compact 3-column subcategory grid, and the search page no longer treats an empty keyword as a successful homepage search."
+}
