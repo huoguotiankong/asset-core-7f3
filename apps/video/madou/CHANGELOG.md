@@ -1,5 +1,35 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.5 / Build 10105
+
+### 实机故障
+- Test4 覆盖导入后，小程序首页启动即报：`SyntaxError: 在属性列表的后面缺少“}”`，来源为 `eval code#1`，说明故障发生在活动远程模块加载/解析阶段，业务首页尚未真正执行。
+- 该结果优先于仓库代码意图：Test4 虽然目标是修分类层级与详情 1MB 问题，但实机已经证明它本身不是可启动恢复基线。
+
+### 恢复决策
+- Test4 / Build10104 整体隔离，不再被 Test5 Release 引用，也不做同 URL 原地修补。
+- Test5 直接从最后一个实机确认能启动的 Test3 链恢复：`Test1 Core + Test2 storagePatch + Test1 runtime + Test3 navigationUiPatch`，然后只叠加新的 `recovery_hierarchy_patch.js`。
+- 新 Release 的 `previous` 明确指回 Test3，而不是 Test4；Bootstrap `minBuild=10105`，新 Shell/Bootstrap 文件名与规则 version 同步递增，强制越过设备上可能残留的 Test4 active state/cache。
+
+### Test5 重建范围
+- 重新实现“大分类 → 小分类”模型，继续以源站侧栏中的 `精选推荐 / 欧美P站 / 原创AV / 网黄 / 乱伦 / 日韩 / 男同百合 / Onlyfans / 三级 / 猛料-SM / 成人综艺 / 短视频 / 性爱教学 / 影视剧` 作为大类 marker，并按 DOM 顺序归组真实子链接。
+- 详情与列表只使用普通 `fetch/request` 获取大页面，不再把 `fetchCodeByWebView` 返回的大型 HTML 当通用 Provider 回传路径。
+- 完整 HTML 只保存在当前运行内存；私有 KV 只写 HTML 长度、时间戳等小诊断值。
+- 历史/收藏增加 URL、标题、图片、描述长度限制，总 JSON 超过约 600KB 时主动减半，继续防止接近海阔 1MB `setItem` 上限。
+- 详情播放先扫描 `.m3u8/.mp4`，没有结构化媒体时再返回 `video://详情页`，当前仍属于播放链待实机确认阶段。
+
+### 发布门禁
+- 新 `recovery_hierarchy_patch.js` 已在本地执行 `node --check` 通过。
+- 新 `bootstrap_test_v5_b10105.js` 已执行 `node --check` 通过。
+- Test5 Shell JSON 由脚本生成并重新 `JSON.parse` 校验通过。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 全部切到 Test5；根目录 revision 为 `202608231436`，`itemCount=11`。
+
+### 回归重点
+1. 先只确认 Test5 能正常启动首页，不再出现 Test4 的 JSEngine SyntaxError。
+2. 再测“全部分类”，确认呈现大类展开小类，而不是扁平长列表。
+3. 再点任意影片进入二级详情，确认不再触发 1MB 私有存储错误。
+4. 最后单独测试立即播放；播放失败再继续拆真实播放器/媒体协议，不把启动、分类、详情与播放混在一起。
+
 ## 2026-08-23 · 0.1.0-test.4 / Build 10104
 
 ### 实机故障
