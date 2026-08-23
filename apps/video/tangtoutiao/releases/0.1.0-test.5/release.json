@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/tangtoutiao/releases/0.1.0-test.4/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.4/protocol.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/image.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/playback.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.5/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "notes": "根据 Test4 实机修复：thumb_cover 按 APK 自定义 Glide 解析 ori/360/720 JSON 并执行图片解密；主播放改为单清晰度 #isVideo=true#，多线路改为海阔对象字面量；漫画 /api/comic/home 改分类导航并接 /api//book/list_filter；诊断直接在设置页显示，移除会触发 ArticleListModel URL 错误的子规则。"
+}
