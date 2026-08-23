@@ -3,7 +3,7 @@
   "id": "xvideos",
   "name": "XVideos",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 19:38",
+  "updatedAt": "2026-08-23 19:54",
   "channels": [
     {
       "channel": "test",
@@ -28,7 +28,7 @@
         "本地收藏/足迹可清空",
         "保留 Test3 搜索/分类/详情/最高画质"
       ],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/xvideos/assets/brand.svg"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/xvideos/assets/brand.svg?v=2026082354"
     }
   ]
 }
