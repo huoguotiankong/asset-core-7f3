@@ -6,6 +6,7 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xvideos/test.json",
   "channels": "apps/video/xvideos/channels.json",
+  "cloudChannels": "apps/video/xvideos/channels_v6_b10106_r1.json",
   "testVersion": "0.1.0-test.6",
   "testBuild": 10106,
   "testShellVersion": "1.0.0-test.6",
@@ -16,7 +17,7 @@
   "sourceSite": "https://www.xvideos.com/",
   "icon": "apps/video/xvideos/assets/brand.svg",
   "migration": {
-    "stage": "test6-creator-profile-account-comments-hardening",
-    "note": "Test6 preserves Test5 private-storage rescue and the verified playback chain while isolating creator types, restoring channel video counts, strengthening creator profile video payload parsing, switching private account lists to POST-first requests, and broadening real comment recovery."
+    "stage": "test6-cloud-republish-r1",
+    "note": "Test6 business Build10106 is unchanged. The cloud repository now points to an immutable channels_v6_b10106_r1.json snapshot to break the rule-repo version-center cache that could show an old Test4 card when the live channels fetch failed."
   }
 }
