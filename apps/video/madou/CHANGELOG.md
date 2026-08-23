@@ -5,6 +5,57 @@
 > 源站：`https://madoup2.cc/`  
 > 当前仅 Test 通道；播放、分类和 UI 未完成海阔实机闭环前禁止晋级 Stable。
 
+## 2026-08-23 · 0.1.0-test.13 / Build 10113
+
+### 本轮实机事实
+- Test12 设置页仍然触发 `InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`。虽然业务设置已迁到 `saveFile/readFile`，实机证明**仅把业务设置值迁出 KV 并不能保证“设置交互 + 刷新链”完全避开旧 KV/框架状态写入**。
+- Test12 纯免嗅仍未带来可用收益，用户明确要求停止继续攻免嗅，恢复此前已经能够播放的视频策略。
+- 用户同时明确不再需要“是否加载标签/推荐”的设置，要求所有影片详情默认开启标签和相关推荐。
+
+### 产品决策
+- **撤回 Test11/Test12 的纯免嗅实验作为活动播放策略。** 保留历史实现和失败结论用于知识库，但 Test13 Release 不再加载 `nosniff_protocol.js` 与 `detail_settings.js`。
+- **取消详情/播放可配置设置。** Test13 Shell 不再声明 `madouSettings` 页面入口；详情页也不再出现“详情与播放设置”。
+- 标签与相关推荐固定默认开启，不再让用户为了正常详情信息维护额外状态。
+
+### Test13 详情策略
+- 每次详情优先读取规则私有文件 `madou_t13_detail_models.json` 的结构化 DetailModel。
+- DetailModel TTL 30 分钟，最多保留最近 12 个详情，内容只包括标题、封面、日期/时长、标签、相关推荐、已识别直链和 player URL；**不缓存完整 HTML**。
+- 缓存未命中时只请求一次当前详情 HTML，然后一次性解析：标题/封面/时间、标签、相关推荐、直链候选、player/iframe 目标。
+- 因标签+推荐现在默认开启，首次进入一个从未缓存的影片详情仍会有一次网络等待；30 分钟内再次进入同一影片应直接命中结构化详情缓存。
+- 继续删除源站 SEO/宣传简介，不恢复 Test6 以前的大段简介文本。
+
+### 播放恢复
+- 恢复 Test7/Test10 已经通过实机验证“最终能播放”的交付合同：
+  1. 详情 HTML 已有 M3U8/MP4 → 直接带 UA/Referer 交播放器；
+  2. 没有直链 → 从详情源码提取 iframe/player/embed/playUrl；
+  3. 对识别到的 player URL 使用 `video://` 自动提取；
+  4. 若没有 player URL，则 `video://` 直接处理详情页；
+  5. 继续保留图片/广告 blockRules、`.m3u8/.mp4` videoRules 与 `cacheM3u8:true`。
+- 点击播放不再先重新加载详情；详情首次请求已经同时得到 player target，避免再次做重复详情请求。
+- 这条路线准确记录为**网页媒体自动提取/嗅探**，不再包装成免嗅。
+
+### 存储与自举
+- 继续保留 Test12 `storage_rescue.js`：收藏、历史、分页模板仍使用规则私有文件，不回退旧 `setItem` 主链。
+- Test13 Bootstrap 进一步取消 Remote Manager 依赖，直接按固定顺序 `require` 当前不可变模块；不读取/写入 `hc_remote_state_*`，避免旧 KV 已满时自举状态再成为故障点。
+- Test10 内部非关键分类/Feed 缓存里仍有历史 `setItem` 尝试，但均有异常捕获；Test13 新增详情/播放主链不再新增 `setItem` 写入。
+
+### Release / 发布链
+- Release：`apps/video/madou/releases/0.1.0-test.13/release.json`
+- Bootstrap：`apps/video/madou/bootstrap_test_v13_b10113.js`
+- Shell：`apps/video/madou/madou_remote_test_v13_b10113.txt`，规则 version `2026082313`
+- 活动模块链：`Test1 Core → Test1 Runtime → Test10 Performance Runtime → Test12 Storage Rescue → Test13 Default Detail/Playback`
+- `default_detail_playback.js` 与 Test13 Bootstrap 已执行 `node --check` 通过；Test13 Shell 内嵌规则 JSON 已本地重新解析通过。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 切 Test13；云仓 revision `202608231735`，itemCount 12。
+
+### Test13 回归重点
+1. 同步并覆盖 Test13 后，不再出现“纯免嗅优先/兼容嗅探”设置；详情底部也不再有设置按钮。
+2. 任意影片详情默认直接显示标签与相关推荐；第一次进入允许一次详情网络请求，重复进入应命中30分钟结构化缓存。
+3. 点击“立即播放”恢复原网页媒体自动提取，确认能够像 Test7/Test10 一样进入播放。
+4. 继续回归分类同页切换、收藏/历史和播放器 Primary Play 单媒体语义。
+5. 若仍出现 1MB 错误，必须记录触发页面/动作并继续清理 Test10 残留的非关键 `setItem` 缓存路径；不得再通过新增设置去绕问题。
+
+---
+
 ## 2026-08-23 · 0.1.0-test.12 / Build 10112
 
 ### 本轮实机事实
