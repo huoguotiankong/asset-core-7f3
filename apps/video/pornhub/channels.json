@@ -2,7 +2,40 @@
   "schema": 4,
   "id": "pornhub",
   "name": "Pornhub",
-  "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 18:12",
-  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.7","build":10107,"displayVersion":"Test 0.1.0-test.7 · Build 10107","path":"apps/video/pornhub/pornhub_remote_test_v7_b10107.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"Test7 按实机重写 Shorts 与片单，并统一压缩首页入口。Shorts 直接识别当前 /shorties/<id>；片单过滤 View Playlist 伪标题，恢复真实标题/封面并支持 /playlist/viewChunked 原页加载更多。首页收藏、历史、搜索、分类、创作者、订阅、片单、Shorts、GIF、我的全部改为 icon_small_4 四列小图标。","highlights":["Shorts /shorties/<id> 真实体解析","Shorts poster/thumbnail 恢复","片单 View Playlist 误识别修复","片单真实标题/封面恢复","片单 viewChunked 原页加载更多","首页 icon_small_4 紧凑图标网格","搜索/分类/创作者恢复图标入口","评论/头像/账号推荐/4档HLS 基线保留"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
+  "versionPolicy": "remote-stable-test-v1",
+  "updatedAt": "2026-08-23 18:23",
+  "channels": [
+    {
+      "channel":"stable",
+      "label":"正式版",
+      "id":"pornhub",
+      "name":"Pornhub",
+      "version":"0.1.0",
+      "build":10108,
+      "displayVersion":"Stable 0.1.0 · Build 10108",
+      "path":"apps/video/pornhub/pornhub_remote_stable_v1_b10108.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":true,
+      "desc":"首个 Pornhub 正式版，由 Test7 按用户明确要求原样晋级。保留账号推荐、登录会话、评论、中文分类、独立搜索、创作者、本地/在线收藏、片单/Shorts Test7 适配与 4 档 HLS 多画质播放。",
+      "highlights":["首页账号推荐与紧凑图标工作区","搜索/分类/创作者原生页面","评论只读与创作者真实头像","影片/创作者/片单本地收藏","Pornhub 在线收藏与订阅入口","4 档 HLS 多画质播放","Test7 Shorts /shorties 适配","Test7 片单 chunk 分页适配"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"
+    },
+    {
+      "channel":"test",
+      "label":"测试版",
+      "id":"pornhub-test",
+      "name":"Pornhub",
+      "version":"0.1.0-test.7",
+      "build":10107,
+      "displayVersion":"Test 0.1.0-test.7 · Promotion Source",
+      "path":"apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":false,
+      "desc":"Stable 0.1.0 的晋级来源，原样保留用于问题对照与回退。后续新 Test 应从 Stable 0.1.0 重新向前开发。",
+      "highlights":["保留为首个 Stable 的不可变晋级来源","Shorts/片单仍可继续在后续新 Test 中实机收敛"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"
+    }
+  ]
 }
