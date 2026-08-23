@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "javmenu-test",
+  "name": "JavMenu",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {
+      "name": "coreBase",
+      "path": "apps/video/javmenu/releases/0.1.0-test.2/core.js",
+      "baseVersion": "0.1.0-test.2"
+    },
+    {
+      "name": "parserPatch",
+      "path": "apps/video/javmenu/releases/0.1.0-test.3/parser_patch.js"
+    },
+    {
+      "name": "playbackBase",
+      "path": "apps/video/javmenu/releases/0.1.0-test.2/playback_adapter.js",
+      "baseVersion": "0.1.0-test.2"
+    },
+    {
+      "name": "runtimeBase",
+      "path": "apps/video/javmenu/releases/0.1.0-test.2/runtime.js",
+      "baseVersion": "0.1.0-test.2"
+    },
+    {
+      "name": "runtimeListPatch",
+      "path": "apps/video/javmenu/releases/0.1.0-test.3/runtime_list_patch.js"
+    },
+    {
+      "name": "javPlaybackManager",
+      "path": "shared/jav-playback/manager.js",
+      "channel": "stable",
+      "sdkVersion": "1.0.0-test.4"
+    }
+  ],
+  "verify": {
+    "global": "JavMenuRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.3"
+  },
+  "sourceSite": "https://javmenu.com/zh",
+  "notes": "Recovery patch release: reuse frozen Test2 detail/playback modules, replace only list parser/list-facing runtime with Test3 href-first multi-structure adapters."
+}
