@@ -15,9 +15,9 @@
   "mode": "remote/self-use",
   "recoveryShell": "apps/tools/rule-repo/rule_repo_remote_v354.txt",
   "managerVersion": "2.0.4",
-  "testVersion": "3.5.6-rc1",
-  "testBuild": 391,
-  "testShell": "apps/tools/rule-repo/rule_repo_test_v137.txt",
-  "testBootstrap": "apps/tools/rule-repo/bootstrap_test_v136.js",
-  "testRelease": "apps/tools/rule-repo/releases/test-3.5.6-rc1/release.json"
+  "testVersion": "3.5.6-rc2",
+  "testBuild": 392,
+  "testShell": "apps/tools/rule-repo/rule_repo_test_v138.txt",
+  "testBootstrap": "apps/tools/rule-repo/bootstrap_test_v137.js",
+  "testRelease": "apps/tools/rule-repo/releases/test-3.5.6-rc2/release.json"
 }
