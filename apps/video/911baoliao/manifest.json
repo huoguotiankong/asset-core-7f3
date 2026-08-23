@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "911baoliao",
+  "name": "911爆料",
+  "category": "video",
+  "mode": "remote/self-use",
+  "repository": "huoguotiankong/asset-core-7f3",
+  "branch": "main",
+  "source": "https://begin.mrbyudbq.com/",
+  "test": "apps/video/911baoliao/test.json",
+  "channels": "apps/video/911baoliao/channels.json",
+  "changelog": "apps/video/911baoliao/CHANGELOG.md"
+}
