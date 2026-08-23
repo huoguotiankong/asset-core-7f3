@@ -5,6 +5,73 @@
 > 源站：`https://madoup2.cc/`  
 > 当前仅 Test 通道；播放、分类和 UI 未完成海阔实机闭环前禁止晋级 Stable。
 
+## 2026-08-23 · 0.1.0-test.12 / Build 10112
+
+### 本轮实机事实
+- Test11 的详情页正常显示“纯免嗅 · HTTP/JS协议解析”，但用户点击播放后明确返回 **`MISS HTTP_ONLY` 等价结果：纯免嗅没有解析到真实媒体**。因此 Test11 不能作为“免嗅已完成”的版本。
+- Test11 设置页在切换详情加载模式时直接报：`InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`。
+- 同一实机详情页同时显示“浏览记录写入失败时已自动跳过”，证明不是某个设置值太大，而是**规则私有 KV 整体已接近/达到上限**，任何新的小型 `setItem` 都可能失败。
+
+### 1MB 存储根因修正
+- Test2 以后虽然已禁止继续把完整 HTML 写入 KV，但历史版本遗留值仍可能占据规则私有存储；Test6 以后所谓 `clearItem` 清理不能再视为可靠恢复合同。
+- 海阔当前文档提供规则私有文件 `saveFile / readFile / deleteFile`，因此 Test12 不再要求先“修好旧 KV”，而是让关键状态**迁出 KV**。
+- 更关键的是 `remote_manager.js` 的 `saveState()` 本身也会 `setItem(hc_remote_state_...)`。如果 Test12 继续用 `minBuild=10112 → enforceMinimum → saveState`，可能在业务模块加载前再次被 1MB 拦截。
+
+### Test12 存储救援架构
+- 新增 `storage_rescue.js`，将以下关键状态迁移到规则私有文件：
+  - 详情加载设置；
+  - 免嗅开关；
+  - 免嗅媒体缓存；
+  - 免嗅诊断；
+  - 本地收藏；
+  - 浏览历史；
+  - 分页模板。
+- `C.fetchHtml()` 改为只使用当前运行内存，不再写诊断 KV。
+- `C.pageUrl()` 覆盖掉 Test1 Core 中分页模板的未捕获 `setItem`。
+- 收藏/历史第一次读取时允许从旧 `getItem` 数据尽量迁移到私有文件；迁移后以文件为主。
+- Test10 分类索引/Feed 的旧缓存写入仍属于非关键缓存，失败只降级，不得再阻塞详情/设置/播放主链。
+
+### Rescue Bootstrap
+- Test12 Bootstrap **不调用 Remote Manager `load()`**，而是直接 `loadRelease(config, immutableDefaultRelease, false)`。
+- `minBuild=0`，不触发 `enforceMinimum → saveState → setItem`。
+- 这是专门针对“旧 KV 已经饱和”的救援自举方式；Test12 的检查/更新/回退入口明确提示通过“我的规则仓库”覆盖版本，不伪装 Remote State 仍可正常写入。
+- 活动 Release 不再加载 Test11 模块，链路为：`Test1 Core → Test1 Runtime → Test10 Performance Runtime → Test12 Storage Rescue → Test12 No-Sniff Protocol → Test12 Detail/Settings`。
+
+### Test12 严格纯免嗅强化
+Test11 的 HTTP-only 通用扫描没有命中，Test12 增加更贴近常见中文 CMS 播放器的协议解析，但**仍保持默认不启动 WebView/video://**：
+1. 显式识别 `player_aaaa` / `player_data` 配置；
+2. 支持 `encrypt=1` 的 Percent 解码；
+3. 支持 `encrypt=2` 的 Base64 → Percent 解码；
+4. 提取 `parse / parse_api / parseApi / jx_url / jxUrl`；
+5. 用解码后的播放参数构造解析器 URL，同时尝试原值/URL 编码值；
+6. 继续跟踪 iframe/player/embed/API/script，但使用有限预算；
+7. 继续支持 escaped unicode、`\\xNN`、Percent、Base64、Dean-Edwards P.A.C.K.E.R 静态解包；
+8. HTTP 请求读取 status/header，增加 302 `Location` 媒体识别；
+9. 即使 URL 没有 `.m3u8` 扩展，只要 `Content-Type` 是 HLS 或响应体以 `#EXTM3U` 开头，也按真实 HLS 交给播放器；
+10. 命中真实媒体后继续携带 `UA + Referer + Origin + #isVideo=true#`，并用私有文件缓存 30 分钟。
+
+### 可观测性
+- “最近一次免嗅诊断”改写入 `madou_t12_play_diag.txt` 私有文件，因此即使旧 KV 仍满，也能可靠显示诊断。
+- 诊断记录 HTTP stage/status/response length/content-type/candidate 类型及命中阶段；URL 中常见 token/sign/key 等值会裁剪/脱敏。
+- 如果 Test12 仍 `MISS HTTP_ONLY`，用户只需在设置页长按/点击复制诊断；下一版直接据此收紧 `madoup2.cc` 当前真实 player API/参数，不再回到盲目 WebView 嗅探。
+
+### 发布链
+- 新 Release：`apps/video/madou/releases/0.1.0-test.12/release.json`
+- 新 Bootstrap：`apps/video/madou/bootstrap_test_v12_b10112.js`
+- 新 Shell：`apps/video/madou/madou_remote_test_v12_b10112.txt`，规则 version `2026082312`
+- 新模块：`storage_rescue.js / nosniff_protocol.js / detail_settings.js`
+- 新增跨程序事故文档：`docs/INCIDENT_PRIVATE_KV_SATURATION_AND_RESCUE_BOOTSTRAP_20260823.md`。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 切 Test12；云仓 revision `202608231720`，itemCount 12。
+
+### Test12 实机回归顺序
+1. 先进入设置，反复切换“手动 / 自动标签 / 自动标签+推荐”，确认不再出现 1MB `setItem` 报错。
+2. 返回详情，确认浏览历史/收藏能重新写入文件；如果旧 KV 仍满不应再影响这些主功能。
+3. 保持“免嗅失败后允许兼容嗅探”关闭，播放同一影片；若成功，必须直接进入媒体播放器，不出现网页加载页。
+4. 若仍失败，打开设置查看“最近一次免嗅诊断”，把完整诊断截图/复制文本回传。
+5. 严格区分：**架构上 HTTP-only ≠ 已经命中站点专用免嗅**；只有实机拿到真实媒体并可播才算完成。
+
+---
+
 ## 2026-08-23 · 0.1.0-test.11 / Build 10111
 
 ### 本轮目标
