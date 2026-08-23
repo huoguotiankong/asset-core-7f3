@@ -3,29 +3,29 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 12:13",
+  "updatedAt": "2026-08-23 12:30",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.6",
-      "build": 10106,
-      "displayVersion": "Test 0.1.0-test.6 · Build 10106",
-      "path": "apps/video/myav/myav_remote_test_v6_b10106.txt",
+      "version": "0.1.0-test.7",
+      "build": 10107,
+      "displayVersion": "Test 0.1.0-test.7 · Build 10107",
+      "path": "apps/video/myav/myav_remote_test_v7_b10107.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "第五轮实机后的产品增强版：新增独立女优中心、影片/演员双收藏、搜索记录与女优入口，并加入各页面2列/3列独立排版设置；完成实机回归前不建立 Stable。",
+      "desc": "Test7 保留上一版业务能力，修复海阔导入风险词；独立演员中心、影片/演员双收藏、搜索记录与页面排版设置继续保留。",
       "highlights": [
-        "首页新增女优独立入口，女优中心覆盖有码/欧美/国产女优与男优分页索引",
-        "本地收藏拆分为影片收藏和演员收藏，女优/男优资料页可直接收藏演员",
-        "影片详情中的演员/男优/片商/TAG跳转携带真实实体类型，不再退化成普通分类页",
-        "搜索增加最近记录、清空、女优库快捷入口并保留三频道原站搜索",
-        "设置新增首页/搜索/女优索引/实体作品/收藏各自2列或3列排版"
+        "导入壳改用中性演员命名，避免页面名称触发海阔禁止导入检查",
+        "演员中心继续覆盖三类女演员索引与男演员索引，并保留真实分页",
+        "本地收藏继续拆分影片收藏与演员收藏",
+        "搜索继续保留最近记录、清空和演员库快捷入口",
+        "首页/搜索/演员索引/实体作品/收藏继续支持独立2列或3列排版"
       ],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/myav/assets/icon.svg"
+      "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
   ]
 }
