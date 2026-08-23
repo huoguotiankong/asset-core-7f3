@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha7",
-  "build": 10007,
-  "shellVersion": "8.6.0-test",
+  "version": "1.0.0-alpha8",
+  "build": 10008,
+  "shellVersion": "8.7.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha7/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha8/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha7 候选。Alpha6 已实机确认海阔 cacheM3u8 返回合同正确但仍不可播，因此 Alpha7 不再修改 HLS/缓存结构，而是把播放 Header 精确回归 Stable 0.4.9 已验证的 UA + API Host Referer/Origin，移除 jhg_player/APP signed header 差异。漫画 Reader 使用官方 #fullTheme# 并只渲染 pic_1_full 正文图片，去掉顶部全部信息区域。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha8 候选。Alpha7 已证实 Stable Header/cacheM3u8 完整移植仍不可播，Alpha8 转而验证此前一直被 seed 短路的 can/watch 会话握手，并把 API 索引 Header 与 CDN 分片 Header 解耦；首 Key/TS 会分别探测无头、UA 和 API Header，必要时对 image/png 分片启用官方 PNG HLS 代理。漫画在 fullTheme 上叠加 immersiveTheme，目标是彻底去掉顶部状态栏白区，只保留连续正文图片。正式 Stable 0.4.9 继续冻结。"
 }
