@@ -14,18 +14,18 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha10",
-  "testBuild": 10010,
-  "testShellVersion": "8.9.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v089.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v089.txt",
+  "testVersion": "1.0.0-alpha11",
+  "testBuild": 10011,
+  "testShellVersion": "9.0.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v090.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v090.txt",
   "imageDecoderPage": "acfunImageDecoder",
-  "comicTrimPage": "acfunComicTrim",
+  "comicCropPage": "acfunComicCrop",
   "migration": {
-    "stage": "clean-rewrite-alpha10-client-sign-repair-comic-crop2",
+    "stage": "clean-rewrite-alpha11-credential-recovery-host-repair-comic-border-crop",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha9 实机已经给出明确 CDN 错误：video/can/watch GET HTTP200/canWatch=true；H5/native manifest HTTP200；但首 TS 对 none/UA/H5/jhg/API/APP/Range 全部返回 403 Forbidden: invalid sign，playPath 裸访问返回 missing auth_key。由此 Seed、decode、Key、cacheM3u8 和播放器 Header 已不是主根因，真正故障是服务端生成/当前 CDN 接受的 auth_key 不一致。auth_key 形态为 timestamp-rand-uid-md5，APK 1.9.7 静态字符串同时存在 playbackAuthKey、playbackDomain、getMediaUrl。Alpha10 从当前远程配置和 CDN refresh 中只提取播放专用 playbackAuthKey/playbackDomain（诊断只记录长度/hash，不泄露密钥），按常见 CDN Type-A 公式及少量兼容变体对首 TS 实时重签并跨当前 CDN 域验证；只有 segment 2xx + 非空二进制且 KEY 同时可取才选择，随后逐条重写 manifest 内 KEY/TS auth_key 并生成本地重签 HLS。若配置未下发密钥或公式不匹配，保留 Alpha9 原生矩阵并输出播放签名配置/重签探针。漫画方面 Alpha9 的首图裁白无异常但未生效，说明旧 0.8% 单行阈值被 JPEG 近白噪声过早触发；Alpha10 改为 2.5% 持续三行内容判定、扫描最多 55% 高度，并切换新缓存目录且记录 w/h/first/top/bestRatio。latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha10 实机确认 playback sign config keyCount=0，客户端 Type-A 重签实际没有得到任何 playbackAuthKey，故播放无变化；同时 can/watch GET HTTP200/canWatch=true，H5/native manifest HTTP200，TS 仍返回 invalid sign，裸 playPath 仍提示 missing auth_key。Alpha11 不再把密钥来源限定在 cloud remoteConfig/CDN refresh，而是按 APK 静态证据恢复独立 playback credential 链：带 videoId/path 探测 m3u8/player/referer，直接探测 sys/getDynamicDomain 与 sys/sdk-config 的 root/api 合同，并合并 video/getVideoById、can/watch、refresh、remoteConfig。凭据诊断只记录长度/hash，不保存明文到知识库。播放优先保留服务端现有 auth_key、只切换到 playPath/CDN refresh/playbackDomain 候选域并以 segment+KEY 同时 2xx 验证；其次把恢复出的 authKey 回灌 /api/m3u8/play 与 /api/m3u8/h5/decode；最后才回到客户端重签。漫画 Alpha10 截图说明问题不是仅首图顶部白边，而是源图本身四边/多页存在大白画布；Alpha11 新增 acfunComicCrop，所有正文图在 XOR/明文判定后对四边近白外画布做安全 bbox 裁剪，再交给 pic_1_full 全宽显示，并使用全新缓存目录。latest/stable 均不变。"
   }
 }
