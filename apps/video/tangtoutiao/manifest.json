@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.16",
-  "defaultBuild": 10116,
-  "testVersion": "0.1.0-test.16",
-  "testBuild": 10116,
-  "testShellVersion": "1.0.0-test.16",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v16_b10116.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt",
+  "defaultVersion": "0.1.0-test.17",
+  "defaultBuild": 10117,
+  "testVersion": "0.1.0-test.17",
+  "testBuild": 10117,
+  "testShellVersion": "1.0.0-test.17",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v17_b10117.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v17_b10117.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test16-playback-frozen-cover-ui-repair","note":"Test15 实机已确认短视频、免费长视频和官方预览播放正常，Test16 冻结其播放链，仅将图片从 placeholder+$().image 回退为 thumb_cover_str 优先的真实 URL@js 内联解密，并将短视频改为双列 movie_2。"}
+  "migration": {"stage":"test17-short-source240-fastpath-and-feed-cache","note":"Test17 保持 Test16 图片与长视频播放基线；短视频按 APK 原生 ShortVideoPlayerActivity 契约优先使用列表 source_240，只有缺失时才回退 Test15 详情候选链。推荐/长视频共享 featuredAv 会话缓存，短视频列表独立缓存，优化顶栏分类切换速度。"}
 }
