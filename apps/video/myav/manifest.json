@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.8",
-  "defaultBuild": 10108,
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "1.0.0-test.8",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/video/myav/myav_remote_test_v8_b10108.txt",
+  "defaultVersion": "0.1.0-test.9",
+  "defaultBuild": 10109,
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "1.0.0-test.9",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/video/myav/myav_remote_test_v9_b10109.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"actress-fallback-ranking-layout-test8","note":"Test8 restores the missing censored actress index with a user-verified current-site fallback and adds ranking 2/3-column layout preferences, while preserving the neutral Test7 import shell. No Stable before device verification."}
+  "migration": {"stage":"complete-category-fallback-test9","note":"Test9 adds a canonical nine-category fallback map shared by the actor hub and category center while preserving dynamic discovery as first choice. No Stable before device verification."}
 }
