@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.11",
-  "build": 10111,
-  "shellVersion": "1.0.0-test.11",
-  "shellRuleVersion": 2026082311,
+  "version": "0.1.0-test.12",
+  "build": 10112,
+  "shellVersion": "1.0.0-test.12",
+  "shellRuleVersion": 2026082312,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.11/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v11_b10111.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.12/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v12_b10112.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test11 增加全局详情扩展加载设置：手动加载、自动标签、自动标签+相关推荐。播放默认切为严格 HTTP-only 纯免嗅：只使用详情/player/script/API 请求和静态 JS 解码（escaped/percent/Base64/P.A.C.K.E.R）解析真实 M3U8/MP4，命中后直接交播放器并缓存30分钟；默认完全不启动 WebView/video://。兼容嗅探只作为用户在设置中明确开启的失败兜底。"
+  "notes": "Test12 为存储救援 + 纯免嗅协议强化版。实机确认 Test11 规则私有 setItem KV 已达到约1MB，连很小的设置写入都会崩溃；Test12 将设置、播放缓存/诊断、收藏、历史和分页模板迁移到规则私有文件，并使用 direct immutable release Bootstrap 绕过 Remote Manager 的 setItem 状态写入。纯免嗅新增 player_aaaa/player_data encrypt=1/2、parse/jx、302 Location、无扩展HLS和更完整的静态解码；默认仍绝不启动WebView/video://。"
 }
