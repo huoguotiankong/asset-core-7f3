@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "51chigua-test",
   "name": "51吃瓜",
-  "version": "0.1.0-test.1",
-  "build": 10101,
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026082301,
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026082302,
   "managerVersion": "2.0.1",
-  "release": "apps/video/51chigua/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/51chigua/51chigua_remote_test_v1_b10101.txt",
+  "release": "apps/video/51chigua/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_test_v2_b10102.txt",
   "updatedAt": "2026-08-23",
-  "notes": "首个自用远程测试版：原生首页/分类/搜索/图文详情；动态域名探测；文章图片与媒体源解析；视频直链/iframe 优先、video:// 兜底；本地收藏/历史；静态评论解析和设置诊断。"
+  "notes": "Test2：修复中文规则名被 URL 编码导致所有内部详情页提示找不到小程序；图标切换为源站 favicon；列表/正文新增 loadBannerDirect、loadImage、data-xkrkllgl 等真实图片字段解析，并对 /xiao/、/upload/upload/ AES-CBC 加密图片接入海阔 InputStream 解密；分类补齐当前 21 类；增加 DPlayer data-config 结构化媒体解析。"
 }
