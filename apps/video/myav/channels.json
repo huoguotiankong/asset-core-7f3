@@ -1,31 +1,48 @@
 {
-  "schema": 4,
-  "id": "myav",
-  "name": "MyAv",
-  "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 13:31",
-  "channels": [
+  "schema":4,
+  "id":"myav",
+  "name":"MyAv",
+  "versionPolicy":"remote-stable-test-v1",
+  "updatedAt":"2026-08-23 13:42",
+  "channels":[
     {
-      "channel": "test",
-      "label": "测试版",
-      "id": "myav-test",
-      "name": "MyAv",
-      "version": "0.1.0-test.11",
-      "build": 10111,
-      "displayVersion": "Test 0.1.0-test.11 · Build 10111",
-      "path": "apps/video/myav/myav_remote_test_v11_b10111.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
-      "recommended": false,
-      "desc": "Test11 修复高级筛选在选择年份/标签后退回精简控制区：结果链与完整 Ttype=2 控制链分离，并在必要时使用 WebView 渲染 DOM 补全。",
-      "highlights": [
-        "保留当前筛选条件，同时强制控制区使用 Ttype=2",
-        "完整控制区与影片结果 URL 分离，不再被精简结果页覆盖",
-        "当普通 HTML 只有少量年份/标签时自动比较 WebView 渲染 DOM",
-        "继续保留 Test10 详情资料净化与影片/演员收藏独立排版",
-        "继续保留九类索引兜底、排行榜独立排版和中性导入壳"
+      "channel":"stable",
+      "label":"正式版",
+      "id":"myav",
+      "name":"MyAv",
+      "version":"0.1.0",
+      "build":10112,
+      "displayVersion":"Stable 0.1.0 · Build 10112",
+      "path":"apps/video/myav/myav_remote_stable_v1_b10112.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":true,
+      "desc":"首个 MyAv 正式版，由 Test11 按用户明确要求晋级；保留完整筛选双链、九类索引、演员/影片双收藏、磁链、预览与共享第三方播放。",
+      "highlights":[
+        "有码 / 欧美 / 国产 / 无码多频道资料",
+        "高级筛选结果链与完整 Ttype=2 控制链分离",
+        "九类片商 / 演员 / TAG 索引与实体页",
+        "影片收藏与演员收藏独立本地保存及独立排版",
+        "磁力点击复制，长按调用迅雷 / PikPak / 123云盘 / 光鸭云盘",
+        "MissAV / 123AV / Jable 共享播放 SDK"
       ],
-      "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
+      "icon":"https://thumbsnap.com/i/uc3CZiMx.jpg"
+    },
+    {
+      "channel":"test",
+      "label":"测试版",
+      "id":"myav-test",
+      "name":"MyAv",
+      "version":"0.1.0-test.11",
+      "build":10111,
+      "displayVersion":"Test 0.1.0-test.11 · Promotion Source",
+      "path":"apps/video/myav/myav_remote_test_v11_b10111.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":false,
+      "desc":"Stable 0.1.0 的晋级来源；后续新 Test 应从 Stable 0.1.0 重新 rebase。",
+      "highlights":["保留为首个 Stable 的晋级来源和问题对照","下一轮 Test 不继续叠加旧测试身份，应从新 Stable 向前开发"],
+      "icon":"https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
   ]
 }
