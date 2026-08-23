@@ -76,6 +76,14 @@
 - 第三方播放是详情 Primary Action 区；收藏、原站、磁力、预览作为工具动作放在其后，不与播放器主操作混成一套选集。
 - 无磁力/无预览/无搜索结果必须显式空状态，宁可失败，不制造假卡片。
 
+## 2026-08-23 云端仓库发布修复
+- 初次发布时只完成 `registry.json`、MyAv Test/Release/Bootstrap/Shell 登记，遗漏根目录 `manifest.json`；用户实机因此在“我的规则仓库”看不到 MyAv。
+- 真实云仓目录由“我的规则仓库” Stable 的 `HikerRuleRepo.manifestPath='manifest.json'` 读取，`registry.json` 不是手机端程序展示清单。
+- 已将 MyAv Test 加入根 `manifest.json`，revision 提升为 `202608231103`，云仓项目数更新为 9。
+- 规则仓库还有独立 `manifest_meta.json` revision 探针；只改 manifest 不同步 meta 会让设备继续命中旧目录缓存。已同步 `manifest_meta.json` 到相同 revision / itemCount=9。
+- MyAv 最初 `channels.json` 使用 `{stable,test}` 内部对象结构，但规则仓库通用版本中心要求 `channels:[{channel,...}]`；已改为 schema 4 的 Test-only 标准通道格式，保证“看得到卡片”后还能进入版本中心并导入 Test。
+- 发布新程序到云仓以后固定检查：`registry → app channels/test/release/Shell → root manifest.json → manifest_meta.json → 规则仓库实机同步/导入`，不能把“registry 已登记”当成“云仓已发布”。
+
 ## Test1 静态门禁
 - [x] Core `node --check`。
 - [x] Runtime `node --check`。
@@ -83,7 +91,7 @@
 - [x] release/test/channels/manifest JSON parse。
 - [x] 本地 synthetic parser smoke：列表 / 番号 / 磁力 / 预览图 / 预览视频 / 分页模板。
 - [ ] Remote installer guard / repository guard。
-- [ ] GitHub 回读。
+- [x] GitHub 回读：registry / manifest / manifest_meta / Test / channels / Release / Bootstrap / Shell / Core / Runtime。
 
 ## Test1 实机回归（待确认）
 - [ ] 从“我的规则仓库”导入 MyAv Test，首页正常启动并显示 `0.1.0-test.1 / 10101`。
