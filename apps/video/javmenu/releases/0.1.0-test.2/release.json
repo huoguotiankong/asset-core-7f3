@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "javmenu-test",
+  "name": "JavMenu",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/javmenu/releases/0.1.0-test.2/core.js"},
+    {"name":"playback","path":"apps/video/javmenu/releases/0.1.0-test.2/playback_adapter.js"},
+    {"name":"runtime","path":"apps/video/javmenu/releases/0.1.0-test.2/runtime.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"JavMenuRuntime","property":"version","equals":"0.1.0-test.2"},
+  "sourceSite": "https://javmenu.com/zh",
+  "notes": "Test2 device-driven repair: scoped .video-list-item parser, repository-owned icons, fixed semantic category routes, dedicated actress index/person pages, strict actor/tag metadata, preview-media exclusion, .com/.org transport fallback."
+}
