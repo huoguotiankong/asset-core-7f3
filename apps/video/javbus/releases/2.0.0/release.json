@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "javbus",
+  "name": "JavBus",
+  "channel": "stable",
+  "version": "2.0.0",
+  "build": 20005,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/javbus/releases/2.0.0-alpha1/core.js"},
+    {"name":"compat","path":"apps/video/javbus/releases/2.0.0-alpha1/compat.js"},
+    {"name":"runtime","path":"apps/video/javbus/releases/2.0.0-alpha1/runtime.js"},
+    {"name":"alpha2Patch","path":"apps/video/javbus/releases/2.0.0-alpha2/patch_alpha2.js"},
+    {"name":"alpha3Patch","path":"apps/video/javbus/releases/2.0.0-alpha3/patch_alpha3.js"},
+    {"name":"alpha4Patch","path":"apps/video/javbus/releases/2.0.0-alpha4/patch_alpha4.js"},
+    {"name":"stablePatch","path":"apps/video/javbus/releases/2.0.0/stable_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"JavBusRemoteRuntime","property":"version","equals":"2.0.0"},
+  "promotedFrom": {"version":"2.0.0-alpha4","build":20004},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "domainConfig": "apps/video/javbus/domains.json",
+  "notes": "First project-owned remote Stable. Promotes the rewritten alpha4 chain, keeps the alpha3 device-verified magnet parser, and adds persistent automatic domain failover."
+}
