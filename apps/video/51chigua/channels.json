@@ -3,12 +3,12 @@
   "id": "51chigua",
   "name": "51吃瓜",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 17:56",
+  "updatedAt": "2026-08-23 18:10",
   "channels": [{
-    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.2","build":10102,
-    "displayVersion":"Test 0.1.0-test.2 · Build 10102","path":"apps/video/51chigua/51chigua_remote_test_v2_b10102.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-    "desc":"修复 Test1 实机确认的内部页面路由、错误图标和无封面问题；接入 51CG 当前加密图片协议与真实列表图片字段。",
-    "highlights":["中文规则名不再编码，详情/分类/收藏等内部页恢复","使用源站 favicon","loadBannerDirect / data-xkrkllgl 封面解析","AES-CBC 加密封面与正文图 InputStream 解密","补齐 21 个当前分类","DPlayer data-config 媒体解析"],
+    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.3","build":10103,
+    "displayVersion":"Test 0.1.0-test.3 · Build 10103","path":"apps/video/51chigua/51chigua_remote_test_v3_b10103.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+    "desc":"实机回归后的产品化增强版：真实评论 JSON、播放上下文隔离、首页/详情图标化、分类分组与真实路由修复。",
+    "highlights":["/comments/<postId>.json 真实评论源","Primary Play 独立，播放器不再混入收藏/评论/正文","首页搜索/分类/收藏/历史图标化","详情收藏/评论/分类/原站图标化","分类中心按官网导航分组","首页分类直接进入内容 Feed","分类与搜索路径按当前站点真实规则修复","DPlayer 多视频保留实际视频名"],
     "icon":"https://51cg1.com/favicon.ico"
   }]
 }
