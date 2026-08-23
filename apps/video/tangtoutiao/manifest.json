@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.8",
-  "defaultBuild": 10108,
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "1.0.0-test.8",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v8_b10108.txt",
+  "defaultVersion": "0.1.0-test.9",
+  "defaultBuild": 10109,
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "1.0.0-test.9",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v9_b10109.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test8-single-play-preflight-image-split","note":"Test7 实机已出现真实视频可播与短视频封面可见，剩余问题收敛为页面连续媒体项触发播放列表语义、部分 source 为数秒维护片、picx 普通 JPEG 被过度走图片解密、排行榜其实是创作者模型。Test8 分链修复。"}
+  "migration": {"stage":"test9-header-image-duration-aware-direct-short","note":"Test8 实机确认 direct-public-image 会让 picx 封面全灰，且长视频 19:34 的 240P 实际只有57秒仍被旧短片阈值误判有效。Test9 恢复图片 Header 合同、按标称时长过滤试看/占位源并增加 source_origin/preview fallback，同时短视频列表直接播放。"}
 }
