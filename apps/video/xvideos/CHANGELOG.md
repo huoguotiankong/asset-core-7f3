@@ -1,5 +1,31 @@
 # XVideos CHANGELOG
 
+## 0.1.0-test.2 / Build 10102 — 2026-08-23
+
+### 首轮实机修复：官网可访问但首页 0 视频
+- 用户实机截图确认：同一台手机浏览器可正常打开 XVideos 官网并看到视频流，但 Test1 首页显示“首页暂未解析到视频”，最终请求地址为 `https://www.xvideos.com/?k=&sort=relevance`。
+- 因此排除“用户网络无法访问官网”这一假设，问题收敛到小程序 HTML 视频卡识别层。
+
+### 根因
+- Test1 的 `isVideoLink()` 把视频 URL 识别写得过严，偏向 `/video123...` 这类数字 ID。
+- 当前 XVideos 大量视频链接使用 `video.<opaque token>/...` 形式，token 可能包含字母和数字；官网现行解析实现也是从 `div.frame-block` 中直接取 href，并不假设 ID 必须为数字。
+- 请求成功但所有真实视频 href 被过滤，最终 `parseVideoCards()` 返回 0 条。
+
+### Test2 修复
+- 新增不可变 `core_patch.js`，不覆盖 Test1：
+  - `isVideoLink()` 改为兼容当前 `video.* / video-*/ video_* / video123*` 字母数字 token。
+  - 明确排除 `/videos-i-like` 等账号列表路径，避免误判。
+  - `parseVideoCards()` 改为 `div.frame-block` 优先分块解析，每个 block 独立恢复视频 href、标题、封面、时长、观看量、`data-pvv` 和 `data-videoid`。
+  - frame-block 不存在时再回退宽松 anchor 解析。
+- 新增 `runtime_patch.js` 将运行版本提升到 Test2 / Build10102。
+- Release → Bootstrap → Shell 全部使用新 Build10102，不在旧 URL 上覆盖缓存。
+
+### 实机下一步
+- 先只验证首页是否出现真实视频卡；若恢复，再继续测试搜索、分类、详情和播放。
+- 如果仍为 0 视频，下一版不再猜 DOM，将直接加入“响应诊断”显示 HTML 长度、frame-block 数量、video href 样例和响应标题，按实机返回体继续修。
+
+---
+
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
 ### 新程序：Clean Rewrite
