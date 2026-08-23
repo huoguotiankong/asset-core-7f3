@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.14",
+  "build": 10114,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.13","build":10113,"release":"apps/video/tangtoutiao/releases/0.1.0-test.13/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/image.js"},
+    {"name":"coreBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compatBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/compat.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/compat.js"},
+    {"name":"pwa","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pwa.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pagesAccess","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"pagesDual","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pages_patch.js"},
+    {"name":"pagesShort","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/pages_patch.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.14/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.14/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.14"},
+  "notes": "Restore App featuredAv large feed for recommend/long tabs. Test reference-rule URL rewrite only on free/purchased content: preview host -> long. and remove seconds=30; locked content remains official preview/purchase. Short video prefers the same reference-compatible PWA preview path instead of the Test13 zero-throughput source_origin path."
+}
