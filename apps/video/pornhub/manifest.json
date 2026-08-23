@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/pornhub/test.json",
   "channels": "apps/video/pornhub/channels.json",
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "1.0.0-test.3",
-  "testBootstrap": "apps/video/pornhub/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
-  "testRelease": "apps/video/pornhub/releases/0.1.0-test.3/release.json",
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "1.0.0-test.4",
+  "testBootstrap": "apps/video/pornhub/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_v4_b10104.txt",
+  "testRelease": "apps/video/pornhub/releases/0.1.0-test.4/release.json",
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
-  "migration": {"stage":"test3-account-identity-creator-grid","note":"Test3 is additive over the verified Test1/Test2 playback baseline. It replaces unsafe homepage username guessing with account-specific /user/security validation and scopes creator extraction to real profile cards. No Stable channel exists yet."}
+  "migration": {"stage":"test4-x5-session-nav-local-online-comments","note":"Test4 keeps the verified public/HLS baseline while replacing account session handoff with X5-cookie continuity, isolating auth cache by session, fixing same-level tabs, and adding local/online entity actions plus read-only comments. No Stable channel exists yet."}
 }
