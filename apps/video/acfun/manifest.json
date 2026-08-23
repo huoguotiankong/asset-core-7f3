@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha1",
-  "testBuild": 10001,
-  "testShellVersion": "8.0.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v080.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v080.txt",
+  "testVersion": "1.0.0-alpha2",
+  "testBuild": 10002,
+  "testShellVersion": "8.1.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v081.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v081.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "clean-rewrite-alpha1-independent-test-chain",
+    "stage": "clean-rewrite-alpha2-first-device-regression",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Test 从 1.0.0-alpha1 起切换到独立 clean rewrite 链：Remote Manager id=acfun-test，与 Stable 的 acfun 状态隔离；不再把 0.6.0 Alpha 历史 UI/修补模块加载进活动 Test Release。新链按 APP 1.9.7 协议重新实现认证、签名、encData、Station、ClassType/Zone、视频、漫画、短视频、社区、小说、有声、搜索、图片与播放 Adapter，并重做原生产品 UI。已保留当前设备验证过的 jhimage/CDN、XOR 解码和媒体 Seed→decode 事实，但通过新模块重新组织。当前仅为 Test/Candidate，等待海阔实机回归，latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Clean Rewrite Alpha1 首轮实机证明认证与列表数据已经打通，但暴露四个独立回归：图片域虽然已得到 asigoo，Alpha1 却对 jhimage 优先硬编码 cdn.ukaim.com 且使用 API Referer，导致封面空白；专题 query 在海阔 getParam 返回编码值时未 decode，导致标题显示 %E...；视频 Seed 与 /api/m3u8/h5/decode URL 已正确但 extension-less decode URL 直接交播放器时未强制 HLS；漫画 info 当前 Host POST 返回405。Alpha2 只做定向修复：恢复 Stable 已验证的 asigoo _480 + 空 Referer + XOR 解码，参数统一安全 decode，decode URL 加 #isM3u8# 并结合 APK 中 m3u8/player/referer、playbackDomain/playbackAuthKey、/api/m3u8/play、X-Referer 证据提供多线路回退，漫画 info/chapter 改 GET-first。继续等待实机回归，不改 latest/stable。"
   }
 }
