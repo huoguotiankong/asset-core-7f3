@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "18av",
+  "name": "18AV",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name":"core","path":"apps/video/18av/releases/0.1.0-test.2/core.js"},
+    {"name":"runtime","path":"apps/video/18av/releases/0.1.0-test.2/runtime.js"}
+  ],
+  "verify":{"global":"AV18RemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes":"Pre-device Test2: align Remote Manager pointer identity and route the home genre shortcut to the dedicated category-library page."
+}
