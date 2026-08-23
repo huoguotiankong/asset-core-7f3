@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "myav",
+  "name": "MyAv",
+  "updatedAt": "2026-08-23",
+  "stable": null,
+  "candidate": null,
+  "test": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/video/myav/releases/0.1.0-test.1/release.json",
+    "rule": "apps/video/myav/myav_remote_test_v1_b10101.txt",
+    "status": "initial-device-validation"
+  }
+}
