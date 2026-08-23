@@ -1,0 +1,12 @@
+{
+  "schema":1,
+  "id":"madou",
+  "name":"麻豆传媒",
+  "version":"0.1.0",
+  "build":10114,
+  "release":"apps/video/madou/releases/0.1.0/release.json",
+  "rule":"apps/video/madou/madou_remote_stable_v1_b10114.txt",
+  "bootstrap":"apps/video/madou/bootstrap_stable_v1_b10114.js",
+  "notes":"First Madou Stable promoted from 0.1.0-test.13 by explicit user request.",
+  "changelog":"apps/video/madou/CHANGELOG.md"
+}
