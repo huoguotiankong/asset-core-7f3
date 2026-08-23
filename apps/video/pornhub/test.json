@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "pornhub-test",
   "name": "Pornhub",
-  "version": "0.1.0-test.5",
-  "build": 10105,
-  "shellVersion": "1.0.0-test.5",
-  "shellRuleVersion": 2026082305,
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "shellVersion": "1.0.0-test.6",
+  "shellRuleVersion": 2026082306,
   "managerVersion": "2.0.1",
-  "release": "apps/video/pornhub/releases/0.1.0-test.5/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v5_b10105.txt",
+  "release": "apps/video/pornhub/releases/0.1.0-test.6/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v6_b10106.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test5：修复 Test4 新增 comments/playlistDetail 未进入 Runtime module 固定白名单导致评论直接报找不到函数；分类页按官网重构为异性恋/男同/女女同页切换 + 热门官方图片双列卡 + 全部中文标签；首页搜索改为独立搜索页并支持视频/创作者同页搜索；详情创作者头像增加上下文优先级和个人主页头像回填缓存；评论/本地收藏/在线收藏改为带 SVG 图标的 icon_small_3 操作栏。"
+  "notes": "Test6：首页默认使用当前 X5 账号推荐，并将站内收藏、观看历史、本地收藏、本地足迹提升到首屏；首页 Feed/最新/热门/高分原页切换，品牌区压缩为头像行。账号页改为紧凑头像 + 功能标签 + 三栏账号工具；Shorts 增加 /short 与普通 view_video 双解析；分类热门卡去除视频数量混入标题，搜索筛选改为可换行 flex 标签并补齐演员/频道/模特/用户搜索；修复 &#039; 等数字 HTML 实体，评论页与详情分类进一步收紧 UI。"
 }
