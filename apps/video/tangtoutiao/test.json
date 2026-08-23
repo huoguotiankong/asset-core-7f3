@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.12",
-  "build": 10112,
-  "shellVersion": "1.0.0-test.12",
-  "shellRuleVersion": 2026082313,
+  "version": "0.1.0-test.13",
+  "build": 10113,
+  "shellVersion": "1.0.0-test.13",
+  "shellRuleVersion": 2026082314,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.12/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v12_b10112.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.13/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v13_b10113.txt",
   "updatedAt": "2026-08-23",
-  "notes": "参考用户上传的汤头条2海阔规则建立 App + PWA 双 Provider：短视频和搜索优先使用已验证的 dpi4.tbrapi.org PWA 协议，短视频点击后按视频 ID 回 App 详情获取合法 source 播放；图片采用参考规则已验证的 AES/CBC/PKCS5Padding 输入流解密；收费内容继续按 isfree/is_pay/coins 处理，绝不复制删除试看参数绕过付费；社区首页改为紧凑频道导航并开始接 list_post。"
+  "notes": "根据 Test12 实机继续收敛：PWA 短视频列表稳定返回 20 条，但旧 playById 把 1–2 秒短内容继续按长视频完整性规则校验，并把 source_origin MP4 误送 M3U8 解密，导致短视频无法播放。Test13 新增短视频专用播放链：免费短视频优先 App 详情 source_origin MP4 直放，其次短 HLS 且不做长视频时长比例校验；收费短视频只用官方 preview。推荐/长视频列表优先 PWA Provider 获取更一致的封面字段，详情仍回 App Provider。图片改为明文→PWA AES-CBC→App legacy AES-CFB 自适应链，详情页 UI 去除技术调试文案。"
 }
