@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.19",
-  "build": 10119,
-  "shellVersion": "1.0.0-test.19",
-  "shellRuleVersion": 2026082320,
+  "version": "0.1.0-test.20",
+  "build": 10120,
+  "shellVersion": "1.0.0-test.20",
+  "shellRuleVersion": 2026082321,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.19/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v19_b10119.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.20/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v20_b10120.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test19 为 Test18 启动依赖链热修复。Test18 pages_patch.js 继承 TangTouTiaoPagesV025，但 release.json 漏载 Test17 pages_patch.js，导致启动即 ReferenceError。Test19 仅补回 Test17 页面基座并保持 Test18 的短视频 Provider、分类中心、图片、长视频与试看业务逻辑不变。"
+  "notes": "Test20 在 Test19 可启动基线上继续补齐内容能力：修复排行榜 type 参数污染和 Creator/featured 缺 uuid/lastId/limit；小说、有声、社区按首页返回的 api_list/params_list 动态二跳真实列表并缓存频道配置；新增创作者作品、社区详情、小说/有声章节；漫画接入 /api//book/detail → /api/book/list_episode(sort=asc) → /api/book/read 正文链。Test16 封面与 Test10/Test15 长视频/试看播放基线保持不变。"
 }
