@@ -1,363 +1,68 @@
 # ACFun Changelog
 
-> **程序级长期技术记忆。** 开发/优化 ACFun 前，先读三份全局文档，再读本文件、`stable.json / test.json / candidate.json / latest.json`、当前 release/Bootstrap/Shell 与用户最新实机结果。接口、签名、解密和播放协议以当前 APK/源码/实机复核为准；历史猜测不能覆盖当前设备事实。
+> **程序级长期技术记忆。** 开发/优化 ACFun 前，先读三份全局文档，再读本文件、`stable.json / test.json / candidate.json / latest.json / web.json`、当前 Release/Bootstrap/Shell 与用户最新实机结果。接口、签名、解密和播放协议以当前 APK/源码/实机复核为准；历史猜测不能覆盖当前设备事实。
 >
-> **并行开发约束：** 当前对话只维护 ACFun。`registry.json`、根 `manifest.json` 等共享文件在写入前必须重新读取，只手术式修改 ACFun 项，禁止覆盖其它并行小程序状态。
+> **并行开发约束：** 当前对话只维护 ACFun。`registry.json`、根 `manifest.json` 等共享文件写入前必须重新读取，只手术式修改 ACFun 项。
 
 ## 当前版本边界
 
 ### Stable 0.4.9 / Build149 / Shell5.11.3
 
-- 正式版与 `latest.json` 继续冻结在 `0.4.9 / Build149`，作为 Clean Rewrite Test 的恢复基线。
-- 历史实机曾验证：常规视频列表/播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
-- Stable Remote Manager `id=acfun`；Clean Rewrite Test `id=acfun-test`，两者状态隔离。
+- 正式版与 `latest.json` 继续冻结，作为恢复基线。
+- 历史实机曾验证：常规视频列表/播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态分类、短视频底座、漫画详情/章节阅读。
+- Remote Manager `id=acfun`。
 
-### Test / Candidate 1.0.0-alpha11 / Build10011 / Shell9.0
+### Test 1.0.0-alpha11 / Build10011 / Shell9.0
 
-活动 Release：
+- 继续作为 **原生协议研究线**，不晋级 Stable。
+- Remote Manager `id=acfun-test`，与 Stable/Web 完全隔离。
+- 当前主要阻塞：HLS 分片 `auth_key` 与 CDN 验签不一致；漫画原生 Reader 在多轮裁白/渲染修复后仍存在实机退化。
 
-```text
-next/core alpha1
-→ next/protocol alpha1
-→ next/provider alpha1
-→ next/media alpha1
-→ next/ui alpha1
-→ next/device-regression-fix alpha2
-→ next/player-comic-transport-fix alpha3
-→ next/cdn-chapter-model-fix alpha4
-→ next/signed-hls-comic-full-image-fix alpha5
-→ next/native-hls-cache-comic-ux-fix alpha6
-→ next/stable-playback-fullscreen-comic-fix alpha7
-→ next/watch-handshake-split-header-immersive-fix alpha8
-→ next/native-play-matrix-segment-auth-comic-trim-fix alpha9
-→ next/client-cdn-sign-repair-comic-crop2-fix alpha10
-→ next/credential-recovery-host-repair-comic-border-crop alpha11
-```
+### Web 1.1.0-web2 / Build11002 / Native Shell1.1
 
-Alpha11 仍属于 Clean Rewrite；Stable/latest 不修改。
-
-### Web 1.0.0-web1 / Build11001 / Shell1.0
-
-- 新增独立程序 `acfun-web`，名称 `ACFun·网页版`，不覆盖 Stable/Test，Remote Manager 状态完全隔离。
-- 默认使用 `x5_webview_single` 直接打开 APP 风格 H5：`https://ac001dhzh5.d24m42dh.work/home`。
-- 顶部可一键切换纯网页：`https://ac6688.a10hkxu0.work/`，并提供自定义网址输入，网站换域名时无需改业务代码。
-- Web 通道把视频播放、漫画阅读、搜索、账号与站内交互交回网站原生前端执行，从运行链上绕开当前海阔原生 HLS `auth_key`、漫画图片解密/裁白和 `pic_1_full` 布局问题。
-- 根 `manifest.json` 已增加独立 `acfun-web` 项，避免“我的规则仓库”旧版本中心只识别 stable/test/local 而隐藏第三 channel；`registry.json` 同时登记独立恢复入口。
+- 独立程序 `acfun-web`，名称 `ACFun·网页版`，不覆盖 Stable/Test。
+- **Web1 产品方向已废弃：禁止再把整站 X5 WebView 当小程序主界面。**
+- Web2 目标：**海阔原生 UI + 网站终端能力兜底**。
+- 首页、专题、分类、搜索、列表、详情、收藏、评论等全部使用海阔原生组件。
+- 数据层复用当前已能稳定返回列表/封面的 ACFun Provider。
+- 只有最终视频播放、漫画阅读进入 H5 Bridge，由网站前端自行完成授权/渲染。
+- APP 风格 H5：`https://ac001dhzh5.d24m42dh.work/home`；纯网页备用：`https://ac6688.a10hkxu0.work/`；支持自定义最新网址。
+- Web2 使用独立 `acfun-web` Remote Manager 状态；原始整站仅保留在设置/诊断中。
 
 ---
 
-## 2026-08-23 · Alpha11 原生链继续无改善 → 建立 Web 兜底
+## 2026-08-23 · Web1 实机否定 → Web2 原生网页源兜底
 
-用户最新实机明确结果：
+用户实机反馈 Web1 打开后就是完整网页，明确要求：**“需要做出一个海阔原生的小程序”**。
 
-```text
-视频播放仍失败；
-漫画章节图片又出现无法显示；
-顶部白色区域仍存在；
-连续多版原生修复没有形成可感知改善。
-```
-
-因此产品策略调整为“双轨”：
+因此架构改为：
 
 ```text
-ACFun Stable/Test
-→ 继续保留原生协议研究和后续真正修复
-
-ACFun·网页版
-→ 立即提供可用性兜底
-→ X5 WebView 运行站点自身前端
-→ APP风格H5优先
-→ 纯网页备用
-→ 支持手动更新最新网址
+海阔原生首页/分类/搜索/详情
+→ 当前 ACFun Provider 提供列表与元数据
+→ 视频详情：原生卡片/收藏/评论
+→ 点击“网页播放”才进入 H5 Bridge
+→ 漫画详情：原生封面/章节目录
+→ 点击“网页阅读/章节”才进入 H5 Bridge
 ```
 
-长期架构约束：
+Web2 Release 只继承 Clean Rewrite 的基础 `core/protocol/provider/media/ui + alpha2 device fix`，**不加载 Alpha3~Alpha11 连续失败的播放/漫画实验补丁**，最后叠加 `web-native-bridge` 与独立图片适配器，避免把失败链继续带入兜底产品。
 
-- Web 兜底必须使用独立 `id=acfun-web`，不得污染 `acfun` 或 `acfun-test` 的 Remote Manager 状态；
-- Web 版不复制/二次实现站点的 HLS 签名和漫画图片协议，核心价值就是让官方/原站前端自己完成这些逻辑；
-- H5 页面使用 `x5_webview_single + canBack + jsLoadingInject + floatVideo`；
-- 网站动态换域时优先通过 Web 版“自定义网址”快速恢复，再决定是否更新仓库默认域名；
-- 原生 Test 后续只有拿到明确的 TS 2xx 或可靠原生媒体凭据后才继续大改播放，不再为了版本号连续叠加无效猜测。
+网页 Bridge 当前策略：
+
+- 主页面不是 WebView；
+- 终端能力页使用 `x5_webview_single`；
+- 默认打开 APP 风格 H5；可切纯网页/自定义域名；
+- 注入轻量站内定位逻辑：优先检测已有 video/漫画图片；否则尝试网站搜索并点击匹配标题；
+- 后续实机若能确定稳定的 H5 详情/播放路由，再把 Bridge 从“站内定位”升级为“精确直达”。
+
+长期产品原则：**“网页源”表示网站作为 Provider/终端能力来源，不等于把网页整个塞进海阔。**
 
 ---
 
-## 2026-08-23 · Alpha10 实机结果 → Alpha11
+## 原生 Test 当前播放事实
 
-设备实际运行：
-
-```text
-版本：1.0.0-alpha10 / Build10010
-接口：https://sjacfanapi.sexbar.site
-令牌：已建立
-```
-
-### 1. Alpha10 客户端重签没有真正执行：playbackAuthKey 根本没有取得
-
-用户实机诊断：
-
-```text
-播放签名配置：
-{"keyCount":0,"keys":[],"domains":[]}
-
-播放重签探针：
-missing auth parts or playbackAuthKey
-```
-
-这条事实必须永久保留：**Alpha10 看起来增加了 Type-A 客户端重签，但当前设备上没有任何候选 playbackAuthKey，因此该分支实际上无法改变播放结果。** 后续不能把“Alpha10 仍失败”解释为“Type-A 公式已经被实机证伪”；当前只证明了“密钥来源找错了”。
-
-同时播放基础事实保持不变：
-
-```text
-GET video/can/watch → HTTP200 / canWatch=true
-videoUrl → 相对 jpd/...m3u8
-playPath → https://<cdn>/jpd/...m3u8
-POST video/cdn/refresh → 成功返回多条 type=11 CDN 域名
-
-videoUrl·native → manifest HTTP200
-videoUrl·h5     → manifest HTTP200
-首 TS           → 403 Forbidden: invalid sign
-playPath·direct → 403 Forbidden: missing auth_key
-```
-
-因此仍然禁止退回以下方向：Seed、HLS hint、cacheM3u8、播放器 Header、Referer、Range 等已经重复证伪的层。
-
-### 2. APK 明确存在独立 playback credential 语义，Clean Rewrite 之前没有完整恢复
-
-APK 1.9.7 静态字符串除 `playbackAuthKey / playbackDomain / getMediaUrl` 外，还确认存在：
-
-```text
-playback_credential
-playback credential is unavailable
-missing authKey
-m3u8/player/referer
-sys/getDynamicDomain
-sys/sdk-config
-cdnRes
-cdnList
-/api/m3u8/play
-/m3u8/play
-signUrl
-presignedUrl
-```
-
-而 Alpha10 只扫描：
-
-```text
-cloud remoteConfig
-+ video/cdn/refresh
-```
-
-这不足以代表 APP 的真实 playback credential 来源。Alpha11 因此新增独立 Credential Recovery：
-
-```text
-can/watch 原始对象
-CDN refresh
-cloud remoteConfig
-m3u8/player/referer 空参数
-m3u8/player/referer?videoId=...
-m3u8/player/referer?path=...
-m3u8/player/referer?videoId=...&path=...
-sys/getDynamicDomain          // root 与 /api 合同
-sys/sdk-config                // root 与 /api 合同
-video/getVideoById
-```
-
-递归只提取与播放有关的：
-
-```text
-playbackAuthKey / authKey / auth_key / mediaAuthKey / m3u8AuthKey / signKey
-playbackDomain / mediaDomain / mp4Domain / m3u8Domain / m3u8H
-referer / playerReferer
-videoUrl / playPath / previewUrl / presignedUrl / signUrl
-```
-
-安全规则：诊断只记录密钥 `len / kind / md5前缀 / source / field`，CHANGELOG 和诊断都不得泄露明文 Token/Cookie/playbackAuthKey。
-
-### 3. Alpha11 新增“保留 auth_key、只切 CDN 域名”的优先验证
-
-Alpha9/10 已经知道：
-
-- 服务端会生成形如 `timestamp-random-uid-md5` 的 auth_key；
-- can/watch 的 `playPath` CDN 与 H5 manifest 中实际 KEY/TS CDN 可能不是同一域；
-- CDN refresh 同时返回多条当前可用线路。
-
-此前版本一直把 `manifest 中的域名 + manifest 中的 auth_key` 当作不可拆组合，却没有验证：**签名本身可能对应另一个当前线路，而 manifest 恰好拼到了错误 CDN 域。**
-
-Alpha11 因此先做最保守的修复，不自己计算签名：
-
-```text
-取 H5 manifest 已有首 TS + KEY
-→ auth_key 原样保留
-→ 只替换 hostname/origin
-→ 依次验证：
-   manifest 原域
-   can/watch playPath 域
-   POST CDN refresh 返回域
-   Credential Recovery 得到的 playbackDomain/mediaDomain
-→ 先请求 TS
-→ TS 真 2xx + 二进制后再请求 KEY
-→ TS + KEY 同时成功才判定线路成立
-→ 将 manifest 内所有绝对 KEY/TS URL 统一切到该工作域
-→ 写入独立本地 HLS
-```
-
-这是一项 **待 Alpha11 实机验证的工程假设**，不能在 TS 2xx 前写成已确认协议。
-
-若域名配对仍失败，Alpha11 才继续：
-
-```text
-恢复出的 authKey
-→ 回灌 /api/m3u8/play?path=...&authKey=...
-→ 回灌 /api/m3u8/h5/decode?path=...&authKey=...
-→ 真实 TS+KEY 2xx 验证
-```
-
-只有仍无结果时，才使用 Alpha10 的客户端 Type-A 重签公式。这样排障优先级从“猜公式”改成“先恢复 APP 原凭据/原签名配对”。
-
-### 4. 漫画 Alpha10 产品判断错误：不是“第一张顶部白边”，而是多页四边源图白画布
-
-Alpha10 用户实机截图明确显示：
-
-- 系统标题栏/chrome 已经消失；
-- 一张漫画小画面位于白色大画布中央，左右、顶部、底部都有明显源图留白；
-- 下一张图在下方继续出现；
-- `漫画首图裁白` 诊断仍为空，但视觉结果本身已足够证明“只裁首图顶部”不是正确产品方案。
-
-因此 Alpha11 不再继续调 Alpha10 的 `first/top/bestRatio`，而是换成独立 `acfunComicCrop`：
-
-```text
-每一张正文图都处理
-→ 先判断 JPEG/PNG/WebP magic；必要时只 XOR 前100字节
-→ Bitmap 扫描四边近白/低色差外画布
-→ 找内容 bbox：top / bottom / left / right
-→ 保留少量安全 padding
-→ 只有 bbox 足够大且裁剪收益明确才裁
-→ JPEG 96 输出到全新 alpha11 缓存目录
-→ pic_1_full 全宽显示裁后的内容
-```
-
-长期结论更新：漫画 API/AES/imgList 已经稳定，后续该问题属于 **源图版面规范化**，不得再回头改 chapterInfo/AES。
-
----
-
-## 2026-08-23 · Alpha9 实机结果 → Alpha10
-
-设备实际运行：
-
-```text
-版本：1.0.0-alpha9 / Build10009
-接口：https://sjacfanapi.sexbar.site
-令牌：已建立
-```
-
-### 1. 视频根因已经从“播放器问题”收敛到 CDN auth_key 本身
-
-真实 `video/can/watch`：
-
-```text
-GET /api/video/can/watch?videoId=<id>
-→ HTTP200
-→ canWatch=true
-→ videoUrl=jpd/...m3u8
-→ playPath=https://<当前CDN>/jpd/...m3u8
-```
-
-`video/cdn/refresh` 同时成功返回当前 CDN 线路。
-
-Alpha9 路由矩阵得到决定性结果：
-
-```text
-videoUrl·native
-→ manifest HTTP200 / HLS
-→ 首 TS：none / UA / H5 / jhg / API / APP / Range 全部 HTTP403
-→ body = 403 Forbidden: invalid sign
-→ KEY 同样可出现 invalid sign
-
-videoUrl·h5
-→ manifest HTTP200 / HLS
-→ AES KEY HTTP200 / 16 bytes
-→ 首 TS 所有 Header 组合仍 HTTP403
-
-videoUrl·root
-→ /m3u8/play HTTP404
-
-playPath·direct
-→ HTTP403
-→ body = 403 Forbidden: missing auth_key
-```
-
-因此后续禁止再把主要精力放在以下已被实机排除的方向：
-
-- Seed/path 是否正确；
-- `/api/m3u8/h5/decode` 是否返回真正 HLS；
-- AES Key 是否能访问；
-- `cacheM3u8()` 返回格式；
-- `#isM3u8# / #noPre#`；
-- `jhg_player / H5 / API / APP / Range` Header 组合；
-- 单纯海阔播放器消费方式。
-
-当前最可信根因是：**服务端下发的 CDN `auth_key` 与当前 CDN 实际验签合同/密钥不同步，或 H5 decode 当前生成了失效签名。**
-
-### 2. auth_key 结构与 APK 证据
-
-当前 HLS 的 KEY/TS URL 已多次观察到：
-
-```text
-auth_key=<timestamp>-<random>-<uid>-<md5>
-```
-
-同时 ACFun 1.9.7 APK 静态字符串已确认存在：
-
-```text
-playbackAuthKey
-playbackDomain
-getMediaUrl
-video/cdn/refresh
-video/cdn/reportError
-/api/m3u8/play
-/api/m3u8/h5/decode
-```
-
-这与常见 CDN Type-A 鉴权结构高度吻合。**Type-A 具体公式目前仍是待实机验证的工程假设，不得在未得到 TS 2xx 前写成已确认协议。**
-
-### 3. Alpha10：客户端重签验证，而不是继续盲改播放器
-
-Alpha10 新 PlaybackAdapter：
-
-```text
-can/watch GET
-→ videoUrl / playPath
-→ CDN refresh
-→ 获取 H5 manifest
-→ 提取首 KEY + 首 TS 的 timestamp/random/uid/sign
-→ 从当前远程配置和 CDN 配置中只查找：
-   playbackAuthKey / playback_auth_key
-   mediaAuthKey / media_auth_key
-   playbackDomain / mediaDomain
-→ 诊断只记录 key 数量、长度、hash 前缀，不保存真实密钥
-→ 尝试少量 CDN Type-A 兼容公式
-→ 每个候选直接请求首 TS
-```
-
-成功标准严格为：
-
-```text
-首 TS HTTP 2xx + 非空二进制
-AND
-对应 AES KEY HTTP 2xx + 至少16字节
-```
-
-Alpha10 最终实机 `keyCount=0`，所以“公式”本身尚未得到真实候选密钥验证。
-
-### 4. 漫画 Alpha10：只裁首图顶部方案被实机截图进一步否定
-
-Alpha9/10 都已确认 Reader 页面 chrome 被完全移除。Alpha10 仍按“第一张图顶部连续白边”建模，但最新实机截图显示白画布同时存在左右/底部以及其它页面，因此 Alpha11 已升级为所有图片四边 bbox 裁剪。
-
----
-
-## 2026-08-23 · Alpha8 实机结果 → Alpha9
-
-### can/watch 当前真实合同
+### can/watch
 
 ```text
 POST video/can/watch → HTTP405
@@ -374,27 +79,85 @@ playPath
 reasonType
 ```
 
-长期结论：当前后端 `video/can/watch` 有效 Method = GET；必须保留 `videoUrl / previewUrl / playPath` 字段差异，不能只用泛型 `mediaPath()` 抹平。
+### HLS / CDN
 
-### Alpha8 首分片事实
+已多轮实机确认：
 
 ```text
-manifest → HTTP200 / #EXTM3U
-AES key → HTTP200 / 16 bytes
-first TS → none / UA / API Header 均 HTTP403
+Seed 正确
+/api/m3u8/h5/decode?path=<seed> → HTTP200 / application/vnd.apple.mpegurl
+HLS 使用 AES-128
+KEY/TS URL 各自带短时 auth_key
+video/cdn/refresh POST → 返回多条当前 type=11 CDN
 ```
 
-因此 Key HTTP200 不能代表 HLS 可播；首 TS 的真实 HTTP 状态才是决定性证据。
+决定性失败证据：
 
-### Alpha9 的价值
+```text
+videoUrl·native manifest → 200
+videoUrl·h5 manifest     → 200
+AES KEY                  → 曾可 200 / 16 bytes
+首 TS                    → 403 Forbidden: invalid sign
+playPath·direct          → 403 Forbidden: missing auth_key
+```
 
-Alpha9 建立 `native/root/h5/direct` 路由矩阵，并测试 none/UA/H5/jhg/API/APP/Range/Cookie 等分片请求合同。最终由 Alpha9 实机拿到 `invalid sign` 和 `missing auth_key`，完成根因收敛。
+none / UA / H5 / `jhg_player` / API / APP signed / Range 等 Header 组合均不能把 TS 403 变成 2xx。
+
+因此后续禁止把主要精力退回以下方向：
+
+- Seed/path 是否正确；
+- `#isM3u8# / #noPre#`；
+- `cacheM3u8()` 返回格式；
+- 单纯 Referer/Header/Range；
+- 海阔播放器消费方式。
+
+当前播放排障优先级：
+
+```text
+独立 playback credential 来源
+> 服务端 auth_key 与 CDN 域名配对
+> 原生 m3u8 endpoint + authKey
+> 客户端签名算法
+> 最后才是播放器消费层
+```
+
+### Alpha10/11 关键结论
+
+Alpha10 实机：
+
+```text
+播放签名配置：keyCount=0
+播放重签探针：missing auth parts or playbackAuthKey
+```
+
+这只证明 **playbackAuthKey 没有取得**，不能证明 Type-A 公式本身已经被证伪。
+
+APK 1.9.7 静态字符串已确认存在：
+
+```text
+playbackAuthKey
+playbackDomain
+getMediaUrl
+playback_credential
+missing authKey
+m3u8/player/referer
+sys/getDynamicDomain
+sys/sdk-config
+cdnRes
+cdnList
+/api/m3u8/play
+/m3u8/play
+signUrl
+presignedUrl
+```
+
+Alpha11 的研究方向因此转为独立 Credential Recovery；但在用户要求建立 Web2 兜底后，原生协议研究暂停连续升版，避免继续无感知叠补丁。
 
 ---
 
-## 漫画正文长期成功合同
+## 漫画长期成功合同
 
-真实闭环已经实机验证：
+真实数据闭环曾实机验证：
 
 ```text
 GET comics/base/info?comicsId=<id>
@@ -404,8 +167,6 @@ GET comics/base/chapterInfo?chapterId=<真实数值ID>
 → HTTP200 / code200 / encData
 → AES/CBC/PKCS5Padding 解密
 → payload.domain + imgList
-→ 原图 ImageAdapter
-→ pic_1_full
 ```
 
 长期规则：
@@ -413,25 +174,24 @@ GET comics/base/chapterInfo?chapterId=<真实数值ID>
 - 当前有效 Method = GET；
 - 当前主键 = 数值 `chapterId`；
 - `encData` AES 链已验证，禁止无故重写；
-- 正文主结构 = `domain + imgList`；
+- 正文结构 = `domain + imgList`；
 - 正文必须使用原图，不得套封面 `_480`；
-- 正文图片走独立 full-image 解密缓存；
-- Reader chrome 已经可以移除；剩余大白区域若位于图像画布，必须在 ImageAdapter 层做四边/版面规范化，不能继续用 Theme 解决。
+- 封面与正文 ImageAdapter 必须隔离。
 
-漫画 Station 分页历史注意：UI identity 曾为 24 位 ObjectId，但 `getStationComicsMore` 实机更接受数字 stationId；当前保持数字候选映射 + `comics/base/findList` 兜底。
+原生 Reader 后续出现的问题属于 **图片渲染/版面规范化**，不是 chapterInfo/AES 问题。Alpha9~11 的首图裁白/全页四边裁白均没有形成稳定实机收益，Web2 因此不再继承这条实验链，漫画终端阅读交回网站前端。
 
 ---
 
 ## 图片长期合同
 
-封面已在 Clean Rewrite Alpha2 实机恢复：
+封面在 Clean Rewrite Alpha2 已实机恢复：
 
 ```text
 相对 jhimage/...
 → 当前 session imgDomain
 → 列表/详情封面 _480
 → Dalvik UA + Referer=""
-→ acfunImageDecoder
+→ XOR decoder
 → 持久缓存
 ```
 
@@ -444,7 +204,7 @@ key = 2020-zq3-888
 明文图片不得重复 XOR
 ```
 
-漫画正文与封面策略必须隔离。
+Web2 为避免依赖另一个已安装的 ACFun 规则，使用独立页面 `acfun_web_image_decoder` 和独立缓存目录。
 
 ---
 
@@ -474,35 +234,6 @@ CHANGELOG/诊断不得保存真实 Token、Cookie、Authorization 或 playbackAu
 
 ---
 
-## 视频 HLS 历史排除链
-
-已经实机验证并形成长期结论：
-
-1. Seed 正确；
-2. `/api/m3u8/h5/decode?path=<seed>` 返回真正 `application/vnd.apple.mpegurl`；
-3. HLS 使用 AES-128；
-4. KEY/TS 都带独立短时 `auth_key`；
-5. `video/cdn/refresh` 返回线路域名，不等于可直接拼裸 seed；
-6. Alpha3：APP/H5/API/无来源 Referer 线路均失败；
-7. Alpha5：`#noPre#` 与手写普通 `file://` M3U8 无效；
-8. Alpha6：官方 `cacheM3u8` 返回 `file://...##original-url` 正确，但仍不可播；
-9. Alpha7：Stable 0.4.9 Header + cacheM3u8 合同移植后仍失败；
-10. Alpha8：Key 200、TS 403；
-11. Alpha9：所有 Header/Range 组合仍 `403 invalid sign`，绝对 playPath 为 `missing auth_key`；
-12. Alpha10：`playbackAuthKey keyCount=0`，证明 cloud remoteConfig/CDN refresh 不是完整凭据来源，不能据此判定客户端签名公式失败。
-
-因此后续播放排障优先级：
-
-```text
-独立 playback credential 来源
-> 服务端 auth_key 与 CDN 域名配对
-> 原生 m3u8 endpoint + authKey
-> 客户端签名算法
-> 最后才是播放器消费层
-```
-
----
-
 ## 其它内容长期入口
 
 ```text
@@ -514,7 +245,7 @@ video/queryVideoByZone
 video/tags/getTagsZ
 video/tagTitleList
 video/getByClassify
-video/list                    // 短视频 loadType
+video/list
 video/getVideoById
 video/queryVideoByTitle
 search/keyWordV2
@@ -529,46 +260,35 @@ community/dynamic/list
 
 ---
 
-## Clean Rewrite 简史
+## Clean Rewrite / Web 简史
 
 - Alpha1：建立 `Core → Protocol/Auth → Provider/Model → Media/Image/Reader → Product UI`。
 - Alpha2：恢复封面、统一参数 decode、漫画 GET-first。
 - Alpha3：`jhg_player` Referer 被实机证伪为单点解法。
-- Alpha4：CDN refresh、真实签名 AES-128 HLS、真实 chapterId 闭环。
+- Alpha4：CDN refresh、签名 AES-128 HLS、真实 chapterId 闭环。
 - Alpha5：漫画正文恢复；`#noPre#`/普通本地 M3U8 播放失败。
 - Alpha6：回归 `cacheM3u8`，仍失败。
-- Alpha7：Stable 播放合同精确移植，仍失败；Reader 改纯图片。
+- Alpha7：Stable 播放合同移植仍失败；Reader 改纯图片。
 - Alpha8：GET can/watch + 首分片探针，得到 Key200/TS403。
-- Alpha9：路由/Header 矩阵得到 `invalid sign / missing auth_key`；首次做首图裁白但阈值过敏。
-- Alpha10：客户端签名配置扫描最终实机 `keyCount=0`；首图顶部裁白仍不符合实际源图版面。
-- Alpha11：恢复独立 playback credential + 现有签名 CDN 域名配对 + 原生 authKey 回灌；漫画升级为所有页四边白画布裁剪。
-- Web1：建立独立 X5 WebView 兜底程序，优先保证可用性，同时保留原生 Test 作为后续协议研究线。
+- Alpha9：路由/Header 矩阵得到 `invalid sign / missing auth_key`。
+- Alpha10：客户端签名配置实机 `keyCount=0`。
+- Alpha11：恢复独立 playback credential + 域名配对研究；漫画尝试全页四边裁白。
+- Web1：独立整站 X5 兜底，**实机产品方向被否定**。
+- Web2：改为 **海阔原生主界面 + H5 终端能力 Bridge**。
 
 ---
 
 ## 发布前固定回归
 
-Test 每版至少验证：
+原生 Test 每版至少验证：首页封面/专题、分类、搜索、详情、视频真实出画面且进度持续走、短视频、漫画详情/目录/章节、小说/有声、社区/评论、返回栈与 UI。
 
-1. 首页真实封面与专题结构；
-2. 专题“更多”标题正常；
-3. 普通视频详情封面；
-4. 普通视频真实出画面、进度持续走；
-5. 短视频列表与播放；
-6. 漫画详情、目录、章节原图；
-7. 小说正文与有声音频；
-8. 社区列表/详情/评论；
-9. 搜索及类型切换；
-10. 同级 Tab 连切多次后系统返回栈正常；
-11. UI 大改继续以用户实机截图收敛；
-12. Test 未完成回归前禁止晋级 Stable。
+Web2 额外至少验证：
 
-Web 兜底版额外至少验证：
-
-1. APP版 H5 首页可加载；
-2. H5 内视频可出画面并持续播放；
-3. H5 内漫画章节可连续阅读；
-4. 站内搜索和详情跳转正常；
-5. X5 返回键可逐级返回；
+1. 首页必须是海阔原生卡片，不得出现整站网页主界面；
+2. 精选/漫画/动漫/视频/里番切换正常；
+3. 搜索结果和详情页保持原生；
+4. 视频详情点击“网页播放”后 H5 Bridge 能定位目标并播放；
+5. 漫画详情/章节列表保持原生，点击章节后 H5 Bridge 能定位并阅读；
 6. APP版 H5 不可用时可切纯网页；
-7. 自定义最新网址保存后可立即生效。
+7. 自定义最新网址保存后立即生效；
+8. Stable/Test/Web 三条 Remote Manager 状态互不污染。
