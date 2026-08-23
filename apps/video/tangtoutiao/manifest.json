@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.15",
-  "defaultBuild": 10115,
-  "testVersion": "0.1.0-test.15",
-  "testBuild": 10115,
-  "testShellVersion": "1.0.0-test.15",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v15_b10115.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt",
+  "defaultVersion": "0.1.0-test.16",
+  "defaultBuild": 10116,
+  "testVersion": "0.1.0-test.16",
+  "testBuild": 10116,
+  "testShellVersion": "1.0.0-test.16",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v16_b10116.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test15-stable-hiker-handoff-and-cover-repair","note":"Test14 裸 long. URL 兼容实验被实机否定。Test15 对短视频/PWA 使用项目内已验证的 cacheM3u8 + 显式播放器 Header 交付方式；App 长视频保留 Test10 播放核心；大列表继续 36 条并尝试 PWA featuredAv，图片最终适配优先 thumb_cover_str + self-fetch 多 Header。"}
+  "migration": {"stage":"test16-playback-frozen-cover-ui-repair","note":"Test15 实机已确认短视频、免费长视频和官方预览播放正常，Test16 冻结其播放链，仅将图片从 placeholder+$().image 回退为 thumb_cover_str 优先的真实 URL@js 内联解密，并将短视频改为双列 movie_2。"}
 }
