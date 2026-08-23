@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 14:49",
+  "updatedAt": "2026-08-23 15:10",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.6",
-      "build":10106,
-      "displayVersion":"Test 0.1.0-test.6 · Build 10106",
-      "path":"apps/video/madou/madou_remote_test_v6_b10106.txt",
+      "version":"0.1.0-test.7",
+      "build":10107,
+      "displayVersion":"Test 0.1.0-test.7 · Build 10107",
+      "path":"apps/video/madou/madou_remote_test_v7_b10107.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test6 针对实机继续修复详情 1MB 私有存储问题，并重新设计分类与搜索页面。详情先清理当前影片在 Test1/Test3 遗留的 raw HTML KV，再进行非阻断历史写入；分类改为大类横向选择 + 小类三列网格；空搜索不再展示首页伪结果。",
-      "highlights":["详情前清理旧 raw HTML KV","历史/收藏写入失败不再拖垮详情","分类横向大类 + 三列小类","空搜索改为明确搜索入口","搜索结果独立展示","Test6 Patch/Bootstrap 已过 node --check"],
+      "desc":"Test7 修复 Test6 实机暴露的播放页多余列表/操作面板、播放启动慢和同级分类标签反复压栈。详情播放直接使用已解析直链或直接进入 video:// 嗅探，不再点击后重复加载 Bootstrap+详情 HTML；Primary Play 与收藏/简介分层。内容页同组小分类全部改为原页状态切换。",
+      "highlights":["同级分类 putMyVar+refreshPage","返回一次离开当前分类页","播放按钮不再二次请求详情","video:// 嗅探拦截图片/广告并 cacheM3u8","Primary Play 与收藏/简介分层","保留 Test6 1MB 存储恢复"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
