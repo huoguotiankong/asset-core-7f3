@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.14",
-  "build": 10114,
-  "shellVersion": "1.0.0-test.14",
-  "shellRuleVersion": 2026082315,
+  "version": "0.1.0-test.15",
+  "build": 10115,
+  "shellVersion": "1.0.0-test.15",
+  "shellRuleVersion": 2026082316,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.14/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.15/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test13 实机仍确认短视频直放 source_origin 为 0 kb/s，且 PWA /MvList/recommend 仅返回 3 条导致推荐/长视频过少。Test14 恢复 App featuredAv 大列表，推荐/长视频各展示最多 36 条；短视频改用用户上传参考规则的 preview_video long 主机兼容写法。该改写只允许免费或已购买内容，收费未解锁内容仍保持官方试看/汤币解锁。长视频详情新增同样的兼容线路按钮，仅用于免费/已购买内容测试。"
+  "notes": "Test14 实机否定裸 long. 兼容改写：短视频和兼容线路仍直接播放异常，同时 App featuredAv 大列表恢复 36 条后封面再次大面积灰。Test15 改为复用项目内已实机验证的海阔播放器交付模式：短视频/PWA 候选先探测，HLS 优先 cacheM3u8，最终 URL 显式携带 User-Agent/Referer/X-Auth；普通 App 长视频继续使用已验证的 Test10 解密/时长校验代理。推荐/长视频仍最多 36 条，优先尝试 PWA featuredAv 大列表；图片最终层优先 thumb_cover_str，并使用 placeholder+self-fetch 多 Header 重试后再做 plain/CBC/legacy-CFB 判型。"
 }
