@@ -3,23 +3,6 @@
   "id": "pornhub",
   "name": "Pornhub",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 15:54",
-  "channels": [
-    {
-      "channel": "test",
-      "label": "测试版",
-      "id": "pornhub-test",
-      "name": "Pornhub",
-      "version": "0.1.0-test.3",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
-      "recommended": true,
-      "desc": "第二轮实机修复：创作者中心改为双列资料卡并按真实列表项恢复姓名/头像；账号 Cookie 同步改为 /user/security 身份验证，彻底移除从普通用户链接猜账号的错误链。",
-      "highlights": ["创作者中心双列资料卡","排名数字不再误识别为姓名","#getAvatar / topProfileHeader 头像链","账号身份从 /user/security 验证","无法识别时绝不猜号","历史/收藏/订阅需确认用户名后开放"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"
-    }
-  ]
+  "updatedAt": "2026-08-23 16:24",
+  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.4","build":10104,"displayVersion":"Test 0.1.0-test.4 · Build 10104","path":"apps/video/pornhub/pornhub_remote_test_v4_b10104.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"账号会话与导航修复版：统一 X5 登录 Cookie 容器，私有数据按当前会话隔离并限制主内容解析；创作者/排序/搜索筛选原页切换；新增影片/创作者/片单在线与本地收藏订阅，以及只读评论。","highlights":["X5 登录会话一致性","账号私有缓存按 Cookie 指纹隔离","账号列表主内容区域解析","同级 Tab 原页切换不压栈","影片在线收藏 + 本地收藏","创作者在线订阅 + 本地收藏","片单在线操作 + 本地收藏","视频评论只读"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
 }
