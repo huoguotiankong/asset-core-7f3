@@ -84,3 +84,42 @@
 6. 当前 `registry.json / channels.json / stable.json / test.json / latest.json / release.json`
 
 所有文档中如果再出现“`hiker-cloud` 是正式运行仓库”的表述，都视为历史旧信息，应改为本文件规定的新职责。
+
+## 7. `main` 多任务并发下的原子发布规则（2026-08-23）
+
+`asset-core-7f3@main` 现在同时承载多个小程序的正式开发和发布。实际发布“我的规则仓库”3.5.5 时，JavDB、XVideos 在同一时间窗口继续推进 `main`，证明不能再假设“本任务开始时读到的 HEAD 在发布结束时仍然有效”。
+
+以后所有远程发布统一拆成两阶段：
+
+```text
+A. 不可变资产准备
+Release / 业务模块 / Bootstrap / Shell 依赖先落盘
+→ 回读确认路径和内容存在
+→ 此阶段不得提前切 stable/test/latest/channels 活动指针
+
+B. 活动指针切换
+发布前重新读取最新 main HEAD
+→ 基于最新 tree 仅叠加本程序的指针改动
+→ 创建单个 Git tree commit
+→ fast-forward main
+```
+
+如果 `main` 在 tree/commit 构建期间再次前进：
+
+```text
+禁止 force
+→ 丢弃旧基线上的待发布 commit
+→ 读取新的 HEAD/tree
+→ 将本程序改动重新叠加到最新 tree
+→ 再 fast-forward
+```
+
+目录级元数据同样遵循该原则。尤其 `manifest.json` / `manifest_meta.json` / `registry.json` 是跨程序共享文件，写入前必须重新读取当前版本，禁止用旧聊天快照或早先下载副本整体覆盖。
+
+可变元数据交付还必须与不可变 Runtime 分离：
+
+- Shell/Bootstrap/Release 等已发布运行文件优先固定不可变 commit 或版本路径。
+- `latest.json / test.json / channels.json` 等活动指针允许变化，但客户端必须使用多源容错、最后成功缓存和 build floor，不能把 jsDelivr `@main` 的陈旧值当作强一致真相。
+- 根目录卡片发布完成条件继续要求 `manifest.revision === manifest_meta.revision` 且 `manifest.items.length === manifest_meta.itemCount`。
+
+该规则既适用于仓库迁移，也适用于迁移完成后的日常多程序并发发布。
