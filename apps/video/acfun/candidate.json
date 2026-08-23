@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha10",
-  "build": 10010,
-  "shellVersion": "8.9.0-test",
+  "version": "1.0.0-alpha11",
+  "build": 10011,
+  "shellVersion": "9.0.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha10/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha11/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha10 候选。Alpha9 已实机确认首 TS 的失败原因不是 Header，而是 CDN 返回 invalid sign；裸 playPath 也明确提示 missing auth_key。Alpha10 依据 APK 中 playbackAuthKey/playbackDomain/getMediaUrl 证据，尝试从当前远程配置提取播放密钥/域名，对 H5 manifest 的 KEY/TS auth_key 逐条客户端重签，并以首分片真实 2xx 为唯一成功标准；无密钥/不匹配时继续保留 Alpha9 路由矩阵诊断。漫画首图白边改为持续内容扫描 + 新缓存，避免 Alpha9 过敏阈值被 JPEG 近白噪声提前触发。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha11 候选。Alpha10 实机证明当前远程配置/CDN refresh 中未取到 playbackAuthKey（keyCount=0），所以不再继续假设 Type-A 密钥已存在。Alpha11 补齐 APK 独立 playback credential 来源，并增加服务端现有 auth_key 的 CDN 域名配对修复、原生 endpoint authKey 回灌，再以真实 TS+KEY 2xx 为成功标准。漫画所有正文页改成四边源图白色画布裁剪后全宽显示，不再只处理首图顶部。正式 Stable 0.4.9 继续冻结。"
 }
