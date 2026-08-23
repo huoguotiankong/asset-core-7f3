@@ -1,5 +1,45 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.5 / Build 10105 — 2026-08-23
+
+状态：**Test4 实机媒体兼容修复版，仍为 Test；禁止晋级 Stable。**
+
+### Test4 实机事实
+- 视频详情主模型已正确：实机可显示真实中文标题、作者、时长、播放量、ID，并识别 `1080P/720P/480P/240P` 四档 `source_*`。说明 `data.detail + ListLikeVideoBean + source_*` 方向已经成立，不再回退通用 URL 扫描。
+- 详情与列表封面仍为灰块。继续反编译 APK 后确认，`thumb_cover` 虽然是 UI Adapter 传入 Glide 的真实字段，但原 APP 注册了自定义 `GlideAppModule / ModelLoader / Decoder`，不能把 `thumb_cover` 简化为“可直接显示的普通 URL”。
+- 点击播放时海阔直接弹出 `未知链接: {"urls":[...],"names":[...],"headers":[...]}`，说明 Test4 的严格 `JSON.stringify({urls,names,headers})` 在当前海阔播放入口没有被识别为多线路协议；该错误发生在播放器识别阶段，尚不能据此否定 `source_* / M3U8` 解密代理本身。
+- `/api/comic/home` 实机返回 12 个漫画分类（推荐、发现、韩漫、Cosplay、3D、本子、日漫、国漫、港台漫画等），Test4 却按 `movie_3` 内容卡渲染，导致巨大空白封面块；证明该接口是分类/标签配置，不是漫画作品列表。
+- “查看最近诊断”触发 `ArticleListModel-HttpRequestError: Expected URL scheme 'http' or 'https' but no colon was found`，说明 Test4 的诊断子规则路由本身错误，普通文本/空值被错误交给 HTTP ArticleListModel。
+
+### APK 图片链复核
+- `ListLikeVideoBean.thumb_cover` 仍是真实封面入口，但自定义 Glide loader 会先解析字符串；当字符串以 `{` 开头时按 JSON 选实际图片地址，已确认候选键包括 `ori / 360 / 720 / 720p`。
+- 图片下载后先检查 JPEG/PNG/GIF/WEBP/BMP magic；本身已是普通图片则直接使用。
+- legacy 图片密文链：HEX → 前 16 字节 IV → 图片专用 secret `e79465cfbbimgkcusimcuekd3b066a6e` → MD5 EVP 派生 AES Key → `AES/CFB/NoPadding`。
+- 另一图片链使用 `AES/CBC/PKCS5Padding`，固定 Key `f5d965df75336270`、IV `97b60394abc2fbe1`。
+- 海阔 Test5 使用 `<http image>@js=...` InputStream Adapter 恢复这三态：明文图片 / legacy AES-CFB / AES-CBC；诊断仅记录模式和字节长度，不记录账号 Token/Cookie。
+
+### APK 漫画链复核
+- `/api/comic/home` 返回漫画分类 Bean，核心字段为 `id / name / selected / uuid`。
+- 漫画作品列表接口为 `/api//book/list_filter`，参数由 APK 明确构造为 `page / sort / categories / type`。
+- 漫画列表 Bean 核心字段包括 `id / title / thumb / categories / tags / series / update_time / finished / is_free / isfree`。
+- 已发现后续接口：`/api//book/detail`（详情）与 `/api/book/list_episode`（章节）；购买链 `/api//book/buy` 当前不实现伪成功。
+
+### Test5 修改
+- 新增 `ImageAdapter`：`thumb_cover/thumb` 先按 JSON 多分辨率选 URL，再通过海阔 `@js=` InputStream 执行普通图片检测、legacy AES-CFB、AES-CBC 解密并返回真实图片流。
+- Core：收藏/历史保存 `coverRaw`，避免把带 `@js=` 的派生显示 URL 当原始封面再次编码；视频与漫画统一走同一图片 Adapter。
+- Playback：主“立即播放”只返回当前最高可用单清晰度并附 `#isVideo=true#`，先隔离验证媒体代理；详情增加 1080P/720P/480P/240P 单独按钮。
+- Playback：保留“播放器内切换”作为次级入口，但返回海阔对象字面量 `{urls:[...],names:[...],headers:[...]}`，不再使用严格 JSON 字符串。
+- Playback：继续复用 Test4 已按 APK 恢复的 `source_* → 拉 M3U8 → player_cfg.dekey AES-CFB → fixM3u8 → startProxyServer` 主链。
+- Comic：`comic/home` 改成紧凑三列分类导航；点击分类后调用 `/api//book/list_filter` 并按 ComicListBean 渲染漫画作品，不再把分类项当内容卡。
+- Diagnostics：最近诊断直接作为设置页 `long_text + hiker://empty` 展示，不再打开会触发 ArticleListModel 的诊断子规则。
+
+### Test5 实机验收
+1. 首页与视频详情优先看封面是否恢复；若仍灰图，设置页直接查看 `ttt_last_image_diag` 的 `plain / legacy-aes-cfb / aes-cbc / raw-fallback`。
+2. 播放先点“立即播放（最高画质）”或单独 `1080P/720P/...`，不要先测“播放器内切换”；若仍失败，截图播放器和设置页 `ttt_last_play_sources / ttt_last_play_diag`。
+3. 漫画页应先看到紧凑分类按钮；点击一个分类后应进入作品列表，而不是 12 个巨大空白卡。
+4. 设置页诊断应直接可见，不应再弹 `Expected URL scheme http or https`。
+5. 只有封面、单线路播放、漫画分类列表三条链完成实机闭环后，才继续接漫画详情/章节和其它内容域。
+
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23
 
 状态：**媒体主链精确模型修复版，仍为 Test；禁止晋级 Stable。**
