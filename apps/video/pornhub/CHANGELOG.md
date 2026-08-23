@@ -2,6 +2,12 @@
 
 ## 0.1.0 / Build 10108 — 2026-08-23
 
+### Shell 0.1.0-stable.2 图标热修
+- 用户实机反馈 Pornhub 与 XVideos 的程序图标同时挂掉，而其它小程序正常；仓库内 `assets/icon.svg` 文件本身仍完整，因此本轮先按图标 URL/缓存交付层问题处理，不改 Stable 业务 Release。
+- 新增 `pornhub_remote_stable_v2_b10108.txt`：继续使用原 `bootstrap_stable_v1_b10108.js` 与 `releases/0.1.0/release.json`，业务 version/build 仍为 `0.1.0 / 10108`；仅把 Shell 数值版本提升到 `2026082355`，并将程序图标从 raw GitHub SVG 切到明确 `@main` 的 jsDelivr CDN 地址。
+- `stable.json / latest.json / manifest.json / channels.json / registry.json / 根 manifest.json` 已同步到 Stable Shell v2；Test7 晋级来源和全部业务模块保持原样。
+- 该修复尚未获得用户实机“图标已恢复”确认；若 CDN SVG 仍失败，下一轮改用 PNG 或站点 favicon 交付，不继续修改已经稳定的业务模块。
+
 ### 首个 Stable
 - 按用户明确要求，将 `0.1.0-test.7 / Build10107` 原样晋级为首个正式版 `0.1.0 / Build10108`；本次晋级不改变业务 Parser、账号、评论、收藏、UI 或播放逻辑。
 - Stable 使用独立 `stable.json / latest.json / release.json / Bootstrap / Shell`，Remote Manager 身份为 `pornhub`，不与 `pornhub-test` 共用活动状态。
