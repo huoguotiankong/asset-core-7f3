@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.11",
+  "build": 10111,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"performanceRuntime","path":"apps/video/madou/releases/0.1.0-test.10/performance_runtime.js"},
+    {"name":"detailSettingsNoSniff","path":"apps/video/madou/releases/0.1.0-test.11/detail_settings_nosniff.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.11"},
+  "previous": {"version":"0.1.0-test.10","build":10110,"release":"apps/video/madou/releases/0.1.0-test.10/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test11 keeps the Test10 performance runtime and adds a focused detail/settings/playback layer. Detail extension mode is globally selectable: manual, auto tags, or auto tags+recommendations. Primary playback is strict HTTP-only no-sniff: detail/player/script/API fetch + escaped/percent/Base64/P.A.C.K.E.R static decoding, direct M3U8/MP4 handoff and 30-minute media cache. WebView/video:// is not used unless the user explicitly enables compatibility fallback in settings."
+}
