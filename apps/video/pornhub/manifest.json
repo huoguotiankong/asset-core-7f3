@@ -6,17 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/pornhub/test.json",
   "channels": "apps/video/pornhub/channels.json",
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "1.0.0-test.2",
-  "testBootstrap": "apps/video/pornhub/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/video/pornhub/pornhub_remote_test_v2_b10102.txt",
-  "testRelease": "apps/video/pornhub/releases/0.1.0-test.2/release.json",
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "1.0.0-test.3",
+  "testBootstrap": "apps/video/pornhub/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
+  "testRelease": "apps/video/pornhub/releases/0.1.0-test.3/release.json",
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
-  "migration": {
-    "stage": "test2-real-device-ui-play-auth",
-    "note": "Test2 is an additive patch over immutable Test1. It keeps the verified public parsing/HLS baseline while applying the first real-device UI, playback handoff, creator-profile and login workflow corrections. No Stable channel exists yet."
-  }
+  "migration": {"stage":"test3-account-identity-creator-grid","note":"Test3 is additive over the verified Test1/Test2 playback baseline. It replaces unsafe homepage username guessing with account-specific /user/security validation and scopes creator extraction to real profile cards. No Stable channel exists yet."}
 }

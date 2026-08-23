@@ -3,29 +3,22 @@
   "id": "pornhub",
   "name": "Pornhub",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 15:00",
+  "updatedAt": "2026-08-23 15:54",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pornhub-test",
       "name": "Pornhub",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/pornhub/pornhub_remote_test_v2_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "首轮实机优化：压缩首页品牌区；详情页清理播放区冗余动作并复用已解析 HLS 加速播放；创作者头像/名称解析增强并过滤 Play All 伪卡；登录改为完整官方网页登录后返回一键同步 Cookie。",
-      "highlights": [
-        "紧凑首页品牌区",
-        "播放点击复用详情 HLS 缓存",
-        "播放区移除重复收藏动作",
-        "创作者头像与名称修复",
-        "过滤 Play All 伪视频",
-        "完整网页登录 + Cookie 同步"
-      ],
+      "desc": "第二轮实机修复：创作者中心改为双列资料卡并按真实列表项恢复姓名/头像；账号 Cookie 同步改为 /user/security 身份验证，彻底移除从普通用户链接猜账号的错误链。",
+      "highlights": ["创作者中心双列资料卡","排名数字不再误识别为姓名","#getAvatar / topProfileHeader 头像链","账号身份从 /user/security 验证","无法识别时绝不猜号","历史/收藏/订阅需确认用户名后开放"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"
     }
   ]

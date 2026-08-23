@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "pornhub-test",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/pornhub/releases/0.1.0-test.1/core.js"},
+    {"name":"corePatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/core_patch.js"},
+    {"name":"corePatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"runtime","path":"apps/video/pornhub/releases/0.1.0-test.1/runtime.js"},
+    {"name":"uiPatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/ui_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/ui_patch.js"}
+  ],
+  "verify": {"global":"PornhubRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/pornhub/releases/0.1.0-test.2/release.json"},
+  "notes": "Test3 fixes creator-directory entity extraction and account identity safety. Pornstar cards are grouped from real list items (including #popularPornstars) so rank numbers are never treated as names; profile avatars prefer #getAvatar/topProfileHeader. Cookie sync validates /user/security and only accepts identity from account-specific markers, otherwise keeps the cookie session without guessing a username."
+}

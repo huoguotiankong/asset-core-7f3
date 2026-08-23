@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "pornhub-test",
   "name": "Pornhub",
-  "version": "0.1.0-test.2",
-  "build": 10102,
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082302,
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082303,
   "managerVersion": "2.0.1",
-  "release": "apps/video/pornhub/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v2_b10102.txt",
+  "release": "apps/video/pornhub/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v3_b10103.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test2 根据首轮实机截图优化：首页大 Banner 改紧凑品牌卡；详情播放不再混入自定义收藏等次要动作；复用详情已解析的 HLS，避免点击播放重复请求；创作者头像/名称与 Play All 伪卡修复；登录改为完整官方网页登录后返回一键同步 Cookie。"
+  "notes": "Test3：重构创作者中心为双列资料卡；Pornstars 按真实列表项分组解析，数字排名不再当姓名，头像优先 #getAvatar / topProfileHeader；账号同步改为 /user/security 身份验证，取消从首页任意 /users/ 链接猜账号，无法可靠识别时要求手动绑定。"
 }
