@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 13:20",
+  "updatedAt": "2026-08-23 13:31",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.10",
-      "build": 10110,
-      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
-      "path": "apps/video/myav/myav_remote_test_v10_b10110.txt",
+      "version": "0.1.0-test.11",
+      "build": 10111,
+      "displayVersion": "Test 0.1.0-test.11 · Build 10111",
+      "path": "apps/video/myav/myav_remote_test_v11_b10111.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Test10 收紧详情资料区解析，移除导航垃圾词；影片收藏与演员收藏独立排版；有码高级筛选改用 Ttype=2 完整模式。",
+      "desc": "Test11 修复高级筛选在选择年份/标签后退回精简控制区：结果链与完整 Ttype=2 控制链分离，并在必要时使用 WebView 渲染 DOM 补全。",
       "highlights": [
-        "片商 / 系列 / 演员 / TAG 仅从影片资料区读取站内实体链接",
-        "影片收藏与演员收藏分别设置2列/3列",
-        "有码高级筛选固定使用 default.cpp?Ttype=2 完整入口",
-        "完整读取分类 / 年份 / 标签 / 玩法 / 资源状态五组筛选",
-        "继续保留九类标签索引兜底、排行榜独立排版和中性导入壳"
+        "保留当前筛选条件，同时强制控制区使用 Ttype=2",
+        "完整控制区与影片结果 URL 分离，不再被精简结果页覆盖",
+        "当普通 HTML 只有少量年份/标签时自动比较 WebView 渲染 DOM",
+        "继续保留 Test10 详情资料净化与影片/演员收藏独立排版",
+        "继续保留九类索引兜底、排行榜独立排版和中性导入壳"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
