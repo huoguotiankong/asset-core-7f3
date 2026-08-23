@@ -3,7 +3,7 @@
   "id": "javdb-v3",
   "name": "JavDB v3",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 21:34",
+  "updatedAt": "2026-08-23 21:40",
   "channels": [
     {
       "channel": "stable",
@@ -17,8 +17,8 @@
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "远程代码正式版 · 当前业务稳定基线；当前发现 Raw 单点启动传输风险",
-      "highlights": ["APP 分类/排行/演员补齐与映射修正", "首页/我的/更多 UI 收敛", "共享 JAV Playback Stable", "当前 Shell 直接依赖 GitHub Raw runtime，网络异常时可能报 JDBCLOUD 未定义", "Stable 3.9.41 完整保留可回退"],
+      "desc": "远程代码正式版 · 当前业务稳定基线；已确认存在 GitHub Raw 单点启动风险",
+      "highlights": ["APP 分类/排行/演员补齐与映射修正", "首页/我的/更多 UI 收敛", "共享 JAV Playback Stable", "Shell 直接依赖 GitHub Raw runtime，网络异常时可能报 JDBCLOUD 未定义", "Stable 3.9.41 完整保留可回退"],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "javdb-v3-test",
       "name": "JavDB v3",
-      "version": "3.9.43-test.1",
+      "version": "3.9.43-test.3",
       "baseVersion": "3.9.42",
       "targetVersion": "3.9.43",
-      "build": 2026082302,
-      "displayVersion": "Test 3.9.43 · 远程传输恢复1",
-      "path": "cloud/javdb/v3.9.43-test.1/javdb_v3.9.43_test1.txt",
+      "build": 2026082304,
+      "displayVersion": "Test 3.9.43 · 远程传输恢复3",
+      "path": "cloud/javdb/v3.9.43-test.3/javdb_v3.9.43_test3.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "业务完全继承 Stable 3.9.42；修复 Runtime 单 Raw 依赖，加入本地缓存 + jsDelivr/GitHub Raw 校验兜底",
-      "highlights": ["修复 JDBCLOUD 未定义启动故障", "Runtime 首次成功后持久缓存", "jsDelivr → GitHub Raw 双远程线路", "远程内容必须包含 JDBCLOUD 标记才写缓存", "后续 Core/Patch/Custom 分片同样双线路读取"],
+      "desc": "业务完全继承 Stable 3.9.42；只重构远程启动和模块传输恢复链",
+      "highlights": ["修复 JDBCLOUD 未定义启动故障", "Shell 使用固定提交的 jsDelivr Bootstrap", "Bootstrap 缓存 Runtime", "Runtime/模块按本地缓存→jsDelivr→GitHub Web Raw→Raw 恢复", "内容校验通过才写缓存", "Test1/Test2 已冻结不测试"],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
