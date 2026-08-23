@@ -2,7 +2,7 @@
   "schema": 4,
   "id": "acfun",
   "name": "ACFun",
-  "versionPolicy": "stable-test-local-lineage-v1",
+  "versionPolicy": "stable-test-web-lineage-v1",
   "updatedAt": "2026-08-23",
   "channels": [
     {
@@ -37,6 +37,22 @@
       "recommended": false,
       "desc": "全新重写 Alpha11 · Playback Credential 恢复 + 签名 CDN 域名配对 + 漫画全页四边裁白",
       "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "漫画正文已实机恢复", "Alpha10 keyCount=0 已确认", "sys/getDynamicDomain凭据探针", "带videoId/path的player referer", "现有auth_key域名配对", "原生authKey回灌", "首TS+KEY 2xx真验证", "所有漫画页四边裁白", "全新裁边缓存"],
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
+    },
+    {
+      "channel": "web",
+      "label": "网页版",
+      "id": "acfun-web",
+      "name": "ACFun·网页版",
+      "version": "1.0.0-web1",
+      "build": 11001,
+      "displayVersion": "Web 1.0.0-web1 · Build 11001 · Shell 1.0",
+      "path": "apps/video/acfun/acfun_remote_web_v100.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": false,
+      "desc": "独立 H5 兜底版 · X5 直接运行 APP 风格 H5，可切纯网页和自定义最新网址",
+      "highlights": ["独立 acfun-web 状态", "不走原生 HLS auth_key", "不走漫画图片解密渲染链", "APP版H5", "纯网页备用", "自定义域名", "WebView 内直接播放/阅读"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
