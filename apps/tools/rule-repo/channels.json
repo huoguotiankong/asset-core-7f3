@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-22 00:22",
+  "updatedAt": "2026-08-23 20:03",
   "channels": [
     {
       "channel": "stable",
@@ -27,17 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.4-test.1",
+      "version": "3.5.4-test.2",
       "baseVersion": "3.5.4",
       "targetVersion": "3.5.4",
-      "build": 385,
-      "displayVersion": "Test 3.5.4-test.1 · Build 385 · Shell 1.0.31",
-      "path": "apps/tools/rule-repo/rule_repo_test_v131.txt",
+      "build": 386,
+      "displayVersion": "Test 3.5.4-test.2 · Build 386 · Sync Refresh",
+      "path": "apps/tools/rule-repo/rule_repo_test_v132.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Stable 3.5.4 同基线测试快照 · 下一轮功能开发干净起点",
-      "highlights": ["业务/UI 与 Stable 3.5.4 对齐", "Test 独立状态", "Test 独立 Remote Manager", "Stable 恢复入口保留"],
+      "desc": "同步目录后立即重建 Single Workspace，修复新增程序已同步但页面仍显示旧快照",
+      "highlights": ["同步成功自动刷新页面", "新增程序即时出现", "Stable 3.5.4 业务/UI 不变", "Test 独立状态与回退链保留"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
