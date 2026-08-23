@@ -3,6 +3,6 @@
   "id": "pornhub",
   "name": "Pornhub",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 17:46",
-  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.6","build":10106,"displayVersion":"Test 0.1.0-test.6 · Build 10106","path":"apps/video/pornhub/pornhub_remote_test_v6_b10106.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"Test6 首页与账号工作区重构：登录后首页默认读取当前 X5 会话的账号推荐，站内收藏/观看历史/本地收藏/本地足迹提升到首屏；账号页压缩为真实头像与紧凑功能区。Shorts 增加普通 view_video 回退；搜索筛选取消横向溢出箭头并补齐演员/频道/模特/用户搜索；分类热门卡标题清理视频数量，详情与评论修复数字 HTML 实体。","highlights":["首页默认账号推荐","站内收藏/历史首屏入口","本地收藏/足迹首屏入口","账号页紧凑重构","Shorts 双解析回退","搜索筛选 flex 化","演员/频道/模特/用户搜索","分类热门卡标题清理","数字 HTML 实体修复","评论/头像/HLS 已验证基线保留"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
+  "updatedAt": "2026-08-23 18:12",
+  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.7","build":10107,"displayVersion":"Test 0.1.0-test.7 · Build 10107","path":"apps/video/pornhub/pornhub_remote_test_v7_b10107.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"Test7 按实机重写 Shorts 与片单，并统一压缩首页入口。Shorts 直接识别当前 /shorties/<id>；片单过滤 View Playlist 伪标题，恢复真实标题/封面并支持 /playlist/viewChunked 原页加载更多。首页收藏、历史、搜索、分类、创作者、订阅、片单、Shorts、GIF、我的全部改为 icon_small_4 四列小图标。","highlights":["Shorts /shorties/<id> 真实体解析","Shorts poster/thumbnail 恢复","片单 View Playlist 误识别修复","片单真实标题/封面恢复","片单 viewChunked 原页加载更多","首页 icon_small_4 紧凑图标网格","搜索/分类/创作者恢复图标入口","评论/头像/账号推荐/4档HLS 基线保留"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
 }
