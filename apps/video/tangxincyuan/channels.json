@@ -3,32 +3,31 @@
   "id": "tangxincyuan",
   "name": "溏心次元",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 21:10",
+  "updatedAt": "2026-08-23 21:23",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "tangxincyuan-test",
       "name": "溏心次元",
-      "version": "0.1.0-test.3",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Shell 1.0.0-test.4 · Build 10103",
-      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v4_b10103.txt",
+      "version": "0.1.0-test.4",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Shell 1.0.0-test.5 · Build 10104",
+      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v5_b10104.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "Test3 修复中文规则名内部跳页被百分号编码后找不到小程序的问题，并放宽首页 HTML 接受条件、增加图片卡片兜底解析和首页可见诊断；快捷入口文字同步重排。",
+      "desc": "Test4 接入 Cloudflare/X5 会话桥：识别安全验证页，在真实 X5 中完成官网验证后自动复用 Cookie/UA，并让首页、分类、搜索、详情、图片和播放继续使用同一会话。",
       "highlights": [
-        "修复分类/人物/收藏/历史等内部跳页",
-        "同程序二级页统一 rule=&simple=true",
-        "首页请求与 HTML 诊断直接可见",
-        "增加未知 DOM 图片卡片兜底解析",
-        "快捷入口标签恢复可读",
-        "人物中心与分类中心继续独立",
-        "搜索页同样修复内部路由",
-        "CDN Direct 2.0 / Build10103"
+        "自动识别 Cloudflare 安全验证页",
+        "X5 官方验证会话桥",
+        "验证后复用 Cookie 与一致 UA",
+        "验证成功后返回并刷新上一页",
+        "首页/分类/人物/搜索/详情统一会话",
+        "不破解验证码、不伪造验证令牌",
+        "CDN Direct 3.0 / Build10104"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608233"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608234"
     }
   ]
 }
