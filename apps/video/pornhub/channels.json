@@ -1,0 +1,25 @@
+{
+  "schema": 4,
+  "id": "pornhub",
+  "name": "Pornhub",
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-23 14:34",
+  "channels": [
+    {
+      "channel":"test",
+      "label":"测试版",
+      "id":"pornhub-test",
+      "name":"Pornhub",
+      "version":"0.1.0-test.1",
+      "build":10101,
+      "displayVersion":"Test 0.1.0-test.1 · Build 10101",
+      "path":"apps/video/pornhub/pornhub_remote_test_v1_b10101.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":true,
+      "desc":"从零重写。原生海阔 UI，公开视频/分类/搜索/创作者/GIF/Shorts/播放列表入口，详情直解析多画质 HLS 并保留网页媒体提取兜底；网页登录后同步 Cookie，账号页读取推荐、Feed、观看历史、站内收藏与订阅。",
+      "highlights":["全新原生 UI","动态分类与高级搜索","Pornstars / Channels / Models","详情与多画质 HLS","GIF / Shorts / Playlists","网页登录 Cookie 同步","推荐 / Feed / 历史 / 收藏 / 订阅","本地收藏与浏览历史"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"
+    }
+  ]
+}

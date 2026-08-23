@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "pornhub-test",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/pornhub/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/pornhub/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"PornhubRemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "notes": "Clean rewrite Test1: native Hiker UI, public video/category/search/creator/GIF/Shorts exploration, direct HLS quality extraction with sniff fallback, local favorites/history, browser-login Cookie sync, and logged-in recommended/feed/history/favorites/subscriptions readers."
+}

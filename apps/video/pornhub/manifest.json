@@ -1,0 +1,19 @@
+{
+  "schema": 3,
+  "id": "pornhub",
+  "name": "Pornhub",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/pornhub/test.json",
+  "channels": "apps/video/pornhub/channels.json",
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "1.0.0-test.1",
+  "testBootstrap": "apps/video/pornhub/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/pornhub/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/pornhub/CHANGELOG.md",
+  "sourceSite": "https://www.pornhub.com/",
+  "icon": "apps/video/pornhub/assets/icon.svg",
+  "migration": {"stage":"clean-rewrite-test1","note":"New app. The uploaded legacy Apollo shell was used only as a reference artifact and is not a runtime dependency. No Stable channel exists yet."}
+}
