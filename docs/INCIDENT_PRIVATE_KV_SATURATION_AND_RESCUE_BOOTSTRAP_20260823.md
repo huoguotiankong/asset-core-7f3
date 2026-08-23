@@ -14,13 +14,26 @@
 - 海阔当前文档中的私有持久文件 API 是 `saveFile / readFile / deleteFile`；旧方案里依赖 `clearItem` 清理 KV 不应再作为恢复合同。
 - Remote Manager 的 `saveState()` 本身也使用 `setItem(hc_remote_state_...)`。因此救援版本如果通过 `minBuild` 强制迁移，可能在业务模块加载前就因保存 Remote State 再次失败。
 
+## Test12 二次实机补充
+麻豆传媒 Test12 已把业务设置值改成 `saveFile/readFile`，Bootstrap 也绕过 Remote Manager 状态写入，但用户点击设置切换后仍然出现同一个 1MB `setItem` 错误。
+
+因此追加更严格结论：
+- **业务函数本身没有 `setItem`，不等于整条交互链没有 `setItem`。** `refreshPage(false)`、页面重建、旧 Runtime、组件状态或其它隐式路径都可能重新触发历史 KV 写入。
+- 对已经确认 KV 饱和的规则，任何“点击设置 → 写状态 → refreshPage”交互都必须当成高风险路径，除非已经做海阔实机验证。
+- 如果一个设置只是为了控制非必要可选行为，而用户目标可以用合理默认值满足，救援阶段优先**删掉设置、固定默认行为**，不要为了“可配置”继续扩大状态面。
+- 救援版要尽量减少页面刷新和状态写入，不把设置中心当作验证存储迁移是否成功的主要入口。
+- 只有实机证明“页面切换/刷新/点击动作都不再触发 1MB”后，才允许逐步恢复可配置项。
+
+麻豆传媒 Test13 因此撤销详情加载/免嗅设置，默认固定加载标签+相关推荐，并恢复已验证可播放的旧播放合同；设置不再属于主业务完成条件。
+
 ## 强制恢复策略
 1. 已确认 KV 饱和的规则，救援版本不得继续把关键状态写入 `setItem`。
 2. 设置、媒体缓存/诊断、历史、收藏、分页模板、较大结构化缓存优先迁移到规则私有文件；完整 HTML 仍禁止持久化。
-3. 救援 Bootstrap 可临时绕过 Remote Manager `load()` / `enforceMinimum()` 状态迁移，直接 `loadRelease(config, immutableDefaultRelease, false)`，确保旧 KV 无法阻断新代码启动。
+3. 救援 Bootstrap 可临时绕过 Remote Manager `load()` / `enforceMinimum()` 状态迁移，直接加载 immutable Release，确保旧 KV 无法阻断新代码启动。
 4. 救援期的更新/回退入口应明确提示从云仓覆盖安装，不伪装 Remote State 仍然可写。
 5. 新代码必须对所有残留 `setItem` 做热路径审计；无法立刻迁移的非关键缓存写入只能捕获失败，不能阻塞主任务。
 6. 待实机确认新版本稳定后，再决定是否重建/清理旧规则状态；不要把“能继续写 KV”作为救援版本的前置条件。
+7. 已饱和规则新增任何设置项前，必须先证明该设置不依赖 `setItem`、页面刷新链也不会间接触发 KV 写入；否则禁止发布。
 
 ## 发布门禁
 出现过 1MB 私有存储事故的程序，新 Test/Candidate 发布前必须检查：
@@ -28,6 +41,8 @@
 - History/Favorite/Media cache/diagnostic 是否有未捕获写入；
 - Bootstrap/Remote Manager 是否可能在业务加载前写状态；
 - `pageUrl`、分页模板等基础工具是否仍有隐蔽 `setItem`；
-- 大型响应是否只驻留内存/文件而非 KV。
+- 大型响应是否只驻留内存/文件而非 KV；
+- 所有设置点击后的刷新链是否已做实机验证；
+- 可删除的可配置项是否应该直接用产品默认值代替。
 
-本事故由麻豆传媒 Test11 → Test12 实机恢复链触发，适用于后续所有远程海阔小程序。
+本事故由麻豆传媒 Test11 → Test12 → Test13 实机恢复链触发，适用于后续所有远程海阔小程序。
