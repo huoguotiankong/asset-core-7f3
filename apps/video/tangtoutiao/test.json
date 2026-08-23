@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.5",
-  "build": 10105,
-  "shellVersion": "1.0.0-test.5",
-  "shellRuleVersion": 2026082306,
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "shellVersion": "1.0.0-test.6",
+  "shellRuleVersion": 2026082307,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.5/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v5_b10105.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.6/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test4 实机：视频详情与 source_* 已正确，但封面仍灰、严格 JSON 多线路被海阔识别为未知链接、漫画 home 实为分类配置、诊断子规则触发 ArticleListModel URL 异常。Test5 按 APK 自定义 Glide 恢复 thumb_cover JSON 选图 + 图片解密；播放优先单清晰度 #isVideo=true#，多线路改海阔对象字面量；漫画改分类→book/list_filter；诊断直接显示在设置页。"
+  "notes": "根据 Test5 实机：真实视频403条与 source_* 已通，播放器能播但返回2秒旧版本维护占位片；封面候选为真实 HTTPS JPEG 但 image @js 回调没有诊断；comic/home 为顶层12项动态 api_list/params_list；排行榜要求 type。Test6 改用海阔官方 image helper + $.require，首次运行强制读取 versionMsg.version 并以服务端版本重握手，默认播放回归 APP source_240；漫画完全执行动态 API/参数，排行榜补 all/daily/weekly/monthly。"
 }
