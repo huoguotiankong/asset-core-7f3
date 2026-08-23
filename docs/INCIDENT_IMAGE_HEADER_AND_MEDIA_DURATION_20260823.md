@@ -1,10 +1,12 @@
 # 图片 Header 丢失与媒体时长伪成功事故（2026-08-23）
 
 ## 背景
-汤头条 Test8 实机同时暴露两个可跨程序复用的伪成功：
+汤头条 Test8-Test10 实机连续暴露多组可跨程序复用的伪成功：
 
 1. 图片字段已经解析到标准 HTTPS JPEG，代码因为扩展名正常而直接返回裸 URL，但海阔实机全部灰图。
 2. 长视频详情标称 19:34，某 `source_240` 的 M3U8 实际 `#EXTINF` 总时长只有 57 秒；旧逻辑只过滤 `<4s` 的维护片，因此把几十秒试看/占位源错误认定为完整视频。
+3. 后续通过“替换导出 `imageUrl`”修图片，实机诊断仍走旧逻辑；原因是已有 `item()/detailItem()` 已经闭包绑定旧私有函数，导出对象同名属性被替换不会改写闭包。
+4. 播放器只按 `.m3u8` 后缀判断 HLS，导致 `https://cdn/https://origin/...` 这类无后缀包装 HLS 被当成普通直链，完全绕过 M3U8 解密与时长检查。
 
 ## 1. 标准图片扩展名不等于可以丢 Header
 图片显示合同必须同时考虑：
@@ -109,3 +111,79 @@ URL
 - 20 分钟以上视频；
 - 某一画质是试看、其它画质完整的混合情况；
 - 所有画质都无完整源时是否明确失败而非伪播放。
+
+## 6. 导出函数 Patch 不会改写已有词法闭包
+JavaScript 模块如果这样定义：
+
+```js
+function imageUrl(){ /* old */ }
+function item(x){ return { cover: imageUrl(x.thumb) }; }
+return { imageUrl:imageUrl, item:item };
+```
+
+后续执行：
+
+```js
+module.imageUrl = newImageUrl;
+```
+
+**不会**让 `item()` 自动调用 `newImageUrl()`。`item()` 在创建时仍引用模块词法作用域里的旧 `imageUrl`。
+
+因此这类 Patch 只有在下列条件成立时才安全：
+- 原函数内部每次通过对象属性动态调用，例如 `this.imageUrl()`；或
+- 模块明确把依赖作为参数/Provider 注入；或
+- Patch 同时重建所有依赖旧私有函数的上层函数。
+
+否则必须：
+
+```text
+重建模块
+或
+在模块构造前注入依赖
+```
+
+不要因为导出的 `module.imageUrl` 已经变了，就推断所有页面/Adapter 都已经使用新实现。必须用实机诊断验证真正执行路径。
+
+## 7. 媒体类型不能只靠 URL 扩展名判断
+APP/服务端常见媒体地址可能是：
+- 无 `.m3u8` 后缀的签名 HLS；
+- CDN 网关/代理包装地址；
+- `https://proxy-host/https://origin-host/path...` 形式的嵌套绝对 URL；
+- Content-Type 为 `application/vnd.apple.mpegurl`、`application/x-mpegURL`、`text/plain` 或 `application/octet-stream` 的动态索引；
+- URL 看起来像文件，但响应正文实际是加密后的 M3U8 文本。
+
+如果 APK 已确认是把 `source_*` 原样交给播放器 DataSource，更不能人为增加“只有 `.m3u8` 才走 HLS”的假约束。
+
+推荐探测顺序：
+
+```text
+业务字段语义（source_*）
+→ HEAD/onlyHeaders：HTTP status + Content-Type + Content-Length
+→ URL 包装形态 / 重定向
+→ 受约束拉取正文
+→ #EXTM3U 明文判断
+→ 已知协议密文解密
+→ MP4/WebM 等真实 video Content-Type
+→ 未知则失败并记录诊断
+```
+
+对包装 URL 可在协议事实支持时同时尝试：
+
+```text
+服务器下发外层 URL
++ 内嵌原始绝对 URL
+```
+
+但必须记录实际采用的 `variant`，例如 `api-source / inner-source`，禁止静默换源后无法回溯。
+
+播放诊断建议额外记录：
+
+```text
+variant
+kind = hls|direct
+HTTP status
+Content-Type
+Content-Length
+M3U8 mode = plain|aes-cfb|master
+actualDuration / expectedDuration / ratio
+```
