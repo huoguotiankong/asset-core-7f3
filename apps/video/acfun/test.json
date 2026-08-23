@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha3",
-  "build": 10003,
-  "shellVersion": "8.2.0-test",
+  "version": "1.0.0-alpha4",
+  "build": 10004,
+  "shellVersion": "8.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha3/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v082.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha4/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v083.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha3。第二轮实机确认封面恢复，视频 Seed/decode 正确但黑屏停在00:00，m3u8/player/referer 返回字面值 jhg_player；Alpha2 错把非URL referer 丢弃。Alpha3 保留 jhg_player 作为 Referer/X-Referer，并对同一 decode URL 提供 APP标识/H5来源/接口来源/无来源不同 Header 线路。漫画章节仍空白，旧诊断只显示最后 POST 405，无法证明前置 GET 的真实返回；Alpha3 为 comics/base/chapterInfo 增加 HTTP 2xx 宽容解析，不再因非0/200业务码直接丢弃，并逐项记录 GET/POST × API/H5 Origin 的状态与响应片段。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha4。Alpha3 实机确认四种 decode Header 线路全部失败；播放凭据仍只有字面 referer=jhg_player，说明缺失的是 APP 的 CDN/鉴权链而不是再换 Referer。APK 1.9.7 静态复核新增确认 video/cdn/refresh、cdnList、playbackDomain、playbackAuthKey、mp4Domain、video/cdn/reportError。Alpha4 播放前主动刷新 CDN，优先构造真实 CDN/APP播放候选，并用带 aut/deviceId/t/s/User-Mark 的完整签名 Header 预检 decode 响应。漫画方面 Alpha3 把 api2 HTTP200+code404 错当成功，提前停止后续参数尝试；Alpha4 严格拒绝业务404，只读取真实 chapterList/chapters，并记录首章原始结构，同时尝试 chapterId/chapter_id/id/chapterNum 及 comicsId 组合。Stable 0.4.9 不变。"
 }
