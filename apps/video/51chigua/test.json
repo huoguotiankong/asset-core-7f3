@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "51chigua-test",
   "name": "51吃瓜",
-  "version": "0.1.0-test.3",
-  "build": 10103,
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082303,
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/51chigua/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/51chigua/51chigua_remote_test_v3_b10103.txt",
+  "release": "apps/video/51chigua/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_test_v4_b10104.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test3：按实机回归继续产品化。评论改读源站详情明确挂载的 /comments/<文章ID>.json；播放改成独立 Primary Play 并直接复用详情已取得的媒体合同，避免收藏/评论/正文被播放器带成无关列表；首页与详情操作区图标化；分类按官网导航分组，并使用独立 cg51Hub/cg51Feed 路由；分类分页改 /category/<slug>/<page>/，搜索改 /search/<keyword>/；DPlayer 多视频保留真实视频名。"
+  "notes": "Test4：评论页重新排版为头像/昵称/时间头部 + 独立正文，楼中楼回复缩进展示；评论 JSON Parser 增强 nested user/author/avatar/likes 等字段；首页搜索图标不再弹 input:// 对话框，改为独立 cg51Search 页面，在页面内输入并展示搜索结果。"
 }
