@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "51chigua",
+  "name": "51吃瓜",
+  "version": "0.1.0",
+  "build": 10106,
+  "release": "apps/video/51chigua/releases/0.1.0/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_stable_v1_b10106.txt",
+  "bootstrap": "apps/video/51chigua/bootstrap_stable_v1_b10106.js",
+  "notes": "First 51chigua Stable promoted from 0.1.0-test.5 by explicit user request.",
+  "changelog": "apps/video/51chigua/CHANGELOG.md"
+}
