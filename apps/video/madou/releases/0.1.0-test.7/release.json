@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"navigationUiPatch","path":"apps/video/madou/releases/0.1.0-test.3/navigation_ui_patch.js"},
+    {"name":"recoveryHierarchyPatch","path":"apps/video/madou/releases/0.1.0-test.5/recovery_hierarchy_patch.js"},
+    {"name":"detailSearchUxPatch","path":"apps/video/madou/releases/0.1.0-test.6/detail_search_ux_patch.js"},
+    {"name":"navigationPlaybackPatch","path":"apps/video/madou/releases/0.1.0-test.7/navigation_playback_patch.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.7"},
+  "previous": {"version":"0.1.0-test.6","build":10106,"release":"apps/video/madou/releases/0.1.0-test.6/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test7 fixes two already-documented cross-program regressions exposed by real-device Test6: same-level subcategory chips no longer push new madouList pages and now use putMyVar+refreshPage(false); detail playback no longer reloads Bootstrap+detail HTML on click when the page already knows it must sniff, and the Primary Play item is isolated from favorite/intro controls. video:// sniffing adds image/ad blocking, media rules and cacheM3u8 to reduce startup work."
+}
