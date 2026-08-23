@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha9",
-  "build": 10009,
-  "shellVersion": "8.8.0-test",
+  "version": "1.0.0-alpha10",
+  "build": 10010,
+  "shellVersion": "8.9.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha9/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha10/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha9 候选。Alpha8 已把播放故障明确定位到签名 CDN 首 TS HTTP403；Alpha9 围绕 can/watch 的 videoUrl/playPath/previewUrl 与 APK 原生 m3u8/play 路由做自动矩阵探测，只有真实分片 2xx 才进入播放器，同时记录 403 body 与 Cookie/jhg/H5/APP/Range 组合。漫画首图对白边做源图级裁剪，不再继续误调 fullTheme/immersiveTheme。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha10 候选。Alpha9 已实机确认首 TS 的失败原因不是 Header，而是 CDN 返回 invalid sign；裸 playPath 也明确提示 missing auth_key。Alpha10 依据 APK 中 playbackAuthKey/playbackDomain/getMediaUrl 证据，尝试从当前远程配置提取播放密钥/域名，对 H5 manifest 的 KEY/TS auth_key 逐条客户端重签，并以首分片真实 2xx 为唯一成功标准；无密钥/不匹配时继续保留 Alpha9 路由矩阵诊断。漫画首图白边改为持续内容扫描 + 新缓存，避免 Alpha9 过敏阈值被 JPEG 近白噪声提前触发。正式 Stable 0.4.9 继续冻结。"
 }
