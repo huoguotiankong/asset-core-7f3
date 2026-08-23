@@ -28,6 +28,11 @@ Test1 不把这些当永久 URL 常量，而是从原站导航动态提取；截
 - 二级页使用 `hiker://page/...?...&simple=true`，不采用沉浸式标题栏叠加结构。
 - 详情页只保留一个真实“立即播放”媒体动作，避免多个清晰度媒体 item 污染海阔播放列表语义。
 
+### 发布/索引状态
+- 已写入 `registry.json`，程序恢复链可从 registry 定位到 manifest/Test/channels/release/Bootstrap/Shell/CHANGELOG。
+- 已写入根 `manifest.json`，在“我的规则仓库”同步后可作为 Test 通道发现和导入。
+- Test1 仍属于实机验证候选，不等于 Stable；只有首页、分类、搜索、详情、图片和播放链通过海阔实机回归后才允许晋级。
+
 ### 已知待实机确认
 - 当前开发环境无法直接访问 `madoup2.cc`，因此 Test1 采用动态 DOM/JSON-LD 自适应解析器；真实 DOM 选择器、分页格式、搜索参数和播放链必须以用户手机实机结果为准继续收紧。
 - 若普通 HTTP 返回验证页，Provider 会尝试 `fetchCodeByWebView`；若仍失败需根据实机诊断继续处理反爬/Cookie。
