@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.16",
-  "build": 10116,
-  "shellVersion": "1.0.0-test.16",
-  "shellRuleVersion": 2026082317,
+  "version": "0.1.0-test.17",
+  "build": 10117,
+  "shellVersion": "1.0.0-test.17",
+  "shellRuleVersion": 2026082318,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.16/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.17/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v17_b10117.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test15 实机确认短视频、免费长视频、官方预览均已正常播放，因此 Test16 冻结播放链，只修图片和短视频 UI。封面保留 thumb_cover_str 优先，但撤销 Test15 的 placeholder+$().image 自取流，恢复 Test13 已验证的真实图片 URL@js 内联明文/AES-CBC/legacy-CFB 转换；短视频从单列 pic_1_card 改为双列 movie_2，点击仍直接复用 Test15 playShortStable。"
+  "notes": "Test16 实机确认长短视频封面、免费长视频和官方预览都正常；本轮保持图片和长视频链不变。APK 逆向确认原生 ShortVideoPlayerActivity 直接使用短视频列表对象 ListLikeVideoBean.source_240 播放，因此 Test17 短视频优先列表 source_240，不再先请求详情；推荐/长视频共用 5 分钟 featuredAv 会话缓存，短视频列表缓存 3 分钟，降低 Tab 切换等待。对 API 明显异常的 2–3 秒短视频时长不再在卡片误导展示。"
 }
