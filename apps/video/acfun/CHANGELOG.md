@@ -8,11 +8,11 @@
 
 ### Stable 0.4.9 / Build149 / Shell5.11.3
 
-- 正式版与 `latest.json` 继续冻结在 `0.4.9 / Build149`，作为 Clean Rewrite Test 失败时的恢复基线。
-- 历史实机已验证：常规视频列表/播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
+- 正式版与 `latest.json` 继续冻结在 `0.4.9 / Build149`，作为 Clean Rewrite Test 的恢复基线。
+- 历史实机曾验证：常规视频列表/播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
 - Stable Remote Manager `id=acfun`；Clean Rewrite Test `id=acfun-test`，两者状态隔离。
 
-### Test / Candidate 1.0.0-alpha6 / Build10006 / Shell8.5
+### Test / Candidate 1.0.0-alpha8 / Build10008 / Shell8.7
 
 活动 Release：
 
@@ -27,26 +27,165 @@ next/core alpha1
 → next/cdn-chapter-model-fix alpha4
 → next/signed-hls-comic-full-image-fix alpha5
 → next/native-hls-cache-comic-ux-fix alpha6
+→ next/stable-playback-fullscreen-comic-fix alpha7
+→ next/watch-handshake-split-header-immersive-fix alpha8
 ```
 
-Alpha6 仍属于 Clean Rewrite；Stable/latest 不修改。
+Alpha8 仍属于 Clean Rewrite；Stable/latest 不修改。
 
 ---
 
-## 2026-08-23 · Alpha5 第五轮实机结果 → Alpha6
+## 2026-08-23 · Alpha7 实机结果 → Alpha8
 
-设备实际运行：
+设备实际运行 Alpha7：
 
 ```text
-版本：1.0.0-alpha5 / Build10005
+版本：1.0.0-alpha7 / Build10007
 接口：https://sjacfanapi.sexbar.site
-令牌：已建立
-图片域：https://79eq2aouwhf6.asigoo.com
 ```
 
-### 1. 漫画正文链已实机恢复成功
+### 1. 视频：Stable 播放合同完整移植后仍失败
 
-Alpha5 真实章节：
+Alpha7 已把 Clean Rewrite 播放方式收敛到 Stable 0.4.9 的已验证合同：
+
+```text
+UA = WebView UA
+Referer = 当前 API Host + /
+Origin = 当前 API Host
+
+decode = /api/m3u8/h5/decode?path=<seed>
+cacheM3u8(decode + #isM3u8#, {headers}, fname)
+→ 原样保留 file://...m3u8##original-url
+```
+
+用户实机确认：
+
+```text
+Stable兼容缓存 → 失败
+Stable兼容实时 → 失败
+```
+
+并且诊断再次确认：
+
+```text
+cacheM3u8 return=
+file:///.../acfun_a7_xxx.m3u8##https://sjacfanapi.sexbar.site/api/m3u8/h5/decode?...#isM3u8#
+```
+
+因此永久结论：
+
+- `cacheM3u8()` 调用和返回合同本身已被实机确认正确；
+- Stable 的 UA / API Referer / Origin 也不能单独解决当前后端播放；
+- 不得再反复把根因归咎于 `#isM3u8#`、`##original-url`、`jhg_player` 或单纯 Header 差异；
+- 必须继续往 **播放前会话握手、签名 CDN 分片实际请求、分片 MIME/传输形态** 收敛。
+
+### 2. 一个此前一直被忽略的差异：有 Seed 时从未执行 can/watch
+
+Clean Rewrite Alpha1~7 的共同逻辑是：
+
+```text
+列表/详情已有 jpd/jpc/mmc/...m3u8 seed
+→ 直接 decode
+→ 只有 seed 缺失时才请求 video/can/watch
+```
+
+而 `video/can/watch` 从命名与 APP 行为上都可能不仅返回地址，还可能承担：
+
+```text
+观看资格确认
+会话初始化
+CDN/签名上下文刷新
+播放状态副作用
+```
+
+因此 Alpha8 改为：**每次播放都先执行 `video/can/watch` POST，即使已有 seed 也不跳过。**
+
+```text
+videoId
+→ POST video/can/watch
+→ 记录 keys / canWatch / reason / path
+→ 若返回 path，优先使用该 path
+→ 若无 path，才回落原 seed
+```
+
+这不是继续猜 URL，而是补回一个此前被 seed 短路的协议步骤。
+
+### 3. Alpha8 将“API 索引 Header”和“CDN 分片 Header”彻底拆开
+
+此前多线路还有一个结构问题：播放器 `headers` 往往同时作用于索引、KEY 和 TS。当前真实 M3U8 已证明 KEY/TS 是**带独立 auth_key 的绝对 CDN URL**，因此不应默认把 API Host 的 Referer/Origin 强行附加给 CDN 分片。
+
+Alpha8 播放流程：
+
+```text
+can/watch 握手
+→ decode
+→ 用 API Header 主动 GET manifest
+→ 解析第一个 AES KEY + 第一个 TS
+→ 分别探测首 TS：
+   1. 无 Header
+   2. UA-only
+   3. API Header
+→ 记录 HTTP / Content-Type / toHex 字节长度
+→ cacheM3u8 仍用 API Header 获取索引
+→ 播放本地 cacheM3u8 返回值时，按 TS 探针选择播放器 Header
+→ 优先无 Header
+```
+
+如果首分片 `Content-Type=image/png`，Alpha8 额外启用海阔官方：
+
+```text
+cacheM3u8WithPngProxy(...)
+```
+
+因为官方文档明确提供该能力处理“PNG 分段格式的 M3U8”。不能在不知道分片 MIME 的情况下继续只按普通 TS 猜。
+
+Alpha8 新诊断：
+
+```text
+can/watch握手
+播放传输探针
+  manifest status / content-type / bytes
+  segment none / ua / api
+  key-none
+  selectedPlayerHeaders
+  cache return
+  pngProxy
+```
+
+下一轮视频判断只看这两段，不再需要整段 M3U8。
+
+### 4. 漫画：正文链成功，Alpha7 fullTheme 仍残留顶部白色状态栏 inset
+
+Alpha5 起漫画正文已经实机闭环：
+
+```text
+GET comics/base/chapterInfo?chapterId=<真实数值ID>
+→ code200 / encData
+→ AES 解密
+→ payload.domain + imgList
+→ 原图 ImageAdapter
+→ pic_1_full
+```
+
+用户 Alpha7 实机确认正文图继续正常，但 `#fullTheme#` 只去掉了普通页面标题/控件，屏幕顶部仍有一条白色系统状态栏区域。
+
+Alpha8 Reader 因此只做 UI 层变化，不动漫画协议：
+
+```text
+#fullTheme#
++
+#immersiveTheme#
+```
+
+Reader 本身仍只输出 `pic_1_full`，不再渲染章节名、进度、上一话、下一话等任何信息。目标是让第一张漫画图直接铺到物理屏幕顶部。
+
+---
+
+## 2026-08-23 · Alpha5/6 关键实机结论
+
+### 漫画正文链已实机恢复成功
+
+真实示例：
 
 ```text
 comicsId=36164
@@ -57,315 +196,99 @@ GET /api/comics/base/chapterInfo?chapterId=690769
 → HTTP200 / code200 / encData
 ```
 
-解密后 payload：
+解密后：
 
 ```text
 keys=domain,chapterId,chapterTitle,coverImg,imgList,...
 imgList count=185
-domain=https://<当前漫画图片域>/
-first=.../jhcomics/...-0.jpg
 ```
 
-用户实机截图确认漫画原图已经连续显示，`漫画图片错误`为空。因此长期结论：
+用户实机截图确认 185 张原图可连续显示，`漫画图片错误`为空。
 
-- 漫画 `chapterInfo GET + 数值 chapterId + encData AES` 已彻底闭环；
-- `imgList + payload.domain` 是当前正文主结构；
-- 正文原图必须继续走独立 full-image 解密缓存，不得回退封面 `_480`；
-- 后续漫画维修不得再无故改 Method / chapterId / AES 链。
+永久结论：
 
-当前 Reader 顶部仍有 UX 问题：系统标题栏会显示较长漫画标题/继承标题，截断且不利于看当前进度。Alpha6 改为**章节名 + 当前话数/总话数**，并在正文顶部和底部增加紧凑的“上一话 / 当前章节 / 下一话”导航，不采用沉浸式标题栏。
+- 漫画当前有效 Method = GET；
+- 当前有效主键 = 数值 `chapterId`；
+- `encData` AES 链正确；
+- 正文主结构 = `payload.domain + imgList`；
+- 正文图片必须使用独立 full-image 解密缓存，不得回退封面 `_480`；
+- 后续漫画维修不得再无故改 Method / chapterId / AES。
 
-### 2. 漫画 Station 分页暴露 ObjectId / 数字 stationId 不兼容
+### 漫画 Station 分页
 
-Alpha5 诊断出现：
+曾出现：
 
 ```text
-comic|station|6931a5751952ca164bbc8c77|1|3
-GET comics/station/getStationComicsMore
-stationId=<24位对象ID>
-→ 当前主接口 HTTP400
+getComicsStations UI id = 24位 ObjectId
+getStationComicsMore stationId=<ObjectId>
+→ HTTP400
 ```
 
-而此前同一 Clean Rewrite 实机已经出现过：
+而数字 `stationId=1` 曾 HTTP200。Alpha6 起保留 UI identity，并从：
 
 ```text
-GET .../getStationComicsMore?...&stationId=1
+raw.stationId / comicsStationId / stationSort / sort / sortNum /
+index / position / type / 当前站位序号
+```
+
+构造数字 API 候选，最后以 `comics/base/findList` 兜底。
+
+### 视频 HLS 服务端链已确认
+
+真实 decode：
+
+```text
+GET /api/m3u8/h5/decode?path=<seed>
 → HTTP200
-```
-
-因此不能再假定 `getComicsStations` 用于 UI 身份的通用 `id` 就等于分页接口要求的 `stationId`。Alpha6：
-
-```text
-UI identity 保留原 id
-→ 从 raw.stationId / comicsStationId / stationSort / sort / sortNum / index / position / type 提取数字候选
-→ 再加入当前站位序号 i+1
-→ getStationComicsMore 只用数字候选做 GET
-→ 最后才用 comics/base/findList 兜底
-```
-
-并新增 `漫画分类映射 / 漫画分页线路` 诊断，下一轮根据实机确定最终唯一映射。
-
-### 3. 视频：服务端 HLS 已确定正常，Alpha5 的“手写本地索引 + noPre”被实机证伪
-
-Alpha5 实机播放：
-
-```text
-seed=jpd/...m3u8
-decode=/api/m3u8/h5/decode?path=...
-HTTP200
-Content-Type=application/vnd.apple.mpegurl
-bytes≈9KB
-#EXTM3U
-#EXT-X-KEY:METHOD=AES-128
-KEY/TS 均为带 auth_key 的绝对 CDN URL
-```
-
-Key 探针可得到标准 16 字节 Key。首 TS 使用 `fetch(...,{toHex:true})` 时返回空字符串，不能把“未抛异常”误记成“分片内容已验证成功”；这一点只说明旧探针不足，不能继续据此推导媒体字节正确与否。
-
-用户实机确认 Alpha5 三条线路仍全部不可播：
-
-```text
-本地签名索引（手工 writeFile → 普通 file://）
-实时解码·免预载 (#noPre#)
-实时解码·轻量头
-```
-
-因此永久结论：
-
-- `#noPre#` 在本链没有实机收益，不能继续作为默认修复；
-- `writeFile()` 写一个普通 `file://...m3u8` **不等价于海阔 `cacheM3u8()` 的播放器合同**；
-- 海阔官方文档明确说明 `cacheM3u8()` 返回形态类似：
-
-```text
-file:///.../video.m3u8##http://原始m3u8
-```
-
-其中 `##original-url` 属于海阔返回合同的一部分，不能为了“看起来像文件路径”自行裁掉。
-
-同时 Stable 0.4.9 已验证播放实现本身也是：
-
-```text
-cacheM3u8(decode + '#isM3u8#', {headers}, fname)
-→ 原样把返回值交播放器
-```
-
-Alpha6 因此停止继续猜 CDN/Referer/noPre，优先恢复这一**海阔原生 M3U8 缓存消费方式**：
-
-```text
-decode
-→ cacheM3u8(decode#isM3u8#, 当前已验证可取 manifest 的 Header, fname)
-→ 不改写返回字符串
-→ 默认“海阔缓存播放”
-→ “实时HLS”仅作第二线路
-```
-
-下一轮若仍失败，诊断必须重点看 `海阔M3U8缓存 return=` 是否真实包含 `file://...##original-url`，再继续定位播放器/分片层，禁止再次回到 Seed、decode、漫画或封面方向。
-
----
-
-## 2026-08-23 · Alpha4 第四轮实机结果 → Alpha5
-
-设备实际运行：
-
-```text
-版本：1.0.0-alpha4 / Build10004
-接口：https://sjacfanapi.sexbar.site
-令牌：已建立
-图片域：https://79eq2aouwhf6.asigoo.com
-```
-
-### 1. 图片封面链继续确认正常
-
-当前封面事实：
-
-```text
-jhimage/...
-→ 当前 session imgDomain (*.asigoo.com)
-→ 封面缩略图 _480
-→ Dalvik UA + Referer=""
-→ acfunImageDecoder
-→ 本地持久缓存
-```
-
-图片解密长期合同：
-
-```text
-key = 2020-zq3-888
-仅 XOR 前100字节
-先检查 JPEG/PNG/GIF/WebP Magic
-明文图片不得重复解密
-```
-
-**封面 `_480` 只属于列表/详情封面策略，不得自动套到漫画正文原图。**
-
-### 2. 视频：后端播放链已经打通，剩余重点变成“短时签名 HLS 的播放器消费”
-
-Alpha4 实机视频示例：
-
-```text
-videoId=14628
-seed=mmc/...m3u8
-decode=https://sjacfanapi.sexbar.site/api/m3u8/h5/decode?path=...
-```
-
-`POST video/cdn/refresh` 已成功返回多条当前 CDN 域名，但返回项只有 `domain/line/type/status` 等，**没有可直接附加到原始 seed 的 playbackAuthKey**。因此 Alpha4 构造的裸：
-
-```text
-https://<cdn>/<seed>.m3u8
-```
-
-不是完整授权媒体地址，不能再把“CDN refresh 返回域名”误当作“拿到了最终播放 URL”。
-
-最关键的实机预检：
-
-```text
-GET /api/m3u8/h5/decode?path=...
-→ HTTP 200
 → Content-Type: application/vnd.apple.mpegurl
 → #EXTM3U
 → #EXT-X-VERSION:3
 → #EXT-X-KEY:METHOD=AES-128,URI="https://<cdn>/key/enc.key?auth_key=<短时签名>"
-→ 每个 .ts 也都是 https://<cdn>/...ts?auth_key=<短时签名>
+→ 每个 .ts 都是 https://<cdn>/...ts?auth_key=<短时签名>
 ```
 
-由此可以确认：
+已确认：
 
-1. 视频 Seed 正确；
-2. H5 decode 接口正确；
-3. decode 确实返回标准 HLS，而不是 JSON/错误页；
-4. 媒体使用 AES-128；
-5. KEY 与 TS URL 都已经由服务端生成独立 `auth_key`；
-6. `auth_key` 中含当前时间信息，属于动态短时签名；
-7. 不能自行用 `video/cdn/refresh` 的域名拼裸 seed 替代 decode 返回内容。
+1. Seed 正确；
+2. decode 接口正确；
+3. 返回的是真正 HLS，不是 JSON/错误页；
+4. AES-128 KEY URL 正常；
+5. KEY 与 TS 都带服务端独立短时 `auth_key`；
+6. `video/cdn/refresh` 返回的只是线路域名列表，不能自行拼成最终授权 URL；
+7. Alpha5 `#noPre#` 与手写普通 `file://` M3U8 均被实机证伪；
+8. Alpha6/7 已进一步证明官方 `cacheM3u8` 返回格式和 Stable Header 也不是完整根因。
 
-此前 Alpha2/3 对 Referer、Alpha4 对裸 CDN 的试探都不能解决问题。当前重点转为：**海阔默认音视频预加载/缓存是否使“稳定 decode URL → 动态短时签名 M3U8”在真正播放前已经过期。**
+### 首分片旧探针注意
 
-### 3. Alpha5 PlaybackAdapter
-
-Alpha5 不再继续堆无证据 CDN 线路，改为两条真正对应当前实机协议的路径：
+Alpha5 曾出现：
 
 ```text
-A. 实时解码·免预载
-   /api/m3u8/h5/decode?path=...
-   + #isM3u8#
-   + #noPre#
-   + 当前签名请求 Header
-
-B. 本地签名索引
-   点击播放时立即 GET decode
-   → 得到最新 #EXTM3U + AES KEY + TS auth_key
-   → 原样 writeFile 到独立本地 .m3u8
-   → 直接交播放器
+key ok hexLen=32
+segment ok hexLen=0
 ```
 
-同时增加：
-
-```text
-实时签名M3U8诊断
-Key 探针
-首个 TS 分片探针
-本地签名索引路径/长度诊断
-```
-
-如果 Alpha5 仍不可播，下一轮优先依据 `Key/分片探针` 判断：
-
-```text
-manifest 成功 + key 成功 + segment 成功
-→ 海阔播放器/本地索引消费问题
-
-manifest 成功 + key/segment 失败
-→ CDN auth_key 生命周期、请求 Header 或签名刷新问题
-```
-
-禁止再次退回“Seed 不对 / decode 不对 / Referer 随便换”的方向。
-
-### 4. 漫画：接口、Method、主键已经彻底确认，不得继续探测这些层
-
-Alpha4 漫画详情真实结构：
-
-```text
-root.chapterList 存在
-chapterCount=1
-first.chapterId=691609
-first.chapterNum=1
-first.comicsId=36510
-first.chapterTitle=真实章节名
-```
-
-当前真实章节请求：
-
-```text
-GET /api/comics/base/chapterInfo?chapterId=691609
-→ HTTP 200
-→ code=200
-→ msg=success
-→ encData=<AES 加密 payload>
-```
-
-因此永久结论：
-
-- `comics/base/chapterInfo` 当前有效 Method = GET；
-- 当前有效主键 = `chapterId`；
-- 真实 `chapterId` 是数值型章节 ID，不是之前误抓的 24 位 ObjectId；
-- `encData` 正常返回，协议层 AES 解密链已经进入；
-- 后续漫画问题只允许继续查 **解密后的 payload 结构 → 图片字段 → domain → 原图请求/解密 → pic_1_full 渲染**，不能再反复换 Method/ID。
-
-### 5. Alpha5 Comic Reader
-
-Alpha5 把“封面图片”和“漫画正文图片”彻底分开：
-
-```text
-封面：asigoo + _480 + decoder + cover cache
-漫画正文：原始 URL（明确移除/禁止 _480）
-         + Dalvik UA
-         + Referer=""
-         + acfunImageDecoder
-         + 独立 full-image cache
-         + pic_1_full
-```
-
-正文图片解析优先读取：
-
-```text
-imgList / imageList / images / pics / pictureList /
-pageList / pages / contentList / chapterImages
-```
-
-并兼容数组元素是对象时的：
-
-```text
-imgUrl / imageUrl / originalUrl / url / path / src /
-img / image / pic / picture
-```
-
-诊断新增：
-
-```text
-漫画解密结构：root keys / image count / first image / payload 片段
-漫画图片错误
-```
+其中 `segment ok` 只是“请求没有抛异常”的旧标记，`hexLen=0` **不能算分片内容成功**。Alpha8 已改为同时记录 HTTP/Content-Type/toHex 长度，禁止再把空二进制结果误判为成功。
 
 ---
 
-## Clean Rewrite Alpha1 → Alpha4 恢复摘要
+## Clean Rewrite Alpha1 → Alpha7 摘要
 
 ### Alpha1 / Build10001 / Shell8.0
 
-建立独立五层：
+建立：
 
 ```text
 Core → Protocol/Auth → Provider/Model → Media/Image/Reader → Product UI
 ```
 
-首次实机确认：认证/列表数据已通，但封面空白、Station 参数 `%E...`、视频 decode 后播放失败、漫画请求合同需重验。
+首次实机：认证/列表数据已通，但封面空白、页面参数未 decode、视频播放失败、漫画合同需重验。
 
 ### Alpha2 / Build10002 / Shell8.1
 
-- 修复封面：相对 `jhimage/...` 优先当前 `imgDomain`，asigoo `_480 + Referer="" + XOR decoder`。
-- 统一 query decode。
-- decode URL 加 HLS 标识。
-- 读取 `m3u8/player/referer`。
-- 漫画 GET-first。
+- 封面相对 `jhimage/...` 改用当前 `imgDomain`；
+- `asigoo + _480 + Referer="" + XOR decoder` 恢复封面；
+- 统一 query decode；
+- 漫画 GET-first；
 - 用户实机确认封面恢复。
 
 ### Alpha3 / Build10003 / Shell8.2
@@ -376,15 +299,29 @@ Core → Protocol/Auth → Provider/Model → Media/Image/Reader → Product UI
 m3u8/player/referer = {"referer":"jhg_player"}
 ```
 
-测试同一 decode URL 的 `APP标识 / H5来源 / 接口来源 / 无来源` 四套 Header，用户确认全部不可播，因此 Referer 猜测方向被证伪。
-
-漫画精确探针暴露旧逻辑曾把 `HTTP200 + code404` 当成功，后续已禁止这种“协议假成功”。
+`APP标识 / H5来源 / 接口来源 / 无来源` 四套 Header 全部不可播，Referer 单点猜测被证伪。
 
 ### Alpha4 / Build10004 / Shell8.3
 
-- 引入 `POST video/cdn/refresh`，确认 APP 存在动态 CDN 列表。
-- decode 主动预检最终证明服务端返回标准、带短时签名 KEY/TS 的 AES-128 M3U8。
-- 漫画目录只读真实 `chapterList/chapters`，确认真实 `chapterId`，chapterInfo GET 成功。
+- `POST video/cdn/refresh` 成功，确认动态 CDN；
+- decode 预检证明标准短时签名 AES-128 HLS；
+- 漫画真实 `chapterList → 数值 chapterId → GET chapterInfo` 闭环。
+
+### Alpha5 / Build10005 / Shell8.4
+
+- `#noPre#` + 手写最新签名本地 M3U8；实机仍不可播；
+- 漫画正文独立原图 ImageAdapter 成功，185 张正文图实机显示。
+
+### Alpha6 / Build10006 / Shell8.5
+
+- 回归官方 `cacheM3u8`；
+- 实机确认返回 `file://...m3u8##original-url` 正确但仍不可播；
+- 漫画 Reader 曾加入章节导航，后根据用户要求撤销。
+
+### Alpha7 / Build10007 / Shell8.6
+
+- 精确移植 Stable 0.4.9 播放 Header + cacheM3u8 合同；仍不可播；
+- Reader 改为 `#fullTheme#` + 纯 `pic_1_full`；正文正常，但顶部状态栏白色 inset 仍存在。
 
 ---
 
@@ -422,9 +359,24 @@ jhimage/...
 封面 asigoo _480
 XOR key 2020-zq3-888
 只 XOR 前100字节
+先检查 JPEG/PNG/GIF/WebP Magic
+明文图片不得重复解密
+```
+
+漫画正文：
+
+```text
+payload.domain + imgList
+原图，不加 _480
+Dalvik UA + Referer=""
+acfunImageDecoder
+full-image cache
+pic_1_full
 ```
 
 ### 视频
+
+已发现协议/字符串：
 
 ```text
 video/can/watch
@@ -433,23 +385,25 @@ video/cdn/refresh
 video/cdn/reportError
 cdnList / cdnRes
 playbackDomain / playbackAuthKey / mp4Domain
+getMediaUrl
 /api/m3u8/h5/decode
 /api/m3u8/play
 /m3u8/play
 X-Referer
 ```
 
-当前最可信实际链：
+当前最可信链：
 
 ```text
-视频 item seed
-→ /api/m3u8/h5/decode?path=<seed>
-→ 服务端返回 AES-128 M3U8
-→ KEY/TS 都是带短时 auth_key 的绝对 CDN URL
-→ 海阔 cacheM3u8 原样返回的播放器合同优先
+videoId
+→ video/can/watch（Alpha8 起强制，不再被 seed 跳过）
+→ path / seed
+→ /api/m3u8/h5/decode?path=<path>
+→ 标准 AES-128 M3U8
+→ KEY/TS 为带 auth_key 的绝对 CDN URL
+→ cacheM3u8 缓存索引
+→ CDN 分片 Header 必须按实机探针确定，不能默认复用 API Header
 ```
-
-`video/cdn/refresh` 当前实机返回的是线路域名列表，不能自行等同于最终已签名媒体 URL。
 
 ### 漫画
 
@@ -463,11 +417,9 @@ comics/base/chapterInfo?chapterId=<真实数值ID>
   → HTTP200/code200/encData
   → AES decode
   → domain + imgList
-  → 独立原图解密缓存
+  → 原图解密缓存
   → pic_1_full
 ```
-
-正文图片必须使用原图策略，不能复用封面 `_480`。
 
 ### 其它内容
 
@@ -497,14 +449,15 @@ community/dynamic/list
 
 ## 关键历史回归经验
 
-- Alpha8：同级栏目/筛选使用状态 + `refreshPage(false)`，避免返回栈膨胀；短视频曾实机直接播放成功。
-- Alpha10：小说正文恢复；`.txt` 正文需要主动 fetch。
-- Alpha12：漫画章节曾实机成功，核心是 `chapterInfo {chapterId}` + 图片提取 + `pic_1_full`。
-- Alpha13：深层图片 Resolver 强覆盖会破坏全局封面；漫画 `pics://` 曾退化，优先 `pic_1_full`。
-- Alpha15：补丁链过长时应 Clean Rebase，不继续叠 overlay。
-- Alpha16：`拿到 seed / 构造 decode / cacheM3u8 返回 file:///` 都不能单独证明播放完成；短视频 Provider 有数据也不能证明 Renderer 正常。
-- Alpha18：远程 decode 直交播放器仍未闭环，Clean Rewrite 后最终由 Alpha4 证明 decode 响应本身有效。
-- Clean Rewrite Alpha5：`writeFile` 生成普通本地 M3U8 与 `cacheM3u8` 的 Hiker-aware 返回合同不是一回事；不要自行裁掉 `##original-url`。
+- 旧 Alpha8：同级栏目/筛选使用状态 + `refreshPage(false)`，避免返回栈膨胀；短视频曾实机直接播放成功。
+- 旧 Alpha10：小说正文恢复；`.txt` 正文需要主动 fetch。
+- 旧 Alpha12：漫画章节曾实机成功，核心是 `chapterInfo {chapterId}` + 图片提取 + `pic_1_full`。
+- 旧 Alpha13：深层图片 Resolver 强覆盖会破坏全局封面；漫画 `pics://` 曾退化，优先 `pic_1_full`。
+- 旧 Alpha15：补丁链过长时应 Clean Rebase，不继续叠 overlay。
+- 旧 Alpha16：`拿到 seed / 构造 decode / cacheM3u8 返回 file:///` 都不能单独证明播放完成。
+- 旧 Alpha18：远程 decode 直交播放器仍未闭环；Clean Rewrite Alpha4 最终证明 decode 响应本身有效。
+- Clean Rewrite Alpha5：`writeFile` 普通本地 M3U8 与 `cacheM3u8` Hiker-aware 返回合同不是一回事。
+- Clean Rewrite Alpha7：即使 Stable 播放 Header/cacheM3u8 精确移植，当前后端仍失败；下一步必须验证 can/watch 副作用和 CDN 分片真实传输。
 
 ---
 
