@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"navigationUiPatch","path":"apps/video/madou/releases/0.1.0-test.3/navigation_ui_patch.js"},
+    {"name":"hierarchyDetailPatch","path":"apps/video/madou/releases/0.1.0-test.4/hierarchy_detail_patch.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "previous": {"version":"0.1.0-test.3","build":10103,"release":"apps/video/madou/releases/0.1.0-test.3/release.json"},
+  "notes": "Test4 rebuilds categories as major-category -> expandable subcategory hierarchy, removes fetchCodeByWebView from large HTML/detail fetch paths to avoid the real-device 1MB private-storage crash, bounds local history/favorite payloads, and uses a direct Bootstrap rule on every internal page to avoid stale page-module execution after upgrades."
+}
