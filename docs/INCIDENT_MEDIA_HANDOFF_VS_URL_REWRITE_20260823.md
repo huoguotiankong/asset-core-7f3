@@ -36,6 +36,8 @@ HLS 优先 `cacheM3u8(url, headers, name)`；失败后才返回带 Header 的代
 8. **详情页已经完成媒体判断时，播放点击不得无条件再次加载 Bootstrap/Release、再次请求同一个详情页、再做同一轮解析。** 已知直链直接交播放器；已知必须网页嗅探则直接进入 `video:// / webRule://`，避免重复网络与 Runtime 开销。
 9. `video://网页` 属于最终网页媒体提取路径时，应按站点实际情况使用 `blockRules / videoRules / videoExcludeRules / cacheM3u8` 减少图片、广告和错误候选造成的启动延迟；这些参数仍需实机回归，不能仅凭静态代码判断更快。
 10. 播放 Primary Action 与详情次操作必须分层。收藏、简介、设置、官网等结果紧贴播放项时，海阔原生播放器可能把页面结果带成多余列表/操作面板；详情页必须结合 `HIKER_APP_DEVELOPMENT_CAUTIONS.md` 的 Primary Play 规则做实机截图验收。
+11. **详情首屏禁止同步执行多跳媒体探测。** `detail HTML → iframe1 → iframe2 → nested player...` 这种串行网络链若不能在一次普通请求里完成，必须移出详情首屏；否则媒体优化会反过来拖慢详情页面本身。
+12. “免嗅”必须按协议事实命名：只有已明确拿到稳定 API/脚本解密/结构化真实媒体地址并直接交播放器，才可称“免嗅直连”。`webRule/x5Rule/video://` 都属于浏览器辅助/资源提取能力，即使比传统嗅探快，也不能在版本说明里冒充纯免嗅已经完成。
 
 ## 汤头条 Test15 落地
 - 短视频/PWA 候选：探测 → HLS 优先 `cacheM3u8` → 显式 Player Headers → 原始候选回退。
@@ -52,6 +54,17 @@ HLS 优先 `cacheM3u8(url, headers, name)`；失败后才返回带 Header 的代
 - 无直链：播放项直接使用 `video://详情页`，并增加图片/广告 block、媒体匹配和 `cacheM3u8`。
 - Primary Play 改为独立 `text_center_1`，后面立即分隔；收藏与官网入口下沉到底部，简介使用信息型组件。
 
+## 2026-08-23 麻豆传媒 Test8 性能回归
+- Test8 为追求“免嗅”在 `R.detail()` 内同步执行 `resolveDirectMedia()`：先扫详情，再最多请求 3 个 player 页面，每个 player 还可继续请求 2 个 nested player，单请求 timeout 6.5 秒。
+- 实机结果证明：仍然没有命中真实直链，播放继续走浏览器提取；同时详情页本身也明显变慢。
+- 结论：**未证明有效的多跳媒体研究链不能进入详情首屏。** 先保证详情一请求可见，再把媒体研究放到点击阶段或独立 Protocol/Playback Adapter。
+
+### Test9 修复
+- `R.detail()` 只允许一次详情请求，当前 HTML 内已有 M3U8/MP4 才直接播放。
+- 当前 HTML 没有直链时，只解析出 iframe/player URL 字符串，不在详情首屏请求它。
+- 点击播放后使用 `webRule://player@JS` 直接加载目标播放器页，每 250ms 检查 `video.currentSrc/source` 和已加载资源中的 `.m3u8/.mp4`；同时 block 图片/广告。
+- 该路径定义为“快速定向浏览器解析”，不再标为纯免嗅。真正免嗅继续要求后续抓到稳定 player API / 解密规则 / 媒体配置协议后再实现。
+
 ## 回归门禁
 播放完成必须由海阔实机确认：
 - 有真实码率；
@@ -60,4 +73,5 @@ HLS 优先 `cacheM3u8(url, headers, name)`；失败后才返回带 Header 的代
 - HLS 子分片/Key 不出现权限错误；
 - 不因进入原生播放器而意外生成错误播放列表上下文；
 - 已知媒体/嗅探策略时，点击播放不得重复做可避免的详情请求与 Runtime 重载；
-- 播放器首屏不得混入收藏、简介、诊断等非媒体 Primary Action。
+- 播放器首屏不得混入收藏、简介、诊断等非媒体 Primary Action；
+- 详情首屏不得因为媒体深探测串行等待多个 player/iframe 请求。
