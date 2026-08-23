@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.4",
-  "defaultBuild": 10104,
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "1.0.0-test.4",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v4_b10104.txt",
+  "defaultVersion": "0.1.0-test.5",
+  "defaultBuild": 10105,
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "1.0.0-test.5",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v5_b10105.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test4-exact-model-image-playback","note":"Test3 实机已打通匿名会话并返回49条，但递归列表误选广告、thumb_cover 未适配导致封面灰块、source_* 加密 M3U8 未按 APP player_cfg.dekey 解密导致播放0kb/s。Test4 改为 APK 精确数据模型和专用 PlaybackAdapter。"}
+  "migration": {"stage":"test5-image-glide-playback-format-comic","note":"Test4 实机确认视频详情/source_* 已正确，但 thumb_cover 需要 APK 自定义 Glide 选图与解密；严格 JSON 多线路不被海阔识别；comic/home 为分类配置；诊断子规则触发 URL 模型异常。Test5 按这些实机事实分链修复。"}
 }
