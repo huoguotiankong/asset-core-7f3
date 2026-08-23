@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.6",
-  "defaultBuild": 10106,
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "1.0.0-test.6",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/myav/myav_remote_test_v6_b10106.txt",
+  "defaultVersion": "0.1.0-test.7",
+  "defaultBuild": 10107,
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "1.0.0-test.7",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/myav/myav_remote_test_v7_b10107.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"actress-favorites-layout-test6","note":"Test6 adds dedicated actress/actor navigation, actor favorites, improved search workflow and per-page layout preferences while preserving verified Test4/5 entity and magnet behavior. No Stable before device verification."}
+  "migration": {"stage":"neutral-import-shell-test7","note":"Test7 preserves Test6 behavior while replacing import-facing restricted terminology with neutral actor naming and updating cloud-repository icon metadata. No Stable before device verification."}
 }
