@@ -1,0 +1,19 @@
+{
+  "schema": 3,
+  "id": "myav",
+  "name": "MyAv",
+  "category": "video",
+  "mode": "remote+test",
+  "test": "apps/video/myav/test.json",
+  "channels": "apps/video/myav/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "1.0.0-test.1",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/myav/myav_remote_test_v1_b10101.txt",
+  "changelog": "apps/video/myav/CHANGELOG.md",
+  "sourceSite": "https://javlist.me/",
+  "migration": {"stage":"initial-native-test","note":"New self-use remote MyAv app. No Stable pointer until device verification."}
+}
