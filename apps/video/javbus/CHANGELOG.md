@@ -1,63 +1,98 @@
 # JavBus Changelog
 
-> 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、`registry.json` 与当前运行入口。只记录已验证事实；尚未完成海阔实机验证的内容明确标记“待确认”。
+> 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、`registry.json`、当前 Stable/Test/Release/Bootstrap/Shell。用户当前实机结果优先于历史记录。未完成海阔实机验证的内容明确标记“待确认”。
 
-## 当前基线
+## 当前基线（2026-08-23）
 - 程序：JavBus
 - App ID：`javbus`
-- Stable：`2026081903` / Legacy Local / 冻结保留
-- Test：`2.0.0-alpha4` / Build `20004` / Remote Module
-- Stable 入口：`javbus_2026081903.txt`
-- Test 入口：`apps/video/javbus/javbus_remote_test_v4_b20004.txt`
-- Test Bootstrap：`apps/video/javbus/bootstrap_test_v4.js`
-- Test Release：`apps/video/javbus/releases/2.0.0-alpha4/release.json`
+- Stable：`2.0.0` / Build `20005` / Remote / 本项目自有代码
+- Stable Shell：`apps/video/javbus/javbus_remote_v2_b20005.txt`
+- Stable Bootstrap：`apps/video/javbus/bootstrap_stable_v1_b20005.js`
+- Stable Release：`apps/video/javbus/releases/2.0.0/release.json`
+- Stable Patch：`apps/video/javbus/releases/2.0.0/stable_patch.js`
+- Domain Config：`apps/video/javbus/domains.json`
+- Test 晋级来源：`2.0.0-alpha4` / Build `20004`
+- Test Shell：`apps/video/javbus/javbus_remote_test_v4_b20004.txt`
 - Remote Manager：`libs/updater/remote_manager.js` v2.0.1
 - Shared JAV Playback Stable：`1.0.0-test.4`
 - JavBus 图标：官网 `https://www.javbus.com/favicon.ico`
-- 最后登记日期：2026-08-23
+- 旧 `javbus_2026081903.txt` 为第三方 Apollo 本地规则，不属于本项目实现；用户已明确允许删除，Stable 2.0.0 发布后仓库删除该工件及索引引用。
 
-## 产品边界
-### 原生化范围
+## Stable 2.0.0 发布结论
+- 用户于 2026-08-23 明确要求：加入域名失效自动切换，并把当前重写版晋级正式版；旧本地版可以删除，因为不是本项目编写。
+- Stable 2.0.0 由 Test alpha4 的完整运行链晋级，并新增 `stable_patch.js` 域名 Adapter；不是复制旧 Apollo 规则。
+- Stable 运行链：
+  `Stable Shell → Stable Bootstrap → Remote Manager → alpha1 Core/Compat/Runtime → alpha2 Patch → alpha3 Patch → alpha4 Patch → Stable Domain Patch → Shared JAV Playback Stable`。
+- Stable 与 Test 使用不同 Remote Manager app id：Stable=`javbus`，Test=`javbus-test`，持久状态隔离。
+- 旧 Apollo 本地工件删除后不再提供“Legacy Local/本地版”渠道；历史 alpha1~alpha4 release 继续保留，便于诊断与回滚开发，不等于保留旧第三方本地版。
+- Stable 2.0.0 的域名自动切换和 alpha4 的原图预览/紧凑播放 UI 在正式发布前完成静态门禁；用户已明确要求直接晋级，后续继续以 Stable 实机结果补齐回归记录。
+
+## 域名自动切换：Stable 2.0.0
+### 用户当前事实
+用户实机网页显示当前可用域名提示：
+- 永久域名：`https://www.javbus.com`
+- 防屏蔽：`https://www.busjav.cyou`
+- 防屏蔽：`https://www.fanbus.bond`
+- 防屏蔽：`https://www.buscdn.bond`
+
+### 设计合同
+- 域名列表独立存放在 `apps/video/javbus/domains.json`，代码内同时保留静态兜底列表。
+- 远程域名配置缓存 6 小时；拉取失败时使用上一次有效缓存，再退回静态列表。
+- 运行时保存最后一次成功域名：`javbus_active_domain`。
+- 普通请求优先使用最后成功域名；如果响应为空、过短、Cloudflare challenge/拦截页或不具备 JavBus 页面指纹，自动尝试其它候选域名。
+- 成功切换后立即更新 `JavBusCore.base` 并持久记忆，后续列表、搜索、详情、演员、分类、图片 Referer 和磁力详情链自然跟随当前 Base。
+- 页面健康校验不是“非空即成功”，会检查 JavBus 业务指纹，如 `movie-box / waterfall / photo-info / sample-waterfall / genre / star / var gid / navbar+JavBus`，避免把限流页、拦截页或无关落地页写成成功域名。
+- 每个候选域名优先普通 `fetch`，失败后允许 `fetchCodeByWebView` 作为站点过检兜底。
+- 设置页显示当前域名、候选域名，并提供“重新检测可用域名”；重置后下一次业务请求重新自动选择。
+- 域名远程配置文件后续可单独维护，新防屏蔽域名无需为了改常量重发整个 Stable Release。
+
+### 禁止回退
+- 禁止恢复单一写死 `https://www.javbus.com` 且失败就整页报错的策略。
+- 禁止仅以 HTTP 非空判断域名健康。
+- 禁止每个列表卡片/图片单独做全候选域名探测；域名切换属于 Protocol/Domain 层统一职责。
+- 禁止为了域名切换修改 alpha3 已实机验证成功的磁力 Parser；只允许让 `C.base` 跟随有效域名。
+
+## 产品范围
+### 首页/搜索/分类
 - 首页：有码 / 无码 / 欧美、全部影片 / 仅有磁力、搜索、演员、分类、收藏、更多。
-- 搜索：番号 / 标题 / 演员 / 厂商关键词并支持翻页。
-- 分类：JavBus `/genre`；详情中的 genre / director / studio / label / series 可继续筛选。
-- 演员：列表、资料、出演作品、本地演员收藏。
-- 详情：封面、标题、日期、时长、导演、制作商、发行商、系列、演员、标签、预览图、相似影片、磁力。
-- 预览：详情顶部 `🖼 预览 N` + 独立 `javbusPreview`。
-- 磁力：详情顶部 `🧲 磁力` + 独立 `javbusMagnets`；点击复制，长按跨小程序。
-- 本地收藏：影片 / 演员独立，并兼容旧 Apollo 收藏一次性读取。
-
-### 第三方在线播放
-- JavBus 只传番号给 `shared/jav-playback/manager.js` Stable；禁止复制 Provider Parser 到 JavBus 私有代码。
-- 当前 Provider：MissAV / 123AV / Jable。
-- shared Playback 当前图标合同：MissAV 原站 favicon；123AV 仓库固定 `shared/jav-playback/assets/123av.svg`；Jable 原站 favicon。
-
-## 数据源 / Parser 合同
-### 影片列表与搜索
-- 有码 `/`，翻页 `/page/{page}`。
-- 无码 `/uncensored`，翻页 `/uncensored/page/{page}`。
-- 欧美 `/western`，翻页 `/western/page/{page}`。
-- 筛选：`/{typePrefix}/{filterType}/{filterValue}/{page?}`。
-- 搜索：`/{typePrefix}/search/{keyword}/{page}&type=1`。
-- 列表：`#waterfall .item`、`.photo-frame img`、`.photo-info date`、`.item-tag button`。
-- `existmag=mag` = 仅有磁力；`existmag=all` = 全部。
-
-### 详情
-- 标题 `.container h3`。
-- 大图 `.container .movie .bigImage img`。
-- 信息 `.container .movie .info p`。
-- 预览 `#sample-waterfall .sample-box`。
-- 相似影片 `#related-waterfall a`。
+- 搜索支持番号 / 标题 / 演员 / 厂商关键词并翻页。
+- 分类使用 JavBus `/genre`；详情中的 `genre / director / studio / label / series` 可继续筛选。
+- 同级“有码 / 无码 / 欧美”、排序、显示范围一律当前页刷新，禁止不断压入新的同级 `hiker://page`。
 
 ### 演员
-- 演员分页必须使用 `/{typePrefix}/actresses/{page}`，第一页也显式 `/1`。
+- 演员分页固定 `/{typePrefix}/actresses/{page}`，第一页显式 `/1`。
 - 列表合同：`.item a`；姓名 `.photo-info span`；头像 `.photo-frame img`。
-- alpha1 的 `/actresses` + `.avatar-box` 已由实机证伪：有码/无码/欧美都只得到一个演员，禁止回退。
-- 演员详情 `/{typePrefix}/star/{id}`；头像缺失时可用 `/pics/actress/{id}_a.jpg` 兜底。
+- alpha1 的 `/actresses` + `.avatar-box` 已由实机证伪：有码/无码/欧美只得到一个演员，禁止回退。
+- 演员详情 `/{typePrefix}/star/{id}`；头像缺失可用 `/pics/actress/{id}_a.jpg` 兜底。
 
-## 磁力链：已恢复并实机验证
+### 影片详情
+1. Hero：封面 + 标题 + 日期 / 时长 / 分区。
+2. 主操作：`🧲 磁力 / 🖼 预览 N / ☆ 收藏 / 🌐 原站`。
+3. 第三方在线播放：MissAV / 123AV / Jable。
+4. 番号 / 日期 / 时长快捷信息。
+5. 导演 / 制作商 / 发行商 / 系列。
+6. 演员。
+7. 标签。
+8. 预览图。
+9. 磁力快速预览 + 完整磁力页。
+10. 相似影片。
+
+### 预览
+- 详情顶部 `🖼 预览 N` 进入独立 `javbusPreview`。
+- alpha3 实机证明：独立页用 `sm.thumb` 放大到 `pic_1_full` 会明显模糊，而详情下方 `pics://sm.src` 原图清晰。
+- alpha4 修复：独立预览页直接用 `C.image(sm.src, detailUrl)` 加载原始 sample；点击仍使用 `pics://sm.src`。
+- 详情下方仍使用 thumb 缩略图，避免列表无意义加载全部大图。
+
+### 第三方在线播放
+- JavBus 只传番号给 `shared/jav-playback/manager.js` Stable；禁止把 Provider Parser 复制到 JavBus 私有模块。
+- 当前 Provider：MissAV / 123AV / Jable。
+- alpha3 使用 `icon_3` 后实机显示 MissAV/Jable 巨型方块、123AV favicon 空白，视觉失败。
+- alpha4 改为 `icon_small_3` 紧凑一行三列；MissAV/Jable 使用原网站 favicon，123AV 使用 Shared Playback 固定 `shared/jav-playback/assets/123av.svg`。
+- Shared Playback 当前 Stable `1.0.0-test.4`：MissAV 走搜索真实版本→详情 packed source→master HLS→最高画质；123AV/Jable 保留已验证播放链。
+
+## 磁力：已恢复并实机验证
 ### alpha2 失败事实
-- 原站 ABF-377 页面明确存在多条磁力，小程序 alpha2 却返回“暂无磁力资源”，证明问题不在资源本身，而在 AJAX 参数/请求/解析链。
+- 原站 ABF-377 明确存在多条磁力，而 alpha2 独立磁力页返回“暂无磁力资源”，证明问题在 AJAX 参数/请求/解析链，不是影片没有磁力。
 
 ### alpha3 修复合同
 - 从详情源码直接提取 `var gid`、`var uc`、`var img`。
@@ -66,10 +101,9 @@
 - Parser：按 `<tr>` + `href="magnet:?xt=urn:btih:..."` 正则恢复磁力标题、大小、日期，并识别高清/字幕。
 - 兜底顺序：普通 AJAX fetch → AJAX WebView → 详情 WebView 渲染后扫描 magnet href。
 
-### alpha3 实机验证（2026-08-23 09:42）
-- **磁力恢复成功。** ABF-379 独立磁力页实际返回 3 条资源：5.19GB / 2.66GB / 1.73GB，并显示日期和高清标记。
-- 大小/日期排序按钮已可见；排序行为仍继续回归观察，但磁力主数据链已不再属于待修问题。
-- 从 alpha4 开始，除非出现新的实机回归，**禁止为了 UI 调整改动 alpha3 磁力 Parser / AJAX 主链。**
+### 实机验证
+- 2026-08-23 09:42：ABF-379 独立磁力页成功返回 3 条资源：5.19GB / 2.66GB / 1.73GB，并显示日期和高清标记。
+- 磁力主数据链判定已恢复。从 alpha4/Stable 2.0.0 开始，除非有新的实机回归，禁止为了 UI 或域名策略修改 alpha3 磁力 Parser/AJAX 主链。
 
 ## 磁力长按跨小程序合同
 1. 迅雷：`hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`
@@ -78,114 +112,73 @@
 4. 光鸭云盘：`hiker://page/magnet?rule=光鸭云盘&realurl=<encodeURIComponent(magnet)>`
 5. 复制磁力。
 
-- 未安装对应小程序时只 toast，不伪造其它入口。
-- 用户已明确：JavBus 磁力长按固定为以上四个云盘目标，不再使用“磁力君 / 云盘君”组合。
-
-## 导航 / 页面栈硬规则
-- alpha1 把有码/无码/欧美同级 Tab 实现为不断打开新 `hiker://page`，导致返回栈叠加。
-- alpha2 已改成 `putMyVar/setItem → refreshPage(false)`。
-- 同级 Tab / 排序 / 筛选只刷新当前 Workspace；详情、演员详情、具体分类、磁力页、预览页才属于真正钻取。
-- 跨程序事故文档：`docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md`。
-
-## 实机回归历史
-### alpha1
-- 首页影片、详情主链、演员详情可运行。
-- 暴露演员列表只一人、同级导航压栈、磁力入口埋太深、演员头像和部分图标问题。
-
-### alpha2
-- 演员列表 Parser 和同级导航已修。
-- 详情顶部磁力入口已出现，详情整体排版改善。
-- 预览图能取得。
-- 磁力 AJAX 仍失败。
-
-### alpha3（2026-08-23 09:42）
-- **磁力已实机恢复成功。**
-- 顶部预览入口能打开独立预览页，但独立页使用 `sm.thumb` 缩略图作为 `pic_1_full` 大图，实机明显模糊；详情下方直接点 `pics://sm.src` 原图则清晰。根因已确认是“把缩略图放大显示”，不是源图片质量问题。
-- 第三方播放使用 `icon_3` 后，MissAV/Jable 变成超大方块，123AV favicon 为空，整体空间占用过大且视觉失衡。
-
-## alpha4 UI 修复
-### 预览页
-- `javbusPreview` 的大图从 `sm.thumb` 改为 `C.image(sm.src, detailUrl)`，直接加载原始 sample 图。
-- 点击仍保留 `pics://sm.src` 查看原图。
-- 详情下方预览缩略图继续使用 thumb，避免无意义加载大量大图；只有独立预览页使用原图。
-
-### 第三方播放
-- `icon_3` 已由实机证明不适合三站播放入口：图标过大、留白过多。
-- alpha4 改用海阔 `icon_small_3`：一行三列，小图标 + 文字，作为紧凑播放线路条。
-- MissAV / Jable 继续原网站 favicon。
-- 123AV 改为 Shared Playback 已固定的仓库 SVG，解决 alpha3 中间空白图标。
-- 详情播放区只保留简短“第三方在线播放 / 选择线路”，不再额外堆大段说明。
-
-## 详情信息架构：alpha4
-1. Hero：封面 + 标题 + 日期 / 时长 / 分区。
-2. 主操作：`🧲 磁力 / 🖼 预览 N / ☆ 收藏 / 🌐 原站`。
-3. 第三方在线播放：MissAV / 123AV / Jable 紧凑三列。
-4. 番号 / 日期 / 时长快捷信息。
-5. 核心资料。
-6. 演员。
-7. 标签。
-8. 预览图：前 4 张缩略图 + 查看全部原图。
-9. 磁力：最多 3 条快速预览 + 查看全部；详情页不再重复显示磁力排序按钮。
-10. 相似影片。
+- 未安装对应小程序只 toast，不伪造其它入口。
+- 用户已明确长按目标固定为以上四个，不再使用“磁力君 / 云盘君”组合。
+- 四个跨小程序动作仍需分别完成 Stable 实机点击回归后才能标记全部通过。
 
 ## 收藏 / 状态
 - 影片收藏：`hiker://files/rules/JavBus/favorites_videos.json`
 - 演员收藏：`hiker://files/rules/JavBus/favorites_actors.json`
-- 旧影片收藏：`hiker://files/rules/Apollo/javbus/javbus_video.txt`
-- 旧演员收藏：`hiker://files/rules/Apollo/javbus/javbus_actor.txt`
-- 主要状态：`javbus_default_type / javbus_mag_mode / javbus_home_type / javbus_search_type / javbus_genres_type / javbus_actors_type / javbus_search_kw / javbus_mag_sort / javbus_fav_kind`。
+- 旧 Apollo 收藏路径仍只作为兼容读取：
+  - `hiker://files/rules/Apollo/javbus/javbus_video.txt`
+  - `hiker://files/rules/Apollo/javbus/javbus_actor.txt`
+- 删除旧本地规则文件不等于删除用户手机收藏数据；兼容读取保留，避免无必要丢失历史收藏。
+- 主要状态：`javbus_default_type / javbus_mag_mode / javbus_home_type / javbus_search_type / javbus_genres_type / javbus_actors_type / javbus_search_kw / javbus_mag_sort / javbus_fav_kind / javbus_active_domain / javbus_domain_config_cache / javbus_domain_config_ts`。
 
-## 架构与版本
-- Stable `2026081903` 冻结，仅作为回退基线。
-- 当前 Test：`Remote Shell → Bootstrap → Remote Manager → alpha1 Core/Compat/Runtime → alpha2 → alpha3 → alpha4 → Shared JAV Playback`。
-- Test app id `javbus-test` 与未来 Stable Remote state 隔离。
-- 每一轮 Test 使用新 Release / Bootstrap / Shell / rule version，不原地覆盖旧 Test 工件。
+## 导航 / 页面栈硬规则
+- alpha1 把有码/无码/欧美同级 Tab 实现成不断打开新页面，造成返回栈叠加。
+- alpha2 已改为 `putMyVar/setItem → refreshPage(false)`。
+- 同级 Tab / 排序 / 筛选只能刷新当前 Workspace；影片详情、演员详情、具体分类结果、磁力页、预览页才属于真正层级钻取。
+- 跨程序事故：`docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md`。
 
-## 禁止回退
-- 禁止恢复 `/actresses` 无页码 + `.avatar-box`。
-- 禁止同级 Tab / 筛选 / 排序不断压新页面。
-- 禁止把磁力或完整预览入口埋到详情底部。
-- 禁止磁力 AJAX 回退到只用封面 rawImg 替代源码 `var img`。
-- 禁止为了 UI 调整破坏 alpha3 已实机验证的磁力主链。
-- 禁止独立预览页再次用 thumb 充当全宽大图。
-- 禁止第三方播放再次使用导致巨型方块的 `icon_3`。
-- 禁止 JavBus 私有复制 shared playback Parser。
-- 未经实机验证不得晋级 Stable。
+## 发布与回退
+- Stable 2.0.0 是第一个本项目自有 JavBus 正式远程版。
+- 旧第三方本地工件在正式指针全部切换并回读后删除，不再作为可选 Stable/Local 渠道。
+- Test alpha4 作为本次晋级来源暂保留；下一轮 Test 必须从 Stable 2.0.0 重新 rebase，不能继续把旧 `baseVersion=2026081903` 当新开发基线。
+- Stable 新增 `latest.json`，正式版后续更新统一走 Stable Remote Manager。
+- Stable Shell/Bootstrap/Release 均使用新路径和新缓存键，避免设备继续命中 Test/旧本地状态。
 
-## alpha4 实机回归清单
-- [ ] 云仓库显示 Test `2.0.0-alpha4 / Build20004`。
-- [ ] 设置页显示 alpha4 / Build20004。
-- [ ] 顶部“预览 N”进入后，图片清晰度与详情下方点击原图一致。
-- [ ] 独立预览页仍可连续查看全部图片。
-- [ ] 第三方在线播放变成紧凑一行三列，不再出现巨型图块。
-- [ ] MissAV 图标正常。
-- [ ] 123AV 固定 SVG 正常，不再空白。
-- [ ] Jable 图标正常。
-- [ ] 三个播放入口点击能力不退化。
-- [ ] ABF-379 磁力仍能返回资源，确认 alpha4 未破坏 alpha3 磁力链。
-- [ ] 迅雷 / PikPak / 123云盘 / 光鸭云盘长按调用继续实机验证。
-- [ ] 演员列表、同级导航、搜索按钮无回归。
+## Stable 2.0.0 实机回归清单
+- [ ] 云仓库只展示新的 Remote Stable 2.0.0，不再展示 Legacy Local 正式版。
+- [ ] 覆盖导入后首页正常，设置页显示 `2.0.0 / Build20005`。
+- [ ] 当前 `www.javbus.com` 可用时正常加载。
+- [ ] 当前域名失效/被拦截时自动尝试备用域名并保存成功域名。
+- [ ] 设置页能看到当前域名和候选域名；“重新检测”可重置选择。
+- [ ] 演员有码/无码/欧美均可一次显示多名演员并翻页。
+- [ ] 分类/演员/搜索同级切换不叠加返回栈。
+- [ ] 顶部预览进入后使用原图，清晰度不再低于详情下方原图入口。
+- [ ] MissAV / 123AV / Jable 为紧凑三列，123AV 图标正常。
+- [ ] ABF-379 等影片磁力仍能返回资源，确认域名 Adapter 未破坏 alpha3 磁力链。
+- [ ] 迅雷 / PikPak / 123云盘 / 光鸭云盘长按分别实机验证。
+- [ ] 三个第三方播放 Provider 不退化。
 
 ---
 ## 版本记录
+### 2.0.0 / Build20005 / 2026-08-23
+- 用户明确要求晋级正式版并删除非本项目编写的旧本地版。
+- 由 Test 2.0.0-alpha4 晋级为第一个项目自有 Remote Stable。
+- 新增 Domain Adapter：远程候选配置、失败自动轮询、业务指纹健康校验、WebView 兜底、成功域名持久记忆、设置页手动重检。
+- 保留 alpha3 已实机验证的磁力链和 alpha4 UI 修复。
+- Stable 使用独立 `javbus` Remote Manager 状态与新 Shell/Bootstrap/Release。
+
 ### 2.0.0-alpha4 / Build20004 / 2026-08-23
-- alpha3 磁力实机成功后的小范围 UI 修复版。
-- 独立预览页改用 sample 原图，解决全宽放大 thumb 导致的模糊。
-- 播放入口 `icon_3 → icon_small_3`，改为紧凑三列。
-- 123AV 使用 shared Playback 固定 SVG。
-- 不修改 alpha3 磁力 Parser 主链。
+- 独立预览页由缩略图改用 sample 原图。
+- 播放入口 `icon_3 → icon_small_3`，123AV 使用 Shared Playback 固定 SVG。
+- 不修改 alpha3 磁力主链。
 
 ### 2.0.0-alpha3 / Build20003 / 2026-08-23
-- 详情顶部新增独立预览入口。
+- 详情顶部新增预览入口。
 - 磁力改为源码 gid/uc/img + 正则 Parser + WebView 兜底。
 - 磁力长按改为 迅雷 / PikPak / 123云盘 / 光鸭云盘。
-- 2026-08-23 09:42 实机确认磁力恢复成功。
+- 09:42 实机确认 ABF-379 磁力恢复成功。
 
 ### 2.0.0-alpha2 / Build20002 / 2026-08-23
-- 修复演员列表只一人、同级导航压栈、搜索按钮、详情磁力入口与演员头像。
+- 修复演员列表只一人：`/actresses/{page}` + `.item`。
+- 修复同级有码/无码/欧美反复压新页面。
+- 增加显眼磁力入口、搜索按钮和详情 UI 重排。
 
 ### 2.0.0-alpha1 / Build20001 / 2026-08-23
-- 首个完整远程重写 Test。
+- 首个自有远程重写 Test，建立 Core/Compat/Runtime、收藏、网站 Parser 与 Shared JAV Playback 接入。
 
 ### 2026081903 / 2026-08-19
-- 重写前 Stable Legacy Local 基线；冻结保留。
+- 第三方 Apollo 本地规则历史基线；2026-08-23 用户明确允许删除，不再作为正式/本地渠道。
