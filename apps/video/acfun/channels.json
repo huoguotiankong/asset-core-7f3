@@ -44,15 +44,15 @@
       "label": "网页版",
       "id": "acfun-web",
       "name": "ACFun·网页版",
-      "version": "1.1.0-web2",
-      "build": 11002,
-      "displayVersion": "Web 1.1.0-web2 · Build 11002 · Native Shell 1.1",
-      "path": "apps/video/acfun/acfun_remote_web_v110.txt",
+      "version": "1.2.0-web3",
+      "build": 11003,
+      "displayVersion": "Web 1.2.0-web3 · Build 11003 · Native Shell 1.2",
+      "path": "apps/video/acfun/acfun_remote_web_v120.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "网页源原生兜底版 · 首页/分类/搜索/详情全部海阔原生，只有最终播放和漫画阅读调用网站前端能力",
-      "highlights": ["海阔原生主界面", "原生卡片与分类", "原生搜索与详情", "网站只负责终端播放/阅读", "不再整页嵌入网页", "独立 acfun-web 状态", "APP版H5/纯网页可切换"],
+      "desc": "海阔原生网页源兜底 Web3 · 原生首页/详情继续保留，修复封面独立解密；最终播放/漫画终端固定使用 APP 风格 Flutter H5，并通过语义节点自动搜索进入目标内容",
+      "highlights": ["海阔原生主界面", "封面内联 XOR 解密", "全新图片缓存", "固定 APP版H5 终端", "Flutter flt-semantics 自动导航", "终端页纯全屏 X5", "Stable/Test 完全不动"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
