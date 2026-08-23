@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.1",
-  "testBuild": 10101,
-  "testShellVersion": "1.0.0-test.1",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v1_b10101.js",
-  "testRule": "apps/video/madou/madou_remote_test_v1_b10101.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.1/release.json",
+  "testVersion": "0.1.0-test.2",
+  "testBuild": 10102,
+  "testShellVersion": "1.0.0-test.2",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v2_b10102.js",
+  "testRule": "apps/video/madou/madou_remote_test_v2_b10102.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.2/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"first-test","note":"New program. No Stable channel exists yet; Test1 must be validated on a real Hiker device before any Stable promotion."}
+  "migration": {"stage":"test2-storage-safety","note":"Test2 supersedes Test1 after real-device startup exposed Hiker private setItem 1MB limit. No Stable channel exists yet."}
 }
