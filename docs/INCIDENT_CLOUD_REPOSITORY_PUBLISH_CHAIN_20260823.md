@@ -131,3 +131,40 @@ manifest.revision === manifest_meta.revision
 ```
 
 这次复发说明“新程序发布清单”不能依赖开发者记忆。以后新建小程序的完成定义必须把 **root manifest + manifest_meta + 标准 channels[]** 作为 P0 工件，与 app Release/Shell/registry 同级检查；任何一个缺失都不得向用户描述为“已在云端仓库发布”。
+
+## 8. Stable 3.5.4 同步后页面仍显示旧目录快照
+
+911 的 manifest/channels/meta 全部修正并回读后，用户再次实机确认“还是没有”。继续追查当前 Stable 3.5.4 的真实代码发现：
+
+```text
+Single Workspace 打开时
+→ workspaceData(items)
+→ programs 被一次性序列化进 HTML
+
+点击“同步”
+→ workspaceStaticAction('sync')
+→ syncManifest() 更新后台 manifest 缓存
+→ 只返回 toast
+→ 当前 Single Workspace HTML 不重建
+```
+
+因此出现第三层假象：**云端 manifest 已正确、手机后台缓存也可能已正确，但当前工作台仍显示同步前的静态 programs 快照。** 这不是 911 条目再次丢失，而是规则仓库同步动作缺少 UI refresh。
+
+2026-08-23 已从 Stable 3.5.4 派生规则仓库 `3.5.4-test.2 / Build386`：
+
+- 新增不可变 `releases/test-3.5.4-sync2/release.json`。
+- 新增 `sync_refresh_patch.js`，仅覆盖同步动作。
+- `syncManifest()` 成功后调用 `refreshPage(false)`，强制重建 Single Workspace。
+- 新 Shell：`rule_repo_test_v132.txt`。
+- 活动 `test.json` 与 `channels.json` 已指向 Test2。
+- Stable 3.5.4 / Build384 不改，等待实机确认后再决定是否晋级。
+
+以后规则仓库目录发布的实机完成条件增加一项：
+
+```text
+云端 revision 正确
+&& 本地 sync 成功
+&& 当前工作台重建后能看到新条目
+```
+
+仅看到“目录已更新”toast 不能视为 UI 已完成同步。
