@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 12:04",
+  "updatedAt": "2026-08-23 12:55",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.11","build":10111,
-      "displayVersion":"Test 0.1.0 · Access & Image Loader 11","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v11_b10111.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test10 实机确认短视频封面已恢复，但长视频/精选封面仍灰；同时 34:52 长视频只下发 2 秒 source 与 120 秒 preview，结合 APK 的 isfree/coins/is_pay 和 /api/user/watchingMvByCoins 可确认部分长视频属于收费/试看语义而非单纯播放故障。Test11 图片改为 APP 风格自取：本地占位触发 JS 后自行 fetch/toHex、多候选/多 Header 重试、明文判型和 AES 解密；视频详情按免费/已购买/未购买收费三态展示，收费未购只提供试看和显式确认后的汤币解锁，绝不自动消费。Stable 仍不存在。",
-      "highlights":["图片改为本地占位触发 + JS 自行 fetch/toHex，不再要求远程图片先被海阔图片加载器成功读取","图片按候选 URL 与 okhttp/browser/minimal/Referer Header 模式重试，再执行明文 magic、legacy AES-CFB、AES-CBC 判型","详情恢复 APK 的 isfree / coins / is_pay / preview_tip / preview_video 访问状态","未购买收费视频显示试看与汤币价格，不再把 2 秒/120 秒预览误报为完整线路故障","汤币解锁仅在用户点击并再次确认后调用 /api/user/watchingMvByCoins，绝不后台自动消费","短视频继续列表卡片直接播放；Test10 HLS sniff/包装 URL 播放适配继续复用"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.12","build":10112,
+      "displayVersion":"Test 0.1.0 · App + PWA Provider 12","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v12_b10112.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"参考用户上传的汤头条2海阔规则做兼容增强：保留 APK App Provider 的启动会话、详情、收费状态、漫画和播放授权，同时新增同站 PWA Provider（dpi4.tbrapi.org / client=pwa / AES-CFB）补短视频与搜索。图片改用参考规则已验证的 AES/CBC/PKCS5Padding 输入流解密。短视频卡片直接播放，但先按 ID 回 App 详情获取合法 source；收费内容仍只允许试看或显式确认后的汤币解锁，不复制参考规则删除 seconds 参数的绕过方式。社区首页改为紧凑频道导航并尝试真实 list_post。Stable 仍不存在。",
+      "highlights":["新增 App + PWA 双 Provider，PWA 只做兼容补充，不替代 App 业务协议","短视频优先 /api/MvList/smallVideoByTag，App small/smallVideoByTag 作为回退","短视频点击直接播放，但先回 App 详情按 ID 获取 source_* 与收费状态","图片采用参考规则实机证明可用的 AES/CBC/PKCS5Padding key/iv 输入流解密","搜索优先 PWA /api/MvSearch/video，失败回 App Provider","社区 5 个频道改为紧凑标签，不再渲染成巨大空卡；开始调用 list_post/list_post2","收费内容保留官方试看/已购/汤币解锁语义，禁止自动消费或删试看参数"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
