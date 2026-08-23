@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.5",
-  "defaultBuild": 10105,
-  "testVersion": "0.1.0-test.5",
-  "testBuild": 10105,
-  "testShellVersion": "1.0.0-test.5",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v5_b10105.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v5_b10105.txt",
+  "defaultVersion": "0.1.0-test.6",
+  "defaultBuild": 10106,
+  "testVersion": "0.1.0-test.6",
+  "testBuild": 10106,
+  "testShellVersion": "1.0.0-test.6",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v6_b10106.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test5-image-glide-playback-format-comic","note":"Test4 实机确认视频详情/source_* 已正确，但 thumb_cover 需要 APK 自定义 Glide 选图与解密；严格 JSON 多线路不被海阔识别；comic/home 为分类配置；诊断子规则触发 URL 模型异常。Test5 按这些实机事实分链修复。"}
+  "migration": {"stage":"test6-server-version-image-helper-dynamic-comic-rank","note":"Test5 实机已确认真实推荐403条与 source_* 播放技术链成立，但媒体为2秒旧版本维护占位片；图片候选 URL 正确但解密回调未执行；comic/home 是顶层动态 api_list/params_list；排行榜缺 type。Test6 按 APK 与海阔官方调用方式修复。"}
 }
