@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "1.0.0-alpha9",
+      "version": "1.0.0-alpha10",
       "baseVersion": "clean-rewrite",
       "targetVersion": "1.0.0",
-      "build": 10009,
-      "displayVersion": "Test 1.0.0-alpha9 · Build 10009 · Shell 8.8",
-      "path": "apps/video/acfun/acfun_remote_test_v088.txt",
+      "build": 10010,
+      "displayVersion": "Test 1.0.0-alpha10 · Build 10010 · Shell 8.9",
+      "path": "apps/video/acfun/acfun_remote_test_v089.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "全新重写 Alpha9 · 原生播放路由矩阵 + 首TS授权探针 + 漫画首图自动裁白",
-      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "漫画正文已实机恢复", "can/watch GET已确认", "签名TS 403已定位", "videoUrl/playPath/previewUrl矩阵", "原生m3u8/play探测", "403响应正文诊断", "Cookie/jhg/H5/APP/Range探针", "首图源白边自动裁剪"],
+      "desc": "全新重写 Alpha10 · CDN auth_key 客户端重签 + 漫画首图持续内容裁白",
+      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "漫画正文已实机恢复", "can/watch GET已确认", "invalid sign根因已确认", "playbackAuthKey/playbackDomain扫描", "Type-A auth_key重签", "首TS 2xx真验证", "KEY/TS逐条重写", "首图持续内容扫描", "全新裁白缓存"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
