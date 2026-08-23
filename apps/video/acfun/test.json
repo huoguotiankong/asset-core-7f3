@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha18",
-  "build": 169,
-  "shellVersion": "7.4.0-test",
+  "version": "1.0.0-alpha1",
+  "build": 10001,
+  "shellVersion": "8.0.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha18/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v074.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha1/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v080.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha18 是 Alpha17 发布前静态复核发现的播放 Seed 精确修正版。Alpha16 实机已证明视频真实 seed 位于 path=jpd/...m3u8；Alpha17 首版 mediaKeys 未把通用 path 纳入候选，可能再次绕回 can/watch。为避免发布一个已知可能漏掉实机有效 seed 的版本，Alpha18 活动 Release 保留 A17 的 jhimage/CDN、短视频当前 Bootstrap Renderer、漫画显式 query Reader，但用新的 validated-seed Playback 替代 A17 播放模块：优先扫描 videoUrl/playUrl/videoUri/m3u8/playPath/sourcePath，再有限接受 path/url，且通用 path/url 必须匹配 m3u8/mp4/jpc/jpd 等媒体形态，防止误把封面 path 当播放地址；随后仍使用 Stable __v043DecodePlayUrl 并把远程 decode URL + Header 直接交给播放器，不调用 cacheM3u8。A16/A17旧播放模块均不进入活动 Release。小说/有声 POST-first 成功链继续不动，Stable/latest 冻结。"
+  "notes": "Clean Rewrite Alpha1。Test 已从历史 0.6.0-alpha18 补丁栈完全切离，使用独立 remote state id=acfun-test，Stable 0.4.9 / Build149 / Shell5.11.3 不变。新链按 APP 1.9.7 静态协议与当前实机证据重新实现：游客令牌/签名/AES encData、Station 专题首页、动漫/视频 ClassType+Zone、漫画、短视频、社区、小说、有声、统一搜索、本地收藏历史；jhimage/相对图统一进入已验证 XOR 解码器，播放优先真实媒体 Seed，缺失时才补 can/watch，远程 decode URL 直接交播放器。UI 完全重构为 APP 风格多专题首页与独立详情/阅读页。当前状态为待海阔实机回归，不得晋级 Stable。"
 }
