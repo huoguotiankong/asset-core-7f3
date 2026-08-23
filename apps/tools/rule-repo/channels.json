@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 20:03",
+  "updatedAt": "2026-08-23 20:40",
   "channels": [
     {
       "channel": "stable",
@@ -27,17 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.4-test.2",
+      "version": "3.5.5-rc1",
       "baseVersion": "3.5.4",
-      "targetVersion": "3.5.4",
-      "build": 386,
-      "displayVersion": "Test 3.5.4-test.2 · Build 386 · Sync Refresh",
+      "targetVersion": "3.5.5",
+      "build": 387,
+      "displayVersion": "Test 3.5.5-rc1 · Build 387 · Icon Delivery 1.0",
       "path": "apps/tools/rule-repo/rule_repo_test_v132.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "同步目录后立即重建 Single Workspace，修复新增程序已同步但页面仍显示旧快照",
-      "highlights": ["同步成功自动刷新页面", "新增程序即时出现", "Stable 3.5.4 业务/UI 不变", "Test 独立状态与回退链保留"],
+      "desc": "统一修复部分程序图标和底部导航 Raw GitHub 破图，保留 Test2 同步即时刷新",
+      "highlights": ["本仓 Raw 图标自动转 jsDelivr", "底部五栏统一 CDN 图标", "同步成功自动刷新页面", "Stable 3.5.4 保持不动"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
