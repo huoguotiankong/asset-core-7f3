@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.7",
-  "testBuild": 10107,
-  "testShellVersion": "1.0.0-test.7",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v7_b10107.js",
-  "testRule": "apps/video/madou/madou_remote_test_v7_b10107.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.7/release.json",
+  "testVersion": "0.1.0-test.8",
+  "testBuild": 10108,
+  "testShellVersion": "1.0.0-test.8",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v8_b10108.js",
+  "testRule": "apps/video/madou/madou_remote_test_v8_b10108.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.8/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test7-playback-navigation-contract","note":"Test7 keeps Test6 quota recovery and fixes two cross-program interaction regressions that were already documented globally: same-level subcategory chips now switch state in-place instead of pushing new madouList pages; detail playback is isolated as the sole Primary Play task and directly hands off the known direct URL or video:// sniffing without a second Bootstrap/detail fetch."}
+  "migration": {"stage":"test8-direct-playback-detail-ui","note":"Test8 keeps Test7 navigation/playback-contract fixes, removes the boilerplate site intro from detail, uses a full-width horizontal hero, and adds a structured direct-media resolver before video:// fallback: detail HTML -> player/iframe -> one nested player hop -> small expiring media cache."}
 }
