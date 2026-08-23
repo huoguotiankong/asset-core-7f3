@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "911baoliao-test",
+  "name": "911爆料",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseRelease": "apps/video/911baoliao/releases/0.1.0-test.1/release.json",
+  "modules": [
+    {"name":"core","path":"apps/video/911baoliao/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/911baoliao/releases/0.1.0-test.1/runtime.js"},
+    {"name":"routePatch","path":"apps/video/911baoliao/releases/0.1.0-test.2/route_patch.js"}
+  ],
+  "verify": {"global":"Bl911RemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes": "Single-point Hiker device route fix. Internal hiker://page rule parameter now keeps the raw Chinese rule name instead of percent-encoding it; search input route is fixed at the same time. Test1 parser/UI behavior is otherwise unchanged."
+}
