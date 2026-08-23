@@ -4,15 +4,15 @@
   "id": "javbus-test",
   "appId": "javbus",
   "name": "JavBus",
-  "version": "2.0.0-alpha3",
+  "version": "2.0.0-alpha4",
   "baseVersion": "2026081903",
   "targetVersion": "2.0.0",
-  "build": 20003,
-  "shellVersion": "2.0.0-test.3",
-  "shellRuleVersion": 2026082303,
+  "build": 20004,
+  "shellVersion": "2.0.0-test.4",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/javbus/releases/2.0.0-alpha3/release.json",
-  "rule": "apps/video/javbus/javbus_remote_test_v3_b20003.txt",
+  "release": "apps/video/javbus/releases/2.0.0-alpha4/release.json",
+  "rule": "apps/video/javbus/javbus_remote_test_v4_b20004.txt",
   "updatedAt": "2026-08-23",
-  "notes": "alpha2 第二轮实机反馈修复：影片详情顶部新增完整预览入口；第三方在线播放改为 MissAV/123AV/Jable 原网站 favicon 宫格；磁力恢复改为详情源码 gid/uc/img 原始变量请求 JavBus AJAX，并使用 HTML 正则解析、AJAX WebView 与详情渲染后级兜底；磁力长按固定为 迅雷/PikPak/123云盘/光鸭云盘，复用此前 JavDB 已验证跨小程序调用合同。"
+  "notes": "alpha3 实机已确认 JavBus 磁力恢复成功。本版不改磁力主链：独立预览页从缩略图改为直接加载 sample 原图；第三方在线播放从大块 icon_3 改为紧凑 icon_small_3 一行三列；123AV 改用 shared JAV Playback 已固定的仓库 SVG，避免原站 favicon 空白。"
 }
