@@ -1,0 +1,25 @@
+{
+  "schema": 4,
+  "id": "madou",
+  "name": "麻豆传媒",
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-23 13:45",
+  "channels": [
+    {
+      "channel":"test",
+      "label":"测试版",
+      "id":"madou-test",
+      "name":"麻豆传媒",
+      "version":"0.1.0-test.1",
+      "build":10101,
+      "displayVersion":"Test 0.1.0-test.1 · Build 10101",
+      "path":"apps/video/madou/madou_remote_test_v1_b10101.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":true,
+      "desc":"麻豆传媒全新原生海阔版首测，优先覆盖原站分类、搜索、详情、播放、收藏和历史，并用动态菜单适配站点后续分类变化。",
+      "highlights":["动态同步原站全分类与子导航","首页/分类双列原生内容卡","自动识别站内搜索表单","详情直链提取 + video:// 嗅探兜底","本地收藏与浏览历史","设置页包含最小诊断信息"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
+    }
+  ]
+}
