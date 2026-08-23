@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.11",
+  "build": 10111,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.10","build":10110,"release":"apps/video/tangtoutiao/releases/0.1.0-test.10/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/image.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/compat.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.11"},
+  "notes": "根据 Test10 实机与 APK 继续恢复真实业务合同：图片不再依赖远程图先成功进入海阔图片线程，而由本地占位图触发 JS 后自行 fetch/toHex、多候选/多 Header 重试、明文判型及 legacy CFB/AES-CBC 解密；视频详情解析 isfree/coins/is_pay/preview_tip/preview_video，收费未购买视频明确进入试看/汤币解锁状态，只有用户明确确认后才调用 /api/user/watchingMvByCoins 获取完整播放 URL。短视频继续列表直接播放。"
+}
