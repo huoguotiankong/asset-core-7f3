@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.18",
-  "build": 10118,
-  "shellVersion": "1.0.0-test.18",
-  "shellRuleVersion": 2026082319,
+  "version": "0.1.0-test.19",
+  "build": 10119,
+  "shellVersion": "1.0.0-test.19",
+  "shellRuleVersion": 2026082320,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.18/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v18_b10118.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.19/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v19_b10119.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test17 实机确认分类切换缓存有效，但 PWA 短视频 source_240 仍只有 2–3 秒。Test18 保持 Test16 图片与 Test10/Test15 长视频播放基线不变，短视频列表改为优先原 APP /api/MvList/smallVideoByTag 精确参数 tag/page/limit，PWA 仅兜底；同时启动分类中心第一阶段，接入真实视频分类、创作者、图集、小说、有声、合集、话题、求片、粉丝团等页面。"
+  "notes": "Test19 为 Test18 启动依赖链热修复。Test18 pages_patch.js 继承 TangTouTiaoPagesV025，但 release.json 漏载 Test17 pages_patch.js，导致启动即 ReferenceError。Test19 仅补回 Test17 页面基座并保持 Test18 的短视频 Provider、分类中心、图片、长视频与试看业务逻辑不变。"
 }
