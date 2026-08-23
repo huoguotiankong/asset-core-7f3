@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.8",
-  "build": 10108,
-  "shellVersion": "1.0.0-test.8",
-  "shellRuleVersion": 2026082309,
+  "version": "0.1.0-test.9",
+  "build": 10109,
+  "shellVersion": "1.0.0-test.9",
+  "shellRuleVersion": 2026082310,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.8/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v8_b10108.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.9/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v9_b10109.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test7 实机精修：短视频图片已可显示、部分真实长视频已可播放，但长视频部分封面仍灰、部分 source_* 是数秒维护占位片；详情页多个媒体返回项还触发海阔连续选集/播放列表上下文；排行榜真实返回创作者对象。Test8 只保留一个媒体播放入口，清晰度改状态选择；播放前预检并过滤短占位片、自动回退；picx 普通 JPEG 直显；排行榜按创作者模型渲染。"
+  "notes": "根据 Test8 实机继续精修：所有视频封面仍灰，诊断确认 Test8 对 picx JPEG 走 direct-public-image 丢失海阔图片 Header；长视频 19:34 的 source_240 预检仅 57 秒却被旧阈值误判有效；短视频可播且用户明确要求列表直接播放。Test9 改为 picx 标准图使用 @headers 注入 UA/Accept；播放同时校验标称时长与实际 EXTINF 时长并增加 source_origin/preview fallback；短视频卡片直接播放；详情 UI 收敛。"
 }
