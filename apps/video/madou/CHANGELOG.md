@@ -1,5 +1,56 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.9 / Build 10109
+
+### 实机结果
+- Test8 仍显示浏览器兼容解析，没有命中真实直链；因此 Test8 不能再称“免嗅已经完成”。
+- Test8 新增的 `resolveDirectMedia()` 在详情渲染阶段同步追踪 player/iframe/nested-player，用户实机确认进入影片详情页也明显变慢。
+- 当前最高优先级变成两件事：**先恢复详情首屏速度；再继续研究真正的 player API/解密链，而不是让协议研究阻塞页面。**
+
+### Test8 性能回归根因
+- Test8 在 `R.detail()` 内调用 `C.resolveDirectMedia(html,u)`。
+- 该函数除当前详情 HTML 外，还可能同步请求最多 3 个 player 页面；每个 player 又可能继续请求最多 2 个 nested player，单请求 timeout 6.5 秒。
+- 这些请求发生在 `setResult()` 之前，所以任何一个 player 慢/失败都会直接表现成“详情页长时间打不开”。
+- 实机同时证明这条链仍未获得真实媒体，因此它既没有实现纯免嗅，又破坏了详情性能。
+
+### Test9 修复
+- 新增 `fast_detail_playback.js`，覆盖 Test8 详情实现。
+- **详情首屏严格只允许一次详情请求**：
+  - 不再请求 iframe/player；
+  - 不再请求 nested player；
+  - 不再在详情页等待多次 6.5 秒 timeout。
+- 当前详情 HTML 若已经包含 `.m3u8/.mp4`、video/source、file/playUrl 等真实媒体字段，则直接交播放器。
+- 当前 HTML 没有媒体时，只从字符串中提取最可能的 iframe/player URL，**不请求该 URL**，因此不会拖慢详情首屏。
+- 点击“立即播放”后改为定向 `webRule://player@JS`：
+  - 优先加载识别出的播放器页，而不是完整影片详情页；
+  - 每 250ms 检查 `video.currentSrc / video.src / source[src]`；
+  - 同时检查 `window._getUrls()` / `fy_bridge_app.getUrls()` 中的 `.m3u8/.mp4`；
+  - 屏蔽 jpg/png/webp/svg、广告、analytics 等无关资源，缩短浏览器解析阶段。
+- 详情继续保留 Test8 的 Hero、标题/日期、相关标签、相关推荐和本地收藏，不恢复固定宣传简介。
+- Primary Play 仍只有一个，不重新加入第二“兼容播放”媒体项，避免播放器列表污染。
+
+### 关于“免嗅”的新定义
+- Test8 的命名过早：普通 fetch 跟 player 页面没有拿到真实媒体，最终仍依赖浏览器，因此不能称已经完成免嗅。
+- Test9 的 `webRule` 属于**快速定向浏览器解析**，目标是先把实际等待显著缩短，不冒充纯 API 免嗅。
+- 真正免嗅下一阶段必须取得至少一种稳定事实：
+  1. player 页面真实媒体 API；或
+  2. JS 加密/解密参数与算法；或
+  3. 可由详情 ID 直接推导的媒体配置接口。
+- 拿到其中之一后再把 WebRule 完全替换为 Request/Protocol → Player URL。
+
+### 发布门禁
+- `fast_detail_playback.js` 已执行 `node --check` 通过。
+- `bootstrap_test_v9_b10109.js` 已执行 `node --check` 通过。
+- Test9 使用新 Release、新 Bootstrap、新 Shell，`minBuild=10109`，不原地覆盖 Test8。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 已切到 Test9；云仓 revision 同步为 `202608231558`，itemCount 保持 12，并保留 Pornhub Test3 等并行更新。
+- 通用媒体事故文档追加“详情首屏禁止同步多跳媒体探测”和“webRule/video:// 不得冒充纯免嗅”的长期规则。
+
+### Test9 回归重点
+1. 首先比较进入同一影片详情的速度，必须明显快于 Test8；若仍慢，则只剩“详情本身单次 HTTP 请求/源站网络慢”这一层，下一步再做 DetailModel 小缓存或列表预传。
+2. 点“立即播放”，观察 `快速解析 · 直接加载播放器页` 是否比 Test8 `video://详情页` 明显更快进入播放器。
+3. 若播放器页快速解析仍慢/失败，下一轮不再继续加通用正则，而是新增一次性 player 网络诊断，抓真实 API/参数后做站点专用纯免嗅。
+4. 继续回归同级分类原页切换、1MB 私有存储保护和播放器列表污染，禁止性能修复破坏已有恢复项。
+
 ## 2026-08-23 · 0.1.0-test.8 / Build 10108
 
 ### 实机结果
