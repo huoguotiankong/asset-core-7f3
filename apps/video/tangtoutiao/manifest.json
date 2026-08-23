@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.18",
-  "defaultBuild": 10118,
-  "testVersion": "0.1.0-test.18",
-  "testBuild": 10118,
-  "testShellVersion": "1.0.0-test.18",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v18_b10118.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v18_b10118.txt",
+  "defaultVersion": "0.1.0-test.19",
+  "defaultBuild": 10119,
+  "testVersion": "0.1.0-test.19",
+  "testBuild": 10119,
+  "testShellVersion": "1.0.0-test.19",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v19_b10119.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v19_b10119.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test18-app-short-provider-and-classification-phase1","note":"Test18 保持 Test16 图片与 Test10/Test15 长视频/试看基线；短视频列表优先使用原 APP smallVideoByTag 精确参数，PWA 仅兜底；分类中心第一阶段接入视频分类、创作者、图集、小说、有声、合集、话题、求片、粉丝团等真实接口页面。"}
+  "migration": {"stage":"test19-release-dependency-hotfix","note":"Test19 修复 Test18 Release 漏载 Test17 pages_patch.js 导致 TangTouTiaoPagesV025 未定义的启动故障；仅修加载依赖，不改 Test18 业务实现。"}
 }
