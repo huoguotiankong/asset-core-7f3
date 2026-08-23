@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.14",
-  "defaultBuild": 10114,
-  "testVersion": "0.1.0-test.14",
-  "testBuild": 10114,
-  "testShellVersion": "1.0.0-test.14",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v14_b10114.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt",
+  "defaultVersion": "0.1.0-test.15",
+  "defaultBuild": 10115,
+  "testVersion": "0.1.0-test.15",
+  "testBuild": 10115,
+  "testShellVersion": "1.0.0-test.15",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v15_b10115.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test14-reference-authorized-rewrite","note":"恢复 App featuredAv 大列表以修复推荐/长视频仅 3 条；短视频与免费/已购买长视频增加用户上传参考规则的 long 主机兼容写法，收费未解锁内容仍只允许官方试看/正常汤币解锁。"}
+  "migration": {"stage":"test15-stable-hiker-handoff-and-cover-repair","note":"Test14 裸 long. URL 兼容实验被实机否定。Test15 对短视频/PWA 使用项目内已验证的 cacheM3u8 + 显式播放器 Header 交付方式；App 长视频保留 Test10 播放核心；大列表继续 36 条并尝试 PWA featuredAv，图片最终适配优先 thumb_cover_str + self-fetch 多 Header。"}
 }
