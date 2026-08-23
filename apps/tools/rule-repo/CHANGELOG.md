@@ -1,29 +1,41 @@
 # 我的规则仓库 Changelog
 
-> **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell。由于它同时承担安装中心与自举恢复职责，任何更新协议、缓存、通道、recovery、云端发布链变化都必须写入本日志。
+> **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
-## 3.5.5 Stable（Build 389 / Shell 1.5.5 / Bootstrap 1.5.5 / Manager 2.0.4）
+## 3.5.6-rc1 Test（Build 391 / Shell 1.0.37-test / Bootstrap 1.0.36-test / Manager 2.0.4）
 
-- 用户在 RC3 修复云端更新协议后明确要求“云端仓库正式版也升上来”，因此本轮将 **3.5.5-rc3 / Build389** 作为用户指令晋级基线，正式发布 **Stable 3.5.5 / Build389**。本次不是等待额外 RC3 实机截图后自动晋级，而是依据用户当前明确发布要求执行；最终运行效果仍以正式版手机实机为准。
-- Stable 3.5.5 继承 Single Workspace 13.2 已有业务/UI，并正式吸收三项后续修复：① `sync_refresh_patch.js`，目录同步成功后立即 `refreshPage(false)` 重建工作台；② Icon Delivery 1.1，本仓 Raw/WebRaw 图标统一转换到 jsDelivr，且 `channelMeta()` 的 Stable/Test/Local 版本卡图标也走同一适配；③ Remote Delivery Protocol 2.0 / Remote Manager 2.0.4。
-- Remote Manager 2.0.4 对可变 `latest/test` 指针使用 Raw → WebRaw → GitHub API → jsDelivr 容错；保存最后一次成功元数据；以 `max(current build, default build, minBuild)` 为安全 floor，陈旧 CDN 指针不得把当前版本降级；全部元数据源短时不可达时继续运行当前/Bootstrap 内置安全 Release，不再把网络抖动误报为程序升级失败。
-- Stable Release 新建 `releases/3.5.5/release.json`。**正式链不包含 `test/v1.0.0/state_patch.js`、旧 Test baseline 或 RC3 Test identity patch**；最终 `releases/3.5.5/stable_patch.js` 强制恢复 `hc_repo_* / hc_repo_v3_*` 正式状态命名空间、`isTestChannel()=false`，并把工作台故障恢复重新绑定到 `bootstrap_v155.js`。
-- 新建 Stable Bootstrap `bootstrap_v155.js`。Shell `rule_repo_remote_v355.txt` 数值 version 为 **2026082307**，直接固定到不可变 staging commit `5036c15d8beabd4ade6482b0bcdd02910ceb6d43` 的 Bootstrap v1.5.5；Bootstrap 内 Manager 2.0.4 同样固定到不可变 commit，多镜像仅承担可用性，不再让可变 `@main` 决定已安装 Shell 的核心启动版本。
-- 发布过程首次正式采用“两阶段发布”：先准备不可变 Release/Bootstrap/Test baseline 资产，确认路径存在后，再将 `stable.json / latest.json / test.json / channels.json / Shell` 作为活动指针统一切换。最终 Stable/Test 活动指针切换提交为 `449242d2b4f3ecf4ef3de023ad1b0f19e852d806`；后续根目录和 registry 更新在并发 XVideos 发布推进 `main` 后均重新基于最新 HEAD 构建，**未使用 force**，证明并发发布必须执行 fresh-HEAD rebase。
-- Stable 3.5.5 发布后立即续线 **Test 3.5.5-test.1 / Build390 / Shell 1.0.36-test / Bootstrap 1.0.35-test / Manager 2.0.4**。Test 业务/UI 与 Stable 3.5.5 对齐，只重新应用 Test 独立状态、身份与 Remote Manager state；满足 `baseVersion=3.5.5` 且 `Build390 > Stable Build389`。
-- 旧 Stable **3.5.4 / Build384 / Shell1.5.4** 的 Release/Shell 保留为正式回退基线；RC3 Release 继续作为本次晋级来源历史，不覆盖、不删除。
-- 根 `manifest.json` 与 `manifest_meta.json` 已同步到 revision **202608232246 / itemCount16**；规则仓库条目显示 `Stable 3.5.5 / Test 3.5.5-test.1`。同时保留并发 XVideos Test7 的最新云仓条目，没有用旧快照覆盖其它程序。
-- `registry.json` 已同步记录 Stable 3.5.5/Build389、Bootstrap v155、Release 3.5.5、Test 3.5.5-test.1/Build390 与 Test Release/Shell，作为后续恢复链事实源。
-- 本次云端事故与发布协议沉淀在 `docs/INCIDENT_CLOUD_REPOSITORY_PUBLISH_CHAIN_20260823.md`；双通道约束同步写入 `CHANNELS.md`。以后任何远程小程序都应优先使用“不可变资产准备 → fresh HEAD → 原子活动指针切换 → manifest/meta/registry → 实机闭环”，禁止多 commit 半发布和并发 force 覆盖。
+- 用户在 Stable 3.5.5 实机截图确认首页已有 18 个程序、底部五栏正常，但提出两个 P0 产品问题：**首页每次打开特别慢**，以及首页“可更新”长期显示 **0**；截图同时确认麻豆传媒程序卡图标仍命中破图缓存。
+- 排查真实运行链后确认首页慢不是单纯 GitHub 网络问题，而是两个同步热路径叠加：
+  1. `install_probe.js` 的 `stats()` 对每个程序调用 `actualInstalled()`，继而执行 `request('hiker://home@'+title)`。18 个程序即至少一轮串行本地规则存在性探测；程序数继续增长时首屏耗时会近似线性增长。
+  2. Single Workspace 13.x 的 `hybridProgramData()` 对每个 `channel-group` 在首页构建阶段立即执行 `channelMeta(item)`，导致首页额外形成 **N+1 channels.json 请求**。版本中心数据本应只在用户进入具体程序时需要，不应阻塞首页。
+- “可更新 = 0”确认是代码合同缺陷，不是用户设备状态：`install_probe.js` 的 `stats()` 遇到 `channel-group` 时仅统计安装数后直接 `continue`，从未进入更新比较；而当前云仓大多数程序正是 `channel-group`。同时旧 `updatesView()` 又硬编码 `p.update && !p.channel`，即使多版本程序被算出可更新也会被更新中心再次过滤。
+- 本轮升级为 **Single Workspace 14.0 / Fast Home & Update Index**：
+  - 普通首页打开优先使用本地“最后一次成功目录”缓存立即渲染；联网刷新统一交给显式“同步”，首装无缓存时才进入原网络链。
+  - 首页统计不再调用 `rulePresence()` 扫描全部 `hiker://home@标题`；安装/当前通道状态改用规则仓库自身导入记录与持久化 group state，避免每次首屏重新探测。
+  - 根 manifest 的复合版本字段（`Stable … / Test … / Local …`）成为首页轻量 Update Index；按当前实际通道与同通道目标版本比较，`channel-group` 正式纳入“可更新”数字和更新中心。
+  - 新的通道导入 raw 写入 `__repoParentId / __repoChannel / __repoBuild`，生成有效海阔导入口令后记录当前父程序、通道、版本与 build，为后续 O(1) 更新比较提供稳定状态。
+  - 每个程序的 `channels.json` 改为**按需加载**：首次进入具体多版本程序时只拉该程序一份 channel metadata 并持久缓存；随后进入直接使用缓存。首页不再预取全部版本中心数据。
+  - 更新中心取消 `!p.channel` 排除条件，多版本程序与单版本程序共用 `p.update` 合同。
+- 对历史安装状态采用兼容迁移：优先读取新的 group state；没有新状态时从现有 `importHistory / installedMap` 推断最近一次 Stable/Test/Local 导入记录。该迁移属于性能优先的快速状态模型，**用户最终是否真的完成海阔导入仍以实机为准**；如旧设备记录不足，后续可以增加手动“刷新安装状态”扫描，而不重新塞回首页热路径。
+- 麻豆传媒仓库 SVG 源文件本身有效，截图更符合设备图片缓存继续命中旧失败结果。本 Test 对 Madou 图标 URL 增加独立 `?v=2026082401` 缓存破坏，不全局刷新其它正常图标。
+- 新建不可变资产：
+  - `releases/test-3.5.6-rc1/home_fast_update_patch.js`
+  - `releases/test-3.5.6-rc1/release.json`
+  - `bootstrap_test_v136.js`
+  - `rule_repo_test_v137.txt`
+- 活动 Test 已切到 **3.5.6-rc1 / Build391**，`baseVersion=3.5.5`，Stable **3.5.5 / Build389** 完全冻结不变。Shell 数值 version 为 `2026082401`，固定引用不可变 Bootstrap 提交，不依赖可变 `@main` 启动核心。
+- 本轮仓库并发非常活跃，18AV/JavMenu 等任务持续推进 `main`。两次旧 HEAD 的 Git Data fast-forward 均被 GitHub 422 正确拒绝；全过程未使用 force。不可变资产改用 contents API 安全落盘，最终 Test `test.json / channels.json / app manifest` 再基于最新 HEAD 一次原子活动指针切换。
 
-### 3.5.5 正式版实机回归重点
+### 3.5.6-rc1 实机回归重点
 
-1. 覆盖/导入正式版后首页可正常打开，About/更新页显示 `3.5.5 / Build389`。
-2. 麻豆传媒、Hanime1、汤头条等原 Raw GitHub 程序图标，以及底部“分类 / 搜索 / 更新 / 设置”图标不再破图。
-3. 同步目录后当前 Single Workspace 立即刷新，且 XVideos Test7 等最新并发目录条目仍存在。
-4. 正式版更新页在 GitHub/API/CDN 短时异常时应提示“当前版本可用 / 元数据暂不可达或传播中”，不应再直接报整套升级失败。
-5. 程序卡导入、版本卡导入、备份、诊断、收藏、活动记录和设置不退化；任何 recovery 不得串入 Test 状态。
+1. 覆盖测试版后连续退出/重新进入首页，比较首屏出现速度；第二次及以后应明显快于 3.5.5。
+2. “全部 / 已安装 / 可更新 / 收藏”四个数字应快速出现，不应等待逐程序探测。
+3. 若当前安装的某个 Stable/Test/Local 版本低于根目录同通道目标版本，“可更新”必须大于 0；点击数字和底部“更新”后应能看到对应多版本程序。
+4. 首次点击某个多版本程序允许出现一次很短的“版本信息已加载”并刷新进入详情；再次进入应直接使用缓存。
+5. 从版本中心导入 Stable/Test/Local 后重新打开仓库，应按刚导入通道显示“已安装/可更新”。
+6. 麻豆传媒首页图标应恢复；如仍破图，再针对海阔/X5 图片缓存层做独立诊断，而不是继续修改有效 SVG。
+7. 导入、收藏、同步、搜索、分类、设置、活动记录和 Stable recovery 不得退化。
 
 ## 历史版本
 
-3.5.4 Stable 及更早的完整程序级技术记录已原样保存在 [`CHANGELOG_pre_3.5.5.md`](./CHANGELOG_pre_3.5.5.md)。该文件由 3.5.5 发布前 `CHANGELOG.md` 的原始 Git blob 直接保留，禁止删除；恢复旧版本或追查历史踩坑时必须继续读取。
+Stable 3.5.5 及此前当前日志已原样保存在 [`CHANGELOG_pre_3.5.6-rc1.md`](./CHANGELOG_pre_3.5.6-rc1.md)。更早的完整 3.5.4 及以前记录继续保存在 [`CHANGELOG_pre_3.5.5.md`](./CHANGELOG_pre_3.5.5.md)。恢复旧版本或追查历史踩坑时禁止删除这两份历史文件。
