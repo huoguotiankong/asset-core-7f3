@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "pornhub-test",
   "name": "Pornhub",
-  "version": "0.1.0-test.6",
-  "build": 10106,
-  "shellVersion": "1.0.0-test.6",
-  "shellRuleVersion": 2026082306,
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "shellVersion": "1.0.0-test.7",
+  "shellRuleVersion": 2026082307,
   "managerVersion": "2.0.1",
-  "release": "apps/video/pornhub/releases/0.1.0-test.6/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v6_b10106.txt",
+  "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test6：首页默认使用当前 X5 账号推荐，并将站内收藏、观看历史、本地收藏、本地足迹提升到首屏；首页 Feed/最新/热门/高分原页切换，品牌区压缩为头像行。账号页改为紧凑头像 + 功能标签 + 三栏账号工具；Shorts 增加 /short 与普通 view_video 双解析；分类热门卡去除视频数量混入标题，搜索筛选改为可换行 flex 标签并补齐演员/频道/模特/用户搜索；修复 &#039; 等数字 HTML 实体，评论页与详情分类进一步收紧 UI。"
+  "notes": "Test7：按实机重写 Shorts 与片单。Shorts 直接识别当前 /shorties/<id> 实体并恢复 poster/thumbnail；片单过滤 View Playlist 伪标题，按卡片容器恢复真实标题与封面，详情支持 playlistId/itemsCount/token + /playlist/viewChunked 原页加载更多。首页所有收藏/历史/搜索/分类/创作者/订阅/片单/Shorts/GIF/我的统一改为 icon_small_4 四列小图标，减少首屏占位。"
 }
