@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.9",
-  "defaultBuild": 10109,
-  "testVersion": "0.1.0-test.9",
-  "testBuild": 10109,
-  "testShellVersion": "1.0.0-test.9",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v9_b10109.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v9_b10109.txt",
+  "defaultVersion": "0.1.0-test.10",
+  "defaultBuild": 10110,
+  "testVersion": "0.1.0-test.10",
+  "testBuild": 10110,
+  "testShellVersion": "1.0.0-test.10",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v10_b10110.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v10_b10110.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test9-header-image-duration-aware-direct-short","note":"Test8 实机确认 direct-public-image 会让 picx 封面全灰，且长视频 19:34 的 240P 实际只有57秒仍被旧短片阈值误判有效。Test9 恢复图片 Header 合同、按标称时长过滤试看/占位源并增加 source_origin/preview fallback，同时短视频列表直接播放。"}
+  "migration": {"stage":"test10-rebuilt-core-media-sniff","note":"Test9 实机确认图片 Patch 未接管旧闭包，且无后缀 yd-long 包装 HLS被误判 direct。Test10 完整重建 Core 图片链，并按响应类型/包装形态识别媒体，支持外层/内层 URL fallback。"}
 }
