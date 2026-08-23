@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha5",
-  "build": 10005,
-  "shellVersion": "8.4.0-test",
+  "version": "1.0.0-alpha6",
+  "build": 10006,
+  "shellVersion": "8.5.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha5/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v084.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha6/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v085.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha5。Alpha4 实机已证明 decode 接口本身 HTTP200 且返回标准 AES-128 HLS，但 M3U8 内 key/segment URL 都带当前秒级 auth_key；海阔默认音视频预加载可能把稳定的 decode URL 预取成过期签名索引。Alpha5 按官方能力对实时 decode 显式 #noPre#，并在点击时原样写入新鲜签名 M3U8 到本地作为第二线路，同时探测 key/首分片。漫画方面 Alpha4 已确认真实 chapterId=691609、chapterInfo GET HTTP200/code200/encData 成功，问题已经从接口层收敛到解密后的图片消费/渲染；Alpha5 Reader 使用独立原图 ImageAdapter，不再给漫画正文套封面 _480，并记录解密结构。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha6。Alpha5 实机已经确认漫画 chapterInfo/解密/185张正文图片链恢复成功；视频 decode 也确认 HTTP200 标准 AES-128 HLS、Key 可取，但 Alpha5 手写普通 file:// 索引和 #noPre# 仍不可播。Alpha6 改用海阔官方 cacheM3u8，并原样保留其特殊 file://...##original-url 返回合同，撤销无实机依据的 noPre 默认；漫画阅读顶部改为简洁章节标题和上下话导航。另针对漫画 Station 当前对象 id 导致 getStationComicsMore HTTP400，增加显式数字字段+站位序号映射与 findList 兜底。Stable 0.4.9 不变。"
 }
