@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.5",
-  "build": 10105,
-  "shellVersion": "1.0.0-test.5",
-  "shellRuleVersion": 2026082315,
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "shellVersion": "1.0.0-test.6",
+  "shellRuleVersion": 2026082316,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.5/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v5_b10105.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.6/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v6_b10106.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test5 根据第四轮实机结果优化搜索输入与首页工具图标，并把 /t/ 女优/男优/片商/TAG 恢复为带头像、作品数、原站筛选和双列作品流的原生实体页。"
+  "notes": "Test6 根据第五轮实机结果新增独立女优中心、影片/演员双收藏、搜索历史与女优快捷入口、详情演员类型化跳转，以及首页/搜索/女优/实体页/收藏独立2列/3列排版设置。"
 }
