@@ -1,15 +1,34 @@
 {
-  "schema": 1,
+  "schema": 4,
   "id": "911baoliao",
   "name": "911爆料",
-  "default": "test",
-  "channels": {
-    "test": {
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-23 19:54",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "911baoliao-test",
+      "name": "911爆料",
       "version": "0.1.0-test.1",
       "build": 10101,
-      "metadata": "apps/video/911baoliao/test.json",
-      "release": "apps/video/911baoliao/releases/0.1.0-test.1/release.json",
-      "rule": "apps/video/911baoliao/911baoliao_remote_test_v1_b10101.txt"
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/911baoliao/911baoliao_remote_test_v1_b10101.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": true,
+      "desc": "首个 911爆料测试版：热点信息流、动态分类、独立搜索、图文详情、结构化视频播放、本地收藏/历史与诊断；不包含评论、匿名投稿和资源下载。",
+      "highlights": [
+        "首页热点信息流与自动分页",
+        "官网导航动态分类",
+        "独立搜索与分页",
+        "图文详情与正文图片",
+        "MP4/HLS/iframe 播放提取",
+        "本地收藏与浏览历史",
+        "动态域名与设置诊断",
+        "无评论、投稿、下载功能"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/911baoliao/assets/icon.svg"
     }
-  }
+  ]
 }
