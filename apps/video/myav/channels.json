@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 11:40",
+  "updatedAt": "2026-08-23 11:56",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.4",
-      "build": 10104,
-      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
-      "path": "apps/video/myav/myav_remote_test_v4_b10104.txt",
+      "version": "0.1.0-test.5",
+      "build": 10105,
+      "displayVersion": "Test 0.1.0-test.5 · Build 10105",
+      "path": "apps/video/myav/myav_remote_test_v5_b10105.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "第三轮实机修复：分类中心补齐原站菜单树与索引钻取，磁力页重构资源信息与筛选排序；完成分类/磁链实机回归前不建立 Stable。",
+      "desc": "第四轮实机后的产品补全版：搜索输入瘦身、首页八宫格图标统一、/t/ 女优/男优/片商/TAG 恢复原站实体页体验；完成实体页实机回归前不建立 Stable。",
       "highlights": [
-        "分类中心覆盖资源频道、9 类标签索引、有码热门、片商新番、排行榜和三类搜索",
-        "修复 cat 索引实际 /t/ 条目此前被 parseIndex 排除导致的无响应",
-        "女优等索引页支持原生分页，并在有图片时使用双列卡片",
-        "磁链从资源块恢复标题、大小、日期、字幕/高清标记，过滤无意义 [javlist.me]",
-        "磁力页支持全部/字幕/高清筛选以及默认/大小/日期排序"
+        "搜索输入框只保留短提示，支持范围移到输入框下方",
+        "首页收藏/历史/更多/设置加入独立图标，与搜索/筛选/分类/排行统一",
+        "女优/男优/片商/TAG 的 /t/ 链接升级为原生实体页",
+        "实体页显示头像、作品数、全部/磁力/字幕/单体/无码破解等原站实时筛选",
+        "实体作品流统一双列海报并保留原站分页；Test4 磁链页继续保留"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/myav/assets/icon.svg"
     }
