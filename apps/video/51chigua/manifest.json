@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/51chigua/test.json",
   "channels": "apps/video/51chigua/channels.json",
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "1.0.0-test.3",
-  "testBootstrap": "apps/video/51chigua/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/video/51chigua/51chigua_remote_test_v3_b10103.txt",
-  "testRelease": "apps/video/51chigua/releases/0.1.0-test.3/release.json",
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "1.0.0-test.4",
+  "testBootstrap": "apps/video/51chigua/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/video/51chigua/51chigua_remote_test_v4_b10104.txt",
+  "testRelease": "apps/video/51chigua/releases/0.1.0-test.4/release.json",
   "changelog": "apps/video/51chigua/CHANGELOG.md",
   "sourceSite": "https://51cg1.com/",
   "icon": "https://51cg1.com/favicon.ico",
-  "migration": {"stage":"test3-comments-primary-play-category-ux","note":"Test3 preserves Test2 image/playback success, adds the source comments JSON contract, isolates Primary Play from secondary actions, and replaces overlapping category page names with cg51Hub/cg51Feed."}
+  "migration": {"stage":"test4-comments-layout-dedicated-search","note":"Test4 keeps the Test3 playback/category baseline, rebuilds the comments reading layout and changes the home search action from a modal input to the dedicated cg51Search page."}
 }
