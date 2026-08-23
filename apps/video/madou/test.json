@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.6",
-  "build": 10106,
-  "shellVersion": "1.0.0-test.6",
-  "shellRuleVersion": 2026082306,
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "shellVersion": "1.0.0-test.7",
+  "shellRuleVersion": 2026082307,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.6/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v6_b10106.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.7/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v7_b10107.txt",
   "updatedAt": "2026-08-23",
-  "notes": "修复 Test5 实机仍在影片详情触发 1MB 私有存储错误：进入详情前清理当前 URL 的 Test1/Test3 raw HTML 缓存槽，历史/收藏写入改为配额安全且失败不阻断详情。分类页重构为横向大分类选择 + 三列小分类网格；搜索页空关键词不再错误展示首页内容，改为明确搜索入口和快捷分类。"
+  "notes": "修复 Test6 两个跨程序已记录但再次回归的问题：同级小分类切换改为 putMyVar + refreshPage(false)，不再反复压入 madouList 页面；详情 Primary Play 与收藏/简介分层，播放点击不再重新加载 Bootstrap 和详情 HTML，直链直接交播放器，需嗅探时直接 video:// 并使用资源拦截、媒体规则和 cacheM3u8 降低启动开销。"
 }
