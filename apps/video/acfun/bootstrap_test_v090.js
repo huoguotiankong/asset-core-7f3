@@ -19,7 +19,8 @@ var ACFUN_NEXT_CONFIG={
   {name:'watch-handshake-split-header-immersive-fix',path:'apps/video/acfun/next/acfun_next_fix_v100_a8.js'},
   {name:'native-play-matrix-segment-auth-comic-trim-fix',path:'apps/video/acfun/next/acfun_next_fix_v100_a9.js'},
   {name:'client-cdn-sign-repair-comic-crop2-fix',path:'apps/video/acfun/next/acfun_next_fix_v100_a10.js'},
-  {name:'credential-recovery-host-repair-comic-border-crop',path:'apps/video/acfun/next/acfun_next_fix_v100_a11.js'}
+  {name:'credential-recovery-host-repair-comic-border-crop',path:'apps/video/acfun/next/acfun_next_fix_v100_a11.js'},
+  {name:'context-aware-playback-credential-extraction',path:'apps/video/acfun/next/acfun_next_fix_v100_a11b.js'}
  ],verify:{global:'ACFunNext',property:'build',equals:'2026.08.23-v1.0.0-alpha11'}}
 };
 var ACFunNextBoot={
