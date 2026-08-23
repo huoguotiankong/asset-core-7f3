@@ -3,7 +3,47 @@
 > 程序：麻豆传媒（`madou`）  
 > 正式运行仓：`huoguotiankong/asset-core-7f3@main`  
 > 源站：`https://madoup2.cc/`  
-> 当前仅 Test 通道；播放、分类和 UI 未完成海阔实机闭环前禁止晋级 Stable。
+> 当前 Stable：`0.1.0 / Build 10114`；Test13 保留为本次正式版晋级来源和问题对照。
+
+## 2026-08-23 · Stable 0.1.0 / Build 10114
+
+### 晋级结论
+- 用户明确要求“先这样发布正式版”，因此将当前 Test13 **原样冻结为首个正式使用基线**，不再继续把纯免嗅实验或详情设置带入 Stable。
+- Stable 新增独立 `release.json + stable_patch.js + Bootstrap + Shell`，业务行为保持 Test13：标签与相关推荐默认加载；30 分钟结构化详情缓存；播放优先直链，否则使用 `video://` 对 player/详情页做网页媒体自动提取。
+- Stable Build 使用 `10114`，不覆盖 Test13 Build10113；Test13 继续保留，后续新 Test 必须从 Stable 0.1.0 rebase。
+
+### Stable 运行链
+```text
+Stable Shell 2026082314
+→ bootstrap_stable_v1_b10114.js
+→ Test1 Core
+→ Test1 Runtime
+→ Test10 Performance Runtime
+→ Test12 Storage Rescue
+→ Test13 Default Detail/Playback
+→ Stable identity patch
+```
+- Stable Bootstrap 继续采用 **direct immutable loader**，不进入 Remote Manager `setItem` 状态链，避免设备历史 KV 已接近 1MB 时自举再次失败。
+- `stable_patch.js` 只冻结正式身份：`version=0.1.0 / build=10114` 并把内部 Bootstrap 指针切到 Stable，不改变 Test13 已确认的业务策略。
+- Stable release 一经发布冻结，不允许原地覆盖。
+
+### 当前正式基线与已知边界
+- 播放：恢复并保留此前实机已经证明可最终播放的 `直链优先 → video:// 媒体自动提取` 路线；**不宣称免嗅**。
+- 详情：默认加载标签与相关推荐；第一次进入未缓存影片仍需一次详情请求，30 分钟内重复进入优先命中结构化私有文件缓存。
+- 分类：保留 Test10 的大分类/小分类结构和同页切换设计；首次访问未缓存分类仍受源站网络速度影响。
+- 存储：收藏、历史、分页模板等关键状态继续走规则私有文件；历史 Test 版本遗留的旧 `setItem` KV 可能仍然很大，但 Stable 主链不再依赖其成功写入。
+- 本次晋级是用户明确接受当前状态后的阶段性正式基线，不等于后续性能/UI 已无优化空间。
+
+### 发布工件
+- Stable Release：`apps/video/madou/releases/0.1.0/release.json`
+- Stable identity：`apps/video/madou/releases/0.1.0/stable_patch.js`
+- Stable Bootstrap：`apps/video/madou/bootstrap_stable_v1_b10114.js`
+- Stable Shell：`apps/video/madou/madou_remote_stable_v1_b10114.txt`
+- Stable metadata：`apps/video/madou/stable.json`
+- Latest：`apps/video/madou/latest.json`
+- 晋级来源：`0.1.0-test.13 / Build 10113`
+
+---
 
 ## 2026-08-23 · 0.1.0-test.13 / Build 10113
 
