@@ -7,12 +7,12 @@
   "build": 388,
   "baseVersion": "3.5.4",
   "targetVersion": "3.5.5",
-  "shellVersion": "1.0.33-test",
-  "bootstrapVersion": "1.0.32-test",
+  "shellVersion": "1.0.34-test",
+  "bootstrapVersion": "1.0.33-test",
   "managerVersion": "2.0.3",
   "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json",
   "updatedAt": "2026-08-23",
   "status": "active-candidate-test",
   "previousTest": {"version":"3.5.5-rc1","build":387,"release":"apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json"},
-  "notes": "Icon Delivery 1.1 + Updater Metadata Fix：程序卡/版本卡/底栏图标统一使用 jsDelivr；更新协议升级为 Remote Manager 2.0.3，可变 test/latest/release 指针优先从 GitHub API 读取，避免 jsDelivr @main 缓存让设备误判旧 Build 为最新。Fresh Shell 使用 rule_repo_test_v133.txt + bootstrap_test_v132.js。"
+  "notes": "Icon Delivery 1.1 + Updater Metadata Fix。Fresh Shell 为 rule_repo_test_v134.txt：Bootstrap v1.0.33 固定 Git commit，Remote Manager 2.0.3 也固定不可变 commit；可变 test/latest/release 指针改为 GitHub API 优先读取，解决 jsDelivr @main 缓存导致 Build385 被误判为最新的问题。"
 }
