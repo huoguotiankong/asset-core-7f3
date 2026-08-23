@@ -6,18 +6,18 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xvideos/test.json",
   "channels": "apps/video/xvideos/channels.json",
-  "cloudChannels": "apps/video/xvideos/channels_v6_b10106_r1.json",
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "1.0.0-test.6",
-  "testBootstrap": "apps/video/xvideos/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/xvideos/xvideos_remote_test_v6_b10106.txt",
-  "testRelease": "apps/video/xvideos/releases/0.1.0-test.6/release.json",
+  "cloudChannels": "apps/video/xvideos/channels_v7_b10107_r1.json",
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "1.0.0-test.7",
+  "testBootstrap": "apps/video/xvideos/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/xvideos/xvideos_remote_test_v7_b10107.txt",
+  "testRelease": "apps/video/xvideos/releases/0.1.0-test.7/release.json",
   "changelog": "apps/video/xvideos/CHANGELOG.md",
   "sourceSite": "https://www.xvideos.com/",
   "icon": "apps/video/xvideos/assets/brand.svg",
   "migration": {
-    "stage": "test6-cloud-republish-r1",
-    "note": "Test6 business Build10106 is unchanged. The cloud repository now points to an immutable channels_v6_b10106_r1.json snapshot to break the rule-repo version-center cache that could show an old Test4 card when the live channels fetch failed."
+    "stage": "test7-protocol-contracts",
+    "note": "Test7 targets the three Test6 real-device failures at protocol level: XVideos short-key JSON video payloads, exact account XHR/JSON parsing, and rendered WebView comment DOM. The verified detail/playback and Test5 private-storage rescue chain are unchanged."
   }
 }
