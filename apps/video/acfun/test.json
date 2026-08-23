@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha2",
-  "build": 10002,
-  "shellVersion": "8.1.0-test",
+  "version": "1.0.0-alpha3",
+  "build": 10003,
+  "shellVersion": "8.2.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha2/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v081.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha3/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v082.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha2。针对 Alpha1 首轮海阔实机截图修复四类明确回归：相对封面重新以当前会话 imgDomain 为主，asigoo 恢复 Stable 已验证的 _480 + 空 Referer + XOR 解码链；统一 query 参数安全 decode，修复专题页标题/正文显示百分号编码；播放保留已确认的 jpd Seed→H5 decode，但给 extension-less decode URL 强制 #isM3u8#，同时读取 APK 存在的 m3u8/player/referer 与 playbackDomain/playbackAuthKey，提供 H5解码/CDN直连/APP播放兼容多线路；漫画 info/chapter 恢复 GET-first，避免当前 Host POST 405 优先失败。首页删除 Alpha1 的开发说明文案。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha3。第二轮实机确认封面恢复，视频 Seed/decode 正确但黑屏停在00:00，m3u8/player/referer 返回字面值 jhg_player；Alpha2 错把非URL referer 丢弃。Alpha3 保留 jhg_player 作为 Referer/X-Referer，并对同一 decode URL 提供 APP标识/H5来源/接口来源/无来源不同 Header 线路。漫画章节仍空白，旧诊断只显示最后 POST 405，无法证明前置 GET 的真实返回；Alpha3 为 comics/base/chapterInfo 增加 HTTP 2xx 宽容解析，不再因非0/200业务码直接丢弃，并逐项记录 GET/POST × API/H5 Origin 的状态与响应片段。Stable 0.4.9 不变。"
 }
