@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.11",
-  "testBuild": 10111,
-  "testShellVersion": "1.0.0-test.11",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v11_b10111.js",
-  "testRule": "apps/video/madou/madou_remote_test_v11_b10111.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.11/release.json",
+  "testVersion": "0.1.0-test.12",
+  "testBuild": 10112,
+  "testShellVersion": "1.0.0-test.12",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v12_b10112.js",
+  "testRule": "apps/video/madou/madou_remote_test_v12_b10112.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.12/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test11-detail-settings-http-nosniff","note":"Test11 keeps Test10's performance rebase and adds one focused overlay. Detail expansion is globally selectable (manual, auto tags, auto tags+recommendations). Playback defaults to strict HTTP-only no-sniff using detail/player/script/API requests plus escaped/percent/Base64/P.A.C.K.E.R static decoding, direct M3U8/MP4 handoff and bounded media cache. Browser sniffing is disabled unless the user explicitly enables compatibility fallback."}
+  "migration": {"stage":"test12-storage-rescue-protocol-nosniff","note":"Test12 responds to real-device private-KV saturation. Critical persistent state moves from setItem/getItem to rule-private files, while rescue Bootstrap direct-loads the immutable Test12 release instead of Remote Manager state so the old 1MB KV cannot block startup. Strict no-sniff remains HTTP-only and adds player_aaaa/player_data encrypt decoding, parse/jx construction, HTTP status/location/HLS detection and richer static decoding."}
 }
