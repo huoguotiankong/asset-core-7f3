@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "id": "51chigua",
+  "name": "51吃瓜",
+  "version": "0.1.0",
+  "build": 10106,
+  "mode": "remote",
+  "shellVersion": "0.1.0-stable.1",
+  "shellRuleVersion": 2026082306,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/51chigua/releases/0.1.0/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_stable_v1_b10106.txt",
+  "bootstrap": "apps/video/51chigua/bootstrap_stable_v1_b10106.js",
+  "promotedFrom": {
+    "version": "0.1.0-test.5",
+    "build": 10105
+  },
+  "updatedAt": "2026-08-23",
+  "notes": "First 51chigua Stable, promoted by explicit user request from Test5. Test5 remains unchanged as the promotion source."
+}
