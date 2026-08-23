@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.6",
-  "build": 10106,
-  "shellVersion": "1.0.0-test.6",
-  "shellRuleVersion": 2026082316,
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "shellVersion": "1.0.0-test.7",
+  "shellRuleVersion": 2026082317,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.6/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v6_b10106.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.7/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v7_b10107.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test6 根据第五轮实机结果新增独立女优中心、影片/演员双收藏、搜索历史与女优快捷入口、详情演员类型化跳转，以及首页/搜索/女优/实体页/收藏独立2列/3列排版设置。"
+  "notes": "Test7 保留 Test6 功能，修复海阔导入风险词：导入壳和云仓可见元数据改为中性演员命名，并更新云仓 MyAv 图标地址。"
 }
