@@ -74,18 +74,18 @@ A.filters=function(d){
 A.videoCard=function(d,x,short){
     var i=A.videoInfo(x);if(!i.id)return;var meta=[];
     if(i.watch)meta.push('播放 '+A.fmtNum(i.watch));if(i.duration)meta.push(i.duration);if(!meta.length&&i.author)meta.push(i.author);
-    var pic=A.image(i.img), url=short?A.playLazy(i):A.page('acfun_next_detail',{acf_kind:'video',acf_id:i.id});
+    var pic=A.image(i.img), url=short?A.playLazy(i):A.page('acfun_next_detail',{acf_kind:'video',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_uri:i.uri});
     d.push({title:i.title,desc:meta.join(' · '),pic_url:pic,img:pic,col_type:short?'movie_3':'movie_2',url:url,extra:{inheritTitle:false,pageTitle:i.title,acf_kind:'video',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_uri:i.uri,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
 };
 A.comicCard=function(d,x){
-    var i=A.comicInfo(x);if(!i.id)return;var pic=A.image(i.img);d.push({title:i.title,desc:i.author||i.desc,pic_url:pic,img:pic,col_type:'movie_3',url:A.page('acfun_next_detail',{acf_kind:'comic',acf_id:i.id}),extra:{inheritTitle:false,pageTitle:i.title,acf_kind:'comic',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
+    var i=A.comicInfo(x);if(!i.id)return;var pic=A.image(i.img);d.push({title:i.title,desc:i.author||i.desc,pic_url:pic,img:pic,col_type:'movie_3',url:A.page('acfun_next_detail',{acf_kind:'comic',acf_id:i.id,acf_title:i.title,acf_img:i.img}),extra:{inheritTitle:false,pageTitle:i.title,acf_kind:'comic',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
 };
 A.fictionCard=function(d,x,mode){
-    var i=A.fictionInfo(x,mode);if(!i.id)return;var pic=A.image(i.img);d.push({title:i.title,desc:[i.author,mode==='audio'?'有声':'小说'].join(' · ').replace(/^ · | · $/g,''),pic_url:pic,img:pic,col_type:'movie_3',url:A.page('acfun_next_detail',{acf_kind:mode,acf_id:i.id}),extra:{inheritTitle:false,pageTitle:i.title,acf_kind:mode,acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
+    var i=A.fictionInfo(x,mode);if(!i.id)return;var pic=A.image(i.img);d.push({title:i.title,desc:[i.author,mode==='audio'?'有声':'小说'].join(' · ').replace(/^ · | · $/g,''),pic_url:pic,img:pic,col_type:'movie_3',url:A.page('acfun_next_detail',{acf_kind:mode,acf_id:i.id,acf_title:i.title,acf_img:i.img}),extra:{inheritTitle:false,pageTitle:i.title,acf_kind:mode,acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
 };
 A.dynamicCard=function(d,x){
     var i=A.dynamicInfo(x);if(!i.id)return;var desc=[];if(i.author)desc.push(i.author);if(i.like)desc.push('赞 '+A.fmtNum(i.like));if(i.comment)desc.push('评论 '+A.fmtNum(i.comment));
-    var pic=A.image(i.img);d.push({title:i.title,desc:desc.join(' · '),pic_url:pic,img:pic,col_type:i.img?'movie_1_left_pic':'movie_1',url:A.page('acfun_next_detail',{acf_kind:'community',acf_id:i.id}),extra:{inheritTitle:false,pageTitle:'社区动态',acf_kind:'community',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
+    var pic=A.image(i.img);d.push({title:i.title,desc:desc.join(' · '),pic_url:pic,img:pic,col_type:i.img?'movie_1_left_pic':'movie_1',url:A.page('acfun_next_detail',{acf_kind:'community',acf_id:i.id,acf_title:i.title,acf_img:i.img}),extra:{inheritTitle:false,pageTitle:'社区动态',acf_kind:'community',acf_id:i.id,acf_title:i.title,acf_img:i.img,acf_data:JSON.stringify(i.raw||{}),lineVisible:false}});
 };
 A.renderList=function(d,s,list){
     var i;if(s==='comic')for(i=0;i<list.length;i++)A.comicCard(d,list[i]);
