@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha5",
-  "testBuild": 10005,
-  "testShellVersion": "8.4.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v084.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v084.txt",
+  "testVersion": "1.0.0-alpha6",
+  "testBuild": 10006,
+  "testShellVersion": "8.5.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v085.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v085.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "clean-rewrite-alpha5-signed-hls-comic-full-image",
+    "stage": "clean-rewrite-alpha6-native-m3u8-comic-ux",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha4 第四轮实机证明播放接口本身已经打通：/api/m3u8/h5/decode HTTP200，Content-Type=application/vnd.apple.mpegurl，返回标准 #EXTM3U + AES-128 KEY；但 KEY/TS URL 的 auth_key 都嵌入当前时间戳并属于短时签名。此前直接把稳定 decode URL 交海阔，会遇到默认音视频预加载提前缓存动态签名索引的高风险。Alpha5 对 decode 显式增加 #noPre#，并在点击播放时 fetch 最新签名 M3U8 原样 writeFile 到本地提供第二线路，同时探测 KEY/首分片。漫画方面 Alpha4 已实机确认真实 chapterList 首项 chapterId=691609/comicsId=36510，chapterInfo GET HTTP200/code200/encData 成功，因此接口/主键已不再是疑点；Alpha5 只维修解密后图片消费：漫画正文使用独立原图 ImageAdapter，取消封面专用 _480，继续使用图片解码器并记录解密结构。继续实机回归，latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha5 实机确认漫画正文已恢复：chapterInfo GET HTTP200/code200/encData，解密后 imgList 共185张，正文原图可正常显示。视频也确认 decode 返回标准 AES-128 HLS，KEY 可访问，但 Alpha5 手工 writeFile 生成的普通 file:// 索引和 #noPre# 假设均未解决播放器失败。结合海阔官方 cacheM3u8 文档及 Stable 0.4.9 已验证实现，Alpha6 改为直接调用 cacheM3u8(decode#isM3u8#, headers, fname)，并原样保留其 file://...m3u8##original-url 返回值，不再手工裁掉 Hiker 元信息，也不再默认 noPre。漫画阅读页同时把系统标题收敛为章节名+进度，并增加顶部/底部上一话、当前章节、下一话导航。当前漫画分页还暴露 getComicsStations UI id 为 ObjectId 而 getStationComicsMore 需要数字 stationId 的兼容问题，Alpha6 从 raw 显式数字字段与站位序号生成候选并增加 findList 兜底。继续实机回归，latest/stable 均不变。"
   }
 }
