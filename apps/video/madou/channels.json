@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 15:10",
+  "updatedAt": "2026-08-23 15:28",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.7",
-      "build":10107,
-      "displayVersion":"Test 0.1.0-test.7 · Build 10107",
-      "path":"apps/video/madou/madou_remote_test_v7_b10107.txt",
+      "version":"0.1.0-test.8",
+      "build":10108,
+      "displayVersion":"Test 0.1.0-test.8 · Build 10108",
+      "path":"apps/video/madou/madou_remote_test_v8_b10108.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test7 修复 Test6 实机暴露的播放页多余列表/操作面板、播放启动慢和同级分类标签反复压栈。详情播放直接使用已解析直链或直接进入 video:// 嗅探，不再点击后重复加载 Bootstrap+详情 HTML；Primary Play 与收藏/简介分层。内容页同组小分类全部改为原页状态切换。",
-      "highlights":["同级分类 putMyVar+refreshPage","返回一次离开当前分类页","播放按钮不再二次请求详情","video:// 嗅探拦截图片/广告并 cacheM3u8","Primary Play 与收藏/简介分层","保留 Test6 1MB 存储恢复"],
+      "desc":"Test8 重做详情视觉并加入免嗅优先播放链。横向封面使用全宽 Hero，删除源站固定简介，只保留真正有用的标题、时间、播放、标签、推荐和收藏；播放先从详情 HTML、iframe/player 页面及一层嵌套 player 结构化提取真实 M3U8/MP4，命中后直接播放，video:// 仅作未命中兜底。",
+      "highlights":["详情全宽 Hero 重排","移除固定简介文案","结构化免嗅优先","跟随 iframe/player 页面取真实媒体","8 分钟小型媒体缓存","video:// 降级为兜底"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
