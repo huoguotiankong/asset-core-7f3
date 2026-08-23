@@ -47,3 +47,10 @@
 - `core.js / runtime.js / bootstrap` 均需 `node --check`。
 - Shell JSON 必须可解析，全部页面固定 Build10101 Bootstrap。
 - Test1 未经实机闭环不得晋级 Stable。
+
+### 远端发布确认
+- 已写入 `asset-core-7f3@main/apps/video/xvideos/`；远端 `core.js / runtime.js / Bootstrap / Shell` Git Blob SHA 与本地通过静态门禁的对应文件逐个一致，排除上传截断或转义损坏。
+- `registry.json` 已登记 XVideos Test1 恢复链。
+- 根 `manifest.json` 已加入 XVideos `channel-group` 卡片，revision=`202608231856`；`manifest_meta.json` 同步相同 revision，itemCount=`14`。
+- `channels.json` 使用规则仓库标准 `channels[]` 合同，当前只暴露 Test1，不伪造 Stable。
+- 云仓代码链已经闭环；页面数据、UI、图片、播放、Cookie 和评论仍必须以海阔实机结果为最终事实。
