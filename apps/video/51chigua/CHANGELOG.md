@@ -4,101 +4,86 @@
 
 - App ID：`51chigua`
 - 当前通道：Test only
-- 当前版本：`0.1.0-test.1`
-- Build：`10101`
-- Shell：`1.0.0-test.1` / rule version `2026082301`
+- 当前版本：`0.1.0-test.2`
+- Build：`10102`
+- Shell：`1.0.0-test.2` / rule version `2026082302`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://51cg1.com/`
 - Stable：尚未建立，禁止在未实机验证前晋级。
+
+## 0.1.0-test.2 / Build 10102 — 2026-08-23
+
+### 实机问题
+
+Test1 实机截图确认：
+
+- 首页文章标题可解析，但封面全部缺失。
+- 程序使用了项目自制临时 SVG，不是源站图标。
+- 点击详情/分类等内部页面直接提示：`找不到“51%E5%90%83%E7%93%9C”这个小程序`。
+
+### 根因与修复
+
+1. **内部路由规则名错误编码**
+   - Test1 的 `Cg51Core.page()` 以及搜索输入回调对整个中文规则名执行 `encodeURIComponent`。
+   - 当前海阔设备要求 `rule=51吃瓜` 保留原始中文规则名；百分号编码后的字符串会被当成另一个不存在的小程序。
+   - Test2 将内部路由统一改为原始规则名，业务参数仍继续 URL 编码。
+
+2. **51CG 图片并非普通静态图片链**
+   - 当前列表封面可来自 `loadBannerDirect(...)`、`data-xkrkllgl`、`data-src`、`data-original`、`src`。
+   - `/xiao/` 与 `/upload/upload/` 类图片实测属于 AES 加密资源。
+   - 已确认协议：AES/CBC/PKCS7，key=`f5d965df75336270`，iv=`97b60394abc2fbe1`。
+   - 海阔实现使用 `hiker://assets/crypto-java.js`：`InputStream → AES decrypt → toInputStream()`，不把大图转成规则 KV/Base64 常驻状态。
+   - 正文图同时新增 `loadImage(...)` 提取。
+
+3. **源站图标**
+   - Test2 Shell/渠道元数据改用 `https://51cg1.com/favicon.ico`，不再使用首版临时 SVG。
+
+4. **分类与媒体**
+   - 固定分类补齐到当前已确认的 21 类。
+   - 首页过滤“原创招募 / 百万现金扶持 / 往期活动”等非主 Feed 活动卡。
+   - 新增 DPlayer `data-config` 中 `video.url` 的结构化 m3u8/mp4 提取；无法静态取得时仍保留 `video://` 兜底。
+   - 公共请求加入 `user-choose=true` Cookie，用于源站公开内容确认，不涉及账号登录。
+
+### Test2 静态门禁
+
+- `core_patch.js`：`node --check` 通过。
+- `runtime_patch.js`：`node --check` 通过。
+- Test1 Release 保持不可变；Test2 仅新增 Patch + 新 Bootstrap + 新 Shell。
+- Runtime 继续使用动态 `R.module=function(){return R;}`，新增版本不引入固定导出白名单。
+
+### 待实机确认
+
+1. 首页封面是否已全部恢复，尤其 `/xiao/`、`/upload/upload/` 加密图片。
+2. 点击任意文章、分类、收藏、历史、设置是否不再出现百分号编码规则名报错。
+3. 源站 favicon 在海阔规则卡/页面是否正常显示。
+4. 详情正文图能否正常解密，是否仍混入广告/二维码。
+5. DPlayer/HLS 实际播放是否可直接获取；失败时记录 `video://` 兜底表现。
+6. 评论是否需要继续定位 AJAX/JS 接口。
 
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
 ### 产品与页面
 
-首版采用海阔原生 UI，提供：
-
-- 首页文章流与分页。
-- 官网分类汇总和分类分页。
-- WordPress 风格站内搜索与分页兜底。
-- 文章详情：标题、日期、分类、标签、正文段落、正文图片、相关推荐。
-- 视频播放入口：仅在静态页面发现媒体/iframe 证据时出现。
-- 评论页：先解析静态 HTML 评论；AJAX/JS 评论待实机确认。
-- 本地收藏、浏览历史、设置与诊断。
+首版采用海阔原生 UI，提供首页文章流与分页、官网分类、WordPress 风格搜索、图文详情、视频入口、静态评论、本地收藏、历史、设置与诊断。
 
 ### Domain / Request
 
-源站存在频繁切换域名的长期风险，Test1 建立独立 Domain Adapter：
-
-```text
-最后成功域名
-→ 51cg1.com
-→ cg51.com
-→ chigua.com
-→ 当前已知 51cgo* 备选
-→ 首页内容特征验证
-→ 从有效首页抽取官方同族域名
-→ 缓存最后有效 Host
-```
-
-只自动信任 `51cg*.com / cg51.com / chigua.com` 同族域名，避免把页面广告外链误当新主站。
+首版建立独立 Domain Adapter：最后成功域名 → `51cg1.com` → `cg51.com` → `chigua.com` → 当前已知 `51cgo*` → 首页结构验证 → 抽取同族官方域名 → 缓存最后有效 Host。只信任 `51cg*.com / cg51.com / chigua.com` 同族域名。
 
 ### Parser
 
-当前站点按公开网页事实呈现 WordPress 风格路径：
-
-- 文章：`/archives/<id>/`
-- 分类：`/category/<slug>/`
-- 分页：`/page/<n>/`
-- 搜索：`/?s=<keyword>`，分页同时保留 `paged=` 兼容兜底。
-
-Test1 使用结构特征 Parser，不绑定单一 CSS class；列表以文章永久链接为实体主键，详情优先 `og:title / og:image / article / entry-content` 等结构。
-
-### 图片
-
-- 列表和详情图片统一附 `User-Agent + Referer`。
-- 不做无依据的图片解密。
-- 正文优先过滤 logo/avatar/favicon/loading 等非内容图。
-- 暂不把完整网页 HTML 写入规则私有 KV，避免私有存储被大页面快速填满。
+首版按 `/archives/<id>/`、`/category/<slug>/`、`/page/<n>/`、`/?s=<keyword>` 构建结构 Parser；列表以文章永久链接为实体主键。
 
 ### Playback
 
-播放路线固定为：
+首版路线：`source/video 直链 → JS/JSON m3u8/mp4 → iframe 一层 → 单/多线路 → video://`，不引入第三方解析服务。
 
-```text
-<source>/<video> 直链
-→ JS/JSON 中 m3u8/mp4 字段
-→ iframe 一层解析
-→ 单线路直接媒体合同 / 多线路 PlayModel
-→ 无结构化媒体时 video:// 作为最后网页媒体提取兜底
-```
+### 已知失败结论
 
-Test1 不引入第三方解析服务，不假装已证明“纯免嗅”。真实站点播放结构、Header、HLS/时效问题必须由海阔实机验证后再定型。
-
-### 本地数据
-
-- 收藏最多 100 项。
-- 历史最多 60 项。
-- 仅保存结构化卡片字段，不缓存全文 HTML。
-
-### 已完成静态门禁
-
-- `core.js`：`node --check` 通过。
-- `runtime.js`：`node --check` 通过。
-- `release.json`：JSON parse 通过。
-- Runtime 动态导出 smoke：`home/categories/category/searchPage/search/detail/comments/favorites/history/settings` 10 个 Shell 入口均为 function。
-- Runtime 使用 `R.module=function(){ return R; }`，不使用固定白名单快照。
-
-### 待海阔实机确认
-
-1. 首页封面是否全部正常显示、比例是否合适。
-2. 分类列表是否覆盖官网当前全部主要分类。
-3. 搜索结果 HTML 是否与首页同结构。
-4. 文章详情正文段落与图片是否存在广告/二维码误入。
-5. 吃瓜剧场/视频文章的真实播放器结构、直链与 Header。
-6. `video://` 在当前海阔版本的兜底结果。
-7. 评论是否静态存在；如为 AJAX/JS，定位独立评论接口。
-8. UI 密度与长标题需要根据真实截图继续优化。
+- **禁止再把中文规则名整体 `encodeURIComponent` 后放进 `rule=`。**
+- **禁止把 51CG `/xiao/`、`/upload/upload/` 图片当普通明文图片直出。**
+- 首版临时 SVG 图标不再使用。
 
 ## 恢复规则
 
-Test1 是首个不可变基线。任何解析/播放/UI 修复都创建更高 Test build/release，禁止原地覆盖本 Release。Stable 只能从用户实机验证通过的 Test 晋级。
+Test1、Test2 都是不可变 Release。Test2 若仍有图片/播放/UI 问题，继续新建更高 Test build；禁止原地覆盖。Stable 只能从用户实机验证通过的 Test 晋级。
