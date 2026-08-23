@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/51chigua/test.json",
   "channels": "apps/video/51chigua/channels.json",
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "1.0.0-test.4",
-  "testBootstrap": "apps/video/51chigua/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/51chigua/51chigua_remote_test_v4_b10104.txt",
-  "testRelease": "apps/video/51chigua/releases/0.1.0-test.4/release.json",
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "1.0.0-test.5",
+  "testBootstrap": "apps/video/51chigua/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/51chigua/51chigua_remote_test_v5_b10105.txt",
+  "testRelease": "apps/video/51chigua/releases/0.1.0-test.5/release.json",
   "changelog": "apps/video/51chigua/CHANGELOG.md",
   "sourceSite": "https://51cg1.com/",
   "icon": "https://51cg1.com/favicon.ico",
-  "migration": {"stage":"test4-comments-layout-dedicated-search","note":"Test4 keeps the Test3 playback/category baseline, rebuilds the comments reading layout and changes the home search action from a modal input to the dedicated cg51Search page."}
+  "migration": {"stage":"test5-official-comment-avatar","note":"Test5 is a narrow UI alignment patch over Test4: every comment and reply uses the official 51CG favicon avatar, matching the source-site default identity while leaving comments/search/playback/category contracts unchanged."}
 }
