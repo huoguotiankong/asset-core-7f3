@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "1.0.0-alpha5",
+      "version": "1.0.0-alpha6",
       "baseVersion": "clean-rewrite",
       "targetVersion": "1.0.0",
-      "build": 10005,
-      "displayVersion": "Test 1.0.0-alpha5 · Build 10005 · Shell 8.4",
-      "path": "apps/video/acfun/acfun_remote_test_v084.txt",
+      "build": 10006,
+      "displayVersion": "Test 1.0.0-alpha6 · Build 10006 · Shell 8.5",
+      "path": "apps/video/acfun/acfun_remote_test_v085.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "全新重写 Alpha5 · 短时签名 HLS 免预载/本地索引 + 漫画正文原图独立解密",
-      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "标准AES-128 HLS已确认", "#noPre#免预载", "本地原样签名M3U8", "Key/首分片探针", "chapterInfo HTTP200已确认", "漫画正文不再使用_480"],
+      "desc": "全新重写 Alpha6 · 海阔原生 cacheM3u8 播放合同 + 漫画阅读顶部导航/Station 分页修复",
+      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "漫画正文已实机恢复", "标准AES-128 HLS已确认", "官方cacheM3u8", "保留##original-url合同", "章节标题与上下话导航", "Station数字ID映射"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
