@@ -3,12 +3,12 @@
   "id": "51chigua",
   "name": "51吃瓜",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 18:26",
+  "updatedAt": "2026-08-23 18:39",
   "channels": [{
-    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.4","build":10104,
-    "displayVersion":"Test 0.1.0-test.4 · Build 10104","path":"apps/video/51chigua/51chigua_remote_test_v4_b10104.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-    "desc":"评论页重做 + 独立搜索页：评论按头像/昵称/时间/正文分层，楼中楼缩进；搜索从首页弹窗改为独立页面内搜索。",
-    "highlights":["评论卡片重新排版","楼中楼回复缩进展示","增强 nested user/author/avatar 评论字段解析","首页搜索改为独立 cg51Search 页面","搜索页内输入并展示结果","保留 Test3 已验证的封面、详情、播放与分类链"],
+    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.5","build":10105,
+    "displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/51chigua/51chigua_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+    "desc":"评论头像对齐原站：所有评论与楼中楼回复统一使用 51CG 官方 favicon，不再展示随机字母/用户头像；Test4 评论布局和独立搜索保持不变。",
+    "highlights":["评论统一官方 51CG 头像","一级评论与楼中楼头像一致","停止使用评论 JSON avatar 字段","保留 Test4 评论卡片布局","保留独立搜索页","播放/分类/封面链不变"],
     "icon":"https://51cg1.com/favicon.ico"
   }]
 }
