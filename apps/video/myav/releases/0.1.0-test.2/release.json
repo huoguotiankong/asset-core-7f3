@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/myav/releases/0.1.0-test.1/core.js"},
+    {"name":"imagePatch","path":"apps/video/myav/releases/0.1.0-test.2/image_patch.js"},
+    {"name":"runtime","path":"apps/video/myav/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtimePatch","path":"apps/video/myav/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"MyAvRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "previous": {"version":"0.1.0-test.1","build":10101,"release":"apps/video/myav/releases/0.1.0-test.1/release.json"},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "notes": "Device-driven image repair: lazy-load real-image priority, href-grouped movie cards, visible-text code parsing, detail og:image/JSON-LD cover fallback, and repository-owned MyAv icon."
+}
