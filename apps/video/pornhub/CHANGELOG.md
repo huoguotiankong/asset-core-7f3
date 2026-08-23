@@ -1,5 +1,41 @@
 # Pornhub CHANGELOG
 
+## 0.1.0-test.2 / Build 10102 — 2026-08-23
+
+### 首轮实机结论
+- Test1 已在用户设备确认：首页真实视频与封面可加载；视频详情可解析；测试样例能得到 4 个 HLS 画质并正常播放；创作者页面能列出公开视频；官方 Pornhub 登录页可以加载。
+- 本轮不改已验证的基础公开解析协议，采用 Test1 immutable Core/Runtime + Test2 Patch 的增量结构。
+
+### 首页 / UI
+- 删除 Test1 过高的 `pic_1_full` 品牌 Banner；实机截图显示该组件占据首屏大量高度并出现视觉上过大的装饰圆形。
+- 首页改为紧凑 `movie_1_left_pic` 品牌卡，保留搜索 / 分类 / 创作者 / 登录四个主入口和排序栏，让真实内容更早进入首屏。
+- 详情页只保留播放作为 Primary Action；Test1 的“加入本地收藏”“原站详情/评论/互动”不再和播放同层。
+- 原站评论/互动下沉到详情最底部“更多操作”；系统标题栏已有收藏能力时，不再让自定义收藏污染播放页首屏。
+
+### 播放性能
+- Test1 详情已完成一次视频页请求并解析 `mediaDefinitions`，但点击播放时 `resolvePlay()` 又 `force:true` 重请求同一详情，造成可感知等待。
+- Test2 新增 4 分钟轻量 PlaySource cache：详情解析到 HLS 后只缓存 `url/name/quality`；点击播放优先直接消费已解析结果。
+- 即使 PlaySource cache 未命中，也优先复用 `fetchText()` 的 2 分钟详情缓存，不再默认强制二次网络请求；只有无缓存时才重新取页。
+- 多画质 PlayModel 与 Referer/User-Agent 合同保持 Test1 不变，避免“优化速度”同时改变已实机可播行为。
+
+### 创作者
+- 增强 Profile 名称解析：`og:title` → `<h1>` / profile username → URL slug，避免页面显示通用 `Creator`。
+- 增强头像解析：优先匹配 `profileAvatar/userAvatar/avatar/profilePic/profileImage/userImage/thumbImage` 等头像节点；详情页作者卡也从附近 DOM 恢复头像。
+- Profile 页面从宽图 `movie_1_left_pic` 改为真正的 `avatar` Hero；原站 URL 不再占据页面顶部，移动到页面底部。
+- 列表和详情进入创作者页时把已知名称/头像作为 seed 传递；目标页解析失败时可恢复真实实体信息。
+- 过滤 `Play All / Watch All / All Videos` 这类误入视频列表的控制项，避免创作者页底部出现伪视频卡。
+
+### 登录
+- Test1 的 `x5_webview_single + screen-300` 在实机上把官方登录框压缩在小程序内容中，Google/X/邮箱入口操作空间不足。
+- Test2 移除默认内嵌登录框，改为三步：①打开完整 Pornhub 官方登录页；②登录成功后返回小程序；③点击“同步登录状态”。
+- 仍只通过 `getCookie(base)` 同步官方网页 Cookie，不保存账号密码，不自行模拟验证码或二次验证。
+- “手动填写用户名”只在 Cookie 已同步但自动识别用户名失败时显示，降低普通登录流程干扰。
+
+### 回归门禁
+- `core_patch.js` / `ui_patch.js` 已通过 `node --check`。
+- 离线 smoke test 已验证：Test2 Patch 可在 Test1 对象上加载；详情 HLS 可写入/读取播放缓存；播放直接消费缓存；`Play All` 被过滤；Profile 名称/头像恢复；首页首项为紧凑品牌卡。
+- Test2 仍只进入 Test；首页实际比例、播放点击延迟、创作者真实头像命中率、网页登录后的 Cookie 同步仍需下一轮实机截图/结果确认。
+
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
 ### 基线
