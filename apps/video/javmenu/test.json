@@ -3,14 +3,14 @@
   "channel": "test",
   "id": "javmenu-test",
   "name": "JavMenu",
-  "version": "0.1.0-test.2",
-  "build": 10102,
-  "shellVersion": "0.1.0-test.2",
-  "shellRuleVersion": 2026082401,
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "shellVersion": "0.1.0-test.3",
+  "shellRuleVersion": 2026082402,
   "managerVersion": "direct-loader-cdn",
-  "release": "apps/video/javmenu/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
-  "bootstrap": "apps/video/javmenu/bootstrap_test_v2_b10102.js",
+  "release": "apps/video/javmenu/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/javmenu/javmenu_remote_test_v3_b10103.txt",
+  "bootstrap": "apps/video/javmenu/bootstrap_test_v3_b10103.js",
   "updatedAt": "2026-08-24",
-  "notes": "Test2 按首轮实机截图修复：仓库/程序图标改为仓库资产；影片列表锁定 .video-list-item，修复 watermark/占位图与文本污染；发现页改为当前官网已确认分类路由；女优榜建立独立人物索引，人物页单独展示作品；详情演员仅认 /actor/，标签仅认元数据路径；站内播放排除 preview/freepv/litevideo，并增加 javmenu.org 请求兜底。"
+  "notes": "Test3 恢复 Test2 首页/搜索/分类列表回归：删除 .video-list-item 单点依赖，按真实详情链接建立多结构影片集合；重复链接合并标题和封面，多图片候选择优并过滤 watermark/placeholder/logo。Test2 分类、女优、演员/标签语义过滤和正式播放试看隔离继续保留。"
 }
