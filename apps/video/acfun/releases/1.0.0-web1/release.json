@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "acfun-web",
+  "name": "ACFun · 网页版",
+  "version": "1.0.0-web1",
+  "build": 11001,
+  "ref": "main",
+  "modules": [
+    {"name":"web-core","path":"apps/video/acfun/web/acfun_web_core_v100.js"}
+  ],
+  "verify": {"global":"ACFunWeb","property":"build","equals":"2026.08.23-v1.0.0-web1"}
+}
