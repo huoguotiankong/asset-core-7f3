@@ -1,15 +1,31 @@
 {
-  "schema": 1,
+  "schema": 4,
   "id": "myav",
   "name": "MyAv",
-  "updatedAt": "2026-08-23",
-  "stable": null,
-  "candidate": null,
-  "test": {
-    "version": "0.1.0-test.1",
-    "build": 10101,
-    "release": "apps/video/myav/releases/0.1.0-test.1/release.json",
-    "rule": "apps/video/myav/myav_remote_test_v1_b10101.txt",
-    "status": "initial-device-validation"
-  }
+  "versionPolicy": "remote-test-only-v1",
+  "updatedAt": "2026-08-23 11:05",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "myav-test",
+      "name": "MyAv",
+      "version": "0.1.0-test.1",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/myav/myav_remote_test_v1_b10101.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": false,
+      "desc": "MyAv 首个原生远程测试版；完成实机回归前不建立 Stable。",
+      "highlights": [
+        "有码 / 欧美 / 国产 / 无码列表与高级筛选",
+        "9 类索引、TOP20 / 周榜 / 月榜、三类搜索",
+        "详情、磁力、预览、本地收藏与历史",
+        "Shared JAV Playback：MissAV / 123AV / Jable",
+        "磁链长按：迅雷 / PikPak / 123云盘 / 光鸭云盘"
+      ],
+      "icon": "https://javlist.me/favicon.ico"
+    }
+  ]
 }
