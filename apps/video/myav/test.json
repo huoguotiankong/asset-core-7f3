@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.4",
-  "build": 10104,
-  "shellVersion": "1.0.0-test.4",
-  "shellRuleVersion": 2026082314,
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "shellVersion": "1.0.0-test.5",
+  "shellRuleVersion": 2026082315,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.4/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v4_b10104.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.5/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v5_b10105.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test4 根据第三轮实机结果重做磁力页与分类中心：完整原站菜单树、/t/ 索引条目、分类钻取修复、磁链标题/大小/日期/字幕高清解析与筛选排序。"
+  "notes": "Test5 根据第四轮实机结果优化搜索输入与首页工具图标，并把 /t/ 女优/男优/片商/TAG 恢复为带头像、作品数、原站筛选和双列作品流的原生实体页。"
 }
