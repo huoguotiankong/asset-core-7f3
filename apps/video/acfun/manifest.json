@@ -14,17 +14,18 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha8",
-  "testBuild": 10008,
-  "testShellVersion": "8.7.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v087.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v087.txt",
+  "testVersion": "1.0.0-alpha9",
+  "testBuild": 10009,
+  "testShellVersion": "8.8.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v088.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v088.txt",
   "imageDecoderPage": "acfunImageDecoder",
+  "comicTrimPage": "acfunComicTrim",
   "migration": {
-    "stage": "clean-rewrite-alpha8-watch-handshake-split-headers-immersive-comic",
+    "stage": "clean-rewrite-alpha9-native-play-matrix-segment-auth-comic-trim",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha7 实机确认：即使完整移植 Stable 0.4.9 的 UA + API Host Referer/Origin + cacheM3u8 合同，当前 Clean Rewrite 视频仍不可播，因此 Seed、decode、cacheM3u8 返回格式和这套 Header 都不能再单独作为根因。注意此前所有重写版只要列表/详情已带 seed 就不会调用 video/can/watch，可能漏掉当前后端要求的观看资格/会话/CDN 初始化副作用。Alpha8 每次播放都先强制 POST can/watch，成功则优先其返回 path；随后主动获取 decode manifest，提取首个 KEY/TS，并分别用无 Header、UA-only、API Header 探测 HTTP/Content-Type/二进制长度。cacheM3u8 获取 API 索引仍使用 API Header，但播放器消费本地索引时默认按首分片探针选择 Header，优先无 Header，避免把 API Referer/Origin 继续附加到已签名 CDN Key/TS；若分片 Content-Type 为 image/png，则自动增加官方 cacheM3u8WithPngProxy。漫画 Reader 已成功显示正文，Alpha7 fullTheme 仍留下系统状态栏白色 inset；Alpha8 叠加 immersiveTheme，让首图覆盖到物理屏幕顶部。latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha8 实机确认 video/can/watch 当前 POST=405、GET=HTTP200 且 canWatch=true，返回 videoUrl/previewUrl/playPath；H5 decode manifest HTTP200、AES key HTTP200，但首 TS 在 none/UA/API Header 下全部 HTTP403。因此当前根因已前移到签名 CDN 分片授权，不能再把 Seed、decode、Key、cacheM3u8 或播放器 UI 当作根因。Alpha9 先执行 can/watch GET 与 CDN refresh，再把 videoUrl/playPath/previewUrl/seed 分别送入 APP 原生 /api/m3u8/play、/m3u8/play 和 H5 /api/m3u8/h5/decode 做路由矩阵；每条 manifest 提取首 TS 后直接测试 none/UA/H5/jhg/API/APP/Range/Cookie 组合，并记录 403 响应正文，只有真实 2xx + 二进制内容的线路才自动成为播放主线路。漫画 Alpha8 截图已经没有系统标题/状态 chrome，顶部白区属于第一张源图片自身白边；Alpha9 新增独立 acfunComicTrim，仅裁首图顶部近白区域，后续图片保持原图。latest/stable 均不变。"
   }
 }
