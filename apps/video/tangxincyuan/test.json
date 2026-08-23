@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "tangxincyuan",
+  "name": "溏心次元",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "mode": "remote",
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082311,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/tangxincyuan/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/tangxincyuan/tangxincyuan_remote_test_v1_b10101.txt",
+  "bootstrap": "apps/video/tangxincyuan/bootstrap_test_v1_b10101.js",
+  "updatedAt": "2026-08-23",
+  "notes": "Initial clean Test build. Dynamic homepage/nav/category/actress/search/detail/media parser with local favorites/history."
+}
