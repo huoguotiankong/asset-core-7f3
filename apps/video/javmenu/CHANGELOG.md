@@ -13,6 +13,7 @@
 - Test Release：`apps/video/javmenu/releases/0.1.0-test.1/release.json`
 - 源站：`https://javmenu.com/zh`
 - Shared JAV Playback：Stable `1.0.0-test.4`，作为可选备用 Provider。
+- 云端仓库：已于 2026-08-23 将 Test1 登记到根 `manifest.json`，安装中心通过 `apps/video/javmenu/channels_v1_b10101.json` 暴露测试通道。
 
 ## 0.1.0-test.1 · 2026-08-23
 
@@ -48,7 +49,7 @@
 - Test1 已在本地通过 `node --check`；Parser Fixture 已验证影片卡、详情、人物/标签、HLS/MP4、预览图、磁力标准模型。
 - Bootstrap Runtime Smoke 已通过：`JavMenuBoot.loadOnly()` 可在同一作用域加载并校验 Core / Playback / Runtime；单真实线路返回直链媒体合同，多真实线路返回带 `urls/names/headers` 的 PlayModel。
 - Test1 自有资产已以 fast-forward 提交发布到 `asset-core-7f3@main`；`registry.json` 已登记 JavMenu，保证后续按恢复链继续开发。
-- 根 `manifest.json`（“我的规则仓库”安装中心）**暂未加入 JavMenu**：全新 Test1 尚未经过海阔实机，避免未验证入口被当作正式可安装程序展示；完成基础实机回归后再挂安装中心 Test 通道。
+- 2026-08-23 23:46 按用户要求发布到“我的规则仓库”云端安装中心：根 `manifest.json` 新增 `javmenu` Test 条目，指向 `javmenu_remote_test_v1_b10101.txt` 和不可变频道快照 `channels_v1_b10101.json`；发布时检测到并发 18AV 云仓提交，已基于其最新 HEAD 合并，未覆盖 18AV 或其它程序。
 - **尚未完成：海阔实机 Home / Search / Detail / Player / Favorite / Discover / Settings 回归，因此不得晋级 Stable。**
 
 ## 禁止回退 / 待确认
