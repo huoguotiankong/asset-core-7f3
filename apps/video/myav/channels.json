@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 12:30",
+  "updatedAt": "2026-08-23 12:43",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.7",
-      "build": 10107,
-      "displayVersion": "Test 0.1.0-test.7 · Build 10107",
-      "path": "apps/video/myav/myav_remote_test_v7_b10107.txt",
+      "version": "0.1.0-test.8",
+      "build": 10108,
+      "displayVersion": "Test 0.1.0-test.8 · Build 10108",
+      "path": "apps/video/myav/myav_remote_test_v8_b10108.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Test7 保留上一版业务能力，修复海阔导入风险词；独立演员中心、影片/演员双收藏、搜索记录与页面排版设置继续保留。",
+      "desc": "Test8 修复演员库中有码女优入口：动态导航优先，失败时使用用户实机确认的当前原站入口；排行榜加入独立2列/3列排版设置，默认双列。",
       "highlights": [
-        "导入壳改用中性演员命名，避免页面名称触发海阔禁止导入检查",
-        "演员中心继续覆盖三类女演员索引与男演员索引，并保留真实分页",
-        "本地收藏继续拆分影片收藏与演员收藏",
-        "搜索继续保留最近记录、清空和演员库快捷入口",
-        "首页/搜索/演员索引/实体作品/收藏继续支持独立2列或3列排版"
+        "有码女优入口增加当前站点 cat.py 兜底，不再因导航发现失败显示空白",
+        "欧美女优、国产女优和男优继续优先读取原站动态导航",
+        "排行榜 TOP20 / 周榜 / 月榜统一接入独立2列或3列排版",
+        "设置页新增排行榜排版项，恢复默认排版时排行榜也恢复双列",
+        "继续保留 Test7 中性导入壳和云仓自定义图标"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
