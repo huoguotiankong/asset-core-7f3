@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 12:56",
+  "updatedAt": "2026-08-23 13:24",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.13","build":10113,
-      "displayVersion":"Test 0.1.0 · Short Direct & Adaptive Image 13","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v13_b10113.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"基于 Test12 实机与汤头条2参考规则继续收敛。PWA 短视频列表已稳定恢复，但旧播放链仍把 1–2 秒短内容按长视频完整性校验，并把 source_origin MP4 误送 M3U8 解密。Test13 拆出短视频专用播放：免费短视频优先 App 详情 source_origin MP4 直放，其次短 HLS 且不做长视频时长比例校验；收费短视频仅使用官方 preview。推荐/长视频列表优先 PWA Provider 以获得更一致的 thumb_cover_str；详情仍回 App Provider 做 isfree/is_pay/coins 判断。图片升级为明文→PWA AES-CBC→App legacy AES-CFB 自适应。详情 UI 去除 preview_video/Provider 等技术文案。Stable 仍不存在。",
-      "highlights":["短视频播放与长视频完整性校验彻底分离","免费短视频优先 source_origin MP4 直接播放，不再误进 M3U8 解密","短 HLS 不再因 1 秒/2 秒舍入差异被判为不完整长片","推荐/长视频列表优先 PWA Provider，App Provider 继续负责详情与收费状态","图片统一 plain → AES-CBC → legacy AES-CFB 自适应判型","详情页保留试看/解锁/收藏/清晰度/简介，删除技术调试式文案","收费/汤币规则保持 Test11 安全边界，不自动消费"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.14","build":10114,
+      "displayVersion":"Test 0.1.0 · Large Feed & Reference Playback 14","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test13 实机确认 PWA 推荐接口仅返回 3 条，且短视频 source_origin 直放仍 0 kb/s。Test14 将推荐/长视频恢复为 App featuredAv 大列表，每页展示最多 36 条；短视频改用用户上传参考规则的 preview_video 兼容改写（播放主机切到 long. 并移除 seconds=30）。该兼容改写只对免费或已购买内容启用；收费未解锁内容继续使用官方试看/正常汤币解锁。免费/已购买长视频详情新增“兼容线路”按钮用于实机验证同一改写是否能恢复完整播放。",
+      "highlights":["推荐/长视频恢复 App featuredAv 大列表，修复仅 3 条","短视频优先参考规则的 long 主机兼容线路","免费/已购买长视频增加参考兼容线路测试按钮","收费未解锁内容不使用截断改写，继续官方试看/正常解锁","Test13 自适应图片链继续保留","新增 ttt_last_reference_rewrite 诊断，记录改写前后 URL"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
