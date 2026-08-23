@@ -3,7 +3,14 @@
   "id": "51chigua",
   "name": "51吃瓜",
   "category": "video",
-  "mode": "remote-test/self-use",
+  "mode": "remote/self-use",
+  "version": "0.1.0",
+  "build": 10106,
+  "stable": "apps/video/51chigua/stable.json",
+  "latest": "apps/video/51chigua/latest.json",
+  "stableRelease": "apps/video/51chigua/releases/0.1.0/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_stable_v1_b10106.txt",
+  "bootstrap": "apps/video/51chigua/bootstrap_stable_v1_b10106.js",
   "test": "apps/video/51chigua/test.json",
   "channels": "apps/video/51chigua/channels.json",
   "testVersion": "0.1.0-test.5",
@@ -15,5 +22,5 @@
   "changelog": "apps/video/51chigua/CHANGELOG.md",
   "sourceSite": "https://51cg1.com/",
   "icon": "https://51cg1.com/favicon.ico",
-  "migration": {"stage":"test5-official-comment-avatar","note":"Test5 is a narrow UI alignment patch over Test4: every comment and reply uses the official 51CG favicon avatar, matching the source-site default identity while leaving comments/search/playback/category contracts unchanged."}
+  "migration": {"stage":"stable-010-promoted-test5","note":"Stable 0.1.0 / Build10106 is promoted unchanged from the user-validated Test5. Test5 remains the immutable promotion source and rollback reference; future Test work must move forward from Stable 0.1.0."}
 }
