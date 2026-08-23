@@ -1,5 +1,53 @@
 # XVideos CHANGELOG
 
+## 0.1.0-test.6 / Build 10106 — 2026-08-23
+
+### Test5 实机结论
+- Test5 详情页产品重构已明显生效：Hero、立即播放、默认最高画质、时长/观看/点赞/评论两列文字统计以及“本地收藏 / 评论 / 官网 / 上传者”四图标均正常出现；本轮不再改动这条已验证的详情/播放主链。
+- 演员页虽然已经变成双列卡片，但卡片名称仍出现“中国 / 台湾 / 日本 / 哈萨克斯坦”等地区词，图片却是真实人物/视频图，说明 Test5 在卡片邻域中仍把地区筛选文本当成主标题。
+- 频道页的 Cannonmedia / ModelMedia / DirectorTONG 等实体基本正确，但没有像官网一样直接显示视频数量；用户明确要求频道卡补视频数。
+- “创作者”页仍出现“墨西哥 / 法国 / 英国 / 美国 / 印度”等地区名称以及统一黑色轮廓占位图，证明根级 URL 的宽松 Creator 兼容继续把地区/导航页识别成账号实体。
+- Yui Hatano 人物主页能恢复视频总数 558、浏览和订阅，但头像被 `og:image` 的默认轮廓覆盖，`/pornstars/yui-hatano-1/videos/best/0` 返回载荷没有恢复出视频卡。
+- 评论仍只能恢复详情页的评论数量，正文为空。
+- 账号 X5 会话已经能建立并显示会话 fingerprint，但 `/history/0` 原生请求没有解析到视频，说明“登录态存在”与“账号私有列表请求合同正确”仍是两件事。
+
+### 演员 / 频道 / 创作者隔离
+- 修复 Test5 的确定性状态 bug：旧 UI 使用 `getMyVar('xv_creator_kind5', paramKind)`，因此上一次点击保存的隐式状态可能覆盖首页传入的明确 `kind`，导致演员/频道/创作者三类页面互相串线。
+- Test6 三个 Tab 全部改为 URL 显式路由，不再共享 `putMyVar/getMyVar` 作为类型事实源。
+- Creator Parser 改为严格路径合同：`/pornstars/<slug>` 仅视为演员，`/channels/<slug>` / `/amateur-channels/<slug>` 仅视为频道，`/profiles/<slug>` 仅视为创作者；根级 URL 只有在对应类型的强上下文命中时才接受。
+- 地区词只作为演员筛选入口，永远不直接输出为人物/频道/创作者卡；当邻域标题被地区文本污染时，人物名称优先从真实 URL slug 恢复，例如 `yui-hatano-1 → Yui Hatano`。
+- 频道卡新增 `videoCount` 和 `subscribers` 解析，UI 优先展示“xxx 个视频”，尽量贴近官网频道卡的信息密度。
+
+### 人物主页
+- 人物头像改为 `div.profile-pic img` 优先，`og:image` 只做 fallback，避免官网通用轮廓图覆盖真实人物头像。
+- `/videos/best/<page>` 继续作为真实人物视频链，但载荷解析增加：普通 frame-block、JSON 对象/数组、JSON 内嵌 HTML、`\\u003c / \\/ / \\"` 等转义字符串还原、视频对象字段兼容、原始 video URL 邻域 fallback。
+- XHR GET 仍无视频时增加 POST fallback；视频总数继续读取 `nb_videos / total_videos / total / count` 等真实字段。
+- 主页统计继续保留视频/浏览/订阅/播放，并在官网存在时补性别/年龄；解析不到的字段保持空值，不制造数字。
+
+### 账号功能加强
+- 参考当前维护的 XVideos 账号实现确认：`/history/<page>`、`/videos-i-like/<page>`、`/watch-later/<page>` 私有列表使用 POST 页面请求；Test5 仅 GET 是“会话存在但历史 0 条”的重点差异。
+- Test6 新增 `fetchAccountPage()`：账号私有列表 POST + `X-Requested-With: XMLHttpRequest` 优先，失败才回退 GET；返回后仍只在主视频容器解析 `frame-block`，避免推荐侧栏污染私有列表。
+- 账号中心新增当前账号身份恢复、官方个人主页入口和头像，并把“喜欢 / 稍后看 / 观看历史 / 推荐”整理成四个直接入口。
+- Cookie 仍只实时读取 X5，不保存密码、不持久化 Cookie；账号显示状态继续写 Test5 私有文件，保留 1MB KV 救援边界。
+
+### 评论继续恢复
+- 在 Test5 DOM + AJAX/JSON 解析基础上，新增当前详情 `video_id` 恢复，并扫描内联脚本中的 comment/reply 同源候选地址。
+- 候选接口同时尝试 GET 与携带 `video_id/id` 的 POST，JSON 继续递归解析 user/comment/time/avatar/likes；未拿到真实正文仍保持空态，并提供 X5 官网 `#comments` 入口。
+- 评论正文仍需 Test6 实机确认；在没有真实返回证据前不宣称已经完全修复。
+
+### Release / Transport
+- 新不可变目录：`apps/video/xvideos/releases/0.1.0-test.6/`，在 Test5 之后追加 `core_feature_patch.js + ui_feature_patch.js`；`previous` 明确指向 Test5 / Build10105。
+- Bootstrap：`bootstrap_test_v6_b10106.js`，继续 Direct Immutable Rescue 架构，同时所有模块交付统一使用 jsDelivr CDN，避免新文件首次加载继续依赖 Raw GitHub。
+- Shell：`xvideos_remote_test_v6_b10106.txt`，规则版本 `2026082306`，所有入口固定 Build10106 / Test6 CDN Bootstrap。
+- 程序级 `test.json / manifest.json / channels.json`、根 `registry.json / manifest.json / manifest_meta.json` 已同步到 Test6；共享索引更新前重新读取并保留 911爆料 Test3、溏心次元 Test3 等并行最新事实。
+
+### 静态门禁与实机回归
+- `core_feature_patch.js`、`ui_feature_patch.js`、Test6 Bootstrap 已执行 `node --check`；Release JSON 与 Shell `￥home_rule￥` JSON 已解析通过。
+- Test6 仍只发布 Test，不建立 Stable；Test5 完整保留为 previous。
+- 实机重点：①演员名称是否恢复真实人物而不是地区；②频道卡是否出现视频数；③创作者页是否不再出现国家卡；④Yui Hatano 等主页真实头像与视频列表是否恢复；⑤评论正文是否恢复；⑥喜欢/稍后看/历史是否与 X5 官网同账号一致；⑦详情和最高画质播放不得回退；⑧不再出现 1MB `setItem` 错误。
+
+---
+
 ## 0.1.0-test.5 / Build 10105 — 2026-08-23
 
 ### Test4 实机结论
