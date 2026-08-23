@@ -88,3 +88,29 @@ MyAv 首版还暴露了第二个问题：其 `channels.json` 最初写成 `{stab
 - MyAv CHANGELOG 记录本事故和恢复链。
 
 后续以用户实机同步结果为最终事实。
+
+## 6. 麻豆传媒 Test3 复发记录
+
+2026-08-23 麻豆传媒从 Test2 发布 Test3 时再次复发同类问题：
+
+- `apps/video/madou/test.json`、`channels.json`、Release、Bootstrap、Shell 已到 Test3。
+- 根 `manifest.json` 也已经显示 Test3，并提升到 revision `202608231404`。
+- 但 `manifest_meta.json` 仍停在 revision `202608231342`，`itemCount` 仍为 10。
+- 用户实机“我的规则仓库”因此仍看到 Test2，证明仅回读 `manifest.json` 不能判定云仓发布完成。
+
+已修复为：
+
+```text
+manifest.json revision = 202608231411
+manifest_meta.json revision = 202608231411
+manifest_meta.json itemCount = 11
+```
+
+以后每次修改根 `manifest.json` 后，发布结束前必须做一个成对断言：
+
+```text
+manifest.revision === manifest_meta.revision
+&& manifest.items.length === manifest_meta.itemCount
+```
+
+这个断言属于发布完成条件，不是可选检查。
