@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 10:25",
+  "updatedAt": "2026-08-23 11:08",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.7","build":10107,
-      "displayVersion":"Test 0.1.0 · Runtime Contract 7","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test5 实机确认403条真实推荐和 source_* 播放技术链成立，但封面回调未执行、媒体为2秒旧版本维护占位片、漫画为动态接口配置、排行榜缺 type。Test6 完成四条修复；Test7 再补发布门禁发现的旧 Token 版本迁移问题，确保首次升级一定按 versionMsg.version 重握手。Stable 仍不存在。",
-      "highlights":["旧 Token 存在时也强制完成首次服务端版本迁移握手","封面使用海阔官方 $(url,headers).image + $.require 图片回调","默认播放按原 APP source_240，M3U8 记录 suspiciousShort 占位片诊断","漫画严格执行服务器 api_list/params_list 动态接口","排行榜支持总榜/日榜/周榜/月榜 type","Test6 不原地覆盖，完整保留用于回退"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.8","build":10108,
+      "displayVersion":"Test 0.1.0 · Playback Context 8","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v8_b10108.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test7 实机已确认短视频封面可见、部分真实长视频可播放，主协议和媒体代理成立。Test8 专门收敛剩余 P0：详情页只保留一个实际媒体返回项，清晰度只改状态以移除页面生成的播放列表语义；播放前预检并过滤数秒维护占位片；picx 普通 JPEG 直接显示；排行榜按真实创作者对象渲染。Stable 仍不存在。",
+      "highlights":["详情页仅一个实际媒体播放入口，Hero/清晰度按钮不再返回媒体 URL","清晰度按钮只选择偏好，避免连续同 col_type 被海阔识别为选集/播放列表","播放前预检 240/480/720/1080 M3U8 时长，过滤数秒维护片并自动回退","picx.yrfmba.cn 普通 JPEG 直接显示，非标准图片继续走解密 Adapter","排行榜按 nickname/owner_uuid/videos_count/followed_count 创作者模型渲染","漫画动态 api_list/params_list 链继续保留"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
