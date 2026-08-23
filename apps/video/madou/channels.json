@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 16:39",
+  "updatedAt": "2026-08-23 17:20",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.11",
-      "build":10111,
-      "displayVersion":"Test 0.1.0-test.11 · Build 10111",
-      "path":"apps/video/madou/madou_remote_test_v11_b10111.txt",
+      "version":"0.1.0-test.12",
+      "build":10112,
+      "displayVersion":"Test 0.1.0-test.12 · Build 10112",
+      "path":"apps/video/madou/madou_remote_test_v12_b10112.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test11 在 Test10 性能基线上加入详情扩展加载偏好与严格纯免嗅播放。详情可选手动、自动标签、自动标签+相关推荐；播放默认只走 HTTP/player/script/API + 静态 JS 解码，不启动 WebView/video://，命中真实 M3U8/MP4 后直接交播放器并做30分钟小型媒体缓存。兼容嗅探仅在用户设置中显式打开时作为失败兜底。",
-      "highlights":["详情扩展加载三档可选","手动模式保持seed-first快速首屏","HTTP-only纯免嗅默认开启","Base64/percent/P.A.C.K.E.R静态解码","真实M3U8/MP4直交播放器","30分钟媒体缓存","嗅探兜底默认关闭"],
+      "desc":"Test12 为存储救援 + 播放协议强化版。针对实机已达到1MB的规则私有 setItem KV，设置、媒体缓存/诊断、收藏、历史和分页模板全部迁移到规则私有文件；Bootstrap 直接加载不可变 Test12 Release，避免 Remote Manager 状态 setItem 阻断救援启动。纯免嗅继续严格 HTTP-only，并强化 player_aaaa/player_data、encrypt=1/2、parse/jx、302 Location、无扩展 HLS 与静态解码。",
+      "highlights":["1MB setItem 饱和救援","设置迁移私有文件","收藏历史迁移私有文件","Bootstrap绕过Remote Manager状态写入","player_aaaa/player_data","encrypt=1/2","parse/jx协议链","302/无扩展HLS检测","默认严格纯免嗅"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
