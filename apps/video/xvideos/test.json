@@ -3,14 +3,14 @@
   "channel": "test",
   "id": "xvideos-test",
   "name": "XVideos",
-  "version": "0.1.0-test.6",
-  "build": 10106,
-  "shellVersion": "1.0.0-test.6",
-  "shellRuleVersion": 2026082306,
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "shellVersion": "1.0.0-test.7",
+  "shellRuleVersion": 2026082307,
   "managerVersion": "direct-loader-cdn",
-  "release": "apps/video/xvideos/releases/0.1.0-test.6/release.json",
-  "rule": "apps/video/xvideos/xvideos_remote_test_v6_b10106.txt",
-  "bootstrap": "apps/video/xvideos/bootstrap_test_v6_b10106.js",
+  "release": "apps/video/xvideos/releases/0.1.0-test.7/release.json",
+  "rule": "apps/video/xvideos/xvideos_remote_test_v7_b10107.txt",
+  "bootstrap": "apps/video/xvideos/bootstrap_test_v7_b10107.js",
   "updatedAt": "2026-08-23",
-  "notes": "Test6：演员/频道/创作者改为显式独立路由并严格按真实路径分型，修复地区/导航串入人物卡；频道卡优先显示官网视频数；人物主页头像改为 profile-pic 优先并增强 /videos/best/<page> JSON/转义载荷/POST fallback；账号喜欢/稍后看/历史改为 POST 优先并增强身份主页；评论扩大到 video_id + 内联脚本候选 + GET/POST AJAX；保留 Test5 私有 KV 救援与已验证播放链。"
+  "notes": "Test7：按当前 XVideos 协议修复 Test6 实机仍失败的三条主链。人物/频道 JSON 直接解析 eid/u/t/tf/i/d/pn/pu 短字段并补 /videos/new、/videos/best/straight POST；账号历史/喜欢/稍后看使用精确 XHR 头与 JSON 优先解析；评论改为 WebView 动态渲染 DOM 优先恢复。地区筛选清理同义噪声，人物头像可用列表图兜底。Test5/Test6 已验证详情与最高画质播放链保持不变。"
 }
