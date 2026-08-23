@@ -3,6 +3,6 @@
   "id": "pornhub",
   "name": "Pornhub",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 16:24",
-  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.4","build":10104,"displayVersion":"Test 0.1.0-test.4 · Build 10104","path":"apps/video/pornhub/pornhub_remote_test_v4_b10104.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"账号会话与导航修复版：统一 X5 登录 Cookie 容器，私有数据按当前会话隔离并限制主内容解析；创作者/排序/搜索筛选原页切换；新增影片/创作者/片单在线与本地收藏订阅，以及只读评论。","highlights":["X5 登录会话一致性","账号私有缓存按 Cookie 指纹隔离","账号列表主内容区域解析","同级 Tab 原页切换不压栈","影片在线收藏 + 本地收藏","创作者在线订阅 + 本地收藏","片单在线操作 + 本地收藏","视频评论只读"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
+  "updatedAt": "2026-08-23 17:17",
+  "channels": [{"channel":"test","label":"测试版","id":"pornhub-test","name":"Pornhub","version":"0.1.0-test.5","build":10105,"displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/pornhub/pornhub_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,"desc":"第三轮 UI/入口修复：评论与片单详情补入 Runtime module 导出；分类按官网重构成异性恋/男同/女女 + 热门图片卡 + 中文全部分类；首页搜索进入独立搜索页；详情创作者头像增加主页回填；评论/本地收藏/在线收藏改为带图标的三栏操作。","highlights":["comments/playlistDetail Runtime 导出修复","分类官网式热门图片双列卡","分类与详情标签中文化","异性恋/男同/女女原页切换","独立搜索页","视频/创作者搜索","详情创作者头像主页回填","评论/本地收藏/在线收藏图标操作栏"],"icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/pornhub/assets/icon.svg"}]
 }
