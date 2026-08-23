@@ -1,5 +1,83 @@
 # XVideos CHANGELOG
 
+## 0.1.0-test.5 / Build 10105 — 2026-08-23
+
+### Test4 实机结论
+- Test4 的视频主链仍可进入详情，创作者频道页也能恢复真实图片和视频数量，说明 Test2 的 `frame-block + video.* token` 列表解析、Test3 创作者视频 `/videos/best/<page>` 和既有播放链没有整体失效。
+- 详情页当前把“时长 / 观看 / 点赞 / 评论”做成四个统计图标，但实机只能突出图标/标签，真正数值信息弱；用户明确要求统计改为直接文字数据，原本位于详情底部的“本地收藏 / 评论 / 官网 / 上传者”四个操作图标前移到该位置。
+- 详情标题和简介仍出现 `&lbrack; / &rsqb; / &period;` 等命名 HTML 实体，证明旧 `decode()` 只覆盖常用实体和部分数字实体仍不足。
+- 详情“出演者”误把 `Transsexual Porn / Channels / Pornstars` 等分类/导航文字当人物，说明 `li.model` 周边取链仍过宽，必须只接受明确人物路径。
+- 演员页地区入口重复出现多个 `China / Japan`，同时把 `Taiwan / Kazakhstan` 等地区条目当成演员实体；频道页虽然能恢复 80 个真实频道，但单列 avatar 排版与官网视觉差距大。用户要求演员/频道/创作者参考官网卡片感，统一改成一行两列。
+- 分类官网当前可见中文名称，而小程序仍主要展示英文 slug；本轮改为“真实官网标签 URL 不变、显示名中文化”。
+- 评论页能识别评论数量，但正文仍为空；说明详情页评论数量 Selector 有效，Comment Adapter 仍未命中当前真实 DOM/AJAX 数据。
+- 登录入口打开的是 XVideos 普通首页，不能稳定进入登录/账号流程；同时实机同步操作直接抛出 `InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`，因此 Test5 必须先按私有 KV 饱和事故救援，而不是继续在旧 `setItem` 会话链上修补。
+
+### 私有存储 1MB 救援
+- Test1-Test4 的完整 HTML 短缓存会写入 `setItem`；累计多个列表/详情/账号页面后，用户设备已达到海阔规则私有 KV 约 1MB 上限，导致后续哪怕只写一个很小的登录状态也会失败。
+- Test5 覆盖 `fetchText()`：完整 HTML 只保存在本次运行内存，不再写 `setItem`；Profile AJAX 载荷同样只走内存缓存。
+- 本地收藏、浏览足迹、搜索历史、账号显示状态和自定义域名迁到 `saveFile/readFile` 私有文件；首次读取可从旧 KV 做只读迁移，后续写入完全走文件。
+- 账号 Cookie 不再持久化到任何文件或 KV，只实时读取当前 X5 Cookie 容器；文件中只保存 `enabled / name / fingerprint / syncedAt` 这类非秘密会话状态。
+- Patch 启动时尝试清理已知旧 HTML cache key、旧账号 Cookie/Session key 和旧 Remote Manager 状态；清理失败也不会阻断页面主链。
+- Test5 Bootstrap 不再调用会写 Remote State 的 `HikerCloudRemote`，改为 Direct Immutable Loader，按 Release 固定顺序直接 `require()` Test1→Test5 不可变模块并校验最终版本。
+
+### 登录 / 账号重构
+- 官方登录入口固定为 `x5://<base>/account`，不再把站点首页当登录页。
+- `liveCookie()` 会从 `/account`、站点根路径读取当前 X5 Cookie，并选择当前有效会话；原生账号请求直接使用 live Cookie。
+- “同步当前 X5 会话”先请求 `/account` 验证登录状态；Cookie 中存在当前 session token 或账号页出现明确已登录信号后才建立小程序账号状态。
+- 当前会话只以不可逆 fingerprint 展示；账号名只能从明确 account/profile 上下文恢复，解析不到名字时仍可保留已验证的 Cookie 会话，不再从普通推荐人物猜用户名。
+- 退出小程序账号只清文件状态，不删除 X5 官网 Cookie。
+
+### 详情页产品重构
+- 详情主信息区仍保留 Hero + “立即播放”，播放链继续使用 Test3 已验证的已知源优先 / HLS master 多画质 / `video://` 回退，不重新改媒体协议。
+- 时长、观看、点赞、评论改为两列纯文字统计，直接显示实际解析值；发布日期独立显示，不再用四个统计图标占据首屏。
+- 原底部“本地收藏 / 评论 / 官网 / 上传者”四个动作改为 `icon_small_4` 前移到统计下方，符合用户实机操作优先级。
+- 底部不再重复一套同功能操作；收藏写入文件，不触碰已饱和 KV。
+- `decode()` 增加命名实体与十六进制数字实体，覆盖 `lbrack / rbrack / period / rsquo / ldquo / rdquo / ndash / mdash / hellip` 等当前实机暴露形式。
+- 出演者 Parser 收紧为 `li.model` 容器内的明确 `pornstar/profile` 人物路径；`Channels / Pornstars / Transsexual Porn / Models / Users` 等导航或类别词直接拒绝。
+
+### 中文分类
+- `/tags` 的真实标签 URL、分类搜索、A-Z 收纳逻辑继续保留，避免为了中文展示制造一套假的本地分类协议。
+- 显示名优先尝试从 XVideos 中文站标签页学习真实中文名称；不可用时使用项目内稳定映射，例如 `anal→肛交`、`mature→成熟`、`brunette→褐发`、`black→黑人`、`redhead→红发`、`blonde→金发`、`big-tits→巨乳`、`big-ass→巨臀`、`oral/blowjob→口交`、`ai-generated→AI生成`。
+- 中文分类搜索同时匹配中文显示名和原始英文标签，点击后仍进入原官网标签 URL。
+
+### 演员 / 频道 / 创作者
+- 三类实体统一使用 `movie_2` 双列卡片，不再使用 Test4 的单列 avatar 长列表；名称、图片和视频/订阅/观看统计尽量贴近官网卡片信息层级。
+- 演员页只接受明确 Pornstar 实体；频道接受 Channel / 经强上下文验证的根级 Creator；创作者接受 Profile / 经强上下文验证的根级 Creator。
+- 地区词典补齐 Taiwan / Kazakhstan 等并中文化；地区入口按显示名去重，和演员实体完全分离。
+- 创作者主页统计也改为真实文字两列，视频继续双列展示。
+
+### 评论恢复增强
+- Comment Adapter 从单一 class 结构扩大到 `div/li/article/section` comment 容器，支持更多 username/message/time/like/avatar 结构。
+- 初始详情 HTML 未命中时，会从真实 `data-url / data-href / href / action` 和脚本字符串中发现同源 comment/reply AJAX 地址，最多有限请求 8 个候选。
+- AJAX 返回兼容 HTML 和 JSON；JSON 可递归读取 `comment/message/body/text/content` 以及用户、头像、时间、点赞字段，仍坚持“没有真实数据就空态”，不伪造评论。
+- 若仍恢复不到正文，只在私有文件写入很小的 comment diagnostic（URL、候选地址数量、HTML 长度），不保存完整 HTML。
+
+### Release / Bootstrap / Shell
+- 新不可变目录：`apps/video/xvideos/releases/0.1.0-test.5/`。
+- Release 在 Test4 模块之后追加 `core_rescue_patch.js + ui_rescue_patch.js`，`previous` 明确指向 `0.1.0-test.4 / Build10104`。
+- Bootstrap：`bootstrap_test_v5_b10105.js`，采用 direct immutable rescue loader，不写 Remote Manager 私有状态。
+- Shell：`xvideos_remote_test_v5_b10105.txt`，规则版本 `2026082305`，继续复用 Test3 已验证的单 `xvideosRoute` 通用路由，全部入口固定 Build10105。
+- 云仓 `manifest / manifest_meta / registry / test / manifest / channels` 已切到 Test5；合并共享索引时重新读取并保留并行开发的 `911爆料 Test3` 与 `溏心次元 Test2`，避免用旧共享文件覆盖其它程序。
+
+### 静态门禁
+- Test5 Core/UI 发布候选已执行 `node --check` 通过；Direct Bootstrap 已执行 `node --check` 通过。
+- Test5 Shell 的 `￥home_rule￥` JSON 已本地解析通过，单一页面路由为 `xvideosRoute`，Build 固定 10105。
+- Test5 仍只进入 Test，不建立 Stable；Test4 完整保留为 previous 回退基线。
+
+### Test5 实机回归重点
+1. 首次覆盖 Test5 后是否不再出现 `私有存储内容过大 (1MB) / setItem` 错误。
+2. 首页、搜索和播放是否保持 Test2/Test3 已验证基线，不因救援 Bootstrap 回退。
+3. 详情标题/简介中的 `&lbrack; / &period;` 是否正常解码。
+4. 时长/观看/点赞/评论是否直接显示真实值；下面四个图标是否变为本地收藏/评论/官网/上传者。
+5. 出演者是否不再出现 `Transsexual Porn / Channels / Pornstars` 这类假人物。
+6. 分类是否大部分显示中文，搜索中文标签能否进入正确分类。
+7. 演员/频道/创作者是否变为一行两列，地区入口去重且不再把 Taiwan/Kazakhstan 当演员。
+8. 打开登录是否直接进入 XVideos 账号页；完成官网登录后同步是否能进入“我的账号”，喜欢/稍后看/历史是否和官网同一会话。
+9. 评论是否能恢复真实正文；若仍为空，下一轮读取 Test5 小诊断继续定向适配当前评论接口。
+10. 图标 CDN 修复是否在重新覆盖 Test5 后正常显示。
+
+---
+
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23
 
 ### 恢复基线
