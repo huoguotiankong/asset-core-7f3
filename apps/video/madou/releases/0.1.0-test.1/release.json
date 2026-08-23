@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "notes": "First architecture-first test release for madoup2.cc: native Hiker UI, dynamic menu/category discovery, adaptive cards, search-form discovery, detail/player extraction with video:// fallback, local favorites/history and diagnostics."
+}
