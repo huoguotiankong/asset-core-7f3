@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "911baoliao-test",
+  "name": "911爆料",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/911baoliao/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/911baoliao/releases/0.1.0-test.1/runtime.js"},
+    {"name":"routePatch","path":"apps/video/911baoliao/releases/0.1.0-test.2/route_patch.js"},
+    {"name":"transportPatch","path":"apps/video/911baoliao/releases/0.1.0-test.3/transport_patch.js"}
+  ],
+  "verify": {"global":"Bl911RemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "notes": "Test3 keeps Test2 route fix and moves Shell/Bootstrap/runtime callbacks to jsDelivr with Remote Manager 2.0.2 multi-mirror fallback."
+}
