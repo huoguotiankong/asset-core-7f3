@@ -3,12 +3,12 @@
   "channel": "web",
   "id": "acfun-web",
   "name": "ACFun · 网页版",
-  "version": "1.1.0-web2",
-  "build": 11002,
-  "shellVersion": "1.1.0-web-native",
+  "version": "1.2.0-web3",
+  "build": 11003,
+  "shellVersion": "1.2.0-web-native",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.1.0-web2/release.json",
-  "rule": "apps/video/acfun/acfun_remote_web_v110.txt",
+  "release": "apps/video/acfun/releases/1.2.0-web3/release.json",
+  "rule": "apps/video/acfun/acfun_remote_web_v120.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Web2 已纠正 Web1 的产品方向：不再把整站 X5 当作主界面。首页、分类、专题、搜索、详情、收藏、评论等恢复为海阔原生组件；网站只作为最终播放/漫画阅读的 H5 能力兜底。数据层复用当前已验证可返回列表/封面的 ACFun Provider，终端媒体页用 X5 调网站自身前端以绕开原生 Test 当前的 HLS auth_key 与漫画渲染问题。原始整站仅保留在设置/诊断中。"
+  "notes": "Web3 根据实机反馈修复 Web2 两个核心问题：原生首页封面不再依赖带特殊规则名的子页 decoder，而在 Web3 ImageAdapter 内直接执行已验证的前100字节 XOR 并使用全新缓存；播放/漫画终端不再受上次纯网页模式持久状态影响，固定使用已实机可加载的 APP 风格 H5，并按 Flutter Web 的 flt-semantics/aria-label 结构自动搜索标题、进入详情、点击播放或章节。终端页只保留一个全屏 X5 组件，不再显示说明/线路按钮。"
 }
