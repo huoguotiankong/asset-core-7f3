@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.9",
-  "defaultBuild": 10109,
-  "testVersion": "0.1.0-test.9",
-  "testBuild": 10109,
-  "testShellVersion": "1.0.0-test.9",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v9_b10109.js",
-  "testRule": "apps/video/myav/myav_remote_test_v9_b10109.txt",
+  "defaultVersion": "0.1.0-test.10",
+  "defaultBuild": 10110,
+  "testVersion": "0.1.0-test.10",
+  "testBuild": 10110,
+  "testShellVersion": "1.0.0-test.10",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v10_b10110.js",
+  "testRule": "apps/video/myav/myav_remote_test_v10_b10110.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"complete-category-fallback-test9","note":"Test9 adds a canonical nine-category fallback map shared by the actor hub and category center while preserving dynamic discovery as first choice. No Stable before device verification."}
+  "migration": {"stage":"scoped-detail-full-filter-split-favorites-test10","note":"Test10 fixes polluted detail metadata, adds independent movie/actor favorite layouts, and uses the full user-verified Ttype=2 censored filter page. No Stable before device verification."}
 }
