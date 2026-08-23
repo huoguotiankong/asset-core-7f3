@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha1",
-  "build": 10001,
-  "shellVersion": "8.0.0-test",
+  "version": "1.0.0-alpha2",
+  "build": 10002,
+  "shellVersion": "8.1.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha1/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v080.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha2/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v081.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha1。Test 已从历史 0.6.0-alpha18 补丁栈完全切离，使用独立 remote state id=acfun-test，Stable 0.4.9 / Build149 / Shell5.11.3 不变。新链按 APP 1.9.7 静态协议与当前实机证据重新实现：游客令牌/签名/AES encData、Station 专题首页、动漫/视频 ClassType+Zone、漫画、短视频、社区、小说、有声、统一搜索、本地收藏历史；jhimage/相对图统一进入已验证 XOR 解码器，播放优先真实媒体 Seed，缺失时才补 can/watch，远程 decode URL 直接交播放器。UI 完全重构为 APP 风格多专题首页与独立详情/阅读页。当前状态为待海阔实机回归，不得晋级 Stable。"
+  "notes": "Clean Rewrite Alpha2。针对 Alpha1 首轮海阔实机截图修复四类明确回归：相对封面重新以当前会话 imgDomain 为主，asigoo 恢复 Stable 已验证的 _480 + 空 Referer + XOR 解码链；统一 query 参数安全 decode，修复专题页标题/正文显示百分号编码；播放保留已确认的 jpd Seed→H5 decode，但给 extension-less decode URL 强制 #isM3u8#，同时读取 APK 存在的 m3u8/player/referer 与 playbackDomain/playbackAuthKey，提供 H5解码/CDN直连/APP播放兼容多线路；漫画 info/chapter 恢复 GET-first，避免当前 Host POST 405 优先失败。首页删除 Alpha1 的开发说明文案。Stable 0.4.9 不变。"
 }
