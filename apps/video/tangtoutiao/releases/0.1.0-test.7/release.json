@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"tangtoutiao-test",
+  "name":"汤头条",
+  "version":"0.1.0-test.7",
+  "build":10107,
+  "ref":"main",
+  "baseStable":null,
+  "baseTest":{"version":"0.1.0-test.6","build":10106,"release":"apps/video/tangtoutiao/releases/0.1.0-test.6/release.json"},
+  "modules":[
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/image.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/playback.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/runtime.js"}
+  ],
+  "verify":{"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.7"},
+  "notes":"Test6 发布门禁发现：已有 Test5 token 时普通 call() 会跳过 bootstrapSession，导致 versionMsg.version 迁移不会执行。Test7 增加 protocolGate：version_checked 未建立时无论旧 token 是否存在都先执行启动重握手；其余 Test6 图片/播放/漫画/排行模块原样复用。"
+}
