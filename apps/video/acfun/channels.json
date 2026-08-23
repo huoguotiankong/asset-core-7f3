@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "1.0.0-alpha3",
+      "version": "1.0.0-alpha4",
       "baseVersion": "clean-rewrite",
       "targetVersion": "1.0.0",
-      "build": 10003,
-      "displayVersion": "Test 1.0.0-alpha3 · Build 10003 · Shell 8.2",
-      "path": "apps/video/acfun/acfun_remote_test_v082.txt",
+      "build": 10004,
+      "displayVersion": "Test 1.0.0-alpha4 · Build 10004 · Shell 8.3",
+      "path": "apps/video/acfun/acfun_remote_test_v083.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "全新重写 Alpha3 · 第二轮实机修复 · jhg_player播放凭据与漫画章节传输探针",
-      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "保留jhg_player字面Header", "同decode多Header线路", "漫画HTTP2xx宽容解析", "GET/POST与Origin精确探针", "继续实机回归"],
+      "desc": "全新重写 Alpha4 · CDN refresh 播放链 + 漫画章节真实模型/参数探针",
+      "highlights": ["独立测试运行链", "Stable 0.4.9 不变", "封面已实机恢复", "video/cdn/refresh", "完整签名播放Header", "decode响应预检", "拒绝HTTP200业务404", "chapterList精确章节", "chapterId/chapter_id/chapterNum适配"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
