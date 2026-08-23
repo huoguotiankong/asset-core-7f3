@@ -3,32 +3,32 @@
   "id": "tangxincyuan",
   "name": "溏心次元",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 20:18",
+  "updatedAt": "2026-08-23 20:33",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "tangxincyuan-test",
       "name": "溏心次元",
-      "version": "0.1.0-test.1",
-      "build": 10101,
-      "displayVersion": "Test 0.1.0-test.1 · Shell 1.0.0-test.2 · Build 10101",
-      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v2_b10101.txt",
+      "version": "0.1.0-test.2",
+      "build": 10102,
+      "displayVersion": "Test 0.1.0-test.2 · Shell 1.0.0-test.3 · Build 10102",
+      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v3_b10102.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "溏心次元首个远程测试版：按官网结构重建首页、主导航、人物中心、分类中心、搜索、详情与播放，并提供本地收藏、历史和诊断；当前 Shell2 已清理导入可见敏感标签。",
+      "desc": "Test2 修复实机首页获取远程依赖失败：导入 Shell、Bootstrap 与模块交付切换为 jsDelivr CDN 直连链，同时保留 Test1 业务解析基线。",
       "highlights": [
+        "修复首页远程依赖加载失败",
+        "云仓版本提升为 Test2 / Build10102",
+        "Shell 与 Bootstrap 使用 CDN 交付",
+        "保留人物中心与中性导入标签",
         "首页与官网主导航",
-        "人物头像与详情入口",
-        "栏目/系列/片商分类中心",
-        "独立站内搜索",
-        "内容详情与相关推荐",
-        "MP4/HLS/player/iframe 媒体提取",
-        "本地收藏与浏览历史",
-        "导入标签兼容修复"
+        "分类中心与人物入口",
+        "搜索、详情、播放与本地收藏",
+        "设置与诊断"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608231"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608232"
     }
   ]
 }
