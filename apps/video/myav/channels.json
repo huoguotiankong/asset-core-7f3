@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 12:43",
+  "updatedAt": "2026-08-23 13:05",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.8",
-      "build": 10108,
-      "displayVersion": "Test 0.1.0-test.8 · Build 10108",
-      "path": "apps/video/myav/myav_remote_test_v8_b10108.txt",
+      "version": "0.1.0-test.9",
+      "build": 10109,
+      "displayVersion": "Test 0.1.0-test.9 · Build 10109",
+      "path": "apps/video/myav/myav_remote_test_v9_b10109.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Test8 修复演员库中有码女优入口：动态导航优先，失败时使用用户实机确认的当前原站入口；排行榜加入独立2列/3列排版设置，默认双列。",
+      "desc": "Test9 补齐原站九类标签索引入口：动态导航优先，失败时使用用户实机确认的当前地址兜底；演员库与分类中心共用同一映射。",
       "highlights": [
-        "有码女优入口增加当前站点 cat.py 兜底，不再因导航发现失败显示空白",
-        "欧美女优、国产女优和男优继续优先读取原站动态导航",
-        "排行榜 TOP20 / 周榜 / 月榜统一接入独立2列或3列排版",
-        "设置页新增排行榜排版项，恢复默认排版时排行榜也恢复双列",
-        "继续保留 Test7 中性导入壳和云仓自定义图标"
+        "有码片商 / 有码女演员 / 男演员 / 有码TAG 全部加入可靠兜底",
+        "欧美片商 / 欧美女演员 / 欧美TAG 全部加入可靠兜底",
+        "国产女演员 / 国产TAG 全部加入可靠兜底",
+        "分类中心固定展示完整九类，不再依赖原站菜单是否抓全",
+        "继续保留排行榜独立2列/3列排版、中性导入壳和自定义云仓图标"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
