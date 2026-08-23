@@ -1,5 +1,52 @@
 # XVideos CHANGELOG
 
+## 0.1.0-test.7 / Build 10107 — 2026-08-23
+
+### Test6 实机结论
+- Test6 已确认真实运行，不是旧缓存：演员页已经从“中国 / 台湾 / 日本”等假人物恢复为 Yui Hatano、Rae Lil Black、Anri Okita、Rie Tachikawa 等真实演员，双列卡也正常，证明 Test6 路由隔离确实生效。
+- 地区筛选仍存在“中国人 模特 / 亚洲的 模特”等官网同义标签噪声，需要在显示层进一步归一化和去重。
+- Anri Okita / Yui Hatano 等人物主页能恢复真实视频总数、浏览、订阅、播放等统计，但当前页始终 0 个视频；头像仍可能显示官网黑色默认轮廓。
+- 评论页仍只能恢复评论数量，正文为空。
+- X5 会话指纹已经存在，但 `/history/0` 仍显示“账号列表暂未解析到视频”，说明问题不再是“有没有登录状态”，而是账号返回载荷和请求合同没有被正确解析。
+- Test5 已实机确认正常的详情信息布局、立即播放和最高画质链本轮继续冻结，不重新改媒体主链。
+
+### 人物 / 频道视频的真实根因
+- Test6 `/videos/best/<page>` 已经能读到 `nb_videos`，所以主页能显示“共 23 个 / 558 个”等真实总数；但 Test6 的通用对象解析只识别 `url/title/thumbnail` 等长字段。
+- 当前 XVideos JSON `videos[]` 实际大量使用短字段：`eid`（编码视频 id）、`u`（URL/slug）、`t / tf`（标题）、`i`（封面）、`d`（时长）、`pn`（上传者名）、`pu`（上传者 URL）。因此 Test6 实际是“JSON 已返回，但每条视频对象全部被过滤”，不是接口本身没数据。
+- 当前维护实现同时证明账号/人物/频道还存在 `/videos/new/<page>` POST，以及频道 `/videos/best/straight/<page>` POST；后者需要 `X-Requested-With: XMLHttpRequest`、JSON Accept、Origin/Referer 和 `main_cats[]=straight/shemale/gay` 表单。
+- Test7 新增 `parseApiVideoPayloadV7()`，优先按上述真实短字段建立视频卡，再兼容长字段/HTML；人物和频道按类型尝试当前 GET/POST 合同，最后才使用 WebView 已渲染页面兜底。
+
+### 账号私有列表
+- `/history/<page>`、`/videos-i-like/<page>`、`/watch-later/<page>` 继续使用官网真实列表，不制造本地伪数据。
+- Test7 的私有列表请求补齐当前 XHR 头：`Accept: application/json, text/plain, */*`、`X-Requested-With`、`Sec-Fetch-*`、`Connection`、Referer，并实时注入当前 X5 Cookie。
+- 返回体改为 JSON 短字段优先、HTML `frame-block` 次之、WebView 已登录页面最后兜底；不再把 JSON 返回直接交给 HTML Parser。
+- 如果官网返回明确登录页，仍显示“登录态未传递”，不把公共推荐视频伪装成账号历史。
+
+### 评论策略重构
+- Test5/Test6 连续扩大静态 DOM 与 AJAX 猜测仍没有恢复评论正文，说明继续堆候选 URL 的收益很低。
+- Test7 将评论链改为：详情静态 DOM → `fetchCodeByWebView()` 加载当前视频并触发评论 Tab → 等待真实 comment DOM 出现 → 解析用户、正文、时间、点赞、头像 → 最后才有限尝试旧 AJAX 候选。
+- WebView 评论恢复只在用户主动进入评论页时运行，避免拖慢首页/详情首屏。
+- 仍坚持“没有真实正文就空态”，不生成伪评论。
+
+### 人物与地区 UI
+- 演员卡继续一行两列，并将卡片 `rawImg` 作为人物主页 seed；当官网只返回默认黑色轮廓时可用列表侧真实人物图作为视觉兜底，不覆盖真实可用头像。
+- 地区筛选将 Chinese/China、Thai/Thailand、Japanese/Japan、Taiwanese/Taiwan、Asian/Asia 等同义标签统一为中文地区名并去重。
+- 修复资料栏“年龄 年龄39”重复前缀，统一为“年龄 39”。
+
+### Release / Transport
+- 新不可变目录：`apps/video/xvideos/releases/0.1.0-test.7/`，新增 `core_protocol_patch.js + ui_protocol_patch.js`；`previous` 明确指向 Test6 / Build10106。
+- Bootstrap：`bootstrap_test_v7_b10107.js`，继续 CDN Direct Immutable Loader，按 Test1→Test7 固定顺序加载并验证 Core/Runtime `0.1.0-test.7 / 10107`。
+- Shell：`xvideos_remote_test_v7_b10107.txt`，规则版本 `2026082307`，全部入口固定 Build10107。
+- 云仓继续使用不可变 Channels 快照：`channels_v7_b10107_r1.json`，避免版本中心异常时再次回退到旧 Test 卡。
+- 根 `manifest / manifest_meta / registry` 发布前重新读取并保留溏心次元 Test5 等并行最新事实。
+
+### 静态门禁与实机回归
+- Test7 `core_protocol_patch.js`、`ui_protocol_patch.js`、Bootstrap 均已执行 `node --check` 通过；Release/Test/Manifest/Channels/Shell 进入最终远端回读门禁。
+- Test7 仍只发布 Test，不建立 Stable；Test6 完整保留为 previous。
+- 实机重点：① Anri Okita / Yui Hatano 人物主页是否出现真实视频卡；②人物头像是否不再固定黑色轮廓；③账号历史/喜欢/稍后看是否出现真实列表；④评论正文是否从动态 DOM 恢复；⑤地区筛选是否清洁去重；⑥详情和最高画质播放不得回退。
+
+---
+
 ## 0.1.0-test.6 / Build 10106 — 2026-08-23
 
 ### Test5 实机结论
