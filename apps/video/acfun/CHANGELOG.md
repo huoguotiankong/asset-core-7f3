@@ -4,279 +4,363 @@
 >
 > **并行开发约束：** 当前对话只维护 ACFun。`registry.json`、根 `manifest.json` 等共享文件在写入前必须重新读取，只手术式修改 ACFun 项，禁止覆盖其它并行小程序状态。
 
-## 2026-08-23 · Test 1.0.0-alpha1 / Build10001 / Shell8.0 —— Clean Rewrite Alpha1
-
-### 当前版本边界
-
-- **Stable 不动：** `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 保持正式恢复基线。
-- **Test/Candidate 全新起线：** `1.0.0-alpha1 / Build10001 / Shell8.0.0-test`。
-- Test Bootstrap 使用 `id=acfun-test`，Remote Manager 状态键与 Stable 的 `acfun` 完全隔离；测试失败不会污染正式版激活状态。
-- 活动 Test Release 只加载 `next/core → protocol → provider → media → ui` 五层新模块，不再加载 `0.6.0-alpha18` 的 Stable8+A15/A17/A18 历史补丁栈。
-- 旧 Alpha18 及更早版本保留为历史证据，不作为当前实现基线。
-
-### 产品/UI 重写
-
-- 参考用户当前 APP/H5 实机截图重新设计首页，不再把 Station 强行做成一个全局筛选器。
-- `精选 / 里番` 首页按真实 Station **多专题分块**：专题标题 + “查看更多” + 6 个预览卡片；翻页继续下一个专题组，结构对应 APP 的“进站必看 / 新番”等信息流。
-- 一级主导航：`精选 / 漫画 / 动漫 / 视频 / 里番 / 短视频`；快捷入口：`社区 / 小说 / 有声 / 我的`。
-- 动漫/视频使用 `classTypeList → Zone/Tag → 排序`；漫画使用独立 Station；短视频使用独立 loadType；社区、小说、有声各有自己的分类 Adapter。
-- 二级详情、漫画阅读、小说/有声阅读、评论、搜索、收藏、历史、设置、诊断全部拆为独立 `hiker://page/...?...&simple=true` 页面；同级 Tab/筛选只改状态并 `refreshPage(false)`，不叠同级页面栈。
-- 普通原生标题/描述不注入 HTML；只有评论/正文等明确 `rich_text` 区域使用 HTML。
-
-### 协议 / Provider / 图片 / 播放
-
-- 以 APK 1.9.7 静态证据和已有实机成功链重建：游客 `user/traveler/`、`t + s(MD5) + deviceId + User-Mark + aut`、`encData` AES-CBC、动态接口 Host、Station、ClassType/Zone、视频、漫画、短视频、社区、小说/有声及搜索。
-- 图片统一经过 ImageAdapter：相对 `jhimage/...` 先映射到 `https://cdn.ukaim.com/`，再进入已验证 `acfunImageDecoder`；明文 JPEG/PNG/GIF/WebP 直接放行，非明文才按 `2020-zq3-888` XOR 前100字节，并使用持久本地缓存。
-- 播放统一为 **Seed First**：列表/详情真实媒体字段优先；只有 Seed 缺失才尝试 `video/can/watch`；最终构造远程 `/api/m3u8/h5/decode?path=...` 并连同 UA/Referer/Origin 直接交播放器，不默认 `cacheM3u8`。
-- 所有播放/收藏等序列化回调必须重新进入当前 `bootstrap_test_v080.js` 再 `ACFunNextBoot.loadOnly()`，禁止闭包加载旧 Release。
-
-### 当前验证状态
-
-- 本地静态校验已通过：5 个业务 JS + Bootstrap 均通过 `node --check`；Shell 外层 JSON roundtrip 通过；VM smoke load 能得到 `ACFunNext.version=1.0.0-alpha1`、Build 标识、9 个栏目和基础视频模型。
-- 当前环境不能直接实时打开用户提供的两个站点，因此本版数据合同来自：**用户当前截图 + APK 1.9.7 静态证据 + 现有 Stable/Alpha 实机成功事实**；网站运行时变化必须由海阔实机继续验证。
-- **PENDING 实机回归，禁止晋级 Stable。** 首轮必须检查：
-  1. 首页首屏、多专题块、封面；
-  2. 一级 Tab `A→B→C→A→B` 后只按一次返回能离开 Home；
-  3. 动漫/视频 分类、标签、排序；
-  4. 普通视频详情、播放、快速切换；
-  5. 短视频列表/切换/直接播放；
-  6. 漫画详情→章节→图片；
-  7. 小说/有声列表→章节/音频；
-  8. 社区列表→详情→评论；
-  9. 搜索输入与多类型切换；
-  10. 根据真实截图继续做 UI 第二轮视觉收敛。
-
----
-
-## 0.6.0 Alpha 历史恢复记录
+## 当前版本边界
 
 ### Stable 0.4.9 / Build149 / Shell5.11.3
 
-- 正式 Stable 与 `latest.json` 固定在 `0.4.9 / Build149`，是 Test 大改失败后的恢复基线。
-- 历史实机已验证：常规视频播放、极速切换、封面 XOR 解密与持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
-- 图片解密固定合同：key `2020-zq3-888`，只 XOR 前100字节；JPEG/PNG/GIF/WebP 明文不重复解密。
-- Stable/latest 在 Alpha18 仍冻结。
+- 正式版与 `latest.json` 继续冻结在 `0.4.9 / Build149`，作为 Test 重构失败时的恢复基线。
+- 历史实机已验证：常规视频列表/播放、封面 XOR 解密和持久缓存、精选/里番 Station、动态 `classTypeList`、APP 1.9.7 `getTagsZ → tagTitleList`、短视频底座、漫画详情/章节阅读。
+- Stable 与 Clean Rewrite Test 使用不同 Remote Manager 状态：Stable `id=acfun`，Test `id=acfun-test`，禁止互相污染。
 
-### Test 0.6.0-alpha18 / Build169 / Shell7.4（历史测试）
+### Test / Candidate 1.0.0-alpha2 / Build10002 / Shell8.1
 
-#### Alpha16 最新实机探针
+活动 Release：
 
 ```text
-ACFun 2026.08.23-v0.6.0-alpha16
-cover=jhimage/20260725/a8/d7/zg/ws/21d72fca8ed64b829fd38bbeea97e495.jpg
-play={
-  "id":"265755",
-  "used":"seed",
-  "path":"jpd/20260710/x4/x9/qj/k9/b2b3fb280fb4437a875ce81297d4ced4.m3u8",
-  "decode":"https://sjacfanapi.sexbar.site/api/m3u8/h5/decode?path=jpd%2F20260710%2Fx4%2Fx9%2Fqj%2Fk9%2Fb2b3fb280fb4437a875ce81297d4ced4.m3u8",
-  "url":"file:///sto..."
-}
-short=loadType=2 variant=0 count=30
-comic=none
+next/core alpha1
+→ next/protocol alpha1
+→ next/provider alpha1
+→ next/media alpha1
+→ next/ui alpha1
+→ next/device-regression-fix alpha2
 ```
 
-这组结果明确把四类问题定位到具体层：
+Alpha2 是 Clean Rewrite 的首轮实机回归修正版，不回到 0.6.0 历史补丁栈。
 
-1. 视频封面字段已经找到，问题是 `jhimage/...` 相对地址的 ImageDomain/图片消费链。
-2. 视频 Seed 和 decode URL 都已经正确，Alpha16 在 `cacheM3u8 → file:///...` 后仍不可播，因此优先隔离缓存/本地文件步骤，不能继续误判为“没拿到播放地址”。
-3. 短视频接口 `loadType=2` 已返回30条，空页属于 ModelAdapter / Renderer / 点击运行链问题，而不是 Provider 没数据。
-4. `comic=none` 表明 Alpha16 漫画 Reader 没真正进入，优先修跨页主键/路由。
-5. 另有当前成功事实：`fiction-list|audio||3|0 -> POST fiction/base/findList (8)`，小说/有声 POST-first 列表链禁止无关重写。
+---
 
-#### APK 1.9.7 静态证据
+## 2026-08-23 · Alpha1 首轮实机结果
 
-用户上传 APK 的 `libapp.so` 当前可确认存在：
+用户设备实际运行：
 
 ```text
-imgDomain
-generatedCoverImg
-templateCoverImg
-videoCover
-https://cdn.ukaim.com/
-video/can/watch
-m3u8/player/referer
-loadType
-shortVideo
-comics/base/chapterInfo
-fiction/base/chapterInfo
+版本：1.0.0-alpha1 / Build 10001
+运行：2026.08.23-v1.0.0-alpha1
+接口：https://sjacfanapi.sexbar.site
+令牌：已建立
+图片域：https://79eq2aouwhf6.asigoo.com
+最近接口：GET /api/video/list?loadType=2&pageSize=15&page=1&pageNum=1 HTTP 200
 ```
 
-这些字符串只证明合同/常量存在；HTTP Method 与响应结构仍以实机为最高事实。
-
-#### Alpha18 活动 Release
-
-Alpha18 不继承 Alpha16 业务模块，也不加载 Alpha17 首版 Playback。当前活动链：
+普通视频实际拿到：
 
 ```text
-Stable 0.4.9 八模块
-+ A15 Clean Runtime/UI
-+ A17 Image/Model
-+ A17 Short Renderer
-+ A17 Comic Router/Reader
-+ A18 Validated Seed Playback
+id=263416
+used=seed
+path=jpd/20260302/cj/tp/yz/an/4180e59ba73e4bb38879101eeee63d6f.m3u8
+decode=https://sjacfanapi.sexbar.site/api/m3u8/h5/decode?path=...
 ```
 
-##### 图片：`jhimage` 专用 Adapter
+实机截图同时确认：
 
-当前视频封面已明确是：
+1. **认证/接口/列表层已经通。** 首页可返回真实标题、播放数、评论数等数据，游客令牌成功建立。
+2. **视频封面全部空白。** 设备已经返回真实 `imgDomain=*.asigoo.com`，所以问题不再是“没有图片域”，而是 Alpha1 ImageAdapter 消费错误。
+3. **专题页 URL 参数未解码。** 页面标题和正文直接显示 `%E8%BF%9B...`，说明海阔 `getParam()` 在该页返回编码值，必须统一安全 `decodeURIComponent`。
+4. **视频 Seed 与 decode URL 均正确，但播放器报播放异常。** 不能再把问题归因于“没拿到播放地址”。
+5. **漫画详情请求暴露当前 Host 方法差异。** `comics/base/info` 在 `sjacfanapi.sexbar.site` 的 POST 返回 `HTTP 405`；历史 Stable GET 合同应优先。
+6. Alpha1 首页产品结构方向可继续，但“首页按专题流展示/每个专题独立成块”等开发说明不应出现在最终产品 UI。
+
+---
+
+## 2026-08-23 · Alpha2 修复
+
+### 1. 图片链恢复为当前设备事实
+
+Alpha1 错误：
 
 ```text
-jhimage/...
+jhimage/... → 强制 https://cdn.ukaim.com/
+并给图片请求带 API Host Referer
 ```
 
-Alpha17/18 只对该家族映射：
+当前设备已经明确给出：
 
 ```text
-jhimage/...
-→ https://cdn.ukaim.com/jhimage/...
-→ $(url,headers).image(...)
+imgDomain=https://79eq2aouwhf6.asigoo.com
+```
+
+Alpha2 改为：
+
+```text
+所有相对图片（包括 jhimage/...）
+→ 优先当前 session imgDomain
+→ *.asigoo.com 使用 _480 缩略图
+→ User-Agent=Dalvik
+→ Referer=""
 → acfunImageDecoder
+→ 独立 a2 本地图片缓存
 ```
 
-现有 `acfunImageDecoder` 会先检查 JPEG/PNG/GIF/WebP Magic；明文直接返回，非明文才 XOR 前100字节，因此不会对正常图片二次解密。
+只有没有 `imgDomain` 时才使用 `cdn.ukaim.com` 作为 fallback。非 asigoo 的正常绝对图片不强制 XOR。
 
-全局 `itemInfo()` 只做 fallback-only 补齐：Stable 已经有 `id/title/img/uri` 时不覆盖；缺失时再读取嵌套 `videoId/generatedCoverImg/templateCoverImg/videoUrl/playPath` 等字段。
-
-##### 播放：Validated Seed + Remote Decode
-
-Alpha17 发布前复核发现首版 mediaKeys 没把通用 `path` 纳入 Seed，而 Alpha16 当前设备已经明确证明有效 Seed 就是：
+图片解密长期合同：
 
 ```text
-path=jpd/...m3u8
+key = 2020-zq3-888
+仅 XOR 前 100 字节
+先检查 JPEG / PNG / GIF / WebP Magic
+明文图片不得二次解密
 ```
 
-因此没有让已知可能漏 Seed 的 Alpha17 成为活动测试，直接升到 Alpha18。Alpha18 规则：
+### 2. Query 参数统一解码
+
+`ACFunNext.param()` 现在对 `getParam()` 返回值执行一次安全 `decodeURIComponent`，异常时退回原字符串。
+
+目标修复：
+
+- Station 专题标题；
+- `pageTitle`；
+- 搜索关键词；
+- 漫画/小说章节名；
+- 其它由 `A.page()` 使用 `encodeURIComponent()` 生成的 query。
+
+以后不能假设海阔不同页面的 `getParam()` 一定自动解码。
+
+### 3. 播放：Seed 正确后继续修“播放器消费层”
+
+Alpha1 当前设备已经证明：
 
 ```text
-1. videoUrl/playUrl/videoUri/m3u8Url/m3u8/playPath/sourcePath
-2. 再有限接受 path/url
-3. 通用 path/url 必须匹配 m3u8/mp4/jpc/jpd 等媒体形态
-4. 无 Seed 才 GET video/can/watch
-5. POST can/watch 仅后级兼容
-6. __v043DecodePlayUrl
-7. 远程 decode URL + PlayerHeaders 直接交海阔播放器
+真实 Seed = jpd/...m3u8
+H5 decode URL = 正确构造
 ```
 
-本版**不调用 `cacheM3u8`**，也不把 `file:///...` 当“播放完成”的证明。返回 PlayModel 只有真实播放线路：
-
-```js
-{urls:[url], names:['播放'], headers:[headers]}
-```
-
-收藏、评论、复制标题保持 `scroll_button`，不进入播放器列表。
-
-##### 短视频：接口已成功，只修消费链
-
-- 首选 `loadType=2`，保留有限 fallback。
-- Alpha18 使用 fallback-only `itemInfo()` 解析30条结果中的嵌套 id/封面/媒体字段。
-- 短视频栏目使用独立 Renderer。
-- 点击卡片显式进入当前 Bootstrap v074，再调用 A18 PlaybackAdapter。
-- 这同时绕开 A15 `currentBootPlay()` 闭包硬编码 v071、可能在点击时重载旧 Release 的问题。
-
-##### 漫画：显式主键路由 + 已验证 Reader
-
-继续使用 Alpha12 已经实机成功的核心合同：
+Alpha2 第一修复：给 extension-less 的 `/api/m3u8/h5/decode?path=...` URL 显式追加：
 
 ```text
-comics/base/chapterInfo {chapterId}
-→ robust image extractor
-→ ac.image()
-→ pic_1_full
+#isM3u8#
 ```
 
-Alpha17/18 的关键修复在路由：章节 URL 直接写入 `content_kind/comics_id/comic_chapter_id/comic_chapter_title` query，不再依赖 `extra` 跨页透传；尾部使用 `#fullTheme#noRecordHistory#`。Reader 不主动添加章节说明/标题内容，只输出阅读图片，减少顶部冗余区域。
+避免海阔把 `/decode` 当普通媒体地址而不是 HLS。
 
-#### Alpha18 发布链
+同时根据 APK 1.9.7 `libapp.so` 新确认的字符串：
 
-- Release：`apps/video/acfun/releases/0.6.0-alpha18/release.json`
-- Build：169
-- Bootstrap：`bootstrap_test_v074.js?v=7400`
-- Shell：`acfun_remote_test_v074.txt`
-- 规则 version：`2026082306`
-- Stable/latest 不修改。
-- 当前 Test 必须继续实机验证：视频封面、普通视频播放、播放器线路、短视频列表/播放、漫画章节/顶部区域；未通过不得晋级 Stable。
+```text
+m3u8/player/referer
+playbackDomain
+playbackAuthKey
+/api/m3u8/play
+/m3u8/play
+X-Referer
+playback_credential
+playback credential is unavailable
+missing authKey
+```
+
+增加 Playback Credential Adapter：
+
+```text
+GET/POST m3u8/player/referer
+→ 读取 referer / playbackDomain / playbackAuthKey
+→ 构造多条有证据的播放候选
+```
+
+当前线路顺序：
+
+```text
+H5解码：当前 API /api/m3u8/h5/decode?path=...#isM3u8#
+CDN直连：playbackDomain/<seed>?auth_key=...#isM3u8#
+APP播放：playbackDomain/api/m3u8/play?path=...&authKey=...#isM3u8#
+APP兼容：playbackDomain/m3u8/play?path=...&auth_key=...#isM3u8#
+```
+
+播放器 Header 同时带 UA / Referer / Origin / X-Referer。诊断页记录 playback credential、实际 Seed、decode、候选线路。
+
+注意：这一步仍需要实机确认哪一条才是当前 Host 的最终主线路；验证后应收敛成单一主链，不长期保留无意义候选。
+
+### 4. 漫画恢复 GET-first
+
+当前设备：
+
+```text
+POST comics/base/info → HTTP 405
+```
+
+Alpha2：
+
+```text
+comics/base/info       GET → POST fallback
+comics/base/chapterInfo GET → POST fallback
+```
+
+小说/有声已经有历史实机 `POST fiction/base/findList` 成功证据，不允许因漫画 Method 问题顺手改坏小说/有声 POST-first。
+
+### 5. UI 第一轮收敛
+
+- 删除精选/里番首页的开发说明文案，导航后直接进入专题内容。
+- 专题“更多”仍进入真正的二级 Station 页面；专题内排序属于同级状态，只 `refreshPage(false)`。
+- 普通 Tab/筛选继续遵守项目导航硬约束：同级切换不得创建新的同功能 `hiker://page`。
 
 ---
 
-## 关键测试历史
+## Clean Rewrite Alpha1 架构
 
-### Alpha17 / Build168 / Shell7.3 —— 未作为最终活动测试
+Alpha1 从旧 0.6.0 补丁活动链完全切离，建立五层：
 
-- 首次根据 Alpha16 探针建立 `jhimage → cdn.ukaim.com`、短视频当前 Bootstrap Renderer、漫画显式 query Reader，并移除 Alpha16 业务模块。
-- 发布前复核发现 Playback 没把当前设备已证明有效的通用 `path=jpd/...m3u8` 安全纳入 Seed，因此立即由 Alpha18 替换；A17旧播放模块不进入 Alpha18 Release。
+```text
+Core
+Protocol/Auth
+Provider/Model
+Media/Image/Reader
+Product UI
+```
 
-### Alpha16 / Build167 / Shell7.2 —— 已停止继承业务模块
+主要产品栏目：
 
-- 在 Alpha15 Clean Rebase 上追加 focused media。
-- 详情收藏/评论退出 `text_3` 播放列表；Bootstrap 增加 `searchCenter/category` dispatcher。
-- 最新实机探针证明：`jhimage` 相对封面字段已找到；播放 seed/decode 已找到，但 `cacheM3u8` 后 `file:///...` 仍不可播；短视频接口已有30条；漫画探针未进入。
+```text
+精选 / 漫画 / 动漫 / 视频 / 里番 / 短视频
+社区 / 小说 / 有声 / 我的
+```
 
-### Alpha15 / Build166 / Shell7.1
+精选和里番不再使用一个全局 Station 下拉筛选，而是按真实 Station 多专题分块：专题标题 + 预览内容 + 更多页面。
 
-- 真正 Clean Rebase：Stable0.4.9 八模块 + 单一 A15 Clean Runtime/UI。
-- 动漫/漫画列表封面恢复，但视频分类封面仍空。
-- 普通视频播放失败，播放器列表混入收藏/评论。
-- 漫画章节空白、短视频列表空。
-- 有声 `POST fiction/base/findList` 实机返回8条，成为当前有声列表主合同。
-
-### Alpha14 / Build165 / Shell6.10 —— 停止继承
-
-- 只跳过 Alpha13、回到 Alpha12 多层 overlay 仍不足以干净恢复。
-- 永久结论：recovery base 本身如果仍包含多层未完整验收 overlay，应回 Stable Clean Rebase。
-
-### Alpha13 / Build164 / Shell6.9 —— 隔离失败
-
-- 深层评分封面 Resolver 覆盖已有 `img`，造成全局封面退化。
-- `pics://` 替代 `pic_1_full` 后漫画从可读退化为不可读。
-- 当前 Host 实机：`POST video/can/watch → HTTP405`。
-
-### Alpha12 / Build163 / Shell6.8 —— 历史部分成功
-
-- **漫画章节实机恢复成功。**
-- 关键合同：`chapterInfo {chapterId}` + robust image list + `ac.image` + `pic_1_full`。
-- 短视频和有声封面当时恢复；漫画和部分普通视频封面恢复。
-
-### Alpha10 / Build161 / Shell6.6
-
-- **小说/有声分类实机恢复。**
-- **小说正文实机恢复。** `.txt` 章节地址需要主动 fetch 后显示正文。
-
-### Alpha8 / Build159 / Shell6.4
-
-- 筛选回到首页同页 `select://`，解决页面栈累积。
-- 九栏目同页切换。
-- **短视频卡片点击直接播放曾实机验证正常。**
+二级页面统一使用 `hiker://page/<path>?rule=ACFun&simple=true`，避免沉浸式标题栏叠加。
 
 ---
 
-## Stable/Core 长期协议记忆
+## APP 1.9.7 长期协议记忆
 
-### 0.4.8
+### 认证与响应
 
-- APP 1.9.7：`video/tags/getTagsZ → video/tagTitleList` 是标签主链。
-- 精选/里番使用 Station；动漫/视频使用动态 `classTypeList`；漫画使用 `getComicsStations / info / chapterInfo`。
+历史确认：
 
-### 0.4.5
+```text
+POST user/traveler/
+headers:
+  deviceId
+  t = 当前毫秒时间戳
+  s = MD5(t.substring(3,8))
+  User-Mark = acfun
+  aut = token（登录后）
+```
 
-- 播放优先列表/详情已有 `videoUrl/path`，缺失才 `video/can/watch`。
-- Alpha16 已证明“正确 decode → cacheM3u8 → file:/// 本地地址”仍可能播放失败；以后直链播放与缓存播放必须分层验收，不能把 cache 成功等价为播放器成功。
-- 旧历史曾使用 POST can/watch；2026-08-23 当前 Host 实机 POST=405，Method 不能视为永久常量。
+`encData`：
 
-### 0.4.3
+```text
+secret = token.substring(2,18)
+AES/CBC/PKCS5Padding
+key = secret
+iv  = secret
+Base64 decode → AES decrypt → JSON
+```
 
-- 分类视频 `/api/video/getByClassify`；搜索优先 `/api/video/queryVideoByTitle`，再 `search/keyWordV2`。
-- 历史已验证播放链：`can/watch → path → /api/m3u8/h5/decode?path=...`，播放器补 UA/Referer/Origin。
+当前主要 API Host 实机：
 
-### 0.4.2 / 0.4.1
+```text
+https://sjacfanapi.sexbar.site
+```
 
-- 列表/分类/搜索 Cache-First + stale fallback；空响应不能覆盖有效缓存。
-- 封面优先 `_480`，解密后持久缓存。
+Host/Method 属于运行时事实，不得写死为永久不变；失败时记录实际 status/code。
 
-### 0.4.0
+### 内容合同
 
-- 图片解密：`2020-zq3-888`，XOR 前100字节，明文图片直接返回。
+已验证/高可信路由：
 
-### Core 0.1.9
+```text
+station/stations
+station/getStationMore
+video/classTypeList
+video/getZoneListByClassifyId
+video/queryVideoByZone
+video/tags/getTagsZ
+video/tagTitleList
+video/getByClassify
+video/list              // 短视频 loadType
+video/getVideoById
+video/can/watch
+video/queryVideoByTitle
+search/keyWordV2
+comics/station/getComicsStations
+comics/station/getStationComicsMore
+comics/base/info
+comics/base/chapterInfo
+fiction/other/tagList
+fiction/base/findList
+fiction/base/info
+fiction/base/chapterInfo
+community/dynamic/list
+```
 
-- APK 原生协议历史确认：`t + s(MD5) + deviceId + User-Mark + aut`。
-- `encData` 使用 AES-CBC 解密。
+### 分类长期规则
+
+- 精选/里番：Station，restricted 0/1。
+- 动漫/视频：APP 动态 `classTypeList`，再 Zone/Tag。
+- 标签优先 APP 1.9.7 已验证的 `getTagsZ → tagTitleList`。
+- 短视频：`video/list + loadType`；历史实机 `loadType=2` 返回 30 条。
+- 漫画：Station → info → chapterInfo；章节阅读使用 `pic_1_full`。
+- 小说/有声：独立 Adapter；有声列表已有 POST-first 成功事实。
+
+---
+
+## 关键历史回归经验
+
+### 0.6.0 Alpha8
+
+- 九栏目同页切换与筛选不压返回栈。
+- 短视频卡片直接播放曾实机成功。
+
+### Alpha10
+
+- 小说/有声分类恢复。
+- 小说正文恢复；`.txt` 章节地址需要主动 fetch 后显示正文。
+
+### Alpha12
+
+- 漫画章节实机恢复成功。
+- 有效合同：`chapterInfo {chapterId}` + robust image extractor + `ac.image()` + `pic_1_full`。
+
+### Alpha13
+
+- 深层图片 Resolver 覆盖已有字段导致全局封面退化；禁止“评分后强覆盖”。
+- `pics://` 替换 `pic_1_full` 导致漫画退化；当前项目漫画阅读优先已验证原生组件。
+- 当前 Host 曾实机出现 `POST video/can/watch → HTTP405`，Method 不是永久常量。
+
+### Alpha15
+
+- Clean Rebase 证明“减少 overlay 层级”是必要的；旧补丁链过长时应回稳定基线重组，而不是继续叠补丁。
+- 有声 `POST fiction/base/findList` 实机返回 8 条。
+
+### Alpha16
+
+实机：
+
+```text
+cover=jhimage/...
+play seed=jpd/...m3u8
+decode URL 构造正确
+cacheM3u8 → file:///... 后仍播放失败
+short loadType=2 count=30
+comic reader 未进入
+```
+
+永久结论：
+
+- 拿到 Seed ≠ 播放完成；
+- 构造 decode URL ≠ 播放完成；
+- cacheM3u8 成功 ≠ 播放完成；
+- Provider 有 30 条 ≠ Renderer 一定显示；
+- UI/媒体/图片必须海阔实机闭环。
+
+### Alpha18
+
+- 安全把通用 `path/url` 纳入媒体 Seed，但只接受 m3u8/mp4/jpc/jpd 等媒体形态，避免把封面 path 当视频地址。
+- 尝试远程 decode 直交播放器；Clean Rewrite 后继续在播放器消费层验证。
+
+---
+
+## 发布前固定回归
+
+每个 Test 版本至少验证：
+
+1. 首页真实封面与专题结构；
+2. 专题“更多”标题不出现 `%E...`；
+3. 普通视频详情封面；
+4. 普通视频至少一条线路真实播放；
+5. 短视频列表与直接播放；
+6. 漫画详情、目录、章节图片；
+7. 小说正文与有声音频；
+8. 社区列表/详情/评论；
+9. 搜索及类型切换；
+10. 同级 Tab 连切 5 次后系统返回一次即可离开当前功能页；
+11. UI 大改必须继续以用户实机截图收敛；
+12. Test 未完成上述回归前禁止晋级 Stable。
