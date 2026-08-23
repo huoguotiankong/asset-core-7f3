@@ -1,5 +1,32 @@
 # Pornhub CHANGELOG
 
+## 0.1.0-test.3 / Build 10103 — 2026-08-23
+
+### 第二轮实机结论
+- Test2 实机显示创作者目录存在严重实体误识别：排名数字 `13 / 25 / 32 / 79 ...` 被当作姓名，部分条目只能回退到默认账号图标。
+- 官方网页登录 + Cookie 同步本身能够建立会话，但 Test1/Test2 通过首页任意 `/users/<name>` 链接推断账号名，会命中推荐内容中的其他用户；因此同一网页登录态下重新同步可能随机显示不同账号。
+- 上述“首页猜用户名”链已判定为账号身份事故，Test3 完全禁用；Cookie 与账号身份从此分层处理。
+
+### 创作者解析 / UI
+- Pornstars 列表优先限定在 `ul#popularPornstars`，并以 `<li>/<article>` 为人物卡边界，不再扫描全页后取第一个 profile anchor。
+- 姓名候选改为：人物图片 `alt/title` → 卡片有效文本 → URL slug；纯数字、统计值、Rank、Views、Subscribers、Play All 等一律拒绝作为姓名。
+- 列表卡要求有真实人物图片才进入主结果，不再使用 `account.svg` 伪装缺失头像。
+- 个人页头像优先 `img#getAvatar`；失败后读取 `.topProfileHeader img`，最后才进入 Test2 通用头像兼容链。
+- 创作者中心改为双列 `movie_2` 资料卡，顶部保留 Pornstars / 频道 / Models / 用户切换与搜索；详情页继续展示公开视频和原站主页入口。
+
+### 账号身份安全
+- Cookie 同步改为：`getCookie(base)` → 使用该 Cookie 请求 `/user/security` → 仅从 username input、明确 user data 属性或账号 Header 强信号恢复用户名。
+- 每次同步在写入新身份前先清空旧 `username / avatar / identity source`，避免上一轮错误身份继续污染当前会话。
+- 如果 `/user/security` 能确认 Cookie 已登录、但没有可靠用户名，Test3 只保留 Cookie 会话并显示“已登录 · 待绑定用户名”，不会再从推荐内容猜一个账号。
+- `为你推荐 / Feed` 只依赖 Cookie，可继续使用；`观看历史 / 站内收藏 / 订阅` 依赖 `/users/<name>`，只有用户名确认后才开放。
+- 用户可在登录页或账号页手动绑定/校正自己的 Pornhub 用户名；只保存用户名，不保存密码。
+- 退出本小程序账号会话会同时清除本程序保存的 Cookie、用户名、头像和身份来源，但不删除 Pornhub 官方网页 Cookie。
+
+### 回归门禁
+- `core_patch.js`、`ui_patch.js`、Test3 Bootstrap 均通过 `node --check`。
+- 离线 smoke：含排名 `13 / 25` 的 `#popularPornstars` 样例只输出 `Skye Young / Sara Diamante` 及对应真实图片；`/user/security` 身份样例只识别明确当前账号 `REAL_USER`。
+- Test1/Test2 已实机可用的公开列表、详情和多画质 HLS 播放链保持不变；Test3 仍只进入 Test，等待新一轮实机验证后再决定是否继续增强账号功能。
+
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23
 
 ### 首轮实机结论
