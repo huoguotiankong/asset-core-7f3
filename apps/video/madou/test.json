@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.8",
-  "build": 10108,
-  "shellVersion": "1.0.0-test.8",
-  "shellRuleVersion": 2026082308,
+  "version": "0.1.0-test.9",
+  "build": 10109,
+  "shellVersion": "1.0.0-test.9",
+  "shellRuleVersion": 2026082309,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.8/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v8_b10108.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.9/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v9_b10109.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test8 美化影片详情：横向封面改为全宽 Hero，移除源站固定简介文案，只保留标题、日期/时长、播放、标签、推荐和本地收藏。播放新增结构化免嗅解析链：详情 HTML 直链 → iframe/player 页面 → 一层嵌套 player → 8 分钟小型媒体缓存；命中后直接把真实 M3U8/MP4 交给播放器，只有未命中时才保留 video:// 兼容兜底。"
+  "notes": "Test9 修复 Test8 性能回归：详情页严格只做一次详情请求，不再同步追 iframe/player/nested-player，所以进入详情不会被多次 6.5 秒请求阻塞。播放优先使用详情 HTML 已存在的 M3U8/MP4；没有直链时只加载识别出的播放器 iframe/player 页面，通过 webRule 每 250ms 读取 video.currentSrc/source 和已加载资源中的 m3u8/mp4，并屏蔽图片与广告资源。当前属于快速定向浏览器解析，尚未冒充已完成纯 API 免嗅。"
 }
