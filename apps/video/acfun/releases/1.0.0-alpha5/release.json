@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha5",
+  "build": 10005,
+  "ref": "main",
+  "summary": "第四轮实机回归：确认 decode 返回的是带短时 auth_key 的 AES-128 HLS，改为 #noPre# 实时解码并提供原样本地签名索引；漫画 chapterInfo 已 HTTP200/code200 成功，Reader 改用独立原图解密链，不再复用封面 _480。",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-regression-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"player-comic-transport-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a3.js"},
+    {"name":"cdn-chapter-model-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a4.js"},
+    {"name":"signed-hls-comic-full-image-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a5.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha5"}
+}
