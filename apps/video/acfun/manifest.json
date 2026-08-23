@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha6",
-  "testBuild": 10006,
-  "testShellVersion": "8.5.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v085.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v085.txt",
+  "testVersion": "1.0.0-alpha7",
+  "testBuild": 10007,
+  "testShellVersion": "8.6.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v086.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v086.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "clean-rewrite-alpha6-native-m3u8-comic-ux",
+    "stage": "clean-rewrite-alpha7-stable-playback-fullscreen-comic",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha5 实机确认漫画正文已恢复：chapterInfo GET HTTP200/code200/encData，解密后 imgList 共185张，正文原图可正常显示。视频也确认 decode 返回标准 AES-128 HLS，KEY 可访问，但 Alpha5 手工 writeFile 生成的普通 file:// 索引和 #noPre# 假设均未解决播放器失败。结合海阔官方 cacheM3u8 文档及 Stable 0.4.9 已验证实现，Alpha6 改为直接调用 cacheM3u8(decode#isM3u8#, headers, fname)，并原样保留其 file://...m3u8##original-url 返回值，不再手工裁掉 Hiker 元信息，也不再默认 noPre。漫画阅读页同时把系统标题收敛为章节名+进度，并增加顶部/底部上一话、当前章节、下一话导航。当前漫画分页还暴露 getComicsStations UI id 为 ObjectId 而 getStationComicsMore 需要数字 stationId 的兼容问题，Alpha6 从 raw 显式数字字段与站位序号生成候选并增加 findList 兜底。继续实机回归，latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha6 实机已经确认 cacheM3u8 返回值本身完全符合海阔合同：file:///...m3u8##https://.../api/m3u8/h5/decode?...#isM3u8#，但海阔缓存播放和实时HLS仍均失败，因此不再继续怀疑 cacheM3u8 URL 结构。重新逐项对照 Stable 0.4.9 已验证播放实现后，剩余最关键差异是 Header：Stable 使用 UA + 当前 API Host 的 Referer/Origin；Alpha6 使用了 APP signed headers，Referer=jhg_player 且 Origin=H5，并附带 aut/deviceId/t/s/User-Mark。Alpha7 直接精确移植 Stable 播放 Header 与 cacheM3u8 方式，移除这些新增差异。漫画方面 Alpha5/6 已实机确认 chapterInfo 解密后 imgList 可连续原图显示；用户明确要求 Reader 顶部信息区域全部删除并让图片覆盖全屏，因此 Alpha7 使用官方 #fullTheme# 页面标识，Reader 只输出 pic_1_full 图片，不再渲染章节名、进度、上一话/下一话等控件。latest/stable 均不变。"
   }
 }
