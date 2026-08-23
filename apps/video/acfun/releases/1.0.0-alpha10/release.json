@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha10",
+  "build": 10010,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-regression-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"player-comic-transport-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a3.js"},
+    {"name":"cdn-chapter-model-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a4.js"},
+    {"name":"signed-hls-comic-full-image-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a5.js"},
+    {"name":"native-m3u8-comic-ux-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a6.js"},
+    {"name":"stable-playback-fullscreen-comic-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a7.js"},
+    {"name":"watch-handshake-split-header-immersive-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a8.js"},
+    {"name":"native-play-matrix-segment-auth-comic-trim-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a9.js"},
+    {"name":"client-cdn-sign-repair-comic-crop2-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a10.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha10"}
+}
