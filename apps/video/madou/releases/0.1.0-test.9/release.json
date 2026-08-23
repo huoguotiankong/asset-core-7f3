@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.9",
+  "build": 10109,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"navigationUiPatch","path":"apps/video/madou/releases/0.1.0-test.3/navigation_ui_patch.js"},
+    {"name":"recoveryHierarchyPatch","path":"apps/video/madou/releases/0.1.0-test.5/recovery_hierarchy_patch.js"},
+    {"name":"detailSearchUxPatch","path":"apps/video/madou/releases/0.1.0-test.6/detail_search_ux_patch.js"},
+    {"name":"navigationPlaybackPatch","path":"apps/video/madou/releases/0.1.0-test.7/navigation_playback_patch.js"},
+    {"name":"detailDirectPlaybackPatch","path":"apps/video/madou/releases/0.1.0-test.8/direct_playback_detail_ui.js"},
+    {"name":"fastDetailPlaybackPatch","path":"apps/video/madou/releases/0.1.0-test.9/fast_detail_playback.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.9"},
+  "previous": {"version":"0.1.0-test.8","build":10108,"release":"apps/video/madou/releases/0.1.0-test.8/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test9 fixes the Test8 performance regression. Detail rendering performs exactly one detail request and never follows iframe/player/nested-player pages synchronously. Playback uses direct media already present in the detail HTML when available; otherwise it targets the detected iframe/player page with webRule and returns video.currentSrc/source or the first captured m3u8/mp4 resource, while blocking images and ad resources. This is a targeted browser-assisted bridge, not yet a proven pure API no-sniff implementation."
+}
