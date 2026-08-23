@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.8",
-  "build": 10108,
-  "shellVersion": "1.0.0-test.8",
-  "shellRuleVersion": 2026082318,
+  "version": "0.1.0-test.9",
+  "build": 10109,
+  "shellVersion": "1.0.0-test.9",
+  "shellRuleVersion": 2026082319,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.8/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v8_b10108.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.9/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v9_b10109.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test8 修复有码女优入口：动态发现失败时使用用户实机确认的当前 cat.py 地址兜底；排行榜新增独立2列/3列排版设置并默认双列。"
+  "notes": "Test9 补齐原站九类标签索引兜底：有码片商/女演员/男演员/TAG、欧美片商/女演员/TAG、国产女演员/TAG；动态导航仍优先，失败才使用用户实机确认的当前入口。"
 }
