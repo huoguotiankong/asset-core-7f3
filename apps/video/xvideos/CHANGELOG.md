@@ -32,9 +32,14 @@
 - 新 Shell：`xvideos_remote_test_v4_b10104.txt`，规则数值版本 `2026082304`，所有入口显式使用 Test4 Bootstrap / Build10104。
 - Settings 的检查更新、安装更新、回退、缓存清理等 lazyRule 全部切到当前 Build10104，不再继续调用 Test1 的 Build10101 Bootstrap。
 
+### 程序图标交付修复
+- 用户实机反馈 XVideos 与 Pornhub 的程序图标同时挂掉，而其它小程序图标正常；仓库内 XVideos `brand.svg` 文件本身仍完整，问题先按“图标 URL/缓存交付链”处理，不误判为业务代码损坏。
+- Test4 `channels.json`、云仓根 `manifest.json` 和 Test4 Shell 的 `icon` 已统一从 `raw.githubusercontent.com/.../brand.svg` 切换为明确 `@main` 的 jsDelivr CDN 地址，并附加新的缓存参数。
+- 该修复当前只证明代码/交付链已切换，**尚未得到用户实机确认图标恢复**；在实机确认前不把“raw GitHub SVG 一定有问题”写成跨程序定论。
+
 ### 静态门禁
-- `core_account_patch.js`、`ui_account_patch.js`、`bootstrap_test_v4_b10104.js` 已执行 `node --check` 通过。
-- 新 Shell 的 `￥home_rule￥` 后 JSON 已本地解析通过。
+- `core_account_patch.js`、`ui_account_patch.js`、`bootstrap_test_v4_b10104.js` 已实际执行 `node --check` 通过。
+- 新 Shell 的 `￥home_rule￥` 后 JSON 结构保持 Test3 已验证 generic route 形式；Test4 只变更 Bootstrap/Build 与程序图标交付地址。
 - Test4 只发布 Test，不建立 Stable；Test3 作为 previous release 保留。
 
 ### Test4 实机回归重点
@@ -45,6 +50,7 @@
 5. 若切换官网账号，重新同步后私有列表是否完全切换，不出现上一账号旧缓存。
 6. 评论页是否比 Test3 恢复更多真实正文；若仍为空，下一轮按实机 DOM 定向适配。
 7. 本地收藏/本地足迹清空是否只删除本机记录。
+8. 云仓卡片和导入后的 XVideos 程序图标是否恢复；若仍挂图，下一轮直接改用 PNG/站点 favicon 方案，不继续猜 SVG CDN。
 
 ---
 
