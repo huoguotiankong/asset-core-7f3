@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "18av",
+  "name": "18AV",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name":"hotfixBundle","path":"apps/video/18av/releases/0.1.0-test.4/hotfix_bundle.js"}
+  ],
+  "verify":{"global":"AV18RemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "notes":"Emergency real-device Test4: preserve Test3 behavior but patch the Rhino/Hiker regex repeat-limit failure caused by {0,250000}. Test3 remains immutable."
+}
