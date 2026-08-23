@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 17:20",
+  "updatedAt": "2026-08-23 17:35",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.12",
-      "build":10112,
-      "displayVersion":"Test 0.1.0-test.12 · Build 10112",
-      "path":"apps/video/madou/madou_remote_test_v12_b10112.txt",
+      "version":"0.1.0-test.13",
+      "build":10113,
+      "displayVersion":"Test 0.1.0-test.13 · Build 10113",
+      "path":"apps/video/madou/madou_remote_test_v13_b10113.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test12 为存储救援 + 播放协议强化版。针对实机已达到1MB的规则私有 setItem KV，设置、媒体缓存/诊断、收藏、历史和分页模板全部迁移到规则私有文件；Bootstrap 直接加载不可变 Test12 Release，避免 Remote Manager 状态 setItem 阻断救援启动。纯免嗅继续严格 HTTP-only，并强化 player_aaaa/player_data、encrypt=1/2、parse/jx、302 Location、无扩展 HLS 与静态解码。",
-      "highlights":["1MB setItem 饱和救援","设置迁移私有文件","收藏历史迁移私有文件","Bootstrap绕过Remote Manager状态写入","player_aaaa/player_data","encrypt=1/2","parse/jx协议链","302/无扩展HLS检测","默认严格纯免嗅"],
+      "desc":"Test13 按实机要求撤回免嗅和详情设置。标签与相关推荐固定默认加载，并增加30分钟结构化详情缓存；播放恢复已实机确认可播放的原策略：源码直链优先，否则 video:// 对播放器页/详情页自动提取媒体。Test12 私有文件收藏/历史恢复继续保留，Bootstrap 继续直接加载不可变 Release，避开已饱和 setItem 状态。",
+      "highlights":["移除纯免嗅实验","移除详情/播放设置","标签推荐默认开启","30分钟结构化详情缓存","恢复video://已验证播放策略","收藏历史继续私有文件存储","direct immutable loader"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
