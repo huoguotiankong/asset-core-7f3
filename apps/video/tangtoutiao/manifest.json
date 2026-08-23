@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.6",
-  "defaultBuild": 10106,
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "1.0.0-test.6",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt",
+  "defaultVersion": "0.1.0-test.7",
+  "defaultBuild": 10107,
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "1.0.0-test.7",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v7_b10107.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test6-server-version-image-helper-dynamic-comic-rank","note":"Test5 实机已确认真实推荐403条与 source_* 播放技术链成立，但媒体为2秒旧版本维护占位片；图片候选 URL 正确但解密回调未执行；comic/home 是顶层动态 api_list/params_list；排行榜缺 type。Test6 按 APK 与海阔官方调用方式修复。"}
+  "migration": {"stage":"test7-session-version-gate","note":"Test6 已恢复官方图片入口、服务端版本握手、source_240 默认播放、动态漫画路由和排行榜 type；发布门禁额外发现旧 token 会跳过版本握手，Test7 用独立 protocolGate 强制首次版本迁移。"}
 }
