@@ -11,7 +11,8 @@ var ACFUN_WEB_CONFIG={
   {name:'native-ui',path:'apps/video/acfun/next/acfun_next_ui_v100_a1.js'},
   {name:'device-fix',path:'apps/video/acfun/next/acfun_next_fix_v100_a2.js'},
   {name:'web-native-bridge',path:'apps/video/acfun/web/acfun_web_native_v110.js'},
-  {name:'web-native-image',path:'apps/video/acfun/web/acfun_web_native_image_v110.js'}
+  {name:'web-native-image',path:'apps/video/acfun/web/acfun_web_native_image_v110.js'},
+  {name:'web-native-runtime-fix',path:'apps/video/acfun/web/acfun_web_native_runtime_fix_v110.js'}
  ],verify:{global:'ACFunWebNative',property:'build',equals:'2026.08.23-v1.1.0-web2'}}
 };
 var ACFunWebBoot={
