@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "myav-test",
   "name": "MyAv",
-  "version": "0.1.0-test.1",
-  "build": 10101,
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026082311,
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026082312,
   "managerVersion": "2.0.1",
-  "release": "apps/video/myav/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/myav/myav_remote_test_v1_b10101.txt",
+  "release": "apps/video/myav/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/myav/myav_remote_test_v2_b10102.txt",
   "updatedAt": "2026-08-23",
-  "notes": "首次 MyAv 原生 Test。主站 javlist.me 的核心数据库功能进入海阔原生页面；外围独立站先保留入口，待实机验证后继续原生化。"
+  "notes": "Test2 根据首轮实机截图修复图片链：lazy-load 真实图优先、同 href 卡片聚合、可见文本番号解析、详情 og:image/JSON-LD 封面兜底，并改用仓库自有 MyAv 图标。"
 }
