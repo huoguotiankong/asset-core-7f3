@@ -1,0 +1,24 @@
+/* 溏心次元 Remote Test Bootstrap 0.1.0-test.2 - CDN direct loader */
+var TXCY_CDN_ROOT='https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/';
+var TXCY_STATE_KEY='txcy_cdn_state_v1';
+var TXCY_DEFAULT_RELEASE={"schema":1,"id":"tangxincyuan-test","name":"溏心次元","channel":"test","version":"0.1.0-test.2","build":10102,"ref":"main","modules":[{"name":"core","path":"apps/video/tangxincyuan/releases/0.1.0-test.2/core.js"},{"name":"runtime","path":"apps/video/tangxincyuan/releases/0.1.0-test.2/runtime.js"}],"verify":{"global":"TxcyRemoteRuntime","property":"version","equals":"0.1.0-test.2"},"notes":"CDN direct-loader recovery build."};
+var TxcyBoot=(function(){
+  function clone(o){return o?JSON.parse(JSON.stringify(o)):o;}
+  function parse(s,label){try{return JSON.parse(String(s||''));}catch(e){throw new Error((label||'JSON')+'解析失败: '+(e.message||e));}}
+  function moduleUrl(r,m){return TXCY_CDN_ROOT+String(m.path||'').replace(/^\/+/, '')+'?txcy_release='+encodeURIComponent(String(r.version||'0'))+'&b='+Number(r.build||1);}
+  function verify(r){var o;if(!r.verify)return true;try{o=eval('typeof '+r.verify.global+'==="undefined"?undefined:'+r.verify.global);}catch(e){o=undefined;}if(!o)throw new Error('版本校验失败: '+r.verify.global);if(r.verify.property&&r.verify.equals!==undefined&&String(o[r.verify.property])!==String(r.verify.equals))throw new Error('版本校验失败: '+r.verify.property+'='+o[r.verify.property]+'，期望='+r.verify.equals);return true;}
+  function loadRelease(r,force){var i,m,u,loaded=[];for(i=0;i<r.modules.length;i++){m=r.modules[i];u=moduleUrl(r,m);if(force){try{deleteCache(u);}catch(e0){}}require(u,{headers:{'Cache-Control':'no-cache'}},Number(r.build||1));loaded.push({name:m.name||('module'+i),url:u});}verify(r);return{ok:true,release:r,loaded:loaded};}
+  function defaultState(){return{schema:1,current:clone(TXCY_DEFAULT_RELEASE),previous:null,updatedAt:0};}
+  function readState(){var raw='',st;try{raw=getItem(TXCY_STATE_KEY,'');}catch(e){}if(!raw)return defaultState();try{st=parse(raw,'状态');}catch(e2){return defaultState();}if(!st.current||Number(st.current.build||0)<10102)return defaultState();return st;}
+  function saveState(st){try{setItem(TXCY_STATE_KEY,JSON.stringify(st));}catch(e){}return st;}
+  function fetchJson(path,label){var u=TXCY_CDN_ROOT+String(path||'').replace(/^\/+/, '')+(String(path||'').indexOf('?')>=0?'&':'?')+'_txcy_ts='+(new Date().getTime());var t=fetch(u,{timeout:10000,headers:{'Cache-Control':'no-cache'}});if(t===undefined||t===null||!String(t).trim())throw new Error('远程返回为空: '+u);return parse(t,label);}
+  function loadOnly(){var st=readState(),r;try{return loadRelease(st.current,false);}catch(e){if(Number(st.current.build||0)!==Number(TXCY_DEFAULT_RELEASE.build)){try{r=loadRelease(clone(TXCY_DEFAULT_RELEASE),false);st.previous=st.current;st.current=clone(TXCY_DEFAULT_RELEASE);st.updatedAt=new Date().getTime();st.lastFallbackError=String(e.message||e);saveState(st);r.fallback=true;return r;}catch(e2){}}throw e;}}
+  function latest(){var meta=fetchJson('apps/video/tangxincyuan/test.json','test.json');if(!meta.release)throw new Error('test.json缺少release');var r=fetchJson(meta.release,'release.json');return{meta:meta,release:r};}
+  function check(){var st=readState(),x=latest();return{ok:true,current:clone(st.current),latest:clone(x.release),hasUpdate:Number(x.release.build||0)>Number(st.current.build||0),notes:x.meta.notes||''};}
+  function update(){var st=readState(),x;try{x=latest();if(Number(x.release.build||0)<=Number(st.current.build||0))return{ok:true,changed:false,current:st.current,latest:x.release};loadRelease(x.release,false);st.previous=clone(st.current);st.current=clone(x.release);st.updatedAt=new Date().getTime();st.lastFallbackError='';saveState(st);return{ok:true,changed:true,previous:st.previous,current:st.current};}catch(e){return{ok:false,changed:false,error:String(e.message||e),latest:x?x.release:null};}}
+  function rollback(){var st=readState(),cur;if(!st.previous)return{ok:false,error:'没有可回退的上一版本'};try{loadRelease(st.previous,false);cur=st.current;st.current=st.previous;st.previous=cur;st.updatedAt=new Date().getTime();saveState(st);return{ok:true,current:st.current,previous:st.previous};}catch(e){return{ok:false,error:String(e.message||e)};}}
+  function reinstall(){var st=readState(),i,u;try{for(i=0;i<st.current.modules.length;i++){u=moduleUrl(st.current,st.current.modules[i]);try{deleteCache(u);}catch(e0){}}return loadRelease(st.current,false);}catch(e){return{ok:false,error:String(e.message||e)};}}
+  function info(){var st=readState();return{managerVersion:'cdn-direct-1.0',current:clone(st.current),previous:clone(st.previous),updatedAt:st.updatedAt||0,lastFallbackError:st.lastFallbackError||''};}
+  function module(){loadOnly();return TxcyRemoteRuntime.module();}
+  return{version:'cdn-direct-1.0',loadOnly:loadOnly,module:module,info:info,check:check,update:update,rollback:rollback,reinstall:reinstall};
+})();
