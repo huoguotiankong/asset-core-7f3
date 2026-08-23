@@ -3,14 +3,14 @@
   "channel": "test",
   "id": "javmenu-test",
   "name": "JavMenu",
-  "version": "0.1.0-test.1",
-  "build": 10101,
-  "shellVersion": "0.1.0-test.1",
-  "shellRuleVersion": 2026082311,
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "shellVersion": "0.1.0-test.2",
+  "shellRuleVersion": 2026082401,
   "managerVersion": "direct-loader-cdn",
-  "release": "apps/video/javmenu/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/javmenu/javmenu_remote_test_v1_b10101.txt",
-  "bootstrap": "apps/video/javmenu/bootstrap_test_v1_b10101.js",
-  "updatedAt": "2026-08-23",
-  "notes": "首个重构 Test：JavMenu 原站首页/搜索/详情/动态发现，原站 HLS/MP4 结构化播放优先，WebView 取源码与 video:// 兜底，本地影片/人物收藏，预览图/磁力（页面存在时），Shared JAV Playback 备用。分类和分页 URL 仍待实机确认。"
+  "release": "apps/video/javmenu/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
+  "bootstrap": "apps/video/javmenu/bootstrap_test_v2_b10102.js",
+  "updatedAt": "2026-08-24",
+  "notes": "Test2 按首轮实机截图修复：仓库/程序图标改为仓库资产；影片列表锁定 .video-list-item，修复 watermark/占位图与文本污染；发现页改为当前官网已确认分类路由；女优榜建立独立人物索引，人物页单独展示作品；详情演员仅认 /actor/，标签仅认元数据路径；站内播放排除 preview/freepv/litevideo，并增加 javmenu.org 请求兜底。"
 }
