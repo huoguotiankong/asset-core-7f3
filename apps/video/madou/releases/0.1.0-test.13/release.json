@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.13",
+  "build": 10113,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"performanceRuntime","path":"apps/video/madou/releases/0.1.0-test.10/performance_runtime.js"},
+    {"name":"storageRescue","path":"apps/video/madou/releases/0.1.0-test.12/storage_rescue.js"},
+    {"name":"defaultDetailPlayback","path":"apps/video/madou/releases/0.1.0-test.13/default_detail_playback.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.13"},
+  "previous": {"version":"0.1.0-test.12","build":10112,"release":"apps/video/madou/releases/0.1.0-test.12/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test13 removes the no-sniff experiment and all mutable detail/play settings. Detail tags and recommendations are always enabled, with a 30-minute structured private-file DetailModel cache. Playback returns to the proven Test10/Test7 contract: direct media when present, otherwise video:// on the detected player/detail page. Test12 private-file favorites/history storage is retained."
+}
