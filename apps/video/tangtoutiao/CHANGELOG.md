@@ -1,211 +1,39 @@
 # 汤头条 CHANGELOG
 
-## 0.1.0-test.7 / Build 10107 — 2026-08-23
+## 0.1.0-test.8 / Build 10108 — 2026-08-23
 
-状态：**Test5 实机合同继续收敛 + Test6 发布门禁补丁版，仍为 Test；禁止晋级 Stable。**
+状态：**Test7 实机精修版，仍为 Test；禁止晋级 Stable。**
 
-### Test5 实机事实
-- 推荐数据已经确认是真实视频：`data.list[3]` 最终展开为 **403 条**视频，首条真实 ID `3080972`，四档 `source_240/480/720/1080` 均存在。此前广告误识别问题已经结束。
-- 视频详情已经确认真实：标题、作者、时长、播放量、ID 与四档 `source_*` 均正确，详情 schema 也稳定在 `data.detail`。
-- `thumb_cover` 已确认能选出普通 HTTPS JPEG，例如 `https://picx.yrfmba.cn/...jpeg`，但实机仍全灰，同时诊断中完全没有 `ttt_last_image_diag`。这说明 Test5 更可能是**图片 JS 回调根本没有执行**，而不是继续修改 AES 参数即可解决。
-- Test5 单线路播放已经真正进入海阔播放器并有画面/进度，不再是 0 kb/s；但播放内容只有约 2 秒，是“汤头条 ttt.tips / 该版本已停止维护，请前往官网下载最新版本”的服务器业务占位片。结论：**播放器技术链已通，但拿到的不是实际业务视频。**
-- 启动响应 schema 明确包含 `versionMsg{id,version,type,apk,tips,must}`，而此前海阔客户端一直固定发送 `system_version=9.6.2`。结合 2 秒“版本停止维护”占位片，必须把服务端版本配置纳入启动迁移链。
-- 原 APP `VideoDetailPlayerActivity` 再次复核：首播使用 `source_240`，不是最高画质；1080/720/480 属于用户后续切换。因此海阔默认首播也应先复刻 `source_240`。
-- `/api/comic/home` 实机真实响应是**顶层 array[12]**，每项字段包含 `current/id/name/show_style/type/api_list/params_list`。Test5 错误只读 `data.categories`，因此显示“0 个分类”。服务端已经直接下发动态路由合同，应原样执行 `api_list + params_list`。
-- 排行榜 `/api/RankList/getPlayRank` 实机明确返回 `code 551 · type值只能为:daily,weekly,monthly,all`，因此必须补 `type`，并提供总/日/周/月四种切换。
-- `/api/MvList/style` 的无参数诊断请求继续返回 `551 参数不全`；APK 的内容调用参数为 `id/page/size/orderBy`，因此无参数 smoke probe 本身就是无效测试，不再使用。
+### Test7 实机事实
+- 短视频页面已经出现真实封面；长视频/精选 403 条里仍有部分灰封面，说明图片主入口已经成立，但不同图片链不能继续一刀切处理。
+- 已出现真正可播放的长视频：实机视频 ID `3017032`，时长 `29:17`，240P 可正常播放并实际播放到 `06:35 / 29:17`。这证明 `source_* → M3U8 → 解密/修复 → Hiker 本地代理 → 原生播放器` 主链已经成立。
+- 同时仍有部分视频/画质播放为约 2 秒“该版本已停止维护，请前往官网下载最新版本”的占位片。当前 `requestVersion/effectiveVersion/serverVersion` 均为 `9.6.2`，因此不能再把所有占位片归因于版本握手失败；必须按**每个 source 独立预检**处理混合有效/占位源。
+- 详情页此前同时给 Hero、立即播放、1080/720/480/240、播放器内切换等多个条目返回真实媒体 URL。海阔会把连续同类条目识别为连续选集/章节，最终在播放器中产生“上一个 / 下一个 / 列表”等页面派生的播放列表上下文。这是结构错误，不再通过样式或播放器 URL 补丁处理。
+- 漫画动态路由已真正成立：`/api/comic/home` 返回 12 个动态分类；例如分类 `api/comic/construct?id=7&page=1` 已实机返回 `list[30]`。后续可从作品列表继续接详情/章节。
+- 排行榜 `getPlayRank(type)` 实际返回的是**创作者排行榜**，实机 schema 为 `array[9]>{nickname,thumb,owner_uuid,videos_count,followed_count,...,thumb_url,uuid,num}`，不是视频列表；Test7 用视频 Adapter 渲染导致“code 200 但 0 条”的伪空列表。
 
-### 海阔图片入口复核
-- 海阔官方图片处理能力应通过 `$(url, headers).image(function...)` 生成图片 URL，而不是手工拼接 `@js=` 字符串。
-- 图片回调在独立图片线程中加载远程模块时应使用 `$.require(...)`。Test5 手工使用 `@js=require(...)`，与“封面全灰且没有任何图片回调诊断”高度吻合。
-- Test6/7 因此改成：真实 HTTPS JPEG → `$(url,headers).image(...)` → 回调 `$.require(ImageAdapter).decrypt(input)` → 明文 magic / legacy AES-CFB / AES-CBC 三态检测。
-- 新增 `ttt_last_image_link` 用于区分“image helper 是否生成成功”，`ttt_last_image_diag` 用于证明图片回调是否真的执行。
+### Test8 修改
+- **详情播放结构重构**：Hero 卡只负责展示，URL 固定 `hiker://empty`；整页只保留一个真正返回媒体 URL 的“立即播放”条目。
+- **清晰度改为状态选择**：1080P/720P/480P/240P 按钮只保存偏好并刷新页面，不直接返回媒体；删除“播放器内切换”媒体条目。这样从页面结构上消除误触发连续选集/播放列表的条件。
+- **播放源预检与自动回退**：点击唯一播放按钮后，先按用户偏好检查 source，再按 `240P → 480P → 720P → 1080P → preview` 回退；对 M3U8 执行明文/AES-CFB 解密并统计 `#EXTINF` 总时长，`0 < duration < 4s` 作为维护/升级占位片拒绝，不再送进播放器。
+- 新增 `ttt_last_source_probe`：记录 preferred、chosen 及每个画质的 `ok/duration/mode/short/error`，用于区分“源坏 / 解密失败 / 占位片 / 自动回退成功”。
+- **图片分链**：`picx.yrfmba.cn` / `yrfmba.cn` 上带标准图片扩展名的普通 JPEG/PNG/GIF/WebP/BMP 直接交海阔显示，不再强制经过图片解密回调；非标准/未知图片继续使用既有 ImageAdapter。新增 `ttt_last_image_policy`。
+- **排行榜模型修复**：新增 Creator Rank Adapter，按 `num/nickname/owner_uuid/videos_count/followed_count/vip_level_str/auth_status_str/thumb_url` 渲染“创作者播放榜”，不再套视频卡；创作者详情在接口未恢复前不伪装成功。
+- **漫画链保留已验证动态合同**：继续严格执行服务端每个分类自己的 `api_list + params_list`；分类缺少动态 API 时直接提示，不回退猜测接口。
+- Runtime/Release/Bootstrap/Shell 全部派生为不可变 Test8 / Build10108；Shell rule version `2026082309`。
 
-### Test6 / Build 10106 中间版本
-- Protocol：首次启动读取 `versionMsg.version`；若与当前 `system_version` 不同，保存为 `ttt_effective_version`，清旧 Token，再以服务端版本重新执行 `/api/home/getOpenAdsAndVersion`，随后再进入业务接口。
-- Protocol：`system_version` 不再永远固定 9.6.2，而是优先使用经过启动验证的 `ttt_effective_version`；同时记录 `ttt_last_version_info` 与 bootstrap 的 request/effective/server version。
-- Playback：默认“立即播放”改为原 APP 同样的 `source_240`；1080/720/480/240 仍提供手动切换。
-- Playback：代理统计 M3U8 所有 `#EXTINF` 总时长；短于 4 秒记录 `suspiciousShort=true`，专门识别可播放但业务错误的升级/维护占位片。
-- Comic：`comic/home` 直接把顶层 array[12] 解析为动态分类，点击后执行每项服务端下发的 `api_list + params_list`，不再硬编码分类参数。
-- Rank：增加 `all/daily/weekly/monthly` 四种 type；协议诊断也不再调用无参数 `MvList/style`，改为已知合法的排行榜请求。
-- Image：切换到海阔官方 `$(url,headers).image(...) + $.require(...)` 调用方式。
+### Test8 实机验收
+1. 进入任意视频详情：Hero 不应触发播放；清晰度按钮只改变选中态；真正播放入口应只有一个“立即播放”。
+2. 播放后重点看**页面派生的**“上一个 / 下一个 / 列表”是否消失。若仅剩海阔原生播放器自己的通用收藏/下载/投屏等操作面板，需与页面播放列表问题分开处理。
+3. 找一个此前会播 2 秒维护片的视频：Test8 应自动尝试其它画质；若所有画质都是占位/失败，应直接 toast 提示，而不是再打开 2 秒维护片。
+4. 长视频封面应比 Test7 更完整；若仍有灰图，记录对应封面截图与 `ttt_last_image_policy`。
+5. 排行榜应显示创作者卡片而不是 `code 200 / 0 条`；总榜/日榜/周榜/月榜继续使用 `all/daily/weekly/monthly`。
+6. 漫画分类点击后应继续返回约 30 条作品，不允许因本轮播放/图片重构退化。
+7. 混合播放失败时优先提供 `ttt_last_source_probe` + `ttt_last_play_sources`；图片失败提供 `ttt_last_image_policy` + 对应封面。
 
-### 发布门禁发现与 Test7
-- Test6 工件写入后、用户尚未测试前，发布回读发现一个迁移漏洞：旧 Test5 `ttt_token` 仍存在时，普通 `Protocol.call()` 只在“Token 为空”时调用 `bootstrapSession(false)`，因此新的 `versionMsg.version` 迁移逻辑可能永远不执行。
-- 按不可变 Release 规则，**没有原地覆盖 Test6 / Build10106**。Test6 保留为可回退的中间版本。
-- Test7 / Build10107 新增独立 `protocol_gate.js`：只要 `ttt_version_checked !== 1`，即使已有旧 Token，也必须先执行启动/版本迁移握手，然后才允许业务请求。
-- Test7 其余图片、播放、漫画、排行模块全部原样复用已经完成静态门禁的 Test6 工件，修改边界只增加会话迁移门禁。
+## 历史版本
+Test7 / Build10107 及以前的完整协议、APK 逆向、图片/播放/漫画修复记录已原样归档：
 
-### Test7 实机验收
-1. 从 Test5 升级 Test7 后**不要先手工重置身份**；第一次打开首页应自动触发版本迁移。设置页应出现 `ttt_last_version_info`，并在 `ttt_last_bootstrap` 中显示 `requestVersion/effectiveVersion/serverVersion`。
-2. 首页封面应开始真实显示；若仍灰，设置页必须至少出现 `ttt_last_image_link`。若 image helper 已生成且回调执行，则还应出现 `ttt_last_image_diag`，据此再判断 `plain/legacy-cfb/aes-cbc/fallback-raw`。
-3. 视频详情先点击默认“立即播放（240P）”。若仍出现 2 秒维护片，查看 `ttt_last_play_diag.duration` 与 `suspiciousShort`，同时结合版本诊断判断服务端是否仍对当前版本返回占位源。
-4. 漫画页应显示约 12 个服务端真实分类；点击“韩漫/日漫/国漫”等后应实际调用该分类自身的 `api_list + params_list` 并进入作品列表。
-5. 排行榜应出现“总榜/日榜/周榜/月榜”，不再报 type 551。
-6. 只有封面、真实业务视频、漫画动态列表和排行榜全部完成实机闭环后，才继续扩漫画详情/章节、社区完整互动、小说/有声等其它功能。
+- [CHANGELOG_HISTORY_TO_TEST7.md](./CHANGELOG_HISTORY_TO_TEST7.md)
 
-## 0.1.0-test.5 / Build 10105 — 2026-08-23
-
-状态：**Test4 实机媒体兼容修复版，仍为 Test；禁止晋级 Stable。**
-
-### Test4 实机事实
-- 视频详情主模型已正确：实机可显示真实中文标题、作者、时长、播放量、ID，并识别 `1080P/720P/480P/240P` 四档 `source_*`。说明 `data.detail + ListLikeVideoBean + source_*` 方向已经成立，不再回退通用 URL 扫描。
-- 详情与列表封面仍为灰块。继续反编译 APK 后确认，`thumb_cover` 虽然是 UI Adapter 传入 Glide 的真实字段，但原 APP 注册了自定义 `GlideAppModule / ModelLoader / Decoder`，不能把 `thumb_cover` 简化为“可直接显示的普通 URL”。
-- 点击播放时海阔直接弹出 `未知链接: {"urls":[...],"names":[...],"headers":[...]}`，说明 Test4 的严格 `JSON.stringify({urls,names,headers})` 在当前海阔播放入口没有被识别为多线路协议；该错误发生在播放器识别阶段，尚不能据此否定 `source_* / M3U8` 解密代理本身。
-- `/api/comic/home` 实机返回 12 个漫画分类（推荐、发现、韩漫、Cosplay、3D、本子、日漫、国漫、港台漫画等），Test4 却按 `movie_3` 内容卡渲染，导致巨大空白封面块；证明该接口是分类/标签配置，不是漫画作品列表。
-- “查看最近诊断”触发 `ArticleListModel-HttpRequestError: Expected URL scheme 'http' or 'https' but no colon was found`，说明 Test4 的诊断子规则路由本身错误，普通文本/空值被错误交给 HTTP ArticleListModel。
-
-### APK 图片链复核
-- `ListLikeVideoBean.thumb_cover` 仍是真实封面入口，但自定义 Glide loader 会先解析字符串；当字符串以 `{` 开头时按 JSON 选实际图片地址，已确认候选键包括 `ori / 360 / 720 / 720p`。
-- 图片下载后先检查 JPEG/PNG/GIF/WEBP/BMP magic；本身已是普通图片则直接使用。
-- legacy 图片密文链：HEX → 前 16 字节 IV → 图片专用 secret `e79465cfbbimgkcusimcuekd3b066a6e` → MD5 EVP 派生 AES Key → `AES/CFB/NoPadding`。
-- 另一图片链使用 `AES/CBC/PKCS5Padding`，固定 Key `f5d965df75336270`、IV `97b60394abc2fbe1`。
-- 海阔 Test5 使用 `<http image>@js=...` InputStream Adapter 恢复这三态：明文图片 / legacy AES-CFB / AES-CBC；诊断仅记录模式和字节长度，不记录账号 Token/Cookie。
-
-### APK 漫画链复核
-- `/api/comic/home` 返回漫画分类 Bean，核心字段为 `id / name / selected / uuid`。
-- 漫画作品列表接口为 `/api//book/list_filter`，参数由 APK 明确构造为 `page / sort / categories / type`。
-- 漫画列表 Bean 核心字段包括 `id / title / thumb / categories / tags / series / update_time / finished / is_free / isfree`。
-- 已发现后续接口：`/api//book/detail`（详情）与 `/api/book/list_episode`（章节）；购买链 `/api//book/buy` 当前不实现伪成功。
-
-### Test5 修改
-- 新增 `ImageAdapter`：`thumb_cover/thumb` 先按 JSON 多分辨率选 URL，再通过海阔 `@js=` InputStream 执行普通图片检测、legacy AES-CFB、AES-CBC 解密并返回真实图片流。
-- Core：收藏/历史保存 `coverRaw`，避免把带 `@js=` 的派生显示 URL 当原始封面再次编码；视频与漫画统一走同一图片 Adapter。
-- Playback：主“立即播放”只返回当前最高可用单清晰度并附 `#isVideo=true#`，先隔离验证媒体代理；详情增加 1080P/720P/480P/240P 单独按钮。
-- Playback：保留“播放器内切换”作为次级入口，但返回海阔对象字面量 `{urls:[...],names:[...],headers:[...]}`，不再使用严格 JSON 字符串。
-- Playback：继续复用 Test4 已按 APK 恢复的 `source_* → 拉 M3U8 → player_cfg.dekey AES-CFB → fixM3u8 → startProxyServer` 主链。
-- Comic：`comic/home` 改成紧凑三列分类导航；点击分类后调用 `/api//book/list_filter` 并按 ComicListBean 渲染漫画作品，不再把分类项当内容卡。
-- Diagnostics：最近诊断直接作为设置页 `long_text + hiker://empty` 展示，不再打开会触发 ArticleListModel 的诊断子规则。
-
-### Test5 实机验收
-1. 首页与视频详情优先看封面是否恢复；若仍灰图，设置页直接查看 `ttt_last_image_diag` 的 `plain / legacy-aes-cfb / aes-cbc / raw-fallback`。
-2. 播放先点“立即播放（最高画质）”或单独 `1080P/720P/...`，不要先测“播放器内切换”；若仍失败，截图播放器和设置页 `ttt_last_play_sources / ttt_last_play_diag`。
-3. 漫画页应先看到紧凑分类按钮；点击一个分类后应进入作品列表，而不是 12 个巨大空白卡。
-4. 设置页诊断应直接可见，不应再弹 `Expected URL scheme http or https`。
-5. 只有封面、单线路播放、漫画分类列表三条链完成实机闭环后，才继续接漫画详情/章节和其它内容域。
-
-## 0.1.0-test.4 / Build 10104 — 2026-08-23
-
-状态：**媒体主链精确模型修复版，仍为 Test；禁止晋级 Stable。**
-
-### Test3 实机事实
-- 匿名启动会话已经真正打通：首页不再返回 401，可加载出 49 条卡片，说明 API、AES/签名、启动 Token 和内容请求主链成立。
-- 首页 49 条并非真实推荐视频，而是“高端约炮 / 高端外围 / 附近约会 / 春药迷奸 / 催情迷药 / 高潮春药”等广告/推广项；说明 Test3 的递归“最佳数组”算法选中了 `banner/widget/ads`，形成了**看似成功但业务语义错误**的伪成功。
-- 首页与详情全部无封面、显示灰块；APK 模型复核后确认真实视频字段为 `thumb_cover`，Test3 候选字段遗漏该字段。
-- 视频详情能获得真实 ID/标题/简介，但系统顶部标题显示 `%E7...` URL 编码，说明页面参数进入 `getParam` 后需要显式 decode。
-- 点击播放进入海阔播放器后显示本地 `192.168.*:52020/proxy...` 且 `0 kb/s`，无法播放。问题不是“本地代理 URL 本身错误”，而是 Test3 把未按 APP 播放器解密的媒体链直接交给海阔，代理里没有得到可播放 M3U8。
-
-### APK 9.6.2 精确模型复核
-- `/api/MvList/featuredAv` 的响应模型为 `SeeMoreDataBean`，顶层业务字段包括 `banner / list / widget`。
-- `SeeMoreDataBean.list` 中每个 `ListBean` 再包含自己的 `list`；**真正推荐视频固定路径为 `data.list[].list`**。`banner/widget` 为广告/推广数据，禁止再用通用数组评分混入推荐。
-- 真正视频实体为 `ListLikeVideoBean`，已确认核心字段：`id / title / thumb_cover / thumb_cover_str / member / duration_str / count_play_str / source_240 / source_480 / source_720 / source_1080 / preview_video` 等。
-- 原 APP 列表适配器直接对 `thumb_cover` 调图片加载链，因此 Test4 优先使用 `thumb_cover`，`thumb_cover_str` 仅作为兜底。
-- `/api/MvDetail/detail` 返回模型中的真实视频主体为 `data.detail`（`ListLikeVideoBean`），不再对整个详情对象递归猜视频实体。
-- 原 APP `VideoDetailPlayerActivity` 使用 `source_240/source_480/source_720/source_1080` 作为真实播放源；Test4 不再从详情任意 URL 字段里“找第一个可疑链接”。
-- 启动 `AppConfigBean.player_cfg` 提供 `dekey / refer / x_auth`。原 APP 自定义播放器数据源下载 `.m3u8` 后：若内容以 `#EXTM3U` 开头则直接使用；否则以 `dekey` 按 MD5 EVP 派生 AES Key/IV，使用 `AES/CFB/NoPadding` 解密 HEX 内容，解密结果才是真实 M3U8。
-
-### Test4 修改
-- Core：推荐固定解析 `SeeMoreDataBean.data.list[].list`，彻底排除 `banner/widget/ads`；通用递归适配仅保留给尚未恢复精确模型的其它频道，并显式跳过广告键。
-- Core：视频字段切换为 `ListLikeVideoBean` 精确映射，封面优先 `thumb_cover/thumb_cover_str`；作者读 `member.nickname`；播放固定 `source_*`。
-- Core：详情固定优先 `data.detail`；列表进入详情时同时携带 `source_*` 作为失败兜底。
-- Core：页面参数检测 `%xx` 后 `decodeURIComponent`，修复详情系统标题和播放器标题显示 URL 编码。
-- Protocol：启动配置除了 Token 外，同时持久化 `player_cfg.dekey/refer/x_auth`；诊断只记录这些配置是否存在，不输出真实值。
-- PlaybackAdapter：新增专用 HLS 本地代理。代理读取远端 M3U8；明文 `#EXTM3U` 直接使用，否则按 APK 同算法用 `player_cfg.dekey` AES-CFB 解密；随后调用海阔 `fixM3u8(remoteUrl, content)` 修正 TS/KEY 相对路径，再把结果交播放器。
-- PlaybackAdapter：支持 `1080P/720P/480P/240P` 多清晰度返回；嵌套 master M3U8 继续通过同一代理递归处理。
-- Diagnostics：新增 `ttt_last_featured_exact / ttt_last_detail_exact / ttt_last_play_sources / ttt_last_play_diag / ttt_last_player_cfg`，后续播放失败时可以区分“没取到 source / 没取到 dekey / M3U8 解密失败 / 代理返回异常”。
-
-### Test4 实机验收
-1. 首页“今日推荐”应变为真正视频内容，不再出现约会/药物等广告推广卡。
-2. 首页卡片应出现真实 `thumb_cover` 封面；详情 Hero 也应有封面。
-3. 详情顶部系统标题应正常显示中文，不再显示 `%E7...`。
-4. 详情应识别一个或多个 `source_*` 清晰度；点击播放后可以看到 1080P/720P/480P/240P 中实际存在的线路。
-5. 播放器仍可能显示 `192.168.*` 本地代理 URL，这是 Test4 的设计：该代理负责把原 APP 的加密 M3U8 解密后再喂给海阔。验收标准是能产生码率并正常播放，而不是地址必须为远程 URL。
-6. 若播放仍失败，直接进入“设置与诊断 → 查看最近诊断”，重点查看 `ttt_last_play_diag`，不得回退到通用嗅探伪成功。
-
-## 0.1.0-test.3 / Build 10103 — 2026-08-23
-
-状态：**第二轮实机根因修复版，仍为 Test；禁止晋级 Stable。**
-
-### Test2 实机事实
-- 用户实机首页明确返回：`code 401 · 用户已过期，请重新进入app`，`data=null`。
-- 这证明当前 API 域名、最终路径、请求加密/签名与响应解密已经能够进入服务器业务层；Test2 的 P0 根因不是“列表字段没适配”，而是匿名设备身份/启动会话没有按原 APP 建立。
-- Test2 的远程 Protocol/Adapter 可继续作为数据结构诊断基础，但不能跳过启动握手直接访问内容接口。
-- Test2 使用 `data:image/svg+xml` 的纯几何导航图标在当前实机仍退化成彩色首字母/头像式占位图，说明 `icon_small_4` 对 data URI SVG 的兼容性不可靠；Test3 改为仓库 HTTP(S) SVG。
-
-### APK 9.6.2 启动会话复核
-- `com/tencent/mm/viewModel/x0.z(...)`：首页业务前进入 `/api/home/getOpenAdsAndVersion` 启动链，并先恢复本地身份。
-- `com/tencent/mm/net/n.M1()`：公共参数真实来源包括 `system_oauth_id/system_token/system_iid` 等。
-- `com/tencent/mm/ui/LaunchActivity$g.run()`：首次启动生成一个设备 ID 后，将**同一个值**同时写入 `device_id` 和 `uuid`；因此 `system_iid` 与 `system_oauth_id` 必须一致。Test1/Test2 各自随机生成两个不同 ID 是错误实现。
-- `com/tencent/mm/utils/x1.a(Context)`：设备 ID 为稳定的 MD5 形态；原 APP 由 `android_id + UUID(去横线) + currentTimeMillis` 生成并持久化。海阔版保持同等稳定 32 位小写 MD5 形态并持久化。
-- `com/tencent/mm/viewModel/x0$a.d(...)`：启动接口成功后读取 `BaseResponse.data` 为 `AppConfigBean`。
-- `com/tencent/mm/ui/LaunchActivity.l3(AppConfigBean)`：把 `AppConfigBean.token` 保存，随后作为公共参数 `system_token` 参与内容请求。
-- Token 偏好键在 APK 中为 `tangbure_token`；海阔版使用自身命名空间 `ttt_token`，不保存/输出真实敏感值到 CHANGELOG 或诊断。
-
-### Test3 修改
-- Protocol：新增统一 `ttt_device_id`，并强制 `system_oauth_id === system_iid`；旧 Test1/Test2 的两个分离 ID 不再使用。
-- Protocol：没有 Token 时先调用 `/api/home/getOpenAdsAndVersion`；从启动响应提取 `AppConfigBean.token` 后再调用推荐/短视频/搜索/详情等内容接口。
-- Protocol：内容接口若返回 `401` 或“用户已过期/重新进入app”，自动清 Token → 重新启动握手 → 原请求重试一次；若启动本身仍判身份过期，则重新生成匿名设备 ID 再试一次。
-- Diagnostics：仅显示“设备身份是否建立 / ID 尾 6 位 / Token 是否建立 / 域名 / code/msg/schema”，不显示完整设备 ID、Token、Cookie。
-- Settings：新增“重新初始化匿名身份”，用于清理 Test1/Test2 遗留错误身份并按 APK 首次启动链重建。
-- UI：快捷导航图标切换为 `apps/video/tangtoutiao/assets/v010/*.svg` 远程资源，避开 data URI 兼容问题。
-- UI：首页主标签收敛为“推荐 / 短视频 / 长视频 / 社区”，删除与“频道”快捷入口重复且会产生横向溢出的“更多”。
-- Core：继续复用 Test2 的递归列表/字段适配，控制本轮修改范围，只解决会话 P0 与已证实 UI 兼容问题。
-
-### Test3 实机验收
-1. 重新导入 Test3 后首次首页应自动完成匿名启动握手，不再直接出现 `401 用户已过期`。
-2. 若握手失败，首页应显示“启动握手失败”或“启动成功但未取得 token”的明确错误；设置页可查看无敏感信息诊断。
-3. 若业务 code 成功且出现视频卡片，下一轮立即转向封面字段/图片链、详情字段和真实播放链。
-4. 若业务 code 成功但仍无卡片，继续根据 `schema/list path` 精确适配，不再改身份协议。
-5. 快捷入口应显示远程红色几何 SVG，不应再出现彩色首字母占位头像。
-
-## 0.1.0-test.2 / Build 10102 — 2026-08-23
-
-状态：**首轮实机反馈修复版。**
-
-### Test1 实机事实
-- 程序能进入首页，请求没有抛网络/解密异常，但列表未解析。
-- 海阔当前实机的 `scroll_button/text_1` 等普通原生文本不会按本版写法解析 `<font>/<b>`，导致 HTML 源码直接显示。
-- Data-URI SVG + Emoji 字符跨设备渲染不稳定。
-- Test1 把“请求未抛异常”误当成“业务成功”；Test2 开始同时显示 `code/msg/schema`。
-
-### Test2 修改
-- UI 移除普通原生文本中的 HTML；选中态改纯文本 `●`。
-- Adapter 最多 8 层递归发现数组，根据路径名 + 视频字段特征评分，并递归读取嵌套 ID/标题/封面/作者/时长/播放字段。
-- Protocol 支持响应 JSON 字符串二次解包并记录 `code/msg/schema`。
-- 首页/频道空列表时直接显示业务状态与响应结构。
-- AES/签名核心、接口路径和播放策略本轮未改。
-
-## 0.1.0-test.1 / Build 10101 — 2026-08-23
-
-状态：**首个 Test。**
-
-### APK 与产品基线
-- 来源：用户项目来源 `ttt_9.6.2_260822_3.apk`，`versionName=9.6.2`。
-- 原 APP 为大型原生 Android 内容应用，包含 IJK Player、RTMP、SQLCipher 等运行库，不是简单 WebView 壳。
-- 已确认产品域：长/短视频、创作者/排行榜、社区/话题、图集、小说、有声、漫画、求片、合集、粉丝团、消息/私聊、收藏历史下载、AI 创作、游戏、会员/汤币等。
-
-### 主协议事实
-- API 基线：`https://api1.wiimrdys.com/api.php`、`https://api2.wiimrdys.com/api.php`。
-- 最终业务地址为 `<base>/api/...`，例如 `.../api.php/api/MvList/featuredAv`。
-- 主业务接口原始 Form 参数补公共参数后转 JSON，再整体包装成 JSON 请求体：`timestamp / data / sign / _ver=v0`。
-- `data`：AES/CFB/NoPadding；密钥材料 `132f1537f85scxpcm59f7e318b9epa51`；MD5 EVP_BytesToKey 风格派生 32 字节 AES Key + 16 字节 IV；输出 `IV + ciphertext` 的大写十六进制。
-- `timestamp`：`floor(currentTimeMillis/1000)`，10 位秒级时间戳。
-- `sign`：`SHA256('_ver=v0&data=<DATA>&timestamp=<TS>e79465cfbb39ckcusimcuekd3b066a6e')` 得小写 hex，再对该字符串做 MD5 小写 hex。
-- 响应外层 JSON 的 `data` 使用同一 AES-CFB 链解密为真实业务响应。
-- 公共参数包括：`system_oauth_id/system_oauth_type=android/system_app_type=local/system_token/system_version/app_status/new_player=fx/system_build_aff/system_build_id/bundle_id/system_iid/device_brand/device_model`，以及可选 `trace_id/aff_x_code`。
-- APK `UMENG_CHANNEL` 回退 `a1000`；包名为 `com.tencent.mm`；测试版模拟 `system_version=9.6.2`。
-
-### 已确认 P0 接口
-- `/api/home/getOpenAdsAndVersion`：启动配置/匿名 Token 链。
-- `/api/MvList/featuredAv`：`page, limit`。
-- `/api/MvList/small`：`page, limit`。
-- `/api/MvList/style`：无业务参数。
-- `/api/MvSearch/video`：`keyword, page, limit`。
-- `/api/MvDetail/detail`：`id`。
-- 其它已发现域：`/api/community/*`、`/api/picture/*`、`/api/novel/*`、`/api/audio/*`、`/api/comic/*`、`/api/find/*`、`/api/RankList/*`、`/api/Creator/*`、`/api/ai/*` 等。
-
-### 产品结构基线
-- 首页：搜索、推荐/短视频/长视频/社区主内容与快捷入口。
-- 内容中心：视频、创作者、排行、社区、话题、图集、小说、有声、漫画、求片、合集、粉丝团、消息、AI、游戏等。
-- 搜索、视频详情、真实媒体 URL 探测、本地收藏/观看历史、设置与协议诊断已建立模块骨架。
-- 付费/充值/提现等资金能力在协议和权限未验证前不伪装成功。
+后续最新回归继续记录在本文件，历史归档不再反复整份改写，以降低多程序并行发布时的冲突风险。
