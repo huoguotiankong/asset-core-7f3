@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"tangtoutiao-test",
+  "name":"汤头条",
+  "version":"0.1.0-test.8",
+  "build":10108,
+  "ref":"main",
+  "baseStable":null,
+  "baseTest":{"version":"0.1.0-test.7","build":10107,"release":"apps/video/tangtoutiao/releases/0.1.0-test.7/release.json"},
+  "modules":[
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/image.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.8/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.8/playback.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.8/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.8/runtime.js"}
+  ],
+  "verify":{"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.8"},
+  "notes":"根据 Test7 实机精修：详情页只保留一个实际媒体返回项，清晰度按钮只修改状态，消除页面生成的连续选集/播放列表语义；播放前预检各 source_* 的 M3U8 时长，过滤数秒维护占位片并自动回退其它清晰度；picx.yrfmba.cn 普通 JPEG 直显，非标准图片继续走解密 Adapter；排行榜按真实创作者模型渲染。"
+}
