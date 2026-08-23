@@ -1,0 +1,36 @@
+{
+  "schema": 4,
+  "id": "javmenu",
+  "name": "JavMenu",
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-23 23:11",
+  "cloudSnapshot": "apps/video/javmenu/channels_v1_b10101.json",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "javmenu-test",
+      "name": "JavMenu",
+      "version": "0.1.0-test.1",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/javmenu/javmenu_remote_test_v1_b10101.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": true,
+      "desc": "JavMenu 全新重构首测：原生 UI、原站首页/搜索/详情、站内播放优先、本地收藏与备用番号播放。分类/演员入口按当前页面动态识别，不伪造未验证固定路由。",
+      "highlights": [
+        "全新 JavMenu 原生 UI",
+        "首页 / 搜索 / 动态发现 / 详情",
+        "OG + JSON-LD + DOM 多层解析",
+        "原站 HLS / MP4 结构化播放优先",
+        "WebView 源码与 video:// 最终兜底",
+        "本地影片 / 人物收藏",
+        "预览图 / 页面磁力识别",
+        "MissAV / 123AV / Jable 备用播放",
+        "诊断与请求模式切换"
+      ],
+      "icon": "https://javmenu.com/assets/images/logo.png"
+    }
+  ]
+}

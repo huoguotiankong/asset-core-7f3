@@ -1,0 +1,23 @@
+{
+  "schema": 3,
+  "id": "javmenu",
+  "name": "JavMenu",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/javmenu/test.json",
+  "channels": "apps/video/javmenu/channels.json",
+  "cloudChannels": "apps/video/javmenu/channels_v1_b10101.json",
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "0.1.0-test.1",
+  "testBootstrap": "apps/video/javmenu/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/javmenu/javmenu_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/javmenu/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/javmenu/CHANGELOG.md",
+  "sourceSite": "https://javmenu.com/zh",
+  "icon": "https://javmenu.com/assets/images/logo.png",
+  "migration": {
+    "stage": "initial-test",
+    "note": "Brand-new app; no previous project Stable. Stable will be created only after device verification."
+  }
+}

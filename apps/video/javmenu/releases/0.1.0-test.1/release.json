@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "javmenu-test",
+  "name": "JavMenu",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/javmenu/releases/0.1.0-test.1/core.js"
+    },
+    {
+      "name": "playback",
+      "path": "apps/video/javmenu/releases/0.1.0-test.1/playback_adapter.js"
+    },
+    {
+      "name": "runtime",
+      "path": "apps/video/javmenu/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "javPlaybackManager",
+      "path": "shared/jav-playback/manager.js",
+      "channel": "stable",
+      "sdkVersion": "1.0.0-test.4"
+    }
+  ],
+  "verify": {
+    "global": "JavMenuRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.1"
+  },
+  "sourceSite": "https://javmenu.com/zh",
+  "notes": "First project-owned JavMenu Test. Native Hiker UI; resilient HTML/OG/JSON-LD adapters; site playback first with WebView-source fallback; optional Shared JAV Playback; local video/person favorites."
+}
