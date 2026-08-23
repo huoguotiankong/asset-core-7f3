@@ -6,14 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.1",
-  "defaultBuild": 10101,
-  "testVersion": "0.1.0-test.1",
-  "testBuild": 10101,
-  "testShellVersion": "1.0.0-test.1",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v1_b10101.js",
-  "testRule": "apps/video/myav/myav_remote_test_v1_b10101.txt",
+  "defaultVersion": "0.1.0-test.2",
+  "defaultBuild": 10102,
+  "testVersion": "0.1.0-test.2",
+  "testBuild": 10102,
+  "testShellVersion": "1.0.0-test.2",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v2_b10102.js",
+  "testRule": "apps/video/myav/myav_remote_test_v2_b10102.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
-  "migration": {"stage":"initial-native-test","note":"New self-use remote MyAv app. No Stable pointer until device verification."}
+  "icon": "apps/video/myav/assets/icon.svg",
+  "migration": {"stage":"device-image-repair-test2","note":"Test2 fixes cover/lazy-image parsing from first device regression. No Stable pointer until device verification."}
 }
