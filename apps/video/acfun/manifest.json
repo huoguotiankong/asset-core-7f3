@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "0.6.0-alpha18",
-  "testBuild": 169,
-  "testShellVersion": "7.4.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v074.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v074.txt",
+  "testVersion": "1.0.0-alpha1",
+  "testBuild": 10001,
+  "testShellVersion": "8.0.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v080.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v080.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "alpha18-validated-seed-device-chain-v74",
+    "stage": "clean-rewrite-alpha1-independent-test-chain",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha16 实机探针已确认 jhimage 相对封面、path=jpd/...m3u8 有效 Seed、decode URL 构造正确、cacheM3u8 后 file:/// 仍不可播、短视频 loadType=2 返回30条、comic probe 未进入。Alpha17 据此建立 jhimage→cdn.ukaim.com、短视频当前 Bootstrap Renderer 和漫画显式 query Reader。发布前静态复核又发现 Alpha17 首版 Playback 没把通用 path 纳入 Seed，可能丢掉当前设备已证明的 jpd 路径，因此 Alpha18 使用新 validated-seed Playback：优先明确视频字段，再有限接受 path/url，且通用字段必须匹配 m3u8/mp4/jpc/jpd 等媒体形态；之后走 Stable __v043DecodePlayUrl，将远程 decode URL + Header 直接交播放器，不调用 cacheM3u8。活动 Release 为 Stable8 + A15 Clean + A17 Image/Short/Comic + A18 Playback，A16 和 A17旧播放模块均不进入。小说/有声 POST-first 成功链不改。minBuild=169，latest 不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Test 从 1.0.0-alpha1 起切换到独立 clean rewrite 链：Remote Manager id=acfun-test，与 Stable 的 acfun 状态隔离；不再把 0.6.0 Alpha 历史 UI/修补模块加载进活动 Test Release。新链按 APP 1.9.7 协议重新实现认证、签名、encData、Station、ClassType/Zone、视频、漫画、短视频、社区、小说、有声、搜索、图片与播放 Adapter，并重做原生产品 UI。已保留当前设备验证过的 jhimage/CDN、XOR 解码和媒体 Seed→decode 事实，但通过新模块重新组织。当前仅为 Test/Candidate，等待海阔实机回归，latest/stable 均不变。"
   }
 }
