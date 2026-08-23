@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "xvideos-test",
   "name": "XVideos",
-  "version": "0.1.0-test.3",
-  "build": 10103,
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082303,
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/xvideos/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/xvideos/xvideos_remote_test_v3_b10103.txt",
+  "release": "apps/video/xvideos/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/xvideos/xvideos_remote_test_v4_b10104.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test3 产品化优化：独立搜索中心+搜索历史清理；热门+A-Z分类；地区/创作者分离和主页视频恢复；详情页图标化与播放上下文隔离；多画质默认最高画质。"
+  "notes": "Test4：X5 实时 Cookie + 会话指纹私有缓存隔离；账号列表主内容域解析；首页分页与登录后推荐态；评论恢复增强；本地收藏/足迹可清空；Test3 搜索/分类/创作者/详情/最高画质保持不变。"
 }
