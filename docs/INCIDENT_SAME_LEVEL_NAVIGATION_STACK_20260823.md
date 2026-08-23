@@ -162,3 +162,29 @@ putMyVar → refreshPage(false)
 如果答案是前者，默认不得创建新的同功能页面。
 
 该检查应与“二级页面避免沉浸式标题栏叠加”“UI 必须实机截图复核”一起作为海阔 UI/Navigation 发布前固定检查项。
+
+## 8. 2026-08-23 麻豆传媒 Test6 重复事故
+
+麻豆传媒 `0.1.0-test.6 / Build10106` 再次违反了本文件已经存在的规则：分类总览本身的大类切换已经使用 `putMyVar + refreshPage(false)`，但进入具体内容页后，顶部同组小分类仍使用：
+
+```text
+C.page('madouList', {u: child.url, ...})
+```
+
+结果用户连续点击分类标签会持续压入新的 `madouList`，返回首页需要多次返回。
+
+### Test7 修复
+- `0.1.0-test.7 / Build10107` 覆盖内容页 `R.list()`。
+- 同组小分类使用页面 state key 保存 active URL/name。
+- 点击只执行 `putMyVar → refreshPage(false)`，不再构造新的 `madouList`。
+
+### 从本次起增加发布前强制审查
+只要页面里出现 `scroll_button / flex_button / text_*` 形式的 Tab、筛选、排序、同组分类，代码评审必须搜索该按钮 URL：
+
+```text
+如果目标仍是当前功能页自身
+且代码返回 hiker://page/<same path>
+→ 直接判定为发布阻断项
+```
+
+不能因为“大分类已经原页切换”就忽略下一层内容页的 sibling chips；**所有同级切换层都要做 5 次切换 + 1 次返回验收。**
