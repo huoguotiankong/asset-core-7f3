@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "name": "51吃瓜",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/51chigua/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/51chigua/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"Cg51RemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "previous": null,
+  "notes": "First self-use remote Test. Native home/category/search/detail, HTML article/image parsing, structured video/iframe extraction with video:// fallback, dynamic domain failover, local favorites/history, static-comment parser and diagnostics."
+}
