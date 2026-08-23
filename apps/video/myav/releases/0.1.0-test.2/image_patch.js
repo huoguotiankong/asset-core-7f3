@@ -70,11 +70,12 @@
         ims=C.imageCandidates(im[i],href);for(j=0;j<ims.length;j++)if(!C.isPlaceholderImage(ims[j]))g.images.push(ims[j]);
       }
     }
-    var out=[],seenImg,ctxStart,ctxEnd,ctx,plain,code,date,dm,flags,title,cand,k,bestScore,score,img;
+    var out=[],seenImg,before,after,plain,code,date,dm,flags,title,cand,k,bestScore,score,img,ctx;
     for(i=0;i<order.length;i++){
-      g=order[i];ctxStart=Math.max(0,i>0?order[i-1].end:g.start-650);ctxEnd=Math.min(s.length,i+1<order.length?order[i+1].start:g.end+850);if(ctxStart>=g.start)ctxStart=Math.max(0,g.start-260);if(ctxEnd<=g.end)ctxEnd=Math.min(s.length,g.end+420);
-      ctx=s.substring(ctxStart,ctxEnd);plain=C.strip(ctx);code=C.codeFromText(plain);
-      dm=plain.match(/20\d{2}[-\/.]\d{1,2}[-\/.]\d{1,2}/);date=dm?dm[0].replace(/[\/.]/g,'-'):'';
+      g=order[i];before=s.substring(i>0?order[i-1].end:Math.max(0,g.start-420),g.start);after=s.substring(g.end,i+1<order.length?order[i+1].start:Math.min(s.length,g.end+900));
+      plain=C.strip(after);code=C.codeFromText(plain);dm=plain.match(/20\d{2}[-\/.]\d{1,2}[-\/.]\d{1,2}/);date=dm?dm[0].replace(/[\/.]/g,'-'):'';
+      if(!code){plain=C.strip(before);code=C.codeFromText(plain);}if(!date){dm=C.strip(before).match(/20\d{2}[-\/.]\d{1,2}[-\/.]\d{1,2}/);date=dm?dm[0].replace(/[\/.]/g,'-'):'';}
+      ctx=s.substring(Math.max(0,g.start-260),Math.min(s.length,g.end+420));plain=C.strip(ctx+' '+after);
       flags=[];if(/磁力下载|磁力下載|磁力资源/.test(plain))flags.push('磁力');if(/无码破解|無碼流出/.test(plain))flags.push('无码');if(/高清资源|高清資源|\bHD\b/.test(plain))flags.push('高清');if(/中文字幕|字幕/.test(plain))flags.push('字幕');
       title='';bestScore=-9999;
       for(j=0;j<g.titles.length;j++){
@@ -86,8 +87,8 @@
       if(!title||title.length<2)title=code||'影片';
       img='';seenImg={};
       for(j=0;j<g.images.length;j++){if(!seenImg[g.images[j]]){seenImg[g.images[j]]=1;img=g.images[j];break;}}
-      if(!img)img=C.bestImageFromHtml(ctx,href,code);
-      out.push({href:href,key:href,title:title,code:code,date:date,section:section||'',sectionName:C.sectionName(section||'normal'),flags:flags,img:C.image(img,href),rawImg:img});
+      if(!img)img=C.bestImageFromHtml(ctx,g.href,code);
+      out.push({href:g.href,key:g.href,title:title,code:code,date:date,section:section||'',sectionName:C.sectionName(section||'normal'),flags:flags,img:C.image(img,g.href),rawImg:img});
     }
     return out;
   };
