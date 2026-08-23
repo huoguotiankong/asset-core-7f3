@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha3",
-  "build": 10003,
-  "shellVersion": "8.2.0-test",
+  "version": "1.0.0-alpha4",
+  "build": 10004,
+  "shellVersion": "8.3.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha3/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha4/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha3 候选。基于 Alpha2 第二轮实机：封面已恢复；视频 Seed/decode 正确但播放器黑屏，播放凭据明确返回 jhg_player；漫画章节调用仍未成功且旧诊断只覆盖最后一次 POST 405。Alpha3 保留 jhg_player 字面 Header 并提供同 URL 不同 Header 线路；漫画章节使用 HTTP 2xx 宽容解析并记录精确 GET/POST/Origin 探针。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha4 候选。第三轮实机确认 Alpha3 的 APP标识/H5来源/接口来源/无来源均不可播；APK 1.9.7 进一步确认 video/cdn/refresh 与 CDN 鉴权字段，因此 Alpha4 转向真实 CDN refresh + 完整签名 Header + decode 响应预检。漫画 Alpha3 误把 HTTP200/code404 当成功，Alpha4 拒绝失败业务码并用真实 chapterList、chapterId/chapter_id/chapterNum 多参数适配。正式 Stable 0.4.9 继续冻结。"
 }
