@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.7",
-  "defaultBuild": 10107,
-  "testVersion": "0.1.0-test.7",
-  "testBuild": 10107,
-  "testShellVersion": "1.0.0-test.7",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v7_b10107.js",
-  "testRule": "apps/video/myav/myav_remote_test_v7_b10107.txt",
+  "defaultVersion": "0.1.0-test.8",
+  "defaultBuild": 10108,
+  "testVersion": "0.1.0-test.8",
+  "testBuild": 10108,
+  "testShellVersion": "1.0.0-test.8",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v8_b10108.js",
+  "testRule": "apps/video/myav/myav_remote_test_v8_b10108.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"neutral-import-shell-test7","note":"Test7 preserves Test6 behavior while replacing import-facing restricted terminology with neutral actor naming and updating cloud-repository icon metadata. No Stable before device verification."}
+  "migration": {"stage":"actress-fallback-ranking-layout-test8","note":"Test8 restores the missing censored actress index with a user-verified current-site fallback and adds ranking 2/3-column layout preferences, while preserving the neutral Test7 import shell. No Stable before device verification."}
 }
