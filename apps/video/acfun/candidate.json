@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha2",
-  "build": 10002,
-  "shellVersion": "8.1.0-test",
+  "version": "1.0.0-alpha3",
+  "build": 10003,
+  "shellVersion": "8.2.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha2/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha3/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha2 候选。基于 Alpha1 首轮实机结果修复封面域/解码、专题参数编码、HLS识别与APP播放凭据候选、漫画GET-first。正式版仍冻结在 Stable 0.4.9；本候选需要继续完成视频封面/普通播放、专题标题、漫画详情与章节、短视频、小说有声、社区的实机回归后才能晋级。"
+  "notes": "Clean Rewrite Alpha3 候选。基于 Alpha2 第二轮实机：封面已恢复；视频 Seed/decode 正确但播放器黑屏，播放凭据明确返回 jhg_player；漫画章节调用仍未成功且旧诊断只覆盖最后一次 POST 405。Alpha3 保留 jhg_player 字面 Header 并提供同 URL 不同 Header 线路；漫画章节使用 HTTP 2xx 宽容解析并记录精确 GET/POST/Origin 探针。正式 Stable 0.4.9 继续冻结。"
 }
