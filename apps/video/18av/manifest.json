@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "18av",
+  "name": "18AV",
+  "category": "video",
+  "mode": "remote/self-use",
+  "repository": "huoguotiankong/asset-core-7f3",
+  "branch": "main",
+  "source": "https://18av.mm-cg.com/zh/",
+  "comicSource": "https://18h.mm-cg.com/zh/",
+  "contentTypes": ["video","comic","photo","novel"],
+  "test": "apps/video/18av/test.json",
+  "channels": "apps/video/18av/channels.json",
+  "changelog": "apps/video/18av/CHANGELOG.md"
+}
