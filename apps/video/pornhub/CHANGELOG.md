@@ -1,5 +1,43 @@
 # Pornhub CHANGELOG
 
+## 0.1.0-test.7 / Build 10107 — 2026-08-23
+
+### 第六轮实机结论
+- Test6 搜索页的可换行筛选已经正常，不再出现 Test5 横向溢出的尾部 `>`；首页账号/公开视频列表、分类、评论、详情头像和既有多画质播放基线继续可用。
+- Test6 公开片单页虽然能识别约 38 个 `/playlist/<id>`，但实体边界错误：大量卡片把操作文案 `View Playlist` 当作标题，前两张封面重复、后续封面大量为空，说明旧 Parser 仍在用“锚点附近任意图片/文本”拼装片单。
+- Test6 Shorts 继续为空。当前 `/shorties` 首页并不是旧 `/short/` 链，也没有可供旧回退使用的普通 `view_video.php` 卡片，因此 Test6 的双回退方向仍不匹配真实 Shorts 实体。
+- 用户要求保留搜索、分类等图标入口，同时把收藏、历史、搜索等首页图标整体缩小，减少首屏导航占位，让视频内容更早出现。
+
+### Shorts Adapter 重写
+- Test7 不再寻找旧 `/short/`，直接把当前真实 `/shorties/<id>` 作为 Short 实体 URL；同时兼容 HTML anchor 与脚本/JSON 中出现的 `/shorties/<id>` 字符串。
+- Short 封面优先从 `video poster / data-poster` 恢复，再尝试 JSON `poster/thumbnail/thumb/image/cover` 与普通 `img`，避免仅有 URL 没有封面。
+- Short 标题优先使用 title/caption/description、标题节点或图片 alt；实在没有标题时只回退 `Shorts · <id尾部>`，不伪造普通视频标题。
+- Short 点击后仍进入既有 `pornhubDetail → mediaDefinitions → HLS` 详情/播放链；没有复制一套新的播放器逻辑。
+- 外部协议交叉验证：yt-dlp PR `#15328` 明确将 `https://www.pornhub.com/shorties/<id>` 直接加入 PornHub 单视频 URL 规则，并说明“不需要 extractor 逻辑变更”，支持本轮把 Shorties 单条实体视为现有视频详情协议的同类入口。
+
+### Playlist Adapter 重写
+- `View Playlist / Playlist / Play All / Watch All / View / Open / More` 等操作文案全部列为无效标题，不再进入片单实体名称。
+- 列表优先按 `<li>/<article>` 真实卡片容器取实体，在同一容器内按标题节点 → playlist title/name class → 同 URL anchor 属性/文本 → 图片 alt/title 恢复名称；URL 最终按 `/playlist/<id>` 规范化并去重。
+- 片单封面增加 `data-mediumthumb / data-thumb_url / data-src / data-original / data-image / data-thumb / background-image` 等恢复链，避免 Test6 只找到相邻卡片图片或空图。
+- 如果当前 DOM 确实没有暴露可读标题，回退显示 `片单 #<id>`，也不会再次展示几十个完全相同的 `View Playlist`。
+- 详情页增加当前 Pornhub chunk 合同：首屏解析 `playlistId / itemsCount / token`，后续通过 `/playlist/viewChunked?id=<id>&page=<n>&token=<token>` 获取下一批视频。
+- 为避免加载大播放列表时首屏阻塞，详情不一次请求全部 chunk；使用 `getMyVar → refreshPage(false)` 原页“加载更多”，不会制造新的返回栈。
+- 外部协议交叉验证：当前 yt-dlp PornHubPlaylistIE 同样从首屏读取 `playlistId/itemsCount/token`，首屏 36 条、后续每页 40 条，并调用 `/playlist/viewChunked`；Test7 按这一现行合同实现分页。
+
+### 首页 UI 收敛
+- 首页高频入口仍保持图标化，不退回文字 chip。
+- `站内收藏 / 观看历史 / 本地收藏 / 本地足迹` 第一排；`搜索 / 分类 / 创作者 / 订阅` 第二排；`片单 / Shorts / GIF / 我的` 第三排。
+- 三排统一使用官方 `icon_small_4`，仍是一行四列“图标 + 标签”，但图片比 `icon_4` 明显更小，解决 Test6 四个大图标占据过多首屏的问题。
+- 账号状态 Hero 继续保留紧凑 `avatar`，视频 Feed 逻辑与 Test6 不变；本轮不重写账号推荐、评论、分类、搜索与播放链。
+
+### 回归门禁
+- Test7 `core_patch.js / ui_patch.js / Bootstrap` 已通过 `node --check`。
+- 离线 Shorts smoke：`/shorties/68dbebc3b76ae` 可恢复实体 URL、标题与 poster。
+- 离线 Playlist smoke：同一卡片同时存在真实标题与 `View Playlist` 时只输出真实标题；`data-src` 封面与 `24 Videos` 计数可恢复；`playlistId=123 / itemsCount=96 / token=abc` 可计算 3 页 chunk。
+- Shell 继续保留 20 个页面，全部指向 Build10107；Runtime 最终 `module()` 仍动态导出 Test7 覆盖后的 `home/shorts/playlists/playlistDetail`。
+- Test5 已实机确认的评论、详情真实创作者头像、中文分类与独立搜索，以及 Test1/Test2 已实机确认的 4 档 HLS 播放链均保持不变。
+- Test7 仍只进入 Test；真实 `/shorties` 首页能否命中新 Parser、公开片单真实名称/封面以及 chunk 加载需要下一轮实机截图确认。
+
 ## 0.1.0-test.6 / Build 10106 — 2026-08-23
 
 ### 第五轮实机结论
