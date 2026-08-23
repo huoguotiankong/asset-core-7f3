@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "pornhub-test",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/pornhub/releases/0.1.0-test.1/core.js"},
+    {"name":"corePatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/core_patch.js"},
+    {"name":"corePatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"corePatch4","path":"apps/video/pornhub/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"corePatch5","path":"apps/video/pornhub/releases/0.1.0-test.5/core_patch.js"},
+    {"name":"runtime","path":"apps/video/pornhub/releases/0.1.0-test.1/runtime.js"},
+    {"name":"uiPatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/ui_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/ui_patch.js"},
+    {"name":"uiPatch4","path":"apps/video/pornhub/releases/0.1.0-test.4/ui_patch.js"},
+    {"name":"uiPatch5","path":"apps/video/pornhub/releases/0.1.0-test.5/ui_patch.js"}
+  ],
+  "verify": {"global":"PornhubRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "previous": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/pornhub/releases/0.1.0-test.4/release.json"},
+  "notes": "Test5 fixes Runtime module export for comments/playlist detail, rebuilds the category hub with official image cards and Chinese labels, adds a dedicated search page, improves detail creator avatars, and changes comment/local/online actions to icon_small_3."
+}
