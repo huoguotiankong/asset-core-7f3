@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 20:50",
+  "updatedAt": "2026-08-23 20:52",
   "channels": [
     {
       "channel": "stable",
@@ -32,12 +32,12 @@
       "targetVersion": "3.5.5",
       "build": 388,
       "displayVersion": "Test 3.5.5-rc2 · Build 388 · Icon Delivery 1.1 · Updater 2.0.3",
-      "path": "apps/tools/rule-repo/rule_repo_test_v133.txt",
+      "path": "apps/tools/rule-repo/rule_repo_test_v134.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "完整统一程序/版本/底栏图标 CDN 交付，并修复测试版更新页被 jsDelivr 旧指针误判为最新的问题",
-      "highlights": ["程序卡与版本卡 Raw 自动转 jsDelivr", "底部五栏统一 CDN", "test/latest 指针 GitHub API 优先", "新 Shell v1.0.33 / Bootstrap v1.0.32"],
+      "desc": "图标 CDN 统一交付 + 更新元数据 GitHub API 优先；Fresh Shell 使用不可变 commit Bootstrap",
+      "highlights": ["程序卡与版本卡 Raw 自动转 jsDelivr", "底部五栏统一 CDN", "test/latest 指针 GitHub API 优先", "Shell v1.0.34 / Bootstrap v1.0.33 固定 commit"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
