@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha5",
-  "build": 10005,
-  "shellVersion": "8.4.0-test",
+  "version": "1.0.0-alpha6",
+  "build": 10006,
+  "shellVersion": "8.5.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha5/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha6/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha5 候选。Alpha4 已实机确认 decode 返回标准 AES-128 M3U8，key 与 TS 地址均含短时 auth_key；Alpha5 转为 #noPre# 实时解码 + 点击时写入原样本地签名索引，避免海阔默认预加载把稳定 decode URL 对应的动态签名内容提前缓存到过期。漫画 chapterInfo 已实机 GET HTTP200/code200/encData 成功，Alpha5 只维修解密后图片解析/原图渲染，正文不再复用封面 _480。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha6 候选。Alpha5 实机确认漫画正文链已经恢复、视频 decode 返回标准 AES-128 HLS 且 Key 可访问，但手写 file:// 本地索引与 noPre 仍不可播。Alpha6 改为官方 cacheM3u8 原生缓存合同并保留其特殊返回 URL；漫画阅读优化顶部章节信息/上下话导航，同时给漫画 Station 的对象 ID 增加数字 stationId 映射和分页兜底。正式 Stable 0.4.9 继续冻结。"
 }
