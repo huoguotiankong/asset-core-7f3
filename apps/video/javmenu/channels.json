@@ -3,34 +3,34 @@
   "id": "javmenu",
   "name": "JavMenu",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-24 00:12",
-  "cloudSnapshot": "apps/video/javmenu/channels_v2_b10102.json",
+  "updatedAt": "2026-08-24 00:40",
+  "cloudSnapshot": "apps/video/javmenu/channels_v3_b10103.json",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "javmenu-test",
       "name": "JavMenu",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/javmenu/javmenu_remote_test_v3_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-24",
       "recommended": true,
-      "desc": "JavMenu Test2 为首轮实机修复版：修复仓库/小程序图标、首页错误封面与 watermark 文本、发现页重复导航、女优榜空页、详情演员/标签误识别，并继续保留原站播放与 Shared JAV Playback。",
+      "desc": "JavMenu Test3 为 Test2 解析回归的恢复版：不再锁死 .video-list-item，恢复真实详情链接广覆盖识别；同一影片多个链接合并后择优取标题/封面，主动过滤 watermark/logo/loading；保留 Test2 已修复的图标、分类、女优、详情演员/标签与试看媒体过滤。",
       "highlights": [
-        "仓库自有 JavMenu / MissAV / Jable 图标",
-        "影片列表锁定 .video-list-item",
-        "有码 / 无码 / FC2 / 国产 / 欧美 / 动画分类分组",
-        "日榜 / 周榜 / 月榜 / 女优榜独立路由",
-        "女优榜人物索引 → 人物作品页",
-        "详情演员仅识别 /actor/",
-        "详情标签过滤全站导航污染",
-        "站内播放排除预览媒体",
-        "javmenu.com / javmenu.org 请求回退"
+        "冻结 Test2 单选择器回归",
+        "影片详情链接多结构识别",
+        "同影片重复 Anchor 合并",
+        "多图片 / srcset / background-image 择优封面",
+        "watermark / logo / loading 过滤",
+        "保留 Test2 分类与女优页",
+        "保留演员 / 标签语义过滤",
+        "保留正式播放与试看隔离",
+        "解析诊断增加 detailAnchors / images 统计"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10102"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10103"
     }
   ]
 }
