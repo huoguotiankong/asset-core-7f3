@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.7",
-  "build": 10107,
-  "shellVersion": "1.0.0-test.7",
-  "shellRuleVersion": 2026082307,
+  "version": "0.1.0-test.8",
+  "build": 10108,
+  "shellVersion": "1.0.0-test.8",
+  "shellRuleVersion": 2026082308,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.7/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v7_b10107.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.8/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v8_b10108.txt",
   "updatedAt": "2026-08-23",
-  "notes": "修复 Test6 两个跨程序已记录但再次回归的问题：同级小分类切换改为 putMyVar + refreshPage(false)，不再反复压入 madouList 页面；详情 Primary Play 与收藏/简介分层，播放点击不再重新加载 Bootstrap 和详情 HTML，直链直接交播放器，需嗅探时直接 video:// 并使用资源拦截、媒体规则和 cacheM3u8 降低启动开销。"
+  "notes": "Test8 美化影片详情：横向封面改为全宽 Hero，移除源站固定简介文案，只保留标题、日期/时长、播放、标签、推荐和本地收藏。播放新增结构化免嗅解析链：详情 HTML 直链 → iframe/player 页面 → 一层嵌套 player → 8 分钟小型媒体缓存；命中后直接把真实 M3U8/MP4 交给播放器，只有未命中时才保留 video:// 兼容兜底。"
 }
