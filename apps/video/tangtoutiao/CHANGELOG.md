@@ -1,5 +1,33 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.10 / Build 10110 — 2026-08-23
+
+状态：**Test9 架构修正版，仍为 Test；禁止晋级 Stable。**
+
+### Test9 实机事实
+- 用户明确反馈 Test9 “都不行”。关键诊断不是单纯接口失败，而是直接证明了 Test9 两个实现层错误。
+- 图片诊断在 Test9 页面打开后仍是 `ttt_last_image_policy.mode=direct-public-image`。Test9 虽然把导出的 `C.imageUrl` 改成了带 Header 的实现，但 Test8 的 `item()/detailItem()` 等函数在创建时已经闭包绑定旧私有 `imageUrl()`；后续给导出对象换同名函数不会改写这些闭包。因此实际视频卡、详情、漫画/排行仍可能走 Test8 老图片链。
+- 播放诊断出现 `https://yd-long.utxxds.cn/https://upload.ycomesc.live/...` 这类包装 URL，`ttt_last_source_probe` 却记录 `mode=direct / duration=null`。原因是 Test9 仅按 `.m3u8` 后缀判断 HLS；无后缀的包装 HLS 被直接当普通媒体 URL，绕开了解密、M3U8 检查和时长校验。
+- APK `VideoDetailPlayerActivity.v6()` 已确认原 APP 直接把 `source_240` 交给播放器 DataSource，不依赖 URL 文件后缀判断媒体类型。因此海阔端也不应把“有没有 .m3u8”作为播放链分流的唯一条件。
+- 漫画动态分类与 `construct list[30]`、403 条精选模型、匿名会话与启动配置仍然成立，本轮不重写这些已验证协议。
+
+### Test10 修改
+- **Core 完整重建**：不再通过 Test9 的 `Core Patch` 覆盖导出函数。新 `TangTouTiaoCoreV018` 重新定义 `item / detailItem / normalize / comicList / rankCreators`，这些函数内部统一闭包到 Test10 自己的 `imageUrl()`。
+- **图片统一恢复官方 helper 合同**：所有 HTTP 图片统一使用 `$(url, headers).image(...)`；回调调用既有 `ImageAdapter.decrypt(input)`。ImageAdapter 会先检查 JPEG/PNG/GIF/WebP/BMP magic，正常明文图片直接原样返回，只有非图片字节才尝试 legacy AES-CFB / AES-CBC。新的策略诊断应为 `helper-all`，不应再出现 Test8 的 `direct-public-image`。
+- **媒体类型从“后缀判断”升级为“响应探测”**：先通过 Header/Content-Type、URL 包装形态和受约束 body 规则判断是 HLS、MP4/视频直链还是未知媒体；无 `.m3u8` 后缀也允许进入 HLS 解密链。
+- **包装 URL 双候选**：对 `https://host/https://real-host/...` 形态同时尝试服务器下发的外层 URL与内嵌的原始绝对 URL；诊断新增 `variant=api-source / inner-source`。
+- **HLS 链保持结构化处理**：明文 `#EXTM3U` 直接使用；否则按 `player_cfg.dekey` 做 AES-CFB 解密；master 继续检查 child playlist；最终走 `fixM3u8 + startProxyServer`。
+- **完整性校验继续保留**：解析出的 HLS `#EXTINF` 时长与详情标称时长比较，明显不完整的试看/占位源继续拒绝并自动尝试其它清晰度/原始/预览。
+- **短视频交互保留**：继续沿用 Test9 Pages，短视频列表点击卡片直接播放，不进二级详情。通过 Test10 `compat.js` 在 Pages 初始化前将 `TangTouTiaoCoreV017` 映射到重建后的 `TangTouTiaoCoreV018`，避免复制整套页面代码。
+- Release / Bootstrap / Shell 全部派生为不可变 Test10 / Build10110；Shell rule version `2026082311`。
+
+### Test10 实机验收
+1. 刷新并重新导入 Test10 后打开首页。`ttt_last_image_policy` 应更新为 `helper-all`；如果仍是 `direct-public-image`，说明当前手机没有真正运行 Build10110 或运行时缓存未切换。
+2. 若封面仍灰，提供 `ttt_last_image_policy + ttt_last_image_diag`。这次 `ttt_last_image_diag` 应能直接说明 helper 是否收到明文图片、解密后是否为图片以及输入/输出字节长度。
+3. 点一个短视频，应直接进入播放解析；若失败提供 `ttt_last_source_probe`。重点看 `variant/kind/status/type/length/duration/expected/error`。
+4. 点一个长视频；对无 `.m3u8` 后缀或 `yd-long/.../https://...` 包装地址，诊断不应再简单出现 `mode=direct`。应看到 `kind=hls` 或明确的 Header/类型错误。
+5. 漫画 12 分类 → 动态 `api_list/params_list` → `list[30]`、创作者排行榜不能因本轮 Core 重建退化。
+
 ## 0.1.0-test.9 / Build 10109 — 2026-08-23
 
 状态：**Test8 实机精修版，仍为 Test；禁止晋级 Stable。**
