@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "0.6.0-alpha18",
-  "build": 169,
-  "shellVersion": "7.4.0-test",
+  "version": "1.0.0-alpha1",
+  "build": 10001,
+  "shellVersion": "8.0.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/0.6.0-alpha18/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha1/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Alpha18 候选在 Alpha17 设备证据链基础上补齐当前实机已经确认有效的 path=jpd/...m3u8 Seed。通用 path/url 只有匹配 m3u8/mp4/jpc/jpd 等媒体形态才作为播放候选，防止误取封面 path；远程 decode URL 直接交播放器，不走 Alpha16 已出现 file:/// 失败的 cacheM3u8。本版保留 A17 jhimage→cdn.ukaim.com、短视频30条消费链和漫画显式路由方案，小说/有声 POST-first 不改。待实机回归后才允许晋级 Stable。"
+  "notes": "Clean Rewrite Alpha1 候选。完全独立于旧 0.6.0 Alpha 补丁活动链，重新建立 APP 1.9.7 协议、内容 Provider、媒体/图片 Adapter 与产品 UI。Stable 0.4.9 冻结不动；本候选只有在首页/分类/搜索/视频播放/短视频/漫画/小说有声/社区及返回栈完成海阔实机回归后才允许晋级。"
 }
