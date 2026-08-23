@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.9",
-  "build": 10109,
-  "shellVersion": "1.0.0-test.9",
-  "shellRuleVersion": 2026082309,
+  "version": "0.1.0-test.10",
+  "build": 10110,
+  "shellVersion": "1.0.0-test.10",
+  "shellRuleVersion": 2026082310,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.9/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v9_b10109.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.10/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v10_b10110.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test9 修复 Test8 性能回归：详情页严格只做一次详情请求，不再同步追 iframe/player/nested-player，所以进入详情不会被多次 6.5 秒请求阻塞。播放优先使用详情 HTML 已存在的 M3U8/MP4；没有直链时只加载识别出的播放器 iframe/player 页面，通过 webRule 每 250ms 读取 video.currentSrc/source 和已加载资源中的 m3u8/mp4，并屏蔽图片与广告资源。当前属于快速定向浏览器解析，尚未冒充已完成纯 API 免嗅。"
+  "notes": "Test10 性能重构：活动 Release 从 Test9 的 9 层补丁缩减为 Core + Runtime + 单一 Performance Runtime，减少二级页重复模块装载。分类层级改成小型结构化索引持久缓存，切换同组分类不再重新请求首页；最近 6 个分类保存最多 30 张解析后卡片，20 分钟内回切直接本地渲染。列表卡把标题/封面/摘要作为 seed 传给详情，因此正常影片详情首屏默认零网络请求；标签与相关推荐改为用户主动加载。所有热路径网络请求采用单次 6.5 秒预算，不再 fetch→request→WebView 连续兜底拖住页面。"
 }
