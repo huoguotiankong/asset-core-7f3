@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.9",
-  "build": 10109,
-  "shellVersion": "1.0.0-test.9",
-  "shellRuleVersion": 2026082310,
+  "version": "0.1.0-test.10",
+  "build": 10110,
+  "shellVersion": "1.0.0-test.10",
+  "shellRuleVersion": 2026082311,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.9/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v9_b10109.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.10/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v10_b10110.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test8 实机继续精修：所有视频封面仍灰，诊断确认 Test8 对 picx JPEG 走 direct-public-image 丢失海阔图片 Header；长视频 19:34 的 source_240 预检仅 57 秒却被旧阈值误判有效；短视频可播且用户明确要求列表直接播放。Test9 改为 picx 标准图使用 @headers 注入 UA/Accept；播放同时校验标称时长与实际 EXTINF 时长并增加 source_origin/preview fallback；短视频卡片直接播放；详情 UI 收敛。"
+  "notes": "根据 Test9 实机继续修复：Test9 Core Patch 只覆盖导出函数，item/detail 等闭包仍执行 Test8 旧 imageUrl，导致诊断仍出现 direct-public-image；播放又把无 .m3u8 后缀的 yd-long 包装 HLS误判为 direct。Test10 完整重建 Core，所有图片统一走 image helper + ImageAdapter；媒体先探响应类型/包装形态，支持外层包装 URL 与内层原始 URL 两套候选，无后缀 HLS同样解密/代理；短视频继续列表直接播放。"
 }
