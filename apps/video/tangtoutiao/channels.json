@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 14:55",
+  "updatedAt": "2026-08-23 15:21",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.18","build":10118,
-      "displayVersion":"Test 0.1.0 · APP Short & Classification 18","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v18_b10118.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test17 实机确认顶部分类缓存生效，但 PWA 短视频 source_240 仍只有 2–3 秒。本轮继续冻结已正常的封面、免费长视频和官方试看，短视频改为优先原 APP /api/MvList/smallVideoByTag 精确参数 tag/page/limit，PWA 仅做兜底；同时开始补齐内容频道，第一阶段接入真实视频分类、创作者、图集、小说、有声、合集、话题、求片、粉丝团等页面。",
-      "highlights":["保持 Test16 已实机恢复的全部封面","保持 Test10/Test15 已实机通过的免费长视频与官方试看播放链","短视频优先原 APP smallVideoByTag 精确参数，不再首选 PWA 2–3 秒源","保留推荐/长视频 5 分钟缓存与短视频 3 分钟缓存","视频分类恢复 getStyle → MvList/style 精确 id/page/size/orderBy 参数链","新增创作者、图集、小说、有声、合集、话题、求片、粉丝团真实接口页面","漫画、社区、排行榜继续复用现有链"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.19","build":10119,
+      "displayVersion":"Test 0.1.0 · Dependency Hotfix 19","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v19_b10119.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test19 只修 Test18 的启动依赖链：Test18 pages_patch.js 继承 TangTouTiaoPagesV025，但 Release 漏载 Test17 pages_patch.js，导致启动即 ReferenceError。现已在 Test18 pages 之前恢复 Test17 页面基座；Test18 的 APP 短视频 Provider、分类中心第一阶段、封面、免费长视频和官方试看逻辑全部保持不变。",
+      "highlights":["修复 TangTouTiaoPagesV025 未定义导致的启动崩溃","Release 显式恢复 Test17 pages_patch.js → Test18 pages_patch.js 依赖顺序","不修改 Test18 短视频 Provider 与分类中心业务逻辑","不修改 Test16 封面解密基线","不修改 Test10/Test15 长视频与官方试看播放链","Test18 完整保留为可回退不可变版本"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
