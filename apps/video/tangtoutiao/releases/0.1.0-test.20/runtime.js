@@ -1,0 +1,3 @@
+/* 汤头条 0.1.0-test.20 Runtime / preserves Test19 playback and upgrades content pages */
+var TangTouTiaoRuntimeV019=TangTouTiaoRemoteRuntime;
+var TangTouTiaoRemoteRuntime=(function(){var instance=null;function module(){if(instance)return instance;if(typeof TangTouTiaoPagesV027!=='object')throw new Error('汤头条 Test20 页面模块未加载');var base=TangTouTiaoRuntimeV019.module(),m={};for(var k in base)if(base.hasOwnProperty(k))m[k]=base[k];m.version='0.1.0-test.20';m.build=10120;m.home=TangTouTiaoPagesV027.home;m.channels=TangTouTiaoPagesV027.channels;m.channel=TangTouTiaoPagesV027.channel;m.community=TangTouTiaoPagesV027.community;m.rank=TangTouTiaoPagesV027.rank;instance=m;return m;}return{version:'0.1.0-test.20',build:10120,module:module};})();
