@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha8",
-  "build": 10008,
-  "shellVersion": "8.7.0-test",
+  "version": "1.0.0-alpha9",
+  "build": 10009,
+  "shellVersion": "8.8.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha8/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha9/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha8 候选。Alpha7 已证实 Stable Header/cacheM3u8 完整移植仍不可播，Alpha8 转而验证此前一直被 seed 短路的 can/watch 会话握手，并把 API 索引 Header 与 CDN 分片 Header 解耦；首 Key/TS 会分别探测无头、UA 和 API Header，必要时对 image/png 分片启用官方 PNG HLS 代理。漫画在 fullTheme 上叠加 immersiveTheme，目标是彻底去掉顶部状态栏白区，只保留连续正文图片。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha9 候选。Alpha8 已把播放故障明确定位到签名 CDN 首 TS HTTP403；Alpha9 围绕 can/watch 的 videoUrl/playPath/previewUrl 与 APK 原生 m3u8/play 路由做自动矩阵探测，只有真实分片 2xx 才进入播放器，同时记录 403 body 与 Cookie/jhg/H5/APP/Range 组合。漫画首图对白边做源图级裁剪，不再继续误调 fullTheme/immersiveTheme。正式 Stable 0.4.9 继续冻结。"
 }
