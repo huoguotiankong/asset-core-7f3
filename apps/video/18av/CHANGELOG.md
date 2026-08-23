@@ -1,5 +1,24 @@
 # 18AV CHANGELOG
 
+## 0.1.0-test.4 / Build 10104 — 2026-08-24
+
+状态：**Test3 实机启动事故紧急修复版；仍为 Test，禁止晋级 Stable。**
+
+### Test3 实机事故
+- 用户导入 Test3 后首页尚未进入业务解析即报错：`模块 core 全部镜像加载失败：1:最大值50000太大 | 2:最大值50000太大 | 3:最大值50000太大`。
+- GitHub 实际文件大小回读确认 `core.js` 只有 21690 bytes、`runtime.js` 只有 17510 bytes，因此并不是 Remote Manager 的模块体积超限。
+- 真正根因是 Test3 为解析漫画/写真脚本数组加入正则 `([\s\S]{0,250000}?)`。海阔当前 Rhino/正则实现的重复量词上限为 50000，`{0,250000}` 在模块 `require()` 执行时即编译失败；Remote Manager 捕获模块执行异常后表现为三个镜像全部“加载失败”。
+
+### Test4 修复
+- Test3 Release 保持不可变，不直接覆盖旧 `core.js`。
+- 新增独立 `hotfix_bundle.js`：从不可变 Test3 Release 读取 core/runtime 源码，在执行前把非法 `{0,250000}` 改为无固定巨大上限的惰性匹配 `*?`，再切换 Test4 版本/Build/Bootstrap 身份后加载。
+- Test3 已完成的 `av18_*` 路由隔离、详情页重构、独立播放线路、`fc_search`、媒体评分、`Large_cgurl` 图片链、35 张分页阅读等功能全部保留。
+- 新增固定踩坑：海阔/Rhino 正则量词不要使用超过 50000 的上限；大块 HTML/JS 区域应使用惰性匹配配合业务边界/后续长度限制，而不是 `{0,100000+}`。
+
+### Test4 必测
+1. 先确认首页能正常打开，不再出现“最大值50000太大”。
+2. 再继续执行 Test3 原验收：中文字幕二级页、漫画/写真/小说、`IPZZ-774` 搜索与详情、播放线路。
+
 ## 0.1.0-test.3 / Build 10103 — 2026-08-24
 
 状态：**首轮海阔实机回归修复版；仍为 Test，禁止晋级 Stable。**
@@ -35,7 +54,7 @@
 - 修复 Remote Manager 2.0.4 身份契约：Bootstrap / Release / `test.json` 统一使用 `id=18av`，避免 `pointerOk()` 严格校验导致活动 Test 指针失效。
 - 修复首页快捷入口：`影片类别库` 不再误进普通 Feed，而是直接进入独立 `av18Genres` 大类库页面。
 - **云仓导入事故修复**：用户实机进入“我的规则仓库 → 18AV”后显示“版本数量 0 个 / 可用版本 0 个”，导致无法导入。根因是首版 `channels.json` 使用旧式对象结构 `channels:{test:{...}}`，而当前规则仓库多版本解析器要求 `schema:4` 且 `channels:[...]` 数组，每个版本必须提供 `channel/label/version/build/path/mode` 等字段。现已改为与当前 Pornhub 等正常程序一致的 schema 4 数组结构，Test2 路径固定为 `apps/video/18av/18av_remote_test_v2_b10102.txt`。
-- 云仓卡片、registry 和版本中心必须同步广告同一活动 Test；以后新程序首次登记前必须实际用当前规则仓库 schema 生成 `channels.json`，不能从旧程序记忆猜格式。
+- 云仓卡片、registry 和版本中心必须同步同一活动 Test；以后新程序首次登记前必须实际用当前规则仓库 schema 生成 `channels.json`，不能从旧程序记忆猜格式。
 - Test1 的站点协议、四类 Adapter、UI、内容安全过滤与实机验收清单全部继承。
 
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
