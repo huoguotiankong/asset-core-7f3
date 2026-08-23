@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan-test",
+  "name": "溏心次元",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/tangxincyuan/releases/0.1.0-test.2/core.js"},
+    {"name":"runtime","path":"apps/video/tangxincyuan/releases/0.1.0-test.2/runtime.js"}
+  ],
+  "verify": {"global":"TxcyRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes": "Test2 fixes remote dependency delivery on devices that cannot load raw.githubusercontent.com by switching Shell, Bootstrap, manager and release module delivery to jsDelivr. Business parser remains based on the immutable Test1 baseline."
+}
