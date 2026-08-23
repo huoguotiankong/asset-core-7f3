@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "51chigua-test",
+  "name": "51吃瓜",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082301,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/51chigua/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "首个自用远程测试版：原生首页/分类/搜索/图文详情；动态域名探测；文章图片与媒体源解析；视频直链/iframe 优先、video:// 兜底；本地收藏/历史；静态评论解析和设置诊断。"
+}
