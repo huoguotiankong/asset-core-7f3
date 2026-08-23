@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "911baoliao",
+  "name": "911爆料",
+  "default": "test",
+  "channels": {
+    "test": {
+      "version": "0.1.0-test.1",
+      "build": 10101,
+      "metadata": "apps/video/911baoliao/test.json",
+      "release": "apps/video/911baoliao/releases/0.1.0-test.1/release.json",
+      "rule": "apps/video/911baoliao/911baoliao_remote_test_v1_b10101.txt"
+    }
+  }
+}
