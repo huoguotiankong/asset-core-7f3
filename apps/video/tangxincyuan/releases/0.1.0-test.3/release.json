@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan-test",
+  "name": "溏心次元",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"coreBase","path":"apps/video/tangxincyuan/releases/0.1.0-test.1/core.js"},
+    {"name":"runtimeBase","path":"apps/video/tangxincyuan/releases/0.1.0-test.1/runtime.js"},
+    {"name":"corePatch3","path":"apps/video/tangxincyuan/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"runtimePatch3","path":"apps/video/tangxincyuan/releases/0.1.0-test.3/runtime_patch.js"}
+  ],
+  "verify": {"global":"TxcyRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/tangxincyuan/releases/0.1.0-test.2/release.json"},
+  "notes": "Test3 fixes same-rule Chinese page routing, adds relaxed HTML acceptance and fallback card parsing, and makes request diagnostics visible directly on the home/settings pages."
+}
