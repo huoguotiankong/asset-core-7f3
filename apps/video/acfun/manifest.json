@@ -20,20 +20,20 @@
   "testShellVersion": "9.0.0-test",
   "testBootstrap": "apps/video/acfun/bootstrap_test_v090.js",
   "testRule": "apps/video/acfun/acfun_remote_test_v090.txt",
-  "webVersion": "1.1.0-web2",
-  "webBuild": 11002,
-  "webShellVersion": "1.1.0-web-native",
-  "webBootstrap": "apps/video/acfun/bootstrap_web_v110.js",
-  "webRule": "apps/video/acfun/acfun_remote_web_v110.txt",
-  "webRelease": "apps/video/acfun/releases/1.1.0-web2/release.json",
+  "webVersion": "1.2.0-web3",
+  "webBuild": 11003,
+  "webShellVersion": "1.2.0-web-native",
+  "webBootstrap": "apps/video/acfun/bootstrap_web_v120.js",
+  "webRule": "apps/video/acfun/acfun_remote_web_v120.txt",
+  "webRelease": "apps/video/acfun/releases/1.2.0-web3/release.json",
   "imageDecoderPage": "acfunImageDecoder",
   "webImageDecoderPage": "acfun_web_image_decoder",
   "comicCropPage": "acfunComicCrop",
   "migration": {
-    "stage": "clean-rewrite-alpha11-plus-native-web-fallback-web2",
+    "stage": "clean-rewrite-alpha11-plus-native-web-fallback-web3",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149，Clean Rewrite Test 继续保留 Alpha11 用于原生协议研究。Web1 被实机确认产品方向错误：整站 X5 只是网页壳，不符合海阔原生小程序目标。Web2 改为海阔原生首页/分类/专题/搜索/详情/收藏/评论，数据层复用当前已可工作的 ACFun Provider；仅最终视频播放和漫画阅读进入 H5 Bridge，由网站前端自行完成播放授权和阅读渲染。原始整站只留作设置/诊断备用，不再作为主界面。"
+    "note": "Stable 继续冻结 0.4.9 Build149，Clean Rewrite Test 继续保留 Alpha11 用于原生协议研究。Web2 实机确认主界面已经原生化，但封面仍为空、媒体 Bridge 因持久化到纯网页线路而出现空白终端。Web3 不再依赖特殊规则名子页解码器，封面直接在 ImageAdapter 内执行已验证的前100字节 XOR 并启用全新缓存；媒体终端固定到此前 Web1 实机能加载的 APP 风格 H5，并针对 Flutter Web 的 flt-semantics/aria-label 自动搜索标题、点击目标、播放或章节。终端页面只保留单个 list&&screen X5 组件。"
   }
 }
