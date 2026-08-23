@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "web",
+  "id": "acfun-web",
+  "name": "ACFun · 网页版",
+  "version": "1.0.0-web1",
+  "build": 11001,
+  "shellVersion": "1.0.0-web",
+  "managerVersion": "2.0.1",
+  "release": "apps/video/acfun/releases/1.0.0-web1/release.json",
+  "rule": "apps/video/acfun/acfun_remote_web_v100.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "独立 H5 兜底通道。默认直接用 X5 WebView 打开 APP 风格 H5：https://ac001dhzh5.d24m42dh.work/home；可一键切换纯网页 https://ac6688.a10hkxu0.work/，并支持手动粘贴最新网址。视频、漫画、搜索、账号等交由网站原生前端处理，完全绕开当前 Clean Rewrite 的 HLS auth_key 与漫画图片渲染链。与 Stable/Test 的 Remote Manager 状态隔离。"
+}
