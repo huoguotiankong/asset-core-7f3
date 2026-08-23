@@ -1,14 +1,32 @@
 {
-  "schema": 1,
+  "schema": 4,
   "id": "18av",
   "name": "18AV",
-  "default": "test",
-  "channels": {
-    "test": {
-      "metadata": "apps/video/18av/test.json",
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-24 00:02",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "18av-test",
+      "name": "18AV",
       "version": "0.1.0-test.2",
       "build": 10102,
-      "rule": "apps/video/18av/18av_remote_test_v2_b10102.txt"
+      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
+      "path": "apps/video/18av/18av_remote_test_v2_b10102.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-24",
+      "recommended": true,
+      "desc": "18AV 首轮实机测试版。视频、漫画、写真、小说四类 Adapter 分离；Test2 已修复 Remote Manager 身份契约和影片类别库入口。尚未晋级 Stable。",
+      "highlights": [
+        "视频 / 漫画 / 写真 / 小说四类内容隔离",
+        "官网主分类、子分类与影片类别库",
+        "漫画与写真长图阅读",
+        "小说文本阅读与字号调节",
+        "本地收藏、历史、搜索与诊断",
+        "Remote Manager 2.0.4 Test 更新链"
+      ],
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/18av/assets/icon.svg?v=10102"
     }
-  }
+  ]
 }
