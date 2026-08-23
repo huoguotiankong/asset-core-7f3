@@ -1,5 +1,53 @@
 # XVideos CHANGELOG
 
+## 0.1.0-test.4 / Build 10104 — 2026-08-23
+
+### 恢复基线
+- 新对话恢复时确认 `asset-core-7f3@main` 当前真实活动测试版为 Test3 / Build10103；Test2 已由用户实机确认首页视频与搜索正常，Test3 已完成独立搜索、A-Z 分类、创作者主页、详情 UI、最高画质优先和 generic route 产品化。
+- Test4 不回退或重写 Test2 已验证的 `frame-block + video.* token` 列表解析链，也不破坏 Test3 的搜索/分类/详情/播放产品层，只做增量补强。
+
+### 账号会话硬化
+- 根据 2026-08-23 `INCIDENT_BROWSER_COOKIE_CONTAINER_AND_AUTH_CACHE_20260823.md` 的跨程序实机结论，同步修复 XVideos 账号链：网页登录继续固定使用 `x5://`，原生请求优先读取当前 live X5 Cookie，而不是长期只依赖上次保存值。
+- 新增 `activeCookie()` / `authFingerprint()`：私有请求缓存 key 从简单 `auth:<url>` 升级为 `auth:<session fingerprint>:<url>`，防止切换官网账号后复用上一个账号的历史/喜欢/稍后看 HTML。
+- 会话指纹只保存 Cookie 的不可逆 hash/长度组合，不记录新的明文秘密；退出小程序会话时同步清理本程序保存的 Cookie、账号名和会话指纹，但不主动删除 X5 官网 Cookie。
+- `detectAccountName()` 收紧到账号/当前用户上下文，不再把整页任意 `/profiles/<slug>` 链接当作当前账号。
+- 登录页/账号页直接显示当前会话指纹，方便实机核对“网页账号、原生私有列表、当前会话”是否同一套状态。
+
+### 私有账号列表
+- `accountVideos()` 改为优先定位 `mozaique / video-list / videos-list / content-videos` 等主内容区域，再解析 `frame-block`，减少推荐区、导航区或其它公共视频混入喜欢/稍后看/历史。
+- 私有列表仍以真实官网返回为唯一事实源；解析不到时显示明确空态和官网入口，不制造伪账号内容。
+
+### 首页连续浏览
+- Test3 首页固定 `homeVideos(mode,1)`，只能长期停留第一页；Test4 改为读取 `MY_PAGE`，让首页视频 Feed 跟随海阔分页继续加载。
+- 首页 Workspace、排序按钮和“更多”工具只在第一页渲染，后续页只追加视频卡，避免每一页重复工具区。
+- 登录后新增明确“推荐”筛选态，对应 `home` 模式；解决 Test3 登录默认 mode=`home` 但界面没有任何按钮显示选中的问题。
+
+### 评论与本地数据
+- 评论解析在旧安全 parser 前增加更宽但仍受 comment 容器约束的适配层：支持 `div/li/article` comment 节点、统一 Creator Path Adapter 和更多 `comment-user/comment-content` 类名；无法恢复真实正文时继续回退旧 parser，不伪造评论。
+- 本地收藏与本地足迹新增“清空”动作；只修改本机对应列表，不触碰官网账号内容。
+
+### Shell / Settings
+- 新增不可变 `releases/0.1.0-test.4/`，在 Test3 模块之后叠加 `core_account_patch.js + ui_account_patch.js`。
+- 新 Bootstrap：`bootstrap_test_v4_b10104.js`，`minBuild/defaultRelease` 固定 Build10104。
+- 新 Shell：`xvideos_remote_test_v4_b10104.txt`，规则数值版本 `2026082304`，所有入口显式使用 Test4 Bootstrap / Build10104。
+- Settings 的检查更新、安装更新、回退、缓存清理等 lazyRule 全部切到当前 Build10104，不再继续调用 Test1 的 Build10101 Bootstrap。
+
+### 静态门禁
+- `core_account_patch.js`、`ui_account_patch.js`、`bootstrap_test_v4_b10104.js` 已执行 `node --check` 通过。
+- 新 Shell 的 `￥home_rule￥` 后 JSON 已本地解析通过。
+- Test4 只发布 Test，不建立 Stable；Test3 作为 previous release 保留。
+
+### Test4 实机回归重点
+1. 首页向下翻页是否能继续加载第 2 页及后续视频，而不重复 Workspace。
+2. 未登录时 Test2 已验证的视频卡与搜索是否保持正常。
+3. Test3 的独立搜索历史、热门+A-Z 分类、创作者主页、详情布局、最高画质优先是否无回退。
+4. X5 登录后首页是否出现并选中“推荐”；喜欢/稍后看/历史是否与官网同一账号一致。
+5. 若切换官网账号，重新同步后私有列表是否完全切换，不出现上一账号旧缓存。
+6. 评论页是否比 Test3 恢复更多真实正文；若仍为空，下一轮按实机 DOM 定向适配。
+7. 本地收藏/本地足迹清空是否只删除本机记录。
+
+---
+
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
 ### 第二轮实机结论
