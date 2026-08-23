@@ -1,5 +1,50 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.7 / Build 10107
+
+### 实机结果
+- Test6 已确认：影片详情能够正常打开，视频也能够播放，说明 1MB 私有存储恢复链和基础播放兜底已经有效。
+- 播放启动仍偏慢。当前无直链详情会在点击“立即播放”后再次加载 Bootstrap/Release、再次请求整页详情，然后才回退 `video://详情页`，存在明显重复工作。
+- 海阔原生播放器首屏出现“当前播放 + 立即播放 + 加入本地收藏 + 简介”等多余列表/操作面板。这与项目全局 `HIKER_APP_DEVELOPMENT_CAUTIONS.md` 的 Primary Play 约束冲突。
+- 内容列表顶部的同组小分类仍通过新的 `hiker://page/madouList?...` 切换。连续点击多个分类后返回栈不断增长，需要多次返回才能回首页。这与 `INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md` 的硬约束直接冲突。
+
+### 根因与责任边界
+- 这两个问题并不是“没记录”。项目文档此前已经明确规定：
+  - 同级 Tab/筛选/分类切换必须优先 `putMyVar / setItem → refreshPage(false)`，不得重复新建同功能页面。
+  - 详情 Primary Play 区只能放真实媒体任务；收藏、设置、简介等次操作必须与播放层分离，避免原生播放器把详情结果带成伪播放列表/操作面板。
+- Test6 的 `R.list()` 仍沿用了 Test5 的 sibling `C.page('madouList',...)` 实现；Test6 的 `R.detail()` 又把“立即播放 / 本地收藏 / 简介 section”连续放在 `text_1` 结果层，属于实现违反现有规范，而不是规范缺失。
+
+### Test7 修复
+- 新增 `navigation_playback_patch.js`，保留 Test6 详情存储恢复和分类/搜索基线，只覆盖列表同级导航与详情播放交付。
+- 内容页同组小分类：
+  - 当前页面使用独立 state key 保存 active URL/name；
+  - 点击 sibling chip 改为 `putMyVar → refreshPage(false)`；
+  - 不再构造新的 `madouList` 页面；
+  - 目标验收为连续切换 5 次后系统返回一次即可离开当前分类页。
+- 播放启动：
+  - 详情解析阶段已经发现直链时，播放按钮直接返回带 UA/Referer 的媒体 URL，不再点击后重新进入 Bootstrap 并二次请求详情。
+  - 详情阶段没有发现直链时，按钮直接使用 `video://详情页`，同样取消“点击后先重载 Runtime + 再 fetch 一次详情”的冗余链。
+  - `video://` 增加图片/广告资源 `blockRules`、`.m3u8/.mp4` `videoRules`、明显广告 `videoExcludeRules` 和 `cacheM3u8:true`，减少网页嗅探启动阶段的无关资源工作量。
+- 播放 UI：
+  - Primary Play 改为独立 `text_center_1`；
+  - 播放项后立即插入分隔线；
+  - 简介改用 `rich_text/long_text` 信息层；
+  - 本地收藏与原站入口统一下沉到详情底部，不再和播放同层。
+- 继续保留 Test6 的历史/收藏配额保护，并在 Test7 详情进入时继续精确清理当前 URL 的 Test1/Test3 legacy raw-HTML KV。
+
+### 发布门禁
+- `navigation_playback_patch.js` 已本地执行 `node --check` 通过。
+- `bootstrap_test_v7_b10107.js` 已本地执行 `node --check` 通过。
+- `release.json` 已执行 JSON 解析检查。
+- 新 Shell 规则 version 为 `2026082307`，Bootstrap `minBuild=10107`。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 已切到 Test7；云仓 revision 同步为 `202608231512`，itemCount 保持 12。
+
+### Test7 回归重点
+1. 打开详情后点击“立即播放”，比较 Test6 的 22% 等待阶段是否明显缩短。
+2. 播放器首屏不应再把“本地收藏 / 简介”等详情动作混入播放主列表；若海阔系统自身仍保留单媒体的“列表”按钮，再单独区分系统固定 UI 与规则结果污染。
+3. 进入任意小分类内容页，连续点击同组 5 个分类标签，再按一次系统返回；必须直接回到上一级，而不是逐个回退。
+4. 详情、分类、搜索、收藏和播放均不得回归 Test6 已恢复的 1MB/空搜索问题。
+
 ## 2026-08-23 · 0.1.0-test.6 / Build 10106
 
 ### 实机结果
