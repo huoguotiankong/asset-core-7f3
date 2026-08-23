@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.2",
-  "defaultBuild": 10102,
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "1.0.0-test.2",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt",
+  "defaultVersion": "0.1.0-test.3",
+  "defaultBuild": 10103,
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "1.0.0-test.3",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v3_b10103.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test2-response-adapter","note":"Test1 首轮实机截图确认协议有响应但列表未适配，并暴露原生组件 HTML 不解析；Test2 只修适配、诊断与 UI 兼容。"}
+  "migration": {"stage":"test3-apk-session-handshake","note":"Test2 实机明确返回 401 用户已过期；APK 复核确认首次启动统一 device_id/uuid，并由 getOpenAdsAndVersion 返回 AppConfigBean.token 后再进入内容链。Test3 恢复此匿名会话链。"}
 }
