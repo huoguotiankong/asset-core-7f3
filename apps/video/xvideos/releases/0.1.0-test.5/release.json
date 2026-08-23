@@ -6,7 +6,7 @@
   "version": "0.1.0-test.5",
   "build": 10105,
   "ref": "main",
-  "loader": "direct-immutable-rescue",
+  "loader": "direct-immutable-rescue-cdn",
   "modules": [
     {"name":"core","path":"apps/video/xvideos/releases/0.1.0-test.1/core.js"},
     {"name":"runtime","path":"apps/video/xvideos/releases/0.1.0-test.1/runtime.js"},
@@ -18,9 +18,10 @@
     {"name":"coreAccountPatch4","path":"apps/video/xvideos/releases/0.1.0-test.4/core_account_patch.js"},
     {"name":"uiAccountPatch4","path":"apps/video/xvideos/releases/0.1.0-test.4/ui_account_patch.js"},
     {"name":"coreRescuePatch5","path":"apps/video/xvideos/releases/0.1.0-test.5/core_rescue_patch.js"},
-    {"name":"uiRescuePatch5","path":"apps/video/xvideos/releases/0.1.0-test.5/ui_rescue_patch.js"}
+    {"name":"uiRescuePatch5","path":"apps/video/xvideos/releases/0.1.0-test.5/ui_rescue_patch.js"},
+    {"name":"transportPatch5","path":"apps/video/xvideos/releases/0.1.0-test.5/transport_patch.js"}
   ],
   "verify": {"global":"XVideosRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
   "previous": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/xvideos/releases/0.1.0-test.4/release.json"},
-  "notes": "Test5 is a private-KV rescue/product pass: direct immutable loader, file-backed local/account/search state, live X5 cookie only, no raw HTML setItem cache, /account login validation, decoded named HTML entities, Chinese category labels, two-column creator cards, strict performer filtering, textual detail statistics with action icons, and broader real-comment recovery."
+  "notes": "Test5 is a private-KV rescue/product pass: direct immutable jsDelivr loader, file-backed local/account/search state, live X5 cookie only, no raw HTML setItem cache, /account login validation, decoded named HTML entities, Chinese category labels, two-column creator cards, strict performer filtering, textual detail statistics with action icons, broader real-comment recovery, and detail-safe deferred localized tag learning."
 }
