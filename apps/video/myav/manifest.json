@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10110,
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
-  "testShellVersion": "1.0.0-test.10",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/video/myav/myav_remote_test_v10_b10110.txt",
+  "defaultVersion": "0.1.0-test.11",
+  "defaultBuild": 10111,
+  "testVersion": "0.1.0-test.11",
+  "testBuild": 10111,
+  "testShellVersion": "1.0.0-test.11",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v11_b10111.js",
+  "testRule": "apps/video/myav/myav_remote_test_v11_b10111.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"scoped-detail-full-filter-split-favorites-test10","note":"Test10 fixes polluted detail metadata, adds independent movie/actor favorite layouts, and uses the full user-verified Ttype=2 censored filter page. No Stable before device verification."}
+  "migration": {"stage":"persistent-full-filter-control-test11","note":"Test11 separates the filter-control source from result URLs, preserves active selections while forcing Ttype=2, and uses rendered DOM when raw HTML remains compact. No Stable before device verification."}
 }
