@@ -6,17 +6,17 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xvideos/test.json",
   "channels": "apps/video/xvideos/channels.json",
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "1.0.0-test.3",
-  "testBootstrap": "apps/video/xvideos/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/video/xvideos/xvideos_remote_test_v3_b10103.txt",
-  "testRelease": "apps/video/xvideos/releases/0.1.0-test.3/release.json",
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "1.0.0-test.4",
+  "testBootstrap": "apps/video/xvideos/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/video/xvideos/xvideos_remote_test_v4_b10104.txt",
+  "testRelease": "apps/video/xvideos/releases/0.1.0-test.4/release.json",
   "changelog": "apps/video/xvideos/CHANGELOG.md",
   "sourceSite": "https://www.xvideos.com/",
   "icon": "apps/video/xvideos/assets/brand.svg",
   "migration": {
-    "stage": "test3-product-pass",
-    "note": "Test3 builds on the real-device-successful Test2 video parser and focuses on search/category/creator/detail/playback product quality, highest-quality-first playback and generic-route Shell isolation."
+    "stage": "test4-account-session-hardening",
+    "note": "Test4 preserves the real-device-successful Test2 parser and Test3 product pass, while hardening X5 account session correctness, auth-cache isolation, private-list parsing and home pagination."
   }
 }
