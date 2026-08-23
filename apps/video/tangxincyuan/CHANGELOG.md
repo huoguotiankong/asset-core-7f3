@@ -4,14 +4,61 @@
 
 - App ID：`tangxincyuan`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.2` / Build `10102`
-- 当前 Shell：`1.0.0-test.3` / RuleVersion `2026082313`
-- 当前 Bootstrap：`bootstrap_test_v2_b10102.js`
-- 当前加载器：`cdn-direct-1.0`
+- 当前版本：`0.1.0-test.3` / Build `10103`
+- 当前 Shell：`1.0.0-test.4` / RuleVersion `2026082314`
+- 当前 Bootstrap：`bootstrap_test_v3_b10103.js`
+- 当前加载器：`cdn-direct-2.0`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 用户当前源站入口：`https://txcy-online.buzz/banshu/`
-- 当前没有 Stable；首轮真实 DOM / 图片 / 播放链仍需实机验证，禁止直接晋级 Stable。
-- 云端目录已同步到根 `manifest.json` revision `202608232035`，`manifest_meta.json` 同 revision，`itemCount=16`。
+- 当前没有 Stable；真实 DOM / 图片 / 搜索 / 播放链仍需继续实机验证，禁止直接晋级 Stable。
+
+## 0.1.0-test.3 / Build 10103 — 2026-08-23
+
+### Test2 实机结果
+
+Test2 已证明新的 jsDelivr CDN 启动链可以让程序正常进入首页，因此上一轮 `raw.githubusercontent.com` Bootstrap 获取失败已经越过；但用户当前实机截图同时暴露了两个新的明确问题：
+
+1. 点击分类、人物、收藏、历史等内部入口时，海阔提示：
+
+```text
+找不到“%E6%BA%8F%E5%BF%83%E6%AC%A1%E5%85%83”这个小程序
+```
+
+该百分号字符串解码后就是当前规则名“溏心次元”。
+2. 首页只能显示品牌卡、搜索和四个快捷入口，真实视频卡片仍为 0；快捷入口旧写法 `符号\n文字` 在当前组件上只稳定露出符号，文字几乎不可见。
+
+### 根因边界
+
+- 内部跳页是确定性路由 Bug：Test1 Core 的 Page Builder 使用 `rule=` + `encodeURIComponent(中文规则名)`，当前海阔把 `%E6...` 当成字面程序名查找，而没有还原成中文。项目已有同类事故 `docs/INCIDENT_CHINESE_RULE_ROUTE_ENCODING_20260823.md`，已验证同一小程序内部页应优先使用 `rule=&simple=true`。
+- 首页 0 卡片还不能直接归因为“网站没内容”。当前开发环境仍无法直接取得该站真实 DOM，Test1 的站点有效性判断和内容 URL 形态又偏严格，因此 Test3 先扩大可观测性并增加保守兜底 Parser，等待实机返回 HTML 长度、标题和摘要后再建立 txcy 专用 Adapter。
+
+### Test3 修复
+
+- 新建不可变 `0.1.0-test.3 / Build10103`，不覆盖 Test2。
+- Core Patch：
+  - `C.page()` 统一改为 `hiker://page/<path>?rule=&simple=true`；
+  - `C.ruleTitle()` 在同程序内部路由返回空值，连带修复旧搜索输入回调再次百分号编码中文规则名的问题；
+  - 业务参数仍独立 `encodeURIComponent()`；
+  - 新增 `txcy_fetch_diag_v3`，记录最近请求 URL、HTML 长度、网页标题、页面纯文本摘要、异常和 challenge 标记；
+  - 对已取得且看起来是正常 HTML、但未命中 Test1 品牌特征的页面允许 `ok-loose`，避免“页面其实拿到了却被严格校验丢弃”；
+  - Test1 严格卡片 Parser 返回 0 时，再使用“真实链接 + 图片 + 可用标题”的保守兜底解析，同时继续过滤分类/人物/工具路由和内容边界条目。
+- Runtime Patch：
+  - 首页四个快捷入口改成单行 `分类 / 人物 / 收藏 / 历史`，不再把可读文字压到第二行；
+  - 首页无内容时直接显示请求状态、HTML 长度、内容卡/分类/人物/导航计数、网页标题与页面摘要，不再要求先进入一个本身可能坏掉的诊断页；
+  - 分类页、人物页、搜索页空结果同样显示当前解析诊断；
+  - 设置页展示最近请求和 Core 诊断，并保留“打开当前网页”用于实机对照。
+- 新建 `bootstrap_test_v3_b10103.js`：独立 `txcy_cdn_state_v2`，最低恢复基线 Build10103，避免旧 Test2 状态把设备拉回错误路由版本。
+- 新建 `tangxincyuan_remote_test_v4_b10103.txt`，Shell RuleVersion 提升到 `2026082314`，所有页面入口统一加载 Test3 CDN Bootstrap。
+- `core_patch.js`、`runtime_patch.js`、Bootstrap 已在发布前通过 JavaScript 语法检查；Shell 使用完整规则结构并保持导入可见标签中性。
+
+### Test3 首轮实机验收
+
+Test3 的目标不是宣称已经完成站点适配，而是先把“内部页全部打不开”和“首页 0 卡却没有足够事实”这两个阻断点拆开。用户重新覆盖导入后优先确认：
+
+1. 分类 / 人物 / 收藏 / 历史 / 设置是否都能正常进入，不再出现 `%E6...` 规则名错误。
+2. 首页是否出现真实卡片；若仍为 0，直接截图首页底部“当前首页解析诊断”，其中应能看到 HTML 长度、网页标题和页面摘要。
+3. 若 HTML 长度正常，则下一版直接根据实机摘要/页面结构建立站点专用 DOM Adapter；若长度为 0 或出现 challenge/异常，则转向 Cookie/X5/请求 Header/动态入口层处理。
+4. 在首页与分类卡片恢复前，不开始猜播放协议，更不晋级 Stable。
 
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23
 
