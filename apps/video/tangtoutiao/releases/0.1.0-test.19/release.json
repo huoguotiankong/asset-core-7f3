@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.19",
+  "build": 10119,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {
+    "version": "0.1.0-test.18",
+    "build": 10118,
+    "release": "apps/video/tangtoutiao/releases/0.1.0-test.18/release.json"
+  },
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"imageLegacy","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/image.js"},
+    {"name":"coreBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compatBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/compat.js"},
+    {"name":"compatAdaptive","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/compat.js"},
+    {"name":"pwa","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pwa.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"compat15","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/compat.js"},
+    {"name":"playbackBridge15","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/playback_bridge.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.16/compat.js"},
+    {"name":"playbackBridge","path":"apps/video/tangtoutiao/releases/0.1.0-test.17/playback_bridge.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pagesAccess","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"pagesDual","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pages_patch.js"},
+    {"name":"pagesShort","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/pages_patch.js"},
+    {"name":"pagesLarge","path":"apps/video/tangtoutiao/releases/0.1.0-test.14/pages_patch.js"},
+    {"name":"pagesStablePlayback","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/pages_patch.js"},
+    {"name":"pagesImageUi","path":"apps/video/tangtoutiao/releases/0.1.0-test.16/pages_patch.js"},
+    {"name":"pagesFastTabs17","path":"apps/video/tangtoutiao/releases/0.1.0-test.17/pages_patch.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.18/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.19/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.19"},
+  "notes": "Test19 is a startup dependency-chain hotfix for Test18. Test18 pages_patch.js extends TangTouTiaoPagesV025 from Test17, but Test18 release.json omitted the Test17 pages_patch.js module, causing ReferenceError before business code ran. Test19 adds the immutable Test17 pages module before Test18 pages, changes no image/playback/provider/classification business logic, and keeps Test18 behavior otherwise identical."
+}
