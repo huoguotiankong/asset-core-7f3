@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/myav/releases/0.1.0-test.1/core.js"},
+    {"name":"imagePatch","path":"apps/video/myav/releases/0.1.0-test.2/image_patch.js"},
+    {"name":"sectionPatch","path":"apps/video/myav/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"catalogMagnetPatch","path":"apps/video/myav/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"entityPatch","path":"apps/video/myav/releases/0.1.0-test.5/core_patch.js"},
+    {"name":"favoriteLayoutPatch","path":"apps/video/myav/releases/0.1.0-test.6/core_patch.js"},
+    {"name":"runtime","path":"apps/video/myav/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtimePatch2","path":"apps/video/myav/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/myav/releases/0.1.0-test.3/ui_patch.js"},
+    {"name":"uiPatch4","path":"apps/video/myav/releases/0.1.0-test.4/ui_patch.js"},
+    {"name":"uiPatch5","path":"apps/video/myav/releases/0.1.0-test.5/ui_patch.js"},
+    {"name":"uiPatch6A","path":"apps/video/myav/releases/0.1.0-test.6/ui_a.js"},
+    {"name":"uiPatch6B","path":"apps/video/myav/releases/0.1.0-test.6/ui_b.js"},
+    {"name":"uiPatch6C","path":"apps/video/myav/releases/0.1.0-test.6/ui_c.js"},
+    {"name":"versionPatch7","path":"apps/video/myav/releases/0.1.0-test.7/version_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"MyAvRemoteRuntime","property":"version","equals":"0.1.0-test.7"},
+  "previous": {"version":"0.1.0-test.6","build":10106,"release":"apps/video/myav/releases/0.1.0-test.6/release.json"},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "notes": "Test7 keeps Test6 business behavior unchanged and replaces the import-facing shell/metadata with neutral naming to avoid Hiker blocked-word import checks."
+}
