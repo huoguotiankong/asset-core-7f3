@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.4",
-  "build": 10104,
-  "shellVersion": "1.0.0-test.4",
-  "shellRuleVersion": 2026082305,
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "shellVersion": "1.0.0-test.5",
+  "shellRuleVersion": 2026082306,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.4/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v4_b10104.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.5/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v5_b10105.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test3 实机修复三条 P0：推荐不再递归误选 banner/widget 广告，固定解析 SeeMoreDataBean.data.list[].list；封面固定读取 ListLikeVideoBean.thumb_cover；播放固定 source_240/480/720/1080，并按 APP player_cfg.dekey 用 AES-CFB 解密 M3U8 后经 Hiker 代理播放，同时修复详情标题 URL 编码。"
+  "notes": "根据 Test4 实机：视频详情与 source_* 已正确，但封面仍灰、严格 JSON 多线路被海阔识别为未知链接、漫画 home 实为分类配置、诊断子规则触发 ArticleListModel URL 异常。Test5 按 APK 自定义 Glide 恢复 thumb_cover JSON 选图 + 图片解密；播放优先单清晰度 #isVideo=true#，多线路改海阔对象字面量；漫画改分类→book/list_filter；诊断直接显示在设置页。"
 }
