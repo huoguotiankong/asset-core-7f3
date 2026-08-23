@@ -2,13 +2,22 @@
   "schema": 4,
   "id": "51chigua",
   "name": "51吃瓜",
-  "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 18:39",
-  "channels": [{
-    "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.5","build":10105,
-    "displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/51chigua/51chigua_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-    "desc":"评论头像对齐原站：所有评论与楼中楼回复统一使用 51CG 官方 favicon，不再展示随机字母/用户头像；Test4 评论布局和独立搜索保持不变。",
-    "highlights":["评论统一官方 51CG 头像","一级评论与楼中楼头像一致","停止使用评论 JSON avatar 字段","保留 Test4 评论卡片布局","保留独立搜索页","播放/分类/封面链不变"],
-    "icon":"https://51cg1.com/favicon.ico"
-  }]
+  "versionPolicy": "remote-stable-test-v1",
+  "updatedAt": "2026-08-23 18:46",
+  "channels": [
+    {
+      "channel":"stable","label":"正式版","id":"51chigua","name":"51吃瓜","version":"0.1.0","build":10106,
+      "displayVersion":"Stable 0.1.0 · Build 10106","path":"apps/video/51chigua/51chigua_remote_stable_v1_b10106.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"首个正式版，由已实机验证的 Test5 原样晋级。保留加密封面、图文详情、DPlayer/HLS 播放、真实评论 JSON、官方评论头像、独立搜索、分类中心、本地收藏和历史。",
+      "highlights":["Test5 原样晋级，无业务逻辑变化","加密封面与正文图片解密","DPlayer/HLS 原生播放","/comments/<postId>.json 真实评论","评论统一 51CG 官方头像","独立搜索页","分类中心与快捷分类","本地收藏与历史"],
+      "icon":"https://51cg1.com/favicon.ico"
+    },
+    {
+      "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.5","build":10105,
+      "displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/51chigua/51chigua_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,
+      "desc":"Stable 0.1.0 的晋级来源与回退参考。评论与楼中楼统一使用 51CG 官方 favicon，保留 Test4 评论布局和独立搜索。",
+      "highlights":["Stable 晋级来源","评论统一官方 51CG 头像","纵向评论卡片","独立搜索页","播放/分类/封面链保持验证状态"],
+      "icon":"https://51cg1.com/favicon.ico"
+    }
+  ]
 }
