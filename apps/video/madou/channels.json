@@ -3,7 +3,7 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 14:55",
+  "updatedAt": "2026-08-23 14:49",
   "channels": [
     {
       "channel":"test",
