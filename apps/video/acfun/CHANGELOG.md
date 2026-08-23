@@ -36,6 +36,49 @@ next/core alpha1
 
 Alpha11 仍属于 Clean Rewrite；Stable/latest 不修改。
 
+### Web 1.0.0-web1 / Build11001 / Shell1.0
+
+- 新增独立程序 `acfun-web`，名称 `ACFun·网页版`，不覆盖 Stable/Test，Remote Manager 状态完全隔离。
+- 默认使用 `x5_webview_single` 直接打开 APP 风格 H5：`https://ac001dhzh5.d24m42dh.work/home`。
+- 顶部可一键切换纯网页：`https://ac6688.a10hkxu0.work/`，并提供自定义网址输入，网站换域名时无需改业务代码。
+- Web 通道把视频播放、漫画阅读、搜索、账号与站内交互交回网站原生前端执行，从运行链上绕开当前海阔原生 HLS `auth_key`、漫画图片解密/裁白和 `pic_1_full` 布局问题。
+- 根 `manifest.json` 已增加独立 `acfun-web` 项，避免“我的规则仓库”旧版本中心只识别 stable/test/local 而隐藏第三 channel；`registry.json` 同时登记独立恢复入口。
+
+---
+
+## 2026-08-23 · Alpha11 原生链继续无改善 → 建立 Web 兜底
+
+用户最新实机明确结果：
+
+```text
+视频播放仍失败；
+漫画章节图片又出现无法显示；
+顶部白色区域仍存在；
+连续多版原生修复没有形成可感知改善。
+```
+
+因此产品策略调整为“双轨”：
+
+```text
+ACFun Stable/Test
+→ 继续保留原生协议研究和后续真正修复
+
+ACFun·网页版
+→ 立即提供可用性兜底
+→ X5 WebView 运行站点自身前端
+→ APP风格H5优先
+→ 纯网页备用
+→ 支持手动更新最新网址
+```
+
+长期架构约束：
+
+- Web 兜底必须使用独立 `id=acfun-web`，不得污染 `acfun` 或 `acfun-test` 的 Remote Manager 状态；
+- Web 版不复制/二次实现站点的 HLS 签名和漫画图片协议，核心价值就是让官方/原站前端自己完成这些逻辑；
+- H5 页面使用 `x5_webview_single + canBack + jsLoadingInject + floatVideo`；
+- 网站动态换域时优先通过 Web 版“自定义网址”快速恢复，再决定是否更新仓库默认域名；
+- 原生 Test 后续只有拿到明确的 TS 2xx 或可靠原生媒体凭据后才继续大改播放，不再为了版本号连续叠加无效猜测。
+
 ---
 
 ## 2026-08-23 · Alpha10 实机结果 → Alpha11
@@ -357,7 +400,6 @@ Alpha9 建立 `native/root/h5/direct` 路由矩阵，并测试 none/UA/H5/jhg/AP
 GET comics/base/info?comicsId=<id>
 → chapterList
 → chapterId / chapterNum / comicsId
-
 GET comics/base/chapterInfo?chapterId=<真实数值ID>
 → HTTP200 / code200 / encData
 → AES/CBC/PKCS5Padding 解密
@@ -500,6 +542,7 @@ community/dynamic/list
 - Alpha9：路由/Header 矩阵得到 `invalid sign / missing auth_key`；首次做首图裁白但阈值过敏。
 - Alpha10：客户端签名配置扫描最终实机 `keyCount=0`；首图顶部裁白仍不符合实际源图版面。
 - Alpha11：恢复独立 playback credential + 现有签名 CDN 域名配对 + 原生 authKey 回灌；漫画升级为所有页四边白画布裁剪。
+- Web1：建立独立 X5 WebView 兜底程序，优先保证可用性，同时保留原生 Test 作为后续协议研究线。
 
 ---
 
@@ -519,3 +562,13 @@ Test 每版至少验证：
 10. 同级 Tab 连切多次后系统返回栈正常；
 11. UI 大改继续以用户实机截图收敛；
 12. Test 未完成回归前禁止晋级 Stable。
+
+Web 兜底版额外至少验证：
+
+1. APP版 H5 首页可加载；
+2. H5 内视频可出画面并持续播放；
+3. H5 内漫画章节可连续阅读；
+4. 站内搜索和详情跳转正常；
+5. X5 返回键可逐级返回；
+6. APP版 H5 不可用时可切纯网页；
+7. 自定义最新网址保存后可立即生效。
