@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "acfun-web",
+  "name": "ACFun · 网页版",
+  "version": "1.1.0-web2",
+  "build": 11002,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media-model","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"native-ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"web-native-bridge","path":"apps/video/acfun/web/acfun_web_native_v110.js"},
+    {"name":"web-native-image","path":"apps/video/acfun/web/acfun_web_native_image_v110.js"}
+  ],
+  "verify": {"global":"ACFunWebNative","property":"build","equals":"2026.08.23-v1.1.0-web2"}
+}
