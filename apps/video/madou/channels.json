@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 14:24",
+  "updatedAt": "2026-08-23 14:36",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.4",
-      "build":10104,
-      "displayVersion":"Test 0.1.0-test.4 · Build 10104",
-      "path":"apps/video/madou/madou_remote_test_v4_b10104.txt",
+      "version":"0.1.0-test.5",
+      "build":10105,
+      "displayVersion":"Test 0.1.0-test.5 · Build 10105",
+      "path":"apps/video/madou/madou_remote_test_v5_b10105.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"重做分类为大分类→小分类层级，并修复详情页再次触发海阔私有存储 1MB 上限的问题。Test4 对大页面禁用 fetchCodeByWebView HTML 回传，内部页面统一直接加载当前 Bootstrap，避免旧模块残留。",
-      "highlights":["大分类→可展开小分类层级","首页只展示主要大分类入口","分类列表只展示同组小分类","详情/播放大页面禁用 WebView HTML 回传","历史/收藏写入做体积上限保护","内部页面直接加载 Test4 Bootstrap"],
+      "desc":"恢复版 Test5：Test4 已因实机 JSEngine 解析错误隔离，不进入新 Release。Test5 从 Test3 可启动基线重新实现大分类→小分类、详情大页面安全请求、历史/收藏体积保护。",
+      "highlights":["隔离 Test4 解析失败模块","从 Test3 可启动基线恢复","大分类→小分类层级重建","详情页不走大型 WebView HTML 回传","历史/收藏 setItem 体积门禁","Test5 Patch 与 Bootstrap 已过 node --check"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
