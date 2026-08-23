@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/myav/releases/0.1.0-test.1/core.js"},
+    {"name":"imagePatch","path":"apps/video/myav/releases/0.1.0-test.2/image_patch.js"},
+    {"name":"sectionPatch","path":"apps/video/myav/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"runtime","path":"apps/video/myav/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtimePatch2","path":"apps/video/myav/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/myav/releases/0.1.0-test.3/ui_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"MyAvRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/myav/releases/0.1.0-test.2/release.json"},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "notes": "Device-driven Test3: fixes western /c4 and domestic /c3 list parsers, discovers real section links dynamically, keeps uncensored as current dynamic filter, and redesigns Home/Detail native UI."
+}
