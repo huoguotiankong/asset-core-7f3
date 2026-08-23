@@ -3,30 +3,31 @@
   "id": "18av",
   "name": "18AV",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-24 00:02",
+  "updatedAt": "2026-08-24 00:27",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "18av-test",
       "name": "18AV",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/18av/18av_remote_test_v2_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/18av/18av_remote_test_v3_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-24",
       "recommended": true,
-      "desc": "18AV 首轮实机测试版。视频、漫画、写真、小说四类 Adapter 分离；Test2 已修复 Remote Manager 身份契约和影片类别库入口。尚未晋级 Stable。",
+      "desc": "18AV 首轮实机回归修复版：二级页面统一改用 av18_* 路由命名空间；影片详情和播放线路重构；搜索、漫画/写真脚本图片解析和媒体候选筛选同步增强。尚未晋级 Stable。",
       "highlights": [
-        "视频 / 漫画 / 写真 / 小说四类内容隔离",
-        "官网主分类、子分类与影片类别库",
-        "漫画与写真长图阅读",
-        "小说文本阅读与字号调节",
-        "本地收藏、历史、搜索与诊断",
-        "Remote Manager 2.0.4 Test 更新链"
+        "修复分类/漫画/写真/小说等二级页 URL scheme 报错",
+        "详情页重排番号、日期、类型与相关推荐",
+        "新增独立播放线路页和网页嗅探兜底",
+        "媒体候选按可信度排序，不再盲选首条",
+        "视频搜索优先适配官网 fc_search",
+        "漫画/写真支持 Large_cgurl 等脚本图片数组",
+        "图片阅读按 35 张分页，降低长图集内存压力"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/18av/assets/icon.svg?v=10102"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/18av/assets/icon.svg?v=10103"
     }
   ]
 }
