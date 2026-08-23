@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha4",
-  "build": 10004,
-  "shellVersion": "8.3.0-test",
+  "version": "1.0.0-alpha5",
+  "build": 10005,
+  "shellVersion": "8.4.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha4/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v083.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha5/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v084.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha4。Alpha3 实机确认四种 decode Header 线路全部失败；播放凭据仍只有字面 referer=jhg_player，说明缺失的是 APP 的 CDN/鉴权链而不是再换 Referer。APK 1.9.7 静态复核新增确认 video/cdn/refresh、cdnList、playbackDomain、playbackAuthKey、mp4Domain、video/cdn/reportError。Alpha4 播放前主动刷新 CDN，优先构造真实 CDN/APP播放候选，并用带 aut/deviceId/t/s/User-Mark 的完整签名 Header 预检 decode 响应。漫画方面 Alpha3 把 api2 HTTP200+code404 错当成功，提前停止后续参数尝试；Alpha4 严格拒绝业务404，只读取真实 chapterList/chapters，并记录首章原始结构，同时尝试 chapterId/chapter_id/id/chapterNum 及 comicsId 组合。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha5。Alpha4 实机已证明 decode 接口本身 HTTP200 且返回标准 AES-128 HLS，但 M3U8 内 key/segment URL 都带当前秒级 auth_key；海阔默认音视频预加载可能把稳定的 decode URL 预取成过期签名索引。Alpha5 按官方能力对实时 decode 显式 #noPre#，并在点击时原样写入新鲜签名 M3U8 到本地作为第二线路，同时探测 key/首分片。漫画方面 Alpha4 已确认真实 chapterId=691609、chapterInfo GET HTTP200/code200/encData 成功，问题已经从接口层收敛到解密后的图片消费/渲染；Alpha5 Reader 使用独立原图 ImageAdapter，不再给漫画正文套封面 _480，并记录解密结构。Stable 0.4.9 不变。"
 }
