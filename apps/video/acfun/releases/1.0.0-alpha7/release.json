@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha7",
+  "build": 10007,
+  "ref": "main",
+  "summary": "第五轮实机收敛：Alpha6 已确认 cacheM3u8 返回海阔标准 file://...m3u8##original-url 仍不可播，因此把剩余差异锁定到播放 Header；Alpha7 直接移植 Stable 0.4.9 已验证的 UA + API Host Referer/Origin 合同，不再使用 jhg_player/APP 签名头。漫画阅读按用户要求改为 #fullTheme# 纯图片画布，移除章节标题、进度和上下话导航。",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-regression-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"player-comic-transport-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a3.js"},
+    {"name":"cdn-chapter-model-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a4.js"},
+    {"name":"signed-hls-comic-full-image-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a5.js"},
+    {"name":"native-m3u8-comic-ux-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a6.js"},
+    {"name":"stable-playback-fullscreen-comic-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a7.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha7"}
+}
