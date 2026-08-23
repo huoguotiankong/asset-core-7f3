@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan",
+  "name": "溏心次元",
+  "default": "test",
+  "channels": {
+    "test": {
+      "version": "0.1.0-test.1",
+      "build": 10101,
+      "metadata": "apps/video/tangxincyuan/test.json",
+      "release": "apps/video/tangxincyuan/releases/0.1.0-test.1/release.json",
+      "rule": "apps/video/tangxincyuan/tangxincyuan_remote_test_v1_b10101.txt"
+    }
+  }
+}
