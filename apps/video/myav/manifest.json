@@ -6,15 +6,15 @@
   "mode": "remote+test",
   "test": "apps/video/myav/test.json",
   "channels": "apps/video/myav/channels.json",
-  "defaultVersion": "0.1.0-test.5",
-  "defaultBuild": 10105,
-  "testVersion": "0.1.0-test.5",
-  "testBuild": 10105,
-  "testShellVersion": "1.0.0-test.5",
-  "testBootstrap": "apps/video/myav/bootstrap_test_v5_b10105.js",
-  "testRule": "apps/video/myav/myav_remote_test_v5_b10105.txt",
+  "defaultVersion": "0.1.0-test.6",
+  "defaultBuild": 10106,
+  "testVersion": "0.1.0-test.6",
+  "testBuild": 10106,
+  "testShellVersion": "1.0.0-test.6",
+  "testBootstrap": "apps/video/myav/bootstrap_test_v6_b10106.js",
+  "testRule": "apps/video/myav/myav_remote_test_v6_b10106.txt",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
-  "migration": {"stage":"entity-page-search-home-ui-test5","note":"Test5 restores native /t/ entity pages and refines search/home UI while preserving Test4 magnet/category fixes. No Stable before device verification."}
+  "migration": {"stage":"actress-favorites-layout-test6","note":"Test6 adds dedicated actress/actor navigation, actor favorites, improved search workflow and per-page layout preferences while preserving verified Test4/5 entity and magnet behavior. No Stable before device verification."}
 }
