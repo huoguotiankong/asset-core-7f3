@@ -2,14 +2,14 @@
   "schema": 1,
   "channel": "candidate",
   "id": "rule-repo-test",
-  "version": "3.5.5-rc1",
-  "build": 387,
+  "version": "3.5.5-rc2",
+  "build": 388,
   "baseStableVersion": "3.5.4",
   "baseStableBuild": 384,
   "targetVersion": "3.5.5",
-  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json",
   "createdAt": "2026-08-23",
   "testStatus": "awaiting-real-device",
-  "previousTest": {"version":"3.5.4-test.2","build":386,"release":"apps/tools/rule-repo/releases/test-3.5.4-sync2/release.json"},
-  "notes": "图标交付专项候选。用户实机截图确认部分程序卡及底部未激活导航图标破图：激活首页图标走 jsDelivr 正常，而未激活导航和麻豆AI/Hanime1/汤头条等仍引用 raw.githubusercontent.com。RC1 新增 Icon Delivery Adapter，把本仓 Raw/GitHub Raw 图片统一转换到 asset-core-7f3@main 的 jsDelivr，并把规则仓库 UI 资产根统一到 jsDelivr；保留 Test2 同步成功即时刷新。"
+  "previousTest": {"version":"3.5.5-rc1","build":387,"release":"apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json"},
+  "notes": "图标交付完整候选。用户实机截图确认首页激活图标(jsDelivr)正常，而未激活底栏和麻豆AI/Hanime1/汤头条等 Raw GitHub 图标破图。RC1 已统一 UI/程序卡图标 CDN；RC2 继续把 channelMeta 中 Stable/Test/Local 版本卡图标纳入同一转换，避免进入版本中心再次破图。Stable 3.5.4 保持不动。"
 }
