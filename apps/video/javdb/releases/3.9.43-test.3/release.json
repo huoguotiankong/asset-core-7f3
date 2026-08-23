@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.43-test.3",
+  "build": 2026082304,
+  "baseVersion": "3.9.42",
+  "baseBuild": 2026082301,
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.43-test.3/javdb_v3.9.43_test3.txt",
+  "bootstrap": "apps/video/javdb/bootstrap_test_v1_b2026082304.js",
+  "runtime": "cloud/javdb/v3.9.43-test.3/runtime.js",
+  "modules": [
+    {"name":"stable3942","path":"apps/video/javdb/releases/3.9.42/release.json"},
+    {"name":"transportRecoveryIdentity","path":"apps/video/javdb/releases/3.9.43-test.3/transport_patch3.js"}
+  ],
+  "transport": {
+    "shellBootstrap": "jsDelivr pinned commit",
+    "runtimeOrder": ["validated-local-cache", "jsDelivr", "GitHub-Web-Raw", "raw.githubusercontent.com"],
+    "runtimeMarker": "var JDBCLOUD=",
+    "moduleOrder": ["validated-local-cache", "jsDelivr", "GitHub-Web-Raw", "raw.githubusercontent.com"],
+    "bootstrapBuild": 2026082304
+  },
+  "verify": {"global":"JDB","property":"version","equals":"20260823-v3.9.43-test.3"},
+  "notes": "Transport recovery over Stable 3.9.42. Business/API/UI unchanged. Shell now uses an immutable jsDelivr Bootstrap, Bootstrap loads Runtime through validated cache plus three remote transports, and Runtime applies the same failover to Core/Patch/Custom modules. Test1/Test2 were pre-device recovery drafts and are superseded by this build."
+}
