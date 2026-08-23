@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082301,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/madou/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "首个测试版：原生双列内容流、动态全分类、搜索、详情、直接播放/网页嗅探兜底、本地收藏、浏览历史与诊断。"
+}
