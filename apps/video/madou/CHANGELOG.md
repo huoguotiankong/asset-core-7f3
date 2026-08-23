@@ -1,5 +1,47 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.8 / Build 10108
+
+### 实机结果
+- Test7 已确认：影片详情正常、视频能够播放，同级分类压栈问题已进入新修复基线。
+- 当前详情仍有两个体验问题：源站固定宣传简介占据大量空间；播放按钮显示“网页媒体自动提取”，首次播放仍有明显 WebView/嗅探等待。
+- 用户明确要求：去掉简介信息、美化详情页，并优先改成“免嗅”直接播放。
+
+### Test8 详情 UI
+- 横向视频封面从小尺寸 `movie_1_left_pic` 改为全宽 `pic_1_full` Hero，标题与日期/时长独立排版，减少视觉拥挤。
+- **完全移除 `x.desc` 简介区**，不再显示“麻豆传媒官网入口，汇聚华语原创成人剧情精品……”这类源站固定 SEO/宣传文案。
+- 详情信息层收敛为：`Hero → 标题/日期时长 → Primary Play → 相关标签 → 相关推荐 → 本地收藏`。
+- 播放仍保持唯一 Primary Play，避免再次把详情动作污染原生播放器列表。
+
+### Test8 免嗅优先播放链
+- 新增 `resolveDirectMedia()`，不再把 `video://` 作为第一选择。
+- 结构化解析顺序：
+  1. 当前详情 HTML 直接扫描 `.m3u8/.mp4`；
+  2. 扫描 `file/src/source/videoUrl/video_url/playUrl/play_url/m3u8/url` 等播放器配置字段；
+  3. 扫描 `<video>/<source>`；
+  4. 尝试短 Base64 player config；
+  5. 跟随详情页 `<iframe>` / player/embed URL，用详情页作为 Referer 请求播放器页面；
+  6. 必要时再跟随一层 nested player/embed；
+  7. 命中真实媒体后直接返回带 `User-Agent + Referer + #isVideo=true#` 的媒体地址。
+- 解析成功后只把 `media URL / Referer / stage / timestamp` 这类小型结构写入 8 分钟缓存；不缓存 HTML，继续遵守 1MB 私有存储事故约束。
+- 若结构化链仍拿不到真实媒体，才降级到 Test7 的 `video://` 兼容解析，并继续保留图片/广告拦截和 `cacheM3u8`。
+- UI 会直接提示当前播放路径：
+  - `免嗅直连 · 已解析真实媒体` = Test8 结构化直连已命中；
+  - `兼容解析 · 当前页未命中免嗅直链` = 仍走 `video://`，下一轮需要针对真实 player 页面/接口继续收紧。
+
+### 发布门禁
+- `direct_playback_detail_ui.js` 已本地执行 `node --check` 通过。
+- `bootstrap_test_v8_b10108.js` 已本地执行 `node --check` 通过。
+- Test8 `release.json` 已完成 JSON 解析检查；Shell 规则 version 为 `2026082308`，Bootstrap `minBuild=10108`。
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 已切到 Test8；云仓 revision 为 `202608231530`，itemCount 保持 12，并保留同时存在的汤头条 Test19、Pornhub Test2 等其它程序当前状态。
+
+### Test8 回归重点
+1. 详情页确认源站固定简介已彻底消失，Hero/标题/时间/标签/推荐层级是否更舒服。
+2. 看“立即播放”下面的状态文字：优先确认是否显示 `免嗅直连`。
+3. 若显示 `免嗅直连`，比较首次播放进入播放器的速度；第二次打开同一影片还应命中 8 分钟媒体缓存。
+4. 若仍显示 `兼容解析`，说明当前真实媒体只在更深 JS/API 运行链中出现，需要下一版针对具体 player HTML/接口做站点专用免嗅，而不是继续扩大通用嗅探。
+5. 继续回归 Test7 的同级分类原页切换和播放器列表污染，禁止因详情重写退化。
+
 ## 2026-08-23 · 0.1.0-test.7 / Build 10107
 
 ### 实机结果
