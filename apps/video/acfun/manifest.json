@@ -20,18 +20,20 @@
   "testShellVersion": "9.0.0-test",
   "testBootstrap": "apps/video/acfun/bootstrap_test_v090.js",
   "testRule": "apps/video/acfun/acfun_remote_test_v090.txt",
-  "webVersion": "1.0.0-web1",
-  "webBuild": 11001,
-  "webShellVersion": "1.0.0-web",
-  "webBootstrap": "apps/video/acfun/bootstrap_web_v100.js",
-  "webRule": "apps/video/acfun/acfun_remote_web_v100.txt",
+  "webVersion": "1.1.0-web2",
+  "webBuild": 11002,
+  "webShellVersion": "1.1.0-web-native",
+  "webBootstrap": "apps/video/acfun/bootstrap_web_v110.js",
+  "webRule": "apps/video/acfun/acfun_remote_web_v110.txt",
+  "webRelease": "apps/video/acfun/releases/1.1.0-web2/release.json",
   "imageDecoderPage": "acfunImageDecoder",
+  "webImageDecoderPage": "acfun_web_image_decoder",
   "comicCropPage": "acfunComicCrop",
   "migration": {
-    "stage": "clean-rewrite-alpha11-plus-independent-web-fallback",
+    "stage": "clean-rewrite-alpha11-plus-native-web-fallback-web2",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3，Clean Rewrite Test 继续保留 Alpha11 用于原生协议研究。由于 Alpha10/11 前多轮实机仍无法解决 HLS auth_key 与漫画 WebView/图片布局问题，新增完全隔离的 Web 兜底通道 acfun-web：独立 Remote Manager id、独立 Bootstrap/Release/Rule，不修改 Stable/Test。Web1 直接使用 x5_webview_single 加载用户当前可访问的 APP 风格 H5 https://ac001dhzh5.d24m42dh.work/home，并提供纯网页 https://ac6688.a10hkxu0.work/ 与手动自定义最新网址。视频、漫画、搜索、账号、社区等均交网站原生前端执行，从运行链上绕开海阔侧 HLS auth_key、漫画 chapterInfo 图片解密/裁白逻辑。"
+    "note": "Stable 继续冻结 0.4.9 Build149，Clean Rewrite Test 继续保留 Alpha11 用于原生协议研究。Web1 被实机确认产品方向错误：整站 X5 只是网页壳，不符合海阔原生小程序目标。Web2 改为海阔原生首页/分类/专题/搜索/详情/收藏/评论，数据层复用当前已可工作的 ACFun Provider；仅最终视频播放和漫画阅读进入 H5 Bridge，由网站前端自行完成播放授权和阅读渲染。原始整站只留作设置/诊断备用，不再作为主界面。"
   }
 }
