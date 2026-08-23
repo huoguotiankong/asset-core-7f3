@@ -3,16 +3,16 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.5-rc1",
-  "build": 387,
+  "version": "3.5.5-rc2",
+  "build": 388,
   "baseVersion": "3.5.4",
   "targetVersion": "3.5.5",
   "shellVersion": "1.0.32-test",
   "bootstrapVersion": "1.0.31-test",
   "managerVersion": "2.0.2",
-  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json",
   "updatedAt": "2026-08-23",
   "status": "active-candidate-test",
-  "previousTest": {"version":"3.5.4-test.2","build":386,"release":"apps/tools/rule-repo/releases/test-3.5.4-sync2/release.json"},
-  "notes": "基于 Stable 3.5.4 / Test2 向下一正式版本推进。保留同步目录后即时刷新；新增 Icon Delivery Adapter，将规则仓库 UI 图标统一切到 jsDelivr，并把本仓 raw.githubusercontent / GitHub raw 程序图标运行时自动转换为 jsDelivr，修复海阔 X5 中部分程序卡与底部导航破图。"
+  "previousTest": {"version":"3.5.5-rc1","build":387,"release":"apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json"},
+  "notes": "Icon Delivery 1.1 完整候选：继承 RC1 的规则仓库 UI / 程序卡 Raw→jsDelivr 转换，并新增 channelMeta 通道图标转换，保证 Stable/Test/Local 版本卡也不再直接使用本仓 Raw GitHub 图片；同时保留 Test2 同步成功即时刷新。"
 }
