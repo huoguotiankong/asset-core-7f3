@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/myav/releases/0.1.0-test.1/core.js"},
+    {"name":"imagePatch","path":"apps/video/myav/releases/0.1.0-test.2/image_patch.js"},
+    {"name":"sectionPatch","path":"apps/video/myav/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"catalogMagnetPatch","path":"apps/video/myav/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"runtime","path":"apps/video/myav/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtimePatch2","path":"apps/video/myav/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/myav/releases/0.1.0-test.3/ui_patch.js"},
+    {"name":"uiPatch4","path":"apps/video/myav/releases/0.1.0-test.4/ui_patch.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"MyAvRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "previous": {"version":"0.1.0-test.3","build":10103,"release":"apps/video/myav/releases/0.1.0-test.3/release.json"},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "notes": "Device-driven Test4: reconstructs the complete javlist navigation into a native category center, fixes /t/ index entries and no-response category drill-down, and redesigns magnet parsing/UI with title cleanup, size/date/tag extraction and filters/sorts."
+}
