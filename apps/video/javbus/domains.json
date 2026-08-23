@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "appId": "javbus",
+  "canonical": "https://www.javbus.com",
+  "mirrors": [
+    "https://www.busjav.cyou",
+    "https://www.fanbus.bond",
+    "https://www.buscdn.bond"
+  ],
+  "updatedAt": "2026-08-23",
+  "notes": "Runtime domain candidates. Stable tries the last successful domain first and automatically fails over on invalid/blocked responses. Update this file when JavBus publishes new anti-block domains."
+}
