@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-24 00:35",
+  "updatedAt": "2026-08-24 07:45",
   "channels": [
     {
       "channel": "stable",
@@ -27,17 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.6-rc1",
+      "version": "3.5.6-rc2",
       "baseVersion": "3.5.5",
       "targetVersion": "3.5.6",
-      "build": 391,
-      "displayVersion": "Test 3.5.6-rc1 · Build 391 · Fast Home 14.0",
-      "path": "apps/tools/rule-repo/rule_repo_test_v137.txt",
+      "build": 392,
+      "displayVersion": "Test 3.5.6-rc2 · Build 392 · Fast Home 14.1",
+      "path": "apps/tools/rule-repo/rule_repo_test_v138.txt",
       "mode": "remote",
       "updatedAt": "2026-08-24",
       "recommended": false,
-      "desc": "首页缓存优先 + 多版本可更新统计 + 版本元数据按需加载",
-      "highlights": ["取消首页18次规则存在性串行探测", "取消首页逐程序预取 channels.json", "Stable/Test/Local 当前通道参与更新比较", "更新中心支持多版本程序", "麻豆传媒图标独立破缓存"],
+      "desc": "修复 RC1 工作区白屏 · 首页缓存优先 + 多版本可更新统计 + 版本元数据按需加载",
+      "highlights": ["修复 X5 workspaceClient 闭包序列化白屏", "Render Guard 显式错误页", "取消首页逐程序安装探测", "取消首页逐程序预取 channels.json", "Stable/Test/Local 当前通道参与更新比较"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
