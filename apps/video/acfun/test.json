@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha7",
-  "build": 10007,
-  "shellVersion": "8.6.0-test",
+  "version": "1.0.0-alpha8",
+  "build": 10008,
+  "shellVersion": "8.7.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha7/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v086.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha8/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v087.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha7。Alpha6 实机确认 cacheM3u8 已返回标准 file://...m3u8##original-url 但仍不可播，因此 cacheM3u8 结构本身不再是疑点。对照 Stable 0.4.9 已验证播放实现，Alpha6 与 Stable 剩余关键差异是 Header：Alpha6 使用 APP signed headers + Referer=jhg_player/H5 Origin，而 Stable 仅使用 UA + 当前 API Host Referer/Origin。Alpha7 直接移植 Stable 0.4.9 播放 Header 与 cacheM3u8 消费合同，不再叠加 APP 鉴权头。漫画正文已实机成功，按用户明确要求把 Reader 改为 #fullTheme# 纯图片画布，完全移除顶部章节名、进度、上下话导航和普通页面标题区域。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha8。Alpha7 实机确认 Stable 0.4.9 的 Header + cacheM3u8 合同完整移植后仍不可播，因此停止把问题归因于 Seed/decode/cacheM3u8/Header 本身。Alpha8 强制在每次播放前执行 video/can/watch POST 握手，即使列表/详情已经带 seed，也优先使用握手返回 path，并记录 canWatch/返回字段；随后把 API manifest 请求 Header 与签名 CDN Key/TS 分片 Header 拆开，主动探测首分片在无 Header/UA/API Header 下的 HTTP/Content-Type/字节结果，cacheM3u8 只负责带 API Header 获取索引，播放器默认不再把 API Referer/Origin 污染到 CDN 分片。若分片 Content-Type 实为 image/png，则自动增加海阔官方 cacheM3u8WithPngProxy 线路。漫画 Reader 在已成功的 #fullTheme# 基础上再加 #immersiveTheme#，去掉状态栏白色 inset，让图片从物理屏幕顶部开始。Stable 0.4.9 不变。"
 }
