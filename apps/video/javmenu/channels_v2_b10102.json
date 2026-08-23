@@ -1,0 +1,36 @@
+{
+  "schema": 4,
+  "id": "javmenu",
+  "name": "JavMenu",
+  "versionPolicy": "remote-test-v1",
+  "updatedAt": "2026-08-24 00:12",
+  "cloudSnapshot": "apps/video/javmenu/channels_v2_b10102.json",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "javmenu-test",
+      "name": "JavMenu",
+      "version": "0.1.0-test.2",
+      "build": 10102,
+      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
+      "path": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-24",
+      "recommended": true,
+      "desc": "JavMenu Test2 为首轮实机修复版：修复仓库/小程序图标、首页错误封面与 watermark 文本、发现页重复导航、女优榜空页、详情演员/标签误识别，并继续保留原站播放与 Shared JAV Playback。",
+      "highlights": [
+        "仓库自有 JavMenu / MissAV / Jable 图标",
+        "影片列表锁定 .video-list-item",
+        "有码 / 无码 / FC2 / 国产 / 欧美 / 动画分类分组",
+        "日榜 / 周榜 / 月榜 / 女优榜独立路由",
+        "女优榜人物索引 → 人物作品页",
+        "详情演员仅识别 /actor/",
+        "详情标签过滤全站导航污染",
+        "站内播放排除预览媒体",
+        "javmenu.com / javmenu.org 请求回退"
+      ],
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10102"
+    }
+  ]
+}
