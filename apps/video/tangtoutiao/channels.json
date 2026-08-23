@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 11:31",
+  "updatedAt": "2026-08-23 11:46",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.9","build":10109,
-      "displayVersion":"Test 0.1.0 · Media Contract 9","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v9_b10109.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test8 实机确认详情播放列表污染已结构性收敛，但所有视频封面仍灰，原因是 picx JPEG 直链丢失海阔 Header；同时长视频 19:34 的 240P 实际仅57秒，旧逻辑只过滤<4秒导致误判。Test9 改为标准图片 @headers、按标称时长校验完整片源、增加 source_origin/preview fallback，短视频列表直接播放，并继续保留漫画动态路由和创作者排行榜。Stable 仍不存在。",
-      "highlights":["picx 标准 JPEG/PNG 使用 @headers 注入 UA/Accept，不再裸直链","播放预检比较详情标称时长与 M3U8 EXTINF 总时长，过滤几十秒试看/占位片","source_origin/preview 作为受约束 fallback，只有媒体 URL 才参与回退","短视频卡片点击直接播放，不再进入二级详情页","详情清晰度使用固定 text_4，移除多余滚动箭头与技术 ID","Test8 已验证的漫画动态路由、创作者排行榜继续保留"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.10","build":10110,
+      "displayVersion":"Test 0.1.0 · Core Rebuild 10","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v10_b10110.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test9 实机确认两个架构问题仍未真正修到运行链：Core Patch 只覆盖导出 imageUrl，但 item/detail 等旧闭包继续调用 Test8 的 direct-public-image；播放又只凭 .m3u8 后缀判断 HLS，导致 yd-long/.../https://... 这类无后缀包装源被当成 direct。Test10 完整重建 Core，所有图片统一使用 image helper + ImageAdapter；媒体先探 Content-Type/包装形态，并同时尝试外层包装 URL 与内层原始 URL，短视频继续列表直接播放。Stable 仍不存在。",
+      "highlights":["完整重建 Core，不再使用覆盖导出函数但旧闭包不变的 Patch 方式","所有视频/详情/漫画/排行图片统一走 $(url,headers).image + ImageAdapter，明文图片由 magic 自动直返","播放不再依赖 .m3u8 后缀，先探响应 Content-Type/包装 URL，再决定 HLS/直链","支持 yd-long/.../https://... 外层包装 URL 与内层原始 URL 双候选","无后缀 HLS 同样执行 AES-CFB 解密、master 子索引解析、M3U8 本地代理与标称时长校验","短视频卡片继续直接播放，不进入二级详情"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
