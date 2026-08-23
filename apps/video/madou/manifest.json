@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "1.0.0-test.3",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/video/madou/madou_remote_test_v3_b10103.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.3/release.json",
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "1.0.0-test.4",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/video/madou/madou_remote_test_v4_b10104.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.4/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test3-route-ui-fix","note":"Test3 supersedes Test2 after real-device screenshots proved percent-encoded Chinese rule titles break internal Hiker page routing. Internal routes now inherit current rule with rule=&; quick-action icons are real SVG assets."}
+  "migration": {"stage":"test4-hierarchy-detail-safety","note":"Test4 supersedes Test3 after real-device validation showed category navigation must preserve the site's major->minor hierarchy and detail pages could still trigger Hiker's private-storage 1MB failure. Large detail HTML no longer uses fetchCodeByWebView return-path; internal pages directly load the current Bootstrap."}
 }
