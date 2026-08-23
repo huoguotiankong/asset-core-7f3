@@ -10,6 +10,7 @@
   "stable": "apps/video/acfun/stable.json",
   "candidate": "apps/video/acfun/candidate.json",
   "test": "apps/video/acfun/test.json",
+  "web": "apps/video/acfun/web.json",
   "channels": "apps/video/acfun/channels.json",
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
@@ -19,13 +20,18 @@
   "testShellVersion": "9.0.0-test",
   "testBootstrap": "apps/video/acfun/bootstrap_test_v090.js",
   "testRule": "apps/video/acfun/acfun_remote_test_v090.txt",
+  "webVersion": "1.0.0-web1",
+  "webBuild": 11001,
+  "webShellVersion": "1.0.0-web",
+  "webBootstrap": "apps/video/acfun/bootstrap_web_v100.js",
+  "webRule": "apps/video/acfun/acfun_remote_web_v100.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "comicCropPage": "acfunComicCrop",
   "migration": {
-    "stage": "clean-rewrite-alpha11-credential-recovery-host-repair-comic-border-crop",
+    "stage": "clean-rewrite-alpha11-plus-independent-web-fallback",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha10 实机确认 playback sign config keyCount=0，客户端 Type-A 重签实际没有得到任何 playbackAuthKey，故播放无变化；同时 can/watch GET HTTP200/canWatch=true，H5/native manifest HTTP200，TS 仍返回 invalid sign，裸 playPath 仍提示 missing auth_key。Alpha11 不再把密钥来源限定在 cloud remoteConfig/CDN refresh，而是按 APK 静态证据恢复独立 playback credential 链：带 videoId/path 探测 m3u8/player/referer，直接探测 sys/getDynamicDomain 与 sys/sdk-config 的 root/api 合同，并合并 video/getVideoById、can/watch、refresh、remoteConfig。凭据诊断只记录长度/hash，不保存明文到知识库。播放优先保留服务端现有 auth_key、只切换到 playPath/CDN refresh/playbackDomain 候选域并以 segment+KEY 同时 2xx 验证；其次把恢复出的 authKey 回灌 /api/m3u8/play 与 /api/m3u8/h5/decode；最后才回到客户端重签。漫画 Alpha10 截图说明问题不是仅首图顶部白边，而是源图本身四边/多页存在大白画布；Alpha11 新增 acfunComicCrop，所有正文图在 XOR/明文判定后对四边近白外画布做安全 bbox 裁剪，再交给 pic_1_full 全宽显示，并使用全新缓存目录。latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3，Clean Rewrite Test 继续保留 Alpha11 用于原生协议研究。由于 Alpha10/11 前多轮实机仍无法解决 HLS auth_key 与漫画 WebView/图片布局问题，新增完全隔离的 Web 兜底通道 acfun-web：独立 Remote Manager id、独立 Bootstrap/Release/Rule，不修改 Stable/Test。Web1 直接使用 x5_webview_single 加载用户当前可访问的 APP 风格 H5 https://ac001dhzh5.d24m42dh.work/home，并提供纯网页 https://ac6688.a10hkxu0.work/ 与手动自定义最新网址。视频、漫画、搜索、账号、社区等均交网站原生前端执行，从运行链上绕开海阔侧 HLS auth_key、漫画 chapterInfo 图片解密/裁白逻辑。"
   }
 }
