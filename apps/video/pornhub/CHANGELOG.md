@@ -1,5 +1,50 @@
 # Pornhub CHANGELOG
 
+## 0.1.0-test.4 / Build 10104 — 2026-08-23
+
+### 第三轮实机结论
+- Test3 已修掉“随机猜用户名”，创作者目录视觉也明显改善；但用户实机继续确认：小程序原生账号内容、尤其订阅，仍与 Pornhub 官方网页登录后的真实账号不一致。
+- 这说明问题不只是用户名：网页登录容器、`getCookie()` 来源、私有请求 Cookie、私有缓存以及账号页 Parser 都必须作为一条完整 Session Contract 验证。
+- 创作者页 Pornstars / 频道 / Models / 用户仍通过同功能 `hiker://page` 切换，实机确认不断压入返回栈；该问题此前已在跨程序事故文档明确禁止，本轮按发布阻断项修正。
+
+### 账号会话重构
+- Test2/Test3 的账号入口不再使用 `web://` 作为同步来源。Test4 统一改成 `x5://<login-url>` 全屏官方登录，使网页登录与 `getCookie(base)` 处于同一 X5 会话语义。
+- 原生私有请求不再只依赖一次保存的旧 Cookie，优先读取当前 live X5 Cookie；`/user/security` 继续作为登录/身份验证页。
+- 私有 HTML 缓存 key 增加 Cookie 会话指纹；账号切换后不会再按相同 URL 命中上一账号的推荐、历史、收藏或订阅缓存。
+- 每次重新同步前继续清理旧 username/avatar/identity source；用户名只负责构造必须包含 `/users/<name>` 的 URL，不再被视为“账号会话正确”的充分证据。
+- 账号视频页优先只解析主 `videoblock`；订阅页只接受 `subscriptions / userLink` 范围人物实体，避免把热门演员、推荐关注、侧栏内容误当成用户自己的订阅。
+- 账号页增加 X5 官方 `/user/security` 校验入口；如果原生私有列表与网页仍不一致，优先以 X5 官方状态为事实源继续诊断。
+
+### 同级导航彻底收敛
+- 创作者中心 Pornstars / 频道 / Models / 用户改为 `putMyVar → refreshPage(false)`，不再新开 `pornhubCreators`。
+- 同时审查并修正公开视频排序（推荐/最新/最多观看/最高评分）、搜索排序/制作类型/时长、本地收藏类型（影片/创作者/片单）等同级状态，全部原页刷新。
+- 真正的信息钻取仍保留新页面：列表 → 视频详情、创作者列表 → 创作者详情、片单列表 → 片单详情、视频详情 → 评论。
+- 固定回归：同一页 A/B/C/A/B 连续切换后，系统返回一次必须离开该功能页。
+
+### 影片 / 创作者 / 片单收藏订阅
+- **影片本地收藏**：恢复为详情页明确动作，与在线账号收藏完全隔离。
+- **影片在线收藏**：从当前已登录视频页提取真实 video id + token，按 Pornhub 当前契约提交 `/video/favourite`；不硬编码用户身份。
+- **创作者本地收藏**：新增独立本地列表，可在创作者详情收藏/取消。
+- **创作者在线订阅**：优先读取当前页面真实 `data-subscribe-url / data-unsubscribe-url` 后执行；页面没有暴露安全直调动作时不猜接口，回退 X5 官方主页。
+- **片单**：Playlists 从原站入口升级为原生列表 + 片单详情 + 片单视频；新增本地片单收藏。在线片单动作同样只在当前页面暴露可验证 action URL 时直调，否则进入 X5 官方页完成。
+- 本地收藏中心改为影片 / 创作者 / 片单同页 Tab，不产生新返回栈。
+
+### 评论
+- 视频详情新增“评论”入口，不实现发评论。
+- 第一阶段只读 Comment Adapter 从 `#cmtContent / .commentBlock / .commentMessage` 等真实 HTML 结构提取作者、头像、时间、点赞数和正文。
+- 如果用户当前区域的 Pornhub 把评论改为 JS/AJAX 异步加载、初始 HTML 没有评论，则明确显示空状态并提供 X5 官方评论区兜底，不伪造评论。
+
+### 外部协议交叉验证
+- 当前 `sven-nillsson/PHUB` 实现再次确认账号推荐、观看历史、收藏、订阅分别依赖账号会话及 `/users/<name>/...` 路径；视频收藏使用 `POST /video/favourite {toggle,id,token}`。
+- 同一实现的订阅解析也围绕 `userLink` 提取，支持本轮“账号私有页面必须限定主业务容器、禁止整页扫描”的修正方向。
+
+### 回归门禁
+- `core_patch.js`、`ui_patch.js`、Test4 Bootstrap 均通过 `node --check`。
+- 离线 smoke：评论解析 2 条；订阅样例只保留 subscriptions 区域 1 位人物，排除侧栏推荐；片单样例解析 1 个；在线创作者 `data-subscribed="0"` 状态误判已修复。
+- 静态导航审查确认 Test4 UI 不再通过 `C.page('pornhubCreators' / 'pornhubCatalog' / 'pornhubSearch')` 处理同级切换；Shell 增加评论与片单详情后共 20 个页面声明。
+- Test1/Test2 已实机正常的公开视频详情与多画质 HLS 播放链保持不变。
+- Test4 仍只进入 Test；账号会话、在线收藏/订阅和评论必须经过下一轮实机验证后才允许考虑 Stable。
+
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
 ### 第二轮实机结论
