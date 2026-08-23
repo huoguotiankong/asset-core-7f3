@@ -11,8 +11,9 @@
     {"name":"runtime","path":"apps/video/911baoliao/releases/0.1.0-test.1/runtime.js"},
     {"name":"routePatch","path":"apps/video/911baoliao/releases/0.1.0-test.2/route_patch.js"},
     {"name":"transportPatch","path":"apps/video/911baoliao/releases/0.1.0-test.3/transport_patch.js"},
-    {"name":"contentAdapterPatch","path":"apps/video/911baoliao/releases/0.1.0-test.4/content_adapter_patch.js"}
+    {"name":"contentAdapterPatch","path":"apps/video/911baoliao/releases/0.1.0-test.4/content_adapter_patch.js"},
+    {"name":"test4BootstrapPatch","path":"apps/video/911baoliao/releases/0.1.0-test.4/test4_bootstrap_patch.js"}
   ],
   "verify": {"global":"Bl911RemoteRuntime","property":"version","equals":"0.1.0-test.4"},
-  "notes": "Test4 uses device evidence to remove homepage promo/navigation pseudo-posts, harden poster extraction, remove site promo paragraphs, and normalize/validate HTTP(S) MP4/HLS media before playback."
+  "notes": "Test4 uses device evidence to remove homepage promo/navigation pseudo-posts, harden poster extraction, remove site promo paragraphs, normalize/validate HTTP(S) MP4/HLS media before playback, and pin lazy callbacks to the Test4 CDN bootstrap."
 }
