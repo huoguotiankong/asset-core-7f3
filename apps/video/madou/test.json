@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.4",
-  "build": 10104,
-  "shellVersion": "1.0.0-test.4",
-  "shellRuleVersion": 2026082304,
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "shellVersion": "1.0.0-test.5",
+  "shellRuleVersion": 2026082305,
   "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.4/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v4_b10104.txt",
+  "release": "apps/video/madou/releases/0.1.0-test.5/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v5_b10105.txt",
   "updatedAt": "2026-08-23",
-  "notes": "重做分类中心为大分类→可展开小分类层级；详情/播放取页停止使用可能触发 >1MB 私有存储错误的 fetchCodeByWebView 回传，改用普通网络请求并限制本地历史/收藏体积；所有内部页面直接加载 Test4 Bootstrap，避免升级后命中旧页面模块。"
+  "notes": "Test4 已被实机判定为 JSEngine 解析失败版本并隔离。Test5 不继承 Test4 模块，直接从最后可启动的 Test3 基线重建：保留 Test2 1MB 存储修复与 Test3 路由/图标修复，重新实现大分类→小分类层级、详情大页面安全请求和本地历史/收藏体积门禁。"
 }
