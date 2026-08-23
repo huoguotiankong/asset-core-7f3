@@ -114,3 +114,20 @@ manifest.revision === manifest_meta.revision
 ```
 
 这个断言属于发布完成条件，不是可选检查。
+
+## 7. 911爆料首版复发记录
+
+2026-08-23 新建 911爆料 `0.1.0-test.1 / Build10101` 时第三次出现同类遗漏：业务目录、Test/Release/Bootstrap/Shell 与 `registry.json` 都已经存在，但根 `manifest.json` 未加入 911，用户实机同步后明确反馈“云端仓库没有这个小程序”。同时首版 `channels.json` 又误写成 `channels:{test:{...}}` 对象结构。
+
+本次修复固定执行了完整发布链：
+
+```text
+911 channels.json → schema 4 + channels[]
+→ root manifest.json 增加 channel-group
+→ revision 202608231959
+→ manifest_meta.json 同步 revision 202608231959 / itemCount 15
+→ GitHub main 回读
+→ 用户实机同步确认
+```
+
+这次复发说明“新程序发布清单”不能依赖开发者记忆。以后新建小程序的完成定义必须把 **root manifest + manifest_meta + 标准 channels[]** 作为 P0 工件，与 app Release/Shell/registry 同级检查；任何一个缺失都不得向用户描述为“已在云端仓库发布”。
