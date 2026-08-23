@@ -1,42 +1,48 @@
 # 汤头条 CHANGELOG
 
-## 0.1.0-test.17 / Build 10117 — 2026-08-23
+## 0.1.0-test.18 / Build 10118 — 2026-08-23
 
-状态：**Test16 已恢复封面、普通长视频和官方预览后的短视频契约/性能修复版，仍为 Test；禁止晋级 Stable。**
+状态：**Test17 缓存已验证、短视频仍只有 2–3 秒后的 Provider 修正 + 分类中心第一阶段，仍为 Test；禁止晋级 Stable。**
 
-### Test16 实机事实
-- 推荐、长视频、短视频封面均已恢复，说明 `thumb_cover_str` 优先 + 真实 URL@js 内联 plain/AES-CBC/legacy-CFB 是当前有效图片基线。
-- 免费长视频和官方预览继续正常播放，Test10/Test15 的长视频播放链保持有效。
-- 顶栏推荐/短视频/长视频切换仍明显偏慢，切换后会等待较长时间才重新出现列表。
-- 短视频虽然可以进入播放器，但点击等待较长，而且大量视频只显示/播放 2–3 秒，和实际内容明显不符。
+### Test17 最新实机事实
+- 推荐/短视频/长视频第一次切换仍较慢，但后续切换明显变快，证明 Test17 的会话缓存方案已经生效；性能问题已从“每次都慢”收敛为“首次冷启动慢”。
+- 推荐、长视频、短视频封面继续正常，Test16 图片链保持有效。
+- 免费长视频与官方预览继续正常播放，Test10/Test15 长视频链保持有效。
+- 短视频即使已经按 APK 原生契约直接使用列表 `source_240`，实际仍然只有约 2–3 秒，因此问题不再是详情重查或播放器交付层。
 
-### APK 逆向结论
-- `ShortVideoPlayerActivity` 使用 `ListLikeVideoBean` 作为短视频列表对象。
-- 原生播放器路径直接读取 `ListLikeVideoBean.source_240` 并调用播放器 `setUp(source_240, ...)`。
-- 购买成功后，原 APP 才把购买接口返回的 URL 回写到同一对象的 `source_240` 再继续播放。
-- 因此短视频当前页面的原生媒体契约是**列表对象 `source_240`**；Test15/16 的“点卡片后重新请求详情，再从详情挑 source/preview”属于偏离原 APP 的错误链，会同时增加等待并可能选到试看/占位源。
+### 新的 APK / Provider 结论
+- 原 APP 的短视频 ViewModel 实际调用 `/api/MvList/smallVideoByTag`，请求参数由 `Y2(tag,page,limit)` 构造，三个字段缺一不可。
+- Test17 首选的是 PWA Provider；PWA 返回的列表 `source_240` 在实机上仍是 2–3 秒短切片，因此 Test18 改成**原 App Provider 优先**，PWA 只做兜底。
+- `/api/MvList/style` 的真实参数已经逆向确认为 `id + page + size + orderBy`；此前 `551 参数不全` 就是因为没有完整按这个契约调用。
 
-### Test17 修改
-- **短视频列表 source_240 快路径**：点击卡片后优先使用列表记录中的 `source_240`，不再先请求 `/api/MvDetail/detail`。
-- **减少播放器前串行网络**：列表 `source_240` 若为 HLS，只做一次 `cacheM3u8`；失败则直接带播放器 Header 交付，不再先做 HEAD 探测和多候选循环。
-- **保留旧链作为兜底**：只有列表没有 `source_240` 时才调用 Test15 的详情/候选回退。
-- **推荐/长视频共享缓存**：统一直接使用 App `/api/MvList/featuredAv`，会话缓存 5 分钟；推荐和长视频在同一份列表上切换，不再每次重打 API，也移除了此前先试 PWA featuredAv 再回 App 的额外等待。
-- **短视频列表缓存**：PWA `smallVideoByTag` 结果会话缓存 3 分钟；切离短视频再返回时优先直接复用。
-- **错误时长不再误导 UI**：短视频 `duration_str <= 5s` 时暂不显示时长，真实长度以播放器结果为准。
-- **图片与长视频基线冻结**：Test16 图片链、Test10 长视频完整性/解密链、收费/试看语义均不修改。
-- 新增诊断：`ttt_last_short_contract`、`ttt_last_feed_cache`；保留 `ttt_last_short_play / ttt_last_handoff`。
-- 新增跨程序事故：`docs/INCIDENT_LIST_MEDIA_CONTRACT_VS_DETAIL_REQUERY_20260823.md`。
-- Test17 `playback_bridge.js / pages_patch.js / runtime.js / Bootstrap` 均通过实际 JS 语法门禁；Release JSON / Shell JSON 通过解析门禁。
-- Release / Bootstrap / Shell 派生为不可变 Test17 / Build10117；Shell rule version `2026082318`。
+### Test18 修改
+- **短视频 Provider 切换**：优先调用 App `/api/MvList/smallVideoByTag`，固定参数 `{tag:'recommend', page:1, limit:20}`；有结果即缓存 3 分钟并直接沿用 Test17 `source_240` 播放快路径。
+- **PWA 降级为兜底**：只有 App 精确接口没有结果/失败时才调用 PWA `smallVideoByTag`，最后再回退 `/api/MvList/small`。
+- 新增短视频精确诊断 `ttt_last_short_app_exact`，记录 App 列表第一条的 `source_240 / duration / schema`。
+- **推荐/长视频缓存保持不变**：继续复用 Test17 的 5 分钟 `/api/MvList/featuredAv` 会话缓存；首次冷加载问题后续再做预热，不在本轮破坏现有稳定链。
+- **内容频道第一阶段重构**：从占位入口升级为按功能域分组的真实页面。
+- 视频分类接入 `/api/MvSearch/getStyle`，分类影片接入 `/api/MvList/style` 精确 `{id,page,size,orderBy:'id'}` 参数。
+- 创作者入口接入 `/api/Creator/featured`。
+- 图集接入 `/api/picture/home` 与 `/api/picture/detail`，详情可显示真实图片序列。
+- 小说接入 `/api/novel/home`、`/api/novel/detail`，并先展示 `/api/novel/chaptersList` 前 3 章；正文下一阶段接入。
+- 有声接入 `/api/audio/home` 与 `/api/audio/detail` 的基础列表/详情；章节播放下一阶段接入。
+- 合集接入 `/api/compilation/list` 与 `/api/compilation/mvlist`。
+- 话题、求片、粉丝团分别接入社区 topic、`/api/find/list`、`/api/club/items` 第一阶段 Adapter。
+- 漫画、社区、排行榜继续复用现有已接链，不在本轮重写。
+- AI 创作、游戏中心保留明确的阶段入口，不使用伪数据；下一阶段按独立数据模型开发。
+- 新增频道诊断：`ttt_last_style_home`、`ttt_last_style_list`、`ttt_last_creator_featured`、`ttt_last_channel_diag`、`ttt_last_content_detail`。
+- **稳定边界冻结**：Test16 图片 Adapter、Test10/Test15 长视频/试看播放、收费/汤币权限语义均不修改。
+- Test18 新增 `pages_patch.js / runtime.js / release.json / Bootstrap / Shell` 均已通过本地 JS/JSON 语法门禁。
+- Release / Bootstrap / Shell 派生为不可变 Test18 / Build10118；Shell rule version `2026082319`。
 
-### Test17 实机验收
-1. 第一次打开推荐后切换长视频，再切回推荐，应明显快于 Test16；诊断 `ttt_last_feed_cache.hit=true` 表示命中缓存。
-2. 第一次进入短视频后离开再返回，应直接复用 3 分钟短视频缓存。
-3. 随机点击 3 个短视频：进入播放器等待应明显缩短，并检查播放器真实总时长是否不再只有 2–3 秒。
-4. 若短视频仍只有 2–3 秒，只提供 `ttt_last_short_contract + ttt_last_short_play + ttt_last_handoff`，即可确认 PWA 列表是否真正下发完整 `source_240`。
-5. 推荐/长视频/短视频封面、免费长视频、官方预览必须保持 Test16 状态，不允许回归。
+### Test18 实机验收重点
+1. 短视频随机测试 3 个，确认 App Provider 后实际总时长是否仍只有 2–3 秒。若仍异常，只需要 `ttt_last_short_app_exact + ttt_last_short_provider + ttt_last_short_contract`。
+2. 进入“频道 → 视频分类”，确认分类能正常出现；点击任一分类后应不再出现 `551 参数不全`。若异常提供 `ttt_last_style_home / ttt_last_style_list`。
+3. 依次试图集、小说、有声、合集、话题、求片、粉丝团；页面结构不对时提供截图和 `ttt_last_channel_diag`，下一版按真实返回结构细化 Adapter。
+4. 推荐/长视频/短视频封面、免费长视频、官方试看必须继续保持 Test16/17 状态，不允许回归。
 
 ## 历史版本
+- Test17：[`CHANGELOG_HISTORY_TEST17.md`](./CHANGELOG_HISTORY_TEST17.md)
 - Test16：[`CHANGELOG_HISTORY_TEST16.md`](./CHANGELOG_HISTORY_TEST16.md)
 - Test15：[`CHANGELOG_HISTORY_TEST15.md`](./CHANGELOG_HISTORY_TEST15.md)
 - Test14：[`CHANGELOG_HISTORY_TEST14.md`](./CHANGELOG_HISTORY_TEST14.md)
