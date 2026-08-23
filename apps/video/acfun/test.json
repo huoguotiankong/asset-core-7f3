@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha8",
-  "build": 10008,
-  "shellVersion": "8.7.0-test",
+  "version": "1.0.0-alpha9",
+  "build": 10009,
+  "shellVersion": "8.8.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha8/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v087.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha9/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v088.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha8。Alpha7 实机确认 Stable 0.4.9 的 Header + cacheM3u8 合同完整移植后仍不可播，因此停止把问题归因于 Seed/decode/cacheM3u8/Header 本身。Alpha8 强制在每次播放前执行 video/can/watch POST 握手，即使列表/详情已经带 seed，也优先使用握手返回 path，并记录 canWatch/返回字段；随后把 API manifest 请求 Header 与签名 CDN Key/TS 分片 Header 拆开，主动探测首分片在无 Header/UA/API Header 下的 HTTP/Content-Type/字节结果，cacheM3u8 只负责带 API Header 获取索引，播放器默认不再把 API Referer/Origin 污染到 CDN 分片。若分片 Content-Type 实为 image/png，则自动增加海阔官方 cacheM3u8WithPngProxy 线路。漫画 Reader 在已成功的 #fullTheme# 基础上再加 #immersiveTheme#，去掉状态栏白色 inset，让图片从物理屏幕顶部开始。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha9。Alpha8 实机已确认 can/watch 当前有效 Method=GET、canWatch=true，且 H5 decode manifest HTTP200、AES Key HTTP200，但首 TS 在无 Header、UA-only、API Header 下全部 HTTP403；因此播放故障已定位到签名 CDN 分片授权，而不是海阔播放器、Seed、decode、cacheM3u8 或 Key 本身。Alpha9 不再盲改播放器：完整读取 can/watch 的 videoUrl/playPath/previewUrl，先执行 CDN refresh，再对 APP 原生 /api/m3u8/play、/m3u8/play 与 H5 decode 建立路由矩阵；每条只在首 TS 真正 2xx 且有二进制内容时才选为主线路，并直接记录 403 响应正文、Cookie/jhg/H5/APP/Range 等分片请求组合。漫画方面 Alpha8 已去掉系统 chrome，用户截图剩余顶部白区实际来自第一张源图片自身留白；Alpha9 仅对首图做近白边自动裁顶，后续正文保持原图。Stable 0.4.9 不变。"
 }
