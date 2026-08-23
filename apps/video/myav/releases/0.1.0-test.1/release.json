@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/myav/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/myav/releases/0.1.0-test.1/runtime.js"},
+    {"name":"javPlaybackManager","path":"shared/jav-playback/manager.js","channel":"stable","sdkVersion":"1.0.0-test.4"}
+  ],
+  "verify": {"global":"MyAvRemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "sharedPlayback": {"channel":"stable","version":"1.0.0-test.4","build":10004},
+  "notes": "Initial native MyAv test release for javlist.me: section feeds, dynamic filters, category indexes, rankings, three search modes, detail metadata, preview extraction, magnets, local favorites/history, shared JAV playback and cloud-app magnet long-click actions."
+}
