@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.10",
-  "build": 10110,
-  "shellVersion": "1.0.0-test.10",
-  "shellRuleVersion": 2026082311,
+  "version": "0.1.0-test.11",
+  "build": 10111,
+  "shellVersion": "1.0.0-test.11",
+  "shellRuleVersion": 2026082312,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.10/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v10_b10110.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.11/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v11_b10111.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test9 实机继续修复：Test9 Core Patch 只覆盖导出函数，item/detail 等闭包仍执行 Test8 旧 imageUrl，导致诊断仍出现 direct-public-image；播放又把无 .m3u8 后缀的 yd-long 包装 HLS误判为 direct。Test10 完整重建 Core，所有图片统一走 image helper + ImageAdapter；媒体先探响应类型/包装形态，支持外层包装 URL 与内层原始 URL 两套候选，无后缀 HLS同样解密/代理；短视频继续列表直接播放。"
+  "notes": "根据 Test10 实机与 APK 继续恢复真实业务合同：短视频封面已恢复，但长视频封面仍灰；长视频详情明确存在 2 秒维护源和 120 秒 preview_video，且 APK 模型含 isfree/coins/is_pay。Test11 图片改为本地占位触发 JS 后自行 fetch/toHex、多候选/多 Header 重试并解密；详情按免费/已购买/未购买收费三态展示，未购买只提供试看与显式确认后的汤币解锁，不再把预览源误报成播放线路故障。"
 }
