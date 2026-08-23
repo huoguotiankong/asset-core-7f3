@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "xvideos-test",
+  "name": "XVideos",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/xvideos/releases/0.1.0-test.1/core.js"
+    },
+    {
+      "name": "runtime",
+      "path": "apps/video/xvideos/releases/0.1.0-test.1/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "XVideosRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.1"
+  },
+  "notes": "Clean XVideos Test1. Confirmed search/account/HLS contracts; native Hiker UI and remote self-use architecture."
+}
