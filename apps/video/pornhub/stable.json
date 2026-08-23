@@ -6,16 +6,16 @@
   "version": "0.1.0",
   "build": 10108,
   "mode": "remote",
-  "shellVersion": "0.1.0-stable.1",
-  "shellRuleVersion": 2026082308,
+  "shellVersion": "0.1.0-stable.2",
+  "shellRuleVersion": 2026082355,
   "managerVersion": "2.0.1",
   "release": "apps/video/pornhub/releases/0.1.0/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_stable_v1_b10108.txt",
+  "rule": "apps/video/pornhub/pornhub_remote_stable_v2_b10108.txt",
   "bootstrap": "apps/video/pornhub/bootstrap_stable_v1_b10108.js",
   "promotedFrom": {
     "version": "0.1.0-test.7",
     "build": 10107
   },
   "updatedAt": "2026-08-23",
-  "notes": "First Pornhub Stable, promoted by explicit user request from Test7. Test7 remains unchanged as the promotion source."
+  "notes": "Stable 0.1.0 business release remains Build10108; Shell v2 only switches the app icon delivery URL to jsDelivr to repair broken icon loading."
 }
