@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "18av-test",
+  "name": "18AV",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name":"core","path":"apps/video/18av/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/18av/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"AV18RemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "notes": "Initial architecture-first Test release. Separate video, comic, photo and novel adapters; dual-domain 18AV/18H navigation; native Hiker UI; local favorites/history; safety filtering; diagnostics. Device validation is still required for media sniffing and gallery/comic image extraction."
+}
