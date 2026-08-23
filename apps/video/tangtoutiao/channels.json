@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 14:09",
+  "updatedAt": "2026-08-23 14:28",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.16","build":10116,
-      "displayVersion":"Test 0.1.0 · Cover & Short UI Repair 16","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test15 实机已确认短视频、免费长视频和官方预览全部可以播放，因此 Test16 将该播放链冻结，不再改媒体解析。当前只修两个回归：所有封面因 placeholder+$().image 自取流只剩灰块，现保留 thumb_cover_str 优先选图但恢复 Test13 已验证的真实图片 URL@js 内联 plain/AES-CBC/legacy-CFB 解密；短视频由单列超大 pic_1_card 改成双列 movie_2，仍保持点击卡片直接播放。",
-      "highlights":["冻结 Test15 已实机通过的短视频/免费长视频/预览播放链","封面恢复真实远程 URL@js 内联解密，不再依赖 placeholder 回调","继续优先 thumb_cover_str，兼容 PWA AES-CBC 与 App legacy AES-CFB","短视频改成双列 movie_2 紧凑卡片","短视频仍点击卡片直接播放，不增加详情跳转","Test15 完整保留为播放回退基线"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.17","build":10117,
+      "displayVersion":"Test 0.1.0 · Short Source Contract & Fast Tabs 17","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v17_b10117.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test16 实机确认长短视频封面、免费长视频和官方预览已经正常。本轮冻结图片/长视频基线，只修短视频真实播放源和首页切换性能。APK 逆向确认 ShortVideoPlayerActivity 直接把短视频列表对象 ListLikeVideoBean.source_240 交给播放器；Test17 因此优先列表 source_240，不再先请求详情或做多候选 HEAD 探测，缺失时才回退 Test15 旧链。推荐和长视频共用 5 分钟 App featuredAv 会话缓存，短视频列表缓存 3 分钟；API 明显异常的 2–3 秒时长不再在卡片显示。",
+      "highlights":["保持 Test16 已实机恢复的全部封面与长视频/预览播放","短视频按 APK 原生契约优先列表 source_240","短视频点击不再先请求详情，减少进入播放器等待","推荐/长视频共享 featuredAv 会话缓存，Tab 切换避免重复请求","短视频列表独立 3 分钟缓存","隐藏明显异常的 <=5 秒短视频时长标签"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
