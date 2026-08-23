@@ -4,12 +4,43 @@
 
 - App ID：`911baoliao`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.4` / Build `10104`
+- 当前版本：`0.1.0-test.5` / Build `10105`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
-- 源站入口：`https://begin.mrbyudbq.com/`
+- 初始入口：`https://begin.mrbyudbq.com/`
+- 当前已验证镜像：`911bl.com` / `911bla.com` / `911bg7.com` / `d10cq29fdobmmg.cloudfront.net`
+- 真实文章合同：`/archives/<numeric-id>/`
 - 架构：Remote Shell → CDN Bootstrap → Remote Manager 2.0.2 多镜像 → immutable release。
 - 该程序不实现评论、匿名投稿或下载功能。
 - 已进入“我的规则仓库”动态目录：根 `manifest.json` → `apps/video/911baoliao/channels.json` → Test Shell。
+
+## 0.1.0-test.5 / Build 10105 — 2026-08-23 21:18
+
+### 真实文章合同、封面 Parser 与 LazyRule 播放根因修复
+
+Test4 实机继续暴露两个关键事实：
+
+1. 首页仍把 `回家的路`、`投稿方式`、`常见问题`、`所有标签`、`关于我们`、`911暑期活动`、`加入911`、`官方TG群`、`官方推特`、`广告商务` 等站点功能页当成“最新爆料”，说明继续通过标题黑名单修通用 `<a>` Parser 不可靠。
+2. 点击“立即播放”仍报 `java.lang.IllegalArgumentException: Expected URL scheme 'http' or 'https' but no colon was found`，堆栈明确经过 `LazyRuleParser → HttpParser`。回读 Test1 Runtime 后确认播放按钮构造为 `$(mediaJson, articleUrl).lazyRule(...)`；根据海阔 `$().lazyRule()` 合同，外层 `$()` 的第一参数必须是一个合法 URL，因此媒体 JSON 在 lazyRule 函数执行前就被 HttpParser 当作 URL 校验并失败。Test4 的媒体 URL 规范化虽然正确，但没有修到这一层。
+
+Test5 不再继续叠标题黑名单，而是建立站点专用合同：
+
+- 根据当前官网主页实际链接结构，真实正文统一认定为 `/archives/<数字>/`；首页、分类、搜索和相关推荐只接受该路径。
+- `回家的路 / 投稿 / FAQ / 标签 / 活动 / 社群 / 官方推荐 / 广告商务 / 关于我们` 等非 `/archives/` 页面从结构上退出内容 Feed，不再依赖标题是否命中黑名单。
+- 站点可用域名候选扩展为已实际确认的 `911bl.com`、`911bla.com`、`911bg7.com`、CloudFront 永久镜像及原始入口，保留最后成功域名优先。
+- 封面 Parser 扩展到 `data-bg`、`data-background`、`data-background-image`、`data-thumb`、`poster`、`data-lazy-srcset`、`srcset`、CSS `background-image:url(...)` 及卡片块内直接图片 URL 候选。
+- 图片继续排除 logo、brand、favicon、loading、placeholder、404/error、二维码、APP 下载及社交导航图。
+- Runtime 卡片不再使用 911 错误占位图作为文章封面；如果真实封面仍未解析到，改为文本卡，避免“所有文章都显示同一个假封面”。
+- 播放链重写：单线路由详情页直接交付真实媒体 URL；多线路需要动态返回 PlayModel 时，外层改为 `$(articleUrl).lazyRule(...)`，确保 HttpParser 看到的是合法文章 URL，媒体 JSON 仅作为 lazyRule 的函数参数，不再充当 URL。
+- 没有可验证结构化媒体而存在网页播放器时，直接使用 `video://<articleUrl>` 嗅探兜底。
+- 收藏 lazyRule 同步改为 `$(articleUrl).lazyRule(...)`，避免把标题/封面等普通字符串塞入 `$()` URL 参数。
+- 安全过滤继续保留，并加强“私密/不雅/酒店/性爱 + 泄漏/流出/偷拍”等明显非自愿私密内容模式。
+
+### Test5 实机验收点
+
+1. 首页“最新爆料”第一项开始必须直接是真实 `/archives/<id>/` 文章，不再出现回家、投稿、FAQ、标签、活动、社群和广告功能页。
+2. 有真实封面的文章应显示自身封面；解析不到时宁可使用文本卡，也不再显示统一错误图。
+3. 点击有结构化媒体的文章播放时，不得再出现 `Expected URL scheme 'http' or 'https' but no colon was found`。
+4. 如果 scheme 异常消失但视频仍不能播，再进入下一阶段研究 911 自身播放器的 HLS/iframe/签名协议；不得回退到“放宽 URL 校验”方案。
 
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23 21:02
 
@@ -34,13 +65,6 @@ Test4 新增独立 `content_adapter_patch.js`，不改 Test1 Core/Runtime 基线
 - 单线路继续直接交付；多线路只有全部通过 HTTP(S) 校验后才构造 `urls/names/headers` PlayModel；如果结构化线路全部无效，则退回 `video://` 网页媒体嗅探，而不是把坏 URL 交给播放器。
 - Test4 Shell、Bootstrap 与 lazyRule 回调继续使用 jsDelivr + Remote Manager 2.0.2 多镜像；`minBuild=10104`，保留 Test2 中文路由修复和 Test3 CDN 容灾。
 
-### Test4 实机验收点
-
-1. 首页顶部“最新爆料”不再出现上述广告/导航伪视频。
-2. 正常文章卡尽可能显示自身真实封面，不再大面积显示 911 Logo/通用错误图。
-3. 同一篇 Test3 报 URL scheme 异常的文章重新点击“立即播放”，不应再抛缺少 `http/https` scheme 的 Java 异常。
-4. 若该文章真实线路仍无法播放，下一轮必须根据“设置与诊断”里的实际播放 route/URL 继续研究站点自身播放器协议，不得再通过放宽 URL 校验蒙混过关。
-
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23 20:40
 
 ### Raw GitHub 启动链实机修复
@@ -61,8 +85,6 @@ Test3 采用完整 transport hotfix，而不是只替换首页入口：
 - `minBuild=10103`，旧 Test1/Test2 激活状态会被新 Shell 的最低 Build 门槛拉回 Test3 默认 Release。
 - 保留 Test2 的原始中文规则名内部路由修复，其余首页 UI、Parser、收藏/历史逻辑不变。
 
-本次确认的发布原则：远程 Shell 不能把 `raw.githubusercontent.com` 作为唯一 Bootstrap 入口；业务模块也不能只修首屏而遗漏 lazyRule/二级页的二次 Bootstrap 地址。
-
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23 20:17
 
 ### 中文规则名内部路由实机修复
@@ -80,8 +102,6 @@ Test2 采用单点不可变补丁：
 - 独立搜索输入回调同步修复，避免输入关键词后再次把规则名编码。
 - 首页、分类、详情、收藏、历史、设置等页面均继续复用 Test1 Shell 页面声明，不改页面 path。
 - Test1 首页 UI、通用 Parser、图片/播放链、本地收藏和历史逻辑保持不变，只修路由。
-
-本次实机也确认 Test1 至少完成了两项事实闭环：① 云仓卡片和程序导入链已经工作；② 首页可以请求到站点并输出真实分类/内容卡。下一轮重点转向分类结构、封面真实性、详情正文和播放协议。
 
 ## 云端仓库发布链修复 — 2026-08-23 19:59
 
@@ -142,16 +162,5 @@ Runtime
 ### 内容边界
 
 首页、分类、搜索、详情与本地列表统一经过内容过滤；明显涉及未成年人或明确非自愿私密影像的条目不进入本程序浏览/播放链。
-
-### 当前待实机确认
-
-当前开发环境无法解析 `begin.mrbyudbq.com` DNS，因此 Test1 采用多页面形态兼容 Parser，而不是把未验证 DOM 猜成站点事实。首轮实机需要确认：
-
-1. 首页是否能识别真实卡片与封面。
-2. 分类导航的真实 URL 形态。
-3. 搜索实际路由。
-4. 详情正文/图片节点。
-5. 播放字段位于 HTML、DPlayer config、iframe 还是 JS 渲染层。
-6. 图片是否需要特殊 Header、解密或代理。
 
 Test1 一旦发布即冻结；后续根据实机截图/诊断建立 911 专用 Adapter，以新 Test 追加，不原地覆盖。
