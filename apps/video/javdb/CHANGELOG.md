@@ -10,7 +10,12 @@
 - Stable 入口：`cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt`
 - Stable Release：`apps/video/javdb/releases/3.9.42/release.json`
 - Previous Stable：`3.9.41` / build `2026082006` / `cloud/javdb/v3.9.41/javdb_v3.9.41_cloud.txt`
-- Test：`3.9.42-test.5` / build `2026082245` / 已晋级 Stable 3.9.42，保留用于对照
+- 当前 Test：`3.9.43-test.3` / build `2026082304` / Remote / 待实机验证
+- Test 入口：`cloud/javdb/v3.9.43-test.3/javdb_v3.9.43_test3.txt`
+- Test Bootstrap：`apps/video/javdb/bootstrap_test_v1_b2026082304.js`
+- Test Runtime：`cloud/javdb/v3.9.43-test.3/runtime.js`
+- Test Release：`apps/video/javdb/releases/3.9.43-test.3/release.json`
+- `3.9.43-test.1/test.2`：传输恢复的实机前草稿，已由 Test3 取代，不作为用户测试入口。
 - 上一已验证启动/UI 基线：`3.9.42-test.3` / build `2026082243`
 - 上一已验证分类/排行/演员总体基线：`3.9.42-test.1` / build `2026082241`
 - 已知失败 Test：`3.9.42-test.2` / build `2026082242`（首页启动 `ReferenceError: JDB 未定义`）
@@ -70,14 +75,17 @@
 - SDK test.4：顶层显式声明 `var JAVPlayback`，加载 test.2 基线时将 `var JAVPlayback=` 转成对当前导出变量赋值；已完成 Manager 风格作用域 smoke test。
 - **2026-08-23 用户明确要求把当前 Test5 晋级正式版，因此 Shared Playback `stable` 指针固定到 immutable `1.0.0-test.4`；未来新 Provider/修复只移动 `test` 指针，不得原地改变 Stable 指针。**
 
-### Runtime / eval 作用域
+### Runtime / eval / 远程传输
 
 - Test2 实机启动失败：`JSEngine#17(eval)#9(eval)` / `ReferenceError: JDB 未定义`。
 - 根因：Test1 在同一个 `core()` 内 `eval(Core) -> eval(Patch) -> eval(call)`；Test2 抽出 `loadCore()` 后，Core 中 `var JDB` 只活在 `loadCore()` 局部作用域。
 - Test3 修复：`core()` 与 `javdb3ExternalPlay` 均恢复同一函数作用域 direct eval。
 - 2026-08-23 用户 Test3 截图证明小程序已正常进入首页/演员/更多播放，故 **Test3 启动作用域修复已实机确认有效**。
 - Stable 3.9.42 使用独立 `runtime.js` 和独立 cache key，继续保持 Core/Patch/最终调用同一作用域，不复活 Test2 的 `loadCore()` 方案。
-- 通用规则已同步到 `HIKER_APP_DEVELOPMENT_CAUTIONS.md`：依赖 eval 创建局部符号的加载链不能跨 helper 假定可见；语法门禁之外必须做真实导出/entry smoke test。
+- **2026-08-23 晚间 Stable 3.9.42 新事故：此前可正常运行的规则突然启动报 `ReferenceError: JDBCLOUD 未定义`。回读确认 GitHub 中 `cloud/javdb/v3.9.42/runtime.js` 文件仍存在且内容正常；真正故障点是 Stable Shell 直接执行 `eval(fetch(raw.githubusercontent.com/.../runtime.js));JDBCLOUD.core(...)`，且未校验 fetch 返回值。设备当时 Raw 请求临时失败/返回空时，`eval('')` 本身不会报错，下一句才表现为 `JDBCLOUD 未定义`。这不是 JavDB API 故障，也不是 Runtime 文件被删除。**
+- `3.9.43-test.3` 为纯传输恢复版，业务/API/UI 完整继承 Stable 3.9.42：Shell 改为固定提交的 jsDelivr Bootstrap；Bootstrap 将 Runtime 持久缓存，并按“有效本地缓存 → jsDelivr → GitHub Web Raw → raw.githubusercontent.com”恢复；Runtime 对 Core/Patch/Custom 分片也使用同样多线路与内容校验，只有通过标记校验的代码才写缓存。
+- Test3 Bootstrap 中 `eval(Runtime) → JDBCLOUD.core/custom()` 保持在同一个方法作用域；Runtime 内仍保持 `eval(Core) → eval(Patch) → call` 同一函数作用域，避免重犯 JDB/JDBCLOUD direct-eval 生命周期事故。
+- 通用规则已同步到 `HIKER_APP_DEVELOPMENT_CAUTIONS.md`：远程 Shell 禁止把 `eval(fetch(singleRaw)); Namespace...` 当唯一启动链；必须校验内容并至少具备可验证缓存/备用传输。
 
 ### UI / 信息架构
 
@@ -90,19 +98,22 @@
 
 - Stable 与 Test 同名覆盖；Local 使用 `JavDB v3 本地版` 独立命名。
 - Stable 3.9.42 使用新 Shell `version=2026082301`、新 runtime URL 和 `3942stable` 独立缓存键，不覆盖 3.9.41 文件。
+- Test 3.9.43-test.3 使用新 Shell version/build `2026082304`、Bootstrap 固定提交 URL、新 Runtime URL，以及 `3943t3` 独立 Runtime/Core/Patch/Custom 缓存键。
 - 分类状态继续使用 `jdb3_cat42_*`。
 - Local 当前仍是 3.9.41-local；如需更新本地版，必须从已确认的 Stable 3.9.42 另行派生并做隐私扫描，不直接把远程 Shell 当本地版。
 
 ## 已知风险与禁止回退方案
 
 - 当前 Stable 为 3.9.42；3.9.41 保留为完整 rollback，不原地覆盖或删除。
-- Test1 已验证分类/排行总体结构，不因播放问题整块重写。
+- Stable 3.9.42 的业务链仍是当前稳定基线，但其旧 Shell 已实机暴露 Raw 单点启动风险；在 3.9.43 传输恢复实机通过并晋级前，不原地修改 Stable 3.9.42 文件。
+- `3.9.43-test.1/test.2` 是修复过程中在实机前发现不够稳的草稿，冻结；用户只测试 Test3。
+- Test1 已验证分类/排行总体结构，不因播放或传输问题整块重写。
 - Test2 已证实启动失败，禁止作为活动 Test 或 recovery base。
 - Test4 不作为用户测试入口；其有效演员补丁已继承到 3.9.42，Shared SDK test.3 继续冻结。
 - 第三方 Provider 属于可选能力，任一外站失败不得拖垮 JavDB 官方功能。
 - 123AV/Jable 已实机可播；后续修 MissAV 时默认冻结它们的解析链。
 - Shared Playback Stable 已固定到 immutable SDK test.4；后续不得让 Stable 无边界跟随 test channel。
-- 下一轮 JavDB Test 必须从 Stable 3.9.42 向前开发，不再从 3.9.41 或失败 Test2 恢复。
+- 下一轮业务 Test 必须从 Stable 3.9.42 向前开发；本轮 3.9.43 只处理远程传输可靠性。
 - 未经当前源码/实机证据，不从其它 JAV 站、旧 JavDB/JavDB2 推断协议事实。
 
 ## 回归测试清单
@@ -116,6 +127,11 @@
 - [x] Shared SDK Test2 / Jable 可播放（2026-08-23）
 - [x] Shared SDK Test2 / MissAV 不可播放，已确认为待修项（2026-08-23）
 - [x] Test3 / 123AV 图标为空，已确认为 UI 缺陷（2026-08-23）
+- [x] Stable 3.9.42 “突然 JDBCLOUD 未定义”已定位为单 Raw Runtime 传输故障，而非业务/API/文件删除。
+- [ ] Test 3.9.43-test.3 从云仓库覆盖导入后首页可启动，不再 `JDBCLOUD 未定义`
+- [ ] Test3 第二次冷/热启动命中已缓存 Runtime 仍正常
+- [ ] Test3 任一二级页可独立进入，不依赖先打开首页
+- [ ] Test3 搜索 / 详情 / 评论 / 官方播放 / 磁链无回归
 - [ ] Stable 3.9.42 演员 `无码` / `欧美(女)` 新映射实机回归
 - [ ] Stable 3.9.42 演员页重复搜索行已消失
 - [ ] Shared SDK Stable / Manager 在海阔实机加载/version 校验正常
@@ -123,7 +139,6 @@
 - [ ] Jable 二次回归仍正常
 - [ ] MissAV 只展示真实存在版本
 - [ ] MissAV 选中版本后可播放并自动最高画质
-- [ ] 搜索 / 详情 / 评论 / 官方播放 / 磁链无回归
 - [ ] Stable 3.9.42 同名覆盖安装正常
 - [ ] Local 独立安装与隐私扫描
 
@@ -134,6 +149,18 @@
 ---
 
 ## 版本记录
+
+### 3.9.43-test.3 / 2026-08-23
+
+- 纯远程传输恢复版本；业务/API/UI/共享播放行为全部继承 Stable 3.9.42。
+- 修复 Stable Shell 的 `raw.githubusercontent.com/runtime.js` 单点依赖及空返回未校验问题。
+- 新 Shell Build/version：`2026082304`；外层使用固定提交 SHA 的 jsDelivr Bootstrap，不再直接 `eval(fetch(raw runtime))`。
+- Bootstrap：`apps/video/javdb/bootstrap_test_v1_b2026082304.js`；Runtime：`cloud/javdb/v3.9.43-test.3/runtime.js`。
+- Bootstrap Runtime 恢复顺序：有效本地缓存 → jsDelivr → GitHub Web Raw → GitHub Raw；校验必须包含 `var JDBCLOUD=`。
+- Runtime 对 Core/Patch/Custom 分片采用相同的本地缓存 + 多镜像恢复；补丁按版本 marker 校验后才缓存。
+- 保持 `eval(Runtime) → JDBCLOUD...` 与 `eval(Core/Patch) → JDB...` 必要的同作用域调用关系。
+- `3.9.43-test.1/test.2` 为实机前淘汰草稿，禁止让用户测试。
+- Stable 3.9.42 文件保持只读；Test3 实机通过后再新建 Stable 3.9.43，不原地覆盖。
 
 ### 3.9.42 Stable / 2026-08-23
 
@@ -146,6 +173,7 @@
 - 新增 `stable.json` / `latest.json`，registry/manifest/channels 同步到 Stable 3.9.42。
 - Previous Stable 3.9.41 完整保留用于回退。
 - Local 暂不跟随晋级，继续保持 3.9.41-local。
+- 2026-08-23 晚间实机暴露：Shell 对 Raw Runtime 的单点启动依赖可在网络异常时导致 `JDBCLOUD 未定义`；业务 3.9.42 本身不是根因，传输修复进入 3.9.43 Test。
 
 ### 3.9.42-test.5 / 2026-08-23
 
