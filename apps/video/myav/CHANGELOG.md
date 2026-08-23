@@ -5,16 +5,58 @@
 ## 当前基线（2026-08-23）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.1` / Build `10101`
-- Shell：`apps/video/myav/myav_remote_test_v1_b10101.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v1_b10101.js`
-- Release：`apps/video/myav/releases/0.1.0-test.1/release.json`
+- 当前仅 Test：`0.1.0-test.2` / Build `10102`
+- Shell：`apps/video/myav/myav_remote_test_v2_b10102.txt`
+- Bootstrap：`apps/video/myav/bootstrap_test_v2_b10102.js`
+- Release：`apps/video/myav/releases/0.1.0-test.2/release.json`
+- Test2 Patch：`image_patch.js` + `runtime_patch.js`，复用 Test1 Core/Runtime 基座，不原地覆盖 Test1。
+- 图标：`apps/video/myav/assets/icon.svg`，禁止再依赖 `javlist.me/favicon.ico`。
 - 数据源：`https://javlist.me/`
 - Remote Manager：`libs/updater/remote_manager.js` v2.0.1
 - Shared JAV Playback Stable：`1.0.0-test.4` / MissAV + 123AV + Jable
 - Stable：尚未建立；必须完成实机回归后才允许晋级。
 
-## Product Blueprint · Test1
+## 2026-08-23 · Test1 首轮实机结果 → Test2
+### 已确认
+- “我的规则仓库”补齐 root manifest / manifest_meta / channels 后，MyAv Test1 已能在手机端看到、导入和启动。
+- 首页结构、有码/欧美/国产/无码 Tab、搜索/高级筛选/分类索引/排行榜/收藏/历史/更多/设置入口均可渲染。
+- 列表已经识别出真实影片详情链接，点击可进入详情；例如 `vrkm-1905` 详情能够打开。
+- 详情标题、番号、日期、时长、第三方播放区、磁力/预览/收藏/原站操作均能渲染；该实机截图识别到 `预览 20`，说明详情主体 HTML 与预览图片链已被解析。
+
+### Test1 P0 图片故障
+- 首页所有影片封面显示成同一张灰底 `AVLIST` 图，不是真实影片封面。
+- 同一行多个影片出现重复/错位番号，例如多个卡片都显示成 `vrkm01890`；这是 Parser 卡片边界错误，不只是图片加载失败。
+- 详情 Hero 左侧封面为空白，没有拿到真实主封面。
+- `https://javlist.me/favicon.ico` 在海阔中不可作为稳定程序图标，设备实际显示的是失败后的字母/占位效果。
+
+### 根因
+1. Test1 `attrImage()` 使用单个正则 `(?:data-original|data-src|data-lazy-src|src)=...`。正则虽然把 lazy 字段写在前面，但实际匹配仍从标签左到右扫描；当原站 `<img>` 是 `src=占位图` 写在前、`data-src/data-original=真实图` 写在后时，会先命中 `src`，因此稳定拿到 AVLIST/loading 占位图。
+2. Test1 列表 Parser 遇到 `/c/<opaque>` 链接后立即去详情链接前后截取约 3KB HTML，并从宽上下文中恢复番号/日期/图片。一个影片通常存在“图片链接”和“标题链接”两个相同 href，Test1 又对 href 首次出现就 `seen`，导致只保留图片锚点；标题为空后，再从宽上下文扫描 raw HTML，容易先匹配到图片文件名或相邻影片番号，于是出现串卡。
+3. Test1 详情 `coverImage()` 对全页 `<img>` 做泛化扫描，缺少 `og:image / JSON-LD / 详情首屏区域` 的明确优先级，容易拿到站点公共图或根本没有可用候选。
+
+### Test2 修复
+- `image_patch.js`：
+  - 图片属性改成逐字段显式读取，优先级：`data-original → data-src → data-lazy-src → data-lazy → data-url → data-echo → data-cover → data-ks-lazyload → data-thumb → src → srcset/style`。
+  - 新增 placeholder 判定，过滤 loading / lazy / placeholder / blank / spacer / transparent / noimage / default / favicon / logo / avatar 等公共图。
+  - 列表按**同一个详情 href 聚合全部锚点**，把图片锚点与标题锚点合并成同一影片实体，不再“首个 href 锚点即定稿”。
+  - 番号/日期优先从当前影片标题锚点后的**可见文本**提取，禁止直接在 raw HTML 属性/图片 URL 中先抓番号。
+  - 详情封面优先：`og:image/twitter:image → image_src → JSON-LD image → 预览区之前的详情图片 → 全页评分兜底`。
+- `runtime_patch.js`：
+  - Home 使用仓库自有 SVG 图标。
+  - 设置页显示 Test2 / Build10102 与图片链状态。
+  - Test 更新/回退 require cache key 升到 10102。
+- Shell 图标、规则仓库 channels 图标、root manifest 图标全部切换为仓库自有 `assets/icon.svg`。
+- 本地 synthetic smoke 已覆盖 `src=loading.jpg + data-src=real.jpg`：真实图优先；并覆盖同 href 图片/标题双锚点 + 下一卡片，输出正确 `href/code/date/image`，避免相邻番号串卡。
+
+### Test2 待实机确认
+- [ ] 首页真实封面恢复，不再显示 AVLIST 占位图。
+- [ ] 首页每张卡片的番号/标题与当前卡片一致，不再串成相邻影片番号。
+- [ ] `vrkm-1905` 详情 Hero 显示真实封面。
+- [ ] 顶部 MyAv 程序图标显示仓库自有紫色 MyAv 图标。
+- [ ] 预览 20 张仍正常，不因封面 Parser 改动退化。
+- [ ] 有码/欧美/国产/无码与搜索/筛选/排行继续正常。
+
+## Product Blueprint
 ### 页面地图
 - Home：有码 / 欧美 / 国产 / 无码四个同级工作区，快捷进入搜索、筛选、分类索引、排行、收藏、历史、更多、设置。
 - Filters：按原站当前页面动态解析年份 / 标签 / 资源状态，切换筛选只刷新当前页，不重复压栈。
@@ -42,8 +84,7 @@
 - 普通 HTML 请求优先 `fetch`；响应为空、过短或 challenge 时使用 `fetchCodeByWebView` 作为页面源码兜底。
 - 首页导航缓存 20 分钟，仅缓存成功且长度足够的 HTML；设置页可主动重置。
 - 列表实体以真实 `/c/<opaque>` 详情 URL 为主键，**不尝试解密/伪造 opaque id**。
-- 列表 Parser 以详情锚点 `/c/` 为稳定实体特征，并从同一卡片邻域恢复标题、日期、番号、资源标签和图片；Test1 需实机确认图片 DOM 与卡片边界。
-- 分页不写死完整 query；先从当前 HTML 提取 `page=2` 模板，再替换目标 page，保留原站 year/tag/other/sort 参数。Test1 静态 smoke 已发现并修复 `?page=2...` 相对 query 必须保留当前文件名的问题。
+- 分页不写死完整 query；先从当前 HTML 提取 `page=2` 模板，再替换目标 page，保留原站 year/tag/other/sort 参数。
 - 筛选链接从原站当前页面动态提取，保证站点 hash/token 变化时不把历史常量写死。
 - 索引入口从首页导航按显示名称发现；索引项继续使用原站真实 href。
 - 搜索优先动态解析 `<form>` action/method/input name/hidden fields；失败才有限尝试常见关键词参数，并明确显示诊断，不制造伪结果。
@@ -79,38 +120,32 @@
 ## 2026-08-23 云端仓库发布修复
 - 初次发布时只完成 `registry.json`、MyAv Test/Release/Bootstrap/Shell 登记，遗漏根目录 `manifest.json`；用户实机因此在“我的规则仓库”看不到 MyAv。
 - 真实云仓目录由“我的规则仓库” Stable 的 `HikerRuleRepo.manifestPath='manifest.json'` 读取，`registry.json` 不是手机端程序展示清单。
-- 已将 MyAv Test 加入根 `manifest.json`，revision 提升为 `202608231103`，云仓项目数更新为 9。
-- 规则仓库还有独立 `manifest_meta.json` revision 探针；只改 manifest 不同步 meta 会让设备继续命中旧目录缓存。已同步 `manifest_meta.json` 到相同 revision / itemCount=9。
-- MyAv 最初 `channels.json` 使用 `{stable,test}` 内部对象结构，但规则仓库通用版本中心要求 `channels:[{channel,...}]`；已改为 schema 4 的 Test-only 标准通道格式，保证“看得到卡片”后还能进入版本中心并导入 Test。
-- 发布新程序到云仓以后固定检查：`registry → app channels/test/release/Shell → root manifest.json → manifest_meta.json → 规则仓库实机同步/导入`，不能把“registry 已登记”当成“云仓已发布”。
+- 规则仓库还有独立 `manifest_meta.json` revision 探针；只改 manifest 不同步 meta 会让设备继续命中旧目录缓存。
+- MyAv 初始 `channels.json` 使用 `{stable,test}` 内部对象结构，但规则仓库通用版本中心要求 `channels:[{channel,...}]`；现已使用 schema 4 的 Test-only 标准通道格式。
+- 发布新程序/新版本到云仓以后固定检查：`registry → app channels/test/release/Shell → root manifest.json → manifest_meta.json → 规则仓库实机同步/导入`。
 
-## Test1 静态门禁
+## 静态门禁
+### Test1
 - [x] Core `node --check`。
 - [x] Runtime `node --check`。
 - [x] Bootstrap `node --check`。
 - [x] release/test/channels/manifest JSON parse。
-- [x] 本地 synthetic parser smoke：列表 / 番号 / 磁力 / 预览图 / 预览视频 / 分页模板。
-- [ ] Remote installer guard / repository guard。
-- [x] GitHub 回读：registry / manifest / manifest_meta / Test / channels / Release / Bootstrap / Shell / Core / Runtime。
+- [x] synthetic parser smoke。
+- [x] GitHub 回读。
 
-## Test1 实机回归（待确认）
-- [ ] 从“我的规则仓库”导入 MyAv Test，首页正常启动并显示 `0.1.0-test.1 / 10101`。
-- [ ] 首页有码 / 欧美 / 国产 / 无码连续切换 5 次后，系统返回一次即可离开，不叠页面栈。
-- [ ] 首页影片卡有标题、日期/番号、封面；翻页正常。
-- [ ] 高级筛选年份 / 标签 / 磁力 / 无码流出 / 高清 / 字幕能组合切换并刷新结果。
-- [ ] 9 类分类索引至少随机验证 3 类可分页并进入结果。
-- [ ] TOP20 / 周榜 / 月榜切换和翻页正常。
-- [ ] 有码 / 欧美 / 国产搜索各测试一个关键词。
-- [ ] 详情 Hero、档案、演员/TAG、简介正常。
-- [ ] 有磁力的旧片能列出磁力；新片无磁力显示真实空状态。
-- [ ] 磁力点击复制；长按分别测试 迅雷 / PikPak / 123云盘 / 光鸭云盘。
-- [ ] MissAV / 123AV / Jable 至少各验证一次可播番号。
-- [ ] 预览图能显示清晰原图；如果站点需要脚本展开，WebView fallback 生效。
-- [ ] 收藏后进入本地收藏可见；取消收藏正常；浏览历史正常。
-- [ ] 实机截图复核 Home / Filters / Detail 三个核心页面的密度、卡片比例和操作层级。
+### Test2
+- [x] `image_patch.js` `node --check`。
+- [x] `runtime_patch.js` `node --check`。
+- [x] Bootstrap `node --check`。
+- [x] Release JSON parse。
+- [x] Shell 外层 JSON + 14 pages parse。
+- [x] lazy-load + href-group synthetic smoke；预发布 smoke 曾发现 patch 使用循环残留 `href` 以及第二卡片上下文会吃前卡番号，已在 Test2 正式 pointer 更新前修正并重测通过。
+- [ ] 海阔 Test2 实机图片回归。
 
 ## 禁止回退 / 待确认
 - 禁止把站点 opaque `/c/<id>` 当成可预测业务 ID 逆推。
 - 禁止写死年份/标签 hash；从当前页面读取真实 href。
 - 禁止把外围独立站“视频在线/韩漫”编造为当前已原生支持。
-- Test1 的 HTML Parser 仍需海阔实机确认 DOM/图片 lazy-load 细节；任何实机差异以手机结果优先，下一版新 build 修正，不原地覆盖 Test1。
+- **禁止再用“一个正则匹配 data-src|src”来代表 lazy-load 优先级**；HTML 属性匹配必须逐字段读取，不能依赖 alternation 顺序。
+- **禁止用影片锚点前后几 KB raw HTML 直接抓番号**；先按实体 href 聚合，再从当前实体的可见文本/局部结构读取。
+- Test2 图片链仍需海阔实机确认；任何差异以手机结果优先，下一版必须新 Build 修正，不原地覆盖已发布 Test2。
