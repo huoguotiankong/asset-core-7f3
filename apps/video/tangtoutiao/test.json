@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.2",
-  "build": 10102,
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082303,
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082304,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v2_b10102.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v3_b10103.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test1 首轮实机截图修复原生组件 HTML 标签原样显示；列表适配改为深层递归发现并扩展嵌套字段；空列表直接显示业务 code/msg/schema。"
+  "notes": "根据 Test2 实机明确的 401 用户已过期与 APK 启动链复核：system_oauth_id/system_iid 共用同一持久设备 ID；内容请求前自动调用 getOpenAdsAndVersion 取得 AppConfigBean.token；401 自动重握手一次。快捷导航改远程 SVG。"
 }
