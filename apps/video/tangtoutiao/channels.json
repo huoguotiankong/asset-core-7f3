@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 11:46",
+  "updatedAt": "2026-08-23 12:04",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.10","build":10110,
-      "displayVersion":"Test 0.1.0 · Core Rebuild 10","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v10_b10110.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test9 实机确认两个架构问题仍未真正修到运行链：Core Patch 只覆盖导出 imageUrl，但 item/detail 等旧闭包继续调用 Test8 的 direct-public-image；播放又只凭 .m3u8 后缀判断 HLS，导致 yd-long/.../https://... 这类无后缀包装源被当成 direct。Test10 完整重建 Core，所有图片统一使用 image helper + ImageAdapter；媒体先探 Content-Type/包装形态，并同时尝试外层包装 URL 与内层原始 URL，短视频继续列表直接播放。Stable 仍不存在。",
-      "highlights":["完整重建 Core，不再使用覆盖导出函数但旧闭包不变的 Patch 方式","所有视频/详情/漫画/排行图片统一走 $(url,headers).image + ImageAdapter，明文图片由 magic 自动直返","播放不再依赖 .m3u8 后缀，先探响应 Content-Type/包装 URL，再决定 HLS/直链","支持 yd-long/.../https://... 外层包装 URL 与内层原始 URL 双候选","无后缀 HLS 同样执行 AES-CFB 解密、master 子索引解析、M3U8 本地代理与标称时长校验","短视频卡片继续直接播放，不进入二级详情"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.11","build":10111,
+      "displayVersion":"Test 0.1.0 · Access & Image Loader 11","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v11_b10111.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test10 实机确认短视频封面已恢复，但长视频/精选封面仍灰；同时 34:52 长视频只下发 2 秒 source 与 120 秒 preview，结合 APK 的 isfree/coins/is_pay 和 /api/user/watchingMvByCoins 可确认部分长视频属于收费/试看语义而非单纯播放故障。Test11 图片改为 APP 风格自取：本地占位触发 JS 后自行 fetch/toHex、多候选/多 Header 重试、明文判型和 AES 解密；视频详情按免费/已购买/未购买收费三态展示，收费未购只提供试看和显式确认后的汤币解锁，绝不自动消费。Stable 仍不存在。",
+      "highlights":["图片改为本地占位触发 + JS 自行 fetch/toHex，不再要求远程图片先被海阔图片加载器成功读取","图片按候选 URL 与 okhttp/browser/minimal/Referer Header 模式重试，再执行明文 magic、legacy AES-CFB、AES-CBC 判型","详情恢复 APK 的 isfree / coins / is_pay / preview_tip / preview_video 访问状态","未购买收费视频显示试看与汤币价格，不再把 2 秒/120 秒预览误报为完整线路故障","汤币解锁仅在用户点击并再次确认后调用 /api/user/watchingMvByCoins，绝不后台自动消费","短视频继续列表卡片直接播放；Test10 HLS sniff/包装 URL 播放适配继续复用"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
