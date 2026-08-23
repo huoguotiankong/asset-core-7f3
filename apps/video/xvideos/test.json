@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "xvideos-test",
   "name": "XVideos",
-  "version": "0.1.0-test.2",
-  "build": 10102,
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082302,
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082303,
   "managerVersion": "2.0.1",
-  "release": "apps/video/xvideos/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/xvideos/xvideos_remote_test_v2_b10102.txt",
+  "release": "apps/video/xvideos/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/xvideos/xvideos_remote_test_v3_b10103.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test2：按首轮实机结果修复首页/搜索视频卡识别。Test1 错误地假设视频 URL 为纯数字 ID；当前官网大量使用 video.<字母数字token>/...。新版改为 frame-block 优先 + video.* 宽松路径识别。"
+  "notes": "Test3 产品化优化：独立搜索中心+搜索历史清理；热门+A-Z分类；地区/创作者分离和主页视频恢复；详情页图标化与播放上下文隔离；多画质默认最高画质。"
 }
