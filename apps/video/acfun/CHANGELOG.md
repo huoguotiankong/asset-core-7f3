@@ -4,7 +4,51 @@
 >
 > **并行开发约束：** 当前对话只维护 ACFun。`registry.json`、根 `manifest.json` 等共享文件在写入前必须重新读取，只手术式修改 ACFun 项，禁止覆盖其它并行小程序状态。
 
-## 当前恢复基线
+## 2026-08-23 · Test 1.0.0-alpha1 / Build10001 / Shell8.0 —— Clean Rewrite Alpha1
+
+### 当前版本边界
+
+- **Stable 不动：** `0.4.9 / Build149 / Shell5.11.3` 与 `latest.json` 保持正式恢复基线。
+- **Test/Candidate 全新起线：** `1.0.0-alpha1 / Build10001 / Shell8.0.0-test`。
+- Test Bootstrap 使用 `id=acfun-test`，Remote Manager 状态键与 Stable 的 `acfun` 完全隔离；测试失败不会污染正式版激活状态。
+- 活动 Test Release 只加载 `next/core → protocol → provider → media → ui` 五层新模块，不再加载 `0.6.0-alpha18` 的 Stable8+A15/A17/A18 历史补丁栈。
+- 旧 Alpha18 及更早版本保留为历史证据，不作为当前实现基线。
+
+### 产品/UI 重写
+
+- 参考用户当前 APP/H5 实机截图重新设计首页，不再把 Station 强行做成一个全局筛选器。
+- `精选 / 里番` 首页按真实 Station **多专题分块**：专题标题 + “查看更多” + 6 个预览卡片；翻页继续下一个专题组，结构对应 APP 的“进站必看 / 新番”等信息流。
+- 一级主导航：`精选 / 漫画 / 动漫 / 视频 / 里番 / 短视频`；快捷入口：`社区 / 小说 / 有声 / 我的`。
+- 动漫/视频使用 `classTypeList → Zone/Tag → 排序`；漫画使用独立 Station；短视频使用独立 loadType；社区、小说、有声各有自己的分类 Adapter。
+- 二级详情、漫画阅读、小说/有声阅读、评论、搜索、收藏、历史、设置、诊断全部拆为独立 `hiker://page/...?...&simple=true` 页面；同级 Tab/筛选只改状态并 `refreshPage(false)`，不叠同级页面栈。
+- 普通原生标题/描述不注入 HTML；只有评论/正文等明确 `rich_text` 区域使用 HTML。
+
+### 协议 / Provider / 图片 / 播放
+
+- 以 APK 1.9.7 静态证据和已有实机成功链重建：游客 `user/traveler/`、`t + s(MD5) + deviceId + User-Mark + aut`、`encData` AES-CBC、动态接口 Host、Station、ClassType/Zone、视频、漫画、短视频、社区、小说/有声及搜索。
+- 图片统一经过 ImageAdapter：相对 `jhimage/...` 先映射到 `https://cdn.ukaim.com/`，再进入已验证 `acfunImageDecoder`；明文 JPEG/PNG/GIF/WebP 直接放行，非明文才按 `2020-zq3-888` XOR 前100字节，并使用持久本地缓存。
+- 播放统一为 **Seed First**：列表/详情真实媒体字段优先；只有 Seed 缺失才尝试 `video/can/watch`；最终构造远程 `/api/m3u8/h5/decode?path=...` 并连同 UA/Referer/Origin 直接交播放器，不默认 `cacheM3u8`。
+- 所有播放/收藏等序列化回调必须重新进入当前 `bootstrap_test_v080.js` 再 `ACFunNextBoot.loadOnly()`，禁止闭包加载旧 Release。
+
+### 当前验证状态
+
+- 本地静态校验已通过：5 个业务 JS + Bootstrap 均通过 `node --check`；Shell 外层 JSON roundtrip 通过；VM smoke load 能得到 `ACFunNext.version=1.0.0-alpha1`、Build 标识、9 个栏目和基础视频模型。
+- 当前环境不能直接实时打开用户提供的两个站点，因此本版数据合同来自：**用户当前截图 + APK 1.9.7 静态证据 + 现有 Stable/Alpha 实机成功事实**；网站运行时变化必须由海阔实机继续验证。
+- **PENDING 实机回归，禁止晋级 Stable。** 首轮必须检查：
+  1. 首页首屏、多专题块、封面；
+  2. 一级 Tab `A→B→C→A→B` 后只按一次返回能离开 Home；
+  3. 动漫/视频 分类、标签、排序；
+  4. 普通视频详情、播放、快速切换；
+  5. 短视频列表/切换/直接播放；
+  6. 漫画详情→章节→图片；
+  7. 小说/有声列表→章节/音频；
+  8. 社区列表→详情→评论；
+  9. 搜索输入与多类型切换；
+  10. 根据真实截图继续做 UI 第二轮视觉收敛。
+
+---
+
+## 0.6.0 Alpha 历史恢复记录
 
 ### Stable 0.4.9 / Build149 / Shell5.11.3
 
@@ -13,7 +57,7 @@
 - 图片解密固定合同：key `2020-zq3-888`，只 XOR 前100字节；JPEG/PNG/GIF/WebP 明文不重复解密。
 - Stable/latest 在 Alpha18 仍冻结。
 
-### Test 0.6.0-alpha18 / Build169 / Shell7.4（当前测试）
+### Test 0.6.0-alpha18 / Build169 / Shell7.4（历史测试）
 
 #### Alpha16 最新实机探针
 
