@@ -4,12 +4,70 @@
 
 - App ID：`51chigua`
 - 当前通道：Test only
-- 当前版本：`0.1.0-test.3`
-- Build：`10103`
-- Shell：`1.0.0-test.3` / rule version `2026082303`
+- 当前版本：`0.1.0-test.4`
+- Build：`10104`
+- Shell：`1.0.0-test.4` / rule version `2026082304`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://51cg1.com/`
+- 源站 favicon：`https://51cg1.com/favicon.ico`
+- 源站页面 Logo：`https://51cg1.com/usr/themes/Mirages/images/logo-2.png`
 - Stable：尚未建立，禁止在未实机验证前晋级。
+
+## 0.1.0-test.4 / Build 10104 — 2026-08-23
+
+### 本轮实机结论
+
+Test3 实机确认：
+
+- `/comments/<postId>.json` 已成功读取真实评论，当前测试文章可加载 58 条。
+- 评论页功能已经打通，但旧 `avatar` 单行布局把昵称、正文、回复、时间横向挤在一起，阅读层级不清晰。
+- 首页四个图标显示正常，但“搜索”仍走 `input://` 系统弹窗，不符合独立页面交互目标。
+
+### 评论页重构
+
+Test4 不再把一条评论全部塞进单个 `avatar`：
+
+```text
+头像 + 昵称
+      ↓
+评论 / 回复 · 时间 · 点赞数
+      ↓
+独立可换行正文
+      ↓
+分隔线
+```
+
+- 每条评论拆成“用户头部 + 独立正文”两层，长评论自然换行。
+- `depth > 0` 的楼中楼回复增加 `↳ 回复` 与正文缩进，避免与一级评论混在同一视觉层。
+- 评论 JSON Parser 增强 nested `user / author / member / profile / account` 对象解析。
+- 头像兼容 `avatar/avatar_url/avatarUrl/head/headimg/headImg/face/photo/image`。
+- 昵称兼容 `nickname/nick/username/name/displayName` 等字段。
+- 增加点赞数字段兼容；接口没有头像时使用程序自己的 `comment.svg` 兜底。
+- 单次评论上限从 120 调整为 160，仍避免超大评论区一次性压垮页面。
+
+### 独立搜索页
+
+- 首页“搜索”图标不再打开系统 `input://` 对话框。
+- 点击搜索直接进入 `cg51Search` 独立页面。
+- 搜索页首屏固定显示搜索头部与页面内输入框。
+- 未输入关键词时显示常用分类快捷入口。
+- 搜索后继续留在独立页面，显示清空搜索、全部分类与结果列表。
+- 搜索数据链继续复用 Test3 已修正的 `/search/<keyword>/<page>/`，不改 Provider。
+
+### Test4 静态门禁
+
+- `core_patch.js`：`node --check` 通过。
+- `runtime_patch.js`：`node --check` 通过。
+- Test1 / Test2 / Test3 Release 保持不可变；Test4 追加 Patch + 新 Bootstrap + 新 Shell。
+- Runtime 继续动态 `R.module=function(){return R;}`。
+
+### 待实机确认
+
+1. 评论正文是否已从横向单行变成清晰的纵向卡片阅读结构。
+2. 楼中楼回复缩进是否合适，是否还需要进一步做“展开回复”。
+3. 源站评论 JSON 是否能解析到真实头像；若接口本身没有头像则保持统一评论图标兜底。
+4. 首页点“搜索”是否直接进入独立搜索页，不再弹系统输入框。
+5. 搜索页输入、回车/确定、结果分页是否完整正常。
 
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
@@ -85,16 +143,6 @@ Test2 视频已经实机可播，所以 Test3 不重写成功的 HLS 交付链�
 - Test1 / Test2 Release 保持不可变；Test3 仅追加 Patch + 新 Bootstrap + 新 Shell。
 - Runtime 继续动态 `R.module=function(){return R;}`。
 
-### 待实机确认
-
-1. `/comments/<postId>.json` 当前字段是否已被通用 Comment Adapter 正确识别；如仍为空，记录接口原始结构后做定向字段适配。
-2. 播放器页面是否只保留真实视频条目，不再出现“加入本地收藏 / 查看评论 / 正文”。
-3. 首页四个操作图标在当前海阔 `icon_4` 下的尺寸与间距。
-4. 详情四个图标的视觉密度与收藏状态刷新。
-5. 首页快捷分类是否直接进入内容列表。
-6. 分类中心分组与动态“更多分类”是否完整、是否需要继续调整顺序。
-7. 分类第二页和搜索分页是否按当前站点真实路径正常工作。
-
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23
 
 ### 实机问题
@@ -121,4 +169,4 @@ Test1 实机截图确认：首页文章标题可解析但封面缺失；程序�
 
 ## 恢复规则
 
-Test1、Test2、Test3 都是不可变 Release。后续问题继续新建更高 Test build，禁止原地覆盖。Stable 只能从用户明确实机验证通过的 Test 晋级。
+Test1、Test2、Test3、Test4 都是不可变 Release。后续问题继续新建更高 Test build，禁止原地覆盖。Stable 只能从用户明确实机验证通过的 Test 晋级。
