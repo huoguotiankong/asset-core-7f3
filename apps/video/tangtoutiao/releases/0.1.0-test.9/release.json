@@ -1,0 +1,23 @@
+{
+  "schema":1,
+  "id":"tangtoutiao-test",
+  "name":"汤头条",
+  "version":"0.1.0-test.9",
+  "build":10109,
+  "ref":"main",
+  "baseStable":null,
+  "baseTest":{"version":"0.1.0-test.8","build":10108,"release":"apps/video/tangtoutiao/releases/0.1.0-test.8/release.json"},
+  "modules":[
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/image.js"},
+    {"name":"coreBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.8/core.js"},
+    {"name":"corePatch","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/core_patch.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/playback_fixed.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/runtime.js"}
+  ],
+  "verify":{"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.9"},
+  "notes":"根据 Test8 实机继续精修：picx.yrfmba.cn 标准图片改用海阔 @headers 图片 URL，恢复 UA/Accept 而不误走媒体 Referer；播放预检同时比较 source 实际 EXTINF 总时长与详情标称时长，过滤几十秒试看/占位源，并将 source_origin/preview 作为受约束 fallback；短视频列表卡片直接播放，不再进入二级详情；详情清晰度改固定 text_4，移除技术 ID 和滚动箭头式交互。"
+}
