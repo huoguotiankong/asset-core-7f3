@@ -4,12 +4,34 @@
 
 - App ID：`911baoliao`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.2` / Build `10102`
+- 当前版本：`0.1.0-test.3` / Build `10103`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://begin.mrbyudbq.com/`
-- 架构：Remote Shell → Bootstrap → Remote Manager 2.0.1 → immutable release。
+- 架构：Remote Shell → CDN Bootstrap → Remote Manager 2.0.2 多镜像 → immutable release。
 - 该程序不实现评论、匿名投稿或下载功能。
 - 已进入“我的规则仓库”动态目录：根 `manifest.json` → `apps/video/911baoliao/channels.json` → Test Shell。
+
+## 0.1.0-test.3 / Build 10103 — 2026-08-23 20:40
+
+### Raw GitHub 启动链实机修复
+
+用户覆盖导入 Test2 后实机启动直接报错：
+
+`获取远程依赖失败: https://raw.githubusercontent.com/.../apps/video/911baoliao/bootstrap_test_v2_b10102.js?v=10102`
+
+这证明 Test2 的业务代码和中文规则名路由补丁尚未执行，故障发生在最外层 Shell → Bootstrap 交付链。回读源码确认 Test2 Shell、Bootstrap Manager 以及 Core 中供 lazyRule 二次加载使用的 `C.bootstrap` 都仍以 `raw.githubusercontent.com` 为主要/唯一依赖。
+
+Test3 采用完整 transport hotfix，而不是只替换首页入口：
+
+- 新 Shell `911baoliao_remote_test_v3_b10103.txt` 的首页、搜索和 8 个内部页面全部从 jsDelivr 加载 Test3 Bootstrap。
+- 程序图标同步切换到 jsDelivr，避免 Raw 图片域名同类失败。
+- Bootstrap 升级到 Remote Manager `2.0.2`。
+- Remote Manager 配置启用 `jsDelivr → GitHub Web Raw → raw.githubusercontent.com` 多镜像回退。
+- Core 的 `C.bootstrap` 通过 Test3 `transport_patch.js` 同步切到 jsDelivr，确保播放、收藏、清理、检查更新等 lazyRule 不会在后续动作再次掉回旧 Raw Bootstrap。
+- `minBuild=10103`，旧 Test1/Test2 激活状态会被新 Shell 的最低 Build 门槛拉回 Test3 默认 Release。
+- 保留 Test2 的原始中文规则名内部路由修复，其余首页 UI、Parser、收藏/历史逻辑不变。
+
+本次确认的发布原则：远程 Shell 不能把 `raw.githubusercontent.com` 作为唯一 Bootstrap 入口；业务模块也不能只修首屏而遗漏 lazyRule/二级页的二次 Bootstrap 地址。
 
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23 20:17
 
@@ -39,8 +61,7 @@ Test2 采用单点不可变补丁：
 
 - `apps/video/911baoliao/channels.json` 改为 `schema:4`、Test-only `channels[]` 标准格式。
 - 根 `manifest.json` 增加 `911baoliao` 的 `channel-group` 展示项，`channelsPath` 指向上述标准 channels 文件。
-- 根目录 revision 提升到 `202608231959`。
-- `manifest_meta.json` 同步相同 revision，`itemCount=15`。
+- 根目录 revision 提升并与 `manifest_meta.json` 保持一致。
 - 未修改“我的规则仓库” Stable 3.5.4 的 Release、Bootstrap 或 Shell；本次只修动态目录发布数据。
 - 发布判断以后必须以“manifest 卡片 + channels 可导入 + meta revision/itemCount 成对一致 + 用户实机同步”作为完整条件，`registry.json` 只作为开发恢复索引。
 
