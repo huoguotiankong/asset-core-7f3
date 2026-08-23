@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "1.0.0-test.4",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/madou/madou_remote_test_v4_b10104.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.4/release.json",
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "1.0.0-test.5",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/madou/madou_remote_test_v5_b10105.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.5/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test4-hierarchy-detail-safety","note":"Test4 supersedes Test3 after real-device validation showed category navigation must preserve the site's major->minor hierarchy and detail pages could still trigger Hiker's private-storage 1MB failure. Large detail HTML no longer uses fetchCodeByWebView return-path; internal pages directly load the current Bootstrap."}
+  "migration": {"stage":"test5-recovery-from-test3","note":"Test4 is quarantined after a real-device JSEngine parse failure. Test5 explicitly excludes the Test4 module and rebuilds hierarchy/detail safety on the last device-startable Test3 baseline, while preserving Test2 storage protection and Test3 route/icon fixes."}
 }
