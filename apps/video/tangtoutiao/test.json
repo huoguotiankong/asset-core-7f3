@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.17",
-  "build": 10117,
-  "shellVersion": "1.0.0-test.17",
-  "shellRuleVersion": 2026082318,
+  "version": "0.1.0-test.18",
+  "build": 10118,
+  "shellVersion": "1.0.0-test.18",
+  "shellRuleVersion": 2026082319,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.17/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v17_b10117.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.18/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v18_b10118.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test16 实机确认长短视频封面、免费长视频和官方预览都正常；本轮保持图片和长视频链不变。APK 逆向确认原生 ShortVideoPlayerActivity 直接使用短视频列表对象 ListLikeVideoBean.source_240 播放，因此 Test17 短视频优先列表 source_240，不再先请求详情；推荐/长视频共用 5 分钟 featuredAv 会话缓存，短视频列表缓存 3 分钟，降低 Tab 切换等待。对 API 明显异常的 2–3 秒短视频时长不再在卡片误导展示。"
+  "notes": "Test17 实机确认分类切换缓存有效，但 PWA 短视频 source_240 仍只有 2–3 秒。Test18 保持 Test16 图片与 Test10/Test15 长视频播放基线不变，短视频列表改为优先原 APP /api/MvList/smallVideoByTag 精确参数 tag/page/limit，PWA 仅兜底；同时启动分类中心第一阶段，接入真实视频分类、创作者、图集、小说、有声、合集、话题、求片、粉丝团等页面。"
 }
