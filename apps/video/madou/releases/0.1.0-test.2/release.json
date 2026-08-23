@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"storagePatch","path":"apps/video/madou/releases/0.1.0-test.2/storage_patch.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"versionPatch","path":"apps/video/madou/releases/0.1.0-test.2/version_patch.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "previous": {"version":"0.1.0-test.1","build":10101,"release":"apps/video/madou/releases/0.1.0-test.1/release.json"},
+  "notes": "Test2 fixes Test1 startup crash caused by storing a >1MB homepage HTML string in Hiker private setItem storage. Full HTML now stays in memory only; legacy raw HTML slots are cleared and only tiny diagnostic values remain persistent."
+}
