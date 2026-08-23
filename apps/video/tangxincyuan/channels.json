@@ -3,32 +3,32 @@
   "id": "tangxincyuan",
   "name": "溏心次元",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 20:33",
+  "updatedAt": "2026-08-23 21:10",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "tangxincyuan-test",
       "name": "溏心次元",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Shell 1.0.0-test.3 · Build 10102",
-      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v3_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Shell 1.0.0-test.4 · Build 10103",
+      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v4_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "Test2 修复实机首页获取远程依赖失败：导入 Shell、Bootstrap 与模块交付切换为 jsDelivr CDN 直连链，同时保留 Test1 业务解析基线。",
+      "desc": "Test3 修复中文规则名内部跳页被百分号编码后找不到小程序的问题，并放宽首页 HTML 接受条件、增加图片卡片兜底解析和首页可见诊断；快捷入口文字同步重排。",
       "highlights": [
-        "修复首页远程依赖加载失败",
-        "云仓版本提升为 Test2 / Build10102",
-        "Shell 与 Bootstrap 使用 CDN 交付",
-        "保留人物中心与中性导入标签",
-        "首页与官网主导航",
-        "分类中心与人物入口",
-        "搜索、详情、播放与本地收藏",
-        "设置与诊断"
+        "修复分类/人物/收藏/历史等内部跳页",
+        "同程序二级页统一 rule=&simple=true",
+        "首页请求与 HTML 诊断直接可见",
+        "增加未知 DOM 图片卡片兜底解析",
+        "快捷入口标签恢复可读",
+        "人物中心与分类中心继续独立",
+        "搜索页同样修复内部路由",
+        "CDN Direct 2.0 / Build10103"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608232"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608233"
     }
   ]
 }
