@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "18av",
+  "name": "18AV",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "mode": "remote",
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082324,
+  "managerVersion": "2.0.4",
+  "release": "apps/video/18av/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/18av/18av_remote_test_v1_b10101.txt",
+  "bootstrap": "apps/video/18av/bootstrap_test_v1_b10101.js",
+  "updatedAt": "2026-08-23",
+  "notes": "Initial Test: video/comic/photo/novel separated adapters, dual-domain navigation, native UI, local favorites/history and diagnostics. Requires real-device validation before Stable."
+}
