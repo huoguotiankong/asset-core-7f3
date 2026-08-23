@@ -1,5 +1,36 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.13 / Build 10113 — 2026-08-23
+
+状态：**Test12 实机后的短视频/图片分层修复版，仍为 Test；禁止晋级 Stable。**
+
+### Test12 实机事实
+- PWA `/api/MvList/smallVideoByTag` 已稳定返回 `list[20]`，短视频封面也能正常显示，说明 PWA Provider 本身成立。
+- 短视频仍无法播放的关键诊断：标称 `expected=2` 秒，HLS 实际 `duration=1` 秒，旧 PlaybackAdapter 按长视频比例规则判定 `suspicious=true`；这属于短内容舍入差异，不应复用长片完整性阈值。
+- 同一短视频详情还存在 `source_origin=https://...mp4?...`，但旧通用探测把它误送 M3U8/密文解析，产生 `m3u8密文不是合法HEX`。因此媒体类型分流仍不完整。
+- 视频封面已从“全部灰”改善为“部分正常、部分灰”，证明参考规则的 PWA AES-CBC 路径有效，但 App 长视频仍存在另一类 legacy AES-CFB/明文资源，需要自适应判型，不能继续单算法覆盖。
+- 收费长视频的 `locked / coins / preview` 语义继续稳定，不能因为播放兼容修改而破坏。
+
+### Test13 修改
+- **短视频专用播放链**：新增 `playShortById`，不再复用长视频完整性校验。
+- **免费短视频 MP4 优先**：按视频 ID 回 App 详情后，若 `source_origin` 是 `.mp4`，直接返回海阔视频 URL；不再送入 M3U8 解密器。
+- **短 HLS 放宽长度语义**：没有 MP4 时才使用 `source_240` / preview，`expectedDuration` 留空，只做格式/可播放性处理，不套长视频时长比例规则。
+- **收费短视频边界保持**：如果 App 详情判定 locked，只允许官方 preview；不自动调用汤币消费接口。
+- **推荐/长视频列表优先 PWA Provider**：利用参考小程序已经验证的 PWA 列表和 `thumb_cover_str`，App Provider 继续负责详情、收费状态和播放授权。
+- **图片三段自适应**：最终图片回调依次识别明文 JPEG/PNG/WebP/GIF/BMP → 参考规则 AES/CBC/PKCS5Padding → App legacy HEX + AES-CFB。新的 `ttt_last_image_policy.mode=adaptive-inline-plain-cbc-legacy`。
+- **详情封面优先复用列表卡片 coverRaw**：PWA 列表已有可用封面时，不再被 App 详情里另一套封面字段无条件覆盖。
+- **详情 UI 产品化**：删除 `preview_video / APP下发 / Provider` 等技术调试文案；收费页只显示“完整版 / 试看 / 解锁完整版”，免费页只显示“立即播放 / 清晰度 / 收藏 / 简介”。
+- **新增诊断**：`ttt_last_short_play` 记录 `direct-mp4 / short-hls` 和最终来源；`ttt_last_long_provider` 记录推荐/长视频使用 PWA 还是 App 回退。
+- 新增专项事故文档：`docs/INCIDENT_SHORT_VS_LONG_PLAYBACK_20260823.md`。
+- Release / Bootstrap / Shell 派生为不可变 Test13 / Build10113；Shell rule version `2026082314`。
+
+### Test13 实机验收
+1. 短视频列表仍应返回约 20 条并有封面，点击卡片直接播放，不进入二级页。
+2. 若短视频成功直放，`ttt_last_short_play.mode` 应优先出现 `direct-mp4`；没有 MP4 时允许 `short-hls`。
+3. 推荐/长视频列表应优先 PWA，`ttt_last_long_provider.provider=pwa`；观察灰封面数量是否继续下降。
+4. 图片若仍灰，只需提供 `ttt_last_image_diag`，重点看 `ok/mode/input/output`，不再重复提供旧图片诊断。
+5. 收费长视频仍只显示试看与显式汤币解锁；不要为了测试确认真实消费。
+
 ## 0.1.0-test.12 / Build 10112 — 2026-08-23
 
 状态：**参考现成海阔规则建立双 Provider 的兼容增强版，仍为 Test；禁止晋级 Stable。**
