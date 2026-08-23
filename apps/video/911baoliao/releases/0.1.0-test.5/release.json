@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "911baoliao-test",
+  "name": "911爆料",
+  "channel": "test",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/911baoliao/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/911baoliao/releases/0.1.0-test.1/runtime.js"},
+    {"name":"routePatch","path":"apps/video/911baoliao/releases/0.1.0-test.2/route_patch.js"},
+    {"name":"transportPatch","path":"apps/video/911baoliao/releases/0.1.0-test.3/transport_patch.js"},
+    {"name":"contentAdapterPatch","path":"apps/video/911baoliao/releases/0.1.0-test.4/content_adapter_patch.js"},
+    {"name":"test4BootstrapPatch","path":"apps/video/911baoliao/releases/0.1.0-test.4/test4_bootstrap_patch.js"},
+    {"name":"siteAdapterPatch","path":"apps/video/911baoliao/releases/0.1.0-test.5/site_adapter_patch.js"},
+    {"name":"runtimePatch","path":"apps/video/911baoliao/releases/0.1.0-test.5/runtime_patch.js"}
+  ],
+  "verify": {"global":"Bl911RemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "notes": "Test5 replaces generic anchor scraping with the verified /archives/<id>/ article contract, broadens real poster extraction, removes functional/promo pages from feeds, and fixes LazyRuleParser URL-scheme failures by never using media JSON as the outer lazyRule URL."
+}
