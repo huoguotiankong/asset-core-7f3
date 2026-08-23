@@ -9,6 +9,7 @@
 - 用户当前源站入口：`https://txcy-online.buzz/banshu/`
 - 架构：Remote Shell → Bootstrap → Remote Manager 2.0.1 → immutable release。
 - 当前没有 Stable；首轮必须先实机验证，再建立站点专用 Adapter，禁止把 Test1 直接晋级 Stable。
+- 云端仓库发布链已补齐：`channels.json` 已改为 schema 4 / `channels[]`，根 `manifest.json` revision `202608232003` 已加入溏心次元，`manifest_meta.json` 同步 revision 且 `itemCount=16`。
 
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
@@ -80,3 +81,19 @@ Settings / Diagnostics
 8. 图片是否需要额外 Cookie、特殊 Referer 或解密。
 
 Test1 发布后冻结；后续根据用户实机截图和诊断新建更高 Build，不原地覆盖。
+
+### 云端仓库首次发布补漏
+
+首版业务 Release、Bootstrap、Shell 和 `registry.json` 已完成后，实际云端仓库仍未显示该程序。根因是首次发布遗漏了手机端目录真实消费链：根 `manifest.json` + `manifest_meta.json`，同时 `channels.json` 仍是内部对象格式而不是规则仓库要求的 `channels[]` 合同。
+
+已按长期发布规范修复：
+
+```text
+channels.json → schema 4 / channels[]
+→ root manifest.json 增加 tangxincyuan channel-group
+→ manifest revision 202608232003
+→ root manifest_meta.json 同步 revision 202608232003 / itemCount 16
+→ GitHub main 回读
+```
+
+后续以用户在“我的规则仓库”执行同步后能看到程序、进入版本中心并成功导入为最终实机完成条件。
