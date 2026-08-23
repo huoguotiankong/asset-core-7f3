@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "pornhub",
+  "name": "Pornhub",
+  "channel": "stable",
+  "version": "0.1.0",
+  "build": 10108,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/pornhub/releases/0.1.0-test.1/core.js"},
+    {"name":"corePatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/core_patch.js"},
+    {"name":"corePatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"corePatch4","path":"apps/video/pornhub/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"corePatch5","path":"apps/video/pornhub/releases/0.1.0-test.5/core_patch.js"},
+    {"name":"corePatch6","path":"apps/video/pornhub/releases/0.1.0-test.6/core_patch.js"},
+    {"name":"corePatch7","path":"apps/video/pornhub/releases/0.1.0-test.7/core_patch.js"},
+    {"name":"runtime","path":"apps/video/pornhub/releases/0.1.0-test.1/runtime.js"},
+    {"name":"uiPatch2","path":"apps/video/pornhub/releases/0.1.0-test.2/ui_patch.js"},
+    {"name":"uiPatch3","path":"apps/video/pornhub/releases/0.1.0-test.3/ui_patch.js"},
+    {"name":"uiPatch4","path":"apps/video/pornhub/releases/0.1.0-test.4/ui_patch.js"},
+    {"name":"uiPatch5","path":"apps/video/pornhub/releases/0.1.0-test.5/ui_patch.js"},
+    {"name":"uiPatch6","path":"apps/video/pornhub/releases/0.1.0-test.6/ui_patch.js"},
+    {"name":"uiPatch7","path":"apps/video/pornhub/releases/0.1.0-test.7/ui_patch.js"},
+    {"name":"stablePatch","path":"apps/video/pornhub/releases/0.1.0/stable_patch.js"}
+  ],
+  "verify":{"global":"PornhubRemoteRuntime","property":"version","equals":"0.1.0"},
+  "promotedFrom":{"version":"0.1.0-test.7","build":10107,"release":"apps/video/pornhub/releases/0.1.0-test.7/release.json"},
+  "notes":"First Pornhub Stable. Promoted by explicit user request from Test7 without changing business logic; Test7 remains the immutable promotion source and rollback reference."
+}
