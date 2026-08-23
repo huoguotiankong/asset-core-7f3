@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 20:52",
+  "updatedAt": "2026-08-23 21:40",
   "channels": [
     {
       "channel": "stable",
@@ -19,7 +19,13 @@
       "updatedAt": "2026-08-22",
       "recommended": true,
       "desc": "RC7 实机验证晋级 · Single Workspace 13.2 正式稳定版",
-      "highlights": ["局部滚动与固定五栏", "分类原地展开", "同页程序详情", "程序与版本导入修复", "诊断与备份修复"],
+      "highlights": [
+        "局部滚动与固定五栏",
+        "分类原地展开",
+        "同页程序详情",
+        "程序与版本导入修复",
+        "诊断与备份修复"
+      ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     },
     {
@@ -27,17 +33,22 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.5-rc2",
+      "version": "3.5.5-rc3",
       "baseVersion": "3.5.4",
       "targetVersion": "3.5.5",
-      "build": 388,
-      "displayVersion": "Test 3.5.5-rc2 · Build 388 · Icon Delivery 1.1 · Updater 2.0.3",
-      "path": "apps/tools/rule-repo/rule_repo_test_v134.txt",
+      "build": 389,
+      "displayVersion": "Test 3.5.5-rc3 · Build 389 · Delivery Protocol 2.0",
+      "path": "apps/tools/rule-repo/rule_repo_test_v135.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "图标 CDN 统一交付 + 更新元数据 GitHub API 优先；Fresh Shell 使用不可变 commit Bootstrap",
-      "highlights": ["程序卡与版本卡 Raw 自动转 jsDelivr", "底部五栏统一 CDN", "test/latest 指针 GitHub API 优先", "Shell v1.0.34 / Bootstrap v1.0.33 固定 commit"],
+      "desc": "图标 CDN 统一交付 + Remote Manager 2.0.4 元数据容错 + 原子发布基线",
+      "highlights": [
+        "程序卡/版本卡/底栏图标统一 CDN",
+        "可变指针 Raw 优先且拒绝陈旧 build",
+        "元数据失败继续运行本地安全版本",
+        "Fresh Shell 1.0.35 / Bootstrap 1.0.34"
+      ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]

@@ -3,16 +3,20 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.5-rc2",
-  "build": 388,
+  "version": "3.5.5-rc3",
+  "build": 389,
   "baseVersion": "3.5.4",
   "targetVersion": "3.5.5",
-  "shellVersion": "1.0.34-test",
-  "bootstrapVersion": "1.0.33-test",
-  "managerVersion": "2.0.3",
-  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json",
+  "shellVersion": "1.0.35-test",
+  "bootstrapVersion": "1.0.34-test",
+  "managerVersion": "2.0.4",
+  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc3/release.json",
   "updatedAt": "2026-08-23",
   "status": "active-candidate-test",
-  "previousTest": {"version":"3.5.5-rc1","build":387,"release":"apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json"},
-  "notes": "Icon Delivery 1.1 + Updater Metadata Fix。Fresh Shell 为 rule_repo_test_v134.txt：Bootstrap v1.0.33 固定 Git commit，Remote Manager 2.0.3 也固定不可变 commit；可变 test/latest/release 指针改为 GitHub API 优先读取，解决 jsDelivr @main 缓存导致 Build385 被误判为最新的问题。"
+  "previousTest": {
+    "version": "3.5.5-rc2",
+    "build": 388,
+    "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json"
+  },
+  "notes": "Remote Delivery Protocol 2.0：业务/UI 与 RC2 保持一致；更新器改为 Raw→WebRaw→GitHub API→jsDelivr 的可变元数据容错，保存最后一次成功指针，拒绝低于当前/默认 build 的陈旧 CDN 指针；元数据全不可达时继续使用 Bootstrap 内置安全 release。Fresh Shell v1.0.35 使用多镜像加载唯一 Bootstrap v1.0.34。发布端开始采用 Git tree 单 commit 原子发布。"
 }
