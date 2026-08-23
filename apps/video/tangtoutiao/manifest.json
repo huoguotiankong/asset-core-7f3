@@ -6,14 +6,14 @@
   "mode": "remote+test",
   "test": "apps/video/tangtoutiao/test.json",
   "channels": "apps/video/tangtoutiao/channels.json",
-  "defaultVersion": "0.1.0-test.11",
-  "defaultBuild": 10111,
-  "testVersion": "0.1.0-test.11",
-  "testBuild": 10111,
-  "testShellVersion": "1.0.0-test.11",
-  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v11_b10111.js",
-  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v11_b10111.txt",
+  "defaultVersion": "0.1.0-test.12",
+  "defaultBuild": 10112,
+  "testVersion": "0.1.0-test.12",
+  "testBuild": 10112,
+  "testShellVersion": "1.0.0-test.12",
+  "testBootstrap": "apps/video/tangtoutiao/bootstrap_test_v12_b10112.js",
+  "testRule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v12_b10112.txt",
   "changelog": "apps/video/tangtoutiao/CHANGELOG.md",
   "sourceApk": "ttt_9.6.2_260822_3.apk",
-  "migration": {"stage":"test11-paid-preview-app-image-loader","note":"Test10 实机确认短视频封面恢复但长视频封面仍灰；长视频详情 source 可能仅为维护片/试看，APK 模型存在 isfree/coins/is_pay 和 watchingMvByCoins 解锁合同。Test11 模拟 APP 图片 ModelLoader 自取/重试/解密，并将收费视频按试看/已购/需汤币解锁三态建模，购买仅允许显式确认触发。"}
+  "migration": {"stage":"test12-app-pwa-dual-provider","note":"参考用户上传汤头条2规则，增加 PWA Provider 补短视频/搜索并采用其已验证 AES-CBC 图片解密方式；App Provider 继续负责详情、收费状态、评论、漫画与播放授权。短视频点击按 ID 回 App 详情取合法 source，不复制删除 seconds 参数绕过试看。"}
 }
