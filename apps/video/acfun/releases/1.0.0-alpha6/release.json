@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha6",
+  "build": 10006,
+  "ref": "main",
+  "summary": "第五轮实机回归：视频 decode 已证明返回标准 AES-128 HLS，Alpha6 不再手写普通 file:// 索引，也撤销未验证的 noPre 假设，改用海阔官方 cacheM3u8 并原样保留其 file://...##original-url 返回合同；漫画阅读已成功，新增紧凑章节标题与上下话导航，并对漫画 Station 的对象 ID 与数字 stationId 做映射兼容。",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-regression-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"player-comic-transport-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a3.js"},
+    {"name":"cdn-chapter-model-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a4.js"},
+    {"name":"signed-hls-comic-full-image-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a5.js"},
+    {"name":"native-hls-cache-comic-ux-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a6.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha6"}
+}
