@@ -3,27 +3,27 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-test-only-v1",
-  "updatedAt": "2026-08-23 13:05",
+  "updatedAt": "2026-08-23 13:20",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.0-test.9",
-      "build": 10109,
-      "displayVersion": "Test 0.1.0-test.9 · Build 10109",
-      "path": "apps/video/myav/myav_remote_test_v9_b10109.txt",
+      "version": "0.1.0-test.10",
+      "build": 10110,
+      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
+      "path": "apps/video/myav/myav_remote_test_v10_b10110.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "Test9 补齐原站九类标签索引入口：动态导航优先，失败时使用用户实机确认的当前地址兜底；演员库与分类中心共用同一映射。",
+      "desc": "Test10 收紧详情资料区解析，移除导航垃圾词；影片收藏与演员收藏独立排版；有码高级筛选改用 Ttype=2 完整模式。",
       "highlights": [
-        "有码片商 / 有码女演员 / 男演员 / 有码TAG 全部加入可靠兜底",
-        "欧美片商 / 欧美女演员 / 欧美TAG 全部加入可靠兜底",
-        "国产女演员 / 国产TAG 全部加入可靠兜底",
-        "分类中心固定展示完整九类，不再依赖原站菜单是否抓全",
-        "继续保留排行榜独立2列/3列排版、中性导入壳和自定义云仓图标"
+        "片商 / 系列 / 演员 / TAG 仅从影片资料区读取站内实体链接",
+        "影片收藏与演员收藏分别设置2列/3列",
+        "有码高级筛选固定使用 default.cpp?Ttype=2 完整入口",
+        "完整读取分类 / 年份 / 标签 / 玩法 / 资源状态五组筛选",
+        "继续保留九类标签索引兜底、排行榜独立排版和中性导入壳"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
