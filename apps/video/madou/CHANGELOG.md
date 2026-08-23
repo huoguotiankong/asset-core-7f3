@@ -6,11 +6,13 @@
 - Test2 已能正常进入首页，但用户实机点击分类、影片卡/播放入口时弹出：`找不到“%E9%BA%BB%E8%B1%86%E4%BC%A0%E5%AA%92”这个小程序`。
 - 首页四个快捷入口显示为海阔默认彩色圆形占位，缺少真实图标。
 - 首页自适应卡片中还误识别出 `arrow` 等导航资源。
+- Test3 代码、`test.json`、`channels.json` 和根 `manifest.json` 已更新后，用户实机“我的规则仓库”仍显示 Test2。
 
 ### 根因
 - `MadouCore.page()` 把中文规则名 `麻豆传媒` 使用 `encodeURIComponent()` 后写进 `hiker://page/...?...&rule=`。目标海阔路由没有在规则名匹配前把该字段还原，直接把 `%E9...` 当规则名，因此二级页全部找不到当前小程序。
 - 英文规则名样本不会暴露这个问题，中文规则必须按已验证的 MDAI 模式使用 `rule=&simple=true`，让二级页继承当前规则上下文。
 - `icon_4` 没有设置图片时会渲染默认圆形占位；正式产品入口必须提供真实图标资源。
+- 云仓库目录刷新另有独立发布合同：`manifest.json revision` 必须和 `manifest_meta.json revision` 同步变化。Test3 发布时根 `manifest.json` 已到 `202608231404`，但 `manifest_meta.json` 仍停在 `202608231342`，且 `itemCount` 仍为 10；规则仓库 freshness probe 因此没有检测到新目录，继续使用缓存中的 Test2。
 
 ### Test3 修复
 - 冻结 Test2，不原地覆盖；新建 Test3 / Build10103。
@@ -19,8 +21,10 @@
 - 新增搜索、分类、收藏、历史四枚独立 SVG 图标，快捷入口切到 `icon_small_4` 并显式传入 `img/pic_url`。
 - `parseCards()` 增加导航伪卡过滤，排除 `arrow / next / prev / more / menu / home` 等明显非视频条目。
 - 保留 Test2 的大 HTML 内存缓存修复；本次不扩大协议层和播放解析边界。
+- 2026-08-23 14:11 将根 `manifest.json` 与 `manifest_meta.json` 同步提升到 revision `202608231411`，并把 `itemCount` 修正为 11，确保“同步目录”能够识别 Test3。
 
 ### 回归重点
+- 在“我的规则仓库”点击“同步目录”后，麻豆传媒应显示 `Test 0.1.0-test.3 · Build 10103`。
 - 点击“全部分类”和横向分类标签应不再出现编码规则名错误。
 - 点击任意影片卡应进入详情页。
 - 进入详情后再测试“立即播放”，区分路由问题与真实媒体解析问题。
