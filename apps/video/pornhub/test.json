@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "pornhub-test",
   "name": "Pornhub",
-  "version": "0.1.0-test.4",
-  "build": 10104,
-  "shellVersion": "1.0.0-test.4",
-  "shellRuleVersion": 2026082304,
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "shellVersion": "1.0.0-test.5",
+  "shellRuleVersion": 2026082305,
   "managerVersion": "2.0.1",
-  "release": "apps/video/pornhub/releases/0.1.0-test.4/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v4_b10104.txt",
+  "release": "apps/video/pornhub/releases/0.1.0-test.5/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v5_b10105.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test4：账号登录统一切回与 getCookie 同容器的 X5 全屏登录；私有账号请求使用实时 X5 Cookie + Cookie 指纹缓存隔离，并只解析账号主内容区域；创作者、视频排序、搜索筛选、本地收藏分类等同级切换全部改为原页刷新；新增影片在线收藏与本地收藏、创作者在线订阅与本地收藏、片单在线操作与本地收藏，以及视频评论只读页。"
+  "notes": "Test5：修复 Test4 新增 comments/playlistDetail 未进入 Runtime module 固定白名单导致评论直接报找不到函数；分类页按官网重构为异性恋/男同/女女同页切换 + 热门官方图片双列卡 + 全部中文标签；首页搜索改为独立搜索页并支持视频/创作者同页搜索；详情创作者头像增加上下文优先级和个人主页头像回填缓存；评论/本地收藏/在线收藏改为带 SVG 图标的 icon_small_3 操作栏。"
 }
