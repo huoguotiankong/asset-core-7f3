@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "xvideos-test",
+  "name": "XVideos",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082301,
+  "managerVersion": "2.0.1",
+  "release": "apps/video/xvideos/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/xvideos/xvideos_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-08-23",
+  "notes": "首个 clean rewrite Test：原生首页、搜索筛选、分类、演员/频道/用户、详情、多源 HLS/MP4 播放、X5 Cookie 登录、站内喜欢/稍后看/历史、本地收藏/足迹、评论真实 DOM 探针、公开收藏夹。"
+}
