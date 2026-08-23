@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.13",
+  "build": 10113,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.12","build":10112,"release":"apps/video/tangtoutiao/releases/0.1.0-test.12/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"image","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/image.js"},
+    {"name":"coreBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compatBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/compat.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/compat.js"},
+    {"name":"pwa","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pwa.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pagesAccess","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"pagesDual","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pages_patch.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.13"},
+  "notes": "Test13 based on Test12 + user device diagnostics: short-video playback is separated from long-video completeness validation. Free short videos prefer App detail source_origin MP4 direct playback, then short HLS without long-duration ratio checks; locked items only use official preview. Long/recommend lists prefer PWA provider for more consistent cover metadata. Image pipeline becomes adaptive plain -> proven PWA AES-CBC -> legacy App AES-CFB, and detail hero prefers the list-card cover fallback. UI removes provider/debug jargon and simplifies paid detail copy."
+}
