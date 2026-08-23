@@ -2,18 +2,43 @@
 
 > 程序级长期技术记忆。开发前必须先读全局项目文档、仓库迁移规范、`registry.json`、本文件、当前 Test/Release/Bootstrap/Shell 和用户最新实机结果。
 
-## 当前基线（2026-08-23 13:20）
+## 当前基线（2026-08-23 13:31）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.10` / Build `10110`
-- Shell Rule Version：`2026082320`
-- Shell：`apps/video/myav/myav_remote_test_v10_b10110.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v10_b10110.js`
-- Release：`apps/video/myav/releases/0.1.0-test.10/release.json`
+- 当前仅 Test：`0.1.0-test.11` / Build `10111`
+- Shell Rule Version：`2026082321`
+- Shell：`apps/video/myav/myav_remote_test_v11_b10111.txt`
+- Bootstrap：`apps/video/myav/bootstrap_test_v11_b10111.js`
+- Release：`apps/video/myav/releases/0.1.0-test.11/release.json`
 - Stable：未建立，必须继续经过海阔实机回归。
 - 数据源：`https://javlist.me/`
 - Shared JAV Playback Stable：`1.0.0-test.4`，Provider：MissAV / 123AV / Jable。
 - 云仓 MyAv 图标：`https://thumbsnap.com/i/uc3CZiMx.jpg`。
+
+## 2026-08-23 · Test10 实机结果 → Test11
+### 实机事实
+- Test10 已进入所谓完整筛选模式，但用户实机截图仍只显示 21 个年份、22 个标签，且“玩法”整组缺失；这与原站 `default.cpp?Ttype=2` 网页中从 2026 到 1981 的长年份列表、大量标签和玩法选项明显不一致。
+- 截图中 `2026` 已处于选中状态，说明当前 `myav_filter_url_normal` 已经是某个筛选结果 URL，而 Test10 又直接从该结果 URL 的 HTML 重建筛选控制区。
+- 原站筛选结果页会退回精简控制区，因此即使初始入口使用 `Ttype=2`，只要选择年份/标签后再从结果页解析控件，就会重新缩成简版。
+- 所以 Test10 的核心错误不是 UI 截断，也不是人为限制数量，而是“筛选结果数据源”和“完整筛选控制数据源”错误地绑定为同一个 URL。
+
+### Test11 修复
+- 高级筛选拆成两条独立链：
+  - 结果 URL：继续保存并请求用户当前实际选择的年份/标签/玩法条件，用于影片列表和分页。
+  - 控制 URL：从当前结果 URL 派生，保留其余 query 参数，但强制 `Ttype=2`，只用于重建完整筛选控制区。
+- 新增 `C.asFullFilterUrl(url)`：若 URL 已有 `Ttype=1/2/...`，统一替换为 `Ttype=2`；没有则追加 `Ttype=2`，不丢失当前其它筛选条件。
+- 新增 `C.fullFilterControl(resultUrl)`：先普通请求完整控制 URL；若年份 `<30`、标签 `<40` 或玩法 `<8`，说明仍疑似精简 HTML，再调用 `fetchCodeByWebView` 对应的 `C.fetchRendered()` 获取渲染后 DOM。
+- 普通 HTML 与 WebView DOM 都解析为五组数据，并按年份/标签/玩法等数量评分，选择信息更完整的一份；不会因为 WebView 返回更短页面而盲目覆盖普通结果。
+- 选择年份/标签后，控制区仍从强制 `Ttype=2` 的同条件页面读取，因此完整标签不会再因结果页切换而退回 22 项。
+- 欧美 / 国产 / 无码仍使用各自原站筛选逻辑，不把有码 Ttype=2 强套过去。
+- Test10 详情资料净化、影片/演员收藏独立排版，Test9 九类索引兜底，Test8 排行榜排版，Test7 中性导入壳均继续保留。
+
+### Test11 发布自检
+- Test11 Core/UI 已本地 `node --check` 通过。
+- Release 在 Test10 基础上追加 `fullFilterControlPatch11` 和 `uiPatch11`，Previous 指向 Test10，可完整回退。
+- Shell Rule Version：`2026082321`，Bootstrap 最低 Build：`10111`。
+- 发布共享索引时遇到一次并行 GitHub head 冲突，第一次 registry 写入被 GitHub 409 拒绝，没有覆盖并行更新；重新读取后按最新 ACFun Web3 / 汤头条 Test14 基线成功写入。
+- 根 `manifest.json` / `manifest_meta.json` 发布 revision：`202608231331`；云仓 MyAv 图标继续使用用户指定地址。
 
 ## 2026-08-23 · Test9 实机结果 → Test10
 ### 实机事实
@@ -32,16 +57,10 @@
   - 演员收藏：`myav_layout_favorites_actors`
   - 两者分别支持 2列 / 3列，互不影响。
 - `layoutReset()` 同时清理排行榜、影片收藏、演员收藏新增布局 key。
-- 有码高级筛选根入口固定使用用户实机确认的 `default.cpp?Ttype=2`；旧缓存若仍是普通 `default.cpp` / `Ttype=1`，进入筛选时自动切换到完整模式。
-- 完整筛选按五组呈现：分类 / 年份 / 标签 / 玩法 / 资源状态；每组读取当前页面全部真实链接，不做人为数量截断。
+- 有码高级筛选根入口固定使用用户实机确认的 `default.cpp?Ttype=2`。
+- 完整筛选按五组呈现：分类 / 年份 / 标签 / 玩法 / 资源状态；Test11 已修正“从筛选结果页重建控制区会重新精简”的后续问题。
 - 欧美 / 国产 / 无码继续使用各自原站入口，不拿有码 Ttype=2 强套其它频道。
 - Test9 九类索引兜底、Test8 排行榜 2/3 列、Test7 中性导入壳、磁链和 Shared Playback 全部保留。
-
-### Test10 发布自检
-- Test10 Core/UI/Bootstrap 已在本地 `node --check` 通过；Release JSON、Shell 外层 JSON 与 15 个 pages 也通过静态解析。
-- 根云仓首次写 Test10 后，写后自检发现 JavBus/MyAv 卡片 `categoryName/subCategory` 被整文件更新压成单层；已立即恢复：`categoryName=视频`、`subCategory=影视资料`。
-- 根 `manifest.json` 与 `manifest_meta.json` revision 同步到 `202608231320`。
-- 发布时保留并行最新状态，包括 ACFun Web2、汤头条 Test13；禁止用旧总索引覆盖其它程序。
 
 ## 2026-08-23 · Test8 实机结果 → Test9
 ### 九类标签索引完整兜底
@@ -130,11 +149,11 @@
 - 总索引更新后必须检查其它程序未被旧快照覆盖，并检查云仓卡片 `version/desc/path/entryType/channelsPath/categoryName/subCategory`。
 - 原站专用高风险术语尽量留在远程运行时解析层，导入 Shell 和云仓可见元数据优先使用中性产品命名。
 
-## Test10 待实机确认
-- [ ] MyAv Test10 / Build10110 可正常导入。
-- [ ] `MCY-0233` 等详情页不再出现秘密入口、福利百科、广告合作联系、javpk.com 等导航垃圾词。
-- [ ] 真实片商/演员/TAG 仍能显示并进入实体页。
-- [ ] 设置中“影片收藏”和“演员收藏”分别有独立 2列 / 3列。
-- [ ] 高级筛选有码页完整显示分类 / 年份 / 标签 / 玩法 / 资源状态，标签数量明显接近原站 `Ttype=2` 页面。
-- [ ] 点击任意年份/标签/玩法后仍在当前筛选页刷新且影片列表正常。
-- [ ] Test9 九类索引、排行榜排版、磁链和 Shared Playback 不退化。
+## Test11 待实机确认
+- [ ] MyAv Test11 / Build10111 可正常导入。
+- [ ] 高级筛选即使已经选中 2026，年份数量也应明显高于 Test10 的 21 项，并接近原站完整年份区。
+- [ ] 标签数量应明显高于 Test10 的 22 项；若 WebView DOM可取得完整原站结构，应恢复原站大量标签。
+- [ ] “玩法”分组必须出现，不再整组缺失。
+- [ ] 点击任意年份/标签/玩法后，完整控制区仍保持，不因结果 URL 改变退回精简模式。
+- [ ] 筛选结果影片列表与分页正常，不因控制 URL 使用 Ttype=2 而被错误替换。
+- [ ] Test10 详情资料净化、双收藏排版、Test9 九类索引、排行榜、磁链和 Shared Playback 不退化。
