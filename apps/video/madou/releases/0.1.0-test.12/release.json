@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "madou-test",
+  "name": "麻豆传媒",
+  "channel": "test",
+  "version": "0.1.0-test.12",
+  "build": 10112,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"performanceRuntime","path":"apps/video/madou/releases/0.1.0-test.10/performance_runtime.js"},
+    {"name":"storageRescue","path":"apps/video/madou/releases/0.1.0-test.12/storage_rescue.js"},
+    {"name":"noSniffProtocol","path":"apps/video/madou/releases/0.1.0-test.12/nosniff_protocol.js"},
+    {"name":"detailSettings","path":"apps/video/madou/releases/0.1.0-test.12/detail_settings.js"}
+  ],
+  "verify": {"global":"MadouRemoteRuntime","property":"version","equals":"0.1.0-test.12"},
+  "previous": {"version":"0.1.0-test.11","build":10111,"release":"apps/video/madou/releases/0.1.0-test.11/release.json"},
+  "quarantined": {"version":"0.1.0-test.4","build":10104,"release":"apps/video/madou/releases/0.1.0-test.4/release.json","reason":"real-device JSEngine parse failure: SyntaxError missing } after property list"},
+  "notes": "Test12 is a storage-rescue + playback-protocol release. It removes Test11 from the active module chain, migrates settings/media cache/history/favorites/page-template state to rule-private files, and overrides hot-path HTML cache to memory-only. Bootstrap intentionally direct-loads this immutable release instead of Remote Manager state so an already saturated setItem store cannot block rescue startup. Strict no-sniff is strengthened with player_aaaa/player_data encrypt=1/2, parse/jx candidates, HTTP status/location/HLS detection and static decoding."
+}
