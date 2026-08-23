@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 12:55",
+  "updatedAt": "2026-08-23 12:56",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.12","build":10112,
-      "displayVersion":"Test 0.1.0 · App + PWA Provider 12","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v12_b10112.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"参考用户上传的汤头条2海阔规则做兼容增强：保留 APK App Provider 的启动会话、详情、收费状态、漫画和播放授权，同时新增同站 PWA Provider（dpi4.tbrapi.org / client=pwa / AES-CFB）补短视频与搜索。图片改用参考规则已验证的 AES/CBC/PKCS5Padding 输入流解密。短视频卡片直接播放，但先按 ID 回 App 详情获取合法 source；收费内容仍只允许试看或显式确认后的汤币解锁，不复制参考规则删除 seconds 参数的绕过方式。社区首页改为紧凑频道导航并尝试真实 list_post。Stable 仍不存在。",
-      "highlights":["新增 App + PWA 双 Provider，PWA 只做兼容补充，不替代 App 业务协议","短视频优先 /api/MvList/smallVideoByTag，App small/smallVideoByTag 作为回退","短视频点击直接播放，但先回 App 详情按 ID 获取 source_* 与收费状态","图片采用参考规则实机证明可用的 AES/CBC/PKCS5Padding key/iv 输入流解密","搜索优先 PWA /api/MvSearch/video，失败回 App Provider","社区 5 个频道改为紧凑标签，不再渲染成巨大空卡；开始调用 list_post/list_post2","收费内容保留官方试看/已购/汤币解锁语义，禁止自动消费或删试看参数"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.13","build":10113,
+      "displayVersion":"Test 0.1.0 · Short Direct & Adaptive Image 13","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v13_b10113.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"基于 Test12 实机与汤头条2参考规则继续收敛。PWA 短视频列表已稳定恢复，但旧播放链仍把 1–2 秒短内容按长视频完整性校验，并把 source_origin MP4 误送 M3U8 解密。Test13 拆出短视频专用播放：免费短视频优先 App 详情 source_origin MP4 直放，其次短 HLS 且不做长视频时长比例校验；收费短视频仅使用官方 preview。推荐/长视频列表优先 PWA Provider 以获得更一致的 thumb_cover_str；详情仍回 App Provider 做 isfree/is_pay/coins 判断。图片升级为明文→PWA AES-CBC→App legacy AES-CFB 自适应。详情 UI 去除 preview_video/Provider 等技术文案。Stable 仍不存在。",
+      "highlights":["短视频播放与长视频完整性校验彻底分离","免费短视频优先 source_origin MP4 直接播放，不再误进 M3U8 解密","短 HLS 不再因 1 秒/2 秒舍入差异被判为不完整长片","推荐/长视频列表优先 PWA Provider，App Provider 继续负责详情与收费状态","图片统一 plain → AES-CBC → legacy AES-CFB 自适应判型","详情页保留试看/解锁/收藏/清晰度/简介，删除技术调试式文案","收费/汤币规则保持 Test11 安全边界，不自动消费"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
