@@ -9,6 +9,20 @@
 - 源站入口：`https://begin.mrbyudbq.com/`
 - 架构：Remote Shell → Bootstrap → Remote Manager 2.0.1 → immutable release。
 - 该程序不实现评论、匿名投稿或下载功能。
+- 已进入“我的规则仓库”动态目录：根 `manifest.json` → `apps/video/911baoliao/channels.json` → Test Shell。
+
+## 云端仓库发布链修复 — 2026-08-23 19:59
+
+用户实机反馈“云端仓库没有这个小程序”后确认：首版只完成 app 目录、Release/Bootstrap/Shell 与 `registry.json`，但遗漏了手机端真正消费的根目录发布链；同时 `channels.json` 误写成内部对象结构，而不是规则仓库版本中心要求的 `schema 4 + channels[]` 合同。
+
+已修复：
+
+- `apps/video/911baoliao/channels.json` 改为 `schema:4`、Test-only `channels[]` 标准格式。
+- 根 `manifest.json` 增加 `911baoliao` 的 `channel-group` 展示项，`channelsPath` 指向上述标准 channels 文件。
+- 根目录 revision 提升到 `202608231959`。
+- `manifest_meta.json` 同步相同 revision，`itemCount=15`。
+- 未修改“我的规则仓库” Stable 3.5.4 的 Release、Bootstrap 或 Shell；本次只修动态目录发布数据。
+- 发布判断以后必须以“manifest 卡片 + channels 可导入 + meta revision/itemCount 成对一致 + 用户实机同步”作为完整条件，`registry.json` 只作为开发恢复索引。
 
 ## 0.1.0-test.1 / Build 10101 — 2026-08-23
 
