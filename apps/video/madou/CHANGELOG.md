@@ -1,5 +1,44 @@
 # 麻豆传媒 CHANGELOG
 
+## 2026-08-23 · 0.1.0-test.4 / Build 10104
+
+### 实机故障
+- Test3 已恢复分类页面进入能力，但影片二级详情仍再次报：`InternalError: 私有存储内容过大 (1MB)，无法继续使用setItem写入`。
+- 当前“全部分类”把网站导航全部拍平成一条长列表，用户实机明确指出源站真实产品结构是“多个大分类 → 每个大分类下大量小分类”，当前 UI/信息架构错误。
+
+### 根因判断与修改边界
+- Test2 只修了业务层 `fetchHtml()` 把完整 HTML 写进 `setItem` 的问题；Test3 的详情链仍允许 `fetchCodeByWebView()` 作为大页面 fallback。实机详情页再次触发同一 1MB 报错，说明不能再把大型渲染后 HTML 回传链当通用兜底。
+- Test3 `menu()` 是扁平导航模型，适合抓链接但不适合作为用户分类目录；源站侧栏已经提供“大分类标题 + 子分类链接”的天然层级，需要独立 `CategoryGroupModel`。
+- 内部页面此前仍通过 `$.require('madou')` 间接调用主模块。虽然 Test3 已修中文 `rule=` 路由，但升级后仍存在页面模块缓存/旧导出残留风险。本版把每个内部 page rule 改为直接加载当前 Bootstrap。
+
+### Test4 修复
+- 冻结 Test3，新建 `0.1.0-test.4 / Build10104`，不原地覆盖旧 Release。
+- 新增 `hierarchy_detail_patch.js`：
+  - `fetchPlainHtml()` 只使用普通 `fetch/request`，大页面不再走 `fetchCodeByWebView` HTML 回传。
+  - `fetchHtml()` 仅保存在当前运行内存，只把 HTML 长度/时间戳等小诊断值写私有 KV。
+  - 本地历史/收藏统一做字段裁剪、data URI 丢弃、条数/总 JSON 体积上限，避免其它异常数据再次把 `setItem` 推近 1MB。
+- 新增 `categoryGroups()`：以当前首页/侧栏 DOM 中 `精选推荐 / 欧美P站 / 原创AV / 网黄 / 乱伦 / 日韩 / 男同百合 / Onlyfans / 三级 / 猛料-SM / 成人综艺 / 短视频 / 性爱教学 / 影视剧` 等大分类作为 group marker，按 DOM 顺序把真实子链接归入各组。
+- “全部分类”重做为：
+  - 分类中心摘要；
+  - 首页/最新快捷入口；
+  - 大分类原地展开/收起；
+  - 展开后使用三列小分类入口；
+  - 进入某小分类的内容页后，只显示同一大分类下的兄弟小分类横向快捷切换，不再把全站菜单混进内容页。
+- 首页横向导航只展示大分类，不再显示大量小分类。
+- 详情页使用普通请求解析；直连 HTML 无效时显示“网页媒体嗅探 / 原站详情”两个明确兜底，不再为了拿 DOM 触发大型 WebView HTML 返回。
+- Test4 Shell 的首页、搜索、列表、分类、详情、收藏、历史、设置全部直接 `require(bootstrap_test_v4_b10104.js)` 后调用当前 `MadouBoot.module()`，减少旧 page module 命中的可能。
+
+### 云仓库发布链
+- `test.json / channels.json / app manifest / registry.json / root manifest.json / manifest_meta.json` 已全部切到 Test4。
+- 根目录 revision 同步为 `202608231426`，`itemCount=11`；再次执行 `manifest.revision === manifest_meta.revision` 检查，避免上次“代码已升版但云仓仍显示旧 Test”的事故。
+
+### 回归重点
+1. “我的规则仓库”同步后必须显示 `Test 0.1.0-test.4 · Build 10104`。
+2. 全部分类页应看到“大分类 → 展开后的多个小分类”，不能再是一条扁平长清单。
+3. 打开“萝莉少女/精品推荐/欧美P站”等任意实际小分类，列表顶部只出现同组小分类。
+4. 点击任意影片进入二级详情，不应再出现 1MB `setItem` 错误。
+5. 详情成功后再测试“立即播放”；若失败，下一版只处理真实播放器/媒体源协议，不把详情存储问题和播放协议问题混在一起。
+
 ## 2026-08-23 · 0.1.0-test.3 / Build 10103
 
 ### 实机故障
