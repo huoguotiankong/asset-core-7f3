@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 22:30",
+  "updatedAt": "2026-08-24 00:35",
   "channels": [
     {
       "channel": "stable",
@@ -27,17 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.5-test.1",
+      "version": "3.5.6-rc1",
       "baseVersion": "3.5.5",
-      "targetVersion": "3.5.5",
-      "build": 390,
-      "displayVersion": "Test 3.5.5-test.1 · Build 390 · Stable-aligned",
-      "path": "apps/tools/rule-repo/rule_repo_test_v136.txt",
+      "targetVersion": "3.5.6",
+      "build": 391,
+      "displayVersion": "Test 3.5.6-rc1 · Build 391 · Fast Home 14.0",
+      "path": "apps/tools/rule-repo/rule_repo_test_v137.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-23",
+      "updatedAt": "2026-08-24",
       "recommended": false,
-      "desc": "Stable 3.5.5 同基线测试快照 · 下一轮开发干净起点",
-      "highlights": ["业务/UI 与 Stable 3.5.5 对齐", "Test 独立状态", "Updater 2.0.4", "Build390 > Stable389"],
+      "desc": "首页缓存优先 + 多版本可更新统计 + 版本元数据按需加载",
+      "highlights": ["取消首页18次规则存在性串行探测", "取消首页逐程序预取 channels.json", "Stable/Test/Local 当前通道参与更新比较", "更新中心支持多版本程序", "麻豆传媒图标独立破缓存"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
