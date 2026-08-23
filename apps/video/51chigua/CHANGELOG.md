@@ -4,14 +4,34 @@
 
 - App ID：`51chigua`
 - 当前通道：Test only
-- 当前版本：`0.1.0-test.4`
-- Build：`10104`
-- Shell：`1.0.0-test.4` / rule version `2026082304`
+- 当前版本：`0.1.0-test.5`
+- Build：`10105`
+- Shell：`1.0.0-test.5` / rule version `2026082305`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://51cg1.com/`
 - 源站 favicon：`https://51cg1.com/favicon.ico`
 - 源站页面 Logo：`https://51cg1.com/usr/themes/Mirages/images/logo-2.png`
 - Stable：尚未建立，禁止在未实机验证前晋级。
+
+## 0.1.0-test.5 / Build 10105 — 2026-08-23
+
+### 本轮实机结论
+
+Test4 已确认新的纵向评论布局明显优于 Test3，但评论头像仍与原站不一致：海阔页面会显示接口中的 K / Y 等字母或随机用户头像，而源站评论区实际统一使用 51CG 官方黑底粉白图标作为默认头像。
+
+### 修复
+
+- 评论页不再读取 `comment.img/avatar` 作为显示头像。
+- 一级评论与所有楼中楼回复统一使用源站官方 `https://51cg1.com/favicon.ico`。
+- 评论页顶部品牌头像也统一为同一官方 favicon。
+- 保留 Test4 的昵称 / 时间 / 回复层级 / 独立正文卡片结构。
+- 不修改 `/comments/<postId>.json` 评论协议、不修改评论 Parser、不修改独立搜索页、不修改播放/分类/封面链。
+
+### Test5 门禁
+
+- `runtime_patch.js` 已通过 `node --check`。
+- Test1–Test4 Release 保持不可变；Test5 只追加新的 Runtime Patch、Release、Bootstrap 和 Shell。
+- Runtime 继续动态 `R.module=function(){return R;}`。
 
 ## 0.1.0-test.4 / Build 10104 — 2026-08-23
 
@@ -60,14 +80,6 @@ Test4 不再把一条评论全部塞进单个 `avatar`：
 - `runtime_patch.js`：`node --check` 通过。
 - Test1 / Test2 / Test3 Release 保持不可变；Test4 追加 Patch + 新 Bootstrap + 新 Shell。
 - Runtime 继续动态 `R.module=function(){return R;}`。
-
-### 待实机确认
-
-1. 评论正文是否已从横向单行变成清晰的纵向卡片阅读结构。
-2. 楼中楼回复缩进是否合适，是否还需要进一步做“展开回复”。
-3. 源站评论 JSON 是否能解析到真实头像；若接口本身没有头像则保持统一评论图标兜底。
-4. 首页点“搜索”是否直接进入独立搜索页，不再弹系统输入框。
-5. 搜索页输入、回车/确定、结果分页是否完整正常。
 
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
@@ -118,40 +130,21 @@ Test2 视频已经实机可播，所以 Test3 不重写成功的 HLS 交付链�
 
 - 首页搜索 / 分类 / 收藏 / 历史改为程序自有 SVG 图标四宫格。
 - 首页快捷分类继续保留横向 chip，但全部直接进入分类 Feed。
-- 新建互不重名的内部页面：`cg51Hub`（分类中心）和 `cg51Feed`（分类内容），淘汰 `cg51Categories/cg51Category` 这种容易混淆的相似页名。
+- 新建互不重名的内部页面：`cg51Hub`（分类中心）和 `cg51Feed`（分类内容）。
 - 分类中心按官网导航重新分组：吃瓜热门 / 娱乐天地 / 黑料事件 / 吃瓜百科 / 51原创；官网动态发现且未映射的分类落到“更多分类”。
 - 分类真实分页修正为 `/category/<slug>/<page>/`。
 - 搜索真实入口修正为 `/search/<keyword>/`，分页为 `/search/<keyword>/<page>/`。
 
 ### UI 资产
 
-新增程序自有操作图标：
-
-- `search.svg`
-- `categories.svg`
-- `favorite.svg`
-- `history.svg`
-- `comment.svg`
-- `web.svg`
-
-程序主图标仍使用源站 `favicon.ico`，不恢复 Test1 的临时品牌 SVG。
-
-### Test3 静态门禁
-
-- `core_patch.js`：`node --check` 通过。
-- `runtime_patch.js`：`node --check` 通过。
-- Test1 / Test2 Release 保持不可变；Test3 仅追加 Patch + 新 Bootstrap + 新 Shell。
-- Runtime 继续动态 `R.module=function(){return R;}`。
+新增程序自有操作图标：`search.svg / categories.svg / favorite.svg / history.svg / comment.svg / web.svg`。
+程序主图标使用源站 `favicon.ico`。
 
 ## 0.1.0-test.2 / Build 10102 — 2026-08-23
 
-### 实机问题
+### 实机问题与修复
 
-Test1 实机截图确认：首页文章标题可解析但封面缺失；程序使用临时 SVG；点击内部页面因中文规则名被 `encodeURIComponent` 导致“找不到小程序”。
-
-### 根因与修复
-
-- 内部 `rule=51吃瓜` 保留原始中文，只有业务参数继续 URL 编码。
+- 修复中文规则名被 URL 编码导致内部页面“找不到小程序”。
 - 列表/正文支持 `loadBannerDirect / loadImage / data-xkrkllgl / data-src / data-original`。
 - `/xiao/` 与 `/upload/upload/` 使用 AES/CBC/PKCS7，key=`f5d965df75336270`，iv=`97b60394abc2fbe1`；海阔通过 `hiker://assets/crypto-java.js` 执行 `InputStream → AES decrypt → toInputStream()`。
 - Shell/渠道图标改为源站 `https://51cg1.com/favicon.ico`。
@@ -169,4 +162,4 @@ Test1 实机截图确认：首页文章标题可解析但封面缺失；程序�
 
 ## 恢复规则
 
-Test1、Test2、Test3、Test4 都是不可变 Release。后续问题继续新建更高 Test build，禁止原地覆盖。Stable 只能从用户明确实机验证通过的 Test 晋级。
+Test1、Test2、Test3、Test4、Test5 都是不可变 Release。后续问题继续新建更高 Test build，禁止原地覆盖。Stable 只能从用户明确实机验证通过的 Test 晋级。
