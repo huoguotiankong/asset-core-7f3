@@ -4,12 +4,42 @@
 
 - App ID：`911baoliao`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.3` / Build `10103`
+- 当前版本：`0.1.0-test.4` / Build `10104`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://begin.mrbyudbq.com/`
 - 架构：Remote Shell → CDN Bootstrap → Remote Manager 2.0.2 多镜像 → immutable release。
 - 该程序不实现评论、匿名投稿或下载功能。
 - 已进入“我的规则仓库”动态目录：根 `manifest.json` → `apps/video/911baoliao/channels.json` → Test Shell。
+
+## 0.1.0-test.4 / Build 10104 — 2026-08-23 21:02
+
+### 首页广告、封面与播放链实机修复
+
+Test3 实机已经确认 CDN 启动链和中文内部路由均恢复，能够进入首页、详情，并能解析出正文与媒体。用户随后提供两张实机截图，暴露出三个独立业务问题：
+
+1. 首页“最新爆料”前部把站点推广/导航入口误识别成内容卡，包括 `911爆料网`、`911爆料APP`、`章鱼导航`、`看图找番`、`AI换脸脱衣`、`APP`、`Telegram`、`Twitter` 等，它们不是正常爆料文章。
+2. 通用列表 Parser 会从过大的邻近 HTML 中抓图，导致大量卡片串到 911 Logo、站点宣传图或占位图；而进入真实文章详情后可以看到该文章自己的真实封面，证明详情图片链与列表卡片图片链需要分开收紧。
+3. 详情已经显示“已提取 3 条媒体线路”，点击播放却由海阔抛出 `java.lang.IllegalArgumentException: Expected URL scheme 'http' or 'https' but no colon was found`。这证明结构化媒体候选中混入了未规范化/非法 URL，不能只以“正则匹配到媒体字段”作为可交付播放线路的完成条件。
+
+Test4 新增独立 `content_adapter_patch.js`，不改 Test1 Core/Runtime 基线文件：
+
+- 新增站点推广/导航伪条目过滤，首页、搜索、相关推荐与本地列表继续经过统一安全过滤；上述已由实机确认的广告/导航项不再进入 Feed。
+- 快捷分类同步排除明显的投放/广告导航项，保留正常内容分类。
+- 列表封面新增 `data-original-src`、`data-lazy`、`data-srcset`、`srcset`、`background-image` 等常见 lazy/picture 字段解析。
+- 列表图片改为“当前链接内部 → 最近内容卡容器”局部取图，不再直接从超大邻域任选第一张图，降低相邻卡片/站点 Logo 串图。
+- 图片候选过滤 logo、brand、favicon、loading、placeholder、error、404、二维码、APP下载/社交导航图等明显非正文封面。
+- 详情正文过滤站点最新地址、永久地址、APP 下载、回家邮箱、广告合作等推广段落，避免把网站自身推广块当事件正文。
+- 新增 `normalizeMediaUrl()`：处理 HTML/JS 转义、百分号编码、`//host/path`、缺冒号的 `https//...`、相对 URL，并最终强制要求真实 `http://` 或 `https://`。
+- 新增 `mediaLike()` 与 `normalizeMediaList()`：播放器只接收经过 URL 规范化且符合 MP4/HLS/stream/playlist 媒体特征的线路，blob/data/javascript/空值/非法 scheme 自动剔除。
+- 单线路继续直接交付；多线路只有全部通过 HTTP(S) 校验后才构造 `urls/names/headers` PlayModel；如果结构化线路全部无效，则退回 `video://` 网页媒体嗅探，而不是把坏 URL 交给播放器。
+- Test4 Shell、Bootstrap 与 lazyRule 回调继续使用 jsDelivr + Remote Manager 2.0.2 多镜像；`minBuild=10104`，保留 Test2 中文路由修复和 Test3 CDN 容灾。
+
+### Test4 实机验收点
+
+1. 首页顶部“最新爆料”不再出现上述广告/导航伪视频。
+2. 正常文章卡尽可能显示自身真实封面，不再大面积显示 911 Logo/通用错误图。
+3. 同一篇 Test3 报 URL scheme 异常的文章重新点击“立即播放”，不应再抛缺少 `http/https` scheme 的 Java 异常。
+4. 若该文章真实线路仍无法播放，下一轮必须根据“设置与诊断”里的实际播放 route/URL 继续研究站点自身播放器协议，不得再通过放宽 URL 校验蒙混过关。
 
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23 20:40
 
