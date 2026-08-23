@@ -5,8 +5,8 @@
   "version": "0.1.0",
   "build": 10108,
   "release": "apps/video/pornhub/releases/0.1.0/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_stable_v1_b10108.txt",
+  "rule": "apps/video/pornhub/pornhub_remote_stable_v2_b10108.txt",
   "bootstrap": "apps/video/pornhub/bootstrap_stable_v1_b10108.js",
-  "notes": "First Pornhub Stable promoted from 0.1.0-test.7 by explicit user request.",
+  "notes": "Stable business Build10108 unchanged; Shell v2 repairs app icon loading through jsDelivr.",
   "changelog": "apps/video/pornhub/CHANGELOG.md"
 }
