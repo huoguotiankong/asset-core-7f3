@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "channel": "candidate",
+  "channel": "candidate-history",
   "id": "rule-repo-test",
   "version": "3.5.5-rc3",
   "build": 389,
@@ -9,11 +9,8 @@
   "targetVersion": "3.5.5",
   "release": "apps/tools/rule-repo/releases/test-3.5.5-rc3/release.json",
   "createdAt": "2026-08-23",
-  "testStatus": "awaiting-real-device",
-  "previousTest": {
-    "version": "3.5.5-rc2",
-    "build": 388,
-    "release": "apps/tools/rule-repo/releases/test-3.5.5-rc2/release.json"
-  },
-  "notes": "远程发布协议专项候选。用户实机 RC2 / Build388 已可运行，但更新页在 GitHub API 内容为空且 Raw/WebRaw/jsDelivr 同时无效时直接报“升级失败”。RC3 不改业务/UI，新增 Remote Manager 2.0.4：可变元数据 Raw→WebRaw→API→CDN，保存最后成功指针，禁止陈旧 build 降级，全部元数据不可达时继续使用 Bootstrap 内置安全 release；Fresh Shell/Bootstrap 使用唯一版本路径多镜像加载。发布端从本版开始采用单 commit 原子发布，避免多文件分批提交产生半发布状态。"
+  "testStatus": "promoted-to-stable-user-directed",
+  "promotedStable": {"version":"3.5.5","build":389,"release":"apps/tools/rule-repo/releases/3.5.5/release.json"},
+  "nextTest": {"version":"3.5.5-test.1","build":390,"release":"apps/tools/rule-repo/releases/test-3.5.5-sync1/release.json"},
+  "notes": "RC3 修复 Icon Delivery 与 Remote Delivery Protocol 2.0 后，用户明确要求同步晋级正式版。Stable 3.5.5 使用独立正式状态/Bootstrap；活动 Test 已重新对齐 Stable 3.5.5 并升到 Build390。"
 }

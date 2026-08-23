@@ -3,9 +3,9 @@
   "id": "rule-repo",
   "name": "我的规则仓库",
   "category": "tools",
-  "shellVersion": "1.5.4",
-  "coreVersion": "3.5.4",
-  "build": 384,
+  "shellVersion": "1.5.5",
+  "coreVersion": "3.5.5",
+  "build": 389,
   "latest": "apps/tools/rule-repo/latest.json",
   "stable": "apps/tools/rule-repo/stable.json",
   "candidate": "apps/tools/rule-repo/candidate.json",
@@ -13,6 +13,9 @@
   "channels": "apps/tools/rule-repo/channels.json",
   "icon": "apps/tools/rule-repo/assets/icon.svg",
   "mode": "remote/self-use",
-  "recoveryShell": "apps/tools/rule-repo/rule_repo_remote_v343_shell144.txt",
-  "managerVersion": "2.0.2"
+  "recoveryShell": "apps/tools/rule-repo/rule_repo_remote_v354.txt",
+  "managerVersion": "2.0.4",
+  "testVersion": "3.5.5-test.1",
+  "testBuild": 390,
+  "testShell": "apps/tools/rule-repo/rule_repo_test_v136.txt"
 }

@@ -4,28 +4,22 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 21:40",
+  "updatedAt": "2026-08-23 22:30",
   "channels": [
     {
       "channel": "stable",
       "label": "正式版",
       "id": "rule-repo",
       "name": "我的规则仓库",
-      "version": "3.5.4",
-      "build": 384,
-      "displayVersion": "Stable 3.5.4 · Build 384 · Shell 1.5.4",
-      "path": "apps/tools/rule-repo/rule_repo_remote_v354.txt",
+      "version": "3.5.5",
+      "build": 389,
+      "displayVersion": "Stable 3.5.5 · Build 389 · Shell 1.5.5 · Updater 2.0.4",
+      "path": "apps/tools/rule-repo/rule_repo_remote_v355.txt",
       "mode": "remote",
-      "updatedAt": "2026-08-22",
+      "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "RC7 实机验证晋级 · Single Workspace 13.2 正式稳定版",
-      "highlights": [
-        "局部滚动与固定五栏",
-        "分类原地展开",
-        "同页程序详情",
-        "程序与版本导入修复",
-        "诊断与备份修复"
-      ],
+      "desc": "同步即时刷新 + Icon Delivery 1.1 + Remote Delivery Protocol 2.0 正式版",
+      "highlights": ["程序卡/版本卡/底栏图标统一 CDN", "同步目录后即时刷新", "Remote Manager 2.0.4 元数据容错", "正式发布指针原子切换"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     },
     {
@@ -33,22 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.5-rc3",
-      "baseVersion": "3.5.4",
+      "version": "3.5.5-test.1",
+      "baseVersion": "3.5.5",
       "targetVersion": "3.5.5",
-      "build": 389,
-      "displayVersion": "Test 3.5.5-rc3 · Build 389 · Delivery Protocol 2.0",
-      "path": "apps/tools/rule-repo/rule_repo_test_v135.txt",
+      "build": 390,
+      "displayVersion": "Test 3.5.5-test.1 · Build 390 · Stable-aligned",
+      "path": "apps/tools/rule-repo/rule_repo_test_v136.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": false,
-      "desc": "图标 CDN 统一交付 + Remote Manager 2.0.4 元数据容错 + 原子发布基线",
-      "highlights": [
-        "程序卡/版本卡/底栏图标统一 CDN",
-        "可变指针 Raw 优先且拒绝陈旧 build",
-        "元数据失败继续运行本地安全版本",
-        "Fresh Shell 1.0.35 / Bootstrap 1.0.34"
-      ],
+      "desc": "Stable 3.5.5 同基线测试快照 · 下一轮开发干净起点",
+      "highlights": ["业务/UI 与 Stable 3.5.5 对齐", "Test 独立状态", "Updater 2.0.4", "Build390 > Stable389"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
