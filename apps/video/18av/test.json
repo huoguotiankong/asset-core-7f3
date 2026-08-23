@@ -3,20 +3,20 @@
   "channel": "test",
   "id": "18av",
   "name": "18AV",
-  "version": "0.1.0-test.2",
-  "build": 10102,
+  "version": "0.1.0-test.3",
+  "build": 10103,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082325,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082401,
   "managerVersion": "2.0.4",
-  "release": "apps/video/18av/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/18av/18av_remote_test_v2_b10102.txt",
-  "bootstrap": "apps/video/18av/bootstrap_test_v2_b10102.js",
-  "updatedAt": "2026-08-23",
+  "release": "apps/video/18av/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/18av/18av_remote_test_v3_b10103.txt",
+  "bootstrap": "apps/video/18av/bootstrap_test_v3_b10103.js",
+  "updatedAt": "2026-08-24",
   "previousTest": {
-    "version": "0.1.0-test.1",
-    "build": 10101,
-    "release": "apps/video/18av/releases/0.1.0-test.1/release.json"
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/video/18av/releases/0.1.0-test.2/release.json"
   },
-  "notes": "Pre-device Test2: fix Remote Manager 2.0.4 pointer id alignment and route the home category-library shortcut correctly. Test1 remains immutable."
+  "notes": "Real-device Test3: isolate av18_* route namespace to repair secondary pages, redesign video detail/play routes, prioritize fc_search, parse scripted comic/photo images, and replace blind first-media playback with scored media plus page sniff fallback."
 }
