@@ -6,18 +6,18 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/javmenu/test.json",
   "channels": "apps/video/javmenu/channels.json",
-  "cloudChannels": "apps/video/javmenu/channels_v2_b10102.json",
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "0.1.0-test.2",
-  "testBootstrap": "apps/video/javmenu/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
-  "testRelease": "apps/video/javmenu/releases/0.1.0-test.2/release.json",
+  "cloudChannels": "apps/video/javmenu/channels_v3_b10103.json",
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "0.1.0-test.3",
+  "testBootstrap": "apps/video/javmenu/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/video/javmenu/javmenu_remote_test_v3_b10103.txt",
+  "testRelease": "apps/video/javmenu/releases/0.1.0-test.3/release.json",
   "changelog": "apps/video/javmenu/CHANGELOG.md",
   "sourceSite": "https://javmenu.com/zh",
-  "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10102",
+  "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10103",
   "migration": {
-    "stage": "device-repair-test2",
-    "note": "Test2 is based on Test1 real-device evidence. No Stable exists; promotion remains blocked until Test2 device regression."
+    "stage": "test3-parser-recovery",
+    "note": "Test2 frozen after real-device regression: single .video-list-item selector produced zero movies. Test3 restores multi-structure detail-link parser."
   }
 }
