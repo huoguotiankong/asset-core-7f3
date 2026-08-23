@@ -2,18 +2,44 @@
 
 > 程序级长期技术记忆。开发前必须先读全局项目文档、仓库迁移规范、`registry.json`、本文件、当前 Test/Release/Bootstrap/Shell 和用户最新实机结果。
 
-## 当前基线（2026-08-23 12:44）
+## 当前基线（2026-08-23 13:05）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.8` / Build `10108`
-- Shell Rule Version：`2026082318`
-- Shell：`apps/video/myav/myav_remote_test_v8_b10108.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v8_b10108.js`
-- Release：`apps/video/myav/releases/0.1.0-test.8/release.json`
+- 当前仅 Test：`0.1.0-test.9` / Build `10109`
+- Shell Rule Version：`2026082319`
+- Shell：`apps/video/myav/myav_remote_test_v9_b10109.txt`
+- Bootstrap：`apps/video/myav/bootstrap_test_v9_b10109.js`
+- Release：`apps/video/myav/releases/0.1.0-test.9/release.json`
 - Stable：未建立，必须继续经过海阔实机回归。
 - 数据源：`https://javlist.me/`
 - Shared JAV Playback Stable：`1.0.0-test.4`，Provider：MissAV / 123AV / Jable。
 - 云仓 MyAv 图标：`https://thumbsnap.com/i/uc3CZiMx.jpg`。
+
+## 2026-08-23 · Test8 实机结果 → Test9
+### 已确认
+- Test8 的有码女演员兜底已生效，说明“动态导航优先 + 当前站点兜底”架构可行。
+- 用户实机继续确认欧美女演员等入口仍可能动态发现失败，因此不能只给有码女演员单点兜底。
+- 用户提供并要求接入当前原站其余 8 个标签索引 URL；结合原站导航映射，可确认九类标签结构为：有码片商 / 有码女优 / 男优 / 有码TAG / 欧美片商 / 欧美女优 / 欧美TAG / 国产女优 / 国产TAG。
+- 原站当前导航页面也显示上述九类标签分类，说明用户给出的 URL 与当前网站结构一致。
+
+### Test9 完整分类兜底表
+- 有码片商：`https://javlist.me/cat.py?type=rpCNLOP1WDRnR2LjHsExtQ==`
+- 有码女优：`https://javlist.me/cat.py?type=0TActtgu02YfLieZ7SleLw==`
+- 男优：`https://javlist.me/cat.py?type=a3oteztILfkYtQWe89XV3w==`
+- 有码TAG：`https://javlist.me/cat.py?type=6Wvt3eOMji5M_tHU6HuewA==`
+- 欧美片商：`https://javlist.me/western_cat.java?type=WBvfQ1QROghlcRTERGmhww==`
+- 欧美女优：`https://javlist.me/western_cat.java?type=0TActtgu02YfLieZ7SleLw==`
+- 欧美TAG：`https://javlist.me/western_cat.java?type=6Wvt3eOMji5M_tHU6HuewA==`
+- 国产女优：`https://javlist.me/domestic_cat.py?type=0TActtgu02YfLieZ7SleLw==`
+- 国产TAG：`https://javlist.me/domestic_cat.py?type=6Wvt3eOMji5M_tHU6HuewA==`
+
+### Test9 架构规则
+- `C.indexUrlExact(label)` 继续先读取当前网站动态导航；只有动态结果为空才读 `C.indexFallbacks[label]`。
+- 九类入口集中维护在 Core `indexFallbacks`，演员库和分类中心共用同一份映射，禁止再做两套地址表。
+- 演员库中的有码 / 欧美 / 国产女演员与男演员因此都获得兜底能力。
+- 分类中心不再依赖 `menuGroups().tags` 是否抓全，固定展示完整九类；点击后仍复用现有 `myavIndexList → parseIndexEntries → /t/ 实体页` 链。
+- 当前 URL 属于站点事实兜底，不视为永恒常量；若动态导航发现新地址，始终优先使用动态地址。
+- Test8 已加入的排行榜 2/3 列排版、Test7 中性导入壳、双收藏、搜索记录和实体页全部保留。
 
 ## 2026-08-23 · Test7 实机结果 → Test8
 ### 已确认
@@ -55,7 +81,7 @@
 - `manifest.json` / `manifest_meta.json` revision 同步到 `202608231230`。
 - 本次更新时保留并行最新状态：ACFun Alpha11、汤头条 Test11，禁止用旧总索引覆盖其它程序。
 
-## Test6 已完成产品能力（Test7/8 保留）
+## Test6 已完成产品能力（Test7/8/9 保留）
 ### 首页与排版
 - 首页 8 个核心入口：搜索、筛选、演员库、分类、排行、收藏、历史、设置。
 - 首页、搜索结果、演员索引、实体作品、本地收藏均可在设置中独立选择 2 列 / 3 列；Test8 起排行榜也加入独立 2/3 列。
@@ -68,7 +94,7 @@
 - 演员中心入口与影片关键词搜索分离。
 
 ### 演员 / 实体页
-- 独立演员中心覆盖三类女演员索引及男演员索引；Test8 起有码女优允许当前站点实机 URL 兜底。
+- 独立演员中心覆盖三类女演员索引及男演员索引；Test9 起四类均使用动态发现 + 当前站点兜底。
 - `/t/`、`/t3/`、`/t4/` 等实体 URL 进入统一实体页：头像、名称、作品数、原站筛选、真实分页作品流。
 - 详情中的演员、男演员、片商、TAG 跳转携带真实实体类型。
 - 当前姓名过滤仅过滤已加载索引页；没有确认可靠全站演员直搜协议前，禁止伪装成全局搜索。
@@ -121,10 +147,10 @@
 - 新增 Shell 页面名称前必须考虑海阔导入风险扫描；原站专用术语尽量留在远程运行时解析层，导入壳和云仓元数据优先使用中性产品命名。
 - 总索引更新必须回读所有条目的卡片 schema，不能只验证当前程序。
 
-## Test8 待实机确认
-- [ ] “我的规则仓库”同步后显示 Test8 / Build10108。
-- [ ] 演员库 → 有码女优不再显示“未找到入口”，可加载真实女优索引及分页。
-- [ ] 随机进入一个女优实体页，头像 / 作品数 / 资源筛选 / 作品流不退化。
-- [ ] 设置中出现“排行榜 2列 / 3列”。
-- [ ] 排行榜默认双列；切换三列后 TOP20 / 周榜 / 月榜均同步生效。
-- [ ] Test7 中性导入壳继续可正常导入，不再触发禁止导入。
+## Test9 待实机确认
+- [ ] “我的规则仓库”同步后显示 Test9 / Build10109。
+- [ ] 演员库 → 有码女演员 / 欧美女演员 / 国产女演员 / 男演员均能进入真实索引。
+- [ ] 分类中心完整显示九类标签入口。
+- [ ] 九类入口随机抽查片商、演员、TAG，均能继续钻取到实体/影片列表。
+- [ ] 分页继续沿用原站分页，不因兜底 URL 退化。
+- [ ] 排行榜 2列 / 3列设置和 Test7 中性导入壳不退化。
