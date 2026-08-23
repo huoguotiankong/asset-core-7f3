@@ -3,22 +3,22 @@
   "id": "madou",
   "name": "麻豆传媒",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 16:16",
+  "updatedAt": "2026-08-23 16:39",
   "channels": [
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.10",
-      "build":10110,
-      "displayVersion":"Test 0.1.0-test.10 · Build 10110",
-      "path":"apps/video/madou/madou_remote_test_v10_b10110.txt",
+      "version":"0.1.0-test.11",
+      "build":10111,
+      "displayVersion":"Test 0.1.0-test.11 · Build 10111",
+      "path":"apps/video/madou/madou_remote_test_v11_b10111.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
       "recommended":true,
-      "desc":"Test10 是性能重构版。活动模块链压缩为 Core + Runtime + 单一性能运行时；分类目录使用小型结构化缓存，不再在每次切分类时重新请求首页；最近访问分类保留有界卡片缓存。影片卡把标题、封面和摘要直接传入详情，正常详情首屏不再请求原站，标签与相关推荐改为按需加载。",
-      "highlights":["Release 9层补丁降为3模块","分类切换不再重复请求首页","最近分类20分钟卡片缓存","影片详情 seed-first 零网络首屏","标签推荐按需加载","热路径单次6.5秒请求预算"],
+      "desc":"Test11 在 Test10 性能基线上加入详情扩展加载偏好与严格纯免嗅播放。详情可选手动、自动标签、自动标签+相关推荐；播放默认只走 HTTP/player/script/API + 静态 JS 解码，不启动 WebView/video://，命中真实 M3U8/MP4 后直接交播放器并做30分钟小型媒体缓存。兼容嗅探仅在用户设置中显式打开时作为失败兜底。",
+      "highlights":["详情扩展加载三档可选","手动模式保持seed-first快速首屏","HTTP-only纯免嗅默认开启","Base64/percent/P.A.C.K.E.R静态解码","真实M3U8/MP4直交播放器","30分钟媒体缓存","嗅探兜底默认关闭"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
