@@ -1,0 +1,18 @@
+{
+  "schema":1,
+  "channel":"stable",
+  "id":"madou",
+  "name":"麻豆传媒",
+  "version":"0.1.0",
+  "build":10114,
+  "mode":"remote",
+  "shellVersion":"0.1.0-stable.1",
+  "shellRuleVersion":2026082314,
+  "managerVersion":"direct-loader",
+  "release":"apps/video/madou/releases/0.1.0/release.json",
+  "rule":"apps/video/madou/madou_remote_stable_v1_b10114.txt",
+  "bootstrap":"apps/video/madou/bootstrap_stable_v1_b10114.js",
+  "promotedFrom":{"version":"0.1.0-test.13","build":10113},
+  "updatedAt":"2026-08-23",
+  "notes":"First Madou Stable, promoted by explicit user request from Test13 as the current practical baseline."
+}
