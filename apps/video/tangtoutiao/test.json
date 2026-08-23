@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.15",
-  "build": 10115,
-  "shellVersion": "1.0.0-test.15",
-  "shellRuleVersion": 2026082316,
+  "version": "0.1.0-test.16",
+  "build": 10116,
+  "shellVersion": "1.0.0-test.16",
+  "shellRuleVersion": 2026082317,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.15/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.16/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test14 实机否定裸 long. 兼容改写：短视频和兼容线路仍直接播放异常，同时 App featuredAv 大列表恢复 36 条后封面再次大面积灰。Test15 改为复用项目内已实机验证的海阔播放器交付模式：短视频/PWA 候选先探测，HLS 优先 cacheM3u8，最终 URL 显式携带 User-Agent/Referer/X-Auth；普通 App 长视频继续使用已验证的 Test10 解密/时长校验代理。推荐/长视频仍最多 36 条，优先尝试 PWA featuredAv 大列表；图片最终层优先 thumb_cover_str，并使用 placeholder+self-fetch 多 Header 重试后再做 plain/CBC/legacy-CFB 判型。"
+  "notes": "Test15 实机确认短视频、免费长视频、官方预览均已正常播放，因此 Test16 冻结播放链，只修图片和短视频 UI。封面保留 thumb_cover_str 优先，但撤销 Test15 的 placeholder+$().image 自取流，恢复 Test13 已验证的真实图片 URL@js 内联明文/AES-CBC/legacy-CFB 转换；短视频从单列 pic_1_card 改为双列 movie_2，点击仍直接复用 Test15 playShortStable。"
 }
