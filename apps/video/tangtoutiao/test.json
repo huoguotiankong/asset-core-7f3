@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.13",
-  "build": 10113,
-  "shellVersion": "1.0.0-test.13",
-  "shellRuleVersion": 2026082314,
+  "version": "0.1.0-test.14",
+  "build": 10114,
+  "shellVersion": "1.0.0-test.14",
+  "shellRuleVersion": 2026082315,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.13/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v13_b10113.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.14/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test12 实机继续收敛：PWA 短视频列表稳定返回 20 条，但旧 playById 把 1–2 秒短内容继续按长视频完整性规则校验，并把 source_origin MP4 误送 M3U8 解密，导致短视频无法播放。Test13 新增短视频专用播放链：免费短视频优先 App 详情 source_origin MP4 直放，其次短 HLS 且不做长视频时长比例校验；收费短视频只用官方 preview。推荐/长视频列表优先 PWA Provider 获取更一致的封面字段，详情仍回 App Provider。图片改为明文→PWA AES-CBC→App legacy AES-CFB 自适应链，详情页 UI 去除技术调试文案。"
+  "notes": "Test13 实机仍确认短视频直放 source_origin 为 0 kb/s，且 PWA /MvList/recommend 仅返回 3 条导致推荐/长视频过少。Test14 恢复 App featuredAv 大列表，推荐/长视频各展示最多 36 条；短视频改用用户上传参考规则的 preview_video long 主机兼容写法。该改写只允许免费或已购买内容，收费未解锁内容仍保持官方试看/汤币解锁。长视频详情新增同样的兼容线路按钮，仅用于免费/已购买内容测试。"
 }
