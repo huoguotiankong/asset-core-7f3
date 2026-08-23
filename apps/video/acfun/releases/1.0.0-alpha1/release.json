@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha1",
+  "build": 10001,
+  "ref": "main",
+  "summary": "全新重写 Alpha1：独立 Test 状态、APP 1.9.7 协议、原生多专题首页、视频/漫画/短视频/社区/小说/有声、统一图片与播放链。",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha1"}
+}
