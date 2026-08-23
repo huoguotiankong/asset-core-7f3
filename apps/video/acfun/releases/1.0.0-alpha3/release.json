@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "1.0.0-alpha3",
+  "build": 10003,
+  "ref": "main",
+  "summary": "第二轮实机回归修复：保留 jhg_player 字面播放凭据，提供同 URL 多 Header 线路；漫画章节改为 HTTP 2xx 宽容解析并记录 GET/POST/Origin 精确探针。",
+  "modules": [
+    {"name":"core","path":"apps/video/acfun/next/acfun_next_core_v100_a1.js"},
+    {"name":"protocol","path":"apps/video/acfun/next/acfun_next_protocol_v100_a1.js"},
+    {"name":"provider","path":"apps/video/acfun/next/acfun_next_provider_v100_a1.js"},
+    {"name":"media","path":"apps/video/acfun/next/acfun_next_media_v100_a1.js"},
+    {"name":"ui","path":"apps/video/acfun/next/acfun_next_ui_v100_a1.js"},
+    {"name":"device-regression-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a2.js"},
+    {"name":"player-comic-transport-fix","path":"apps/video/acfun/next/acfun_next_fix_v100_a3.js"}
+  ],
+  "verify": {"global":"ACFunNext","property":"build","equals":"2026.08.23-v1.0.0-alpha3"}
+}
