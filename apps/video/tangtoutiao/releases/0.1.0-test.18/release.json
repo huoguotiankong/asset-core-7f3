@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.18",
+  "build": 10118,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {
+    "version": "0.1.0-test.17",
+    "build": 10117,
+    "release": "apps/video/tangtoutiao/releases/0.1.0-test.17/release.json"
+  },
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/protocol.js"},
+    {"name":"protocolGate","path":"apps/video/tangtoutiao/releases/0.1.0-test.7/protocol_gate.js"},
+    {"name":"imageLegacy","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/image.js"},
+    {"name":"coreBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/core.js"},
+    {"name":"compatBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/compat.js"},
+    {"name":"compatAdaptive","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/compat.js"},
+    {"name":"pwa","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pwa.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.6/ui.js"},
+    {"name":"playback","path":"apps/video/tangtoutiao/releases/0.1.0-test.10/playback.js"},
+    {"name":"compat15","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/compat.js"},
+    {"name":"playbackBridge15","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/playback_bridge.js"},
+    {"name":"compat","path":"apps/video/tangtoutiao/releases/0.1.0-test.16/compat.js"},
+    {"name":"playbackBridge","path":"apps/video/tangtoutiao/releases/0.1.0-test.17/playback_bridge.js"},
+    {"name":"pagesBase","path":"apps/video/tangtoutiao/releases/0.1.0-test.9/pages.js"},
+    {"name":"pagesAccess","path":"apps/video/tangtoutiao/releases/0.1.0-test.11/pages_patch.js"},
+    {"name":"pagesDual","path":"apps/video/tangtoutiao/releases/0.1.0-test.12/pages_patch.js"},
+    {"name":"pagesShort","path":"apps/video/tangtoutiao/releases/0.1.0-test.13/pages_patch.js"},
+    {"name":"pagesLarge","path":"apps/video/tangtoutiao/releases/0.1.0-test.14/pages_patch.js"},
+    {"name":"pagesStablePlayback","path":"apps/video/tangtoutiao/releases/0.1.0-test.15/pages_patch.js"},
+    {"name":"pagesImageUi","path":"apps/video/tangtoutiao/releases/0.1.0-test.16/pages_patch.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.18/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.18/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.18"},
+  "notes": "Test18 keeps Test16 image and Test10/Test15 long-video playback stable. Short-video list switches to the exact APP /api/MvList/smallVideoByTag contract (tag/page/limit) before PWA fallback, because Test17 proved the PWA list source_240 is still only a 2–3 second clip. Classification Center phase 1 adds real video style browsing via /api/MvSearch/getStyle + /api/MvList/style exact params, creator featured, picture/novel/audio lists and basic details, compilations, topics, find-video and fan-club entry adapters. Existing feed caches remain enabled."
+}
