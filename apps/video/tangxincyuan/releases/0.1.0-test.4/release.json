@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "id": "tangxincyuan-test",
+  "name": "溏心次元",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "modules": [
+    {
+      "name": "coreBase",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.1/core.js"
+    },
+    {
+      "name": "runtimeBase",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "corePatch3",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.3/core_patch.js"
+    },
+    {
+      "name": "runtimePatch3",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.3/runtime_patch.js"
+    },
+    {
+      "name": "coreSessionPatch4",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.4/core_session_patch.js"
+    },
+    {
+      "name": "runtimeSessionPatch4",
+      "path": "apps/video/tangxincyuan/releases/0.1.0-test.4/runtime_session_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "TxcyRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.4"
+  },
+  "previous": {
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/tangxincyuan/releases/0.1.0-test.3/release.json"
+  },
+  "notes": "Test4 adds a Cloudflare/X5 session bridge: detect challenge pages, open the official verification page in X5, reuse browser cookies with a matched mobile UA, verify the session, and refresh the previous Hiker page without attempting to bypass or forge Cloudflare verification."
+}
