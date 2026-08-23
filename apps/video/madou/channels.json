@@ -1,10 +1,26 @@
 {
-  "schema": 4,
-  "id": "madou",
-  "name": "麻豆传媒",
-  "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 17:35",
-  "channels": [
+  "schema":4,
+  "id":"madou",
+  "name":"麻豆传媒",
+  "versionPolicy":"remote-stable-test-v1",
+  "updatedAt":"2026-08-23 17:53",
+  "channels":[
+    {
+      "channel":"stable",
+      "label":"正式版",
+      "id":"madou",
+      "name":"麻豆传媒",
+      "version":"0.1.0",
+      "build":10114,
+      "displayVersion":"Stable 0.1.0 · Build 10114",
+      "path":"apps/video/madou/madou_remote_stable_v1_b10114.txt",
+      "mode":"remote",
+      "updatedAt":"2026-08-23",
+      "recommended":true,
+      "desc":"首个麻豆传媒正式版，由 Test13 按用户明确要求晋级。标签与相关推荐默认加载，详情使用30分钟结构化缓存；播放保持已验证的直链优先、否则 video:// 网页媒体自动提取；收藏/历史继续使用规则私有文件，Stable Bootstrap 采用 direct immutable loader 避开旧 setItem 饱和状态。",
+      "highlights":["标签与相关推荐默认开启","30分钟结构化详情缓存","直链优先 + video:// 已验证播放策略","收藏/历史私有文件存储","direct immutable Stable loader","同级分类原页切换"],
+      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
+    },
     {
       "channel":"test",
       "label":"测试版",
@@ -12,13 +28,13 @@
       "name":"麻豆传媒",
       "version":"0.1.0-test.13",
       "build":10113,
-      "displayVersion":"Test 0.1.0-test.13 · Build 10113",
+      "displayVersion":"Test 0.1.0-test.13 · Promotion Source",
       "path":"apps/video/madou/madou_remote_test_v13_b10113.txt",
       "mode":"remote",
       "updatedAt":"2026-08-23",
-      "recommended":true,
-      "desc":"Test13 按实机要求撤回免嗅和详情设置。标签与相关推荐固定默认加载，并增加30分钟结构化详情缓存；播放恢复已实机确认可播放的原策略：源码直链优先，否则 video:// 对播放器页/详情页自动提取媒体。Test12 私有文件收藏/历史恢复继续保留，Bootstrap 继续直接加载不可变 Release，避开已饱和 setItem 状态。",
-      "highlights":["移除纯免嗅实验","移除详情/播放设置","标签推荐默认开启","30分钟结构化详情缓存","恢复video://已验证播放策略","收藏历史继续私有文件存储","direct immutable loader"],
+      "recommended":false,
+      "desc":"Stable 0.1.0 的晋级来源与问题对照。后续新 Test 必须从 Stable 0.1.0 重新 rebase，不继续叠加旧测试身份。",
+      "highlights":["保留为首个 Stable 的晋级来源","纯免嗅实验已撤回","下一轮 Test 从 Stable 0.1.0 向前开发"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
     }
   ]
