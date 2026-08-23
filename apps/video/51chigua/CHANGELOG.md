@@ -3,15 +3,46 @@
 ## 当前基线
 
 - App ID：`51chigua`
-- 当前通道：Test only
-- 当前版本：`0.1.0-test.5`
-- Build：`10105`
-- Shell：`1.0.0-test.5` / rule version `2026082305`
+- 当前正式版：`0.1.0` / Build `10106`
+- Stable Shell：`0.1.0-stable.1` / rule version `2026082306`
+- 当前测试版：`0.1.0-test.5` / Build `10105`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 源站入口：`https://51cg1.com/`
 - 源站 favicon：`https://51cg1.com/favicon.ico`
 - 源站页面 Logo：`https://51cg1.com/usr/themes/Mirages/images/logo-2.png`
-- Stable：尚未建立，禁止在未实机验证前晋级。
+- Stable 0.1.0 已按用户明确发布要求由实机验证 Test5 原样晋级；Test5 保留为不可变晋级来源与回退参考。
+
+## 0.1.0 / Build 10106 — 2026-08-23
+
+### Stable 晋级
+
+用户明确要求发布正式版。Stable 0.1.0 由 `0.1.0-test.5 / Build10105` 原样晋级，不修改业务逻辑。
+
+正式版保留当前已实机验证链：
+
+- 首页文章流、加密封面解密和正文图片解密。
+- 分类中心、首页快捷分类和分类分页。
+- 独立站内搜索页与搜索分页。
+- 图文详情、DPlayer/HLS 媒体提取和海阔原生播放。
+- 播放 Primary Action 与收藏/评论/正文隔离，播放器只接收真实视频条目。
+- `/comments/<postId>.json` 真实评论接口、纵向评论卡片与楼中楼回复层级。
+- 一级评论与楼中楼回复统一使用 51CG 官方 favicon 头像，对齐原站默认评论身份。
+- 本地收藏、浏览历史、动态可用域名与设置/诊断链。
+
+### Stable 发布结构
+
+```text
+stable.json / latest.json
+→ releases/0.1.0/release.json
+→ Test1~Test5 不可变模块
+→ releases/0.1.0/stable_patch.js
+→ bootstrap_stable_v1_b10106.js
+→ 51chigua_remote_stable_v1_b10106.txt
+```
+
+`stable_patch.js` 仅切换 `version/build/channel/bootstrap` 为 Stable 身份，不改变 Provider、Parser、评论、播放、图片解密或 UI 行为。
+
+后续新 Test 必须从 Stable 0.1.0 向前开发，不得覆盖 Test5 或 Stable 0.1.0 的不可变 Release。
 
 ## 0.1.0-test.5 / Build 10105 — 2026-08-23
 
@@ -162,4 +193,4 @@ Test2 视频已经实机可播，所以 Test3 不重写成功的 HLS 交付链�
 
 ## 恢复规则
 
-Test1、Test2、Test3、Test4、Test5 都是不可变 Release。后续问题继续新建更高 Test build，禁止原地覆盖。Stable 只能从用户明确实机验证通过的 Test 晋级。
+Test1、Test2、Test3、Test4、Test5 与 Stable 0.1.0 都是不可变 Release。Stable 0.1.0 来自 Test5 原样晋级。后续新问题必须从 Stable 0.1.0 派生更高 Test，禁止覆盖既有 Test 或 Stable。
