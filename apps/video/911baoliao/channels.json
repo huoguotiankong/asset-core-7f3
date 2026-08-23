@@ -3,30 +3,30 @@
   "id": "911baoliao",
   "name": "911爆料",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 20:17",
+  "updatedAt": "2026-08-23 20:40",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "911baoliao-test",
       "name": "911爆料",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/911baoliao/911baoliao_remote_test_v2_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/911baoliao/911baoliao_remote_test_v3_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "Test2 修复海阔中文规则名内部路由：不再把 rule=911爆料 percent-encode；首页按钮、分类、详情、收藏、历史、设置和搜索输入统一恢复可跳转。Test1 UI/Parser 其余行为保持不变。",
+      "desc": "Test3 修复海阔实机无法访问 raw.githubusercontent.com 导致的 Bootstrap 启动失败：Shell 与运行时回调改走 jsDelivr，Bootstrap 升级 Remote Manager 2.0.2 并启用 jsDelivr/WebRaw/Raw 多镜像回退；保留 Test2 中文规则名路由修复。",
       "highlights": [
-        "修复首页按钮找不到小程序",
-        "修复分类/详情内部页路由",
-        "修复搜索输入后的结果页路由",
-        "保留 Test1 首页与 Parser",
-        "本地收藏与浏览历史保持",
+        "修复 Raw GitHub Bootstrap 加载失败",
+        "Shell 默认使用 jsDelivr",
+        "Remote Manager 2.0.2 多镜像回退",
+        "lazyRule 回调同步切换 CDN Bootstrap",
+        "保留 Test2 中文规则名路由修复",
         "无评论、投稿、下载功能"
       ],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/911baoliao/assets/icon.svg"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/911baoliao/assets/icon.svg?v=10103"
     }
   ]
 }
