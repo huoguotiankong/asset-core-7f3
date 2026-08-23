@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "51chigua-test",
   "name": "51吃瓜",
-  "version": "0.1.0-test.4",
-  "build": 10104,
-  "shellVersion": "1.0.0-test.4",
-  "shellRuleVersion": 2026082304,
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "shellVersion": "1.0.0-test.5",
+  "shellRuleVersion": 2026082305,
   "managerVersion": "2.0.1",
-  "release": "apps/video/51chigua/releases/0.1.0-test.4/release.json",
-  "rule": "apps/video/51chigua/51chigua_remote_test_v4_b10104.txt",
+  "release": "apps/video/51chigua/releases/0.1.0-test.5/release.json",
+  "rule": "apps/video/51chigua/51chigua_remote_test_v5_b10105.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test4：评论页重新排版为头像/昵称/时间头部 + 独立正文，楼中楼回复缩进展示；评论 JSON Parser 增强 nested user/author/avatar/likes 等字段；首页搜索图标不再弹 input:// 对话框，改为独立 cg51Search 页面，在页面内输入并展示搜索结果。"
+  "notes": "Test5：按实机反馈统一评论头像。所有一级评论和楼中楼回复都强制使用源站官方 favicon 作为默认头像，不再展示接口里的字母/随机头像；评论接口、卡片排版、独立搜索、播放、分类等 Test4 功能保持不变。"
 }
