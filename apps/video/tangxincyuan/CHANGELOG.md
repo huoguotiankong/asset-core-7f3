@@ -4,13 +4,90 @@
 
 - App ID：`tangxincyuan`
 - 当前通道：Test
-- 当前版本：`0.1.0-test.3` / Build `10103`
-- 当前 Shell：`1.0.0-test.4` / RuleVersion `2026082314`
-- 当前 Bootstrap：`bootstrap_test_v3_b10103.js`
-- 当前加载器：`cdn-direct-2.0`
+- 当前版本：`0.1.0-test.4` / Build `10104`
+- 当前 Shell：`1.0.0-test.5` / RuleVersion `2026082315`
+- 当前 Bootstrap：`bootstrap_test_v4_b10104.js`
+- 当前加载器：`cdn-direct-3.0`
 - 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
 - 用户当前源站入口：`https://txcy-online.buzz/banshu/`
-- 当前没有 Stable；真实 DOM / 图片 / 搜索 / 播放链仍需继续实机验证，禁止直接晋级 Stable。
+- 当前没有 Stable；Cloudflare 会话桥、真实 DOM / 图片 / 搜索 / 播放链仍需继续实机验证，禁止直接晋级 Stable。
+
+## 0.1.0-test.4 / Build 10104 — 2026-08-23
+
+### Test3 实机结果：真实阻断点锁定为 Cloudflare 安全验证
+
+Test3 已经修复中文规则名内部跳页，并让首页能够稳定进入；但首页依然没有真实内容。用户通过“打开当前网页”进入 X5 后，实机页面明确显示：
+
+```text
+txcy-online.buzz
+正在进行安全验证
+本网站使用安全服务防护恶意自动程序……
+Cloudflare / Ray ID
+```
+
+因此当前“首页 0 卡片”的 P0 根因不再是 DOM Parser 猜得不够宽，而是普通海阔 `fetch()` 当前拿到的是 Cloudflare Challenge HTML，并没有取得源站真实业务页面。在挑战页没有处理之前，继续扩大视频/分类 Parser 会制造假修复。
+
+### Test4 设计边界
+
+采用“官方 X5 验证 + 会话复用”方案，不破解验证码、不伪造 `cf_clearance`、不调用第三方打码服务：
+
+```text
+Hiker 请求检测 Challenge
+→ 显示安全验证向导
+→ x5:// 打开站点官方 Cloudflare 页面
+→ Cloudflare 自己执行 JS 检测 / 用户完成必要的人机确认
+→ 返回小程序
+→ getCookie() 读取同一浏览器 Cookie 容器
+→ 使用匹配 UA + Cookie 重新请求首页
+→ 验证通过后首页/分类/人物/搜索/详情/图片/播放统一复用该会话
+→ 会话过期再次进入验证向导
+```
+
+### Core Session Adapter
+
+新增 `releases/0.1.0-test.4/core_session_patch.js`：
+
+- 新增 `txcy_cf_session_v4` 与 `txcy_fetch_diag_v4` 独立状态，避免污染旧 Test3 诊断。
+- `C.isChallengePage()` 专门识别当前实机出现的中文 Cloudflare 验证页，以及 `cf-chl-`、`challenge-platform`、Turnstile、Ray ID 等特征。
+- `C.liveCookie()` 通过海阔 `getCookie()` 读取当前 X5 同站 Cookie；只记录 Cookie 名称、数量与不可逆 fingerprint，诊断中不暴露 Cookie 值。
+- 在目标环境存在 `MOBILE_UA` 时优先使用海阔移动 UA，并把同一 UA 传给 X5 验证页与后续请求，降低 Cloudflare 会话因 UA 不一致失效的概率。
+- 覆盖请求 Header：普通 HTML 请求自动附带当前站点 Cookie；同源图片和媒体请求也带同一会话 Cookie、Referer、UA。
+- `C.request()` 一旦确认拿到 Challenge，明确返回 `challenge:true`，不再把验证页交给分类/视频 Parser，也不会把它误写成“页面可用”。
+- `C.syncWebSession()` 在用户完成 X5 验证后重新请求首页：仍为 Challenge 则明确提示继续验证；取得真实可用 HTML 才将本次会话标记为已验证。
+- 首页、分类、搜索、详情统一传播 challenge 状态；详情和播放不再在安全验证未通过时继续猜媒体地址。
+- Test4 重新定义多线路播放 Header，确保同源媒体需要 Cookie 时能够继续使用当前会话。
+
+### Runtime / UX
+
+新增 `releases/0.1.0-test.4/runtime_session_patch.js`：
+
+- 新增独立 `安全验证` 页面 `txcyVerify`。
+- 标准操作只有两步：
+  1. `打开安全验证`：进入 `x5://` 官方网页，等待自动验证；Cloudflare 如要求人机确认则由用户正常完成。
+  2. `验证完成，检查会话`：读取当前浏览器 Cookie，用同一 UA/Cookie 重新请求首页。
+- 检查成功后调用 `back(true)` 返回并刷新上一页，不要求用户重新启动小程序。
+- 首页识别到 Challenge 时不再显示误导性的“0 视频”，而是直接显示“需要完成站点安全验证”与验证入口。
+- 分类中心、人物中心、分类 Feed、搜索、详情也统一识别 Challenge，并复用同一个验证页面，不各自重复造验证逻辑。
+- 设置页新增会话状态、Cookie 数量/fingerprint、是否检测到 clearance、最近请求是否命中验证页等诊断；不显示 Cookie 内容。
+- 详情页关键 lazyRule 全部重新进入 Test4 Bootstrap / Build10104，不再沿用基础 Runtime 中硬编码的旧 Build10101。
+
+### 发布链
+
+- 新建不可变 `0.1.0-test.4 / Build10104` Release，不覆盖 Test3。
+- 新建 `bootstrap_test_v4_b10104.js`，使用新的 `txcy_cdn_state_v3`，最低恢复基线 Build10104。
+- 新建 `tangxincyuan_remote_test_v5_b10104.txt`，Shell `1.0.0-test.5` / RuleVersion `2026082315`，新增 `txcyVerify` 页面声明。
+- `test.json`、`channels.json`、`registry.json`、根 `manifest.json`、`manifest_meta.json` 同步切换 Test4 后才算云仓发布完成。
+- Test4 的新增 JS 与 Bootstrap 在发布前已通过本地 `node --check`；JSON 元数据通过 JSON 语法校验。
+
+### Test4 首轮实机验收
+
+1. 覆盖导入 Test4 后，首页应识别 Cloudflare Challenge，并出现“进入验证向导”。
+2. 进入验证向导 → 打开安全验证；等待页面真正进入溏心次元正常站点页面，而不是仍停留“正在进行安全验证”。
+3. 返回验证向导点击“验证完成，检查会话”。
+4. 成功时应提示“站点会话已生效”，并返回刷新首页。
+5. 验证成功后测试首页、分类、人物、搜索是否还会重新掉回 Challenge。
+6. 如果 Challenge 已消失但真实内容仍为 0，下一版不再处理 Cloudflare，而是根据已拿到的真实 HTML 建立 txcy 专用 DOM/API Adapter。
+7. 图片、详情和播放链在首页/分类真实数据恢复后继续实机回归。
 
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
