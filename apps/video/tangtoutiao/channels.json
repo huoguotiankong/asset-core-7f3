@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 13:55",
+  "updatedAt": "2026-08-23 14:09",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.15","build":10115,
-      "displayVersion":"Test 0.1.0 · Stable Hiker Handoff 15","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test14 实机确认参考规则的裸 long. URL 改写在当前 CDN/海阔环境下无法独立播放，且恢复 App featuredAv 大列表后长视频封面再次大面积灰。Test15 不再把兼容改写当主方案：短视频/PWA 候选改用黄豆短剧、麻豆AI、JAV Playback 已实机验证的海阔交付模式，先探测媒体，HLS 优先 cacheM3u8，最终地址显式携带 UA/Referer/X-Auth；普通 App 长视频继续使用 Test10 已验证的解密/时长校验代理。推荐/长视频仍最多 36 条，优先尝试 PWA featuredAv；图片最终层优先 thumb_cover_str，并用 placeholder+self-fetch 多 Header 重试后再做明文/CBC/legacy-CFB 判型。",
-      "highlights":["短视频/PWA 改用已验证的 cacheM3u8 + 播放器 Header 交付方式","参考 long. 改写降级为候选，不再裸 URL 直放","App 长视频继续保留 Test10 已验证播放核心","推荐/长视频继续最多 36 条，尝试 PWA featuredAv 大列表","封面优先 thumb_cover_str，placeholder+self-fetch 多 Referer/Header 重试","收费未解锁内容继续只允许官方试看/显式汤币解锁"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.16","build":10116,
+      "displayVersion":"Test 0.1.0 · Cover & Short UI Repair 16","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v16_b10116.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test15 实机已确认短视频、免费长视频和官方预览全部可以播放，因此 Test16 将该播放链冻结，不再改媒体解析。当前只修两个回归：所有封面因 placeholder+$().image 自取流只剩灰块，现保留 thumb_cover_str 优先选图但恢复 Test13 已验证的真实图片 URL@js 内联 plain/AES-CBC/legacy-CFB 解密；短视频由单列超大 pic_1_card 改成双列 movie_2，仍保持点击卡片直接播放。",
+      "highlights":["冻结 Test15 已实机通过的短视频/免费长视频/预览播放链","封面恢复真实远程 URL@js 内联解密，不再依赖 placeholder 回调","继续优先 thumb_cover_str，兼容 PWA AES-CBC 与 App legacy AES-CFB","短视频改成双列 movie_2 紧凑卡片","短视频仍点击卡片直接播放，不增加详情跳转","Test15 完整保留为播放回退基线"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
