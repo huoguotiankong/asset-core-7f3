@@ -3,31 +3,31 @@
   "id": "tangxincyuan",
   "name": "溏心次元",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 21:23",
+  "updatedAt": "2026-08-23 22:05",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "tangxincyuan-test",
       "name": "溏心次元",
-      "version": "0.1.0-test.4",
-      "build": 10104,
-      "displayVersion": "Test 0.1.0-test.4 · Shell 1.0.0-test.5 · Build 10104",
-      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v5_b10104.txt",
+      "version": "0.1.0-test.5",
+      "build": 10105,
+      "displayVersion": "Test 0.1.0-test.5 · Shell 1.0.0-test.6 · Build 10105",
+      "path": "apps/video/tangxincyuan/tangxincyuan_remote_test_v6_b10105.txt",
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "Test4 接入 Cloudflare/X5 会话桥：识别安全验证页，在真实 X5 中完成官网验证后自动复用 Cookie/UA，并让首页、分类、搜索、详情、图片和播放继续使用同一会话。",
+      "desc": "Test5 根据实机结果调整验证链：X5 已能通过官网安全验证，但 getCookie 仍为空，因此不再把 Cookie 可见性作为唯一成功条件；新增 fetchCodeByWebView 浏览器源码传输兜底。",
       "highlights": [
-        "自动识别 Cloudflare 安全验证页",
-        "X5 官方验证会话桥",
-        "验证后复用 Cookie 与一致 UA",
-        "验证成功后返回并刷新上一页",
-        "首页/分类/人物/搜索/详情统一会话",
-        "不破解验证码、不伪造验证令牌",
-        "CDN Direct 3.0 / Build10104"
+        "X5 验证后不再强制要求 getCookie 成功",
+        "fetchCodeByWebView 渲染源码兜底",
+        "普通请求命中 Challenge 时自动转浏览器源码",
+        "原生 Cookie / 浏览器源码双传输诊断",
+        "首页/分类/搜索/详情统一复用传输层",
+        "不伪造 clearance、不破解验证码",
+        "CDN Direct 4.0 / Build10105"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608234"
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/tangxincyuan/assets/icon.svg?v=202608235"
     }
   ]
 }
