@@ -1,5 +1,24 @@
 # Pornhub CHANGELOG
 
+## 0.1.0 / Build 10108 — 2026-08-23
+
+### 首个 Stable
+- 按用户明确要求，将 `0.1.0-test.7 / Build10107` 原样晋级为首个正式版 `0.1.0 / Build10108`；本次晋级不改变业务 Parser、账号、评论、收藏、UI 或播放逻辑。
+- Stable 使用独立 `stable.json / latest.json / release.json / Bootstrap / Shell`，Remote Manager 身份为 `pornhub`，不与 `pornhub-test` 共用活动状态。
+- Stable Release 继续复用 Test1→Test7 的不可变模块，并在最后追加 `releases/0.1.0/stable_patch.js`，仅固定 `PornhubCore/PornhubRemoteRuntime` 的 Stable version/build/channel 与 Stable Bootstrap 地址。
+- Stable Shell：`apps/video/pornhub/pornhub_remote_stable_v1_b10108.txt`；Bootstrap：`apps/video/pornhub/bootstrap_stable_v1_b10108.js`；Release：`apps/video/pornhub/releases/0.1.0/release.json`。
+- Test7 完整保留为晋级来源和问题对照；后续新 Test 必须从 Stable 0.1.0 重新向前开发，不继续把旧 Test 身份当作正式运行入口。
+
+### 晋级时的实机事实与已知边界
+- 已有实机确认的稳定基线包括：首页/公开视频、独立搜索、中文分类、评论读取、详情创作者真实头像以及 4 档 HLS 多画质播放。
+- 账号链已完成 X5 Cookie 会话、私有缓存会话指纹和账号身份防误判重构；但账号私有列表仍应继续以用户 X5 官方页面作事实对照。
+- Test7 的 Shorts `/shorties/<id>` 和 Playlist chunk Parser 是最新一轮重写，晋级前尚未收到下一轮实机截图确认；用户明确要求先发布正式版，因此 Stable 0.1.0 保留该实现，同时将其列为后续 Test 的首要回归项。
+
+### 发布门禁
+- Stable finalizer 与 Stable Bootstrap 已通过 `node --check`；Stable Shell JSON 已解析并确认 20 个页面全部指向 Build10108 Stable Bootstrap。
+- Stable Release `verify` 要求 `PornhubRemoteRuntime.version === 0.1.0`；`minBuild/defaultRelease.build` 均为 10108。
+- 正式运行源继续固定为 `huoguotiankong/asset-core-7f3@main`，不新增 `hiker-cloud` 运行依赖。
+
 ## 0.1.0-test.7 / Build 10107 — 2026-08-23
 
 ### 第六轮实机结论
