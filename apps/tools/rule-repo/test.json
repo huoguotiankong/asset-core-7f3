@@ -3,16 +3,16 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.4-test.2",
-  "build": 386,
+  "version": "3.5.5-rc1",
+  "build": 387,
   "baseVersion": "3.5.4",
-  "targetVersion": "3.5.4",
+  "targetVersion": "3.5.5",
   "shellVersion": "1.0.32-test",
   "bootstrapVersion": "1.0.31-test",
   "managerVersion": "2.0.2",
-  "release": "apps/tools/rule-repo/releases/test-3.5.4-sync2/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.5-rc1/release.json",
   "updatedAt": "2026-08-23",
-  "status": "active-test",
-  "previousTest": {"version":"3.5.4-test.1","build":385,"release":"apps/tools/rule-repo/releases/test-3.5.4-sync1/release.json"},
-  "notes": "基于 Stable 3.5.4 / Test1 的单点同步刷新修复：syncManifest 成功写入新目录后立即 refreshPage(false) 重建 Single Workspace，修复新增程序已经进入 manifest 但当前页面仍显示旧快照的问题。其它业务/UI 保持 Stable 3.5.4 基线。"
+  "status": "active-candidate-test",
+  "previousTest": {"version":"3.5.4-test.2","build":386,"release":"apps/tools/rule-repo/releases/test-3.5.4-sync2/release.json"},
+  "notes": "基于 Stable 3.5.4 / Test2 向下一正式版本推进。保留同步目录后即时刷新；新增 Icon Delivery Adapter，将规则仓库 UI 图标统一切到 jsDelivr，并把本仓 raw.githubusercontent / GitHub raw 程序图标运行时自动转换为 jsDelivr，修复海阔 X5 中部分程序卡与底部导航破图。"
 }
