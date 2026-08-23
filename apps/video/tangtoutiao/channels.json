@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 13:24",
+  "updatedAt": "2026-08-23 13:55",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.14","build":10114,
-      "displayVersion":"Test 0.1.0 · Large Feed & Reference Playback 14","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v14_b10114.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test13 实机确认 PWA 推荐接口仅返回 3 条，且短视频 source_origin 直放仍 0 kb/s。Test14 将推荐/长视频恢复为 App featuredAv 大列表，每页展示最多 36 条；短视频改用用户上传参考规则的 preview_video 兼容改写（播放主机切到 long. 并移除 seconds=30）。该兼容改写只对免费或已购买内容启用；收费未解锁内容继续使用官方试看/正常汤币解锁。免费/已购买长视频详情新增“兼容线路”按钮用于实机验证同一改写是否能恢复完整播放。",
-      "highlights":["推荐/长视频恢复 App featuredAv 大列表，修复仅 3 条","短视频优先参考规则的 long 主机兼容线路","免费/已购买长视频增加参考兼容线路测试按钮","收费未解锁内容不使用截断改写，继续官方试看/正常解锁","Test13 自适应图片链继续保留","新增 ttt_last_reference_rewrite 诊断，记录改写前后 URL"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.15","build":10115,
+      "displayVersion":"Test 0.1.0 · Stable Hiker Handoff 15","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v15_b10115.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test14 实机确认参考规则的裸 long. URL 改写在当前 CDN/海阔环境下无法独立播放，且恢复 App featuredAv 大列表后长视频封面再次大面积灰。Test15 不再把兼容改写当主方案：短视频/PWA 候选改用黄豆短剧、麻豆AI、JAV Playback 已实机验证的海阔交付模式，先探测媒体，HLS 优先 cacheM3u8，最终地址显式携带 UA/Referer/X-Auth；普通 App 长视频继续使用 Test10 已验证的解密/时长校验代理。推荐/长视频仍最多 36 条，优先尝试 PWA featuredAv；图片最终层优先 thumb_cover_str，并用 placeholder+self-fetch 多 Header 重试后再做明文/CBC/legacy-CFB 判型。",
+      "highlights":["短视频/PWA 改用已验证的 cacheM3u8 + 播放器 Header 交付方式","参考 long. 改写降级为候选，不再裸 URL 直放","App 长视频继续保留 Test10 已验证播放核心","推荐/长视频继续最多 36 条，尝试 PWA featuredAv 大列表","封面优先 thumb_cover_str，placeholder+self-fetch 多 Referer/Header 重试","收费未解锁内容继续只允许官方试看/显式汤币解锁"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
