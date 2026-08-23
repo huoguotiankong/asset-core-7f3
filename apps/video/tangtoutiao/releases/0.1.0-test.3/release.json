@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "tangtoutiao-test",
+  "name": "汤头条",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "baseTest": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/tangtoutiao/releases/0.1.0-test.2/release.json"},
+  "modules": [
+    {"name":"protocol","path":"apps/video/tangtoutiao/releases/0.1.0-test.3/protocol.js"},
+    {"name":"core","path":"apps/video/tangtoutiao/releases/0.1.0-test.2/core.js"},
+    {"name":"ui","path":"apps/video/tangtoutiao/releases/0.1.0-test.3/ui.js"},
+    {"name":"pages","path":"apps/video/tangtoutiao/releases/0.1.0-test.3/pages.js"},
+    {"name":"runtime","path":"apps/video/tangtoutiao/releases/0.1.0-test.3/runtime.js"}
+  ],
+  "verify": {"global":"TangTouTiaoRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "notes": "根据 Test2 实机 401 与 APK 反编译恢复真实匿名启动链：system_oauth_id/system_iid 共用一个持久设备 ID；内容请求前自动 getOpenAdsAndVersion 获取 AppConfigBean.token；401 自动清 Token 重握手，必要时重建设备身份。快捷导航改远程 SVG，避免 data URI 被海阔当占位图。"
+}
