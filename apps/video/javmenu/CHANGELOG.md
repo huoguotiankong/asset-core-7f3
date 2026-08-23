@@ -46,6 +46,9 @@
 - Bootstrap 使用 jsDelivr 明确 `@main` 的直接不可变模块路径 + Build10101 require 缓存键；Core / Playback / Runtime 都校验 version/build。
 - lazyRule 关键播放/收藏动作重新进入当前 Bootstrap，再调用当前 Runtime，避免只 eval 基础 Core 导致点击动作退回旧实现。
 - Test1 已在本地通过 `node --check`；Parser Fixture 已验证影片卡、详情、人物/标签、HLS/MP4、预览图、磁力标准模型。
+- Bootstrap Runtime Smoke 已通过：`JavMenuBoot.loadOnly()` 可在同一作用域加载并校验 Core / Playback / Runtime；单真实线路返回直链媒体合同，多真实线路返回带 `urls/names/headers` 的 PlayModel。
+- Test1 自有资产已以 fast-forward 提交发布到 `asset-core-7f3@main`；`registry.json` 已登记 JavMenu，保证后续按恢复链继续开发。
+- 根 `manifest.json`（“我的规则仓库”安装中心）**暂未加入 JavMenu**：全新 Test1 尚未经过海阔实机，避免未验证入口被当作正式可安装程序展示；完成基础实机回归后再挂安装中心 Test 通道。
 - **尚未完成：海阔实机 Home / Search / Detail / Player / Favorite / Discover / Settings 回归，因此不得晋级 Stable。**
 
 ## 禁止回退 / 待确认
