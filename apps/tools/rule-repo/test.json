@@ -3,16 +3,16 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.6-rc1",
-  "build": 391,
+  "version": "3.5.6-rc2",
+  "build": 392,
   "baseVersion": "3.5.5",
   "targetVersion": "3.5.6",
-  "shellVersion": "1.0.37-test",
-  "bootstrapVersion": "1.0.36-test",
+  "shellVersion": "1.0.38-test",
+  "bootstrapVersion": "1.0.37-test",
   "managerVersion": "2.0.4",
-  "release": "apps/tools/rule-repo/releases/test-3.5.6-rc1/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.6-rc2/release.json",
   "updatedAt": "2026-08-24",
   "status": "active-test",
-  "previousTest": {"version":"3.5.5-test.1","build":390,"release":"apps/tools/rule-repo/releases/test-3.5.5-sync1/release.json"},
-  "notes": "Single Workspace 14.0：首页改为最后成功目录缓存优先，不再首屏串行扫描全部已安装规则，也不再为每个多版本程序预取 channels.json；多版本程序按当前 Stable/Test/Local 安装记录与根目录目标版本比较，可更新统计和更新中心正式支持 channel-group；版本中心改为按需加载并缓存。Stable 3.5.5 / Build389 保持不变。"
+  "previousTest": {"version":"3.5.6-rc1","build":391,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc1/release.json"},
+  "notes": "Single Workspace 14.1。紧急修复 RC1 X5 工作区白屏：RC1 错误调用 workspaceClient 并把 Rhino 闭包引用序列化进浏览器，导致 baseWorkspaceClient 未定义。RC2 改为 Rhino 端对原 client.toString() 打纯源码补丁后再注入 X5，并增加 Render Guard 显式错误页。Fast Home、channel-group 可更新索引、channels.json 按需加载继续保留。Stable 3.5.5 / Build389 不变。"
 }
