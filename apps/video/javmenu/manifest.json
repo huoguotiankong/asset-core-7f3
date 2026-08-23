@@ -6,18 +6,18 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/javmenu/test.json",
   "channels": "apps/video/javmenu/channels.json",
-  "cloudChannels": "apps/video/javmenu/channels_v1_b10101.json",
-  "testVersion": "0.1.0-test.1",
-  "testBuild": 10101,
-  "testShellVersion": "0.1.0-test.1",
-  "testBootstrap": "apps/video/javmenu/bootstrap_test_v1_b10101.js",
-  "testRule": "apps/video/javmenu/javmenu_remote_test_v1_b10101.txt",
-  "testRelease": "apps/video/javmenu/releases/0.1.0-test.1/release.json",
+  "cloudChannels": "apps/video/javmenu/channels_v2_b10102.json",
+  "testVersion": "0.1.0-test.2",
+  "testBuild": 10102,
+  "testShellVersion": "0.1.0-test.2",
+  "testBootstrap": "apps/video/javmenu/bootstrap_test_v2_b10102.js",
+  "testRule": "apps/video/javmenu/javmenu_remote_test_v2_b10102.txt",
+  "testRelease": "apps/video/javmenu/releases/0.1.0-test.2/release.json",
   "changelog": "apps/video/javmenu/CHANGELOG.md",
   "sourceSite": "https://javmenu.com/zh",
-  "icon": "https://javmenu.com/assets/images/logo.png",
+  "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/javmenu/assets/icon.svg?v=10102",
   "migration": {
-    "stage": "initial-test",
-    "note": "Brand-new app; no previous project Stable. Stable will be created only after device verification."
+    "stage": "device-repair-test2",
+    "note": "Test2 is based on Test1 real-device evidence. No Stable exists; promotion remains blocked until Test2 device regression."
   }
 }
