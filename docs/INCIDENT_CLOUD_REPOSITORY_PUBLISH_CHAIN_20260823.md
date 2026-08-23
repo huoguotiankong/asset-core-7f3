@@ -168,3 +168,100 @@ Single Workspace 打开时
 ```
 
 仅看到“目录已更新”toast 不能视为 UI 已完成同步。
+
+## 9. 可变元数据多源同时失败 / 陈旧 CDN 指针事故
+
+2026-08-23 规则仓库 Test 从 Build385 向 RC2 / Build388 推进时，用户实机先后出现两种相反故障：
+
+1. jsDelivr `@main` 仍返回旧 `test.json`，Remote Manager 因此把 Build385 误判为“已经是最新测试版”。
+2. 改成 GitHub API 优先后，实机又出现 `GitHub API 内容为空`；同一时刻 Raw / WebRaw / CDN 也可能返回无效响应，导致更新页直接报“升级失败”。
+
+结论：**可变版本指针不能依赖单一源，也不能把任一 `@main` CDN 返回值直接当作强一致真相。**
+
+从 Remote Manager 2.0.4 起固定：
+
+```text
+可变 latest/test 指针：
+Raw → WebRaw → GitHub API → jsDelivr
+
+并且：
+- 保存最后一次成功元数据；
+- 设置 floor = max(当前 build, default build, minBuild)；
+- 低于 floor 的 CDN/镜像结果只能判为传播滞后，禁止降级；
+- 所有元数据源暂时不可达时，继续使用当前/Bootstrap 内置安全 Release；
+- 网络抖动不得伪装成“程序升级失败”。
+```
+
+不可变 Release / 模块仍可使用多镜像分发，因为其路径一旦发布就不再变化。
+
+## 10. 多 commit 半发布与并发 main 写入事故
+
+同日继续追查发现，旧发布流程经常按多次提交依次写：
+
+```text
+release
+→ test/stable/latest
+→ channels
+→ Bootstrap
+→ Shell
+→ registry
+→ root manifest
+→ manifest_meta
+```
+
+手机如果恰好在中间窗口读取，会得到“新指针 + 旧文件”或“新文件 + 旧指针”的半发布状态。更严重的是，项目多个对话会同时发布不同小程序；本次规则仓库发布过程中实际捕获到 JavDB、XVideos 并发推进 `main`。如果继续拿旧 HEAD 强推，会覆盖其它程序刚发布的内容。
+
+以后统一采用两阶段协议：
+
+```text
+A. 不可变资产准备阶段
+   新 Release / 模块 / Bootstrap / Shell 依赖先落盘
+   → 回读确认存在
+   → 此阶段不得提前切活动指针
+
+B. 活动指针原子切换阶段
+   重新读取最新 main HEAD
+   → 基于最新 tree 只替换本程序 stable/test/latest/channels 等指针
+   → 单个 Git tree commit
+   → fast-forward main
+```
+
+如果 `main` 在 create tree / commit 期间再次前进：
+
+```text
+禁止 force
+→ 重新读取新 HEAD
+→ 在新 tree 上重建本程序改动
+→ 再 fast-forward
+```
+
+这条规则适用于所有远程小程序，不只是“我的规则仓库”。
+
+## 11. Stable 3.5.5 发布基线
+
+用户明确要求将修复后的规则仓库云端正式版同步升级。最终形成：
+
+```text
+Stable 3.5.5 / Build389 / Shell1.5.5 / Bootstrap1.5.5 / Manager2.0.4
+Test   3.5.5-test.1 / Build390 / Shell1.0.36-test / Bootstrap1.0.35-test
+```
+
+Stable 3.5.5 吸收：
+
+- `sync_refresh_patch`：同步成功即时重建当前工作台；
+- Icon Delivery 1.1：本仓 Raw 图标统一 CDN 交付，版本中心同样处理；
+- Remote Delivery Protocol 2.0：多源可变元数据、last-known-good、安全 build floor；
+- 原子发布基线。
+
+Stable Release **不包含** Test state/baseline patch；最终恢复正式 `hc_repo_* / hc_repo_v3_*` 状态命名空间和 Stable Bootstrap。发布完成后立即续线 Test Build390，满足 `Test baseVersion = Stable version` 且 `Test build > Stable build`。
+
+以后“云端发布完成”的定义升级为：
+
+```text
+不可变资产可回读
+&& 活动指针同一原子切换
+&& main fast-forward 无覆盖并发提交
+&& registry 恢复链同步
+&& root manifest/revision 成对同步
+&& 实机可见/可导入/可打开
+```
