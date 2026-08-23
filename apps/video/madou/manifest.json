@@ -6,14 +6,14 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/madou/test.json",
   "channels": "apps/video/madou/channels.json",
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "1.0.0-test.8",
-  "testBootstrap": "apps/video/madou/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/video/madou/madou_remote_test_v8_b10108.txt",
-  "testRelease": "apps/video/madou/releases/0.1.0-test.8/release.json",
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "1.0.0-test.9",
+  "testBootstrap": "apps/video/madou/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/video/madou/madou_remote_test_v9_b10109.txt",
+  "testRelease": "apps/video/madou/releases/0.1.0-test.9/release.json",
   "changelog": "apps/video/madou/CHANGELOG.md",
   "sourceSite": "https://madoup2.cc/",
   "icon": "apps/video/madou/assets/icon.svg",
-  "migration": {"stage":"test8-direct-playback-detail-ui","note":"Test8 keeps Test7 navigation/playback-contract fixes, removes the boilerplate site intro from detail, uses a full-width horizontal hero, and adds a structured direct-media resolver before video:// fallback: detail HTML -> player/iframe -> one nested player hop -> small expiring media cache."}
+  "migration": {"stage":"test9-fast-detail-targeted-playback","note":"Test8 proved the static/player-page resolver still did not reach a true direct media URL and introduced a new performance regression by synchronously chasing several player pages while rendering detail. Test9 removes all multi-hop network work from detail render; one detail request only. Playback uses direct media present in current HTML when available, otherwise targets the detected player/iframe page with webRule for fast video/currentSrc/resource capture. Pure API no-sniff remains a separate protocol-research target and is not falsely claimed as complete."}
 }
