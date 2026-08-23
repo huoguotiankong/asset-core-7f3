@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha9",
-  "build": 10009,
-  "shellVersion": "8.8.0-test",
+  "version": "1.0.0-alpha10",
+  "build": 10010,
+  "shellVersion": "8.9.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha9/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v088.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha10/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v089.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha9。Alpha8 实机已确认 can/watch 当前有效 Method=GET、canWatch=true，且 H5 decode manifest HTTP200、AES Key HTTP200，但首 TS 在无 Header、UA-only、API Header 下全部 HTTP403；因此播放故障已定位到签名 CDN 分片授权，而不是海阔播放器、Seed、decode、cacheM3u8 或 Key 本身。Alpha9 不再盲改播放器：完整读取 can/watch 的 videoUrl/playPath/previewUrl，先执行 CDN refresh，再对 APP 原生 /api/m3u8/play、/m3u8/play 与 H5 decode 建立路由矩阵；每条只在首 TS 真正 2xx 且有二进制内容时才选为主线路，并直接记录 403 响应正文、Cookie/jhg/H5/APP/Range 等分片请求组合。漫画方面 Alpha8 已去掉系统 chrome，用户截图剩余顶部白区实际来自第一张源图片自身留白；Alpha9 仅对首图做近白边自动裁顶，后续正文保持原图。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha10。Alpha9 实机已经把播放故障明确到 CDN 签名本身：can/watch GET 返回 canWatch=true、videoUrl 与绝对 playPath；H5/native manifest 均可 HTTP200，但首 TS 对所有 Header 组合都返回 403 Forbidden: invalid sign，playPath 裸访问为 missing auth_key。auth_key 形态为 timestamp-rand-uid-md5，且 APK 静态字符串存在 playbackAuthKey/playbackDomain/getMediaUrl，因此本版停止继续试播放器 Header，转为读取当前远程配置中的 playbackAuthKey/playbackDomain，按 CDN Type-A 常见签名合同对 KEY/TS 逐条重签，并以首分片真实 HTTP2xx+二进制内容验证后才生成本地重签 HLS；若当前配置未下发密钥或算法仍不匹配，则保留 Alpha9 路由矩阵并输出签名配置/重签探针。漫画 Alpha9 的白边裁剪未生效且无异常，本版改成更稳健的持续内容扫描、提高 JPEG 近白噪声容忍度并使用全新缓存命名，诊断直接记录源图尺寸、first/top/bestRatio。Stable 0.4.9 不变。"
 }
