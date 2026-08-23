@@ -1,5 +1,61 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.20 / Build 10120 — 2026-08-23
+
+状态：**Test19 已恢复可启动后的内容协议修复与第二阶段补齐，仍为 Test；禁止晋级 Stable。**
+
+### Test19 最新实机事实
+- Test19 启动依赖热修有效，首页及已有视频功能恢复，可继续进入新增频道测试。
+- 创作者页返回 `code 551 · 参数不全`，说明 Test18 将 `/api/Creator/featured` 错当成“创作者发现首页”。
+- 有声首页返回 `code 200`，但结构是 `array[7]>{current:boolean,id:number,name:string,type:string,show_style:number,api_list:string,params_list:object}`；这不是作品列表，而是动态频道描述数组。
+- 小说首页同样返回 `code 200`，结构为 `array[13]>{current:boolean,id:number,name:string,type:string,show_style:number,api_list:string,params_list:object}`；旧 Adapter 因此解析为 0 条。
+- 社区首页实际返回 5 个动态频道描述；旧页面将它们直接渲染成“关注 / 热门 / 发现 / 精选推荐 / 狼友交流”五个超大空白块，确认频道描述与业务 Feed 必须分层。
+- 排行榜“总榜”返回 `code 551 · type值只能为:daily,weekly,monthly,all`。根因是页面路由 `type=rank` 与服务端榜单参数 `type` 同名，路由值污染了 Provider 参数。
+- 漫画分类/列表已实机正常：例如“发现”可显示 30 部并正常显示封面；当前缺口已经从列表推进到详情、章节和正文链。
+- Test16 图片链继续有效；免费长视频与官方试看继续保持已验证播放状态。本轮仍以它们为冻结基线。
+- 短视频完整时长问题仍未解决，仍只有约 2–3 秒；Test20 不宣称修复该问题，也不再次改动短视频播放器链。
+
+### APK / 接口契约进一步确认
+- `/api/Creator/featured` 不是创作者目录。APK 参数构造为 `uuid + lastId + limit`；只有已知创作者 UUID 后才能调用。
+- 创作者发现 Test20 暂使用已经可返回真实创作者实体的 `/api/RankList/getPlayRank?type=all`，点击创作者后再调用 `/api/Creator/featured` `{uuid,lastId:0,limit:10}`。
+- `/api/RankList/getPlayRank` 的 `type` 白名单固定为 `all / daily / weekly / monthly`；页面路由参数不得直接透传。
+- 小说：`/api/novel/home` → 动态 `api_list/params_list` → 真实列表；详情 `/api/novel/detail {id}`；目录 `/api/novel/chaptersList {id,limit,page}`；正文 `/api/novel/chapterDetail {novel_id,chapter_id}`。
+- 有声：`/api/audio/home` → 动态 `api_list/params_list` → 真实列表；详情 `/api/audio/detail {id}`；章节详情 `/api/audio/chapterDetail {audio_id,chapter_id}`。目录接口确认是 `/api/audio/chaptersList`，当前 Test20 对 `id` / `audio_id` 两种参数形式做有限兼容，等待实机确定唯一契约。
+- 社区：`/api/community/home` 返回动态频道配置；APK 可见 `/api/community/list_post {cate,page}`、`/api/community/post_detail {id}`、`/api/community/post_comments {id,page}` 等独立链路。
+- 漫画详情链已从 APK 确认：`/api//book/detail {id}` → `/api/book/list_episode {id,sort:'asc'}` → `/api/book/read {book_id,chapter_id}`。
+- `ComicEpisodeBean` 可见 `comic_id / episode / episode_title / is_free / is_pay / thumb / view_money`；正文返回 `read` 图片列表。
+
+### Test20 修改
+- **动态频道 Adapter**：小说、有声、社区不再把 Home 响应直接交给内容解析器，而是统一执行 `Descriptor[] → Tab → selected.api_list + selected.params_list → real list → content model`。
+- 动态频道配置缓存 10 分钟；切换小说/有声/社区子频道时不必反复请求首页描述数组。
+- **社区 UI 重构**：将原来的大面积空白五分类改成紧凑横向 Tab，并加载当前频道真实 Feed；首页“社区”Tab与独立社区页统一复用同一套 Adapter。
+- 新增社区帖子详情第一阶段：`/api/community/post_detail`，展示正文、媒体和已有评论字段；后续根据实机继续细化评论分页和互动动作。
+- **排行榜修复**：使用独立状态 `ttt20_rank_type`，Provider 调用前只允许 `all/daily/weekly/monthly`，不再读取页面路由 `type=rank` 作为 API 参数。
+- **创作者修复**：创作者入口先显示真实创作者榜单；创作者卡片可进入作品页，作品页按 APK 契约调用 `/api/Creator/featured {uuid,lastId,limit}`。
+- **小说增强**：动态频道可进入真实作品列表；详情加入简介和章节列表；章节点击尝试 `/api/novel/chapterDetail` 正文。
+- **有声增强**：动态频道可进入真实作品列表；详情加入章节列表；章节点击尝试 `/api/audio/chapterDetail`，若返回 `m3u8/url/play_url` 则直接交给海阔播放。
+- **漫画第二阶段**：原先已经正常的 12 个动态分类和 30 部列表保持不变；卡片现在进入真实漫画详情，再取得升序章节，章节进入 `/api/book/read` 并用 `pic_1_full` 连续渲染正文图片。
+- **稳定边界冻结**：Test16 图片 Adapter、Test10/Test15 免费长视频与官方试看、收费/汤币语义全部不修改；短视频 2–3 秒问题本轮也不做冒险性播放重构。
+- Test20 新增 `pages_patch.js / runtime.js / release.json / Bootstrap / Shell`；新增页面/runtime 已通过本地 `node --check`，Release 显式保留 Test17→Test18→Test19→Test20 的依赖顺序。
+- Shell rule version 升为 `2026082321`，Build 升为 `10120`，Test19 完整保留作为可启动回退点。
+
+### Test20 新诊断
+- `ttt_last_creator_discover`：创作者发现榜单数量和结构。
+- `ttt_last_creator_featured`：指定 UUID 的 Creator/featured 结果。
+- `ttt_last_rank_exact`：最终发送的合法榜单 type。
+- `ttt_last_dynamic_channel`：小说/有声/社区当前 Tab、真实 api_list、params_list、内容数量与 schema。
+- `ttt_last_content_detail`：小说/有声详情及章节结构。
+- `ttt_last_community_detail`：社区详情媒体/评论数量。
+- `ttt_last_comic_detail`：漫画详情与章节数量。
+- `ttt_last_comic_read`：漫画正文页数与结构。
+
+### Test20 实机验收重点
+1. 排行榜依次测试总榜/日榜/周榜/月榜，确认不再出现 `type=rank` 的 551；创作者页应能出现真实作者，点击后再验证作品列表。
+2. 小说、有声页面应先出现紧凑频道 Tab，然后出现真实作品，而不是 `array[xx]>{api_list,params_list}` 诊断空页；再测试一个作品详情和章节。
+3. 社区应从五个巨大空白分类变成紧凑 Tab + Feed；点一个帖子验证详情。
+4. 漫画从已正常的 30 部列表继续点进详情 → 章节 → 正文，确认章节数和图片是否真实返回。
+5. 推荐/长视频/短视频封面、免费长视频和官方试看必须保持现状；短视频仍只有 2–3 秒属于已知未解决项，本轮不作为 Test20 成败误判其它频道功能。
+
 ## 0.1.0-test.19 / Build 10119 — 2026-08-23
 
 状态：**Test18 启动依赖链热修版，仍为 Test；禁止晋级 Stable。**
