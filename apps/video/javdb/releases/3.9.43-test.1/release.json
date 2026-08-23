@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "name": "JavDB v3",
+  "channel": "test",
+  "version": "3.9.43-test.1",
+  "build": 2026082302,
+  "baseVersion": "3.9.42",
+  "baseBuild": 2026082301,
+  "ref": "main",
+  "shell": "cloud/javdb/v3.9.43-test.1/javdb_v3.9.43_test1.txt",
+  "runtime": "cloud/javdb/v3.9.43-test.1/runtime.js",
+  "modules": [
+    {"name":"stable3942","path":"apps/video/javdb/releases/3.9.42/release.json"},
+    {"name":"transportRecoveryIdentity","path":"apps/video/javdb/releases/3.9.43-test.1/transport_patch1.js"}
+  ],
+  "transport": {
+    "runtimeCacheKey": "jdb3_runtime_3943t1",
+    "order": ["local-cache", "jsdelivr", "github-raw"],
+    "contentMarker": "var JDBCLOUD=",
+    "moduleFallback": ["jsdelivr", "github-raw", "validated-local-cache"]
+  },
+  "verify": {"global":"JDB","property":"version","equals":"20260823-v3.9.43-test.1"},
+  "notes": "Transport-only recovery build for Stable 3.9.42 startup failure. Business/UI/API behavior inherits Stable 3.9.42. Fixes direct single raw.githubusercontent runtime dependency by adding validated local runtime cache plus jsDelivr/GitHub Raw failover."
+}
