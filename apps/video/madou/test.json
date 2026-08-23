@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "madou-test",
   "name": "麻豆传媒",
-  "version": "0.1.0-test.12",
-  "build": 10112,
-  "shellVersion": "1.0.0-test.12",
-  "shellRuleVersion": 2026082312,
-  "managerVersion": "2.0.1",
-  "release": "apps/video/madou/releases/0.1.0-test.12/release.json",
-  "rule": "apps/video/madou/madou_remote_test_v12_b10112.txt",
+  "version": "0.1.0-test.13",
+  "build": 10113,
+  "shellVersion": "1.0.0-test.13",
+  "shellRuleVersion": 2026082313,
+  "managerVersion": "direct-loader",
+  "release": "apps/video/madou/releases/0.1.0-test.13/release.json",
+  "rule": "apps/video/madou/madou_remote_test_v13_b10113.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Test12 为存储救援 + 纯免嗅协议强化版。实机确认 Test11 规则私有 setItem KV 已达到约1MB，连很小的设置写入都会崩溃；Test12 将设置、播放缓存/诊断、收藏、历史和分页模板迁移到规则私有文件，并使用 direct immutable release Bootstrap 绕过 Remote Manager 的 setItem 状态写入。纯免嗅新增 player_aaaa/player_data encrypt=1/2、parse/jx、302 Location、无扩展HLS和更完整的静态解码；默认仍绝不启动WebView/video://。"
+  "notes": "Test13 按实机要求撤回纯免嗅实验和详情/播放设置。详情页固定默认加载标签+相关推荐，并用30分钟结构化私有文件缓存减少重复请求；播放恢复已实机可播的原策略：详情源码有直链则直接播放，否则对识别到的播放器页/详情页使用 video:// 媒体自动提取。Test12 私有文件收藏/历史恢复继续保留；活动 Bootstrap 使用 direct immutable loader，不再写 Remote Manager setItem 状态。"
 }
