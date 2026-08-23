@@ -3,11 +3,11 @@
   "channel": "candidate",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha6",
-  "build": 10006,
-  "shellVersion": "8.5.0-test",
+  "version": "1.0.0-alpha7",
+  "build": 10007,
+  "shellVersion": "8.6.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha6/release.json",
+  "release": "apps/video/acfun/releases/1.0.0-alpha7/release.json",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha6 候选。Alpha5 实机确认漫画正文链已经恢复、视频 decode 返回标准 AES-128 HLS 且 Key 可访问，但手写 file:// 本地索引与 noPre 仍不可播。Alpha6 改为官方 cacheM3u8 原生缓存合同并保留其特殊返回 URL；漫画阅读优化顶部章节信息/上下话导航，同时给漫画 Station 的对象 ID 增加数字 stationId 映射和分页兜底。正式 Stable 0.4.9 继续冻结。"
+  "notes": "Clean Rewrite Alpha7 候选。Alpha6 已实机确认海阔 cacheM3u8 返回合同正确但仍不可播，因此 Alpha7 不再修改 HLS/缓存结构，而是把播放 Header 精确回归 Stable 0.4.9 已验证的 UA + API Host Referer/Origin，移除 jhg_player/APP signed header 差异。漫画 Reader 使用官方 #fullTheme# 并只渲染 pic_1_full 正文图片，去掉顶部全部信息区域。正式 Stable 0.4.9 继续冻结。"
 }
