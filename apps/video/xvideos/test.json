@@ -3,14 +3,14 @@
   "channel": "test",
   "id": "xvideos-test",
   "name": "XVideos",
-  "version": "0.1.0-test.5",
-  "build": 10105,
-  "shellVersion": "1.0.0-test.5",
-  "shellRuleVersion": 2026082305,
-  "managerVersion": "direct-loader-rescue",
-  "release": "apps/video/xvideos/releases/0.1.0-test.5/release.json",
-  "rule": "apps/video/xvideos/xvideos_remote_test_v5_b10105.txt",
-  "bootstrap": "apps/video/xvideos/bootstrap_test_v5_b10105.js",
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "shellVersion": "1.0.0-test.6",
+  "shellRuleVersion": 2026082306,
+  "managerVersion": "direct-loader-cdn",
+  "release": "apps/video/xvideos/releases/0.1.0-test.6/release.json",
+  "rule": "apps/video/xvideos/xvideos_remote_test_v6_b10106.txt",
+  "bootstrap": "apps/video/xvideos/bootstrap_test_v6_b10106.js",
   "updatedAt": "2026-08-23",
-  "notes": "Test5：按最新实机重构详情统计/操作栏、中文分类、演员/频道/创作者双列卡片；修复命名 HTML 实体；登录改用 /account + X5 live Cookie 验证；评论扩大 DOM/AJAX/JSON 恢复；针对 1MB 私有 KV 饱和改为 direct immutable Bootstrap + 文件状态 + 运行内存 HTML，不再把完整页面/关键账号状态写 setItem。"
+  "notes": "Test6：演员/频道/创作者改为显式独立路由并严格按真实路径分型，修复地区/导航串入人物卡；频道卡优先显示官网视频数；人物主页头像改为 profile-pic 优先并增强 /videos/best/<page> JSON/转义载荷/POST fallback；账号喜欢/稍后看/历史改为 POST 优先并增强身份主页；评论扩大到 video_id + 内联脚本候选 + GET/POST AJAX；保留 Test5 私有 KV 救援与已验证播放链。"
 }
