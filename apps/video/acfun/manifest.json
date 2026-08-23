@@ -14,17 +14,17 @@
   "defaultVersion": "0.4.9",
   "defaultBuild": 149,
   "rule": "apps/video/acfun/acfun_remote_v5.txt",
-  "testVersion": "1.0.0-alpha7",
-  "testBuild": 10007,
-  "testShellVersion": "8.6.0-test",
-  "testBootstrap": "apps/video/acfun/bootstrap_test_v086.js",
-  "testRule": "apps/video/acfun/acfun_remote_test_v086.txt",
+  "testVersion": "1.0.0-alpha8",
+  "testBuild": 10008,
+  "testShellVersion": "8.7.0-test",
+  "testBootstrap": "apps/video/acfun/bootstrap_test_v087.js",
+  "testRule": "apps/video/acfun/acfun_remote_test_v087.txt",
   "imageDecoderPage": "acfunImageDecoder",
   "migration": {
-    "stage": "clean-rewrite-alpha7-stable-playback-fullscreen-comic",
+    "stage": "clean-rewrite-alpha8-watch-handshake-split-headers-immersive-comic",
     "legacyRule": "acfun_v019.txt",
     "pilotRule": "apps/video/acfun/acfun_remote_pilot.txt",
     "currentRule": "apps/video/acfun/acfun_remote_v5.txt",
-    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha6 实机已经确认 cacheM3u8 返回值本身完全符合海阔合同：file:///...m3u8##https://.../api/m3u8/h5/decode?...#isM3u8#，但海阔缓存播放和实时HLS仍均失败，因此不再继续怀疑 cacheM3u8 URL 结构。重新逐项对照 Stable 0.4.9 已验证播放实现后，剩余最关键差异是 Header：Stable 使用 UA + 当前 API Host 的 Referer/Origin；Alpha6 使用了 APP signed headers，Referer=jhg_player 且 Origin=H5，并附带 aut/deviceId/t/s/User-Mark。Alpha7 直接精确移植 Stable 播放 Header 与 cacheM3u8 方式，移除这些新增差异。漫画方面 Alpha5/6 已实机确认 chapterInfo 解密后 imgList 可连续原图显示；用户明确要求 Reader 顶部信息区域全部删除并让图片覆盖全屏，因此 Alpha7 使用官方 #fullTheme# 页面标识，Reader 只输出 pic_1_full 图片，不再渲染章节名、进度、上一话/下一话等控件。latest/stable 均不变。"
+    "note": "Stable 继续冻结 0.4.9 Build149 / Shell5.11.3。Alpha7 实机确认：即使完整移植 Stable 0.4.9 的 UA + API Host Referer/Origin + cacheM3u8 合同，当前 Clean Rewrite 视频仍不可播，因此 Seed、decode、cacheM3u8 返回格式和这套 Header 都不能再单独作为根因。注意此前所有重写版只要列表/详情已带 seed 就不会调用 video/can/watch，可能漏掉当前后端要求的观看资格/会话/CDN 初始化副作用。Alpha8 每次播放都先强制 POST can/watch，成功则优先其返回 path；随后主动获取 decode manifest，提取首个 KEY/TS，并分别用无 Header、UA-only、API Header 探测 HTTP/Content-Type/二进制长度。cacheM3u8 获取 API 索引仍使用 API Header，但播放器消费本地索引时默认按首分片探针选择 Header，优先无 Header，避免把 API Referer/Origin 继续附加到已签名 CDN Key/TS；若分片 Content-Type 为 image/png，则自动增加官方 cacheM3u8WithPngProxy。漫画 Reader 已成功显示正文，Alpha7 fullTheme 仍留下系统状态栏白色 inset；Alpha8 叠加 immersiveTheme，让首图覆盖到物理屏幕顶部。latest/stable 均不变。"
   }
 }
