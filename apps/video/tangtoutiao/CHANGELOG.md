@@ -1,5 +1,43 @@
 # 汤头条 CHANGELOG
 
+## 0.1.0-test.4 / Build 10104 — 2026-08-23
+
+状态：**媒体主链精确模型修复版，仍为 Test；禁止晋级 Stable。**
+
+### Test3 实机事实
+- 匿名启动会话已经真正打通：首页不再返回 401，可加载出 49 条卡片，说明 API、AES/签名、启动 Token 和内容请求主链成立。
+- 首页 49 条并非真实推荐视频，而是“高端约炮 / 高端外围 / 附近约会 / 春药迷奸 / 催情迷药 / 高潮春药”等广告/推广项；说明 Test3 的递归“最佳数组”算法选中了 `banner/widget/ads`，形成了**看似成功但业务语义错误**的伪成功。
+- 首页与详情全部无封面、显示灰块；APK 模型复核后确认真实视频字段为 `thumb_cover`，Test3 候选字段遗漏该字段。
+- 视频详情能获得真实 ID/标题/简介，但系统顶部标题显示 `%E7...` URL 编码，说明页面参数进入 `getParam` 后需要显式 decode。
+- 点击播放进入海阔播放器后显示本地 `192.168.*:52020/proxy...` 且 `0 kb/s`，无法播放。问题不是“本地代理 URL 本身错误”，而是 Test3 把未按 APP 播放器解密的媒体链直接交给海阔，代理里没有得到可播放 M3U8。
+
+### APK 9.6.2 精确模型复核
+- `/api/MvList/featuredAv` 的响应模型为 `SeeMoreDataBean`，顶层业务字段包括 `banner / list / widget`。
+- `SeeMoreDataBean.list` 中每个 `ListBean` 再包含自己的 `list`；**真正推荐视频固定路径为 `data.list[].list`**。`banner/widget` 为广告/推广数据，禁止再用通用数组评分混入推荐。
+- 真正视频实体为 `ListLikeVideoBean`，已确认核心字段：`id / title / thumb_cover / thumb_cover_str / member / duration_str / count_play_str / source_240 / source_480 / source_720 / source_1080 / preview_video` 等。
+- 原 APP 列表适配器直接对 `thumb_cover` 调图片加载链，因此 Test4 优先使用 `thumb_cover`，`thumb_cover_str` 仅作为兜底。
+- `/api/MvDetail/detail` 返回模型中的真实视频主体为 `data.detail`（`ListLikeVideoBean`），不再对整个详情对象递归猜视频实体。
+- 原 APP `VideoDetailPlayerActivity` 使用 `source_240/source_480/source_720/source_1080` 作为真实播放源；Test4 不再从详情任意 URL 字段里“找第一个可疑链接”。
+- 启动 `AppConfigBean.player_cfg` 提供 `dekey / refer / x_auth`。原 APP 自定义播放器数据源下载 `.m3u8` 后：若内容以 `#EXTM3U` 开头则直接使用；否则以 `dekey` 按 MD5 EVP 派生 AES Key/IV，使用 `AES/CFB/NoPadding` 解密 HEX 内容，解密结果才是真实 M3U8。
+
+### Test4 修改
+- Core：推荐固定解析 `SeeMoreDataBean.data.list[].list`，彻底排除 `banner/widget/ads`；通用递归适配仅保留给尚未恢复精确模型的其它频道，并显式跳过广告键。
+- Core：视频字段切换为 `ListLikeVideoBean` 精确映射，封面优先 `thumb_cover/thumb_cover_str`；作者读 `member.nickname`；播放固定 `source_*`。
+- Core：详情固定优先 `data.detail`；列表进入详情时同时携带 `source_*` 作为失败兜底。
+- Core：页面参数检测 `%xx` 后 `decodeURIComponent`，修复详情系统标题和播放器标题显示 URL 编码。
+- Protocol：启动配置除了 Token 外，同时持久化 `player_cfg.dekey/refer/x_auth`；诊断只记录这些配置是否存在，不输出真实值。
+- PlaybackAdapter：新增专用 HLS 本地代理。代理读取远端 M3U8；明文 `#EXTM3U` 直接使用，否则按 APK 同算法用 `player_cfg.dekey` AES-CFB 解密；随后调用海阔 `fixM3u8(remoteUrl, content)` 修正 TS/KEY 相对路径，再把结果交播放器。
+- PlaybackAdapter：支持 `1080P/720P/480P/240P` 多清晰度返回；嵌套 master M3U8 继续通过同一代理递归处理。
+- Diagnostics：新增 `ttt_last_featured_exact / ttt_last_detail_exact / ttt_last_play_sources / ttt_last_play_diag / ttt_last_player_cfg`，后续播放失败时可以区分“没取到 source / 没取到 dekey / M3U8 解密失败 / 代理返回异常”。
+
+### Test4 实机验收
+1. 首页“今日推荐”应变为真正视频内容，不再出现约会/药物等广告推广卡。
+2. 首页卡片应出现真实 `thumb_cover` 封面；详情 Hero 也应有封面。
+3. 详情顶部系统标题应正常显示中文，不再显示 `%E7...`。
+4. 详情应识别一个或多个 `source_*` 清晰度；点击播放后可以看到 1080P/720P/480P/240P 中实际存在的线路。
+5. 播放器仍可能显示 `192.168.*` 本地代理 URL，这是 Test4 的设计：该代理负责把原 APP 的加密 M3U8 解密后再喂给海阔。验收标准是能产生码率并正常播放，而不是地址必须为远程 URL。
+6. 若播放仍失败，直接进入“设置与诊断 → 查看最近诊断”，重点查看 `ttt_last_play_diag`，不得回退到通用嗅探伪成功。
+
 ## 0.1.0-test.3 / Build 10103 — 2026-08-23
 
 状态：**第二轮实机根因修复版，仍为 Test；禁止晋级 Stable。**
