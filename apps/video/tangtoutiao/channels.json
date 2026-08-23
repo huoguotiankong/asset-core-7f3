@@ -3,13 +3,13 @@
   "id": "tangtoutiao",
   "name": "汤头条",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-08-23 10:03",
+  "updatedAt": "2026-08-23 10:25",
   "channels": [
     {
-      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.5","build":10105,
-      "displayVersion":"Test 0.1.0 · Media Compatibility 5","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
-      "desc":"Test4 实机媒体兼容修复版：视频详情与 source_* 已验证正确，Test5 进一步恢复 APK 自定义 Glide 图片 JSON 选图/解密、海阔单清晰度强制视频识别与正确多线路格式，并把漫画 home 从错误内容卡改成分类导航。Stable 仍不存在。",
-      "highlights":["thumb_cover 支持 ori/360/720/720p JSON 选图","图片按 APK 兼容明文、legacy AES-CFB 与 AES-CBC 解密链","主播放优先单清晰度 + #isVideo=true#，便于单独验证媒体代理","多清晰度改为海阔对象字面量 urls/names/headers","漫画改分类导航并接 /api//book/list_filter","诊断信息直接在设置页显示，不再打开错误子规则"],
+      "channel":"test","label":"测试版","id":"tangtoutiao-test","name":"汤头条","version":"0.1.0-test.6","build":10106,
+      "displayVersion":"Test 0.1.0 · Runtime Contract 6","path":"apps/video/tangtoutiao/tangtoutiao_remote_test_v6_b10106.txt","mode":"remote","updatedAt":"2026-08-23","recommended":true,
+      "desc":"Test5 实机确认推荐/详情/source_* 主链已通，但封面回调未执行、播放拿到2秒旧版本维护占位片、漫画首页是动态接口配置、排行榜缺 type。Test6 按海阔官方 image helper 与 APK 真实默认 source_240 修复，并自动跟随启动 versionMsg.version 重握手。Stable 仍不存在。",
+      "highlights":["首次 Test6 运行强制检查 versionMsg.version，必要时切换 system_version 后重新握手","默认播放按原 APP 使用 source_240，高画质继续手动可选","M3U8 诊断增加总时长与 suspiciousShort 标记","封面使用 $(url,headers).image + $.require 执行图片解密回调","漫画按服务端 api_list/params_list 动态路由，不再硬编码分类参数","排行榜支持总榜/日榜/周榜/月榜 type"],
       "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/tangtoutiao/assets/icon.svg"
     }
   ]
