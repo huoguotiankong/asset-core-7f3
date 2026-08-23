@@ -3,13 +3,13 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.11",
-  "build": 10111,
-  "shellVersion": "1.0.0-test.11",
-  "shellRuleVersion": 2026082312,
+  "version": "0.1.0-test.12",
+  "build": 10112,
+  "shellVersion": "1.0.0-test.12",
+  "shellRuleVersion": 2026082313,
   "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.11/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v11_b10111.txt",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.12/release.json",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v12_b10112.txt",
   "updatedAt": "2026-08-23",
-  "notes": "根据 Test10 实机与 APK 继续恢复真实业务合同：短视频封面已恢复，但长视频封面仍灰；长视频详情明确存在 2 秒维护源和 120 秒 preview_video，且 APK 模型含 isfree/coins/is_pay。Test11 图片改为本地占位触发 JS 后自行 fetch/toHex、多候选/多 Header 重试并解密；详情按免费/已购买/未购买收费三态展示，未购买只提供试看与显式确认后的汤币解锁，不再把预览源误报成播放线路故障。"
+  "notes": "参考用户上传的汤头条2海阔规则建立 App + PWA 双 Provider：短视频和搜索优先使用已验证的 dpi4.tbrapi.org PWA 协议，短视频点击后按视频 ID 回 App 详情获取合法 source 播放；图片采用参考规则已验证的 AES/CBC/PKCS5Padding 输入流解密；收费内容继续按 isfree/is_pay/coins 处理，绝不复制删除试看参数绕过付费；社区首页改为紧凑频道导航并开始接 list_post。"
 }
