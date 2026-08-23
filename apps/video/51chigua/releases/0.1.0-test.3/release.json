@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "name": "51吃瓜",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/51chigua/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/51chigua/releases/0.1.0-test.1/runtime.js"},
+    {"name":"corePatch2","path":"apps/video/51chigua/releases/0.1.0-test.2/core_patch.js"},
+    {"name":"runtimePatch2","path":"apps/video/51chigua/releases/0.1.0-test.2/runtime_patch.js"},
+    {"name":"corePatch3","path":"apps/video/51chigua/releases/0.1.0-test.3/core_patch.js"},
+    {"name":"runtimePatch3","path":"apps/video/51chigua/releases/0.1.0-test.3/runtime_patch.js"}
+  ],
+  "verify": {"global":"Cg51RemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "previous": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/51chigua/releases/0.1.0-test.2/release.json"},
+  "notes": "Test3 adds source-site /comments/<postId>.json parsing, primary-play isolation, iconized home/detail actions, grouped category hub, direct category-feed routing, current category/search pagination, and named DPlayer playlists."
+}
