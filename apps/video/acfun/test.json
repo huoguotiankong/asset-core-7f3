@@ -3,12 +3,12 @@
   "channel": "test",
   "id": "acfun-test",
   "name": "ACFun",
-  "version": "1.0.0-alpha6",
-  "build": 10006,
-  "shellVersion": "8.5.0-test",
+  "version": "1.0.0-alpha7",
+  "build": 10007,
+  "shellVersion": "8.6.0-test",
   "managerVersion": "2.0.1",
-  "release": "apps/video/acfun/releases/1.0.0-alpha6/release.json",
-  "rule": "apps/video/acfun/acfun_remote_test_v085.txt",
+  "release": "apps/video/acfun/releases/1.0.0-alpha7/release.json",
+  "rule": "apps/video/acfun/acfun_remote_test_v086.txt",
   "updatedAt": "2026-08-23",
-  "notes": "Clean Rewrite Alpha6。Alpha5 实机已经确认漫画 chapterInfo/解密/185张正文图片链恢复成功；视频 decode 也确认 HTTP200 标准 AES-128 HLS、Key 可取，但 Alpha5 手写普通 file:// 索引和 #noPre# 仍不可播。Alpha6 改用海阔官方 cacheM3u8，并原样保留其特殊 file://...##original-url 返回合同，撤销无实机依据的 noPre 默认；漫画阅读顶部改为简洁章节标题和上下话导航。另针对漫画 Station 当前对象 id 导致 getStationComicsMore HTTP400，增加显式数字字段+站位序号映射与 findList 兜底。Stable 0.4.9 不变。"
+  "notes": "Clean Rewrite Alpha7。Alpha6 实机确认 cacheM3u8 已返回标准 file://...m3u8##original-url 但仍不可播，因此 cacheM3u8 结构本身不再是疑点。对照 Stable 0.4.9 已验证播放实现，Alpha6 与 Stable 剩余关键差异是 Header：Alpha6 使用 APP signed headers + Referer=jhg_player/H5 Origin，而 Stable 仅使用 UA + 当前 API Host Referer/Origin。Alpha7 直接移植 Stable 0.4.9 播放 Header 与 cacheM3u8 消费合同，不再叠加 APP 鉴权头。漫画正文已实机成功，按用户明确要求把 Reader 改为 #fullTheme# 纯图片画布，完全移除顶部章节名、进度、上下话导航和普通页面标题区域。Stable 0.4.9 不变。"
 }
