@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "18av",
+  "name": "18AV",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name":"core","path":"apps/video/18av/releases/0.1.0-test.3/core.js"},
+    {"name":"runtime","path":"apps/video/18av/releases/0.1.0-test.3/runtime.js"}
+  ],
+  "verify":{"global":"AV18RemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "notes":"Real-device Test3: isolate hiker route namespace, repair secondary pages, redesign detail/play pages, prioritize fc_search, parse Large_cgurl image arrays, and stop blindly selecting the first media candidate."
+}
