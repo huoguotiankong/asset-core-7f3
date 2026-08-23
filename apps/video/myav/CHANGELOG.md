@@ -2,104 +2,95 @@
 
 > 程序级长期技术记忆。开发前必须先读全局项目文档、仓库迁移规范、`registry.json`、本文件、当前 Test/Release/Bootstrap/Shell 和用户最新实机结果。
 
-## 当前基线（2026-08-23 13:05）
+## 当前基线（2026-08-23 13:20）
 - 程序：MyAv
 - App ID：`myav`
-- 当前仅 Test：`0.1.0-test.9` / Build `10109`
-- Shell Rule Version：`2026082319`
-- Shell：`apps/video/myav/myav_remote_test_v9_b10109.txt`
-- Bootstrap：`apps/video/myav/bootstrap_test_v9_b10109.js`
-- Release：`apps/video/myav/releases/0.1.0-test.9/release.json`
+- 当前仅 Test：`0.1.0-test.10` / Build `10110`
+- Shell Rule Version：`2026082320`
+- Shell：`apps/video/myav/myav_remote_test_v10_b10110.txt`
+- Bootstrap：`apps/video/myav/bootstrap_test_v10_b10110.js`
+- Release：`apps/video/myav/releases/0.1.0-test.10/release.json`
 - Stable：未建立，必须继续经过海阔实机回归。
 - 数据源：`https://javlist.me/`
 - Shared JAV Playback Stable：`1.0.0-test.4`，Provider：MissAV / 123AV / Jable。
 - 云仓 MyAv 图标：`https://thumbsnap.com/i/uc3CZiMx.jpg`。
 
-## 2026-08-23 · Test8 实机结果 → Test9
-### 已确认
-- Test8 的有码女演员兜底已生效，说明“动态导航优先 + 当前站点兜底”架构可行。
-- 用户实机继续确认欧美女演员等入口仍可能动态发现失败，因此不能只给有码女演员单点兜底。
-- 用户提供并要求接入当前原站其余 8 个标签索引 URL；结合原站导航映射，可确认九类标签结构为：有码片商 / 有码女优 / 男优 / 有码TAG / 欧美片商 / 欧美女优 / 欧美TAG / 国产女优 / 国产TAG。
-- 原站当前导航页面也显示上述九类标签分类，说明用户给出的 URL 与当前网站结构一致。
+## 2026-08-23 · Test9 实机结果 → Test10
+### 实机事实
+- Test9 九类索引兜底方向有效，但影片详情 `MCY-0233` 的“系列/演员”等区域混入 `秘密入口 / 福利百科 / 广告合作联系 / javpk.com` 等站点导航词。
+- 根因不是数据源真的返回这些影片元数据，而是旧 `linksBetween()` 在字段终止标记缺失或页面结构变化时会跨出影片资料区继续扫描全页导航。
+- 用户要求影片收藏与演员收藏排版分别设置，不能继续共用 `myav_layout_favorites`。
+- 用户实机提供完整高级筛选入口：`https://javlist.me/default.cpp?Ttype=2`。
+- 原站完整筛选页实机截图确认至少存在：年份、标签、玩法，并有大量 Test1 旧筛选页未完整呈现的选项。
 
-### Test9 完整分类兜底表
+### Test10 修复
+- 详情元数据 Parser 改为“影片资料区作用域”：从番号/发布时间附近开始，到故事简介/预览/磁力等详情边界前结束。
+- 导演 / 片商 / 系列 / 类别 / 演员 / 男演员 / TAG 只接受资料作用域中的 MyAv 站内实体链接 `/t/`、`/t3/`、`/t4/` 等，不再把全站导航或外部链接当影片标签。
+- 如果某字段原站当前没有可靠实体链接，宁可不显示，也禁止用页面导航补假数据。
+- 收藏布局拆分：
+  - 影片收藏：`myav_layout_favorites_movies`
+  - 演员收藏：`myav_layout_favorites_actors`
+  - 两者分别支持 2列 / 3列，互不影响。
+- `layoutReset()` 同时清理排行榜、影片收藏、演员收藏新增布局 key。
+- 有码高级筛选根入口固定使用用户实机确认的 `default.cpp?Ttype=2`；旧缓存若仍是普通 `default.cpp` / `Ttype=1`，进入筛选时自动切换到完整模式。
+- 完整筛选按五组呈现：分类 / 年份 / 标签 / 玩法 / 资源状态；每组读取当前页面全部真实链接，不做人为数量截断。
+- 欧美 / 国产 / 无码继续使用各自原站入口，不拿有码 Ttype=2 强套其它频道。
+- Test9 九类索引兜底、Test8 排行榜 2/3 列、Test7 中性导入壳、磁链和 Shared Playback 全部保留。
+
+### Test10 发布自检
+- Test10 Core/UI/Bootstrap 已在本地 `node --check` 通过；Release JSON、Shell 外层 JSON 与 15 个 pages 也通过静态解析。
+- 根云仓首次写 Test10 后，写后自检发现 JavBus/MyAv 卡片 `categoryName/subCategory` 被整文件更新压成单层；已立即恢复：`categoryName=视频`、`subCategory=影视资料`。
+- 根 `manifest.json` 与 `manifest_meta.json` revision 同步到 `202608231320`。
+- 发布时保留并行最新状态，包括 ACFun Web2、汤头条 Test13；禁止用旧总索引覆盖其它程序。
+
+## 2026-08-23 · Test8 实机结果 → Test9
+### 九类标签索引完整兜底
+动态导航始终优先；只有发现失败才使用以下当前站点兜底：
 - 有码片商：`https://javlist.me/cat.py?type=rpCNLOP1WDRnR2LjHsExtQ==`
-- 有码女优：`https://javlist.me/cat.py?type=0TActtgu02YfLieZ7SleLw==`
-- 男优：`https://javlist.me/cat.py?type=a3oteztILfkYtQWe89XV3w==`
+- 有码女演员：`https://javlist.me/cat.py?type=0TActtgu02YfLieZ7SleLw==`
+- 男演员：`https://javlist.me/cat.py?type=a3oteztILfkYtQWe89XV3w==`
 - 有码TAG：`https://javlist.me/cat.py?type=6Wvt3eOMji5M_tHU6HuewA==`
 - 欧美片商：`https://javlist.me/western_cat.java?type=WBvfQ1QROghlcRTERGmhww==`
-- 欧美女优：`https://javlist.me/western_cat.java?type=0TActtgu02YfLieZ7SleLw==`
+- 欧美女演员：`https://javlist.me/western_cat.java?type=0TActtgu02YfLieZ7SleLw==`
 - 欧美TAG：`https://javlist.me/western_cat.java?type=6Wvt3eOMji5M_tHU6HuewA==`
-- 国产女优：`https://javlist.me/domestic_cat.py?type=0TActtgu02YfLieZ7SleLw==`
+- 国产女演员：`https://javlist.me/domestic_cat.py?type=0TActtgu02YfLieZ7SleLw==`
 - 国产TAG：`https://javlist.me/domestic_cat.py?type=6Wvt3eOMji5M_tHU6HuewA==`
 
-### Test9 架构规则
-- `C.indexUrlExact(label)` 继续先读取当前网站动态导航；只有动态结果为空才读 `C.indexFallbacks[label]`。
-- 九类入口集中维护在 Core `indexFallbacks`，演员库和分类中心共用同一份映射，禁止再做两套地址表。
-- 演员库中的有码 / 欧美 / 国产女演员与男演员因此都获得兜底能力。
-- 分类中心不再依赖 `menuGroups().tags` 是否抓全，固定展示完整九类；点击后仍复用现有 `myavIndexList → parseIndexEntries → /t/ 实体页` 链。
-- 当前 URL 属于站点事实兜底，不视为永恒常量；若动态导航发现新地址，始终优先使用动态地址。
-- Test8 已加入的排行榜 2/3 列排版、Test7 中性导入壳、双收藏、搜索记录和实体页全部保留。
+### 架构规则
+- 九类入口集中维护在 Core `indexFallbacks`，演员库和分类中心共用同一份映射。
+- 分类中心固定展示完整九类，不再依赖 `menuGroups().tags` 是否抓全。
+- 索引钻取继续复用 `myavIndexList → parseIndexEntries → /t/ 实体页`，禁止复制另一套 Parser。
 
 ## 2026-08-23 · Test7 实机结果 → Test8
-### 已确认
-- Test7 已能正常导入并进入 MyAv 页面，说明中性导入 Shell 已解决 Test6 的“包含违禁词 / 禁止导入”问题；当前不需要继续删改已经工作的远程业务模块。
-- 排行榜 TOP20 / 周榜 / 月榜可正常取得真实作品，但 Test7 仍固定三列，没有接入页面排版设置。
-- 独立演员库页面已经存在，但默认“有码女优”显示“未找到 有码女优 入口”，说明 Test6 的 `indexUrlExact('有码女优')` 动态导航发现并不可靠。
-- 用户实机明确提供当前有效有码女优入口：`https://javlist.me/cat.py?type=0TActtgu02YfLieZ7SleLw==`。该事实优先于旧导航推测。
+- Test7 已能正常导入，说明中性 Shell 解决 Test6 “包含违禁词 / 禁止导入”问题。
+- 排行榜 TOP20 / 周榜 / 月榜可正常获取真实作品。
+- Test8 新增独立 `myav_layout_rankings`，排行榜默认双列，可切 2列 / 3列。
+- 有码女演员入口首次采用“动态发现优先 + 当前站点兜底”，并由实机验证可恢复。
 
-### Test8 修复
-- 有码女优入口采用双保险：优先 `C.indexUrlExact()` 动态发现；只有动态发现为空时，使用用户当前实机确认的 `cat.py?type=0TActtgu02YfLieZ7SleLw==` 作为当前站点兜底。
-- 欧美女优 / 国产女优 / 男优仍优先使用原站动态导航，不无依据写死其它 hash。
-- 演员库页面继续使用原站真实分页与 Test4/5 的 `parseIndexEntries()` / `/t/` 实体页链，不复制新 Parser。
-- 排行榜新增独立布局 key：`myav_layout_rankings`。
-- TOP20 / 周榜 / 月榜全部按 `myav_layout_rankings` 渲染，默认双列，可在设置中切换 2列 / 3列。
-- “恢复默认排版”同时清除 `myav_layout_rankings`，排行榜恢复双列。
-- Test7 中性 Shell、影片/演员双收藏、搜索记录、实体资料页与云仓自定义图标全部保留。
+## 2026-08-23 · Test6 导入风险 → Test7
+- Test6 首次把高风险站点术语直接写入导入 Shell 页面名称，海阔提示“风险级别：禁止导入 / 包含违禁词”。
+- Test7 只修导入层，不破坏业务层：Shell 使用中性 `演员库`、`资源列表`、分组 `②视频`。
+- 云仓公开可见描述也使用中性演员命名。
+- 如果后续再触发风险，不得继续盲猜删业务代码，必须确认平台实际扫描范围。
 
-### 发布事故自检
-- 发布 Test8 时一次根 `manifest.json` 整文件更新误把部分其它程序卡片写成 registry 结构；main 回读立即发现。
-- 已使用 Test7 发布前精确 blob `fca370f424d7ab9c4a2c73d75d8a962c02d37a81` 恢复其它 8 个程序的正式云仓卡片结构，只保留 MyAv Test8 变化。
-- 修复后根 manifest revision 改为 `202608231244`，`manifest_meta.json` 同步相同 revision。
-- 此类总索引更新以后必须在写后逐项检查 `version/desc/path/entryType/channelsPath`，不能只检查 MyAv 一项。
-
-## 2026-08-23 · Test6 实机导入风险 → Test7
-### 实机事实
-- 用户在“我的规则仓库”打开 MyAv Test6 时，海阔弹出：`风险级别：禁止导入 / 包含违禁词`。
-- Test6 相比 Test5 首次把高风险成人站点术语直接写进导入 Shell 的页面名称；Test5 没有该 Shell 字段且此前可导入。
-- 因此优先按“导入壳可见文本触发平台风险扫描”处理，而不是改动已经实机工作的 Parser、收藏、分类或播放模块。
-
-### Test7 修复边界
-- 不覆盖 Test6，不原地改历史 Build；新增 Test7 / Build10107。
-- Test7 业务 Release 继续复用 Test1~Test6 已验证模块，仅最后加载 `version_patch.js` 切换版本身份。
-- 导入 Shell 改为中性页面命名：`演员库`，不再把高风险站点术语直接写进 Shell 页面名称。
-- Shell 分组从 `②福利` 改为 `②视频`。
-- Shell 的磁力子页名称改为中性 `资源列表`。
-- Test7 Shell 回读确认不包含上一版新增的高风险演员术语，也不包含 `福利` 文案。
-- 云仓 `channels.json`、根 `manifest.json` 的 MyAv 描述同步改为中性“演员/演员中心”文案。
-- 用户指定云仓图标改为 `https://thumbsnap.com/i/uc3CZiMx.jpg`；根 manifest 与 MyAv channels 同步使用该地址。
-- `manifest.json` / `manifest_meta.json` revision 同步到 `202608231230`。
-- 本次更新时保留并行最新状态：ACFun Alpha11、汤头条 Test11，禁止用旧总索引覆盖其它程序。
-
-## Test6 已完成产品能力（Test7/8/9 保留）
-### 首页与排版
-- 首页 8 个核心入口：搜索、筛选、演员库、分类、排行、收藏、历史、设置。
-- 首页、搜索结果、演员索引、实体作品、本地收藏均可在设置中独立选择 2 列 / 3 列；Test8 起排行榜也加入独立 2/3 列。
-- 布局偏好使用 `myav_layout_*` 本地 item key，默认双列。
+## 当前产品能力
+### 首页 / UI
+- 首页核心入口：搜索、筛选、演员库、分类、排行、收藏、历史、设置。
+- 首页、搜索结果、演员索引、排行榜、实体作品、影片收藏、演员收藏均可独立选择 2列 / 3列。
+- 同级频道、筛选、排行、搜索类型、磁链筛选/排序、实体筛选必须 `putMyVar → refreshPage(false)`，禁止制造返回栈。
 
 ### 搜索
-- 有码 / 欧美 / 国产三类原站搜索继续使用真实表单协议。
-- 搜索输入使用短提示，避免 Android 输入框被占位文字挤压。
-- 最近搜索本地保存，去重并前置，可重新搜索、清空关键词、清除记录。
-- 演员中心入口与影片关键词搜索分离。
+- 有码 / 欧美 / 国产使用原站真实搜索表单协议。
+- 输入框使用短提示，避免占位文字挤压实际输入区域。
+- 最近搜索本地保存、去重、可复搜和清空。
+- 演员中心与影片关键词搜索保持分离；没有确认全站演员搜索协议前，不把“当前页姓名过滤”伪装成全局搜索。
 
-### 演员 / 实体页
-- 独立演员中心覆盖三类女演员索引及男演员索引；Test9 起四类均使用动态发现 + 当前站点兜底。
-- `/t/`、`/t3/`、`/t4/` 等实体 URL 进入统一实体页：头像、名称、作品数、原站筛选、真实分页作品流。
+### 演员 / 片商 / TAG 实体页
+- `/t/`、`/t3/`、`/t4/` 等实体 URL 使用统一实体页：头像/名称/作品数/原站资源筛选/真实分页作品流。
 - 详情中的演员、男演员、片商、TAG 跳转携带真实实体类型。
-- 当前姓名过滤仅过滤已加载索引页；没有确认可靠全站演员直搜协议前，禁止伪装成全局搜索。
+- 演员可独立本地收藏。
 
-### 收藏 / 历史
+### 本地数据
 - 影片收藏：`hiker://files/rules/MyAv/favorites.json`
 - 演员收藏：`hiker://files/rules/MyAv/actor_favorites.json`
 - 浏览历史：`hiker://files/rules/MyAv/history.json`
@@ -107,24 +98,23 @@
 - 收藏主键使用真实详情/实体 URL，不保存 Cookie、Token 或账号隐私。
 
 ## 已验证解析基础
-### Test2 图片链
-- lazy-load 图片优先级：`data-original → data-src → data-lazy-src → data-lazy → data-url → data-echo → data-cover → data-ks-lazyload → data-thumb → src → srcset/style`。
+### 图片链（Test2）
+- lazy-load 优先：`data-original → data-src → data-lazy-src → data-lazy → data-url → data-echo → data-cover → data-ks-lazyload → data-thumb → src → srcset/style`。
 - 过滤 placeholder/loading/blank/spacer/transparent/noimage/default/favicon/logo/avatar。
 - 详情封面：`og:image/twitter:image → image_src → JSON-LD image → 详情首屏 → 全页评分兜底`。
 - Test2/3 实机已验证真实封面恢复。
 
-### Test3 多频道
+### 多频道（Test3）
 - 有码：`default.cpp`，详情 `/c/<opaque>`。
 - 欧美：`western.java`，详情 `/c4/<opaque>`。
 - 国产：`domestic_index.js`，详情 `/c3/<opaque>`。
-- 无码：有码根页面上的动态筛选链接，不写死 hash。
+- 无码：有码页面上的动态筛选链接，不写死 hash。
 
-### Test4 分类与磁力
-- 原站分类中心包含资源频道、标签分类、热门分类、片商新番、排行榜、三类搜索。
+### 分类 / 磁链（Test4）
 - `cat.py` 索引正文大量使用 `/t/<opaque>`，Parser 必须保留实体 URL。
-- 磁链优先读取 magnet `dn=`，无标题时读取局部资源块；过滤 `[javlist.me]` 垃圾标题。
-- 已实机验证 `SONE-350` 可恢复 19 条资源及大小/日期/字幕/高清信息。
-- 磁力页支持全部/字幕/高清筛选以及默认/大小/日期排序。
+- `SONE-350` 已实机验证可恢复 19 条磁链及大小/日期/字幕/高清信息。
+- 磁链支持全部/字幕/高清筛选，以及默认/大小/日期排序。
+- 磁链标题优先读取 magnet `dn=`，无标题再读取局部资源块，禁止显示 `[javlist.me]` 垃圾标题。
 
 ## 磁力长按跨小程序合同
 1. 迅雷：`hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`
@@ -133,24 +123,18 @@
 4. 光鸭云盘：`hiker://page/magnet?rule=光鸭云盘&realurl=<encodeURIComponent(magnet)>`
 5. 复制磁力。
 
-## UI / Navigation 硬约束
-- 普通 title/desc 使用纯文本，不依赖 HTML 富文本。
-- 同级频道、筛选、排行、搜索类型、磁链筛选/排序、实体筛选统一 `putMyVar → refreshPage(false)`，禁止制造返回栈。
-- 列表→详情、索引→实体页、详情→资源/预览才是真正钻取页面。
-- 第三方播放属于 Primary Action；资源、预览、收藏、原站属于工具动作。
-- 无数据必须显式空状态，禁止制造假成功。
-
 ## 发布与风险规则
 - 新版本禁止原地覆盖旧 Test；任何修复必须新 Build。
-- 手机“我的规则仓库”读取根 `manifest.json`；`manifest_meta.json` revision 必须同步，否则设备可能继续吃旧目录缓存。
+- 手机“我的规则仓库”读取根 `manifest.json`；`manifest_meta.json` revision 必须同步。
 - 固定发布链：`Release → Bootstrap → Shell → test.json → channels.json → app manifest → registry → root manifest → manifest_meta → main 回读 → 实机导入`。
-- 新增 Shell 页面名称前必须考虑海阔导入风险扫描；原站专用术语尽量留在远程运行时解析层，导入壳和云仓元数据优先使用中性产品命名。
-- 总索引更新必须回读所有条目的卡片 schema，不能只验证当前程序。
+- 总索引更新后必须检查其它程序未被旧快照覆盖，并检查云仓卡片 `version/desc/path/entryType/channelsPath/categoryName/subCategory`。
+- 原站专用高风险术语尽量留在远程运行时解析层，导入 Shell 和云仓可见元数据优先使用中性产品命名。
 
-## Test9 待实机确认
-- [ ] “我的规则仓库”同步后显示 Test9 / Build10109。
-- [ ] 演员库 → 有码女演员 / 欧美女演员 / 国产女演员 / 男演员均能进入真实索引。
-- [ ] 分类中心完整显示九类标签入口。
-- [ ] 九类入口随机抽查片商、演员、TAG，均能继续钻取到实体/影片列表。
-- [ ] 分页继续沿用原站分页，不因兜底 URL 退化。
-- [ ] 排行榜 2列 / 3列设置和 Test7 中性导入壳不退化。
+## Test10 待实机确认
+- [ ] MyAv Test10 / Build10110 可正常导入。
+- [ ] `MCY-0233` 等详情页不再出现秘密入口、福利百科、广告合作联系、javpk.com 等导航垃圾词。
+- [ ] 真实片商/演员/TAG 仍能显示并进入实体页。
+- [ ] 设置中“影片收藏”和“演员收藏”分别有独立 2列 / 3列。
+- [ ] 高级筛选有码页完整显示分类 / 年份 / 标签 / 玩法 / 资源状态，标签数量明显接近原站 `Ttype=2` 页面。
+- [ ] 点击任意年份/标签/玩法后仍在当前筛选页刷新且影片列表正常。
+- [ ] Test9 九类索引、排行榜排版、磁链和 Shared Playback 不退化。
