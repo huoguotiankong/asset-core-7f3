@@ -1,5 +1,14 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc20 / Build410 · Local State & Asset Convergence
+- 实机确认 RC19 已成功进入首页，证明 Local-First 主启动链（内嵌 Runtime manifest → Local Module Manager 2.2.0 → Public persistent JS → native require(file://)）已经跑通；本轮停止修改启动架构，转入运行状态/本地资产收口。
+- 修复规则仓库自身详情仍显示 `3.5.6-rc11 当前运行`：RC12 Runtime 中的 `channelTruth` fallback 固定在 RC11，旧 channels 快照会反向覆盖当前 Shell。RC20 的 `local_shell_loader_v4.js` 以正在运行的 Shell `3.5.6-rc20 / Build410` 作为自身唯一真相，在加载后直接生成 Stable 3.5.5 + Test RC20 两张卡并写入本地 fast channel cache，同时强制修复自身 Verified Index。
+- 版本缓存合同升级为 schema5：签名只绑定 `program id + channelsPath`，不再因为根 manifest 的版本摘要/updatedAt 变化而让已成功缓存的程序 channels 集体失效；程序自己的 channels.json 继续是权威事实源。
+- 通用多版本详情改为本地缓存优先；缓存缺失时仅对当前程序执行 Raw → GitHub API → jsDelivr 的短超时补齐并立即落本地，不再沿用 RC7 的长累计等待。X5 的 `load-channels/open` 动作改为直接加载本地 `shell_loader_v4.js`，不再回到旧 page core/远程 Bootstrap 链。
+- 修复规则仓库首页卡片 SVG 破图：自身图标直接作为本地 SVG data URI 交给工作区；其它本地 SVG 先验证真实 `<svg>` 内容，坏文件不再因为 `fileExist=true` 被继续使用，重新同步时会以文本方式落地并转换 data URI。
+- `rule_repo_test_v156.txt` 恢复完整本地页面入口，并把“测试版更新”页从 RC19 的只读运行清单改为“版本中心 + 重建本地运行包 + 本地包状态”，避免更新页退化成静态说明页。
+- Stable 继续冻结在 3.5.5 / Build389；黄豆 Local-First 仍暂停，先验证 RC20 的自身版本真相、SVG、本地版本缓存和其它 channel-group 详情速度。
+
 ## 2026-08-24 · 3.5.6-rc19 / Build409 · Embedded Runtime Manifest
 - P0 修复：RC18 实机不再出现 `Unexpected token: C`，控制面校验成功把故障明确定位为 `RC12 Runtime Release 全部镜像失败`。Raw 返回截断 JSON（`Unexpected end of stream at char 3`），GitHub Raw/jsDelivr 同时返回无效响应，说明固定 `release.json` 首启网络读取本身就是多余故障点。
 - RC19 Bootstrap v1.0.55 直接内嵌不可变 Build402 Runtime 的 `id/version/build/ref/modules/verify` 清单，`release()` 只返回本地克隆；首次安装不再访问任何 `release.json` URL。
