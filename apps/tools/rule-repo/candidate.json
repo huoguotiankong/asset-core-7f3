@@ -1,16 +1,1 @@
-{
-  "schema": 1,
-  "channel": "candidate-history",
-  "id": "rule-repo-test",
-  "version": "3.5.6-rc3",
-  "build": 393,
-  "baseStableVersion": "3.5.5",
-  "baseStableBuild": 389,
-  "targetVersion": "3.5.6",
-  "release": "apps/tools/rule-repo/releases/test-3.5.6-rc3/release.json",
-  "createdAt": "2026-08-24",
-  "testStatus": "promoted-to-stable-user-directed",
-  "promotedStable": {"version":"3.5.6","build":393,"release":"apps/tools/rule-repo/releases/3.5.6/release.json"},
-  "previousStable": {"version":"3.5.5","build":389,"release":"apps/tools/rule-repo/releases/3.5.5/release.json"},
-  "notes": "RC3 完成 Fast Home、Render Guard 与 Verified Device Install Index 14.2 后，用户明确要求晋级正式版。Test RC3 保留为精确晋级来源，后续新 Test 必须从 Stable 3.5.6 rebase。"
-}
+{"schema":1,"channel":"candidate-history","id":"rule-repo-test","version":"3.5.6-rc3","build":393,"baseStableVersion":"3.5.5","baseStableBuild":389,"targetVersion":"3.5.6","release":"apps/tools/rule-repo/releases/test-3.5.6-rc3/release.json","createdAt":"2026-08-24","testStatus":"stable-promotion-withdrawn-after-integration-regression","withdrawnStable":{"version":"3.5.6","build":393,"release":"apps/tools/rule-repo/releases/3.5.6/release.json","reason":"版本中心0个版本/无法导入；打开程序触发 jsoup String must not be empty"},"restoredStable":{"version":"3.5.5","build":389,"release":"apps/tools/rule-repo/releases/3.5.5/release.json"},"nextTest":{"version":"3.5.6-rc4","build":394,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc4/release.json"},"notes":"RC3 曾按用户指令晋级 3.5.6，但随后完整实机回归发现 P0 版本中心和打开程序故障，活动 Stable 已撤回到 3.5.5。3.5.6 工件保留事故历史；RC4 专项修复后必须通过版本列表/导入/打开全链回归才允许再次晋级。"}
