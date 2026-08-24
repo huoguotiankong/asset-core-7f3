@@ -1,0 +1,1 @@
+RC4 / Build394：Version Center & Native Open Bridge 14.3。修复空 channels 缓存导致版本中心 0 个版本，以及 X5 打开程序使用 `hiker://home@` + 空 `findRule` 导致 jsoup 空 selector。正式通道在本轮回归期间恢复 Stable 3.5.5。
