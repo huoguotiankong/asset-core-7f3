@@ -221,8 +221,82 @@ icon.svg?v=<asset-version>
 9. Delivery state 不得伪装成 Verified device state；
 10. 同名 Stable/Test 必须覆盖“存在但身份未知”“精确匹配”“真实可更新”三种测试；
 11. X5/子运行时客户端必须做序列化后静态检查，禁止自由变量闭包依赖；
-12. 浏览器工作区脚本异常必须有可见错误页。
+12. 浏览器工作区脚本异常必须有可见错误页；
+13. 子资源缓存必须验证**语义有效性**，例如版本中心只有 `channels.length > 0` 才能置 `loaded=true`；
+14. 多版本程序正式发布前必须实机验证“版本中心 → Stable/Test/Local 列表 → 导入/覆盖”完整链；
+15. 从 X5/网页工作区触发“打开程序”必须实机验证真实原生页面能打开，不能只验证动作返回了某个 URL；
+16. 至少再抽测一个其它 `channel-group`，防止只依赖当前程序的 fallback 而误判修复完成。
+
+## 11. 空数组缓存不能代表加载成功
+
+3.5.6-rc3 / 被撤回的 Stable 3.5.6 实机出现“版本数量 0 个 / 可用版本 0 个”。根因不是远端没有版本，而是 Fast Home 的 channel metadata 缓存只检查：
+
+```js
+Array.isArray(meta.channels)
+```
+
+因此 `{channels:[]}` 也被视为成功缓存。后续 UI 看到缓存存在就设置 `channelsLoaded=true`，永远不再发起真实 `channels.json` 请求，形成“空成功”永久遮蔽真实数据。
+
+### 固定规则
+
+缓存成功判定必须同时满足**结构正确 + 业务语义有效**。例如版本中心：
+
+```text
+meta 是对象
++ channels 是数组
++ channels.length > 0
++ 每个必要 channel 至少有可识别 path/version/name
+→ 才允许保存 success cache / loaded=true
+```
+
+如果远端返回空数组、空对象、传播中的旧文件或解析失败：
+
+- 不得覆盖最后一次成功缓存；
+- 不得设置 `loaded=true`；
+- 不得 toast“加载成功”；
+- 应保留旧成功数据或显示“版本信息加载失败/待重试”。
+
+此原则同样适用于：分类列表、线路列表、章节列表、评论分页、播放源、图片候选、域名池等所有“空集合可能代表异常”的缓存。
+
+## 12. X5 / 网页桥禁止把 `hiker://home@规则名` 当通用跨规则打开协议
+
+3.5.6 实机点击“打开程序”报：
+
+```text
+java.lang.IllegalArgumentException: String must not be empty
+→ jsoup Selector.select
+→ HomeParser.findList
+```
+
+根因链为：网页工作区动作返回 `hiker://home@规则名`，X5 再通过 `fba.open()` 构造一个 `findRule=''` 的页面描述。HomeParser 最终拿到空 selector，导致 jsoup `String must not be empty`。
+
+`hiker://home@标题` 可以在 Rhino/原生规则环境中用于存在性探测等特定场景，但它与“网页桥跨规则打开页面”不是同一个合同，禁止混用。
+
+### 固定规则
+
+X5/WebView 要打开已安装海阔规则时，应先在原生/Rhino 侧取得目标规则真实 descriptor，例如：
+
+```text
+rule / title
+url
+findRule / find_rule
+preRule
+col_type
+group
+extra
+```
+
+然后通过受支持的原生桥（例如 `fba.open(JSON.stringify(descriptor))`）打开。必须保证：
+
+- `url` 非空；
+- `findRule` 对需要 HomeParser 的页面非空；
+- 缺字段时直接可见报错/Toast，不把残缺 descriptor 交给解析器；
+- 浏览器侧不得再把 `hiker://home@...` 作为通用 fallback；
+- “动作生成成功”不等于“目标程序打开成功”，必须做实机终端回归。
+
+本事故修复线：`3.5.6-rc4 / Single Workspace 14.3 · Version Center & Native Open Bridge`。
 
 本事故首轮性能修复：`我的规则仓库 3.5.6-rc1 / Single Workspace 14.0`。
 白屏恢复：`3.5.6-rc2 / Single Workspace 14.1`。
 设备状态准确性修复：`3.5.6-rc3 / Single Workspace 14.2`。
+版本中心/原生打开桥修复：`3.5.6-rc4 / Single Workspace 14.3`。
