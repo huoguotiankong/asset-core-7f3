@@ -141,14 +141,47 @@ Stable 1.9.0 / Test 1.9.0-test.6 / Local 1.8.2
 
 为了首屏性能，缓存/导入记录只能代表“规则仓库最近一次成功生成或交付了哪个版本”，不能百分之百证明用户最终在海阔确认覆盖安装。
 
-因此推荐两层状态：
+因此必须区分三层状态：
 
-1. **Fast state**：首页使用，来自规则仓库导入记录/显式 group state；O(1) 或 O(N) 本地计算。
-2. **Verified presence**：用户手动执行“刷新安装状态”时扫描真实 `hiker://home@标题`；扫描结果回写 Fast state，但不得每次首页自动执行。
+1. **Delivery state**：`importHistory / installedMap / group_install`，只表示本项目曾生成/交付过导入口令，不能作为设备真相。
+2. **Verified presence**：通过海阔本地规则表或 `hiker://home@标题` 确认规则实际存在。
+3. **Verified identity**：在规则存在基础上进一步读取本地规则 `title + numeric version`，与 Stable/Test/Local 实际 Shell 指纹匹配，确认当前通道和版本。
 
-产品文案不得把未经验证的 Fast state 描述成绝对真实设备状态。
+### 固定规则
 
-## 7. 图片缓存同类原则
+- `importHistory / installedMap` **禁止**直接驱动“已安装/可更新”正式统计。
+- `hiker://home@标题` 只能证明存在，**不能**区分同名 Stable/Test，也不能证明版本。
+- 同名多通道必须使用额外身份指纹；本项目优先使用海阔规则数值 `version`。
+- 语义版本、业务 build、Shell 数值 version 是不同维度，不得默认互相相等。
+- 无法确认真实版本时，应显示“已安装 / 版本待识别”，`updateKnown=false`；宁可不报更新，也禁止猜测通道制造假更新。
+- 精确扫描必须由显式“同步/刷新安装状态/诊断”触发，扫描结果持久化；普通首页只读 Verified Index。
+
+## 7. Verified Device Install Index 推荐实现
+
+```text
+显式同步
+→ getRuleCount()
+→ getLastRules(count) / 本地规则表
+→ 得到 title + numeric version（能取得时）
+→ 对未命中标题再用 hiker://home@标题做存在性兜底
+→ channel-group 按需拉 channels.json
+→ 读取对应 Shell，提取数值 version 形成 Channel Fingerprint
+→ 精确匹配 Stable/Test/Local
+→ 写入 verified_install_index
+```
+
+普通首页：
+
+```text
+root manifest cache
++ verified_install_index
+→ 纯本地状态计算
+→ 首屏
+```
+
+如果海阔版本无法从本地规则表暴露 numeric version，允许降级到“存在已验证、版本未知”，但不能回退到 Delivery state 猜版本。
+
+## 8. 图片缓存同类原则
 
 如果仓库 SVG/PNG 源文件已确认有效，而单个设备持续显示旧破图，优先使用单资源版本 query/path 做 cache bust：
 
@@ -158,7 +191,22 @@ icon.svg?v=<asset-version>
 
 不要为了一个图标失败全量改动所有正常资源，也不要反复原地覆盖相同 URL 期待客户端缓存自动失效。
 
-## 8. 发布回归门槛
+## 9. 跨运行时函数序列化禁令
+
+3.5.6-rc1 为修改 X5 客户端行为，错误覆盖 `workspaceClient()` 并在函数体中引用 Rhino 模块闭包变量 `baseWorkspaceClient`。随后 `hybridDocument()` 对该函数 `.toString()` 后注入 X5，浏览器端不存在 Rhino 闭包，导致整块工作区 `ReferenceError` 白屏。
+
+固定规则：任何将函数通过以下方式跨运行时传输的场景：
+
+- `Function.prototype.toString()` → X5/WebView；
+- lazyRule/child page 序列化；
+- 远程模块导出后再次字符串化；
+- JS 字符串注入另一个 JS 引擎；
+
+都必须满足：**序列化后的函数源码是自包含的，不依赖父作用域变量、临时别名、模块闭包或当前引擎对象。**
+
+需要补丁时，应在源运行时先取得原函数源码字符串并完成纯文本/AST 变换，再把最终自包含函数注入目标运行时。目标运行时必须有 Render Guard/错误页，禁止静默白屏。
+
+## 10. 发布回归门槛
 
 任何云仓首页/程序管理器改动至少验证：
 
@@ -169,6 +217,12 @@ icon.svg?v=<asset-version>
 5. 更新中心与首页数字使用同一状态源；
 6. 首次进入版本中心只加载当前程序 metadata；
 7. 缓存失效/网络异常仍能打开首页；
-8. 精确安装扫描只能由显式动作触发，不进入首屏热路径。
+8. 精确安装扫描只能由显式动作触发，不进入首屏热路径；
+9. Delivery state 不得伪装成 Verified device state；
+10. 同名 Stable/Test 必须覆盖“存在但身份未知”“精确匹配”“真实可更新”三种测试；
+11. X5/子运行时客户端必须做序列化后静态检查，禁止自由变量闭包依赖；
+12. 浏览器工作区脚本异常必须有可见错误页。
 
-本事故首次修复实现：`我的规则仓库 3.5.6-rc1 / Single Workspace 14.0`。
+本事故首轮性能修复：`我的规则仓库 3.5.6-rc1 / Single Workspace 14.0`。
+白屏恢复：`3.5.6-rc2 / Single Workspace 14.1`。
+设备状态准确性修复：`3.5.6-rc3 / Single Workspace 14.2`。
