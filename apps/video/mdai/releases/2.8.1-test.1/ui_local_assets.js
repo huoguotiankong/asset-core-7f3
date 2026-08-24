@@ -1,0 +1,8 @@
+/* 麻豆AI 2.8.1-test.1 - Local UI asset binding */
+(function(){
+  if(typeof MDAIUIBaseV280!=='object'||!MDAIUIBaseV280.design)throw new Error('麻豆AI UI Base 未加载');
+  var A='hiker://files/rules/asset-core-local/mdai-test/assets/';
+  var icon='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABL1BMVEUPDw8AAAAACgAADADUdf8ACQAABgAADgAPDg9KF4NFK1UNAADWa/sODgyPJfmhMPhHF3wKDgjgW//faP+kQb+nh/8/qPiXKvfNcfpQGn+MK9yhMumgNNpmJoZdG52bK/+rNfi3PPzHRP+1QuJIH1QoEkORLdKPMcOPM7u9ROvVT/97M48nFypeH48YERwqFDA0HzuKJuFVJWOeRrV0Ir+OO6S/Wd1aHJXWWPUgFyUpHzV6ItQpEzyXTbCjdOSDacU/FWuRW726gf+SivlRWZg1GD3Ke/+Flv9oi+UpP18hETEwE0xRMmRvmPpipP89fr4WJzY0E1w+OmR4huYfV3xOI1s1sv8TMkVHleMhfLAaECZfG6cwZJVgJnd6MZAOGB1Qba8oLUZsNHt0SJWCMaEDbdCjAAAB/klEQVQ4jY2TfVfaMBTG82LTdDWFQFe2Ib5MGDKhQKvFMpA61+lQmbrpHAo6t+//GZamwJEBnt2/ck5+ee5zXwLAfwVVEUL4GQC/fpNdyRHMFrzHq2uJ9Y23m3nEGZ33vmBkEu+KW6X32+Uyn6OiJo1MBSPFrnJEa/YsompGPUrPkJNycblG/yWwZuzIEtBuKu1RXvPZDNBQpVt7by/t+aQJ+ZRXVfvQkgBSBNBGcL/ThE9FcFAPohS8aqZMB8KDjy8PP0F9IsJa2qpsEQ9TDiSw/VkAR8dfIB/3CXVP4jMKEap5S6esc3h01vt6ro+Ii2AE8LxNvOWlFwRefjvr9azvkqDA7ndHCle+si0ABKD+0LOs6x8xcZFsxQArV2FbAoDB8xvr+qcEWP9Wi4pgWKmaZjoGAIB3Y4B2k4GQYGAwNF3Xm1GgosydLqf8KlQIgdIDhVR6uI/bZQdaI8BOcSgSSQ9xFdZN7FHsi1bPBIWV0hYCjIkUp03Zhzt93AcxrMxtdqMUYoDz6eVXspMP9/pkHBGQWM/mQp8TJwY6v55OSwInxdLQCcPHCNi/nMxhAgTKQEWYE1cAvyGZXph45cRAKUDQbftwZuWSAqBi/Fhx3HBaPQYKRr3Pba7kdx/J3P+FG2sthPN/Bjaadx0RQaNSydFFXy8iolh8/Vz8BSSXRHUKbSFfAAAAAElFTkSuQmCC';
+  MDAIUIBaseV280.design.icon=icon;
+  MDAIUIBaseV280.design.icons={library:A+'library.svg',fav:A+'favorite.svg',history:A+'history.svg',settings:A+'settings.svg',user:A+'user.svg'};
+})();
