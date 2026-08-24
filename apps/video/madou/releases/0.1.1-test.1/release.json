@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"madou-test",
+  "name":"麻豆传媒",
+  "channel":"test",
+  "version":"0.1.1-test.1",
+  "build":10201,
+  "ref":"6ed5b1033d69c6376a931969bf4b7f06c920b538",
+  "baseStable":{"version":"0.1.0","build":10114,"release":"apps/video/madou/releases/0.1.0/release.json"},
+  "previousTest":{"version":"0.1.0-test.13","build":10113,"release":"apps/video/madou/releases/0.1.0-test.13/release.json","status":"promotion-source"},
+  "modules":[
+    {"name":"core","path":"apps/video/madou/releases/0.1.0-test.1/core.js"},
+    {"name":"runtime","path":"apps/video/madou/releases/0.1.0-test.1/runtime.js"},
+    {"name":"performance-local","path":"apps/video/madou/releases/0.1.1-test.1/performance_local_native.js"},
+    {"name":"storage-rescue","path":"apps/video/madou/releases/0.1.0-test.12/storage_rescue.js"},
+    {"name":"default-detail-playback","path":"apps/video/madou/releases/0.1.0-test.13/default_detail_playback.js"},
+    {"name":"identity-local","path":"apps/video/madou/releases/0.1.1-test.1/identity_local_patch.js"}
+  ],
+  "verify":{"global":"MadouRemoteRuntime","property":"version","equals":"0.1.1-test.1"},
+  "delivery":{"mode":"local-first-native","moduleManager":"2.2.0","execution":"require(file://)","code":"hiker-files-rules","assets":"hiker-files-rules","actionBootstrap":"local-file","controlPlane":"remote-on-install-update-only"},
+  "notes":"从 Stable 0.1.0 / Build10114 rebase，仅迁移交付/启动架构。保留 Test13 已实机接受的默认标签/相关推荐、结构化详情缓存、直链优先+video:// 媒体自动提取和 Test12 私有文件存储。Test10 Performance 基线与快捷图标首次安装后固定本地；serialized lazyRule 通过本地 Action Bootstrap 重载 Build10201，不再回 GitHub Bootstrap。"
+}
