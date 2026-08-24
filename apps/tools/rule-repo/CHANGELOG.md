@@ -1,5 +1,13 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc19 / Build409 · Embedded Runtime Manifest
+- P0 修复：RC18 实机不再出现 `Unexpected token: C`，控制面校验成功把故障明确定位为 `RC12 Runtime Release 全部镜像失败`。Raw 返回截断 JSON（`Unexpected end of stream at char 3`），GitHub Raw/jsDelivr 同时返回无效响应，说明固定 `release.json` 首启网络读取本身就是多余故障点。
+- RC19 Bootstrap v1.0.55 直接内嵌不可变 Build402 Runtime 的 `id/version/build/ref/modules/verify` 清单，`release()` 只返回本地克隆；首次安装不再访问任何 `release.json` URL。
+- `local_shell_loader_v3.js` 固定引用 Bootstrap v155，并在执行前验证内嵌清单 `build===402 && modules.length>0`；Shell 升到 `rule_repo_test_v155.txt`，避免继续复用 RC18 启动器 v2。
+- Local Module Manager 2.2.0、Public persistent Runtime JS、native `require(file://)` 探针与模块执行路线保持不变；本轮只删除一个不必要的控制面网络依赖，不修改业务/UI Release。
+- 新硬约束：与某个不可变 Runtime 一一对应且体积可控的 Release manifest，优先随 Bootstrap/安装器内嵌；GitHub/CDN 负责真正的模块资产下载，不能让固定清单成为首启单点故障。
+- Stable 继续冻结在 3.5.5 / Build389；黄豆 Local-First 试点继续暂停，等待规则仓库通过 RC19 首装、二次启动与断 GitHub 门禁。
+
 ## 2026-08-24 · 3.5.6-rc18 / Build408 · Verified Control Plane
 - P0 修复：RC17 实机仍报 `本地运行包不可用：Unexpected token: C`。沿错误包装链确认异常发生在 `boot().installLocal(false)`，尚未进入 native `require(file://)` 探针；根因是 Bootstrap 对新 Manager/Release 的控制面响应只做“非空/部分错误词”判断，jsDelivr 对刚发布不可变 commit 可能返回 `Couldn't ...` 文本，该文本未被 RC17 `valid()` 拒绝，随后直接 `eval()`/`JSON.parse()`，因此出现首字符 `C` 的语法错误。
 - RC18 Bootstrap v1.0.54 改为控制面逐镜像强校验：Manager 默认 Raw → GitHub Raw → jsDelivr，每个候选必须实际 `eval` 并验证 `HikerLocalModules.version===2.2.0` 才算成功；Release 每个候选必须 `JSON.parse` 且通过 `id/build/modules` 身份校验。
