@@ -1,5 +1,25 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc24 / Build414 · Local Icon Pack
+- 用户实机确认 RC23 的“轻同步”已经成功，说明同步卡死问题已经从 Runtime/安装状态链中隔离；但轻同步后、退出重进后首页仍只有“黄豆 / 麻豆 / Ha”等文字占位，真实图标没有恢复。
+- 根因收口：RC23 为保证同步速度明确不下载图标，而首页真实图标来源又混合 GitHub SVG/PNG、CloudFront、站点 favicon 和外部图片站。继续逐程序在线补图既会重新引入慢源/失败源，也会让“同步成功”和“图标是否恢复”产生不确定关系。
+- RC24 新增 `icon_catalog_snapshot.json`：把当前云仓程序图标统一收敛为一份约 11KB 的 SVG 品牌图标包。`sync_scheduler_v4.js` 内嵌同一份最小图标集，首次升级 RC24 即可本地落地，不要求用户先执行同步。
+- 首页图标读取顺序改为：已存在且有效的本地真实图标 → 本地图标包 SVG data URI → 规则仓库默认图标。首页热路径不再把 manifest 中的外部图标 URL 交给卡片逐项加载。
+- RC24 轻同步一次并行更新 `manifest.json + channel_catalog_snapshot.json + icon_catalog_snapshot.json`，仍然不加载 Runtime 状态、不逐图下载、不扫描安装状态、不自动整页刷新；RC23 已实机验证成功的轻同步边界保持不变。
+- 新 `shell_bridge_v2.js` / `rule_repo_test_v161.txt` 使用独立本地图标调度器，Test 元数据升到 `3.5.6-rc24 / Build414`；Stable 继续冻结在 `3.5.5 / Build389`。
+- 本轮仍需海阔实机验证：覆盖升级 RC24 后直接打开首页，确认全部程序图标不再显示文字占位；随后再执行一次轻同步并刷新，确认图标和版本详情均不退化。
+
+## 2026-08-24 · 3.5.6-rc23 / Build413 · Standalone Light Sync
+- RC22 的轻同步仍通过已经加载的 `HikerRuleRepo`/Runtime 调用，并在同步完成后执行页面刷新；实机仍可能出现同步按钮长时间不结束，难以区分到底卡在目录请求、Runtime 状态还是刷新阶段。
+- RC23 新增独立 `sync_scheduler_v3.js` 与 `shell_bridge_v1.js`。轻同步直接更新根目录 + 统一版本目录，不调用 `RuleRepoLocal.load()`、不检查或重建 Build402 Runtime、不写 Runtime 状态文件，也不自动 `refreshPage()`。
+- 用户实机已确认 RC23 轻同步成功，证明“同步动作与 Runtime 状态彻底解耦”的方向正确；版本详情继续保持本地统一目录零网络。
+- 为避免重新引入同步阻塞，RC23 暂时明确不处理图标资产，因此本轮同步成功不能等价于图标已经恢复；该剩余问题转入 RC24 的统一本地图标包解决。
+
+## 2026-08-24 · 3.5.6-rc22 / Build412 · Light Sync Scheduler
+- 在 RC21 统一版本目录基础上把普通“同步”改为轻同步：只并行获取根 manifest 与 `channel_catalog_snapshot.json`，图标补全和安装状态扫描从同步主链拆出。
+- `sync_scheduler_v2.js` 为规则仓库自身强制写入当前 RC22 真相，避免根 manifest/旧目录摘要反向覆盖当前 Test 版本；其它程序继续从统一版本目录恢复。
+- RC22 仍保留同步完成后的页面刷新和运行时对象依赖，后续实机暴露出同步执行边界仍不够彻底，因此 RC23 继续把同步器从 Runtime 启动链中独立出来。
+
 ## 2026-08-24 · 3.5.6-rc21 / Build411 · Single Local Version Catalog
 - 实机确认 RC20 虽然已经恢复图标和 Local-First 主启动，但 JavBus / XVideos 等多版本详情在本地无缓存时仍会调用 `shortMeta()`，按 Raw → GitHub API → jsDelivr 串行前台请求。单路 2.6~3.2 秒累积后可接近 8~9 秒，并且海阔 lazyRule 执行期间会阻塞当前交互，出现“正在快速加载版本”长时间不结束、甚至返回也像卡死。
 - RC21 彻底删除“进入版本详情再联网 hydration”的产品路径。新增 `apps/tools/rule-repo/channel_catalog_snapshot.json`，由发布端把当前所有 channel-group 的 Stable/Test/Local/Web 最小可导入元数据汇总成一份约 10KB 的统一版本目录。
