@@ -2,13 +2,26 @@
 
 > 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、registry 和当前运行入口。只记录已验证事实；未完成实机验证的内容必须明确标记。
 
+## 2026-08-25 · 2.8.1-test.1 / Build28101 · Native Local-First Candidate
+- 前置事实：黄豆短剧 `1.9.1-test.3 / Build19103` 的 Local Module Manager 2.2.0 + `require(file://)` 路线已由用户实机确认正常，因此按原规划把同一交付架构扩展到麻豆AI；Stable `2.8.0 / Build28003` 与 Local `2.6.3-local.1` 均不修改。
+- 本次从当前 Stable 2.8.0 rebase，只迁移交付/启动架构；首页、片库、搜索、我的、详情、设置、收藏历史、分类合并和 PlaybackAdapter 继续复用 Stable 2.8.0 的已验证业务逻辑。
+- 审计 Stable release 后发现两个嵌套远程依赖，不能只把表层 7 个 release 模块写入本地：
+  1. `2.7.0-test.1/core.js` 在 `mdai_core_snapshot_263_v270` 缓存未命中时仍会远程抓取 `source_local_2.6.3.txt`。
+  2. `2.8.0-test.3/pages_content.js` 本身是热修加载器，每次模块执行仍会从固定 GitHub commit 抓取 Test1 `pages_content.js` 再替换缺失右括号。
+- Test1 将上述嵌套依赖一并本地化：首次安装把 `Core 2.6.3` 快照、`ContentPages Test1` 基线、`library/favorite/history/settings/user` 五个 SVG 固定到 `hiker://files/rules/asset-core-local/mdai-test/assets/`；Core/Content bridge 后续只读本地资产。
+- UI Base 仍复用 Stable 2.8.0，但新增 `ui_local_assets.js` 在本地模块加载阶段把五个图标切到本地资产；真实 `32×32` 官方 PNG 图标以已经验证的原始 base64 像素直接绑定为 data URI，不再让设置页依赖 GitHub 图标 URL。
+- 新运行链：`mdai_remote_test_v9.txt / rule 2026082501 → Build28101 本地 package → 若完整则直接 require(file://) 8 个模块 → 若缺失才 bootstrap_test_v9.js → Local Module Manager 2.2.0 → 安装本地资产与模块 → MDAIRemoteRuntime 2.8.1-test.1`。
+- Release 模块固定到不可变 commit `693c6385c2f4284b04be092746cc847c26f4c0df`；Bootstrap 固定到不可变 commit `6cb7f6d725c160c8489186ec2e45d93c097e9d22`；正常二次启动不读取 `latest.json/release.json`，也不加载 Remote Manager。
+- 静态门禁：新增 `core_local_native.js / ui_local_assets.js / content_local_native.js / runtime.js / bootstrap_test_v9.js` 已执行 `node --check`；Shell 外层规则 JSON、`pages` JSON 和首个本地加载器均已解析/语法检查通过。
+- 当前状态：**Test 活动候选，等待海阔实机验证**。验收固定为：①规则仓轻同步后版本详情出现 `2.8.1-test.1 / Build28101`；②覆盖导入后首次打开首页、片库、搜索、详情、我的、设置正常；③退出后二次打开正常且明显走本地包；④至少播放一个当前可播放视频/短剧集，确认 PlaybackAdapter 未退化；⑤如条件允许，断开/屏蔽 GitHub 后再次打开，程序页面仍能进入（站点业务 API 本身仍需要网络）。未完成上述闭环前不得晋级 Stable。
+
 ## 当前基线
 - App ID：`mdai`
 - Remote Stable：`2.8.0 / Build 28003 / Shell 1.2.2`
-- Remote Test：`2.8.0-test.3 / Build 28003 / Shell 1.2.2-test`
+- Remote Test：`2.8.1-test.1 / Build 28101 / Shell 1.3.0-test-local-first-native`（待实机验证）
 - Local：`2.6.3-local.1`
 - Stable 入口：`apps/video/mdai/mdai_remote_v2.txt`
-- Test 入口：`apps/video/mdai/mdai_remote_test_v8.txt`
+- Test 入口：`apps/video/mdai/mdai_remote_test_v9.txt`
 - Local：`mdai.txt`，导入名 `麻豆AI 本地版`
 - 正式图标资产：`apps/video/mdai/assets/mdai_official.png`
 
@@ -28,18 +41,20 @@ mdai_remote_v2.txt / rule version 2026082308
 → runtime.js       复用 2.8 Test3 Runtime
 ```
 
-Stable `2.8.0` 与 `2.8.0-test.3` 的业务模块完全一致；本次正式发布只新增独立 Stable release / Bootstrap / Shell 与 Stable 元数据，不重写 UI、数据或播放逻辑。用户于 2026-08-23 明确要求将当前麻豆AI测试链发布为正式版，此指令作为本次晋级接受依据。
+Stable `2.8.0` 与历史 `2.8.0-test.3` 的业务模块完全一致；正式发布只新增独立 Stable release / Bootstrap / Shell 与 Stable 元数据，不重写 UI、数据或播放逻辑。用户于 2026-08-23 明确要求将当时麻豆AI测试链发布为正式版，该指令作为 2.8.0 晋级接受依据。
 
 ## 当前 Test 运行链
 ```text
-mdai_remote_test_v8.txt / rule version 2026082306
-→ bootstrap_test_v8.js / state id=mdai-test / minBuild=28003
-→ Remote Manager v2.0.1
-→ releases/2.8.0-test.3/release.json
-→ 与 Stable 2.8.0 相同业务模块
+mdai_remote_test_v9.txt / rule version 2026082501
+→ __hclocal22_mdai-test_b28101.json
+→ 若完整：直接 require(file://) Build28101 模块
+→ 若缺失：bootstrap_test_v9.js
+→ Local Module Manager 2.2.0
+→ 安装 Core/Content/UI 本地资产 + 8 个执行模块
+→ MDAIRemoteRuntime 2.8.1-test.1
 ```
 
-Stable/Test 同名覆盖，但 Remote Manager state 独立：`mdai` / `mdai-test`。
+Stable/Test 同名覆盖，但运行状态独立：Stable 继续使用 `mdai` Remote Manager 状态；Test1 使用 `mdai-test` 的 Local Module Manager 2.2.0 package/state。
 
 ## 2.8 产品级 UI 重构
 2.7 已解决片库缺项、分类点击压新页面、横向溢出等结构性问题；2.8 不再局部换皮，重新定义跨页骨架。
@@ -86,49 +101,29 @@ Detail
 
 ### Test2 实机启动事故 → Test3
 用户实机启动 `2.8.0-test.2` 后直接报：
-
 ```text
 麻豆AI解析失败
 SyntaxError: 在参数列表的后面缺少“)”
 来源: eval code#1
 行数: 83
 ```
+根因是片库 `U.section(...)` 少一个右括号。Test3 使用 pinned Test1 ContentPages 做单点替换修复；Test1 的 Local-First 迁移继续保留同一修复结果，但把 pinned 基线改成本地只读资产。
 
-回读实际远程 `pages_content.js` 后确认根因是片库这一行少一个右括号：
-
-```js
-d.push(U.line());d.push(U.section(c,'内容结果',selected?catLabel(c,selected):(menuName(menu)+' · 全部'));
-```
-
-正确为：
-
-```js
-d.push(U.line());d.push(U.section(c,'内容结果',selected?catLabel(c,selected):(menuName(menu)+' · 全部')));
-```
-
-Test3 只修这一处语法错误；UI/数据/详情/播放边界全部保持。为保持旧 release 不可变，Test3 使用 pinned Test1 ContentPages 作为不可变基线，在新模块中做精确单点替换后再 eval。
-
-**固定发布规则：** 大 UI 文件不能只检查 Runtime/Bootstrap；每一个实际会被 Remote Manager eval 的 JS 模块都必须逐文件执行语法检查或等价 parser 校验，且检查对象必须与远端 blob 一致。
+**固定发布规则：** 大 UI 文件不能只检查 Runtime/Bootstrap；每一个实际会被 Remote Manager/Local Manager 执行的 JS 模块都必须逐文件执行语法检查或等价 parser 校验，且检查对象必须与发布 blob 一致。
 
 ## 正式图标资产事实
-用户使用独立 Favicon 工具在实机可访问环境取得原站内嵌图标：
-
-```text
-data:image/jpeg;base64,iVBORw0KGgo...
-```
-
-实际解码后的文件头是 PNG（`89 50 4E 47`），尺寸 `32×32`；内容为黑底紫/蓝渐变播放标识。Data URI 的 MIME 前缀与真实文件格式不一致，因此不能只相信声明类型。
+用户使用独立 Favicon 工具在实机可访问环境取得原站内嵌图标。Data URI 声明为 JPEG，但实际解码文件头为 PNG（`89 50 4E 47`），尺寸 `32×32`；内容为黑底紫/蓝渐变播放标识。
 
 最终处理：
 - 不依赖运行时 favicon 探测作为正式程序图标。
 - 不使用第三方 Favicon API 作为长期资产源。
 - 不用 AI 近似重绘，因为已经获得真实原始像素。
 - 正式 PNG 二进制资产：`apps/video/mdai/assets/mdai_official.png`。
-- Stable/Test Shell、云仓库主卡以及 Stable/Test/Local channel card 统一引用该 PNG。
+- Stable/Test Shell、云仓库主卡以及 Stable/Test/Local channel card 统一引用该 PNG；Local-First Test 运行时设置页使用同一原始 PNG 的 data URI，不再额外联网取图。
 
 固定规则：**数据 API Client 与 Raw Resource Client 必须分层；Data URI 图标若是正式来源，应先解码验证真实格式，再固化为项目静态二进制资产。**
 
-## PlaybackAdapter 2.7（Stable 2.8.0 继续沿用）
+## PlaybackAdapter 2.7（Stable 2.8.0 / Test 2.8.1-test.1 继续沿用）
 - `smart`：稳定代理 + 原始直链。
 - `direct`：原始直链优先。
 - `proxy`：只走站点稳定代理。
@@ -150,7 +145,7 @@ data:image/jpeg;base64,iVBORw0KGgo...
 - 历史：`mdai_watch_history_v1`
 - 收藏：`mdai_favorites_v1`
 - 搜索历史：`mdai_search_history_v1`
-- Core 快照：`mdai_core_snapshot_263_v270`
+- Core 旧快照缓存：`mdai_core_snapshot_263_v270`（Stable 仍可能使用；Local-First Test 改读固定本地资产）
 - 播放策略：`mdai_play_strategy_v2`
 - 播放诊断：`mdai_play_diag_v2`
 - 2.8 首页 Tab：`mdai_home_tab_v280`
@@ -160,14 +155,22 @@ data:image/jpeg;base64,iVBORw0KGgo...
 - 2.8 分类展开：`mdai_library_expand_v280`
 - 2.8 高级筛选展开：`mdai_library_adv_v280`
 - 2.8 我的 Tab：`mdai_mine_tab_v280`
+- Local-First package：`__hclocal22_mdai-test_b28101.json`
+- Local-First state：`__hclocal22_mdai-test_state.json`
 
 ## 回归 / 恢复
 - 当前 Stable 恢复入口：`麻豆AI 2.8.0 / Build28003`。
-- Test 后续开发必须先 rebase Stable 2.8.0，再向下一目标版本前进。
-- Local 2.6.3 继续作为独立纯本地恢复入口，暂不随本次 Stable 晋级重打包。
+- 当前 Test 候选：`2.8.1-test.1 / Build28101`；失败时不得覆盖 Stable，冻结 Test1 后从 Stable 2.8.0 新建更高 build 修复。
+- Local 2.6.3 继续作为独立纯本地恢复入口，暂不随本次 Test 交付架构迁移重打包。
 
 ---
 ## 版本记录
+### 2.8.1-test.1 / 2026-08-25
+- 从 Stable 2.8.0 rebase，只迁移 Local-First 交付架构。
+- 迁移到 Local Module Manager 2.2.0 + native `require(file://)`。
+- Core 快照、ContentPages 热修基线、五个 UI SVG 本地化；官方 PNG 以真实原始像素 data URI 绑定。
+- 当前等待实机闭环，不得晋级 Stable。
+
 ### 2.8.0 Stable / 2026-08-23
 - 按用户明确发布指令，由 `2.8.0-test.3 / Build28003` 原样晋级。
 - 新增 `releases/2.8.0/release.json`、`bootstrap_v2.js`、`mdai_remote_v2.txt`。
@@ -176,7 +179,7 @@ data:image/jpeg;base64,iVBORw0KGgo...
 
 ### 2.8.0-test.3 / 2026-08-23
 - 根据 Test2 实机启动 SyntaxError 精确修复 ContentPages 片库 section 少一个右括号。
-- 保持 Test1/Test2 release 不可变，新 release 使用 pinned Test1 ContentPages + 单点替换。
+- 保持 Test1/Test2 release 不可变，新 release 使用 pinned Test1 ContentPages + 单点替换后 eval。
 - Build28003 / Shell v8 / Bootstrap v8；PNG 图标、2.8 UI、详情、2.7 PlaybackAdapter 全部不变。
 
 ### 2.8.0-test.2 / 2026-08-23

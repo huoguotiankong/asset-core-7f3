@@ -3,7 +3,7 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 01:38",
+  "updatedAt": "2026-08-25 07:45",
   "channels": [
     {
       "channel": "stable",
@@ -26,18 +26,18 @@
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.8.0-test.3",
-      "baseVersion": "2.6.3",
-      "targetVersion": "2.8.0",
-      "build": 28003,
-      "displayVersion": "Test 2.8.0 · UI Redesign 3",
-      "path": "apps/video/mdai/mdai_remote_test_v8.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
+      "version": "2.8.1-test.1",
+      "baseVersion": "2.8.0",
+      "targetVersion": "2.8.1",
+      "build": 28101,
+      "displayVersion": "Test 2.8.1-test.1 · Build 28101 · Local-First",
+      "path": "apps/video/mdai/mdai_remote_test_v9.txt",
+      "mode": "remote-local-first-native-require",
+      "updatedAt": "2026-08-25",
       "recommended": false,
-      "desc": "本次 Stable 2.8.0 的晋级来源；下一轮 Test 必须先 rebase 新 Stable",
-      "highlights": ["修复 Test2 ContentPages 语法错误","业务模块与 Stable 2.8.0 相同","Remote Manager state 与 Stable 独立"],
-      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
+      "desc": "从 Stable 2.8.0 rebase，只迁移 Local-First 交付架构；业务/UI/播放保持不变",
+      "highlights": ["Local Module Manager 2.2.0 + require(file://)","正常二次启动直接读取 Build28101 本地模块包","Core 快照和 ContentPages 热修基线改为本地只读资产","5 个 UI SVG 本地化，官方 PNG 以 data URI 固化","Stable 2.8.0 与 Local 2.6.3 不动","等待实机验证"],
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/mdai/assets/mdai_official.png"
     },
     {
       "channel": "local",
@@ -58,7 +58,7 @@
       "updatedAt": "2026-08-22",
       "recommended": false,
       "desc": "原完整本地版 · 暂保持 2.6.3 派生基线，可与 Remote Stable/Test 独立并存",
-      "highlights": ["导入输出程序名固定为 麻豆AI 本地版","完整业务代码内置","本次 Stable 晋级不重打 Local"],
+      "highlights": ["导入输出程序名固定为 麻豆AI 本地版","完整业务代码内置","本次 Test 交付架构迁移不重打 Local"],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/mdai/assets/mdai_official.png"
     }
   ]
