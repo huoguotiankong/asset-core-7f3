@@ -2,6 +2,38 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
+## 3.5.6-rc3 Test（Build 393 / Shell 1.0.39-test / Bootstrap 1.0.38-test / Manager 2.0.4）
+
+- RC2 实机截图确认 Single Workspace 已恢复渲染且首页打开明显更快，但状态区出现新的确定性问题：云仓显示 **全部16 / 已安装3 / 可更新2**，仅把“我的规则仓库、ACFun、JavDB v3”视为已安装，并把 ACFun/JavDB 标成可更新；这与此前用户设备基本全量安装的实机事实冲突。
+- 根因不是更新比较算法本身，而是 RC1/RC2 为追求首页零扫描，将 `importHistory / installedMap / group_install_v1` 当成设备安装真相。它们只能证明“规则仓库曾生成/交付过某个导入口令”，不能证明用户最终确认安装，也不能证明当前仍运行哪个 Stable/Test/Local；因此会同时造成漏报安装和同名通道误判。
+- 旧 `install_probe.js` 已重新核对：`rulePresence()` 只能通过 `request('hiker://home@标题')` 返回规则是否存在，无法识别同名 Stable/Test 的真实版本。ACFun 进一步证明同名通道必须使用海阔规则数值 `version` 指纹：当前 Stable Shell 数值 version 为 `2026082103`，Test Alpha11 为 `2026082317`，语义版本和 build 并不能替代这个设备指纹。
+- 本轮升级为 **Single Workspace 14.2 / Verified Device Install Index**：
+  - 新增持久化 `verified_install_index_v1`，普通首页只读取该索引，继续保持零逐项安装扫描。
+  - 显式“同步”升级为 **同步目录 + 刷新真实安装状态**。刷新时优先使用 `getRuleCount() + getLastRules()` 一次取得本地规则表，提取 `title + numeric version`；无法从规则表确认存在性的项目才使用旧 `hiker://home@标题` 作为存在性兜底。
+  - 多版本程序显式刷新时按需读取 `channels.json`，并读取各通道实际 Shell，提取海阔规则数值 `version` 建立 `channel_fingerprint_v1`。本地同名规则数值 version 与某条 Stable/Test/Local 指纹精确匹配时，才认定当前通道。
+  - 无法确认真实通道/版本时只显示 **已安装 · 版本待识别**，`update=false / updateKnown=false`，宁可保守不提示，也禁止再通过导入历史猜 Test/Stable 后制造假更新。
+  - 若同名多通道均有可靠数值指纹，且实际设备 ruleVersion 明确低于所有可能目标，才允许在通道未知时安全判定“存在更新”。
+  - 从规则仓库自身重新导入版本后可立即更新 Verified Index，但该快捷状态只作为本项目刚完成的交付记录；用户后续删除/外部覆盖后仍以下一次显式设备刷新结果为准。
+- RC3 保留 RC2 的 X5 Render Guard、Fast Home 缓存优先、`channels.json` 详情按需加载、channel-group 更新中心支持，以及 Icon Delivery，不恢复首页 N 次同步探测。
+- 新建不可变资产：`releases/test-3.5.6-rc3/verified_install_index_patch.js`、`release.json`、`bootstrap_test_v138.js`、`rule_repo_test_v139.txt`。活动 Test 已切到 **3.5.6-rc3 / Build393**；Stable **3.5.5 / Build389** 冻结不动。
+
+### 3.5.6-rc3 实机回归重点
+
+1. 覆盖 RC3 后先点一次“同步”。此动作允许比普通首页慢，因为它要刷新目录、读取设备规则表并建立通道指纹；完成后应提示“已安装 / 可更新 / 版本待识别”统计。
+2. 同步完成后再次进入首页应继续快速打开，不应重新逐程序扫描。
+3. “已安装”数量必须接近海阔设备真实安装状态，不再只显示最近从规则仓库导入的少数程序。
+4. 当前已是 ACFun Stable 0.4.9、JavDB Stable 3.9.42 时，不得再仅因仓库同时存在 Test 而标成“可更新”。
+5. 无法读取某条本地规则 numeric version 时，应显示“已安装/待识别”，不得误报“可更新”。
+6. 首页“可更新”筛选和底部更新中心必须读取同一 Verified Index，数字与列表一致。
+
+## 3.5.6-rc2 Test（Build 392 / Shell 1.0.38-test / Bootstrap 1.0.37-test / Manager 2.0.4）
+
+- RC1 实机出现 X5 工作区整块白屏，但海阔顶栏与底部原生栏仍正常，证明 Shell/Bootstrap 已启动，故障集中在 Single Workspace 浏览器执行层。
+- 根因确认：RC1 将 `workspaceClient` 错当成“返回 JS 字符串的生成器”，并在覆盖函数中引用 Rhino 模块闭包变量 `baseWorkspaceClient`。`hybridDocument()` 随后对覆盖后的函数执行 `.toString()` 注入 X5，浏览器端没有 Rhino 闭包，因此运行时直接 `ReferenceError: baseWorkspaceClient is not defined`。
+- RC2 改为 **Rhino 端先读取原 `baseWorkspaceClient.toString()` → 完成三个纯源码替换 → 再把不含外部闭包引用的函数源码注入 X5**。跨运行时脚本禁止序列化依赖父作用域的闭包变量。
+- 新增 Render Guard：工作区 JS 再发生异常时，X5 中间区域必须显示“工作区加载失败 + 错误信息 + patch 命中数”，禁止静默白屏。
+- RC2 实机确认首页完整恢复，且 Fast Home 性能优化生效；随后暴露的安装/更新状态准确性问题转入 RC3 处理。
+
 ## 3.5.6-rc1 Test（Build 391 / Shell 1.0.37-test / Bootstrap 1.0.36-test / Manager 2.0.4）
 
 - 用户在 Stable 3.5.5 实机截图确认首页已有 18 个程序、底部五栏正常，但提出两个 P0 产品问题：**首页每次打开特别慢**，以及首页“可更新”长期显示 **0**；截图同时确认麻豆传媒程序卡图标仍命中破图缓存。
