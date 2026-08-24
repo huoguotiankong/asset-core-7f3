@@ -2,6 +2,27 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
+## 3.5.6-rc7 Test（Build 397 / Shell 1.0.43-test / Bootstrap 1.0.42-test / Manager 2.0.4）
+
+- RC6 实机确认通用 `channel-group` 已恢复：黄豆短剧可自动显示 Stable 1.9.0 / Test 1.9.0-test.6 / Local 1.8.2-local.1 三版本，首页真实安装统计恢复到 16/16；但用户反馈“点击进去查看版本信息特别慢”。
+- 性能根因：RC6 `loadChannelMetaLive()` 仍调用全局 `apiText(path)`。该函数是核心发布文件使用的重容灾链，顺序为 GitHub API → Raw → jsDelivr → WebRaw，且单路 20 秒级超时。对几 KB 的 `channels.json` 首次详情加载继续使用该链，会把网络等待直接放在版本中心交互路径上。
+- RC7 升级为 **Single Workspace 14.6 / Fast Version Center**：版本中心元数据使用独立 transport；有效持久缓存直接复用，首次读取优先 jsDelivr CDN（4.5s 上限），失败/目录摘要滞后才依次短超时回退 GitHub API（6.5s）、WebRaw（4.5s）、Raw（4.5s）。不再默认进入 4×20s 重链。
+- 新增 `channelMetaMatchesCatalog()`：CDN 快路径返回的数据必须与根 manifest 中该程序 Stable/Test/Local 摘要一致；若 jsDelivr `@main` 传播滞后，则拒绝旧数据并回退 GitHub API，兼顾速度与新鲜度。
+- 版本中心缓存升级为 schema 4，并使用 `id + channelsPath + item.version + updatedAt` 生成程序级签名。其它小程序或根 manifest revision 变化不会让所有已加载版本中心一起失效；只有该程序自己的目录摘要变化才重新取 `channels.json`。
+- 交互改为“先进入详情、再自动加载”：点击多版本程序立即渲染详情页，未加载时显示“加载中… / 正在快速加载版本…”，40ms 后触发原生 loadChannels；网络请求不再阻挡页面进入。加载成功仍复用 RC5/RC6 的自动刷新合同。
+- RC6 的通用版本列表、当前安装语义、嵌套 `home_rule` numeric version 解析、RC4 原生打开桥、Verified Device Install Index 与 Fast Home 全部保留，本轮不修改安装/可更新算法。
+- 新建不可变资产：`releases/test-3.5.6-rc7/fast_version_center_patch.js`、`release.json`、`bootstrap_test_v142.js`、`rule_repo_test_v143.txt`。Shell 数值 `version=2026082408`。
+
+### RC7 必须完成的实机回归门禁
+
+1. 从 RC6 直接升级 RC7；设置页显示 `3.5.6-rc7 / Build397 / Single Workspace 14.6`。
+2. 首次进入一个从未加载版本缓存的 channel-group，详情页必须立即出现，不能等 `channels.json` 返回后才进入；版本卡随后自动补齐。
+3. 黄豆/麻豆AI/ACFun/JavDB 至少抽测两个程序，首次版本加载时间应明显短于 RC6；加载成功后第二次进入应近似本地即时打开。
+4. CDN 返回旧 `channels.json` 时不得静默使用；必须根据根 manifest Stable/Test/Local 摘要检测滞后并回退 API。
+5. 任一其它程序更新不得导致所有已加载版本缓存全部失效；只有目标程序自己的 `version/updatedAt/channelsPath` 改变时才重新加载。
+6. 首页仍保持零 N+1 版本预取，16/16 已安装与可更新统计不得因本轮性能优化退化。
+7. Stable/Test/Local 版本卡导入和“打开程序”继续通过现有回归门禁；RC7 全链通过前 Stable 继续冻结 3.5.5。
+
 ## 3.5.6-rc6 Test（Build 396 / Shell 1.0.42-test / Bootstrap 1.0.41-test / Manager 2.0.4）
 
 - RC5 实机确认“我的规则仓库”自身版本中心恢复正常，但黄豆短剧等其它 `channel-group` 仍显示“版本数量待加载 / 点击加载版本后显示”，并出现“已安装·版本待识别”同时上方“当前版本 1.9.0”的语义冲突。
