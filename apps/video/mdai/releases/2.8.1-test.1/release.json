@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.8.1-test.1",
+  "build": 28101,
+  "ref": "693c6385c2f4284b04be092746cc847c26f4c0df",
+  "baseStable": {"version":"2.8.0","build":28003,"release":"apps/video/mdai/releases/2.8.0/release.json"},
+  "previousTest": {"version":"2.8.0-test.3","build":28003,"release":"apps/video/mdai/releases/2.8.0-test.3/release.json","status":"superseded-by-local-first-native"},
+  "modules": [
+    {"name":"core-native","path":"apps/video/mdai/releases/2.8.1-test.1/core_local_native.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/mdai/releases/2.8.0-test.1/ui_base.js"},
+    {"name":"ui-local-assets","path":"apps/video/mdai/releases/2.8.1-test.1/ui_local_assets.js"},
+    {"name":"content-native","path":"apps/video/mdai/releases/2.8.1-test.1/content_local_native.js"},
+    {"name":"detail-pages","path":"apps/video/mdai/releases/2.8.0-test.1/pages_detail.js"},
+    {"name":"settings","path":"apps/video/mdai/releases/2.8.0-test.1/settings.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.8.1-test.1/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.8.1-test.1"},
+  "delivery": {"mode":"local-first-native","moduleManager":"2.2.0","execution":"require(file://)","code":"hiker-files-rules","assets":"hiker-files-rules","controlPlane":"remote-on-install-update-only"},
+  "notes": "从 Stable 2.8.0 rebase，仅迁移交付/启动架构。Core 2.6.3 快照、ContentPages Test1 基线和 5 个 UI SVG 在首次安装时固定到本地资产目录；业务接口、页面逻辑、详情和 PlaybackAdapter 保持 Stable 2.8.0。"
+}
