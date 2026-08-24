@@ -3,7 +3,7 @@
   "id":"madou",
   "name":"麻豆传媒",
   "versionPolicy":"remote-stable-test-v1",
-  "updatedAt":"2026-08-23 17:53",
+  "updatedAt":"2026-08-25 07:53",
   "channels":[
     {
       "channel":"stable",
@@ -19,23 +19,25 @@
       "recommended":true,
       "desc":"首个麻豆传媒正式版，由 Test13 按用户明确要求晋级。标签与相关推荐默认加载，详情使用30分钟结构化缓存；播放保持已验证的直链优先、否则 video:// 网页媒体自动提取；收藏/历史继续使用规则私有文件，Stable Bootstrap 采用 direct immutable loader 避开旧 setItem 饱和状态。",
       "highlights":["标签与相关推荐默认开启","30分钟结构化详情缓存","直链优先 + video:// 已验证播放策略","收藏/历史私有文件存储","direct immutable Stable loader","同级分类原页切换"],
-      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
+      "icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/madou/assets/icon.svg"
     },
     {
       "channel":"test",
       "label":"测试版",
       "id":"madou-test",
       "name":"麻豆传媒",
-      "version":"0.1.0-test.13",
-      "build":10113,
-      "displayVersion":"Test 0.1.0-test.13 · Promotion Source",
-      "path":"apps/video/madou/madou_remote_test_v13_b10113.txt",
-      "mode":"remote",
-      "updatedAt":"2026-08-23",
+      "version":"0.1.1-test.1",
+      "baseVersion":"0.1.0",
+      "targetVersion":"0.1.1",
+      "build":10201,
+      "displayVersion":"Test 0.1.1-test.1 · Build 10201 · Local-First",
+      "path":"apps/video/madou/madou_remote_test_v14_b10201.txt",
+      "mode":"remote-local-first-native-require",
+      "updatedAt":"2026-08-25",
       "recommended":false,
-      "desc":"Stable 0.1.0 的晋级来源与问题对照。后续新 Test 必须从 Stable 0.1.0 重新 rebase，不继续叠加旧测试身份。",
-      "highlights":["保留为首个 Stable 的晋级来源","纯免嗅实验已撤回","下一轮 Test 从 Stable 0.1.0 向前开发"],
-      "icon":"https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/madou/assets/icon.svg"
+      "desc":"从 Stable 0.1.0 rebase，只迁移 Local-First 交付/点击重载架构；业务、存储和播放合同保持不变。",
+      "highlights":["Local Module Manager 2.2.0 + require(file://)","正常二次启动直接读取 Build10201 本地包","Test10 Performance 源与快捷 SVG 本地化","旧 lazyRule Bootstrap 回调改走固定本地 Action Bootstrap","保留 Test12 私有文件存储救援","保留 Test13 直链优先 + video:// 播放","Stable 0.1.0 不动","等待实机验证"],
+      "icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/madou/assets/icon.svg"
     }
   ]
 }

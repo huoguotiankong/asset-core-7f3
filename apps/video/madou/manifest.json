@@ -15,14 +15,15 @@
   "bootstrap":"apps/video/madou/bootstrap_stable_v1_b10114.js",
   "test":"apps/video/madou/test.json",
   "channels":"apps/video/madou/channels.json",
-  "testVersion":"0.1.0-test.13",
-  "testBuild":10113,
-  "testShellVersion":"1.0.0-test.13",
-  "testBootstrap":"apps/video/madou/bootstrap_test_v13_b10113.js",
-  "testRule":"apps/video/madou/madou_remote_test_v13_b10113.txt",
-  "testRelease":"apps/video/madou/releases/0.1.0-test.13/release.json",
+  "testVersion":"0.1.1-test.1",
+  "testBuild":10201,
+  "testShellVersion":"1.1.0-test-local-first-native",
+  "testBootstrap":"apps/video/madou/bootstrap_test_v14_b10201.js",
+  "testRule":"apps/video/madou/madou_remote_test_v14_b10201.txt",
+  "testRelease":"apps/video/madou/releases/0.1.1-test.1/release.json",
   "changelog":"apps/video/madou/CHANGELOG.md",
+  "changelogHistory":"apps/video/madou/CHANGELOG_HISTORY_20260823.md",
   "sourceSite":"https://madoup2.cc/",
   "icon":"apps/video/madou/assets/icon.svg",
-  "migration":{"stage":"stable-010-promoted-test13","note":"Stable 0.1.0 / Build10114 is promoted by explicit user request from Test13. It freezes the direct-media-or-video:// playback baseline, default tags/recommendations, structured detail cache, private-file favorites/history and direct immutable loader. Test13 remains as promotion source; future Test must rebase Stable 0.1.0."}
+  "migration":{"stage":"local-first-native-test1-pending-device-validation","source":"Stable 0.1.0 / Build10114","target":"0.1.1-test.1 / Build10201","note":"只迁移交付/启动和 serialized lazyRule 本地重载架构；Stable/Latest 不变。"}
 }
