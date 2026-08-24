@@ -1,17 +1,1 @@
-{
-  "schema": 1,
-  "channel": "test",
-  "id": "huangdou-test",
-  "name": "黄豆短剧",
-  "version": "1.9.0-test.6",
-  "baseVersion": "1.8.2",
-  "targetVersion": "1.9.0",
-  "build": 19006,
-  "shellVersion": "1.1.5-test",
-  "shellRuleVersion": 2026082307,
-  "managerVersion": "2.0.1",
-  "release": "apps/video/huangdou/releases/1.9.0-test.6/release.json",
-  "rule": "apps/video/huangdou/huangdou_remote_test_v7.txt",
-  "updatedAt": "2026-08-23",
-  "notes": "根据 Test5 实机确认 text_4 集数按钮不显示锁 Emoji，改为稳定可见的【锁】文本前缀；主按钮和选集说明同步改为【锁】。播放协议继续完整复用 Test4。"
-}
+{"schema":1,"channel":"test","id":"huangdou-test","name":"黄豆短剧","version":"1.9.1-test.2","baseVersion":"1.9.0","targetVersion":"1.9.1","build":19102,"shellVersion":"1.2.0-test-local-first","shellRuleVersion":2026082411,"managerVersion":"2.1.0-local-first","release":"apps/video/huangdou/releases/1.9.1-test.2/release.json","rule":"apps/video/huangdou/huangdou_remote_test_v8.txt","bootstrap":"apps/video/huangdou/bootstrap_test_v8.js","updatedAt":"2026-08-24","notes":"由 Stable 1.9.0 rebase 的 Local-First 试点。1.9.1-test.1 因审计发现 core/detail 内仍有嵌套远程代码未激活；Test2 已把 Core 快照与 Detail 基线纳入本地运行包资产，UI 仓库图标首次安装落地本地。"}
