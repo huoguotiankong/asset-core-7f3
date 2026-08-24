@@ -3,16 +3,16 @@
   "channel": "test",
   "id": "rule-repo-test",
   "name": "我的规则仓库·测试版",
-  "version": "3.5.6-rc2",
-  "build": 392,
+  "version": "3.5.6-rc3",
+  "build": 393,
   "baseVersion": "3.5.5",
   "targetVersion": "3.5.6",
-  "shellVersion": "1.0.38-test",
-  "bootstrapVersion": "1.0.37-test",
+  "shellVersion": "1.0.39-test",
+  "bootstrapVersion": "1.0.38-test",
   "managerVersion": "2.0.4",
-  "release": "apps/tools/rule-repo/releases/test-3.5.6-rc2/release.json",
+  "release": "apps/tools/rule-repo/releases/test-3.5.6-rc3/release.json",
   "updatedAt": "2026-08-24",
   "status": "active-test",
-  "previousTest": {"version":"3.5.6-rc1","build":391,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc1/release.json"},
-  "notes": "Single Workspace 14.1。紧急修复 RC1 X5 工作区白屏：RC1 错误调用 workspaceClient 并把 Rhino 闭包引用序列化进浏览器，导致 baseWorkspaceClient 未定义。RC2 改为 Rhino 端对原 client.toString() 打纯源码补丁后再注入 X5，并增加 Render Guard 显式错误页。Fast Home、channel-group 可更新索引、channels.json 按需加载继续保留。Stable 3.5.5 / Build389 不变。"
+  "previousTest": {"version":"3.5.6-rc2","build":392,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc2/release.json"},
+  "notes": "Single Workspace 14.2。修复 RC2 已安装/可更新状态由导入历史推测导致的误判：新增真实设备安装索引，显式同步时读取海阔本地规则表与数值 version，并与 Stable/Test/Local Shell 指纹匹配；无法确认版本时只标已安装·版本待识别，不误报更新。普通首页继续只读缓存。Stable 3.5.5 / Build389 不变。"
 }

@@ -4,7 +4,7 @@
   "name": "我的规则仓库",
   "namingPolicy": "rule-repo-split-name-exception",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-24 07:45",
+  "updatedAt": "2026-08-24 08:05",
   "channels": [
     {
       "channel": "stable",
@@ -27,17 +27,17 @@
       "label": "测试版",
       "id": "rule-repo-test",
       "name": "我的规则仓库·测试版",
-      "version": "3.5.6-rc2",
+      "version": "3.5.6-rc3",
       "baseVersion": "3.5.5",
       "targetVersion": "3.5.6",
-      "build": 392,
-      "displayVersion": "Test 3.5.6-rc2 · Build 392 · Fast Home 14.1",
-      "path": "apps/tools/rule-repo/rule_repo_test_v138.txt",
+      "build": 393,
+      "displayVersion": "Test 3.5.6-rc3 · Build 393 · Verified Install Index 14.2",
+      "path": "apps/tools/rule-repo/rule_repo_test_v139.txt",
       "mode": "remote",
       "updatedAt": "2026-08-24",
       "recommended": false,
-      "desc": "修复 RC1 工作区白屏 · 首页缓存优先 + 多版本可更新统计 + 版本元数据按需加载",
-      "highlights": ["修复 X5 workspaceClient 闭包序列化白屏", "Render Guard 显式错误页", "取消首页逐程序安装探测", "取消首页逐程序预取 channels.json", "Stable/Test/Local 当前通道参与更新比较"],
+      "desc": "真实设备安装索引 · 同步时扫描 · 首页只读缓存",
+      "highlights": ["真实规则表优先，不再用导入历史猜安装状态", "同名 Stable/Test 用数值 version 指纹识别", "无法识别版本时不误报更新", "同步目录同时刷新安装状态", "普通首页保持零逐项扫描"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg"
     }
   ]
