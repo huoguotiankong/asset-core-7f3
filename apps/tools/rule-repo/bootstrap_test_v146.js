@@ -1,0 +1,39 @@
+/* 我的规则仓库·测试版 Bootstrap v1.0.46 - 3.5.6-rc10 / Local-First 15.1 */
+(function(){
+var BOOT_VERSION='1.0.46-test',BUILD=400;
+var MANAGER_URLS=[
+ 'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c55bf6781ea0fdd41bbbfb0768e30c53eabc736b/libs/updater/v2.1.0/local_bundle_manager.js',
+ 'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/c55bf6781ea0fdd41bbbfb0768e30c53eabc736b/libs/updater/v2.1.0/local_bundle_manager.js',
+ 'https://github.com/huoguotiankong/asset-core-7f3/raw/c55bf6781ea0fdd41bbbfb0768e30c53eabc736b/libs/updater/v2.1.0/local_bundle_manager.js'
+];
+var RELEASE_URLS=[
+ 'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@7a4ab22b10bc4d0fce123942a990791787a824a1/apps/tools/rule-repo/releases/test-3.5.6-rc10/release.json',
+ 'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/7a4ab22b10bc4d0fce123942a990791787a824a1/apps/tools/rule-repo/releases/test-3.5.6-rc10/release.json',
+ 'https://github.com/huoguotiankong/asset-core-7f3/raw/7a4ab22b10bc4d0fce123942a990791787a824a1/apps/tools/rule-repo/releases/test-3.5.6-rc10/release.json'
+];
+var LOCAL_CONFIG={id:'rule-repo-test',timeout:8000,repoTemplates:[
+ 'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@{ref}/{path}',
+ 'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/{ref}/{path}',
+ 'https://github.com/huoguotiankong/asset-core-7f3/raw/{ref}/{path}'
+]};
+var OWN_ICON='hiker://files/cache/asset-core-local/icons/rule-repo.svg';
+function valid(t){t=String(t==null?'':t);return !!t.trim()&&!/^\s*(<!doctype|<html|Bad Gateway|Too Many Requests|Service Unavailable|Gateway Timeout|Not Found)/i.test(t);}
+function fetchAny(us,label){var es=[];for(var i=0;i<us.length;i++)try{var t=fetch(String(us[i]),{timeout:8000,headers:{'Cache-Control':'no-cache'}});if(!valid(t))throw new Error('无效响应');return String(t);}catch(e){es.push((i+1)+':'+String(e.message||e));}throw new Error(String(label||'资源')+'全部镜像失败：'+es.join(' | '));}
+function requireAny(us,ver,label){var es=[];for(var i=0;i<us.length;i++)try{require(String(us[i]),{headers:{'Cache-Control':'no-cache'}},Number(ver||1));return;}catch(e){es.push((i+1)+':'+String(e.message||e));}throw new Error(String(label||'模块')+'全部镜像失败：'+es.join(' | '));}
+function manager(){requireAny(MANAGER_URLS,210,'Local Bundle Manager 2.1.0');if(typeof HikerLocalBundle!=='object'||String(HikerLocalBundle.version)!=='2.1.0')throw new Error('Local Bundle Manager 版本异常');return HikerLocalBundle;}
+function release(){var r=JSON.parse(fetchAny(RELEASE_URLS,'RC10 Release'));if(String(r.id)!=='rule-repo-test'||Number(r.build)!==BUILD)throw new Error('RC10 Release 身份异常');return r;}
+function installOwnIcon(){if(fileExist(OWN_ICON))return getPath(OWN_ICON);var u='https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@7a4ab22b10bc4d0fce123942a990791787a824a1/apps/tools/rule-repo/assets/icon.svg';downloadFile(u,OWN_ICON);if(!fileExist(OWN_ICON))throw new Error('规则仓库本地图标写入失败');return getPath(OWN_ICON);}
+var RuleRepoBoot={
+ version:BOOT_VERSION,
+ installLocal:function(force){var m=manager(),r=release();installOwnIcon();if(force)try{m.removeBuild(LOCAL_CONFIG,r.build);}catch(e){}var x=m.ensure(LOCAL_CONFIG,r);if(!x||!x.ok)throw new Error(x&&x.error?x.error:'本地运行包安装失败');return x;},
+ localStatus:function(){try{return manager().status(LOCAL_CONFIG);}catch(e){return{error:String(e.message||e)};}},
+ updatePage:function(){setPageTitle('测试版更新');var d=[],st=this.localStatus(),s=st&&st.state||{},c=s.current||{};
+  d.push({title:'我的规则仓库·测试版',desc:'3.5.6-rc10 · Build 400\nLocal-First Runtime 15.1',img:fileExist(OWN_ICON)?getPath(OWN_ICON):'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/icon.svg',col_type:'icon_1_left_pic',url:'hiker://empty',extra:{lineVisible:false}});
+  d.push({title:'本地运行包',desc:c.build?'Active '+String(c.version||'')+' / Build '+Number(c.build||0):'尚未初始化',col_type:'text_1',url:'hiker://empty'});
+  d.push({title:'检查新测试版',col_type:'text_2',url:$('#noLoading#').lazyRule(function(){showLoading('正在检查…');try{var us=['https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/tools/rule-repo/test.json?_t='+Date.now(),'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/test.json?_t='+Date.now()],t='';for(var i=0;i<us.length;i++)try{t=fetch(us[i],{timeout:6000,headers:{'Cache-Control':'no-cache'}});if(String(t||'').trim())break;}catch(e){}var j=JSON.parse(String(t||'{}'));hideLoading();return Number(j.build||0)>400?'toast://发现 '+j.version+' / Build '+j.build+'，请从版本中心覆盖导入':'toast://当前已是最新测试版';}catch(ex){hideLoading();return'toast://检查失败：'+String(ex.message||ex);}})});
+  d.push({title:'重装当前本地包',col_type:'text_2',url:$('#noLoading#').lazyRule(function(){showLoading('正在重装…');try{require('https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/bootstrap_test_v146.js',{headers:{'Cache-Control':'no-cache'}},146);var x=RuleRepoBoot.installLocal(true);hideLoading();return'toast://已重装 '+x.release.version;}catch(e){hideLoading();return'toast://重装失败：'+String(e.message||e);}})});
+  d.push({col_type:'line'});d.push({title:'运行模式',desc:'正常页面只读规则私有本地运行包；远程仓库只承担首次安装、显式同步和检查更新。',col_type:'long_text',url:'hiker://empty'});setResult(d);
+ }
+};
+RULE_REPO_BOOTSTRAP_VERSION=BOOT_VERSION;
+})();
