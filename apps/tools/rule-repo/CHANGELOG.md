@@ -1,5 +1,14 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc17 / Build407 · Native Local Modules
+- 架构修正：RC16 实机仍在 `readFile()+eval()` 本地 Runtime 路线报 `SyntaxError: Unexpected token: C`。结合海阔官方模块文档确认，Local-First 不应自行模拟模块执行器；本地源码执行改为海阔原生模块加载语义。
+- 新增共享 `Local Module Manager 2.2.0`：Runtime JS 写入 `hiker://files/rules/asset-core-local/<app>/b<build>/` 持久目录；规则私有文件只保存 package/state 元数据。
+- 首次安装先写入极小 `native_require_probe.js`，通过 `require(getPath(...))` 实机验证本地 `file://` 模块能够按海阔原生 require 语义执行并导出顶层变量；探针失败时停止安装，不继续下载完整 Runtime。
+- Runtime 下载完成后，正常启动不再 `readFile()+eval()`，改为按 Release 顺序 `require(file://本地模块)`；模块地址按 build 隔离，避免新旧版本覆盖。
+- 新增薄启动器 `local_shell_loader_v1.js`：首页和全部子页只负责确保启动器落本地，再由启动器检查本地包、必要时调用 Bootstrap 安装，并使用原生 require 加载所有本地模块。
+- RC12 Build402 业务 Release 继续复用，不重新改业务/UI；本轮只更换 Local-First 的本地持久化/执行层。
+- 新硬约束：Local-First JS 运行面禁止继续使用规则私有文件 `readFile()+eval()` 作为通用模块执行机制；优先使用海阔原生本地模块能力。Stable 继续冻结在 3.5.5 / Build389，黄豆试点继续暂停，等待 RC17 首装/二次启动/断 GitHub 门禁。
+
 ## 2026-08-24 · 3.5.6-rc16 / Build406 · Validated Local Bundle
 - P0 修复：RC15 实机进入本地 Runtime 执行阶段后报 `Unexpected token: E`。审计确认真实第 0 模块 `repository.js` 以正常 JS 注释开头，问题来自 Local Bundle Manager 2.1.1 仍可能把 `batchFetch` 返回的 `Error...` 等错误文本当成有效源码持久化，并对污染内容自身计算 MD5，导致完整性校验无法发现语义污染。
 - 共享 Local Bundle Manager 升到 2.1.2：禁止 `Error / Exception / HTTP / Request failed / Network error / Timeout / GitHub JSON error` 等响应进入本地 JS 包；每个模块远端读取后和本地回读后均执行 JS 语法编译校验。
