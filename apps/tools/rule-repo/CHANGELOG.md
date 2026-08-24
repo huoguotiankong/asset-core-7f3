@@ -1,5 +1,18 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc16 / Build406 · Validated Local Bundle
+- P0 修复：RC15 实机进入本地 Runtime 执行阶段后报 `Unexpected token: E`。审计确认真实第 0 模块 `repository.js` 以正常 JS 注释开头，问题来自 Local Bundle Manager 2.1.1 仍可能把 `batchFetch` 返回的 `Error...` 等错误文本当成有效源码持久化，并对污染内容自身计算 MD5，导致完整性校验无法发现语义污染。
+- 共享 Local Bundle Manager 升到 2.1.2：禁止 `Error / Exception / HTTP / Request failed / Network error / Timeout / GitHub JSON error` 等响应进入本地 JS 包；每个模块远端读取后和本地回读后均执行 JS 语法编译校验。
+- RC16 首装暂时关闭批量 Runtime 下载，改为逐模块不可变多镜像下载，优先保证首次安装正确性；后续只有在实机证明可靠后才能重新引入并发加速。
+- RC16 增加本地 entry loader。旧 Build402 包若执行失败，会明确标出失败模块名，自动删除污染包并使用 Manager 2.1.2 强制重建一次，再重新加载。
+- Stable 继续冻结在 3.5.5 / Build389；黄豆 Local-First Test 暂停继续验证，先等规则仓库完成“首次安装成功 → 第二次本地启动 → 断 GitHub”闭环。
+
+## 2026-08-24 · 3.5.6-rc13 ~ rc15 · Local-First 启动合同修复
+- RC13：确认短模块名 `$.require('ruleRepoCore')` 不可用，尝试完整 `hiker://page/ruleRepoCore`。
+- RC14：修复海阔 `saveFile/readFile` 文本规范化导致的严格原字符串写入校验误报，Manager 2.1.1 改为 BOM/CRLF/尾换行规范化后校验，并以实际回读文本建立 MD5。
+- RC15：实机继续证明 `hiker://page/ruleRepoCore` 在当前首页规则上下文仍不可注册，彻底取消 page-module 启动依赖；首页与各页面直接从规则私有文件读取并 eval 本地 Runtime。
+- 新门禁：Local-First 启动不得依赖海阔 page module 的隐式注册状态；本地包校验必须同时验证“文件存在/MD5”和“内容确实是可执行源码”。
+
 ## 2026-08-24 · 3.5.6-rc12 / Build402 · Local-First Bootstrap Scope Fix
 - P0 修复：RC11 首次启动时 Shell 通过 `require()` 加载 Bootstrap，但 `RuleRepoBoot` 定义在 Bootstrap IIFE 的局部作用域，导致海阔实机报错“RuleRepoBoot 未定义”，本地运行包尚未开始安装即终止。
 - RC12 Shell 改为在同一 Rhino 执行作用域中 `fetch + eval` 不可变 Bootstrap，并在 eval 前显式声明 `var RuleRepoBoot`，不再依赖 `require()` 的全局导出副作用。
