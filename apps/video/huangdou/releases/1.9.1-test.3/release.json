@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "huangdou-test",
+  "name": "黄豆短剧",
+  "version": "1.9.1-test.3",
+  "build": 19103,
+  "ref": "2328da698091bc30f518a943149e801297b7bd5b",
+  "baseStable": {
+    "version": "1.9.0",
+    "build": 19006,
+    "release": "apps/video/huangdou/releases/1.9.0/release.json"
+  },
+  "previousTest": {
+    "version": "1.9.1-test.2",
+    "build": 19102,
+    "release": "apps/video/huangdou/releases/1.9.1-test.2/release.json",
+    "status": "superseded-by-native-local-modules"
+  },
+  "modules": [
+    {"name": "core-native", "path": "apps/video/huangdou/releases/1.9.1-test.3/core_local_native.js"},
+    {"name": "ui-native", "path": "apps/video/huangdou/releases/1.9.1-test.3/ui_base_local_native.js"},
+    {"name": "playback-adapter", "path": "apps/video/huangdou/releases/1.9.0-test.4/playback.js"},
+    {"name": "content-pages", "path": "apps/video/huangdou/releases/1.9.0-test.1/pages_content.js"},
+    {"name": "detail-native", "path": "apps/video/huangdou/releases/1.9.1-test.3/detail_local_native.js"},
+    {"name": "runtime", "path": "apps/video/huangdou/releases/1.9.1-test.3/runtime.js"}
+  ],
+  "verify": {"global": "HuangDouRemoteRuntime", "property": "build", "equals": "1.9.1-test.3"},
+  "delivery": {
+    "mode": "local-first-native",
+    "moduleManager": "2.2.0",
+    "execution": "require(file://)",
+    "code": "hiker-files-rules",
+    "assets": "hiker-files-rules",
+    "controlPlane": "remote-on-install-update-only"
+  },
+  "notes": "由 Stable 1.9.0 rebase。Test3 将可执行模块迁移到 Local Module Manager 2.2.0 + 海阔原生 require(file://)；Core/Detail 固定基线作为本地只读资产安装，正常启动不访问 GitHub/CDN。"
+}
