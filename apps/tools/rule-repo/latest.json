@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "rule-repo",
   "name": "我的规则仓库",
-  "version": "3.5.5",
-  "build": 389,
+  "version": "3.5.6",
+  "build": 393,
   "ref": "main",
-  "release": "apps/tools/rule-repo/releases/3.5.5/release.json",
-  "updatedAt": "2026-08-23T22:30:00+08:00",
-  "notes": "Stable 3.5.5 · Build389 · Shell 1.5.5 · Icon Delivery 1.1 · Remote Delivery Protocol 2.0。按用户明确要求由 RC3 晋级；旧 Stable 3.5.4 保留回退。"
+  "release": "apps/tools/rule-repo/releases/3.5.6/release.json",
+  "updatedAt": "2026-08-24T08:41:00+08:00",
+  "notes": "Stable 3.5.6 · Build393 · Shell 1.5.6 · Verified Device Install Index 14.2。按用户明确要求由 Test RC3 晋级；旧 Stable 3.5.5 完整保留回退。"
 }

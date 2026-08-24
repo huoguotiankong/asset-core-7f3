@@ -12,7 +12,8 @@
   "managerVersion": "2.0.4",
   "release": "apps/tools/rule-repo/releases/test-3.5.6-rc3/release.json",
   "updatedAt": "2026-08-24",
-  "status": "active-test",
+  "status": "promoted-source",
+  "promotedStable": {"version":"3.5.6","build":393,"release":"apps/tools/rule-repo/releases/3.5.6/release.json"},
   "previousTest": {"version":"3.5.6-rc2","build":392,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc2/release.json"},
-  "notes": "Single Workspace 14.2。修复 RC2 已安装/可更新状态由导入历史推测导致的误判：新增真实设备安装索引，显式同步时读取海阔本地规则表与数值 version，并与 Stable/Test/Local Shell 指纹匹配；无法确认版本时只标已安装·版本待识别，不误报更新。普通首页继续只读缓存。Stable 3.5.5 / Build389 不变。"
+  "notes": "RC3 已按用户明确要求晋级 Stable 3.5.6 / Build393。本 Test 保留为晋级来源，不再作为下一轮开发基线；后续 Test 必须从 Stable 3.5.6 rebase。"
 }
