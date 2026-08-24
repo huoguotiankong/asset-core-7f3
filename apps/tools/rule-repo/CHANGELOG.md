@@ -2,6 +2,28 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
+## 3.5.6-rc5 Test（Build 395 / Shell 1.0.41-test / Bootstrap 1.0.40-test / Manager 2.0.4）
+
+- 用户从已恢复的 Stable 3.5.5 覆盖导入 RC4 后，实机出现“**设置页已经是 3.5.6-rc4 / Build394，但规则仓库程序卡仍显示测试版 3.5.6-rc3 已安装**”；同时“界面”仍显示 `Single Workspace 14.2`，版本中心显示“待加载”。
+- 根因一：RC3 的 `readVerifiedInstallIndex()/fastItemState()` 将持久化 `verified_install_index_v1` 视为安装状态最高优先级，只要旧索引存在就直接返回；跨版本覆盖导入并不会自动使旧索引失效。因此当前 Shell 已经是 RC4，详情却仍消费 RC3 自身记录。
+- RC5 固定规则：**规则仓库自身（`id=rule-repo`）的当前运行 Shell 是其安装状态最高优先级真相**。`fastGroupState/fastItemState` 对自身直接使用当前 `R.version/R.build/channel`，不得再被旧 Verified Index 反向覆盖；其它程序继续使用 Verified Device Install Index。
+- 新增 Runtime State Epoch：运行版本/Build/通道变化时，自动修复 `verified_install_index_v1.apps['rule-repo']`，并清理规则仓库自身的旧 channel cache 与 channel fingerprint。用户不需要手动清缓存、删除状态或重新安装旧版。
+- 根因二：RC4 在 `channelsLoaded=false` 时把 `actions.open/actions.check` 指向 `load-channels` URL，但 X5 事件仍把动作 mode 作为 `open/check` 传给 `runAction()`；RC2 的刷新合同只在 `mode==='loadChannels'` 时执行 `refreshPage(true)`，因此版本数据虽然可能已经写入缓存，详情仍停留“待加载”。
+- RC5 修复加载刷新合同：优先把“加载版本”按钮显式路由到 `loadChannels`；同时在 `runAction()` 增加兼容刷新条件，旧 `open/check → load-channels` 路径成功后也强制刷新，避免按钮文本与动作 mode 再次脱节。
+- `workspaceData.ui` 统一为 **Single Workspace 14.4**；RC4 的空 channels 修复、`loadChannelMetaLive()`、原生 `deviceRuleOpenDescriptor + fba.open` 打开桥、Fast Home、Render Guard 与 Verified Device Install Index 均保留。
+- 新建不可变资产：`releases/test-3.5.6-rc5/runtime_state_migration_patch.js`、`release.json`、`bootstrap_test_v140.js`、`rule_repo_test_v141.txt`。Shell 数值 `version=2026082406`。
+
+### RC5 必须完成的实机回归门禁
+
+1. 从 RC4 直接“升级测试版”到 RC5，不允许要求用户手工清状态。
+2. 设置页必须同时显示 `3.5.6-rc5 · Build395` 与 `Single Workspace 14.4`。
+3. “我的规则仓库”详情摘要必须显示当前测试版 RC5 已安装，禁止再出现 RC3/RC4 旧自身状态。
+4. 进入自身详情后，版本中心必须最终显示 Stable 3.5.5 + Test RC5；若首次需要加载，加载成功后页面必须自动刷新，不得停留“待加载”。
+5. Stable/Test 版本卡均能生成有效导入口令；再次导入测试版后当前状态仍必须保持 RC5。
+6. 点击“打开程序”必须继续通过 RC4 原生 descriptor 桥正常进入，不得复发 jsoup 空 selector。
+7. 至少抽测一个其它 channel-group，确认其 Verified Index 行为未被自身 runtime-authoritative 特例影响。
+8. RC5 全链通过前，Stable 继续固定 3.5.5，不得再次晋级 3.5.6。
+
 ## 3.5.6-rc4 Test（Build 394 / Shell 1.0.40-test / Bootstrap 1.0.39-test / Manager 2.0.4）
 
 - 用户补做 RC3/Stable 3.5.6 的版本中心回归后实机确认两个 P0：多版本详情显示 **版本数量 0 个 / 可用版本 0 个**，因此无法导入；点击“打开程序”触发 `java.lang.IllegalArgumentException: String must not be empty`，堆栈进入 jsoup `Selector.select` / `HomeParser.findList`。
