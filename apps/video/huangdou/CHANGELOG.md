@@ -2,13 +2,25 @@
 
 > 程序级长期技术记忆。后续开发/优化本程序前，必须先读三份全局文档，再读本文件、registry 和当前运行入口。只记录已验证事实；未完成实机验证的内容必须明确标记。
 
+## 2026-08-24 · 1.9.1-test.3 / Build19103 · Native Local-First Pilot
+- 触发条件：规则仓库 `3.5.6-rc24 / Build414` 的统一本地图标包已经由用户实机确认恢复图标，因此恢复此前暂停的黄豆 Local-First 试点。
+- 审计 Test2 后确认其仍使用 `Local Bundle Manager 2.1.0 + readFile()/eval()` 执行本地 JS；而规则仓库后续实机已经证明该路线会放大污染源码、执行作用域和本地包恢复问题，最终稳定基线已迁移到 `Local Module Manager 2.2.0 + require(file://)`。
+- Test3 从 Stable `1.9.0 / Build19006` 业务基线继续向前，不修改页面业务、收藏历史、账号/付费权限判断和 PlaybackAdapter；只迁移交付/启动架构。
+- 新运行链：`huangdou_remote_test_v9.txt / rule 2026082412 → bootstrap_test_v9.js → Local Module Manager 2.2.0 → hiker://files/rules/asset-core-local/huangdou-test/b19103/*.js → require(file://) → HuangDouRemoteRuntime 1.9.1-test.3`。
+- 正常启动优先读取 `__hclocal22_huangdou-test_b19103.json`，包完整时不访问 GitHub/CDN；只有首次安装、本地包缺失或主动升级时才进入远端 Bootstrap/模块下载。
+- 可执行模块全部进入 Build19103 的原生本地模块包：Core Bridge、UI、Playback、Content、Detail Bridge、Runtime。Core 1.8.2 规则快照和 Detail Test5 完整基线仍因历史结构需要在本地二次展开，但已改为安装时固定到 `hiker://files/rules/asset-core-local/huangdou-test/assets/` 的只读资产，运行时不再远程抓取；不得把这一阶段描述成“完全零 eval”。
+- 四个 UI SVG 同样落到稳定本地资产目录，不再绑定 Test2 的 Build19102 cache 路径；后续 build 可继续复用已校验资产。
+- Release manifest 内嵌在 Bootstrap，避免固定 `release.json` 成为首次启动额外控制面故障点；真正模块路径全部绑定不可变 commit `2328da698091bc30f518a943149e801297b7bd5b`。
+- 静态门禁：新增 Test3 JS 已通过 `node --check`；Shell 外层规则 JSON、`pages` JSON 和抽取后的本地加载器均通过解析/语法检查；GitHub main 已回读确认 Release、Bootstrap、Shell 存在。
+- 当前状态：**Test 活动候选，等待海阔实机验证**。验收固定为：①从规则仓库覆盖安装 Test3 后首次打开成功；②退出后二次启动成功且明显走本地包；③断开/屏蔽 GitHub 后首页、片库、详情、收藏历史等本地运行链仍能正常进入（站点业务本身仍需要访问黄豆站点）；④至少验证一集可播放的免费剧集，确认播放链没有因交付架构迁移退化。未完成上述闭环前不得晋级 Stable，也不得批量复制到其它小程序。
+
 ## 当前基线
 - App ID：`huangdou`
 - Remote Stable：`1.9.0 / Build 19006 / Shell 1.1.5`
-- Remote Test：`1.9.0-test.6 / Build 19006 / Shell 1.1.5-test`
+- Remote Test：`1.9.1-test.3 / Build 19103 / Shell 1.2.1-test-local-first-native`（待实机验证）
 - Local：`1.8.2-local.1`
 - Stable 入口：`apps/video/huangdou/huangdou_remote_v2.txt`
-- Test 入口：`apps/video/huangdou/huangdou_remote_test_v7.txt`
+- Test 入口：`apps/video/huangdou/huangdou_remote_test_v9.txt`
 - Local：`huangdou.txt`，导入名 `黄豆短剧 本地版`
 
 ## 当前 Stable 运行链
@@ -30,14 +42,16 @@ Stable `1.9.0` 与 `1.9.0-test.6` 的业务模块完全一致；本次正式发�
 
 ## 当前 Test 运行链
 ```text
-huangdou_remote_test_v7.txt / rule version 2026082307
-→ bootstrap_test_v7.js / state id=huangdou-test / minBuild=19006
-→ Remote Manager v2.0.1
-→ releases/1.9.0-test.6/release.json
-→ 与 Stable 1.9.0 相同业务模块
+huangdou_remote_test_v9.txt / rule version 2026082412
+→ 本地包 __hclocal22_huangdou-test_b19103.json
+→ 若完整：直接 require(file://) Build19103 模块
+→ 若缺失：bootstrap_test_v9.js
+→ Local Module Manager 2.2.0
+→ 安装固定 Core/Detail/UI 资产 + Build19103 模块
+→ require(file://) HuangDouRemoteRuntime
 ```
 
-Stable/Test 同名覆盖，但 Remote Manager state 独立：`huangdou` / `huangdou-test`。
+Stable/Test 同名覆盖，但运行状态独立：Stable 继续使用 `huangdou` Remote Manager 状态；Test3 使用 `huangdou-test` 的 Local Module Manager 2.2.0 状态与 Build19103 包。
 
 ## 数据 / HTML / 图片事实
 - 默认 Host：`https://hddj.tv`；备用：`https://hdmgdj.tv`、`https://huangdoudj.com`。
@@ -129,11 +143,17 @@ Test5 使用 `🔒` 标识官网 locked Episode。用户实机确认：
 
 ## 回归 / 恢复
 - 当前 Stable 恢复入口：`黄豆短剧 1.9.0 / Build19006`。
-- 下一轮 Test 必须先 rebase Stable 1.9.0，再向下一目标版本前进。
-- Local 1.8.2 继续作为独立纯本地恢复入口，暂不随本次 Stable 晋级重打包。
+- 当前 Test 候选：`1.9.1-test.3 / Build19103`；失败时不得覆盖 Stable，直接从 Stable 1.9.0 或冻结的 Test2/Test3 immutable 资产新建更高 build 修复。
+- Local 1.8.2 继续作为独立纯本地恢复入口，暂不随本次 Test 交付架构迁移重打包。
 
 ---
 ## 版本记录
+### 1.9.1-test.3 / 2026-08-24
+- Local-First 执行器由 2.1.0 `readFile/eval` 迁移到 2.2.0 `require(file://)`。
+- Release manifest 内嵌 Bootstrap；正常启动只读 Build19103 本地模块包。
+- Core/Detail 历史完整基线改为固定本地只读资产，取消正常运行时远程抓取。
+- 当前等待实机闭环，不得晋级 Stable。
+
 ### 1.9.0 Stable / 2026-08-23
 - 按用户明确发布指令，由 `1.9.0-test.6 / Build19006` 原样晋级。
 - 新增 `releases/1.9.0/release.json`、`bootstrap_v2.js`、`huangdou_remote_v2.txt`。
