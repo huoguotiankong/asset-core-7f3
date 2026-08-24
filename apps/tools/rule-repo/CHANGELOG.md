@@ -1,5 +1,14 @@
 # 我的规则仓库 CHANGELOG
 
+## 2026-08-24 · 3.5.6-rc21 / Build411 · Single Local Version Catalog
+- 实机确认 RC20 虽然已经恢复图标和 Local-First 主启动，但 JavBus / XVideos 等多版本详情在本地无缓存时仍会调用 `shortMeta()`，按 Raw → GitHub API → jsDelivr 串行前台请求。单路 2.6~3.2 秒累积后可接近 8~9 秒，并且海阔 lazyRule 执行期间会阻塞当前交互，出现“正在快速加载版本”长时间不结束、甚至返回也像卡死。
+- RC21 彻底删除“进入版本详情再联网 hydration”的产品路径。新增 `apps/tools/rule-repo/channel_catalog_snapshot.json`，由发布端把当前所有 channel-group 的 Stable/Test/Local/Web 最小可导入元数据汇总成一份约 10KB 的统一版本目录。
+- 新 `local_shell_loader_v5.js` 首次安装只获取一次固定提交 `f4373829...` 的不可变版本目录并写入 `hiker://files/rules/asset-core-local/rule-repo-test/channel_catalog_v2.json`。之后 `fastChannelCache / loadChannelMetaLive / refreshFastChannelCache / load-channels` 全部只读本地目录，版本详情禁止访问 GitHub/CDN。
+- 主动“同步”时才允许联网刷新 `channel_catalog_snapshot.json`；RC10 旧的 N+1 `syncLocalChannelCatalog()` 被覆盖成从统一本地目录批量灌入缓存，不再为每个程序单独请求 `channels.json`。
+- 图标策略改为：真实本地缓存优先；SVG 本地内容验证后使用 data URI；本地真实图标缺失时立即显示本地生成占位图，不再把远程 URL 交给详情页等待，所以不会出现图标空白数秒后才突然出现。主动同步继续负责下载真实图标，下一次刷新后替换占位。
+- `rule_repo_test_v157.txt` / Shell 1.0.57-test 使用 `shell_loader_v5.js`，测试版更新页新增“同步版本目录”和本地目录 revision/程序数状态。RC19 已实机跑通的 Build402 Runtime、Local Module Manager 2.2.0、native `require(file://)` 执行链全部保持不变。
+- 新硬约束：版本详情、分类/搜索等正常浏览热路径不得发任何 GitHub/CDN 元数据请求；远程仓库只允许在安装/升级/用户主动同步时访问。Stable 继续冻结 3.5.5 / Build389，黄豆 Local-First 继续暂停，等待 RC21 实机确认所有版本详情秒开且可正常返回。
+
 ## 2026-08-24 · 3.5.6-rc20 / Build410 · Local State & Asset Convergence
 - 实机确认 RC19 已成功进入首页，证明 Local-First 主启动链（内嵌 Runtime manifest → Local Module Manager 2.2.0 → Public persistent JS → native require(file://)）已经跑通；本轮停止修改启动架构，转入运行状态/本地资产收口。
 - 修复规则仓库自身详情仍显示 `3.5.6-rc11 当前运行`：RC12 Runtime 中的 `channelTruth` fallback 固定在 RC11，旧 channels 快照会反向覆盖当前 Shell。RC20 的 `local_shell_loader_v4.js` 以正在运行的 Shell `3.5.6-rc20 / Build410` 作为自身唯一真相，在加载后直接生成 Stable 3.5.5 + Test RC20 两张卡并写入本地 fast channel cache，同时强制修复自身 Verified Index。
