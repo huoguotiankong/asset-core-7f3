@@ -1,11 +1,1 @@
-{
-  "schema": 1,
-  "id": "rule-repo",
-  "name": "我的规则仓库",
-  "version": "3.5.6",
-  "build": 393,
-  "ref": "main",
-  "release": "apps/tools/rule-repo/releases/3.5.6/release.json",
-  "updatedAt": "2026-08-24T08:41:00+08:00",
-  "notes": "Stable 3.5.6 · Build393 · Shell 1.5.6 · Verified Device Install Index 14.2。按用户明确要求由 Test RC3 晋级；旧 Stable 3.5.5 完整保留回退。"
-}
+{"schema":1,"id":"rule-repo","name":"我的规则仓库","version":"3.5.5","build":389,"ref":"main","release":"apps/tools/rule-repo/releases/3.5.5/release.json","updatedAt":"2026-08-24T09:15:00+08:00","notes":"Stable 已恢复 3.5.5 / Build389。3.5.6 / Build393 因版本中心和打开程序集成回归撤回；修复进入 Test 3.5.6-rc4 / Build394。"}
