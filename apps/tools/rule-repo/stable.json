@@ -1,16 +1,1 @@
-{
-  "schema": 1,
-  "channel": "stable",
-  "id": "rule-repo",
-  "version": "3.5.6",
-  "build": 393,
-  "shellVersion": "1.5.6",
-  "bootstrapVersion": "1.5.6",
-  "managerVersion": "2.0.4",
-  "release": "apps/tools/rule-repo/releases/3.5.6/release.json",
-  "promotedFrom": "3.5.6-rc3",
-  "promotedAt": "2026-08-24T08:41:00+08:00",
-  "rollbackVersion": "3.5.5",
-  "rollbackBuild": 389,
-  "notes": "按用户明确要求由 Test 3.5.6-rc3 / Build393 晋级。正式版吸收 Fast Home 14.x、X5 Render Guard 与 Verified Device Install Index 14.2；Stable 状态命名空间独立，旧 Stable 3.5.5 / Build389 完整保留回退。"
-}
+{"schema":1,"channel":"stable","id":"rule-repo","version":"3.5.5","build":389,"shellVersion":"1.5.5","bootstrapVersion":"1.5.5","managerVersion":"2.0.4","release":"apps/tools/rule-repo/releases/3.5.5/release.json","promotedFrom":"3.5.5-rc3","promotedAt":"2026-08-23T22:30:00+08:00","restoredAt":"2026-08-24T09:15:00+08:00","restoredAfterWithdrawnStable":{"version":"3.5.6","build":393,"release":"apps/tools/rule-repo/releases/3.5.6/release.json","reason":"版本中心可用版本为0且X5打开程序触发jsoup空selector，完整回归未通过"},"rollbackVersion":"3.5.4","rollbackBuild":384,"notes":"Stable 3.5.6 因用户实机发现版本中心/打开程序 P0 回归已撤回活动正式指针；恢复已验证 Stable 3.5.5 / Build389。3.5.6 工件保留历史，不删除、不覆盖。"}
