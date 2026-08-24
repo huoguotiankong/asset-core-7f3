@@ -1,0 +1,23 @@
+{
+  "schema":1,
+  "id":"huangdou-test",
+  "name":"黄豆短剧",
+  "version":"1.9.1-test.2",
+  "build":19102,
+  "ref":"1275b58058f85b72b3ca06c0f18e553192273bd1",
+  "baseStable":{"version":"1.9.0","build":19006,"release":"apps/video/huangdou/releases/1.9.0/release.json"},
+  "previousTest":{"version":"1.9.1-test.1","build":19101,"release":"apps/video/huangdou/releases/1.9.1-test.1/release.json","status":"not-activated-nested-remote-audit-failed"},
+  "modules":[
+    {"name":"core-snapshot","path":"apps/video/huangdou/releases/1.8.2-test.1/source_local_1.8.2.txt","asset":true},
+    {"name":"detail-base","path":"apps/video/huangdou/releases/1.9.0-test.5/pages_detail.js","asset":true},
+    {"name":"core-local","path":"apps/video/huangdou/releases/1.9.1-test.2/core_local.js"},
+    {"name":"ui-local","path":"apps/video/huangdou/releases/1.9.1-test.2/ui_base_local.js"},
+    {"name":"playback-adapter","path":"apps/video/huangdou/releases/1.9.0-test.4/playback.js"},
+    {"name":"content-pages","path":"apps/video/huangdou/releases/1.9.0-test.1/pages_content.js"},
+    {"name":"detail-local","path":"apps/video/huangdou/releases/1.9.1-test.2/detail_local.js"},
+    {"name":"runtime","path":"apps/video/huangdou/releases/1.9.1-test.2/runtime.js"}
+  ],
+  "verify":{"global":"HuangDouRemoteRuntime","property":"build","equals":"1.9.1-test.2"},
+  "delivery":{"mode":"local-first","bundleManager":"2.1.0","code":"rule-private-files","assets":"hiker-files-cache","controlPlane":"remote-on-install-update-only"},
+  "notes":"Local-First 真实试点第二版。修正 Test1 审计发现的嵌套远程代码：1.8.2 Core 快照和 Test5 Detail 基线都作为本地包资产保存，运行时只从私有本地包读取；仓库 UI 图标首次安装时另行落地到 hiker://files/cache。业务页面和播放协议保持 Stable 1.9.0。"
+}
