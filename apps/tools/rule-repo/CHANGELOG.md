@@ -2,6 +2,27 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
+## 3.5.6-rc6 Test（Build 396 / Shell 1.0.42-test / Bootstrap 1.0.41-test / Manager 2.0.4）
+
+- RC5 实机确认“我的规则仓库”自身版本中心恢复正常，但黄豆短剧等其它 `channel-group` 仍显示“版本数量待加载 / 点击加载版本后显示”，并出现“已安装·版本待识别”同时上方“当前版本 1.9.0”的语义冲突。
+- 根因一：RC4/RC5 的详情恢复链实际上对 `rule-repo` 有专用 `ruleRepoChannelFallback()` 与自身预加载特例，其它程序仍依赖脆弱的 X5 点击补丁触发 `load-channels`；不同入口进入详情时可能绕过该触发点，因此通用多版本程序长期停留待加载。
+- RC6 升级为 **Single Workspace 14.5 / Generic Channel Hydration**：所有进入 `detail` 的路径统一在 `go()` 判断 `channel && !channelsLoaded`，只对当前一个程序执行 `loadChannels`；刷新后 `workspaceData()` 还会对 pending detail 做一次当前程序缓存补齐。首页仍禁止预取所有 `channels.json`，不会恢复 N+1。
+- 通用 `loadChannelMetaLive()` 明确兼容 `item.channelsPath` 与 `item.raw.channelsPath`，并在失败诊断中带出真实 path；`rule-repo` fallback 继续只作为自身兜底，不再掩盖其它程序的加载问题。
+- 根因二：多版本详情旧 UI 使用 `p.version` 作为“当前版本”，而该字段来自云端根 manifest 摘要，并不等于手机真实安装版本。RC6 改为“当前安装”：身份已确认时显示 `正式版/测试版/本地版 + installedVersion`，无法确认时只显示“已安装 · 版本待识别”，未安装显示“未安装”。禁止云端 Stable 版本冒充本地当前版本。
+- 根因三：黄豆 Stable/Test Shell 实际 numeric version 可区分（Stable `2026082309`、Test6 `2026082307`），但不同海阔版本的 `getLastRules()` 可能把完整 `home_rule` 文本嵌在 `rule/content/source/ruleText/data` 字段里；RC3 的 `deviceRuleRecord()` 未解析这种嵌套字符串，因此丢失 numeric version。RC6 增强解析器，支持直接对象、完整 `海阔视界，首页频道￥home_rule￥{...}` 文本和嵌套字段。
+- 新建不可变资产：`releases/test-3.5.6-rc6/generic_channel_hydration_patch.js`、`release.json`、`bootstrap_test_v141.js`、`rule_repo_test_v142.txt`。Shell 数值 `version=2026082407`。
+
+### RC6 必须完成的实机回归门禁
+
+1. 从 RC5 直接升级 RC6；设置页显示 `3.5.6-rc6 / Build396 / Single Workspace 14.5`。
+2. 首页点击黄豆、麻豆AI、ACFun/JavDB 等任一多版本程序，第一次允许短暂加载，但必须自动进入详情并显示真实版本卡；不再要求用户手点“加载版本”。
+3. 黄豆详情必须显示 Stable/Test/Local 三张卡；其它程序按其真实 `channels.json` 数量显示。
+4. 多版本详情“当前安装”不得再用根 manifest 的 Stable 摘要冒充本地版本；未识别时明确写“版本待识别”。
+5. 点一次“同步”后，至少黄豆这类 numeric version 明确可区分的同名 Stable/Test 应尝试识别真实通道；如海阔本地规则对象仍不暴露 numeric version，保守保持“版本待识别”，但不得误报更新。
+6. 任取一个其它程序验证 Stable/Test 版本卡可导入；“打开程序”继续走 RC4 原生 descriptor 桥，不复发 jsoup 空 selector。
+7. 首页 Fast Home 打开速度不得明显退化，首页网络请求数仍与程序数量解耦。
+8. RC6 全链通过前，Stable 继续冻结 3.5.5。
+
 ## 3.5.6-rc5 Test（Build 395 / Shell 1.0.41-test / Bootstrap 1.0.40-test / Manager 2.0.4）
 
 - 用户从已恢复的 Stable 3.5.5 覆盖导入 RC4 后，实机出现“**设置页已经是 3.5.6-rc4 / Build394，但规则仓库程序卡仍显示测试版 3.5.6-rc3 已安装**”；同时“界面”仍显示 `Single Workspace 14.2`，版本中心显示“待加载”。
