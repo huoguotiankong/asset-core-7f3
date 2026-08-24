@@ -1,165 +1,174 @@
 # Local-First Runtime / 远程发布、本地运行
 
 日期：2026-08-24
-状态：Test 试点阶段
+状态：Test 试点阶段（规则仓库 RC21 已进入运行态验证）
 正式事实源：`huoguotiankong/asset-core-7f3@main`
 
 ## 1. 目标
 
-把自用远程小程序从“远程代码运行 + 海阔隐式 require 缓存”升级为“远程发布、本地运行”。
+把自用远程小程序从“远程代码运行 + 隐式 require 缓存”升级为“远程发布、本地运行”。
 
-正常运行时，GitHub / jsDelivr 只承担控制面职责，不再承担已安装版本的日常运行时依赖。
+正常运行时，GitHub / jsDelivr 只承担安装、升级、显式同步等控制面职责；已经安装的代码、版本目录和 UI 静态资产必须优先本地运行。
 
-- 首次安装某版本：联网拉取完整版本包。
-- 新版本升级：先完整下载、回读校验，再切换 active。
-- 正常启动：只读取本地 active bundle。
-- 更新失败：旧 active bundle 保持可运行。
-- previous bundle 保留，用于回退与故障恢复。
-- 图标和版本索引在安装/显式同步时落地本地。
+- 首次安装某版本：联网取得不可变 Runtime/安装清单并写本地。
+- 新版本升级：新包完整写入和校验成功后才切换。
+- 正常启动：只执行本地 Runtime。
+- 版本详情：只读本地版本目录，禁止临时联网。
+- 图标：真实本地缓存优先，缺失时立即使用本地占位，不等待远程图片。
+- 更新失败：旧本地 Runtime 与旧版本目录继续可用。
 
 ## 2. 三层网络模型
 
 ### 控制面 Control Plane
 
-只在显式动作发生时访问仓库：
+只允许在显式动作访问仓库：
 
-- 云仓同步
-- 检查版本
-- 安装 / 覆盖导入新版本
-- 重装当前本地包
+- 首次安装 / 覆盖导入
+- 检查并升级程序
+- 用户主动“同步”
+- 重建本地运行包
 
 控制面数据包括：
 
-- 根 `manifest.json`：目录发现和摘要，不作为具体程序版本真相。
-- 程序 `channels.json`：版本中心权威真相。
-- `test.json / latest.json / stable.json`：活动通道指针。
-- `release.json`：不可变版本包描述。
+- 根 manifest / registry：目录发现、分类、摘要。
+- 程序 channels：程序版本权威事实源。
+- stable/test/latest 等活动通道指针。
+- 不可变 Runtime manifest / module assets。
+- 规则仓库统一 `channel_catalog_snapshot.json`。
+
+**禁止**在首页、分类、搜索、程序详情、版本详情等正常浏览热路径发 GitHub/CDN 元数据请求。
 
 ### 运行面 Runtime Plane
 
-正常启动只允许依赖本地：
+正常启动只依赖本地：
 
-- Bootstrap 所需的已安装 runtime bundle
-- Release 全部 JS 模块
-- Release 中声明的静态代码资产 / 快照
-- 程序 UI 图标
-- 规则仓库的本地 channels 快照
+- Runtime JS 模块
+- Runtime package/state
+- 本地版本目录
+- 已缓存真实图标/静态资源
+- 必要的离线 fallback 图标
 
-当前共享实现：`libs/updater/v2.1.0/local_bundle_manager.js`。
+当前已验证路线：
 
-本地包使用规则私有文件保存：
+- JS 持久目录：`hiker://files/rules/asset-core-local/<app>/b<build>/`
+- Runtime JS 执行：海阔原生 `require(file://...)`
+- package/state：规则私有文件
+- 规则仓库版本目录：`hiker://files/rules/asset-core-local/rule-repo-test/channel_catalog_v2.json`
 
-- `__hclocal_<app>_state.json`
-- `__hclocal_<app>_b<build>.json`
-- `__hclocal_<app>_b<build>_m<index>.js`
-
-只有所有模块写入、回读和 MD5 完整性复核通过后，才能更新 `state.current`。
+禁止再使用“规则私有 JS 文件 + 手工 `readFile()+eval()`”作为通用运行时模块机制。RC16 以前的实机已经证明其执行语义与海阔原生 module loader 不完全等价。
 
 ### 业务面 Business Plane
 
-仍按业务需要联网，不属于 GitHub Runtime 依赖：
+仍按业务需要联网：
 
-- 官方网站 / API
-- 登录、Cookie、Token
-- 视频 HLS / DASH
-- 漫画正文图片
-- 评论 / 社区 / 搜索等业务数据
+- 官方网站/API
+- 登录/Cookie/Token
+- 视频 HLS/DASH
+- 漫画图片
+- 评论/社区/搜索等业务数据
 
-因此 Local-First 保证的是“GitHub/CDN 故障不应使已安装代码无法启动”，不意味着业务站点本身可以离线使用。
+Local-First 保证的是：**GitHub/CDN 故障不能让已经安装的小程序代码本身打不开。**
 
 ## 3. 不可接受的假 Local-First
 
-### 3.1 只缓存 Release 第一层模块
+### 3.1 远程套远程
 
-禁止顶层模块本地化后，模块内部继续：
+禁止顶层 Release 已本地化，但模块内部仍运行时下载 JS：
 
-- `fetch(raw.githubusercontent.com/...js)`
+- `fetch(raw...js)`
 - `require(remote js)`
 - `eval(fetch(remote source))`
 
-迁移前必须审计递归依赖。
+迁移前必须递归审计。
 
-黄豆 1.9.0 曾存在两个典型问题：
+黄豆 1.9.0 曾存在 Core 快照与 Detail 基线二次远程加载，因此 Local-First Test2 把这些依赖也纳入本地安装资产。
 
-- `core.js` 运行时再下载 1.8.2 完整 Core 快照。
-- `pages_detail.js` 运行时再下载 Test5 Detail 源码并 patch/eval。
+### 3.2 根 manifest 覆盖程序 channels
 
-因此黄豆 Local-First 试点使用 `1.9.1-test.2`，将 `core-snapshot` 和 `detail-base` 都纳入 Release 本地包，Test1 不激活。
+版本中心事实优先级：
 
-### 3.2 根 manifest 作为版本真相
+`程序 channels / 发布时统一 channels 快照 > 根 manifest 摘要`
 
-禁止用根 manifest 的摘要版本拒绝程序自身更新后的 `channels.json`。
+根 manifest 只做发现、分类、排序和摘要。
 
-事实优先级：
+### 3.3 详情页临时 hydration
 
-`程序 channels.json > 根 manifest 摘要`
+RC20 实机证明：即使单次超时只有 2~3 秒，只要按 Raw/API/CDN 串行在 lazyRule 中获取某个程序的 `channels.json`，最坏会累积到近 8~9 秒，并阻塞返回/点击。
 
-根 manifest 只用于发现程序、分类、排序、摘要和 channelsPath。
+因此从 RC21 开始：
 
-## 4. 图标本地化
+- 版本详情 **零网络**。
+- `loadChannelMetaLive / refreshFastChannelCache / load-channels` 正常浏览时只允许访问本地统一目录。
+- 仓库端发布统一 `apps/tools/rule-repo/channel_catalog_snapshot.json`。
+- 安装/首次打开把不可变快照落本地。
+- 用户主动“同步”时才联网更新这一个目录文件。
+- 禁止重新引入每程序 N+1 channels 请求。
 
-规则仓库在显式同步时缓存程序图标，导入规则时优先把 `home_rule.icon` 改成本地路径。
+## 4. 图标合同
 
-程序内部固定 UI 图标也应随版本安装落地本地。
+图标也是运行资产，不应在卡片渲染时才临时联网。
 
-当前试点：
+顺序：
 
-- 我的规则仓库：`hiker://files/cache/asset-core-local/icons/rule-repo.svg`
-- 黄豆 1.9.1-test.2：library/topic/mine/settings 四个 UI 图标本地化。
+1. 已验证真实本地图标。
+2. SVG 本地文本校验后转 data URI。
+3. 本地图标缺失时立即生成本地 data URI 占位。
+4. 用户主动同步时下载真实图标并覆盖占位。
 
-后续需要继续评估：图标从 app cache 迁移到规则私有持久文件，以提高“清缓存后仍离线可用”的强度。
+禁止因为远程图标 URL 慢而让卡片先空白数秒再突然出现。
 
-## 5. 规则仓库版本索引
+## 5. 规则仓库统一版本目录
 
-规则仓库首页禁止恢复 N+1 网络请求。
+当前文件：
 
-显式“同步”负责：
+`apps/tools/rule-repo/channel_catalog_snapshot.json`
 
-1. 更新根 manifest。
-2. 扫描所有 channel-group。
-3. 并行拉取各程序 `channels.json`。
-4. 写入每程序 Fast Channel Cache。
-5. 缓存程序图标。
-6. 刷新真实安装索引。
+职责：
 
-正常首页、分类、搜索目录、版本详情优先使用本地快照。
+- 汇总所有 channel-group 的 Stable/Test/Local/Web 最小可导入信息。
+- 包含 channel、version、build、path、mode 等版本中心运行必需字段。
+- 发布端更新，不由手机在详情页拼接。
+- 手机首次安装只获取一次不可变 snapshot。
+- 手机日常详情只读本地 snapshot。
+- 主动同步才获取 main 上的新 snapshot。
 
-## 6. 当前试点
+该目录解决的不是“缓存技巧”，而是把**版本中心从在线查询系统改成本地目录系统**。
 
-### 我的规则仓库
+## 6. 当前规则仓库试点
 
-- Stable：3.5.5 / Build389，冻结。
-- Test：3.5.6-rc11 / Build401。
-- Shell：1.0.47-test / `rule_repo_test_v147.txt`。
-- Bootstrap：1.0.47-test / `bootstrap_test_v147.js`。
-- Bundle Manager：2.1.0。
-- UI：Single Workspace 15.1.1。
+Stable：
 
-### 黄豆短剧
+- 3.5.5 / Build389，冻结。
 
-- Stable：1.9.0 / Build19006，冻结。
-- Test：1.9.1-test.2 / Build19102。
-- Shell：`huangdou_remote_test_v8.txt`，numeric version 2026082411。
-- Bootstrap：`bootstrap_test_v8.js`。
-- Bundle Manager：2.1.0。
-- Test1：未激活，原因是递归远程依赖审计失败。
+Test RC21：
+
+- 3.5.6-rc21 / Build411
+- Shell 1.0.57-test / `rule_repo_test_v157.txt`
+- 本地启动器 `local_shell_loader_v5.js`
+- Runtime 基线仍为 RC12 Build402
+- Local Module Manager 2.2.0
+- Runtime JS 使用 native `require(file://)`
+- Runtime manifest 继续内嵌 Bootstrap，不再首启读取 release.json
+- 版本中心使用 Single Local Version Catalog
+
+RC19 已实机证明主 Local-First Runtime 能正常启动；RC20 证明前台单程序 channels hydration 仍会卡死；RC21 专门删除该热路径网络依赖。
 
 ## 7. 实机回归门禁
 
-两个试点都必须完成：
+规则仓库 RC21 必须验证：
 
-1. 新版本覆盖导入成功。
-2. 首次打开成功安装完整本地包。
-3. 第二次打开明显更快。
-4. 首页 / 分类 / 搜索 / 详情 / 设置正常。
-5. 规则仓库同步后，多版本详情无需临时联网等待。
-6. 图标显示正常。
-7. GitHub / jsDelivr 不可用情况下，已安装版本仍能启动并进入本地 UI。
-8. 业务站点可用时，业务数据继续正常请求。
-9. 新版本安装中断，不破坏旧 active。
-10. 重启海阔后本地包仍可使用。
+1. 覆盖导入成功。
+2. 首次打开建立/读取统一本地版本目录。
+3. 第二次打开正常。
+4. JavBus / XVideos / 51吃瓜等从未点过的程序详情也应直接显示版本，不出现“正在快速加载版本”长等待。
+5. 在版本详情中连续进入/返回不会卡死。
+6. 正常版本详情期间抓不到 GitHub/CDN channels 请求。
+7. 图标本地已缓存时立即显示；未缓存时立即显示本地占位，不出现空白等待。
+8. 主动同步后真实图标和版本目录可更新。
+9. 关闭 Wi-Fi/移动数据后仍可打开规则仓库和已缓存版本详情。
+10. Runtime 安装/升级失败不破坏旧可用包。
 
-未完成上述实机闭环前，禁止把 Local-First 迁移直接推广到所有 Stable。
+未完成门禁前，禁止推广到所有 Stable。
 
 ## 8. 推广顺序
 
@@ -179,4 +188,4 @@
 
 - 其它自用远程程序
 
-每个程序迁移时都必须先审计“远程套远程”和动态加载器，禁止仅机械替换 Bootstrap。
+迁移其它程序时必须同时迁移：Runtime、递归代码依赖、版本目录、程序图标/静态 UI 资产；不能只替换 Bootstrap。
