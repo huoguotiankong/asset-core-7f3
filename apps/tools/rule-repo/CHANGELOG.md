@@ -2,6 +2,14 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
+## 3.5.6-rc8 Test（Build 398 / Shell 1.0.44-test / Bootstrap 1.0.43-test / Manager 2.0.4）
+
+- RC7 发布后静态复核发现一个必须在用户实机前修掉的 freshness 边界：根 manifest 为了摘要简洁可写 `Local 1.8.2`，但真实 `channels.json` 版本可能是 `1.8.2-local.1`。RC7 若对根摘要与 channel version 做完全相等比较，会把正确 CDN/API 数据误判为“版本摘要滞后”。
+- RC8 升级为 **Single Workspace 14.6.1 / Fast Version Center Validation**：目录摘要与真实版本比较改为“精确相等或合法派生前缀”。例如 `1.8.2 → 1.8.2-local.1` 允许通过；`1.9.0-test.5 → 1.9.0-test.6` 不兼容，仍会判定为旧数据并回退新鲜源。
+- RC7 的 CDN-first、短超时容灾、程序级缓存签名、详情先渲染后自动加载全部保留；RC6 的安装身份识别、版本列表、原生打开桥和首页统计逻辑不变。
+- 新建不可变资产：`releases/test-3.5.6-rc8/fast_version_validation_patch.js`、`release.json`、`bootstrap_test_v143.js`、`rule_repo_test_v144.txt`。Shell 数值 `version=2026082409`。
+- Stable 继续固定 `3.5.5 / Build389`；RC8 完成版本中心性能/导入/打开程序回归前不得晋级 3.5.6。
+
 ## 3.5.6-rc7 Test（Build 397 / Shell 1.0.43-test / Bootstrap 1.0.42-test / Manager 2.0.4）
 
 - RC6 实机确认通用 `channel-group` 已恢复：黄豆短剧可自动显示 Stable 1.9.0 / Test 1.9.0-test.6 / Local 1.8.2-local.1 三版本，首页真实安装统计恢复到 16/16；但用户反馈“点击进去查看版本信息特别慢”。
