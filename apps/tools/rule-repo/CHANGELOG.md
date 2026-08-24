@@ -2,38 +2,40 @@
 
 > **程序级长期技术记忆。** 开发/优化“我的规则仓库”前，除三份全局文档外，必须先读本文件以及当前 `stable.json / test.json / candidate.json / channels.json / latest.json`、对应 Release、Bootstrap、Shell、实际模块与用户实机结果。
 
-## 3.5.6 Stable（Build 393 / Shell 1.5.6 / Bootstrap 1.5.6 / Manager 2.0.4）
+## 3.5.6-rc4 Test（Build 394 / Shell 1.0.40-test / Bootstrap 1.0.39-test / Manager 2.0.4）
 
-- 用户在 Test `3.5.6-rc3 / Build393` 发布后明确要求将当前版本晋级正式版，因此按项目 RC → Stable 原样晋级规则发布 **Stable 3.5.6 / Build393**。
-- Stable 使用新的不可变运行链：`releases/3.5.6/release.json` → `bootstrap_v156.js` → `rule_repo_remote_v356.txt`。正式规则壳数值 `version=2026082404`，旧 Stable `3.5.5 / Build389 / Shell 1.5.5` 完整保留为 rollback。
-- 正式 Release 吸收 RC2 的 **Fast Home 14.x + X5 Render Guard**，以及 RC3 的 **Verified Device Install Index 14.2**；不包含 Test state/baseline patch，最终 `stable_patch.js` 恢复 Stable 状态命名空间 `hc_repo_v3_*`、`channel=stable` 和 Stable Bootstrap。
-- 安装/更新状态继续遵守 RC3 的“设备真相”约束：普通首页只读持久化索引；显式“同步”才读取海阔本地规则表并建立 `title + numeric version` 设备指纹，必要时才用 `hiker://home@标题` 做存在性兜底。
-- Stable/Test/Local 同名规则只有在数值 `version` 与对应 Shell 指纹可靠匹配时才确认当前通道；无法确认通道/版本时显示 **已安装 · 版本待识别**，不得再使用 `importHistory / installedMap` 猜测并制造假“可更新”。
-- 正式元数据已原子切换：`stable.json / latest.json / candidate.json / channels.json / manifest.json / test.json` 全部指向或记录 Stable 3.5.6；Test RC3 标记为 `promoted-source`，只保留为本次晋级来源，下一轮 Test 必须从 Stable 3.5.6 rebase。
-- 根云仓 `manifest.json` 与 `registry.json` 同步更新到 Stable 3.5.6 / Test RC3，正式程序卡路径切到 `rule_repo_remote_v356.txt`，避免云仓继续广告或交付旧 Stable 3.5.5。
+- 用户补做 RC3/Stable 3.5.6 的版本中心回归后实机确认两个 P0：多版本详情显示 **版本数量 0 个 / 可用版本 0 个**，因此无法导入；点击“打开程序”触发 `java.lang.IllegalArgumentException: String must not be empty`，堆栈进入 jsoup `Selector.select` / `HomeParser.findList`。
+- 版本中心根因：Fast Home 14.1 的 `fastChannelCache()` 只检查 `Array.isArray(meta.channels)`，错误地把 `{channels:[]}` 也当成已加载的有效缓存。随后 `hybridProgramData.channelsLoaded=true`，X5 不再触发 `load-channels`，空缓存会永久把真实 `channels.json` 挡住。
+- RC4 升级为 **Single Workspace 14.3 / Version Center & Native Open Bridge**：空 `channels` 缓存自动失效；新增 `loadChannelMetaLive()` 绕过 RC2 cache-only `channelMeta`，显式加载必须得到至少 1 个版本才允许写缓存和提示成功；规则仓库远端版本元数据失败时仍可使用内建 Stable/Test fallback。
+- 打开程序根因：工作区 `context_free_actions` 返回 `hiker://home@规则名||hiker://home`，X5 `runAction()` 再用 `fba.open` 传入空 `findRule`。网页上下文并不适合直接使用 `hiker://home@规则名`；最终 HomeParser 收到空 selector，与实机 jsoup 堆栈完全吻合。
+- RC4 新增 `deviceRuleOpenDescriptor()`：从 `getRuleCount()+getLastRules()` 得到手机真实已安装规则的 `url / find_rule / preRule / col_type / group`，动作返回内部 `rr-native-open://` 描述；X5 只负责解码后调用 `fba.open(JSON.stringify(descriptor))`。同时显式拦截旧 `hiker://home@...`，缺少真实 descriptor 时只 toast，不再让 HomeParser 以空规则执行。
+- RC4 保留 RC2 的 Fast Home + Render Guard、RC3 的 Verified Device Install Index 14.2；本轮不重新设计首页性能架构。
+- 新建不可变资产：`releases/test-3.5.6-rc4/version_center_bridge_patch.js`、`release.json`、`bootstrap_test_v139.js`、`rule_repo_test_v140.txt`。Shell 数值 `version=2026082405`。
 
-### Stable 3.5.6 实机回归重点
+### RC4 必须完成的实机回归门禁
 
-1. 由旧 Stable 3.5.5 的“正式版更新”升级，或从版本中心覆盖 Stable 3.5.6，应进入 `3.5.6 / Build393`。
-2. 正式版首次打开后主动点一次“同步”，建立 **Stable 命名空间**下的 Verified Device Install Index；这次同步允许比普通首页慢。
-3. 随后重复退出/进入首页应继续保持 Fast Home 的快速首屏，不得重新逐程序扫描。
-4. “已安装”数量应接近设备真实安装状态；ACFun、JavDB 等同名 Stable/Test 不得仅因历史导入记录被标成假“可更新”。
-5. 首页“已安装 / 可更新”数字、对应筛选以及底部更新中心必须使用同一 Verified Index。
-6. 若某条本地规则只能确认存在但无法读取 numeric version，应显示“已安装/版本待识别”，不得误报更新。
-7. 如 Stable 3.5.6 出现严重回归，当前正式 rollback 为 Stable 3.5.5 / Build389，不原地覆盖 Stable 3.5.6 工件。
+1. 从首页点击“我的规则仓库”进入详情，必须看到至少 Stable/Test 两条可用版本，不能再出现 0 个。
+2. Stable/Test 版本卡均能生成有效海阔导入口令并完成覆盖导入。
+3. 已安装程序点击“打开程序”必须正常进入目标程序，不能再出现 jsoup `String must not be empty`。
+4. 多抽测至少一个其它 channel-group 程序，确认版本列表与导入同样正常，避免只修规则仓库自身 fallback。
+5. 首页 Fast Home 速度不得退化；同步后 Verified Install Index 的已安装/可更新统计继续与列表一致。
+6. 只有以上链路全部通过，3.5.6 才允许重新晋级 Stable；禁止仅凭首页正常再次发布正式版。
 
-## 3.5.6-rc3 Test（Build 393 / Shell 1.0.39-test / Bootstrap 1.0.38-test）
+## Stable 3.5.6 / Build393 撤回记录
 
-- RC2 实机确认渲染恢复且首页性能明显改善，但出现 `16 全部 / 3 已安装 / 2 可更新` 的错误状态，仅最近有导入历史的少数程序被识别，ACFun/JavDB 又被误判可更新。
-- 根因确认：`importHistory / installedMap / group_install_v1` 只能证明规则仓库曾交付过导入口令，不能证明用户当前手机实际安装状态，也不能可靠识别同名 Stable/Test 当前通道。
-- RC3 引入 **Verified Device Install Index 14.2**：显式同步使用 `getRuleCount() + getLastRules()` 读取真实本地规则表，提取规则 `title + numeric version`；多版本程序按需读取各通道 Shell 建立数值版本指纹。
-- 普通首页继续只读持久索引，避免恢复 RC1 之前的 N 次同步 `hiker://home@标题` 热路径；无法识别版本时保守显示“已安装 · 版本待识别”。
-- RC3 保留 RC2 的 X5 Render Guard、Fast Home、版本中心 metadata 按需加载、channel-group 更新中心与 Icon Delivery。
-- 本版本现已晋级 Stable 3.5.6，后续不得继续以 RC3 作为新 Test 开发基线。
+- Stable 3.5.6 曾由 RC3 按用户明确指令晋级，但晋级前遗漏“版本中心 → 版本列表 → 导入 → 打开程序”的完整实机回归。
+- 用户后续实机发现上述两个 P0 后，**活动 Stable 指针立即恢复到 3.5.5 / Build389**。`releases/3.5.6/`、`bootstrap_v156.js`、`rule_repo_remote_v356.txt` 作为事故/历史工件永久保留，不删除、不原地修改。
+- 该事故新增发布门禁：规则仓库自身作为“仓库管理器”，正式晋级必须至少覆盖首页、同步、版本中心、Stable/Test 列表、导入、打开程序、回退、更新中心八条核心链；任一未实机验证不得晋级。
+
+## 3.5.6-rc3 Test（Build 393）
+
+- 引入 Verified Device Install Index 14.2：普通首页只读持久索引；显式同步才读取海阔真实本地规则表并使用 `title + numeric version` 指纹识别通道。
+- 修复 RC1/RC2 以导入历史猜安装状态导致的漏报安装和 ACFun/JavDB 假更新；无法识别版本时保守显示“已安装 · 版本待识别”。
+- RC3 的首页/状态链有效，但版本中心与打开程序链未完整回归，因此不得再把“首页正常”视为正式发布充分条件。
 
 ## 历史记录
 
-- `CHANGELOG_pre_3.5.6-stable.md`：保存 Stable 3.5.6 晋级前完整的 RC1/RC2/RC3 开发记录。
+- `CHANGELOG_pre_3.5.6-stable.md`：保存 Stable 3.5.6 晋级前完整 RC1/RC2/RC3 开发记录。
 - `CHANGELOG_pre_3.5.6-rc1.md`：保存 Stable 3.5.5 及此前记录。
 - `CHANGELOG_pre_3.5.5.md`：保存更早历史。
 
