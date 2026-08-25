@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "id": "911baoliao-test",
+  "appId": "911baoliao",
+  "name": "911爆料",
+  "channel": "test",
+  "version": "0.1.1-test.1",
+  "build": 10201,
+  "baseTest": {
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/video/911baoliao/releases/0.1.0-test.5/release.json"
+  },
+  "sourceSnapshot": {
+    "ref": "be9b1266095b28700be208d365c3bb97e339fa49",
+    "modules": [
+      "apps/video/911baoliao/releases/0.1.0-test.1/core.js",
+      "apps/video/911baoliao/releases/0.1.0-test.1/runtime.js",
+      "apps/video/911baoliao/releases/0.1.0-test.2/route_patch.js",
+      "apps/video/911baoliao/releases/0.1.0-test.3/transport_patch.js",
+      "apps/video/911baoliao/releases/0.1.0-test.4/content_adapter_patch.js",
+      "apps/video/911baoliao/releases/0.1.0-test.4/test4_bootstrap_patch.js",
+      "apps/video/911baoliao/releases/0.1.0-test.5/site_adapter_patch.js",
+      "apps/video/911baoliao/releases/0.1.0-test.5/runtime_patch.js",
+      "apps/video/911baoliao/releases/0.1.1-test.1/final_local_patch.js"
+    ],
+    "assets": [
+      "apps/video/911baoliao/assets/icon.svg"
+    ],
+    "sourceCount": 10,
+    "moduleCount": 9,
+    "assetCount": 1
+  },
+  "builder": {
+    "path": "apps/video/911baoliao/releases/0.1.1-test.1/local_bundle_builder.js",
+    "ref": "7cd2a345eedb03cd153e2d6cfa9226f29dd31c22",
+    "sanitizer": "strict-marker+bootstrap-assignment+asset-root-v3"
+  },
+  "entry": {
+    "path": "apps/video/911baoliao/releases/0.1.1-test.1/local_entry.js",
+    "ref": "939b51a1b28ecf8d5a53d6a632a905d90b375a5b"
+  },
+  "shell": {
+    "path": "apps/video/911baoliao/911baoliao_remote_test_localfirst_v1_b10201.txt",
+    "ref": "1a33d86f12e73bc27718ca0f283796bd7c9a9d09",
+    "blob": "7205a6ce3bd3ca0f3cb5475b81e5aa68e2fa81af",
+    "ruleVersion": 2026082527
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/911baoliao-test/b10201/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "bootstrapShim": "local_bootstrap.js",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "Bl911LocalRuntime",
+    "localFirstVersion": "0.1.1-test.1",
+    "localFirstBuild": 10201,
+    "businessBase": "Test5 0.1.0-test.5 / Build10105"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "localBootstrapShim": true,
+    "historicalLazyRuleReentry": "C.bootstrap assignments rewritten to local Bootstrap Shim",
+    "repositoryAssets": "icon.svg localized; Shell icon embedded as data URI",
+    "sourceValidation": "per-module exact marker + body normalization",
+    "remoteResidualGate": "enabled with per-module residual context",
+    "updateOwner": "rule-repo"
+  },
+  "businessContracts": {
+    "article": "/archives/<numeric-id>/ only",
+    "playback": "Test5 native direct handoff / valid article URL multi-line lazyRule / video sniff fallback",
+    "domainSeeds": ["911bl.com", "911bla.com", "911bg7.com", "d10cq29fdobmmg.cloudfront.net"]
+  },
+  "staticGate": {
+    "nodeCheck": ["final_local_patch.js", "local_bundle_builder.js", "local_entry.js"],
+    "shellOuterJson": true,
+    "shellPages": 9,
+    "shellJsSnippets": 11,
+    "shellBlobReconstructedAndMatched": true,
+    "result": "pass"
+  },
+  "notes": "Test5-derived Native Local-First candidate. It changes delivery/startup/control-plane only: the exact 8-layer Test5 business chain remains in order, one repository SVG becomes local, all historical C.bootstrap assignments are rewritten to a local Bootstrap Shim, and the final Runtime keeps a hard private-repository/Remote-Manager residual gate. No Stable exists yet; Test5 remains the recovery baseline until this candidate is device-validated."
+}

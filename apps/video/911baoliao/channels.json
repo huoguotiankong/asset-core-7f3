@@ -2,31 +2,34 @@
   "schema": 4,
   "id": "911baoliao",
   "name": "911爆料",
-  "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-23 21:18",
+  "versionPolicy": "remote-test-localfirst-v1",
+  "updatedAt": "2026-08-25 23:31",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "911baoliao-test",
       "name": "911爆料",
-      "version": "0.1.0-test.5",
-      "build": 10105,
-      "displayVersion": "Test 0.1.0-test.5 · Build 10105",
-      "path": "apps/video/911baoliao/911baoliao_remote_test_v5_b10105.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
+      "version": "0.1.1-test.1",
+      "build": 10201,
+      "displayVersion": "Test 0.1.1-test.1 · Local-First",
+      "path": "apps/video/911baoliao/911baoliao_remote_test_localfirst_v1_b10201.txt",
+      "mode": "remote-local-first",
+      "updatedAt": "2026-08-25",
       "recommended": true,
-      "desc": "Test5 根据第二轮实机结果重做首页内容合同与播放交付：首页只接受官网真实 /archives/<数字>/ 正文页，彻底排除回家/投稿/FAQ/标签/活动/社群/广告等功能页；封面扩大到 data-bg/data-background/poster/srcset/CSS background 等候选；播放不再把媒体 JSON 塞进 $(url).lazyRule 的 URL 位置，单线路直接交付，多线路仅以合法文章 URL 作为 lazyRule 外层。",
+      "desc": "从当前 Test5 / Build10105 原业务基线派生 Local-First：8 层 Test5 代码原顺序冻结，新增 1 层本地交付 Overlay，并把程序 icon.svg 纳入本地包；历史 C.bootstrap 点击重入改走本地 Bootstrap Shim。",
       "highlights": [
-        "首页只保留 /archives/<数字>/ 真实文章",
-        "彻底移除回家/投稿/FAQ/活动/广告伪视频",
-        "扩大真实封面字段和 CSS 背景图解析",
-        "修复 LazyRuleParser URL scheme 报错根因",
-        "单线路直接交付海阔播放器",
-        "多线路仅在合法文章 URL 上动态交付"
+        "Test5 / Build10105 继续作为业务恢复基线",
+        "8 层 Test5 + 1 Local Overlay + 1 SVG = 10 源完整本地闭包",
+        "严格 /archives/<数字>/ 正文合同保持不变",
+        "Test5 封面 Parser 与媒体交付保持不变",
+        "收藏等历史 lazyRule 重入改走本地 Bootstrap Shim",
+        "911 程序图标本地化，Shell 图标直接内嵌 data URI",
+        "每源精确 marker + 私人仓库残留硬门禁",
+        "正常二次启动不再加载 Remote Manager / 远程业务模块",
+        "等待海阔实机验证"
       ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/911baoliao/assets/icon.svg?v=10105"
+      "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgcng9IjU2IiBmaWxsPSIjMTcxOTFmIi8+PHBhdGggZD0iTTU1IDcwaDE0NnYxMTZINTV6IiBmaWxsPSIjMjQyODMyIi8+PHBhdGggZD0iTTc2IDkyaDEwNHYxOEg3NnptMCAzNGg4MHYxOEg3NnptMCAzNGg5NHYxOEg3NnoiIGZpbGw9IiNmNWY2ZjgiLz48Y2lyY2xlIGN4PSIxOTMiIGN5PSI2NCIgcj0iMzEiIGZpbGw9IiNlNTM5MzUiLz48cGF0aCBkPSJNMTg3IDQ1aDEydjI1aC0xMnptMCAzMmgxMnYxMmgtMTJ6IiBmaWxsPSIjZmZmIi8+PC9zdmc+"
     }
   ]
 }
