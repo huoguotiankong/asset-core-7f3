@@ -1,0 +1,26 @@
+  var UI={
+    add:function(d,x){d.push(x);return x;},
+    title:function(t){try{setPageTitle(t);}catch(e){}},
+    section:function(d,t,desc,id){return this.add(d,{title:t,desc:desc||'',url:'hiker://empty',col_type:'text_1',extra:{id:id||'',lineVisible:false}});},
+    line:function(d,t,desc,u,id){return this.add(d,{title:t,desc:desc||'',url:u||'hiker://empty',col_type:'text_1',extra:{id:id||'',lineVisible:false}});},
+    tab:function(t,active,url,id,col){return{title:t,url:url,col_type:col||'scroll_button',extra:{id:id||'',lineVisible:false,backgroundColor:active?BRAND:'',textColor:active?'#FFFFFF':''}};},
+    nav:function(d,t,ico,u){return this.add(d,{title:t,pic_url:icon(ico),url:u,col_type:'icon_small_4',extra:{lineVisible:false}});},
+    action:function(d,t,ico,u){return this.add(d,{title:t,pic_url:icon(ico),url:u,col_type:'icon_small_3',extra:{lineVisible:false}});},
+    video:function(v){return{title:v.title||'视频',desc:v.desc||[v.duration,v.views?v.views+' views':''].filter(function(x){return!!x;}).join(' · '),pic_url:imageUrl(v.cover,v.url),url:page('pornhubV2Detail',{u:v.url}),col_type:'movie_2',extra:{id:'phv2_video_'+hash(v.url),lineVisible:false}};},
+    videos:function(d,a,limit,cls){var i,x,n=limit||a.length;for(i=0;i<a.length&&i<n;i++){x=this.video(a[i]);if(cls)x.extra.cls=cls;this.add(d,x);}},
+    person:function(p){return{title:p.name||'创作者',desc:p.desc||p.personType||'',pic_url:imageUrl(p.avatar,p.url),url:page('pornhubV2Creator',{u:p.url}),col_type:'avatar',extra:{id:'phv2_person_'+hash(p.url),lineVisible:false}};},
+    persons:function(d,a,cls){var i,x;for(i=0;i<a.length;i++){x=this.person(a[i]);if(cls)x.extra.cls=cls;this.add(d,x);}},
+    collection:function(c){return{title:c.title,desc:c.desc||'',pic_url:imageUrl(c.cover,c.url),url:page('pornhubV2Playlist',{u:c.url,n:c.title,im:c.cover}),col_type:'movie_2',extra:{id:'phv2_collection_'+hash(c.url),lineVisible:false}};},
+    collections:function(d,a,cls){var i,x;for(i=0;i<a.length;i++){x=this.collection(a[i]);if(cls)x.extra.cls=cls;this.add(d,x);}},
+    empty:function(d,t,desc,u){this.section(d,t,desc);if(u)this.line(d,'在 Pornhub 官方页打开','用于核对当前站点状态','x5://'+u);},
+    input:function(value,hint,target){var rt=ruleTitle().replace(/'/g,"\\'"),pathName=target||'pornhubV2Search';return{title:'',desc:'',col_type:'input',url:"(function(){var v=String(input||'').trim();return 'hiker://page/"+pathName+"?rule='+encodeURIComponent('"+rt+"')+'&simple=true&q='+encodeURIComponent(v);})()",extra:{defaultValue:value||'',hint:hint||'搜索'}};},
+    searchHistory:function(d){var a=Store.searchHistory(),i;if(!a.length)return;this.section(d,'最近搜索','');for(i=0;i<a.length;i++)this.add(d,{title:a[i],col_type:'flex_button',url:page('pornhubV2Search',{q:a[i]}),extra:{lineVisible:false}});this.add(d,{title:'清空记录',col_type:'flex_button',url:$('#noLoading#').lazyRule(function(){try{$.require('pornhub').clearSearch();refreshPage(false);return'toast://搜索记录已清空';}catch(e){return'toast://'+String(e.message||e);}}),extra:{lineVisible:false}});}
+  };
+
+  function localItem(type,x){return{type:type,url:clean(x.url),title:clean(x.title||x.name),cover:clean(x.cover||x.avatar||x.rawImg),desc:clean(x.desc),time:now()};}
+  function localFavKey(type){return type==='person'?KEYS.favPerson:type==='collection'?KEYS.favCollection:KEYS.favVideo;}
+  function playLazy(u){return $(u).lazyRule(function(target){try{return $.require('pornhub').play(target);}catch(e){return'toast://播放失败：'+String(e.message||e);}},u);}
+  function localToggleLazy(type,obj){return $(JSON.stringify(obj)).lazyRule(function(raw,tp){try{var x=JSON.parse(raw),on=$.require('pornhub').toggleLocal(tp,x);refreshPage(false);return'toast://'+(on?'已加入本地收藏':'已取消本地收藏');}catch(e){return'toast://操作失败：'+String(e.message||e);}},type);}
+  function onlineFavoriteLazy(u){return $(u).lazyRule(function(target){try{var r=$.require('pornhub').onlineFavorite(target);if(r.web)return'x5://'+target;refreshPage(false);return'toast://'+r.message;}catch(e){return'toast://'+String(e.message||e);}},u);}
+  function subscribeLazy(u){return $(u).lazyRule(function(target){try{var r=$.require('pornhub').subscribe(target);if(r.web)return'x5://'+target;refreshPage(false);return'toast://'+r.message;}catch(e){return'toast://'+String(e.message||e);}},u);}
+
