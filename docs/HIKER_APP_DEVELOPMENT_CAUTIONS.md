@@ -1,8 +1,8 @@
 # 海阔小程序编写注意事项
 
-版本：3.6  
+版本：3.7  
 首次建立：2026-08-20  
-最近增强：2026-08-23  
+最近增强：2026-08-25  
 文档性质：**长期踩坑档案 / 发布前必查 / 发现新坑立即追加**
 
 > 本文档保存已经发生过的真实事故、兼容限制和发布硬约束。开发已有程序前必须继续读取目标程序 `CHANGELOG.md`、当前 Stable/Test/Local/Candidate 元数据、release/Bootstrap/Shell/实际模块以及用户当前实机结果。
@@ -681,6 +681,87 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 
 ---
 
+# P1：样本二次复盘新增防回归规则
+
+## 89. 实体相关临时媒体/缓存文件禁止使用全局固定文件名
+新片场、网飞猫样本都存在固定 `danmu.json/danmu.xml` 一类写法。单页演示可能能跑，但多视频、多标签页、并发播放或快速切换时会互相覆盖。
+
+固定规则：
+
+```text
+错误：hiker://files/cache/danmu.json
+错误：hiker://files/cache/danmu.xml
+
+正确：<app>/<provider>/<entityId>/<episodeId>/<schema>.json
+或等价命名空间化 cache key
+```
+
+适用范围不只弹幕，还包括字幕、临时 m3u8、图片解密文件、详情 JSON、播放许可等实体级数据。
+
+## 90. 年份、月份、日期等“当前时间默认值”禁止硬编码历史常量
+网飞猫样本在 2026 年仍有默认上映年份 `2025`，说明成熟旧样本也会留下时间债务。
+
+固定规则：
+
+- “今年 / 本月 / 今日 / 最近 N 天”必须从当前时间动态计算。
+- 只有协议明确要求历史固定值时才写常量，并在 CHANGELOG 说明原因。
+- 缓存 key 如果包含年月日，也必须确认时区和刷新边界。
+- UI 截图里看到的某一年份不能直接复制成程序默认值。
+
+## 91. `catch` 后无条件跳网页属于诊断反模式
+旧样本常见：结构化 API/播放链任何一步异常后直接 `web://原页`。这会让请求失败、解密失败、弹幕失败、播放器失败全部表现成同一个 fallback，长期无法定位根因。
+
+固定规则：
+
+```text
+try structured route
+→ 记录 stage / status / sanitized error
+→ 判断该 stage 是否允许 fallback
+→ 再进入 parser/sniff/web
+```
+
+弹幕、评论、推荐等 P2/P3 附加能力失败不得把主视频/正文一起送去网页 fallback。
+
+## 92. `setLastChapterRule` / 最新集规则不得依赖当前详情页已经解析出的临时数组
+收藏页、历史页或系统独立触发最新章节时，当前详情页可能根本没有打开。
+
+固定规则：
+
+```text
+entityId 可恢复
+→ 独立 Provider.latest(entityId)
+→ setResult(latestText)
+```
+
+禁止捕获当前页面 `episodes[]/chapters[]`、局部变量、临时 DOM 结果作为唯一数据源。latest 请求应轻量并允许短缓存。
+
+## 93. 多个 Stable 共享同一 Runtime/SDK 时必须版本隔离，禁止共享不可回退黑盒
+瓜子影视与一起刷的可见 Shell 几乎相同，说明共享框架本身是合理模式；风险在于如果多个产品同时依赖同一个不可审计 PrivateJS/远程 Core，一次改动可能同时击穿多个 Stable。
+
+固定规则：
+
+- 共享 SDK 必须显式导出契约、版本化、已发布版本只读。
+- 每个 App 的 active release 明确绑定兼容 SDK 版本。
+- SDK 升版逐 App Test，不“改公共文件后默认全部兼容”。
+- PrivateJS/DEX/Native 黑盒不得作为普通自研小程序的默认共享 Runtime。
+
+## 94. 动态域名/Endpoint Discovery 禁止每次首屏全量探活
+有 last-good endpoint 时优先使用；只做低频/失败触发的健康检查。域名发现、DoH/TXT、配置解密、候选探活属于恢复链，不应成为每次打开页面的固定启动税。
+
+推荐：
+
+```text
+fresh last-good
+→ 快速请求
+→ 失败时有限探活
+→ discovery
+→ stale last-good / diagnostic
+```
+
+探活必须有短超时、候选上限和停止条件。
+
+---
+
 # 发布前硬检查
 
 ## 上下文/版本
@@ -708,6 +789,9 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] Auth/Profile/Session Resolver 调用图无回边；存在 browser fallback 时有 re-entry guard。
 - [ ] 只取得 raw identifier 时未制造用户可见伪业务卡片。
 - [ ] HTML/DOM Adapter 已过滤字符串 `null/undefined`，不会直接进入 Renderer。
+- [ ] 当前年/月/日等默认值来自运行时，不是过期硬编码常量。
+- [ ] 实体级临时缓存/弹幕/字幕文件使用 entity-scoped key/path，不共用固定文件名。
+- [ ] 共享 SDK/Runtime 有版本隔离和逐 App 兼容验证。
 
 ## UI
 - [ ] 一眼看懂主任务。
@@ -726,6 +810,7 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] 普通详情/设置/评论页不会为了完整账号头像/昵称隐式联网。
 - [ ] 首屏没有“列表 N 个实体 → 串行请求 N 个详情补 metadata”的 N+1 链。
 - [ ] 可复用账号/列表数据有短缓存或 stale cache，切页不会重复拉相同数据。
+- [ ] 动态域名/Endpoint 已优先 last-good，不在每次首屏全量探活。
 
 ## 图片
 - [ ] Header 正确。
@@ -744,6 +829,8 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - [ ] webRule/x5Rule fallback 已按真实语法实机验证，不是给普通 URL 乱加前缀。
 - [ ] HLS/Proxy/预加载按协议启用。
 - [ ] 字幕/弹幕不阻塞首次播放。
+- [ ] fallback 前已记录失败 stage，不用 catch-all 网页跳转吞掉诊断。
+- [ ] 连载内容的 latest chapter/episode 规则可脱离当前详情页独立恢复实体并请求。
 - [ ] 失败可分层定位。
 
 ## 发布/恢复
@@ -808,6 +895,13 @@ UI 看截图；图片看明文/密文/Header/cache；播放看冷启动/二次�
 - Alpha12 页面加载时已经进入最新 Release，但旧视频详情播放按钮在点击时仅 `eval(core v018)` 再调用 `ac.play`，把 Alpha12 后置 Runtime 覆盖掉；因此源码看似连续修复，实机实际一直执行旧播放逻辑。
 - 永久教训：**关键 lazyRule 不能只恢复基础 Core；必须重新进入当前 Bootstrap/活动 Release，或显式恢复完整导出。启动成功不等于点击动作运行在当前 Runtime。**
 - 同一详情页把“播放 / 收藏 / 评论”作为同级可点击结果，进入播放器后形成无关播放列表；再次验证 Primary Play 区必须只包含真实媒体任务。
+
+## 2026-08-25：成熟样本二次复盘暴露的高概率工程债务
+- 新片场/网飞猫固定 `danmu.json/xml` → **实体级临时数据必须命名空间化，避免多实体互相覆盖。**
+- 网飞猫默认年份仍写死 2025 → **当前年/月/日默认值必须运行时生成。**
+- 旧样本播放异常后无条件跳网页 → **fallback 前先记录失败 stage，P2/P3 失败不得拖垮主播放链。**
+- latest chapter 能力如果依赖当前详情临时数组 → **收藏/历史独立触发会失效，必须只凭 entityId 重新取 Provider。**
+- 瓜子/一起刷共享不可读 Runtime → **共享框架思路可取，但自研 SDK 必须显式、版本化、逐 App 验证，不能形成跨 Stable 单点故障。**
 
 ---
 
