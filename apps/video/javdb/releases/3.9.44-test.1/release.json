@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.44-test.1",
+  "build": 2026082501,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "previousTest": {
+    "version": "3.9.43-test.3",
+    "build": 2026082304,
+    "release": "apps/video/javdb/releases/3.9.43-test.3/release.json",
+    "note": "Remote transport-recovery test preserved as historical rollback reference."
+  },
+  "sourceSnapshot": {
+    "ref": "848879b13bc5de5510af68b6791cc94c6307f198",
+    "coreFragments": [
+      "cloud/javdb/v3.9.41/core_00.txt",
+      "cloud/javdb/v3.9.41/core_01.txt",
+      "cloud/javdb/v3.9.41/core_02.txt",
+      "cloud/javdb/v3.9.41/core_03.txt",
+      "cloud/javdb/v3.9.41/core_04.txt",
+      "cloud/javdb/v3.9.41/core_05.txt",
+      "cloud/javdb/v3.9.41/core_06.txt"
+    ],
+    "customFragments": [
+      "cloud/javdb/v3.9.41/custom_00.txt",
+      "cloud/javdb/v3.9.41/custom_01.txt",
+      "cloud/javdb/v3.9.41/custom_02.txt",
+      "cloud/javdb/v3.9.41/custom_03.txt",
+      "cloud/javdb/v3.9.41/custom_04.txt",
+      "cloud/javdb/v3.9.41/custom_04b.txt",
+      "cloud/javdb/v3.9.41/custom_05.txt",
+      "cloud/javdb/v3.9.41/custom_06.txt",
+      "cloud/javdb/v3.9.41/custom_07b.txt"
+    ],
+    "patches": [
+      "apps/video/javdb/releases/3.9.42-test.1/app_parity_patch.js",
+      "apps/video/javdb/releases/3.9.42-test.2/app_parity_patch2.js",
+      "apps/video/javdb/releases/3.9.42-test.3/runtime_scope_patch.js",
+      "apps/video/javdb/releases/3.9.42-test.4/actor_ui_patch4.js",
+      "apps/video/javdb/releases/3.9.42-test.5/release_patch5.js",
+      "apps/video/javdb/releases/3.9.42/stable_patch.js",
+      "apps/video/javdb/releases/3.9.44-test.1/final_local_patch.js"
+    ],
+    "sharedPlaybackBase": "shared/jav-playback/releases/1.0.0-test.2/index.js",
+    "sharedPlaybackStable": "shared/jav-playback/releases/1.0.0-test.4/index.js",
+    "sharedPlaybackIcon": "shared/jav-playback/assets/123av.svg"
+  },
+  "builder": {
+    "path": "apps/video/javdb/releases/3.9.44-test.1/local_bundle_builder.js",
+    "ref": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.44-test.1/local_entry.js",
+    "ref": "2d3d2c942f00a37814fed5261f4d0c03f8e9c255"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.44-test.1/javdb_v3.9.44_test1_localfirst.txt",
+    "ref": "f07078f3bf3f4cecce5ac47f0b9928f9c0169311",
+    "blob": "3d6d01eb19baf250d2866c38f78148ab15549728",
+    "ruleVersion": 2026082514
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082501/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "sharedPlaybackIcon": "123av.svg"
+  },
+  "verify": {
+    "runtimeGlobal": "JDBCLOUD",
+    "localFirstVersion": "3.9.44-test.1",
+    "localFirstBuild": 2026082501,
+    "stableBusinessBase": "3.9.42 / Build2026082301"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "updateOwner": "rule-repo",
+    "legacyRemoteManager": false,
+    "sharedPlayback": "1.0.0-test.4 embedded with local lazyRule/select re-entry",
+    "sameScopeEval": "Core eval -> all patches eval -> call remains inside core/custom function scope"
+  },
+  "notes": "Delivery-only migration from Stable 3.9.42. Seven compressed Core fragments, nine Custom fragments, the exact Stable patch chain, Shared JAV Playback SDK and the 123AV icon are frozen into an immutable source snapshot and generated once into one local Runtime bundle. Click-time shared playback callbacks re-enter $.require('javdb3').playback() instead of fetching the remote Playback Manager. Stable/Latest remain untouched pending device validation."
+}
