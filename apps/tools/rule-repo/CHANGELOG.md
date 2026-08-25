@@ -1,65 +1,52 @@
 # 我的规则仓库 CHANGELOG
 
-> 当前恢复入口。RC34 已冻结到 `CHANGELOG_RC34_20260825.md`；RC33 为 Flat Runtime 基线，RC35 恢复 per-app channels 权威并修复安装身份。
+> 当前恢复入口。RC35 完整记录冻结到 `CHANGELOG_RC35_20260825.md`。RC36 不再延续 Flat Local-First，而是从 Stable 3.5.5 快启动链重新派生。
 
 ## 当前活动基线
 - Stable：`3.5.5 / Build389`，继续冻结，作为最终救援基线。
-- Test：`3.5.6-rc35 / Build425`，Shell `rule_repo_test_v172.txt` / rule version `2026082517`。
-- 正常启动：`Micro Shell → flat_entry_v3.js → flat_runtime_b425.js`。
-- 版本真相：程序详情优先读取对应 `channelsPath`；统一 `channel_catalog_snapshot` 只作为首页/离线摘要。
-- 自更新：`main` 多源 cache-bust 直接读取，不再依赖 GitHub API HEAD。
+- Test：`3.5.6-rc36 / Build426`，Shell `rule_repo_test_v173.txt` / rule version `2026082518`。
+- 启动：`Test Shell → bootstrap_test_v173.js → Remote Manager 2.0.4 cache → Stable 3.5.5 modules + fast_hybrid_patch.js`。
+- RC36 **不是 Local-First**；规则仓作为控制面优先速度、可靠性和自恢复。业务小程序 Local-First 规划不变。
 
-## 2026-08-25 · 3.5.6-rc35 / Build425 · Per-App Channel Truth + Install Identity Repair
+## 2026-08-25 · 3.5.6-rc36 / Build426 · Stable-derived Fast Hybrid
 
 ### 用户实机事实
-- RC34 中打开 JavBus，当前安装显示“已安装 · 版本待识别”。
-- RC34 的“检查版本”直接报：`无法取得 main HEAD：1:invalid | 2:invalid`。
-- 同时仓库实际 `apps/video/javbus/channels.json` 已是 `2.0.1-test.1 / Build20101`，测试仓仍显示旧 `2.0.0-alpha4 / Build20004`。
-- 因此 RC34 即使解决了 `_catalog` 内存遮蔽，控制面仍存在“GitHub API HEAD 硬依赖 + 统一 snapshot 自身滞后”两层问题。
+- RC35 中程序版本信息已经基本对上，但退出再进入测试仓首页仍需明显等待。
+- 用户明确反馈：体验不像本地程序；与 Stable 3.5.5 相比没有可感知优点，缺点反而增加。
+- 因此 RC35 即便功能事实修正，也不能继续作为交付架构基线。
 
 ### 根因
-1. RC34 `flat_control_v2.js` 把 GitHub API `branches/main` / `commits/main` 当作刷新前置；目标设备 API 响应被判 `invalid` 后整个刷新链直接中断。
-2. `channel_catalog_snapshot.json` 是离线聚合快照，不是强一致版本事实源；它可能晚于程序自己的 `channels.json`。
-3. RC12 release 早已定义 `channelTruth = per-app-channels`，RC33 扁平化时又用统一 snapshot 覆盖 `channelMeta()`，属于架构回归。
-4. RC33 快速 direct-payload 导入覆盖没有继承 RC3 Verified Install Index 的 parent/channel/version 写入；Stable/Test 同名程序后续只能识别“标题存在”，无法识别实际通道。
+1. RC33 `flat_runtime_b423.js` 把 Build402 本地模块包所有历史模块逐段拼成一个 JS，再追加 RC27/RC33 patch。
+2. RC34 在 B423 后继续追加 Live Catalog overlay 生成 B424；RC35 又在 B424 后追加 Per-App Channel Truth overlay 生成 B425。
+3. “单 bundle”减少了 `require()` 次数，却把启动成本变成每次解析一个越来越大的历史 JS；海阔的分模块 `require()` 缓存优势被丢失。
+4. RC35 为修复安装身份，在 `fastItemState()` 遇到已安装但未识别的 channel-group 时会触发 device-rule repair；首页循环可能重复进入 `deviceRuleSnapshot/getLastRules` 级别扫描。
+5. 结论：**Local-First 是交付手段，不是产品目标。对控制面工具，如果本地化后更慢，就必须撤销。**
 
-### RC35 修复
-1. `flat_control_v3.js`：取消 GitHub API HEAD 硬依赖。Raw main / GitHub WebRaw main / jsDelivr @main 使用 cache-bust 读取；多个有效结果按 Build/revision 选择较新值。
-2. `refreshApp(appId, channelsPath)`：用户进入详情/点击检查版本时直接读取该程序自己的 `channels.json`，保存到独立本地 `app_channels_<id>.json`。
-3. `flat_channel_truth_patch_v1.js`：`channelMeta / fastChannelCache / loadChannelMetaLive` 优先读取 per-app 本地 channels；统一 snapshot 只作无网兜底摘要。
-4. 用户主动读取程序 channels 时，对 Stable/Test `.txt` Shell 按需提取 numeric `home_rule.version` 并写入本地 channel 指纹；不在首页做 N+1 网络拉取。
-5. 新导入成功后立即把 parent/channel/version/build/ruleVersion 合并进 Verified Install Index。
-6. 对旧安装，读取手机 `getLastRules()` 的实际 `home_rule.version`，与当前通道 Shell 指纹匹配；唯一命中时自动恢复“当前安装：Stable/Test + 真实版本”。
-7. `load-channels` 仅对当前进入的一个程序按需刷新，5 分钟内复用本地 per-app cache；正常仓库启动仍不联网。
-8. RC35 Builder 只在 RC34 B424 上追加 overlay 生成 `flat_runtime_b425.js`，继续保持单本地 Runtime 正常启动。
-9. Stable 3.5.5 / Build389、Latest 均不修改。
+### RC36 架构
+1. 完全不加载 `flat_runtime_b423/b424/b425`，也没有 Flat Builder/Entry/Control 链。
+2. 直接复用 Stable 3.5.5 / Build389 的 39 个已验证模块和 Remote Manager 2.0.4 缓存机制，只追加 `fast_hybrid_patch.js`。
+3. 正常首页如果已有 manifest 缓存就直接返回；关闭 Stable 原来的 TTL/probe 自动联网。联网只在首次无缓存、手动同步、主动检查程序版本时发生。
+4. 首页安装状态只读仓库记录/已有 identity，不调用 `request(hiker://home@...)`，更不调用 `getLastRules()`。
+5. `channelMeta()` 首页只读当前程序本地缓存；进入某个程序详情时才按需读取它自己的 `channels.json`，5 分钟内复用。
+6. 新导入 Stable/Test 时写入 parent/channel/version/build/ruleVersion；旧安装身份修复只允许在当前程序详情/主动检查时运行一次。
+7. 测试仓自更新重新使用 Remote Manager 2.0.4 读取 `test.json`；Raw/WebRaw/CDN 可用即工作，不把 GitHub main HEAD API 作为前置。
+8. Stable 3.5.5 / Build389、Latest 不改。
 
-### RC35 实机验收
-1. RC34 因 self feed 本身已经坏掉，允许最后一次从 Stable 3.5.5 版本中心覆盖安装 RC35。
-2. RC35 打开后，自身详情显示 `3.5.6-rc35 / Build425 · 当前运行`。
-3. 打开 JavBus 详情：首次进入应直接读取 `apps/video/javbus/channels.json`，可用版本必须显示 `Stable 2.0.0 / Test 2.0.1-test.1`，不能再出现 alpha4。
-4. JavBus 当前安装若是 Stable 2.0.0，识别为正式版 2.0.0；若是 Test 2.0.1-test.1，识别为测试版 2.0.1-test.1；不能继续“版本待识别”。
-5. 点 JavBus“检查版本”不得再出现 `main HEAD invalid`。
-6. 再检查 JavDB/ACFun 任一程序，详情应以其自身 channels.json 为准，不依赖统一 snapshot revision。
-7. 从 RC35 导入任一 Stable/Test 后返回详情，应立即显示刚导入的通道/版本。
-8. 后续发布 RC36 时，RC35 自身“检查版本”必须直接发现，不再依赖正式仓跳板。
+### RC36 性能验收
+1. 从 RC35 覆盖导入 RC36 后，**第一次**允许重新建立 Remote Manager 模块缓存。
+2. 完全退出测试仓，再打开第 2 次、第 3 次；必须明显快于 RC35，目标至少不慢于 Stable 3.5.5。
+3. 首页出现后不应因 60 秒 probe 或设备规则扫描继续阻塞。
+4. 打开 JavBus/JavDB 详情可以有一次当前程序 channels 网络等待，但不能拖慢整个首页。
+5. 当前安装若已由仓库记录应即时显示；仅历史未知版本允许在详情页做一次识别。
+6. “检查测试版更新”必须可用，不再出现 `main HEAD invalid`。
+7. 若 RC36 二次启动仍明显慢于 Stable，直接判失败；不允许再在 RC36 上叠更多性能补丁，应进一步缩减 Stable 模块/重写干净 Core。
 
 ### Stable 门禁
 - 用户明确要求测试仓真正稳定后再升级正式版。
-- RC35 未完成 per-app 版本真相、安装识别、自更新、二次启动、导入、同步和基础页面实机回归前，Stable 3.5.5 不得晋级。
-
-### 事故记录
-- `docs/INCIDENT_RULE_REPO_PER_APP_CHANNEL_TRUTH_AND_INSTALL_IDENTITY_20260825.md`
-- `docs/INCIDENT_RULE_REPO_MUTABLE_CATALOG_MEMORY_CACHE_20260825.md`
-
-## 2026-08-25 · RC34 摘要
-- 修复可变 catalog 被长生命周期 `_catalog` 内存快照遮蔽。
-- 后续实机证明 GitHub API HEAD 硬依赖与 snapshot 自身滞后仍未解决，冻结为历史。
-
-## 2026-08-25 · RC33 摘要
-- 首次重建单一 `flat_runtime_b423.js`，解决 Bridge v6→v10 + Build402 多模块重复加载。
+- RC36 的二次启动、版本中心、导入、自更新、同步和基础页面全部实机通过前，Stable 3.5.5 不得晋级。
 
 ## 历史
+- RC35：`apps/tools/rule-repo/CHANGELOG_RC35_20260825.md`
 - RC34：`apps/tools/rule-repo/CHANGELOG_RC34_20260825.md`
 - RC32 及之前：`apps/tools/rule-repo/CHANGELOG_RC32_20260825.md`
 - RC28：`apps/tools/rule-repo/CHANGELOG_RC28_20260825.md`
