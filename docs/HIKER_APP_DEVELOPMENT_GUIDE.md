@@ -1,13 +1,13 @@
 # 海阔小程序编写指南
 
-版本：2.10
+版本：2.11
 首次建立：2026-08-20  
 最近增强：2026-08-25  
 文档性质：**长期维护 / 开发操作系统 / 编写前必读 / 自动持续进化**
 
 > 本文档不是 API 备忘录，而是本项目开发海阔视界 `.hk小程序` 的统一“开发操作系统”。目标不是做到“能运行”，而是在任何新对话、长对话恢复或全新项目中，仅凭三份主文档 + 目标程序 CHANGELOG/当前 Stable，就能快速恢复产品意图、正确选择海阔能力、完成成熟 UI、稳定协议层、图片/媒体处理、测试与发布，并尽量一次达到甚至超过用户预期。
 >
-> 长期质量排序：**稳定 > 好用 > 好看 > 快速 > 易维护 > 可扩展**。新的官方能力、成熟样本经验、实机验证过的 UI/播放/图片方法，只要具有复用价值，都必须无需用户提醒自动沉淀到本文档；新的坑同步到 `HIKER_APP_DEVELOPMENT_CAUTIONS.md`；长期产品/发布决策同步到 `PROJECT_PLAN.md`；某个程序特有的接口、签名、解密和 Bug 写进该程序自己的 `CHANGELOG.md`。
+> 长期质量排序：**稳定 > 好用 > 好看 > 快速 > 易维护 > 可扩展**。新的官方能力、成熟样本经验、实机验证过的 UI/播放/图片/功能实现方法，只要具有复用价值，都必须无需用户提醒自动沉淀到本文档；新的坑同步到 `HIKER_APP_DEVELOPMENT_CAUTIONS.md`；长期产品/发布决策同步到 `PROJECT_PLAN.md`；某个程序特有的接口、签名、解密和 Bug 写进该程序自己的 `CHANGELOG.md`。
 
 ---
 
@@ -92,17 +92,43 @@ stable / channels / latest / test / candidate
 
 样本研究档案：`docs/HIKER_SAMPLE_ARCHITECTURE_INDEX.md`。它不是第四份启动必读文档；开发时必须执行的结论已经提炼进本指南。
 
-## 1.1 学样本：学模式，不复制历史常量
+## 1.1 学样本：UI 与功能必须双轨学习
+
+以后收到任何成熟 `.hk小程序/.hkzip`、源码、APK/H5 对照样本或实机截图，不得只把它当 UI 参考。固定同时做两条 Review：
+
+```text
+A. Product / UI / UX Review
+页面地图
+→ 首屏任务
+→ 信息架构
+→ 组件/卡片选择
+→ 视觉层级
+→ 状态表达
+→ 交互路径
+→ 空/错/加载态
+
+B. Functional / Engineering Review
+规则壳/路由
+→ 页面模块与状态恢复
+→ 搜索/筛选/收藏/历史/登录
+→ Request / Auth / Sign / Crypto
+→ 动态 UI / 并发 / 缓存
+→ Image / Playback / Download / Community
+→ 系统能力 / Native / PrivateJS 边界
+→ 可测试、可回退、可复用的工程模式
+```
 
 要提炼：
 
 - 页面结构与信息架构。
-- Provider/Adapter 合约。
+- Provider/Adapter/Model 合约。
 - UI 组件组合。
+- 海阔规则字段、路由、`$` 工具、动态界面、存储、并发等可复用指令与技巧。
 - 请求、登录、Token、签名、解密分层。
 - 播放与图片 Pipeline。
 - 缓存、并发、动态渲染。
 - 评论、网盘、下载、规则管理等业务模型。
+- 人物、专题、日历、榜单等是否应成为一等业务实体，而不是只作为字符串标签。
 
 不要照搬：
 
@@ -111,8 +137,29 @@ stable / channels / latest / test / candidate
 - 所有项目都塞 DEX/SO/QuickJS/PrivateJS。
 - 强制在线核心。
 - 样本作者设备上的偶然 UI 技巧。
+- 只因为样本能运行就把旧 API/私有依赖升级成默认架构。
 
-如果样本核心通过 `evalPrivateJS`、私有 DEX/Native 模块等方式不可读，只能把**实机能验证的页面结构、交互结果和视觉关系**视为事实；不得从截图反推内部 `col_type`、协议、依赖或算法并写成“已确认实现”。
+## 1.2 样本结论必须标证据等级
+
+样本研究统一区分：
+
+```text
+[源码确认]
+可读源码、规则 JSON 或当前官方文档能直接证明实现。
+
+[实机确认]
+用户当前截图、点击结果、报错或测试能直接证明行为/效果。
+
+[推断]
+根据截图/现象推测，但源码、协议或私有模块不可见。
+```
+
+规则：
+
+- `[推断]` 只用于研究方向，不得写成 Stable 事实。
+- `[源码确认]` 仍不等于“当前海阔最佳实践”；高风险写法需要当前设备 Test。
+- 如果样本核心通过 `evalPrivateJS`、私有 DEX/Native 模块等方式不可读，只能把**实机能验证的页面结构、功能行为和视觉关系**视为事实；不得从截图反推内部 `col_type`、协议、依赖或算法并写成“已确认实现”。
+- 壳层可读、内部不可读时，允许记录壳层真实模块合约、参数桥接和依赖边界，同时把私有内部保持为黑盒。
 
 ---
 
@@ -317,6 +364,51 @@ mod.load();
 ```
 
 `$.require(path, true)` 只在确实需要绕过模块缓存时使用。
+
+## 4.2 薄 Shell 调模块合约：URL 参数是事实源，页内变量只做缓存
+
+“一起刷”样本壳层可以直接确认：
+
+```js
+// home
+$.require('csdown').home()
+
+// search
+var kw = getParam('kw');
+putMyVar('keyword', kw);
+$.require('csdown').search();
+```
+
+这种模式值得学习的是**薄规则壳只负责恢复参数并调用模块方法**，而不是 PrivateJS 本身。
+
+本项目长期写法：
+
+```text
+Rule/Shell
+→ 从 URL / getParam 恢复 entityId、keyword、page、filter
+→ 组装明确 Context
+→ 调 Page/Provider/Module
+→ 状态变量只作为当前页缓存/交互加速
+```
+
+推荐：
+
+```js
+var ctx = {
+    keyword: getParam('kw') || '',
+    page: Number(getParam('page') || 1)
+};
+SearchPage.render(ctx);
+```
+
+不要让 `putMyVar/getMyVar` 成为跨页唯一事实源，否则容易出现：
+
+- 页面重建后状态丢失。
+- 从历史/收藏/外部链接进入时无法恢复。
+- 多页面共用同名变量互相污染。
+- 调试时看不到 URL 与当前业务状态的对应关系。
+
+`putMyVar` 适合页内选中态、临时输入、缓存当前筛选；重要主键和可恢复参数优先存在 URL/明确模型中。
 
 ---
 
@@ -1506,7 +1598,7 @@ CommunityProvider.comments()
 ```js
 var Item = {
     id: '',
-    type: 'video|comic|book|person|file',
+    type: 'video|comic|book|person|collection|file',
     title: '',
     subtitle: '',
     cover: '',
@@ -1519,6 +1611,59 @@ var Item = {
 ```
 
 Renderer 只消费标准模型，不在 UI 里写 `x.coverImg || x.poster || x.img...` 这种十几个字段兼容链。
+
+## 17.1 人物、专题、上映/更新日历是一等业务实体，不只是标签
+
+“一起刷”等成熟样本补充：资源型产品不应只有 `VideoItem`。当人物、专题、日期本身可以被点击、筛选、进入详情或拥有独立作品集合时，它们应有自己的 Model/Provider。
+
+```js
+var PersonModel = {
+    id: '',
+    name: '',
+    avatar: '',
+    region: '',
+    bio: '',
+    workCount: 0,
+    raw: {}
+};
+
+var CollectionModel = {
+    id: '',
+    title: '',
+    cover: '',
+    desc: '',
+    itemCount: 0,
+    raw: {}
+};
+
+var ScheduleGroup = {
+    date: '',
+    status: 'upcoming|released|updating',
+    count: 0,
+    items: []
+};
+```
+
+推荐 Provider：
+
+```js
+PersonProvider.list(filter,page)
+PersonProvider.detail(personId)
+PersonProvider.works(personId,page)
+
+CollectionProvider.list(filter,page)
+CollectionProvider.detail(collectionId)
+CollectionProvider.items(collectionId,page)
+
+ScheduleProvider.list({date,status,type,page})
+```
+
+原则：
+
+- 演员/作者/UP 主/声优/歌手有独立 id 和作品关系时，用 `PersonModel`，不要只拿姓名做关键词搜索。
+- 系列/奖项/题材/策展/厂牌有独立 id 时，用 `CollectionModel`，不要把专题降级为一串标签。
+- 上映、更新、赛事、直播预告等时间数据，由 Provider 返回结构化时间/状态，Renderer 再按日期分组；不要在 UI 层扫描所有结果临时猜分组。
+- “即将上映 / 已上映”“今日更新 / 历史更新”属于状态模型，不应该只是两张写死页面。
 
 ---
 
@@ -1722,6 +1867,7 @@ PrivateJS      单独检查
 - **JavDB2**：Page Module、搜索、收藏、登录隔离。
 - **网飞猫**：API Client、动态域名、Token/HMAC/AES；高密度影视库、长筛选原生溢出选择、专题/榜单多组件语义切换。
 - **瓜子影视**：PrivateJS/Native 扩展边界；运营发现页、追更型双列横卡、更新日历竖海报、高 metadata 榜单降密度。
+- **一起刷**：薄 Shell → 模块合约、URL 搜索参数恢复；首页/筛选/预告/发现任务分层；Person/Collection/Schedule 一等实体建模。
 - **青豆剧场**：Provider/Adapter、Runtime、弹幕/解析/网盘、渐进详情。
 - **聚阅**：Source SDK、Provider Manager、并发搜索、Provider 私有状态。
 - **dm盒子**：Playback/Danmu/Parser 全链。
@@ -1795,6 +1941,9 @@ Emoji 充当主图标体系
 第三方 favicon API 作为唯一正式图标源
 严重 Bug 在同一 Stable release 原地 patch
 错误页只有“失败”
+把人物/专题/日历只当字符串标签，导致无法独立详情、分页和缓存
+把 putMyVar/getMyVar 当跨页唯一事实源，页面重建后无法恢复状态
+看到截图功能后反推 PrivateJS/DEX 内部实现并写成已确认事实
 ```
 
 ---
@@ -1856,7 +2005,7 @@ UX/UI 设计师
 程序专属接口/签名/解密/Bug
 → 目标程序 CHANGELOG
 
-跨程序可复用的写法/组件/架构/媒体 Pipeline
+跨程序可复用的写法/组件/架构/媒体 Pipeline/功能指令
 → 本 GUIDE
 
 已经发生或高概率踩的坑
@@ -1866,14 +2015,27 @@ UX/UI 设计师
 → PROJECT_PLAN.md
 ```
 
+每个新样本复核结束也必须执行同样的沉淀，不需要等“正式开发任务”结束：
+
+```text
+样本源码 + 实机截图
+→ UI/Product Review
+→ Functional/Engineering Review
+→ 标记 [源码确认]/[实机确认]/[推断]
+→ 样本专属研究记录写 HIKER_SAMPLE_ARCHITECTURE_INDEX.md
+→ 跨程序可复用结论写 GUIDE
+→ 新坑/失败写 CAUTIONS
+```
+
 更新 GUIDE 时：
 
 1. 先查是否已有同类章节。
 2. 优先强化/替换旧规则，不无限追加重复段落。
 3. 新 API 先核对当前官方手册。
 4. 样本经验先理解源码；高风险方法再实机验证。
-5. 旧方法不再推荐时明确降级/废弃。
-6. 文档更新后只需简要告诉用户改了哪份、增加什么。
+5. UI 与功能必须同时审视；不能只学“长得像”，也不能只学“代码能跑”。
+6. 旧方法不再推荐时明确降级/废弃。
+7. 文档更新后只需简要告诉用户改了哪份、增加什么。
 
 ---
 
@@ -1893,6 +2055,8 @@ UX/UI 设计师
 - [ ] Request/Protocol/Provider/UI 分层。
 - [ ] Token/签名/解密没有散落页面。
 - [ ] Provider 原始字段已转标准 Model。
+- [ ] 人物/专题/日历等独立实体没有退化为脆弱字符串关系。
+- [ ] 重要跨页参数可从 URL/明确模型恢复，不只存在临时变量。
 - [ ] 缓存 key/schema 可控。
 
 ### 图片
