@@ -1,35 +1,43 @@
 {
-  "schema": 1,
+  "schema": 2,
   "channel": "test",
   "id": "pornhub-test",
   "appId": "pornhub",
   "name": "Pornhub",
-  "version": "0.1.1-test.2",
+  "version": "0.2.0-test.1",
   "baseVersion": "0.1.0",
   "baseBuild": 10108,
-  "targetVersion": "0.1.1",
-  "build": 10202,
-  "shellVersion": "0.1.1-test.localfirst.2",
-  "shellRuleVersion": 2026082524,
-  "managerVersion": "local-bundle-builder-v2",
+  "targetVersion": "0.2.0",
+  "build": 20001,
+  "shellVersion": "0.2.0-test.localfirst.1",
+  "shellRuleVersion": 2026082602,
+  "managerVersion": "standalone-local-builder-v1",
   "delivery": "local-first-single-runtime-bundle",
-  "release": "apps/video/pornhub/releases/0.1.1-test.2/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt",
-  "sourceRef": "50a6d1514170f85f1751e877794de0d9759fa437",
-  "builderRef": "29b1f8255b5257f9a7b48705ff66dc19f18df60d",
-  "entryRef": "ab4e70127bb9097fb174f4c5d7b5c30ad3484481",
-  "shellRef": "19106230606f059f18d5b8965ea1aca0915d18cb",
-  "shellBlob": "d7db4dcbec856a7c24db8b1b1eaf6bdfff0cdb4d",
-  "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-test2-basic-device-validated",
+  "architecture": "standalone-product-first-model-first",
+  "release": "apps/video/pornhub/releases/0.2.0-test.1/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v3_b20001.txt",
+  "sourceRef": "ffeee0e973c23410bbc6466717cd70ffe8b16953",
+  "builderRef": "cdc6ea284f3bb839e10c6a26a2d83ae7e1fc599b",
+  "entryRef": "f7a5c0356d1d96cdd5c22cbb8ea89787d3ef83ba",
+  "shellRef": "9573abc9b1aadc6f396946c4ec2545c0898759b2",
+  "shellBlob": "17ea47785ca4a48e779cb5a40451e8fd653056ff",
+  "updatedAt": "2026-08-26",
+  "status": "active-test-v2-pending-device-validation",
   "deviceValidation": {
-    "level": "basic",
-    "result": "pass",
-    "date": "2026-08-25",
-    "evidence": "User confirmed Test2 works after Test1 remote-residual failure was repaired.",
-    "scope": "Local-First startup/runtime build basic pass; full business regression not claimed."
+    "level": "pending",
+    "result": "not-tested",
+    "date": "2026-08-26",
+    "scope": "Requires real-device Home/Search/Category/Detail/Playback/Comments/Creator/Library/Account/Shorts/Playlist/UI validation before promotion."
   },
-  "failedPreviousTest": {
+  "previousTest": {
+    "version": "0.1.1-test.2",
+    "build": 10202,
+    "release": "apps/video/pornhub/releases/0.1.1-test.2/release.json",
+    "rule": "apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt",
+    "deviceResult": "basic-pass",
+    "role": "Local-First migration recovery reference"
+  },
+  "failedHistoricalTest": {
     "version": "0.1.1-test.1",
     "build": 10201,
     "error": "Runtime 仍残留远程代码/资产依赖：raw.githubusercontent.com/huoguotiankong/asset-core-7f3",
@@ -41,5 +49,5 @@
     "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
     "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt"
   },
-  "notes": "Test2 basic Local-First device validation passed. Test1 remains frozen after the residual gate failure. Stable 0.1.0 / Build10108 business logic is still frozen. Full Home/Search/Category/Creator/Detail/Comments/Playback/Account/Shorts/Playlist regression is not yet claimed."
+  "notes": "V2 clean rewrite. Stable0.1.0/Build10108 and Latest remain frozen. The new Test no longer assembles the historical Test1-Test7 patch stack; first install builds one local standalone runtime from 8 immutable V2 parts plus local assets. Real-device validation is mandatory."
 }
