@@ -4,30 +4,35 @@
   "id": "pornhub-test",
   "appId": "pornhub",
   "name": "Pornhub",
-  "version": "0.1.1-test.1",
+  "version": "0.1.1-test.2",
   "baseVersion": "0.1.0",
   "baseBuild": 10108,
   "targetVersion": "0.1.1",
-  "build": 10201,
-  "shellVersion": "0.1.1-test.localfirst.1",
-  "shellRuleVersion": 2026082523,
-  "managerVersion": "local-bundle-builder-v1",
+  "build": 10202,
+  "shellVersion": "0.1.1-test.localfirst.2",
+  "shellRuleVersion": 2026082524,
+  "managerVersion": "local-bundle-builder-v2",
   "delivery": "local-first-single-runtime-bundle",
-  "release": "apps/video/pornhub/releases/0.1.1-test.1/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_localfirst_v1_b10201.txt",
-  "sourceRef": "9b866985b1882c3b52f770a804ee75c71f447d2e",
-  "builderRef": "d56cf32216e6f8bbf25ba5adca4e1e21ed02d3e9",
-  "entryRef": "b57edba9df00a0beba53ec344a83e444bce16579",
-  "shellRef": "56c210873dbac204bd59eb5f145f26eb04286f25",
-  "shellBlob": "7c6f6660cadc326d417d19c8ba6d8f2b03270b47",
+  "release": "apps/video/pornhub/releases/0.1.1-test.2/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt",
+  "sourceRef": "50a6d1514170f85f1751e877794de0d9759fa437",
+  "builderRef": "29b1f8255b5257f9a7b48705ff66dc19f18df60d",
+  "entryRef": "ab4e70127bb9097fb174f4c5d7b5c30ad3484481",
+  "shellRef": "19106230606f059f18d5b8965ea1aca0915d18cb",
+  "shellBlob": "d7db4dcbec856a7c24db8b1b1eaf6bdfff0cdb4d",
   "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-pending-device-validation",
-  "previousTest": {
+  "status": "active-test-local-first-test2-pending-device-validation",
+  "failedPreviousTest": {
+    "version": "0.1.1-test.1",
+    "build": 10201,
+    "error": "Runtime 仍残留远程代码/资产依赖：raw.githubusercontent.com/huoguotiankong/asset-core-7f3",
+    "status": "frozen-failed-immutable"
+  },
+  "stablePromotionSource": {
     "version": "0.1.0-test.7",
     "build": 10107,
     "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
-    "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
-    "status": "stable-promotion-source-preserved"
+    "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt"
   },
-  "notes": "Rebased from Stable 0.1.0 / Build10108. Only delivery/startup/control-plane architecture changes: the exact 15-layer Stable business chain is frozen, all 15 repository SVG assets are localized, and historical Bootstrap lazyRule re-entry is redirected through a local Bootstrap Shim. Normal second startup does not load Remote Manager/GitHub executable code. Stable/Latest remain unchanged pending device validation."
+  "notes": "Test2 is a new immutable Local-First build after Test1 was rejected by the device residual gate. Stable 0.1.0 / Build10108 business logic remains frozen. Test2 uses strict source markers, response-body normalization, deterministic C.bootstrap assignment rewriting, exact local SVG asset-root replacement and path-specific residual diagnostics; the final remote-residual gate remains enabled."
 }
