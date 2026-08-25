@@ -1,184 +1,179 @@
 # JavBus Changelog
 
-> 程序级长期技术记忆。后续开发/优化本程序前，先读三份全局文档，再读本文件、`registry.json`、当前 Stable/Test/Release/Bootstrap/Shell。用户当前实机结果优先于历史记录。未完成海阔实机验证的内容明确标记“待确认”。
+> 当前恢复入口。2026-08-25 Local-First 迁移前的完整 Stable2.0.0 / Test alpha1-alpha4 / 磁力与域名历史原样归档到 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
-## 当前基线（2026-08-23）
-- 程序：JavBus
-- App ID：`javbus`
-- Stable：`2.0.0` / Build `20005` / Remote / 本项目自有代码
-- Stable Shell：`apps/video/javbus/javbus_remote_v2_b20005.txt`
-- Stable Bootstrap：`apps/video/javbus/bootstrap_stable_v1_b20005.js`
-- Stable Release：`apps/video/javbus/releases/2.0.0/release.json`
-- Stable Patch：`apps/video/javbus/releases/2.0.0/stable_patch.js`
-- Domain Config：`apps/video/javbus/domains.json`
-- Test 晋级来源：`2.0.0-alpha4` / Build `20004`
-- Test Shell：`apps/video/javbus/javbus_remote_test_v4_b20004.txt`
-- Remote Manager：`libs/updater/remote_manager.js` v2.0.1
-- Shared JAV Playback Stable：`1.0.0-test.4`
-- JavBus 图标：官网 `https://www.javbus.com/favicon.ico`
-- 旧 `javbus_2026081903.txt` 为第三方 Apollo 本地规则，不属于本项目实现；用户已明确允许删除，Stable 2.0.0 发布后仓库删除该工件及索引引用。
+## 当前活动边界
+- Stable：`2.0.0 / Build20005`，继续冻结，是当前业务稳定恢复基线。
+- Latest：仍指向 Stable `2.0.0`，本轮不修改。
+- Test：`2.0.1-test.1 / Build20101`，Shell `apps/video/javbus/javbus_remote_test_localfirst_v1_b20101.txt`，rule version `2026082516`。
+- Previous Test：`2.0.0-alpha4 / Build20004`，Stable 2.0.0 的晋级来源，保留为历史对照。
+- Shared JAV Playback Stable：`1.0.0-test.4`；Local-First Test 将其执行闭包嵌入本地 Runtime，不移动共享 Stable 指针。
+- Domain Config：`apps/video/javbus/domains.json`；Local-First Test 首次安装时同步为本地文件，普通启动不再自动读取 GitHub 控制面。
 
-## Stable 2.0.0 发布结论
-- 用户于 2026-08-23 明确要求：加入域名失效自动切换，并把当前重写版晋级正式版；旧本地版可以删除，因为不是本项目编写。
-- Stable 2.0.0 由 Test alpha4 的完整运行链晋级，并新增 `stable_patch.js` 域名 Adapter；不是复制旧 Apollo 规则。
-- Stable 运行链：
-  `Stable Shell → Stable Bootstrap → Remote Manager → alpha1 Core/Compat/Runtime → alpha2 Patch → alpha3 Patch → alpha4 Patch → Stable Domain Patch → Shared JAV Playback Stable`。
-- Stable 与 Test 使用不同 Remote Manager app id：Stable=`javbus`，Test=`javbus-test`，持久状态隔离。
-- 旧 Apollo 本地工件删除后不再提供“Legacy Local/本地版”渠道；历史 alpha1~alpha4 release 继续保留，便于诊断与回滚开发，不等于保留旧第三方本地版。
-- Stable 2.0.0 的域名自动切换和 alpha4 的原图预览/紧凑播放 UI 在正式发布前完成静态门禁；用户已明确要求直接晋级，后续继续以 Stable 实机结果补齐回归记录。
+## 2026-08-25 · 2.0.1-test.1 / Build20101 · Stable-derived Local-First
 
-## 域名自动切换：Stable 2.0.0
-### 用户当前事实
-用户实机网页显示当前可用域名提示：
-- 永久域名：`https://www.javbus.com`
-- 防屏蔽：`https://www.busjav.cyou`
-- 防屏蔽：`https://www.fanbus.bond`
-- 防屏蔽：`https://www.buscdn.bond`
+### 迁移边界
+本轮严格从 Stable `2.0.0 / Build20005` 重新 rebase，只改变交付、启动与远程控制面，不主动修改：
+- JavBus 列表、搜索、分类、演员、详情 Parser。
+- 收藏数据与旧 Apollo 收藏兼容读取。
+- alpha3 已有实机成功记录的磁力 `gid/uc/img → AJAX → regex Parser → WebView fallback` 主链。
+- alpha4 原图预览和紧凑第三方播放 UI。
+- MissAV / 123AV / Jable 的 Shared JAV Playback Provider 业务逻辑。
+- 磁力长按 迅雷 / PikPak / 123云盘 / 光鸭云盘合同。
 
-### 设计合同
-- 域名列表独立存放在 `apps/video/javbus/domains.json`，代码内同时保留静态兜底列表。
-- 远程域名配置缓存 6 小时；拉取失败时使用上一次有效缓存，再退回静态列表。
-- 运行时保存最后一次成功域名：`javbus_active_domain`。
-- 普通请求优先使用最后成功域名；如果响应为空、过短、Cloudflare challenge/拦截页或不具备 JavBus 页面指纹，自动尝试其它候选域名。
-- 成功切换后立即更新 `JavBusCore.base` 并持久记忆，后续列表、搜索、详情、演员、分类、图片 Referer 和磁力详情链自然跟随当前 Base。
-- 页面健康校验不是“非空即成功”，会检查 JavBus 业务指纹，如 `movie-box / waterfall / photo-info / sample-waterfall / genre / star / var gid / navbar+JavBus`，避免把限流页、拦截页或无关落地页写成成功域名。
-- 每个候选域名优先普通 `fetch`，失败后允许 `fetchCodeByWebView` 作为站点过检兜底。
-- 设置页显示当前域名、候选域名，并提供“重新检测可用域名”；重置后下一次业务请求重新自动选择。
-- 域名远程配置文件后续可单独维护，新防屏蔽域名无需为了改常量重发整个 Stable Release。
+Stable2.0.0 / Latest 保持原文件、原版本、原 build，不被本轮覆盖。
 
-### 禁止回退
-- 禁止恢复单一写死 `https://www.javbus.com` 且失败就整页报错的策略。
-- 禁止仅以 HTTP 非空判断域名健康。
-- 禁止每个列表卡片/图片单独做全候选域名探测；域名切换属于 Protocol/Domain 层统一职责。
-- 禁止为了域名切换修改 alpha3 已实机验证成功的磁力 Parser；只允许让 `C.base` 跟随有效域名。
+### Stable 真实执行闭包审计
+Stable `2.0.0` 的表层 release 不是完整执行闭包，实际还存在两类运行时远程依赖：
 
-## 产品范围
-### 首页/搜索/分类
-- 首页：有码 / 无码 / 欧美、全部影片 / 仅有磁力、搜索、演员、分类、收藏、更多。
-- 搜索支持番号 / 标题 / 演员 / 厂商关键词并翻页。
-- 分类使用 JavBus `/genre`；详情中的 `genre / director / studio / label / series` 可继续筛选。
-- 同级“有码 / 无码 / 欧美”、排序、显示范围一律当前页刷新，禁止不断压入新的同级 `hiker://page`。
+1. `JavBusCore.loadPlayback()` / `playbackUrl()` 会在第三方播放入口和用户真正点击 Provider 时重新下载 `shared/jav-playback/manager.js`，Manager 再读取 channels/SDK。
+2. `stable_patch.js` 的 Domain Adapter 会在域名配置缺失或缓存超过 6 小时时自动下载仓库 `domains.json`。
+3. alpha4 的 123AV 图标仍直接引用仓库 Raw SVG。
 
-### 演员
-- 演员分页固定 `/{typePrefix}/actresses/{page}`，第一页显式 `/1`。
-- 列表合同：`.item a`；姓名 `.photo-info span`；头像 `.photo-frame img`。
-- alpha1 的 `/actresses` + `.avatar-box` 已由实机证伪：有码/无码/欧美只得到一个演员，禁止回退。
-- 演员详情 `/{typePrefix}/star/{id}`；头像缺失可用 `/pics/actress/{id}_a.jpg` 兜底。
+因此只把 Core/Runtime/Patch 放进本地包仍不算 Local-First。
 
-### 影片详情
-1. Hero：封面 + 标题 + 日期 / 时长 / 分区。
-2. 主操作：`🧲 磁力 / 🖼 预览 N / ☆ 收藏 / 🌐 原站`。
-3. 第三方在线播放：MissAV / 123AV / Jable。
-4. 番号 / 日期 / 时长快捷信息。
-5. 导演 / 制作商 / 发行商 / 系列。
-6. 演员。
-7. 标签。
-8. 预览图。
-9. 磁力快速预览 + 完整磁力页。
-10. 相似影片。
+### 本轮完整本地执行闭包
+首次安装从不可变 source ref 固化 12 个源码/资产单元：
 
-### 预览
-- 详情顶部 `🖼 预览 N` 进入独立 `javbusPreview`。
-- alpha3 实机证明：独立页用 `sm.thumb` 放大到 `pic_1_full` 会明显模糊，而详情下方 `pics://sm.src` 原图清晰。
-- alpha4 修复：独立预览页直接用 `C.image(sm.src, detailUrl)` 加载原始 sample；点击仍使用 `pics://sm.src`。
-- 详情下方仍使用 thumb 缩略图，避免列表无意义加载全部大图。
+```text
+8 个 JavBus 业务模块
+= Core + Compat + Runtime
++ alpha2 + alpha3 + alpha4 + Stable Patch
++ Local-First final overlay
 
-### 第三方在线播放
-- JavBus 只传番号给 `shared/jav-playback/manager.js` Stable；禁止把 Provider Parser 复制到 JavBus 私有模块。
-- 当前 Provider：MissAV / 123AV / Jable。
-- alpha3 使用 `icon_3` 后实机显示 MissAV/Jable 巨型方块、123AV favicon 空白，视觉失败。
-- alpha4 改为 `icon_small_3` 紧凑一行三列；MissAV/Jable 使用原网站 favicon，123AV 使用 Shared Playback 固定 `shared/jav-playback/assets/123av.svg`。
-- Shared Playback 当前 Stable `1.0.0-test.4`：MissAV 走搜索真实版本→详情 packed source→master HLS→最高画质；123AV/Jable 保留已验证播放链。
++ Shared JAV Playback test.2 base
++ Shared JAV Playback test.4 Stable overlay
++ 123AV SVG
++ domains.json
+```
 
-## 磁力：已恢复并实机验证
-### alpha2 失败事实
-- 原站 ABF-377 明确存在多条磁力，而 alpha2 独立磁力页返回“暂无磁力资源”，证明问题在 AJAX 参数/请求/解析链，不是影片没有磁力。
+本地目录：
 
-### alpha3 修复合同
-- 从详情源码直接提取 `var gid`、`var uc`、`var img`。
-- AJAX：`/ajax/uncledatoolsbyajax.php?gid=<gid>&lang=zh&img=<img>&uc=<uc>`。
-- Headers：桌面 Chrome UA、详情 Referer、`Cookie: existmag=all`、`X-Requested-With: XMLHttpRequest`。
-- Parser：按 `<tr>` + `href="magnet:?xt=urn:btih:..."` 正则恢复磁力标题、大小、日期，并识别高清/字幕。
-- 兜底顺序：普通 AJAX fetch → AJAX WebView → 详情 WebView 渲染后扫描 magnet href。
+```text
+hiker://files/rules/asset-core-local/javbus-test/b20101/
+├─ local_entry.js
+├─ local_bundle_builder.js
+├─ runtime_bundle.js
+├─ bundle_meta.json
+├─ 123av.svg
+└─ domains.json
+```
 
-### 实机验证
-- 2026-08-23 09:42：ABF-379 独立磁力页成功返回 3 条资源：5.19GB / 2.66GB / 1.73GB，并显示日期和高清标记。
-- 磁力主数据链判定已恢复。从 alpha4/Stable 2.0.0 开始，除非有新的实机回归，禁止为了 UI 或域名策略修改 alpha3 磁力 Parser/AJAX 主链。
+新运行链：
 
-## 磁力长按跨小程序合同
-1. 迅雷：`hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`
-2. PikPak：`hiker://page/fxlj?rule=PikPak&realurl=<encodeURIComponent(magnet)>`
-3. 123云盘：`hiker://page/diaoyong?rule=123云盘&page=fypage&realurl=<encodeURIComponent(magnet)>`
-4. 光鸭云盘：`hiker://page/magnet?rule=光鸭云盘&realurl=<encodeURIComponent(magnet)>`
-5. 复制磁力。
+```text
+JavBus Test Shell / rule 2026082516
+→ local_entry.js
+→ local_bundle_builder.js
+→ 首次安装：immutable source snapshot
+→ runtime_bundle.js + bundle_meta + 123av.svg + domains.json
+→ 后续正常启动：$.require('javbus')
+→ require(file:// runtime_bundle.js)
+→ JavBusLocalRuntime.module()
+```
 
-- 未安装对应小程序只 toast，不伪造其它入口。
-- 用户已明确长按目标固定为以上四个，不再使用“磁力君 / 云盘君”组合。
-- 四个跨小程序动作仍需分别完成 Stable 实机点击回归后才能标记全部通过。
+正常二次启动不再加载：
+- Stable/Test Bootstrap。
+- Remote Manager。
+- 远程 Core/Compat/Runtime/Patch。
+- Shared JAV Playback Manager/channels/SDK 代码。
+- 远程 123AV 仓库图标。
+- GitHub `domains.json` 自动控制面。
 
-## 收藏 / 状态
-- 影片收藏：`hiker://files/rules/JavBus/favorites_videos.json`
-- 演员收藏：`hiker://files/rules/JavBus/favorites_actors.json`
-- 旧 Apollo 收藏路径仍只作为兼容读取：
-  - `hiker://files/rules/Apollo/javbus/javbus_video.txt`
-  - `hiker://files/rules/Apollo/javbus/javbus_actor.txt`
-- 删除旧本地规则文件不等于删除用户手机收藏数据；兼容读取保留，避免无必要丢失历史收藏。
-- 主要状态：`javbus_default_type / javbus_mag_mode / javbus_home_type / javbus_search_type / javbus_genres_type / javbus_actors_type / javbus_search_kw / javbus_mag_sort / javbus_fav_kind / javbus_active_domain / javbus_domain_config_cache / javbus_domain_config_ts`。
+网站页面、图片、JavBus AJAX 磁力接口以及第三方播放站点请求仍属于业务数据网络，不属于程序代码交付。
 
-## 导航 / 页面栈硬规则
-- alpha1 把有码/无码/欧美同级 Tab 实现成不断打开新页面，造成返回栈叠加。
-- alpha2 已改为 `putMyVar/setItem → refreshPage(false)`。
-- 同级 Tab / 排序 / 筛选只能刷新当前 Workspace；影片详情、演员详情、具体分类结果、磁力页、预览页才属于真正层级钻取。
-- 跨程序事故：`docs/INCIDENT_SAME_LEVEL_NAVIGATION_STACK_20260823.md`。
+### Shared JAV Playback 本地重入
+Stable Core 原实现：
 
-## 发布与回退
-- Stable 2.0.0 是第一个本项目自有 JavBus 正式远程版。
-- 旧第三方本地工件在正式指针全部切换并回读后删除，不再作为可选 Stable/Local 渠道。
-- Test alpha4 作为本次晋级来源暂保留；下一轮 Test 必须从 Stable 2.0.0 重新 rebase，不能继续把旧 `baseVersion=2026081903` 当新开发基线。
-- Stable 新增 `latest.json`，正式版后续更新统一走 Stable Remote Manager。
-- Stable Shell/Bootstrap/Release 均使用新路径和新缓存键，避免设备继续命中 Test/旧本地状态。
+```text
+播放入口
+→ fetch(manager.js)
+→ load stable SDK
+→ Provider lazyRule 点击时再次 fetch(manager.js)
+```
 
-## Stable 2.0.0 实机回归清单
-- [ ] 云仓库只展示新的 Remote Stable 2.0.0，不再展示 Legacy Local 正式版。
-- [ ] 覆盖导入后首页正常，设置页显示 `2.0.0 / Build20005`。
-- [ ] 当前 `www.javbus.com` 可用时正常加载。
-- [ ] 当前域名失效/被拦截时自动尝试备用域名并保存成功域名。
-- [ ] 设置页能看到当前域名和候选域名；“重新检测”可重置选择。
-- [ ] 演员有码/无码/欧美均可一次显示多名演员并翻页。
-- [ ] 分类/演员/搜索同级切换不叠加返回栈。
-- [ ] 顶部预览进入后使用原图，清晰度不再低于详情下方原图入口。
-- [ ] MissAV / 123AV / Jable 为紧凑三列，123AV 图标正常。
-- [ ] ABF-379 等影片磁力仍能返回资源，确认域名 Adapter 未破坏 alpha3 磁力链。
-- [ ] 迅雷 / PikPak / 123云盘 / 光鸭云盘长按分别实机验证。
-- [ ] 三个第三方播放 Provider 不退化。
+Test1 内嵌当前 Stable SDK `1.0.0-test.4`，并把点击回调改成：
 
----
-## 版本记录
-### 2.0.0 / Build20005 / 2026-08-23
-- 用户明确要求晋级正式版并删除非本项目编写的旧本地版。
-- 由 Test 2.0.0-alpha4 晋级为第一个项目自有 Remote Stable。
-- 新增 Domain Adapter：远程候选配置、失败自动轮询、业务指纹健康校验、WebView 兜底、成功域名持久记忆、设置页手动重检。
-- 保留 alpha3 已实机验证的磁力链和 alpha4 UI 修复。
-- Stable 使用独立 `javbus` Remote Manager 状态与新 Shell/Bootstrap/Release。
+```text
+$.require('javbus').localPlayback()
+→ sdk.resolve(...)
+```
 
-### 2.0.0-alpha4 / Build20004 / 2026-08-23
-- 独立预览页由缩略图改用 sample 原图。
-- 播放入口 `icon_3 → icon_small_3`，123AV 使用 Shared Playback 固定 SVG。
-- 不修改 alpha3 磁力主链。
+因此页面首次显示播放按钮和真正点击 MissAV / 123AV / Jable 都重新进入当前本地 JavBus Runtime，不再回到远程 Manager。
 
-### 2.0.0-alpha3 / Build20003 / 2026-08-23
-- 详情顶部新增预览入口。
-- 磁力改为源码 gid/uc/img + 正则 Parser + WebView 兜底。
-- 磁力长按改为 迅雷 / PikPak / 123云盘 / 光鸭云盘。
-- 09:42 实机确认 ABF-379 磁力恢复成功。
+### Domain Control Local-First
+Stable2.0.0 的域名自动切换能力保留，但控制面调整为：
 
-### 2.0.0-alpha2 / Build20002 / 2026-08-23
-- 修复演员列表只一人：`/actresses/{page}` + `.item`。
-- 修复同级有码/无码/欧美反复压新页面。
-- 增加显眼磁力入口、搜索按钮和详情 UI 重排。
+```text
+普通启动/普通请求
+→ 本地 domains.json
+→ 静态四域兜底
+→ 最后成功域名优先
+→ 页面业务指纹健康检查
+→ 自动切换
+```
 
-### 2.0.0-alpha1 / Build20001 / 2026-08-23
-- 首个自有远程重写 Test，建立 Core/Compat/Runtime、收藏、网站 Parser 与 Shared JAV Playback 接入。
+不再因为 6 小时缓存过期自动访问 GitHub。
 
-### 2026081903 / 2026-08-19
-- 第三方 Apollo 本地规则历史基线；2026-08-23 用户明确允许删除，不再作为正式/本地渠道。
+设置页新增“同步域名列表”：只有用户主动点击时，才从仓库刷新本地 `domains.json`。这样既保持以后新增防屏蔽域名的维护能力，又不让正常启动依赖远程控制面。
+
+当前本地域名基线：
+- `https://www.javbus.com`
+- `https://www.busjav.cyou`
+- `https://www.fanbus.bond`
+- `https://www.buscdn.bond`
+
+### 磁力主链冻结
+2026-08-23 用户实机已经确认 ABF-379 独立磁力页成功返回 3 条资源（5.19GB / 2.66GB / 1.73GB）。本次 Local-First 不重写 alpha3 Parser/AJAX，只把已经验证的相同源码原样纳入 Runtime Bundle。
+
+以后如果 Local-First Test 磁力退化，优先排查 Runtime 合成顺序、当前域名/Referer 和页面执行上下文，不允许先修改已验证 Parser。
+
+### Local-First 诊断
+新增 `javbusLocalFirst` 页面，可查看：
+- `2.0.1-test.1 / Build20101`。
+- Runtime Bundle ready 状态。
+- immutable source ref。
+- source 数量与 Runtime 字节数。
+- Shared Playback 本地版本。
+- 当前活动 JavBus 域名。
+- 本地包重建。
+- 不含 Cookie/Token/Authorization 的诊断摘要复制。
+
+### 静态门禁
+- `final_local_patch.js`：语法门禁通过。
+- `local_bundle_builder.js`：语法门禁通过。
+- `local_entry.js`：语法门禁通过。
+- Shell 外层规则 JSON 与嵌套 `pages` JSON 已构建解析通过。
+- Test Shell 共 13 个页面：原 Stable 12 个业务页 + 本地化诊断。
+- rule version `2026082516` 在 32 位有符号整数安全范围内。
+- Builder 明确登记 12 个 source unit、8 个业务模块。
+
+### 实机验收
+Test1 当前状态：**pending device validation**。以下完成前不得晋级 Stable：
+1. 从“我的规则仓库”同步并覆盖 Test，应显示 `2.0.1-test.1 / Build20101`。
+2. 首次打开允许一次本地包安装；首页应正常进入。
+3. 完全退出后第二次打开，确认本地 Entry + Runtime Bundle 正常。
+4. 回归首页 / 搜索 / 分类 / 演员 / 演员详情 / 收藏 / 更多 / 设置。
+5. 重点验证影片详情和独立预览仍使用原图。
+6. 重点验证 ABF-379 或其它明确有磁力的影片，磁力数据不得比 Stable2.0.0 退化。
+7. 实际点击 MissAV / 123AV / Jable，确认 Provider 点击回调没有退回远程 Playback Manager。
+8. 打开“本地化诊断”，应显示 Runtime ready、12 sources、Shared Playback local、当前域名。
+9. 设置页“重新检测可用域名”应只重置本地选择；“同步域名列表”仅在主动点击时访问仓库。
+10. 如条件允许，首次安装完成后屏蔽 GitHub/CDN，再重新打开；程序代码/UI 应仍可进入，JavBus/播放站业务数据仍需正常网络。
+
+## 恢复与回退
+- 正式恢复入口：Stable `2.0.0 / Build20005`。
+- 当前 Local-First Test：`2.0.1-test.1 / Build20101`。
+- Test1 出现问题时冻结当前 immutable release，从 Stable2.0.0 新建更高 Test build 修复；禁止原地覆盖 Test1 资产赌缓存刷新。
+- `2.0.0-alpha4` 继续保留为历史晋级来源，但不再作为后续 Test 的开发基线。
+
+## 长期不可回退事实
+- 演员分页使用 `/{typePrefix}/actresses/{page}`，第一页显式 `/1`；旧 `/actresses + .avatar-box` 已被实机证伪。
+- 同级有码/无码/欧美、排序和筛选必须当前页刷新，禁止反复压入新页面。
+- alpha3 磁力 Parser/AJAX 主链已有实机成功证据，不能因 UI/本地化随意重写。
+- 独立预览必须使用 sample 原图，不能把 thumb 放大成模糊大图。
+- 第三方播放保持 MissAV / 123AV / Jable；Provider 逻辑属于 Shared JAV Playback，不复制成 JavBus 私有分叉。
+- Local-First 完成定义包括点击回调与控制面传递依赖，不能只本地化顶层 Runtime。
+
+## 历史
+- Local-First 迁移前完整历史：`apps/video/javbus/CHANGELOG_PRE_LOCAL_FIRST_20260825.md`
