@@ -10,5 +10,6 @@
   "channels": "apps/video/javbus/channels.json",
   "domainConfig": "apps/video/javbus/domains.json",
   "changelog": "apps/video/javbus/CHANGELOG.md",
-  "updatedAt": "2026-08-23"
+  "testDelivery": "local-first-single-runtime-bundle",
+  "updatedAt": "2026-08-25"
 }
