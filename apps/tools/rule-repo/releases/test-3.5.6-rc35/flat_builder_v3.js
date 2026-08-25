@@ -1,0 +1,17 @@
+/* 我的规则仓库 RC35 - Flat Runtime Builder 3.0 */
+var RuleRepoFlatBuilder=(function(){
+var VERSION='3.0.0',ROOT='hiker://files/rules/asset-core-local/rule-repo-test/';
+var OLD=ROOT+'flat_runtime_b424.js',BUNDLE=ROOT+'flat_runtime_b425.js',PATCH=ROOT+'flat_channel_truth_patch_v1.js',CONTROL=ROOT+'flat_control_v3.js',OLD_BUILDER=ROOT+'flat_builder_rc34_legacy.js';
+var ASSET_REF='3de9681c213d045af4f882474fdb3fd12e180621';
+var PATCH_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_channel_truth_patch_v1.js',CONTROL_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_control_v3.js';
+var OLD_REF='2021460e135adcac12c2804d7943ce8391e53905',OLD_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_builder_v2.js';
+function bad(t){t=String(t==null?'':t).replace(/^\uFEFF/,'').trim();return !t||/^(?:<!doctype|<html|Bad Gateway|Too Many Requests|Service Unavailable|Gateway Timeout|Not Found|Error\b|Exception\b|HTTP\b|Cannot\b|Couldn(?:'|’)t\b)/i.test(t);}
+function urls(ref,path){return['https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/'+ref+'/'+path,'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@'+ref+'/'+path,'https://github.com/huoguotiankong/asset-core-7f3/raw/'+ref+'/'+path];}
+function ensure(path,ref,src,label){if(fileExist(path))return path;var us=urls(ref,src),es=[];for(var i=0;i<us.length;i++){try{var s=String(fetch(us[i],{timeout:4200,headers:{'Cache-Control':'public, max-age=31536000, immutable'}})||'');if(bad(s))throw new Error('无效响应');writeFile(path,s);if(!fileExist(path))throw new Error('写入失败');return path;}catch(e){es.push((i+1)+':'+String(e.message||e));}}throw new Error(label+'下载失败：'+es.join(' | '));}
+function req(path){var u=getPath(path);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}}
+function ensureOld(){if(fileExist(OLD))return OLD;ensure(OLD_BUILDER,OLD_REF,OLD_PATH,'RC34 Builder');req(OLD_BUILDER);if(typeof RuleRepoFlatBuilder!=='object'||typeof RuleRepoFlatBuilder.build!=='function')throw new Error('RC34 Builder 未导出');RuleRepoFlatBuilder.build(false);if(!fileExist(OLD))throw new Error('RC34 flat_runtime_b424.js 构建失败');return OLD;}
+function aliasControl(){try{var s=String(readFile(CONTROL)||'');if(s){var a=[ROOT+'flat_control_v1.js',ROOT+'flat_control_v2.js'];for(var i=0;i<a.length;i++){writeFile(a[i],s);try{deleteCache(getPath(a[i]));}catch(e){}}}}catch(e2){}}
+function installAssets(){ensure(CONTROL,ASSET_REF,CONTROL_PATH,'RC35 Control');ensure(PATCH,ASSET_REF,PATCH_PATH,'RC35 Patch');aliasControl();return true;}
+function build(force){installAssets();if(!force&&fileExist(BUNDLE))return{ok:true,built:false,file:BUNDLE};ensureOld();var old=String(readFile(OLD)||''),p=String(readFile(PATCH)||'');if(bad(old)||bad(p))throw new Error('RC35 bundle source 无效');var out=old+'\n;\n/* RC35 PER-APP CHANNEL TRUTH OVERLAY */\n'+p+'\n;\nif(typeof RuleRepoRC35!=="object")throw new Error("RC35 missing");RuleRepoRC35.apply(HikerRuleRepo);\nHikerRuleRepo.__flatBundleBuild=425;\n';writeFile(BUNDLE,out);if(!fileExist(BUNDLE))throw new Error('Flat Runtime Build425 写入失败');try{req(CONTROL);}catch(e2){}return{ok:true,built:true,file:BUNDLE,bytes:out.length};}
+return{version:VERSION,build:build,bundle:BUNDLE,control:CONTROL};
+})();
