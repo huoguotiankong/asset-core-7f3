@@ -3,40 +3,45 @@
 > 当前恢复入口。RC28 完整记录已冻结到 `CHANGELOG_RC28_20260825.md`；RC27、RC26 及更早历史继续保留。
 
 ## 当前活动基线
-- Stable：`3.5.5 / Build389`，继续冻结；RC29 自更新闭环实机通过前禁止晋级。
-- Test：`3.5.6-rc29 / Build419`，Shell `rule_repo_test_v166.txt` / rule version `2026082505`。
+- Stable：`3.5.5 / Build389`，继续冻结；RC28→RC29 测试仓自更新闭环已经用户实机确认通过，RC30 导入提速回归通过前暂不晋级。
+- Test：`3.5.6-rc30 / Build420`，Shell `rule_repo_test_v167.txt` / rule version `2026082506`。
 - Runtime 基线仍为 immutable `3.5.6-rc12 / Build402` + Local Module Manager `2.2.0` + `require(file://)`。
-- RC24 本地图标、RC25 原生 `.txt` 导入、RC26 普通程序三镜像版本目录、RC27 多版本更新统计、RC28 独立 self feed 全部保持。
+- RC24 本地图标、RC25 原生 `.txt` 导入、RC26 普通程序三镜像版本目录、RC27 多版本更新统计、RC28 独立 self feed、RC29 自更新闭环均保持。
 
-## 2026-08-25 · 3.5.6-rc29 / Build419 · Self Update Closure Probe
+## 2026-08-25 · 3.5.6-rc30 / Build420 · Immutable Import Fast Path
 
-### 用户实机事实
-- 用户 08:59 实机截图确认：测试仓自身详情已经正确显示“当前安装：测试版 3.5.6-rc28”，可用版本中的 Test 也为 `3.5.6-rc28`，并标记“当前运行”。
-- 这证明 RC28 已解决 RC26/RC27 时 selfMeta 被旧版本锁死的问题，第一阶段通过。
+### RC29 实机闭环结论
+- 用户 09:21 实机截图确认：详情顶部显示“当前安装：测试版 3.5.6-rc29”，可用版本中的 `测试版 3.5.6-rc29` 标记为“当前运行”。
+- 本次升级由 RC28 测试仓自身发现并导入 RC29，期间不需要打开 Stable 作为跳板。
+- 因此 RC28 → RC29 的“发现新 Test → 原生导入 → 覆盖安装 → 重启 → 识别新 Test”自更新闭环正式判定通过。
 
-### RC29 目的
-- RC29 不新增业务/UI功能，只作为 RC28→RC29 的自更新闭环探针。
-- `channels.json` 将 Test 提升到 `RC29 / Build419` 并指向 `rule_repo_test_v166.txt`。
-- RC28 的 self feed 会直接三镜像读取这个小文件，因此不需要统一大目录，也不需要打开 Stable。
-- RC29 新增极薄 `self_update_probe_patch.js` 和 `shell_bridge_v7.js`：底层完整复用 RC28 已验证链，仅把当前运行身份提升到 RC29，同时继续接受未来更高 self feed。
+### 用户反馈与根因边界
+- 用户反馈普通程序点击“导入”后，仍要等待较久才出现海阔原生导入提示。
+- RC25 之后规则仓已经只把远程 Shell 交给 `home_rule_url`；完整 Runtime / 图片资源并不在这一步下载，所以不能把等待简单归因于整个小程序体积。
+- 当前 RC25 `nativeUrl()` 使用 `cdn.jsdelivr.net/...@main/<path>?v=<version>`；`@main` 是可变分支，需要 CDN 解析当前分支指向并处理边缘缓存一致性，不适合作为已经发布版本的导入热路径。
 
-### 静态门禁
-- RC29 probe patch / Bridge 使用独立文件，不覆盖 RC28 工件。
-- `rule_repo_test_v166.txt` 外层 JSON、内层 pages JSON、14 段 `js:` 入口全部通过解析和 `node --check`。
-- Stable 3.5.5 / Build389、Build402 Runtime、RC24~RC28 已验证能力均未修改。
+### RC30 实现
+- 新增 `releases/test-3.5.6-rc30/import_ref_catalog_v1.json`：约 3 KB，本地保存当前目录 29 个 Remote/Test/Stable `.txt` Shell 的不可变 commit SHA。
+- 新增 `import_fast_path_patch.js`：普通 `.txt` 导入时优先读取对象自身 `importRef`，其次查询本地固定版本目录；命中 40 位 SHA 后生成 `cdn.jsdelivr.net/gh/<repo>@<sha>/<path>`，不再使用 `@main`。
+- 若新版本尚未登记 `importRef`，自动调用 RC25 已验证的原生导入链，保持 fail-safe，不因加速目录缺项导致无法导入。
+- RC30 自身 `channels.json` 已增加 `importRef`，为后续 RC31+ 自更新使用固定版本导入地址建立元数据契约。
+- `shell_bridge_v8.js` 只在 RC30 首次启动缺少本地文件时，三镜像固定 commit 下载 RC30 patch 与 importRef 目录；正常启动继续 Local-First。
+- `rule_repo_test_v167.txt` 固定读取 immutable `shell_bridge_v8.js`，外层 JSON、内层 pages JSON、14 段 `js:` 入口已通过解析/`node --check`。
+- 本版不改 Runtime Build402，不改 Stable，不改任何业务小程序的运行代码。
 
-### 强制实机验收
-1. 保持当前运行 RC28；**不要打开正式仓**。
-2. 在测试仓进入“我的规则仓库”自身详情，点“检查版本”。
-3. 当前安装仍应显示 RC28，但测试版可用版本必须变为 `3.5.6-rc29 / Build419`。
-4. 直接在同一测试仓详情页点击 RC29 导入/覆盖。
-5. 退出并重新打开“我的规则仓库·测试版”。
-6. 再进自身详情，必须显示“当前安装：测试版 3.5.6-rc29”，并将 RC29 标记为“当前运行”。
-7. 首页可更新数字、图标、检查版本和普通小程序导入不得退化。
+### RC30 实机验收
+1. 当前 RC29 测试仓点击“检查版本”，应发现 `3.5.6-rc30 / Build420`。
+2. 从 RC29 覆盖导入 RC30；**这一次 RC29→RC30 仍走旧 RC25 导入器，因此耗时不能作为 RC30 提速结论**。
+3. 重开测试仓，详情必须显示 RC30 / Build420 为“当前运行”。
+4. 任选一个普通 Remote/Test/Stable `.txt` 小程序（建议黄豆短剧或麻豆AI），在 RC30 中再次点击导入。
+5. 对比“点击导入 → 海阔弹出导入提示”的等待时间；应重点观察是否明显短于 RC29。
+6. 完成一次覆盖导入，确认程序名称/版本识别和导入动作没有退化。
+7. 若速度仍慢，则下一层瓶颈基本落在 jsDelivr 固定对象首包或海阔原生 `home_rule_url` 内部，不再继续把 Runtime 体积作为主因。
 
 ### Stable 门禁
-- 只有步骤 2~6 在**完全不借助 Stable**的情况下实机通过，测试仓自更新闭环才算成立。
-- 通过后先记录验收结果，再决定是否将 RC29/后续 Candidate 晋级 Stable；未通过则 Stable 3.5.5 继续冻结。
+- RC30 只验证导入链性能与兼容性。
+- 实机确认固定 SHA 导入正常且无回归后，再把“发布版本必须携带 immutable `importRef`”写入跨程序开发规范。
+- Stable 3.5.5 / Build389 在此之前继续冻结。
 
 ## 历史
 - RC28：`apps/tools/rule-repo/CHANGELOG_RC28_20260825.md`
