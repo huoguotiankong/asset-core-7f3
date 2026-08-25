@@ -3,7 +3,7 @@
   "id": "pornhub",
   "name": "Pornhub",
   "versionPolicy": "remote-stable-localfirst-test-v3",
-  "updatedAt": "2026-08-25 22:33",
+  "updatedAt": "2026-08-25 23:00",
   "channels": [
     {
       "channel": "stable",
@@ -45,18 +45,18 @@
       "mode": "remote-local-first",
       "updatedAt": "2026-08-25",
       "recommended": false,
-      "desc": "Test1 首装被远程残留硬门禁拒绝后新建不可变 Test2；仍从 Stable 0.1.0 重基线，严格校验源码 marker，确定性重写 C.bootstrap 并本地化 15 个 SVG，最终门禁继续保留。",
+      "desc": "Test2 / Build10202 已获用户基础实机确认可正常运行；Test1 的远程残留门禁失败已修复。当前只确认 Local-First 首装/运行基础链，完整业务回归尚未宣称通过。",
       "highlights": [
         "Test1 / Build10201 已冻结为实机失败版本，不原地覆盖",
+        "Test2 / Build10202 Local-First 基础实机已通过",
         "15 层 Stable 业务模块原顺序冻结",
         "16 个代码单元 + 15 个 SVG = 31 源完整本地闭包",
-        "每个 JS 下载后必须命中精确 marker，避免错误响应混入 Runtime",
+        "每个 JS 下载后必须命中精确 marker",
         "历史 C.bootstrap 赋值统一重写到本地 Bootstrap Shim",
         "Pornhub 资产根精确替换为本地 assets/",
-        "远程残留门禁继续开启，失败时会返回具体模块路径和上下文",
-        "账号 / 评论 / Shorts / 片单 / 4 档 HLS 业务逻辑不主动改写",
-        "Stable 0.1.0 / Latest 不变",
-        "等待海阔实机验证"
+        "远程残留门禁继续开启",
+        "完整账号 / 评论 / Shorts / 片单 / 播放业务回归尚未宣称通过",
+        "Stable 0.1.0 / Latest 不变"
       ],
       "icon": "https://www.pornhub.com/favicon.ico"
     }
