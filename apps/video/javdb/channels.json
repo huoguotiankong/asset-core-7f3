@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "javdb-v3",
   "name": "JavDB v3",
-  "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-23 21:40",
+  "versionPolicy": "remote-stable-localfirst-test-local-lineage-v2",
+  "updatedAt": "2026-08-25 19:58",
   "channels": [
     {
       "channel": "stable",
@@ -18,7 +18,14 @@
       "updatedAt": "2026-08-23",
       "recommended": true,
       "desc": "远程代码正式版 · 当前业务稳定基线；已确认存在 GitHub Raw 单点启动风险",
-      "highlights": ["APP 分类/排行/演员补齐与映射修正", "首页/我的/更多 UI 收敛", "共享 JAV Playback Stable", "Shell 直接依赖 GitHub Raw runtime，网络异常时可能报 JDBCLOUD 未定义", "Stable 3.9.41 完整保留可回退"],
+      "highlights": [
+        "APP 分类/排行/演员补齐与映射修正",
+        "首页/我的/更多 UI 收敛",
+        "共享 JAV Playback Stable",
+        "Shell 直接依赖 GitHub Raw runtime，网络异常时可能报 JDBCLOUD 未定义",
+        "Stable 3.9.41 完整保留可回退",
+        "本轮 Local-First 只在 Test 验证，Stable 不变"
+      ],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
@@ -26,17 +33,26 @@
       "label": "测试版",
       "id": "javdb-v3-test",
       "name": "JavDB v3",
-      "version": "3.9.43-test.3",
+      "version": "3.9.44-test.1",
       "baseVersion": "3.9.42",
-      "targetVersion": "3.9.43",
-      "build": 2026082304,
-      "displayVersion": "Test 3.9.43 · 远程传输恢复3",
-      "path": "cloud/javdb/v3.9.43-test.3/javdb_v3.9.43_test3.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
+      "targetVersion": "3.9.44",
+      "build": 2026082501,
+      "displayVersion": "Test 3.9.44-test.1 · Local-First",
+      "path": "cloud/javdb/v3.9.44-test.1/javdb_v3.9.44_test1_localfirst.txt",
+      "mode": "remote-local-first",
+      "updatedAt": "2026-08-25",
       "recommended": false,
-      "desc": "业务完全继承 Stable 3.9.42；只重构远程启动和模块传输恢复链",
-      "highlights": ["修复 JDBCLOUD 未定义启动故障", "Shell 使用固定提交的 jsDelivr Bootstrap", "Bootstrap 缓存 Runtime", "Runtime/模块按本地缓存→jsDelivr→GitHub Web Raw→Raw 恢复", "内容校验通过才写缓存", "Test1/Test2 已冻结不测试"],
+      "desc": "从 Stable 3.9.42 只迁移交付/启动架构；首次生成一个本地 Runtime Bundle，后续正常启动只读本地 Entry + require(file://)，不再加载远程 Runtime/补丁/Playback Manager。",
+      "highlights": [
+        "业务/API/UI/账号/官方播放严格继承 Stable 3.9.42",
+        "7 个 Core 分片 + 9 个 Custom 分片完整本地化",
+        "Stable 6 层补丁 + Local-First overlay 按原顺序执行",
+        "Shared JAV Playback 1.0.0-test.4 内嵌本地 Runtime",
+        "第三方播放 lazyRule/select 点击回调重新进入本地 javdb3，不再远程抓 Manager",
+        "保留 direct eval 同一函数作用域，避免 JDB 未定义回归",
+        "旧 3.9.43-test.3 传输恢复版保留为 previousTest",
+        "Stable 3.9.42 / Latest 不变"
+      ],
       "icon": "https://javdb.com/favicon.ico"
     },
     {
@@ -60,7 +76,12 @@
       "updatedAt": "2026-08-21",
       "recommended": false,
       "desc": "纯本地完整代码 · 导入后不依赖私人 GitHub 运行",
-      "highlights": ["基于 Stable 3.9.41 派生", "规则名 JavDB v3 本地版", "可与正式/测试版同时保留", "导入时执行最终规则隐私扫描"],
+      "highlights": [
+        "基于 Stable 3.9.41 派生",
+        "规则名 JavDB v3 本地版",
+        "可与正式/测试版同时保留",
+        "导入时执行最终规则隐私扫描"
+      ],
       "icon": "https://javdb.com/favicon.ico"
     }
   ]
