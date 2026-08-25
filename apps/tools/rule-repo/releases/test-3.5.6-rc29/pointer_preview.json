@@ -1,0 +1,1 @@
+{"schema":1,"test":{"version":"3.5.6-rc29","build":419,"rule":"apps/tools/rule-repo/rule_repo_test_v166.txt","bridge":"apps/tools/rule-repo/shell_bridge_v7.js"},"stable":{"version":"3.5.5","build":389},"activation":"atomic-fast-forward-only"}
