@@ -21,7 +21,17 @@
   "shellRef": "cd506d17d46f2d63a97f966a482cf108fa2b1064",
   "shellBlob": "311758fec5b6087cf19f27ed70b01bfba76ac52c",
   "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-pending-device-validation",
+  "status": "active-test-local-first-basic-device-validated",
+  "deviceValidation": {
+    "level": "basic-local-first-runtime",
+    "confirmedAt": "2026-08-25 21:55 +08:00",
+    "runtimeReady": true,
+    "sourceCount": 28,
+    "runtimeBytes": 152195,
+    "sourceRefPrefix": "15bec4419cfd",
+    "visibleCards": ["共享播放SDK", "应用图标", "业务基线"],
+    "scope": "User screenshot confirms local package build/load and diagnostic metadata only; filters, magnets, providers and account flows were not individually evidenced in this screenshot."
+  },
   "previousTest": {
     "version": "0.1.0-test.11",
     "build": 10111,
@@ -29,5 +39,5 @@
     "rule": "apps/video/myav/myav_remote_test_v11_b10111.txt",
     "status": "stable-promotion-source-preserved"
   },
-  "notes": "Rebased from Stable 0.1.0 / Build10112. Only delivery/startup/control-plane architecture changes: the exact 23-layer Stable business chain is frozen in original order; Shared JAV Playback 1.0.0-test.4, its base SDK, 123AV icon and MyAv repository icon are localized. Normal second startup uses local Entry + require(file://) Runtime and does not load Bootstrap/Remote Manager/GitHub executable code. Stable/Latest remain unchanged pending device validation."
+  "notes": "Rebased from Stable 0.1.0 / Build10112. Local-First Runtime construction/loading has basic device validation: 28 sources and 152195-byte Runtime ready. This does not claim full business regression for filters, magnets, Shared Playback providers or account flows. Stable/Latest remain unchanged."
 }
