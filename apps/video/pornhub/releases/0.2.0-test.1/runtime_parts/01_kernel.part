@@ -1,0 +1,44 @@
+/* Pornhub V2 0.2.0-test.1 standalone Local-First runtime */
+var PornhubV2=(function(){
+  var VERSION='0.2.0-test.1',BUILD=20001,SCHEMA=2;
+  var ROOT='hiker://files/rules/asset-core-local/pornhub-test/b20001/';
+  var ASSET=ROOT+'assets/';
+  var BRAND='#FF9000',TEXT='#1F1F1F',MUTED='#8A8A8A';
+  var UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/139.0 Safari/537.36';
+  var DEFAULT_BASE='https://www.pornhub.com';
+  var KEYS={
+    base:'phv2_base',cookie:'phv2_cookie',auth:'phv2_auth',account:'phv2_account',identity:'phv2_identity',avatar:'phv2_account_avatar',session:'phv2_session',
+    favVideo:'phv2_fav_video',favPerson:'phv2_fav_person',favCollection:'phv2_fav_collection',history:'phv2_history',searchHistory:'phv2_search_history'
+  };
+  function s(v){return v===undefined||v===null?'':String(v);}
+  function trim(v){return s(v).replace(/^\s+|\s+$/g,'');}
+  function clean(v){var x=trim(v);return x==='null'||x==='undefined'?'':x;}
+  function decode(v){return s(v)
+    .replace(/&amp;/ig,'&').replace(/&#38;/ig,'&').replace(/&quot;/ig,'"').replace(/&apos;|&#39;/ig,"'").replace(/&nbsp;/ig,' ')
+    .replace(/&lt;/ig,'<').replace(/&gt;/ig,'>')
+    .replace(/&#0*(\d+);?/g,function(a,n){var x=parseInt(n,10);return x>0&&x<=65535?String.fromCharCode(x):a;})
+    .replace(/&#x0*([0-9a-f]+);?/ig,function(a,n){var x=parseInt(n,16);return x>0&&x<=65535?String.fromCharCode(x):a;});}
+  function strip(v){return trim(decode(s(v).replace(/<br\s*\/?\s*>/ig,'\n').replace(/<script\b[\s\S]*?<\/script>/ig,' ').replace(/<style\b[\s\S]*?<\/style>/ig,' ').replace(/<[^>]+>/g,' ')).replace(/\s+/g,' '));}
+  function q(v){return encodeURIComponent(s(v));}
+  function hash(v){var x=s(v),h=0,i;for(i=0;i<x.length;i++)h=((h<<5)-h+x.charCodeAt(i))|0;return Math.abs(h);}
+  function now(){return new Date().getTime();}
+  function base(){var b=trim(getItem(KEYS.base,DEFAULT_BASE));if(!/^https?:\/\//i.test(b))b=DEFAULT_BASE;return b.replace(/\/+$/,'');}
+  function origin(u){var m=s(u).match(/^(https?:\/\/[^\/]+)/i);return m?m[1]:base();}
+  function abs(u,b){u=decode(trim(u));b=b||base();if(!u)return'';u=u.replace(/\\\//g,'/');if(/^https?:\/\//i.test(u))return u;if(/^\/\//.test(u))return'https:'+u;if(/^data:/i.test(u)||/^javascript:/i.test(u)||u.charAt(0)==='#')return'';if(u.charAt(0)==='/')return origin(b)+u;if(u.charAt(0)==='?')return s(b).replace(/[?#].*$/,'')+u;return s(b).replace(/[?#].*$/,'').replace(/[^\/]*$/,'')+u;}
+  function ruleTitle(){try{return MY_RULE&&MY_RULE.title?MY_RULE.title:'Pornhub';}catch(e){return'Pornhub';}}
+  function param(name,def){var v='';try{if(typeof getParam==='function'){v=getParam(name);if(v!==undefined&&v!==null&&s(v)!=='')return s(v);}}catch(e){}var u='';try{u=s(MY_URL);}catch(e2){}var m=u.match(new RegExp('[?&]'+name+'=([^&#]*)'));if(!m)return def===undefined?'':def;try{return decodeURIComponent(m[1]);}catch(e3){return m[1];}}
+  function pageNo(){var p=1;try{p=parseInt(MY_PAGE||1,10)||1;}catch(e){p=parseInt(param('page','1'),10)||1;}return p;}
+  function page(path,p){var a=['rule='+encodeURIComponent(ruleTitle()),'simple=true'];p=p||{};for(var k in p)if(p.hasOwnProperty(k)&&p[k]!==undefined&&p[k]!==null&&s(p[k])!=='')a.push(encodeURIComponent(k)+'='+encodeURIComponent(s(p[k])));return'hiker://page/'+path+'?'+a.join('&');}
+  function queryPage(u,p){p=parseInt(p,10)||1;if(p<=1)return u;if(/[?&]page=\d+/i.test(u))return u.replace(/([?&]page=)\d+/i,'$1'+p);return u+(u.indexOf('?')>=0?'&':'?')+'page='+p;}
+  function form(o){var a=[];for(var k in o)if(o.hasOwnProperty(k)&&o[k]!==undefined&&o[k]!==null)a.push(encodeURIComponent(k)+'='+encodeURIComponent(s(o[k])));return a.join('&');}
+  function attr(tag,name){var m=s(tag).match(new RegExp('(?:^|\\s)'+name+'\\s*=\\s*["\\\']([^"\\\']*)["\\\']','i'));return m?decode(m[1]):'';}
+  function meta(html,key){var k=key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),m=s(html).match(new RegExp('<meta[^>]+(?:property|name)=["\\\']'+k+'["\\\'][^>]+content=["\\\']([^"\\\']+)["\\\']','i'));if(!m)m=s(html).match(new RegExp('<meta[^>]+content=["\\\']([^"\\\']+)["\\\'][^>]+(?:property|name)=["\\\']'+k+'["\\\']','i'));return m?decode(m[1]):'';}
+  function imageRaw(raw,b){var m=s(raw).match(/<img\b[^>]*(?:data-mediumthumb|data-thumb_url|data-src|data-original|data-lazy-src|data-image|data-thumb|src)\s*=\s*["']([^"']+)["'][^>]*>/i);return m?abs(m[1],b):'';}
+  function imageUrl(u,ref){u=abs(u,ref||base());if(!u)return'';return u+'@headers='+JSON.stringify({'User-Agent':UA,'Referer':ref||base()+'/'});}
+  function context(html,index,before,after){html=s(html);return html.substring(Math.max(0,index-(before||600)),Math.min(html.length,index+(after||1200)));}
+  function unique(a,key){var out=[],seen={},i,k;for(i=0;i<(a||[]).length;i++){k=key?key(a[i]):s(a[i]);if(!k||seen[k])continue;seen[k]=1;out.push(a[i]);}return out;}
+  function allAnchors(html,b){var out=[],re=/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/ig,m;while((m=re.exec(s(html)))){var href=abs(m[2],b||base());if(!href)continue;out.push({href:href,raw:m[0],text:strip(m[4]),title:attr(m[1]+' '+m[3],'title'),img:imageRaw(m[0],href),index:m.index});}return out;}
+  function isBad(body){var x=s(body),l=x.toLowerCase();return !x||x.length<120||l.indexOf('just a moment')>=0||l.indexOf('cf-chl-')>=0||l.indexOf('attention required')>=0||(l.indexOf('captcha')>=0&&x.length<8000);}
+  function isArray(a){return Object.prototype.toString.call(a)==='[object Array]';}
+  function icon(name){return ASSET+name+'.svg';}
+
