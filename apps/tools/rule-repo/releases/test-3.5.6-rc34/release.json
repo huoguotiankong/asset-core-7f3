@@ -1,0 +1,18 @@
+{
+  "schema":1,
+  "id":"rule-repo-test",
+  "name":"我的规则仓库·测试版",
+  "version":"3.5.6-rc34",
+  "build":424,
+  "baseRuntime":{"version":"3.5.6-rc33","build":423,"generatedRuntime":"hiker://files/rules/asset-core-local/rule-repo-test/flat_runtime_b423.js"},
+  "previousTest":{"version":"3.5.6-rc33","build":423,"rule":"apps/tools/rule-repo/rule_repo_test_v170.txt"},
+  "rule":"apps/tools/rule-repo/rule_repo_test_v171.txt",
+  "entry":"apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_entry_v2.js",
+  "builder":"apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_builder_v2.js",
+  "control":"apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_control_v2.js",
+  "finalPatch":"apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_catalog_live_patch_v1.js",
+  "generatedRuntime":"hiker://files/rules/asset-core-local/rule-repo-test/flat_runtime_b424.js",
+  "delivery":{"mode":"local-first-flat-runtime","normalStartup":"flat-entry-v2-plus-single-generated-bundle","firstBuild":"append-live-catalog-overlay-to-existing-b423-or-build-rc33-once","controlPlane":"standalone-live-file-control-v2","catalog":"mutable-local-snapshot-no-long-lived-memory-cache","import":"inherit-rc33-direct-payload-fast-lane"},
+  "verify":{"global":"HikerRuleRepo","property":"build","equals":424},
+  "notes":"RC34 专门修复测试仓版本目录刷新后仍显示旧 Test 的问题。用户实机证明正式仓已看到 JavDB 3.9.44-test.1，而测试仓仍显示 3.9.42-test.5。根因为 RC33 flat_final_patch 把 channel_catalog_snapshot 缓存在长生命周期 _catalog 内存变量；Control 虽已写入新本地文件，当前 Runtime 仍继续读取旧内存快照。RC34 改为每次版本详情从本地 channel_catalog_v3.json 实时读取；检查版本/同步写入后当前页立即生效。正常启动仍不主动联网。Entry/Control 同时覆盖旧 v1 本地别名，防止旧页面回调重新进入 RC33 控制面。Stable 3.5.5 保持不变。"
+}
