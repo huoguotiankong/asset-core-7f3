@@ -1,1 +1,0 @@
-RC35 pointer blobs prepared; this marker will be removed by final pointer commit.
