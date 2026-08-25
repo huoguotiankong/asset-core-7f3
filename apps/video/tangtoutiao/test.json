@@ -3,13 +3,30 @@
   "channel": "test",
   "id": "tangtoutiao-test",
   "name": "汤头条",
-  "version": "0.1.0-test.20",
-  "build": 10120,
-  "shellVersion": "1.0.0-test.20",
-  "shellRuleVersion": 2026082321,
-  "managerVersion": "2.0.1",
-  "release": "apps/video/tangtoutiao/releases/0.1.0-test.20/release.json",
-  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v20_b10120.txt",
-  "updatedAt": "2026-08-23",
-  "notes": "Test20 在 Test19 可启动基线上继续补齐内容能力：修复排行榜 type 参数污染和 Creator/featured 缺 uuid/lastId/limit；小说、有声、社区按首页返回的 api_list/params_list 动态二跳真实列表并缓存频道配置；新增创作者作品、社区详情、小说/有声章节；漫画接入 /api//book/detail → /api/book/list_episode(sort=asc) → /api/book/read 正文链。Test16 封面与 Test10/Test15 长视频/试看播放基线保持不变。"
+  "version": "0.1.0-test.21",
+  "baseVersion": "0.1.0-test.20",
+  "targetVersion": "0.1.0",
+  "build": 10121,
+  "shellVersion": "1.0.0-test.21-local-first",
+  "shellRuleVersion": 2026082513,
+  "managerVersion": "2.2.0-native-local-modules",
+  "delivery": "local-first-native-require-file",
+  "release": "apps/video/tangtoutiao/releases/0.1.0-test.21/release.json",
+  "bootstrap": "apps/video/tangtoutiao/bootstrap_test_v21_b10121.js",
+  "rule": "apps/video/tangtoutiao/tangtoutiao_remote_test_v21_b10121.txt",
+  "importRef": "3958f5816d9c49ae546cb79e93bf26b87dd54f6c",
+  "bootstrapRef": "736483ee10f472bf06db6ab4d256080ae74d4647",
+  "sourceRef": "e8f6c46a1b86a20c75b0f9cb5148984ad0a37b53",
+  "updatedAt": "2026-08-25",
+  "status": "active-test-local-first-pending-device-validation",
+  "previousTest": {
+    "version": "0.1.0-test.20",
+    "build": 10120,
+    "release": "apps/video/tangtoutiao/releases/0.1.0-test.20/release.json"
+  },
+  "previousBootable": {
+    "version": "0.1.0-test.19",
+    "build": 10119
+  },
+  "notes": "Delivery-only Local-First migration over Test20. The exact Test20 25-module order is preserved and one settings/version overlay is appended. First install writes 26 immutable JS modules to Hiker local files through Local Module Manager 2.2.0; normal startup directly requires those local files and does not load Remote Manager/Bootstrap/GitHub code. Test16 image handling, Test10/Test15 long-video and preview playback, Test20 content contracts, and the known short-video 2–3 second limitation are intentionally unchanged."
 }
