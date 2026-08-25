@@ -1,0 +1,17 @@
+  var Runtime={
+    version:VERSION,build:BUILD,localFirstVersion:VERSION,localFirstBuild:BUILD,
+    module:function(){return this;},
+    home:Pages.home,searchPage:Pages.search,search:Pages.nativeSearch,categories:Pages.categories,category:Pages.category,detail:Pages.detail,comments:Pages.comments,
+    creators:Pages.creators,creator:Pages.creator,library:Pages.library,login:Pages.login,account:Pages.account,shorts:Pages.shorts,playlists:Pages.playlists,playlist:Pages.playlist,gifs:Pages.gifs,settings:Pages.settings,diagnostics:Pages.diagnostics,
+    play:function(u){return Playback.resolve(u);},
+    syncAccount:function(){return Session.sync();},logout:function(){Session.clear();return true;},
+    onlineFavorite:function(u){return Actions.toggleOnlineFavorite(u);},subscribe:function(u){return Actions.creatorSubscription(u);},
+    toggleLocal:function(type,obj){return Store.toggle(localFavKey(type),localItem(type,obj),80);},
+    clearSearch:function(){Store.clearSearch();return true;},clearHistory:function(){Store.putList(KEYS.history,[],80);return true;},
+    homeMode:function(mode){putMyVar('phv2_home_mode',mode);try{var r=VideoProvider.home(mode,1),items=[],i;for(i=0;i<r.items.length&&i<18;i++){var x=UI.video(r.items[i]);x.extra.cls='phv2_home_feed_body';items.push(x);}deleteItemByCls('phv2_home_feed_body');addItemAfter('phv2_home_feed_anchor',items);var modes=['recommended','feed','recent','viewed','rated'],labels=['为你推荐','Feed','最新','热门','高分'];for(i=0;i<modes.length;i++)updateItem('phv2_home_tab_'+modes[i],{title:labels[i],extra:{backgroundColor:modes[i]===mode?BRAND:'',textColor:modes[i]===mode?'#FFFFFF':'',lineVisible:false}});updateItem('phv2_home_feed_title',{title:mode==='recommended'?'为你推荐':mode==='feed'?'Feed':mode==='recent'?'最新':mode==='viewed'?'热门':'高分'});return true;}catch(e){refreshPage(false);return false;}},
+    detailTab:function(u,tab){var key='phv2_detail_tab_'+hash(u);putMyVar(key,tab);try{var items=tab==='comments'?detailCommentItems(u,'phv2_detail_body'):detailIntroItems(VideoProvider.detail(u,false),u,'phv2_detail_body');deleteItemByCls('phv2_detail_body');addItemAfter('phv2_detail_anchor',items);updateItem('phv2_detail_intro',{title:'简介',extra:{backgroundColor:tab==='intro'?BRAND:'',textColor:tab==='intro'?'#FFFFFF':'',lineVisible:false}});updateItem('phv2_detail_comments',{title:'评论',extra:{backgroundColor:tab==='comments'?BRAND:'',textColor:tab==='comments'?'#FFFFFF':'',lineVisible:false}});return true;}catch(e){refreshPage(false);return false;}},
+    core:function(){return{version:VERSION,build:BUILD,base:base,session:Session,providers:{video:VideoProvider,category:CategoryProvider,creator:CreatorProvider,collection:CollectionProvider,account:AccountProvider,shorts:ShortsProvider,gif:GifProvider},parsers:Parser,store:Store};}
+  };
+  if(typeof $!=='undefined')$.exports=Runtime;
+  return Runtime;
+})();
