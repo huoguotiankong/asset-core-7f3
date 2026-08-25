@@ -23,7 +23,7 @@
   "sourceSite": "https://51cg1.com/",
   "icon": "https://51cg1.com/favicon.ico",
   "migration": {
-    "stage":"stable-010-localfirst-test-011t1-pending-device-validation",
-    "note":"Stable 0.1.0 / Build10106 remains frozen. Test 0.1.1-test.1 / Build10201 localizes the exact Stable execution chain plus 7 repository SVG assets and redirects historical C.bootstrap action re-entry through a local Bootstrap Shim."
+    "stage":"stable-010-localfirst-test-011t1-basic-device-validated",
+    "note":"Stable 0.1.0 / Build10106 remains frozen. User real-device screenshot confirms Test 0.1.1-test.1 / Build10201 Local-First Runtime ready with Source 9bfc77fe270c, 18 sources and 68653 bytes. This is a basic delivery/runtime validation; full business regression is not claimed."
   }
 }
