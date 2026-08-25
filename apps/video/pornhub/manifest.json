@@ -26,7 +26,7 @@
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
   "migration": {
-    "stage": "stable-010-localfirst-test-011t2-pending-device-validation",
-    "note": "Test1 / Build10201 was rejected on device by the remote-residual gate and remains frozen. Test2 / Build10202 keeps Stable0.1.0 business logic unchanged, uses strict source markers plus deterministic Bootstrap/asset rewriting, and keeps the final residual gate enabled."
+    "stage": "stable-010-localfirst-test-011t2-basic-device-validated",
+    "note": "Test1 / Build10201 was rejected by the device residual gate and remains frozen. User then confirmed Test2 / Build10202 works, so the Local-First startup/runtime repair has basic device validation. Full business regression is not yet claimed; Stable/Latest remain frozen at 0.1.0 / Build10108."
   }
 }

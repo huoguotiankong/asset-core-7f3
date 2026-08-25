@@ -21,7 +21,14 @@
   "shellRef": "19106230606f059f18d5b8965ea1aca0915d18cb",
   "shellBlob": "d7db4dcbec856a7c24db8b1b1eaf6bdfff0cdb4d",
   "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-test2-pending-device-validation",
+  "status": "active-test-local-first-test2-basic-device-validated",
+  "deviceValidation": {
+    "level": "basic",
+    "result": "pass",
+    "date": "2026-08-25",
+    "evidence": "User confirmed Test2 works after Test1 remote-residual failure was repaired.",
+    "scope": "Local-First startup/runtime build basic pass; full business regression not claimed."
+  },
   "failedPreviousTest": {
     "version": "0.1.1-test.1",
     "build": 10201,
@@ -34,5 +41,5 @@
     "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
     "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt"
   },
-  "notes": "Test2 is a new immutable Local-First build after Test1 was rejected by the device residual gate. Stable 0.1.0 / Build10108 business logic remains frozen. Test2 uses strict source markers, response-body normalization, deterministic C.bootstrap assignment rewriting, exact local SVG asset-root replacement and path-specific residual diagnostics; the final remote-residual gate remains enabled."
+  "notes": "Test2 basic Local-First device validation passed. Test1 remains frozen after the residual gate failure. Stable 0.1.0 / Build10108 business logic is still frozen. Full Home/Search/Category/Creator/Detail/Comments/Playback/Account/Shorts/Playlist regression is not yet claimed."
 }
