@@ -60,7 +60,8 @@
   },
   "shell": {
     "path": "cloud/javdb/v3.9.44-test.1/javdb_v3.9.44_test1_localfirst.txt",
-    "ref": "0944e9600a6f870c5a7d951530538d41057bd6d8",
+    "ref": "f07078f3bf3f4cecce5ac47f0b9928f9c0169311",
+    "blob": "3d6d01eb19baf250d2866c38f78148ab15549728",
     "ruleVersion": 2026082514
   },
   "localFiles": {
