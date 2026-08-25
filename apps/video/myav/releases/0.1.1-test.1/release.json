@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "appId": "myav",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.1-test.1",
+  "build": 10201,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10112,
+    "release": "apps/video/myav/releases/0.1.0/release.json"
+  },
+  "previousTest": {
+    "version": "0.1.0-test.11",
+    "build": 10111,
+    "release": "apps/video/myav/releases/0.1.0-test.11/release.json",
+    "status": "stable-promotion-source-preserved"
+  },
+  "sourceSnapshot": {
+    "ref": "15bec4419cfdd3f9ad3c7ed756e9ffa12f9b11af",
+    "modules": [
+      "apps/video/myav/releases/0.1.0-test.1/core.js",
+      "apps/video/myav/releases/0.1.0-test.2/image_patch.js",
+      "apps/video/myav/releases/0.1.0-test.3/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.4/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.5/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.6/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.9/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.10/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.11/core_patch.js",
+      "apps/video/myav/releases/0.1.0-test.1/runtime.js",
+      "apps/video/myav/releases/0.1.0-test.2/runtime_patch.js",
+      "apps/video/myav/releases/0.1.0-test.3/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.4/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.5/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.6/ui_a.js",
+      "apps/video/myav/releases/0.1.0-test.6/ui_b.js",
+      "apps/video/myav/releases/0.1.0-test.6/ui_c.js",
+      "apps/video/myav/releases/0.1.0-test.7/version_patch.js",
+      "apps/video/myav/releases/0.1.0-test.8/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.9/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.10/ui_patch.js",
+      "apps/video/myav/releases/0.1.0-test.11/ui_patch.js",
+      "apps/video/myav/releases/0.1.0/stable_patch.js",
+      "apps/video/myav/releases/0.1.1-test.1/final_local_patch.js"
+    ],
+    "sharedPlaybackBase": "shared/jav-playback/releases/1.0.0-test.2/index.js",
+    "sharedPlaybackStable": "shared/jav-playback/releases/1.0.0-test.4/index.js",
+    "sharedPlaybackIcon": "shared/jav-playback/assets/123av.svg",
+    "appIcon": "apps/video/myav/assets/icon.svg",
+    "sourceCount": 28
+  },
+  "builder": {
+    "path": "apps/video/myav/releases/0.1.1-test.1/local_bundle_builder.js",
+    "ref": "62557eefb3007432ca2b36f321ddc0d4ff23c996"
+  },
+  "entry": {
+    "path": "apps/video/myav/releases/0.1.1-test.1/local_entry.js",
+    "ref": "a59c57bb599a622c53e3ffca689aa94f98636f23"
+  },
+  "shell": {
+    "path": "apps/video/myav/myav_remote_test_localfirst_v1_b10201.txt",
+    "ref": "cd506d17d46f2d63a97f966a482cf108fa2b1064",
+    "blob": "311758fec5b6087cf19f27ed70b01bfba76ac52c",
+    "ruleVersion": 2026082522
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/myav-test/b10201/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "sharedPlaybackIcon": "123av.svg",
+    "appIcon": "myav_icon.svg"
+  },
+  "verify": {
+    "runtimeGlobal": "MyAvLocalRuntime",
+    "localFirstVersion": "0.1.1-test.1",
+    "localFirstBuild": 10201,
+    "businessBase": "Stable 0.1.0 / Build10112"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "sharedPlayback": "1.0.0-test.4 embedded with local lazyRule/select re-entry",
+    "appIcon": "localized from repository SVG",
+    "updateOwner": "rule-repo"
+  },
+  "notes": "Delivery-only migration from Stable 0.1.0. The exact 23-layer Stable business chain is frozen in original order, then a Local-First overlay is applied. Shared JAV Playback 1.0.0-test.4, its 1.0.0-test.2 base, 123AV icon and the MyAv repository icon are included in the local package. Normal second startup does not load Bootstrap, Remote Manager, remote executable code or repository runtime assets. Stable/Latest remain untouched pending device validation."
+}
