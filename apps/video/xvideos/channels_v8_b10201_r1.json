@@ -1,0 +1,39 @@
+{
+  "schema": 4,
+  "id": "xvideos",
+  "name": "XVideos",
+  "versionPolicy": "remote-test-localfirst-v1",
+  "updatedAt": "2026-08-25 23:58",
+  "republish": "test-localfirst-011t1-r1",
+  "cloudSnapshot": "apps/video/xvideos/channels_v8_b10201_r1.json",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "xvideos-test",
+      "name": "XVideos",
+      "version": "0.1.1-test.1",
+      "build": 10201,
+      "displayVersion": "Test 0.1.1-test.1 · Local-First",
+      "path": "apps/video/xvideos/xvideos_remote_test_localfirst_v1_b10201.txt",
+      "mode": "remote-local-first",
+      "updatedAt": "2026-08-25",
+      "recommended": true,
+      "desc": "从 Test7 / Build10107 原样派生，只迁移交付与启动控制面。15 层 Test7 业务代码 + Local Overlay + 24 个 SVG 共 40 源进入本地 Runtime；历史 C.bootstrap/ROOT Bootstrap 重入统一切到本地 Shim。",
+      "highlights": [
+        "Test7 15 层业务模块原顺序冻结",
+        "16 个代码单元 + 24 个 SVG = 40 源本地闭包",
+        "Shell 程序图标直接内置 data URI",
+        "历史 lazyRule Bootstrap 点击重入改走本地 Shim",
+        "Test5 私有文件存储救援与 X5 Cookie 边界保持不变",
+        "Test5/Test6 已验证详情与最高画质播放主链保持不变",
+        "Test7 短字段人物/频道/账号协议保持不变",
+        "Test7 WebView 评论恢复链保持不变",
+        "最终 Runtime 保留私人仓库与历史 Bootstrap 硬门禁",
+        "无 Stable；Test7 / Build10107 继续作为回退业务基线",
+        "等待海阔实机验证"
+      ],
+      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/xvideos/assets/brand.svg?v=2026082528"
+    }
+  ]
+}
