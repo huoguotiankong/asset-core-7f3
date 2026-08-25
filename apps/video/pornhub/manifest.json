@@ -1,9 +1,9 @@
 {
-  "schema": 3,
+  "schema": 4,
   "id": "pornhub",
   "name": "Pornhub",
   "category": "video",
-  "mode": "remote+stable+localfirst-test",
+  "mode": "remote+stable+standalone-localfirst-test",
   "latest": "apps/video/pornhub/latest.json",
   "stable": "apps/video/pornhub/stable.json",
   "test": "apps/video/pornhub/test.json",
@@ -16,17 +16,18 @@
   "stableBootstrap": "apps/video/pornhub/bootstrap_stable_v1_b10108.js",
   "stableRule": "apps/video/pornhub/pornhub_remote_stable_v2_b10108.txt",
   "stableRelease": "apps/video/pornhub/releases/0.1.0/release.json",
-  "testVersion": "0.1.1-test.2",
-  "testBuild": 10202,
-  "testShellVersion": "0.1.1-test.localfirst.2",
-  "testRule": "apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt",
-  "testRelease": "apps/video/pornhub/releases/0.1.1-test.2/release.json",
+  "testVersion": "0.2.0-test.1",
+  "testBuild": 20001,
+  "testShellVersion": "0.2.0-test.localfirst.1",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_v3_b20001.txt",
+  "testRelease": "apps/video/pornhub/releases/0.2.0-test.1/release.json",
   "testDelivery": "local-first-single-runtime-bundle",
+  "testArchitecture": "standalone-product-first-model-first",
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
   "migration": {
-    "stage": "stable-010-localfirst-test-011t2-basic-device-validated",
-    "note": "Test1 / Build10201 was rejected by the device residual gate and remains frozen. User then confirmed Test2 / Build10202 works, so the Local-First startup/runtime repair has basic device validation. Full business regression is not yet claimed; Stable/Latest remain frozen at 0.1.0 / Build10108."
+    "stage": "stable-010-v2-test-020t1-pending-device-validation",
+    "note": "V2 Test20001 is a clean standalone rewrite and no longer inherits the historical Stable/Test patch stack as runtime architecture. Stable/Latest remain 0.1.0/Build10108. Test0.1.1-test.2 remains the Local-First migration recovery reference. V2 requires full device validation before promotion."
   }
 }
