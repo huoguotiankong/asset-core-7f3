@@ -1,0 +1,16 @@
+/* 我的规则仓库 RC34 - Flat Runtime Builder 2.0 */
+var RuleRepoFlatBuilder=(function(){
+var VERSION='2.0.0',ROOT='hiker://files/rules/asset-core-local/rule-repo-test/';
+var OLD=ROOT+'flat_runtime_b423.js',BUNDLE=ROOT+'flat_runtime_b424.js',PATCH=ROOT+'flat_catalog_live_patch_v1.js',CONTROL=ROOT+'flat_control_v2.js',OLD_BUILDER=ROOT+'flat_builder_rc33_legacy.js';
+var ASSET_REF='d2379e0e2852325d55660aff6a69614fe95ee603';
+var PATCH_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_catalog_live_patch_v1.js',CONTROL_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc34/flat_control_v2.js';
+var OLD_REF='76599d39f81bd9780f88056320f34f993552e4ac',OLD_PATH='apps/tools/rule-repo/releases/test-3.5.6-rc33/flat_builder_v1.js';
+function bad(t){t=String(t==null?'':t).replace(/^\uFEFF/,'').trim();return !t||/^(?:<!doctype|<html|Bad Gateway|Too Many Requests|Service Unavailable|Gateway Timeout|Not Found|Error\b|Exception\b|HTTP\b|Cannot\b|Couldn(?:'|’)t\b)/i.test(t);}
+function urls(ref,path){return['https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/'+ref+'/'+path,'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@'+ref+'/'+path,'https://github.com/huoguotiankong/asset-core-7f3/raw/'+ref+'/'+path];}
+function ensure(path,ref,src,label){if(fileExist(path))return path;var us=urls(ref,src),es=[];for(var i=0;i<us.length;i++){try{var s=String(fetch(us[i],{timeout:4200,headers:{'Cache-Control':'public, max-age=31536000, immutable'}})||'');if(bad(s))throw new Error('无效响应');writeFile(path,s);if(!fileExist(path))throw new Error('写入失败');return path;}catch(e){es.push((i+1)+':'+String(e.message||e));}}throw new Error(label+'下载失败：'+es.join(' | '));}
+function req(path){var u=getPath(path);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}}
+function ensureOld(){if(fileExist(OLD))return OLD;ensure(OLD_BUILDER,OLD_REF,OLD_PATH,'RC33 Builder');req(OLD_BUILDER);if(typeof RuleRepoFlatBuilder!=='object'||typeof RuleRepoFlatBuilder.build!=='function')throw new Error('RC33 Builder 未导出');RuleRepoFlatBuilder.build(false);if(!fileExist(OLD))throw new Error('RC33 flat_runtime_b423.js 构建失败');return OLD;}
+function installAssets(){ensure(CONTROL,ASSET_REF,CONTROL_PATH,'RC34 Control');ensure(PATCH,ASSET_REF,PATCH_PATH,'RC34 Patch');try{writeFile(ROOT+'flat_control_v1.js',String(readFile(CONTROL)||''));try{deleteCache(getPath(ROOT+'flat_control_v1.js'));}catch(_e){}}catch(e){}return true;}
+function build(force){installAssets();if(!force&&fileExist(BUNDLE))return{ok:true,built:false,file:BUNDLE};ensureOld();var old=String(readFile(OLD)||''),p=String(readFile(PATCH)||'');if(bad(old)||bad(p))throw new Error('RC34 bundle source 无效');var out=old+'\n;\n/* RC34 LIVE CATALOG OVERLAY */\n'+p+'\n;\nif(typeof RuleRepoRC34!=="object")throw new Error("RC34 missing");RuleRepoRC34.apply(HikerRuleRepo);\nHikerRuleRepo.__flatBundleBuild=424;\n';writeFile(BUNDLE,out);if(!fileExist(BUNDLE))throw new Error('Flat Runtime Build424 写入失败');try{req(CONTROL);if(typeof RuleRepoFlatControl==='object'&&!fileExist(RuleRepoFlatControl.catalogFile))RuleRepoFlatControl.syncAll();}catch(e2){}return{ok:true,built:true,file:BUNDLE,bytes:out.length};}
+return{version:VERSION,build:build,bundle:BUNDLE,control:CONTROL};
+})();
