@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "javbus",
   "name": "JavBus",
-  "versionPolicy": "remote-stable-test-v1",
-  "updatedAt": "2026-08-23 10:00",
+  "versionPolicy": "remote-stable-localfirst-test-v2",
+  "updatedAt": "2026-08-25 20:42",
   "channels": [
     {
       "channel": "stable",
@@ -18,7 +18,13 @@
       "updatedAt": "2026-08-23",
       "recommended": true,
       "desc": "首个本项目自有远程正式版：重写版完整功能 + 域名失效自动切换",
-      "highlights": ["域名失败自动切换并记住最后成功域名", "远程 domains.json 可独立维护后续防屏蔽域名", "alpha3 磁力主链已实机恢复", "预览使用原图，第三方播放紧凑三列", "磁力长按：迅雷 / PikPak / 123云盘 / 光鸭云盘", "旧第三方 Apollo 本地规则退出渠道"],
+      "highlights": [
+        "域名失败自动切换并记住最后成功域名",
+        "alpha3 磁力主链已有实机成功记录",
+        "预览使用原图，第三方播放紧凑三列",
+        "磁力长按：迅雷 / PikPak / 123云盘 / 光鸭云盘",
+        "本轮 Local-First 只在 Test 验证，Stable 不变"
+      ],
       "icon": "https://www.javbus.com/favicon.ico"
     },
     {
@@ -26,15 +32,28 @@
       "label": "测试版",
       "id": "javbus-test",
       "name": "JavBus",
-      "version": "2.0.0-alpha4",
-      "build": 20004,
-      "displayVersion": "Test 2.0.0-alpha4 · Promotion Source",
-      "path": "apps/video/javbus/javbus_remote_test_v4_b20004.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
+      "version": "2.0.1-test.1",
+      "baseVersion": "2.0.0",
+      "baseBuild": 20005,
+      "targetVersion": "2.0.1",
+      "build": 20101,
+      "displayVersion": "Test 2.0.1-test.1 · Local-First",
+      "path": "apps/video/javbus/javbus_remote_test_localfirst_v1_b20101.txt",
+      "mode": "remote-local-first",
+      "updatedAt": "2026-08-25",
       "recommended": false,
-      "desc": "Stable 2.0.0 的晋级来源；下一轮 Test 必须从新 Stable 重新 rebase",
-      "highlights": ["保留为本次 Stable 晋级来源和问题对照", "下一测试版不得继续以旧 2026081903 为业务基线"],
+      "desc": "从 Stable 2.0.0 重新 rebase；首次安装完整本地 Runtime，后续正常启动使用本地 Entry + require(file://)，不加载 Remote Manager/远程 Runtime。",
+      "highlights": [
+        "业务/API/UI/收藏严格继承 Stable 2.0.0",
+        "alpha3 已实机验证的磁力 Parser/AJAX 主链不修改",
+        "Core / Compat / Runtime / alpha2-alpha4 / Stable Patch 完整本地化",
+        "Shared JAV Playback 1.0.0-test.4 与 123AV 图标进入本地包",
+        "播放 lazyRule 点击时重新进入本地 javbus，不再抓远程 Playback Manager",
+        "domains.json 本地化；普通启动不再每 6 小时读取 GitHub 控制面",
+        "设置页保留手动同步域名列表",
+        "旧 alpha4 保留为 Stable 晋级来源与历史对照",
+        "Stable 2.0.0 / Latest 不变"
+      ],
       "icon": "https://www.javbus.com/favicon.ico"
     }
   ]
