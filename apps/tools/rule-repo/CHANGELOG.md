@@ -1,45 +1,40 @@
 # 我的规则仓库 CHANGELOG
 
-> 当前恢复入口。RC39 是一次明确的架构重置：停止 RC36–RC38 的 Fast Hybrid / Detail / Presence 增量实验，测试仓回到 Stable 3.5.5 的完整已验证运行时。
+> 当前恢复入口。RC40 只针对“每次打开仍有长白屏/等待”做启动链隔离实验，不修改 Stable 3.5.5 的任何业务 Runtime 行为。
 
 ## 当前活动基线
 - Stable：`3.5.5 / Build389`，继续冻结，作为唯一稳定产品基准与 Test 救援入口。
-- Test：`3.5.6-rc39 / Build429`，Shell `rule_repo_test_v176_clean.txt` / rule version `2026082521`。
-- Test 运行：`Clean Test Shell → Stable bootstrap_v155.js → Remote Manager 2.0.4 cache → Stable 3.5.5 39 modules`。
-- RC39 不加载任何 Test Overlay，不是 Local-First，也暂时不提供 Test 自更新。
+- Test：`3.5.6-rc40 / Build430`，Shell `rule_repo_test_v177_startup_capsule.txt` / rule version `2026082522`。
+- Test 运行：`Test Shell → fixed cached startup_loader.js → local remote_manager_204.js + local startup_bootstrap.js → Stable3.5.5 39 modules via Build389 require cache`。
+- RC40 不是全量 Local-First：只本地化 Bootstrap/Manager 启动入口；39个 Stable 业务模块继续使用海阔现有 require 缓存。
+- RC40 暂停 Test 自更新，下一候选仍从 Stable 3.5.5 救援入口覆盖导入。
 
-## 2026-08-25 · 3.5.6-rc39 / Build429 · Clean Stable Clone
+## 2026-08-25 · 3.5.6-rc40 / Build430 · Local Startup Capsule
 
 ### 用户实机事实
-- RC38 首页显示 18 个程序且 18 个全部“已安装”，明显与真实状态不符，说明 Batch Presence 产生假阳性。
-- 点击程序后仍出现“正在读取当前程序版本…”并最终提示“找不到对应的小程序”，说明 RC38 的详情控制面仍未恢复 Stable 行为。
-- 从 RC33 到 RC38，测试仓在启动性能、目录真相、安装识别、详情导航、自更新和导入链上连续出现互相牵连的回归。
-- 用户明确反馈：相较 Stable 3.5.5，新增优点没有形成稳定收益，缺点持续增加。
+- RC39 已把测试仓功能完整退回 Stable3.5.5，但用户实机仍反馈每次打开测试仓要等待很久，出现明显空白页/加载时间。
+- 因 RC39 没有 RC36–RC38 Overlay，启动慢可以排除 Fast Hybrid、Detail Bridge、Presence、Flat Runtime 等实验控制面。
+- Stable3.5.5 实际启动链仍是 `Shell → remote bootstrap_v155 → remote bootstrap_v154 → Remote Manager2.0.4 → 39 module require`；即使39模块可由海阔缓存，Bootstrap/Manager入口仍反复走远程 require。
 
-### 决策
-1. 停止 RC36–RC38 增量补丁链，不再做 RC39=RC38+补丁。
-2. RC39 除测试版独立标题和 numeric rule version 外，所有运行页面直接使用 Stable 3.5.5 的 `bootstrap_v155.js`。
-3. 不加载 `fast_hybrid_patch.js`、Flat Runtime、Detail Bridge、Batch Presence、per-app channels overlay 等任何实验模块。
-4. 首页安装统计、程序详情、版本中心、导入、搜索、分类、设置全部恢复 Stable 3.5.5 原实现。
-5. 为避免再引入更新控制面变量，RC39 暂停 Test 自更新；后续候选先由 Stable 3.5.5 版本中心覆盖导入。
-6. 只有 RC39 实机证明“行为与 Stable 一致且不更慢”后，才允许重新加功能。
-7. 后续每次只加一个独立能力，并要求实机回归后才能进入下一项。
+### RC40 决策
+1. 不修改 Stable3.5.5 的39模块、首页、详情、版本中心、安装识别、导入、搜索、分类和设置。
+2. 不重新启用 Flat Runtime / Local Module Manager2.2.0，因为其完整性检查会逐文件回读+MD5，可能再次把网络等待换成本地扫描等待。
+3. 只建立一个 Local Startup Capsule：首次把 `Remote Manager2.0.4` 与 `startup_bootstrap.js` 写到 `hiker://files/rules/asset-core-local/rule-repo-test-rc40/startup/`。
+4. Shell 只 require 一个固定 commit 的 `startup_loader.js`，版本号 Build430，且不发送 `Cache-Control:no-cache`，让海阔缓存固定 Loader。
+5. Loader 在本地文件存在时只执行 `require(file://remote_manager_204.js)` + `require(file://startup_bootstrap.js)`，不再访问 Bootstrap/Manager 网络。
+6. Stable39模块固定使用 Stable3.5.5 已验证源码和 Build389 require 缓存；RC40 不引入任何 Runtime Overlay。
+7. 第一次打开可能需要安装启动胶囊，不作为性能结论；只看第2/3次重新进入速度。
 
-### RC39 实机验收
-1. 从 Stable 3.5.5 版本中心覆盖导入 RC39。
-2. 第一次打开能完整进入首页；第2/3次启动速度不得明显慢于 Stable。
-3. 首页程序数量、已安装数、可更新数与 Stable 3.5.5 同条件表现一致。
-4. 点击 Pornhub/JavBus/JavDB/MyAv 等程序，详情行为与 Stable 一致，不得出现“找不到对应的小程序”。
-5. 可用版本卡、导入、分类、搜索、更新页、设置页不得出现 RC36–RC38 特有逻辑。
-6. 在 RC39 完整通过前，Stable 3.5.5 不晋级，其他业务小程序本地化暂停。
-
-## 2026-08-25 · RC36–RC38 连续失败收口
-- RC36：为性能取消首页 channels / 安装探针后，多版本详情变成0个版本。
-- RC37：详情按规则标题重新定位，实机提示找不到“我的规则仓库·测试版”；安装统计只剩1。
-- RC38：改当前规则上下文 + Batch Presence 后，实机变成18/18假安装，详情仍提示“找不到对应的小程序”。
-- 结论：规则仓作为控制面必须优先“已验证行为不变”，不能一次同时改启动、安装识别、版本真相、详情导航多个基础层。
+### RC40 验收
+1. 从 Stable3.5.5 版本中心覆盖导入 RC40 / Build430。
+2. 第一次打开允许安装启动胶囊并建立39模块缓存。
+3. 完全退出后第2次、第3次重新进入，白屏等待必须明显缩短；至少不能比 Stable3.5.5 更慢。
+4. 首页、程序详情、版本卡、导入、分类、搜索、设置表现必须与 Stable3.5.5 一致。
+5. 若第2/3次仍明显慢，则启动瓶颈可进一步锁定为39个 Runtime 模块恢复本身；下一步只测试“Stable39模块本地 require”，不得同时加入其它控制面功能。
+6. RC40完整通过前，Stable3.5.5不晋级，其他业务小程序本地化继续暂停。
 
 ## 历史
+- RC39：`apps/tools/rule-repo/CHANGELOG_RC39_20260825.md`
 - RC37：`apps/tools/rule-repo/CHANGELOG_RC37_20260825.md`
 - RC36：`apps/tools/rule-repo/CHANGELOG_RC36_20260825.md`
 - RC35：`apps/tools/rule-repo/CHANGELOG_RC35_20260825.md`
