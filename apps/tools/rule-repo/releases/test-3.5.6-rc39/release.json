@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.6-rc39",
+  "build": 429,
+  "baseStable": {
+    "version": "3.5.5",
+    "build": 389,
+    "release": "apps/tools/rule-repo/releases/3.5.5/release.json",
+    "bootstrap": "apps/tools/rule-repo/bootstrap_v155.js"
+  },
+  "runtimeMode": "exact-stable-3.5.5-clone",
+  "runtimeRelease": "apps/tools/rule-repo/releases/3.5.5/release.json",
+  "runtimeBootstrap": "apps/tools/rule-repo/bootstrap_v155.js",
+  "shell": "apps/tools/rule-repo/rule_repo_test_v176_clean.txt",
+  "shellRuleVersion": 2026082521,
+  "selfUpdate": false,
+  "overlays": [],
+  "withdrawnExperimentalTests": [
+    "3.5.6-rc33",
+    "3.5.6-rc34",
+    "3.5.6-rc35",
+    "3.5.6-rc36",
+    "3.5.6-rc37",
+    "3.5.6-rc38"
+  ],
+  "acceptance": [
+    "首页与 Stable 3.5.5 行为一致",
+    "安装统计与 Stable 3.5.5 行为一致",
+    "程序详情与版本中心与 Stable 3.5.5 行为一致",
+    "导入行为与 Stable 3.5.5 一致",
+    "第2/3次启动不得明显慢于 Stable 3.5.5"
+  ],
+  "notes": "RC36-RC38 连续控制面回归后停止增量补丁。RC39 为纯稳定性基线：Test 仅保留独立规则标题与独立 Shell rule version，所有业务/控制面运行时直接使用已验证 Stable 3.5.5 Bootstrap 与39模块，不加载 Fast Hybrid、Flat Runtime、Detail Bridge、Batch Presence 或其它 Test Overlay。为避免重新引入更新链问题，RC39 暂停 Test 自更新，后续候选由 Stable 3.5.5 救援入口覆盖导入。"
+}
