@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "id": "acfun-test",
+  "name": "ACFun",
+  "version": "0.5.0-test.2",
+  "build": 50002,
+  "baseStable": {
+    "version": "0.4.9",
+    "build": 149,
+    "release": "apps/video/acfun/releases/0.4.9/release.json"
+  },
+  "previousTest": {
+    "version": "0.5.0-test.1",
+    "build": 50001,
+    "release": "apps/video/acfun/releases/0.5.0-test.1/release.json",
+    "status": "device-failed-private-storage-1mb"
+  },
+  "preservedResearch": {
+    "version": "1.0.0-alpha11",
+    "build": 10011,
+    "channel": "candidate",
+    "release": "apps/video/acfun/releases/1.0.0-alpha11/release.json"
+  },
+  "sourceSnapshot": {
+    "ref": "9f0d5a68540ec3b2dfe65b5f064a3ab9f5737934",
+    "stableBaseRef": "3ca58f0845deae19a4e5ad27ae1c84b16cef700d",
+    "stableModulesUnchangedToSourceRef": true,
+    "modules": [
+      "apps/video/acfun/releases/0.5.0-test.2/storage_preflight.js",
+      "acfun_core_v018.js",
+      "acfun_patch_v019.js",
+      "acfun_ui_v042.js",
+      "acfun_fix_v043.js",
+      "acfun_fix_v045.js",
+      "apps/video/acfun/acfun_fix_v047.js",
+      "apps/video/acfun/acfun_fix_v048.js",
+      "apps/video/acfun/acfun_fix_v049.js",
+      "apps/video/acfun/releases/0.5.0-test.2/storage_guard_patch.js",
+      "apps/video/acfun/releases/0.5.0-test.2/final_local_patch.js"
+    ],
+    "imageDecoder": "acfun_image_decoder_v040.js"
+  },
+  "builder": {
+    "path": "apps/video/acfun/releases/0.5.0-test.2/local_bundle_builder.js",
+    "ref": "c14350d117c04c513db63bdc44b46d7b252172fa"
+  },
+  "entry": {
+    "path": "apps/video/acfun/releases/0.5.0-test.2/local_entry.js",
+    "ref": "08e1136a09a4bf41450022ec35ecacc6b675507f"
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/acfun-test/b50002/",
+    "runtime": "runtime_bundle.js",
+    "imageDecoder": "image_decoder.js",
+    "meta": "bundle_meta.json",
+    "sharedConfig": "hiker://files/rules/asset-core-local/acfun-test/shared/remote_config.json",
+    "sharedDiscovery": "hiker://files/rules/asset-core-local/acfun-test/shared/frontend_discovery.json"
+  },
+  "verify": {
+    "global": "ac",
+    "property": "localFirstVersion",
+    "equals": "0.5.0-test.2",
+    "storageGuardProperty": "storageGuardVersion",
+    "storageGuardEquals": "0.5.0-test.2",
+    "stableBusinessBuild": "2026.08.21-v0.4.9"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle-storage-guard",
+    "normalStartup": "local entry + one require(file://) runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "updateOwner": "rule-repo",
+    "legacyRemoteManager": false,
+    "actionRuntime": "local $.require('acfun') trampoline"
+  },
+  "storageFix": {
+    "incident": "docs/INCIDENT_PRIVATE_STORAGE_1MB_HTML_CACHE_20260823.md",
+    "cleanup": [
+      "rebuildable frontend discovery/config/diagnostic control values",
+      "legacy compatibility source slots"
+    ],
+    "fileBacked": [
+      "remote_config",
+      "frontend_discovery"
+    ],
+    "preserve": [
+      "favorites",
+      "history",
+      "token",
+      "manual/good host",
+      "user settings"
+    ],
+    "largeUserListPolicy": "backup then compact only when legacy list exceeds 220KB"
+  },
+  "notes": "Device Test50001 failed with Hiker private KV 1MB quota. Test50002 keeps Stable 0.4.9 business modules unchanged, adds preflight cleanup and file-backed config/discovery, and prevents auxiliary persistence failures from aborting core tasks."
+}
