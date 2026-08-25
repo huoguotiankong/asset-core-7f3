@@ -1,6 +1,6 @@
 # 海阔小程序编写指南
 
-版本：2.11
+版本：2.12
 首次建立：2026-08-20  
 最近增强：2026-08-25  
 文档性质：**长期维护 / 开发操作系统 / 编写前必读 / 自动持续进化**
@@ -2085,3 +2085,169 @@ UX/UI 设计师
 - [ ] 回退/Recovery（适用）有效。
 - [ ] 目标程序 CHANGELOG 同步。
 - [ ] 新通用经验已自动沉淀。
+
+---
+
+# 33. 样本功能二次复盘新增基线
+
+2026-08-25 对“新片场 / 网飞猫APP / 瓜子影视 / 一起刷”重新按 UI + 功能双轨复盘后，新增以下长期能力基线。完整证据与样本来源见 `docs/HIKER_SAMPLE_FUNCTIONAL_REVIEW_20260825.md`。
+
+## 33.1 搜索必须建模为状态机，而不是一个输入框 + 一个接口
+
+成熟搜索至少区分：
+
+```text
+idle
+→ history / hot / recommend
+→ querying
+→ result(type/provider)
+→ empty / error
+```
+
+规则：
+
+- 历史词去重并限制数量，提供清空动作。
+- 搜索对象如果存在“作品 / 创作人 / 用户 / 专题”等类型，类型必须成为 SearchContext 的明确字段，而不是 Renderer 根据标题猜。
+- 搜索关键词优先从 URL/明确 Context 恢复；页内变量只做交互缓存。
+- 搜索结果区使用稳定 anchor/id/cls 局部替换，避免每次输入或切 Tab 重建整页。
+
+## 33.2 页面生命周期要区分“临时状态”和“持久状态”
+
+可使用 `addListener('onClose', ...)` / `addListener('onRefresh', ...)` 清理：
+
+- cursor。
+- 当前 Tab/筛选临时态。
+- render cache。
+- entity-local 临时缓存。
+
+不得因此清理：
+
+- 用户登录 Session。
+- 收藏/历史。
+- last-good endpoint。
+- Provider 长期 stale cache。
+
+生命周期回调和序列化回调一样，不依赖外层闭包局部变量；需要的数据显式传入或从命名空间状态恢复。
+
+## 33.3 游标分页按“查询上下文”保存，不把 cursor 当全局页码
+
+除了 `page=1,2,3`，APP/API 常见 `next/cursor`。统一设计：
+
+```js
+CursorState = {
+    key: '<app>:<provider>:<page>:<filterHash>',
+    next: '',
+    exhausted: false
+};
+```
+
+父页面关闭/查询条件变化时只清该上下文 cursor。不要直接拿关键词、完整 URL 或普通 `page` 作为全局变量名。
+
+## 33.4 多维筛选必须声明依赖关系；父维度变化时重置非法子状态
+
+例如：
+
+```text
+type = movie
+├─ class
+├─ area
+├─ year
+└─ sort
+```
+
+当 `type` 变化后，旧 `class/area/year/sort` 若不再合法必须按 FilterSchema 重置。不要让各筛选维度互相独立保存，否则容易出现“电影 + 动漫子类 + 上一次地区”的非法组合。
+
+推荐：
+
+```text
+FilterSchema
+→ FilterState
+→ normalizeDependentState()
+→ Provider query
+→ Renderer
+```
+
+## 33.5 `registerTask + updateItem` 适合页面内周期视觉状态，不适合重型后台轮询
+
+适合：Banner 轮播、轻量倒计时、页面内短周期状态刷新。
+
+要求：
+
+- 更新对象有稳定且全局唯一 ID。
+- 周期任务只做轻量操作，耗时不得逼近执行间隔。
+- 页面离开后任务应结束；需要显式停用时使用对应注销能力。
+- 网络重型轮询、长期监控、跨页面任务不得伪装成 UI 周期任务。
+
+## 33.6 `setLastChapterRule` 必须能脱离详情页面独立恢复实体并重新请求
+
+适用于影视剧集、漫画、小说等收藏最新集/章场景：
+
+```text
+favorite entityId
+→ 独立 Provider.latest(entityId)
+→ setResult(latestText)
+```
+
+禁止依赖当前详情页已经解析好的 `episodes[]/chapters[]` 或临时变量，否则从收藏页单独触发时会失效。Latest 请求应轻量，并按需使用短缓存。
+
+## 33.7 播放与下载共享“真实媒体解析”，但输出合同分离
+
+推荐：
+
+```text
+PlaybackProvider.resolveMedia(entity)
+→ MediaModel
+   ├─ play()     → direct / PlayModel
+   └─ download() → download://... / DownloadModel
+```
+
+播放能用的 URL 不代表下载一定可用；两者分别处理 Header、时效、权限和失败诊断。下载属于次级动作，不与 Primary Play 同权。
+
+## 33.8 动态 Endpoint 采用 last-good 优先，不让域名发现阻塞每次首屏
+
+成熟链：
+
+```text
+fresh cached endpoint
+→ 快速请求/低频 health check
+→ 失败才有限探活备选
+→ discovery / DoH / config 等发现源
+→ 更新 last-good
+→ 网络全失败时 stale last-good + 诊断
+```
+
+真正可复用的是“发现 → 解码 → 排序 → 有界探活 → last-good cache”，不是某个样本的 DoH 域名、AES Key、固定设备号或签名常量。
+
+## 33.9 多个小程序可以共享 Shell/SDK，但共享 Runtime 必须显式、版本化、可隔离
+
+“瓜子影视 / 一起刷”可见壳层证明不同产品可以复用同一 `home()/search()` 合约。自己的长期方案应做成：
+
+```text
+Hiker App SDK
+├─ Router / Shell Contract
+├─ Base Renderer
+├─ Search / Filter State
+├─ Image / Playback Helpers
+└─ Diagnostics
+
+App
+├─ AppConfig
+├─ Provider
+├─ Product Navigation
+└─ Theme Tokens
+```
+
+禁止把多个 Stable 绑定到同一个不可审计、不可回退的 PrivateJS 黑盒；共享 SDK 升版必须有版本隔离、兼容矩阵和逐 App Test。
+
+## 33.10 样本源码中的 UI Item 缓存只学思路，新项目优先缓存 Model
+
+旧样本会直接把一批已渲染 Item 放进 `putMyVar/storage0`，再 `addItemAfter` 恢复。长期项目优先：
+
+```text
+Provider result
+→ 标准 Model cache
+→ Renderer
+→ Item
+```
+
+这样协议字段、UI 组件和缓存 schema 可以独立演进；只有非常短生命周期的 page render cache 才考虑缓存 Item。
