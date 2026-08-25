@@ -3,7 +3,7 @@
   "id": "pornhub",
   "name": "Pornhub",
   "category": "video",
-  "mode": "remote+stable+test",
+  "mode": "remote+stable+localfirst-test",
   "latest": "apps/video/pornhub/latest.json",
   "stable": "apps/video/pornhub/stable.json",
   "test": "apps/video/pornhub/test.json",
@@ -16,14 +16,17 @@
   "stableBootstrap": "apps/video/pornhub/bootstrap_stable_v1_b10108.js",
   "stableRule": "apps/video/pornhub/pornhub_remote_stable_v2_b10108.txt",
   "stableRelease": "apps/video/pornhub/releases/0.1.0/release.json",
-  "testVersion": "0.1.0-test.7",
-  "testBuild": 10107,
-  "testShellVersion": "1.0.0-test.7",
-  "testBootstrap": "apps/video/pornhub/bootstrap_test_v7_b10107.js",
-  "testRule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
-  "testRelease": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
+  "testVersion": "0.1.1-test.1",
+  "testBuild": 10201,
+  "testShellVersion": "0.1.1-test.localfirst.1",
+  "testRule": "apps/video/pornhub/pornhub_remote_test_localfirst_v1_b10201.txt",
+  "testRelease": "apps/video/pornhub/releases/0.1.1-test.1/release.json",
+  "testDelivery": "local-first-single-runtime-bundle",
   "changelog": "apps/video/pornhub/CHANGELOG.md",
   "sourceSite": "https://www.pornhub.com/",
   "icon": "apps/video/pornhub/assets/icon.svg",
-  "migration": {"stage":"stable-010-icon-hotfix-shell2","note":"Stable business release remains 0.1.0 / Build10108. Shell v2 only changes the app icon delivery URL to jsDelivr; Test7 remains unchanged as the promotion source."}
+  "migration": {
+    "stage": "stable-010-localfirst-test-011t1-pending-device-validation",
+    "note": "Stable 0.1.0 / Build10108 remains frozen. Test 0.1.1-test.1 / Build10201 localizes the exact Stable execution chain plus 15 SVG assets and redirects historical Bootstrap action re-entry through a local Bootstrap Shim."
+  }
 }
