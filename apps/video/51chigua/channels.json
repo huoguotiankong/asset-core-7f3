@@ -3,7 +3,7 @@
   "id": "51chigua",
   "name": "51吃瓜",
   "versionPolicy": "remote-stable-localfirst-test-v1",
-  "updatedAt": "2026-08-25 23:00",
+  "updatedAt": "2026-08-25 23:31",
   "channels": [
     {
       "channel":"stable","label":"正式版","id":"51chigua","name":"51吃瓜","version":"0.1.0","build":10106,
@@ -15,8 +15,8 @@
     {
       "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.1-test.1","build":10201,
       "displayVersion":"Test 0.1.1-test.1 · Local-First","path":"apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt","mode":"remote-local-first","updatedAt":"2026-08-25","recommended":false,
-      "desc":"从 Stable 0.1.0 / Build10106 重基线，只迁移交付链：10 层 Stable 业务代码 + Local Overlay + 7 个 SVG 共 18 源进入本地 Runtime；历史 C.bootstrap 点击重入改走本地 Bootstrap Shim。",
-      "highlights":["10 层 Stable 业务链原顺序冻结","11 个代码单元 + 7 个 SVG = 18 源完整本地闭包","历史 Bootstrap lazyRule 点击重入改走本地 Shim","搜索/分类/收藏/历史/评论等仓库 SVG 本地化","图片 AES 继续使用海阔内置 crypto-java.js","最终 Runtime 保留私人仓库/Remote Manager 硬门禁","Stable 0.1.0 / Latest 不变","等待海阔实机验证"],
+      "desc":"Local-First 基础实机已通过：设备诊断显示 Build10201、本地 Runtime 已就绪、Source 9bfc77fe270c、18源、68653 bytes。当前只确认交付/Runtime 基础闭环，未扩大宣称完整业务回归。",
+      "highlights":["用户实机确认 Local-First Runtime ready","Source 9bfc77fe270c · 18源 · 68653 bytes","10 层 Stable 业务链原顺序冻结","11 个代码单元 + 7 个 SVG = 18 源完整本地闭包","历史 Bootstrap lazyRule 点击重入改走本地 Shim","搜索/分类/收藏/历史/评论等仓库 SVG 本地化","图片 AES 继续使用海阔内置 crypto-java.js","最终 Runtime 保留私人仓库/Remote Manager 硬门禁","完整图片/搜索/评论/播放业务回归尚未宣称通过","Stable 0.1.0 / Latest 不变"],
       "icon":"https://51cg1.com/favicon.ico"
     }
   ]

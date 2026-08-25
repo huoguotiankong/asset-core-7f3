@@ -20,7 +20,18 @@
   "shellRef": "d895590cd3a794978da6dfac547c80e68bda1faa",
   "shellBlob": "3c15611e7f22cc77ed3e9b417e41d03f64f94198",
   "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-pending-device-validation",
+  "status": "active-test-local-first-basic-device-validated",
+  "deviceValidation": {
+    "level": "basic-local-first",
+    "result": "pass",
+    "date": "2026-08-25",
+    "evidence": "User real-device screenshot shows 51吃瓜 0.1.1-test.1 / Build10201, Native Local-First, 本地 Runtime 已就绪, Source 9bfc77fe270c, 18源, 68653 bytes.",
+    "runtimeReady": true,
+    "sourceCount": 18,
+    "runtimeBytes": 68653,
+    "sourcePrefix": "9bfc77fe270c",
+    "scope": "Local-First runtime/package basic pass only; full business regression is not claimed."
+  },
   "previousTest": {
     "version": "0.1.0-test.5",
     "build": 10105,
@@ -28,5 +39,5 @@
     "rule": "apps/video/51chigua/51chigua_remote_test_v5_b10105.txt",
     "status": "stable-promotion-source-preserved"
   },
-  "notes": "Rebased from Stable 0.1.0 / Build10106. Only delivery/startup/control-plane architecture changes: the exact 10-layer Stable chain is preserved, 7 repository SVG assets are localized, historical C.bootstrap lazyRule re-entry is redirected through a local Bootstrap Shim, and the final Runtime keeps a hard private-repository residual gate. Stable/Latest remain unchanged pending device validation."
+  "notes": "Stable-derived Local-First Test1 has passed the basic real-device Local-First runtime/package check. Stable 0.1.0 / Build10106 remains frozen. Full image AES/search/category/detail/comments/playback/action regression is not claimed by this screenshot alone."
 }
