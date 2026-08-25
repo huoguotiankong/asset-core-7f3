@@ -2,81 +2,11 @@
   "schema": 4,
   "id": "acfun",
   "name": "ACFun",
-  "versionPolicy": "stable-localfirst-storage-guard-test-native-candidate-web-v3",
-  "updatedAt": "2026-08-25 19:32",
+  "versionPolicy": "stable-localfirst-test-native-candidate-web-v3",
+  "updatedAt": "2026-08-25 20:17",
   "channels": [
-    {
-      "channel": "stable",
-      "label": "正式版",
-      "id": "acfun",
-      "name": "ACFun",
-      "version": "0.4.9",
-      "build": 149,
-      "displayVersion": "Stable 0.4.9 · Build 149 · Shell 5.11.3",
-      "path": "apps/video/acfun/acfun_remote_v5.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-21",
-      "recommended": true,
-      "desc": "当前实机可用正式基线；播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态分类、短视频和漫画阅读底座保持冻结。",
-      "highlights": [
-        "当前正式恢复基线",
-        "真实 Build149",
-        "极速播放已验证",
-        "封面持久缓存",
-        "本轮不修改 Stable"
-      ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
-    },
-    {
-      "channel": "test",
-      "label": "测试版",
-      "id": "acfun-test",
-      "name": "ACFun",
-      "version": "0.5.0-test.2",
-      "baseVersion": "0.4.9",
-      "targetVersion": "0.5.0",
-      "build": 50002,
-      "displayVersion": "Test 0.5.0-test.2 · Build 50002 · Local-First Storage Guard",
-      "path": "apps/video/acfun/acfun_remote_test_localfirst_v2_b50002.txt",
-      "importRef": "f6fb42e4cf44e1b0a355cc9c72f1b407fa9ab8dc",
-      "mode": "remote-local-first",
-      "updatedAt": "2026-08-25",
-      "recommended": false,
-      "desc": "Test50001 实机触发海阔私有 KV 1MB 上限后的修复版。业务仍严格来自 Stable 0.4.9；启动先清理可重建旧大值，Remote Config / Frontend Discovery 改存 hiker://files，超大旧收藏/历史只在必要时备份压缩。",
-      "highlights": [
-        "Stable 0.4.9 / Build149 八模块业务代码不变",
-        "Test50001 已冻结为 1MB 私有存储失败样本",
-        "全新 b50002 本地 Runtime，不复用旧 bundle",
-        "启动前清理可重建大型诊断/配置旧值",
-        "Remote Config / Frontend Discovery 改为文件缓存",
-        "收藏/历史默认保留，只有历史列表异常超大才备份后压缩",
-        "辅助 setItem 配额失败不再拖垮主业务",
-        "正常启动仍为 1× require(file://) Runtime",
-        "Alpha11 Candidate 与 Web3 均不动"
-      ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
-    },
-    {
-      "channel": "web",
-      "label": "网页版",
-      "id": "acfun-web",
-      "name": "ACFun·网页版",
-      "version": "1.2.0-web3",
-      "build": 11003,
-      "displayVersion": "Web 1.2.0-web3 · Build 11003 · Native Shell 1.2",
-      "path": "apps/video/acfun/acfun_remote_web_v120.txt",
-      "mode": "remote",
-      "updatedAt": "2026-08-23",
-      "recommended": false,
-      "desc": "海阔原生网页源兜底 Web3；原生首页/详情继续保留，最终播放/漫画终端固定使用 APP 风格 Flutter H5。",
-      "highlights": [
-        "海阔原生主界面",
-        "封面内联 XOR 解密",
-        "固定 APP版H5 终端",
-        "Flutter 语义节点自动导航",
-        "与 Stable/Test 隔离"
-      ],
-      "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
-    }
+    {"channel":"stable","label":"正式版","id":"acfun","name":"ACFun","version":"0.4.9","build":149,"displayVersion":"Stable 0.4.9 · Build 149 · Shell 5.11.3","path":"apps/video/acfun/acfun_remote_v5.txt","mode":"remote","updatedAt":"2026-08-21","recommended":true,"desc":"当前实机可用正式基线；继续冻结。","highlights":["真实 Build149","当前正式恢复基线","本轮不修改 Stable"],"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"},
+    {"channel":"test","label":"测试版","id":"acfun-test","name":"ACFun·测试版","version":"0.5.0-test.3","baseVersion":"0.4.9","targetVersion":"0.5.0","build":50003,"displayVersion":"Test 0.5.0-test.3 · Build 50003 · Isolated Local-First","path":"apps/video/acfun/acfun_remote_test_localfirst_v3_b50003.txt","importRef":"3d6b51dd97def4a3c30a73cb1d024aba589fe160","mode":"remote-local-first","updatedAt":"2026-08-25","recommended":false,"desc":"针对 Test50001/50002 相同行848错误的隔离验证版：规则标题改为 ACFun·测试版、主模块改为 acfun50003、本地目录改为 b50003，彻底避开旧 ACFun 私有 KV 与 page module 缓存；业务仍来自 Stable0.4.9。","highlights":["独立规则标题 ACFun·测试版","全新 page module acfun50003","全新 b50003 本地目录","继续使用文件型 Storage Guard","Stable0.4.9 八模块业务基线不变","Test50001/50002 冻结保留","Candidate/Web 不变"],"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"},
+    {"channel":"web","label":"网页版","id":"acfun-web","name":"ACFun·网页版","version":"1.2.0-web3","build":11003,"displayVersion":"Web 1.2.0-web3 · Build 11003 · Native Shell 1.2","path":"apps/video/acfun/acfun_remote_web_v120.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,"desc":"独立网页终端兜底，保持不变。","highlights":["与 Stable/Test 隔离"],"icon":"https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"}
   ]
 }
