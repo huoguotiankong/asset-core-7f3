@@ -4,32 +4,39 @@
   "id": "pornhub-test",
   "appId": "pornhub",
   "name": "Pornhub",
-  "version": "0.2.0-test.1",
+  "version": "0.2.0-test.2",
   "baseVersion": "0.1.0",
   "baseBuild": 10108,
   "targetVersion": "0.2.0",
-  "build": 20001,
-  "shellVersion": "0.2.0-test.localfirst.1",
-  "shellRuleVersion": 2026082602,
+  "build": 20002,
+  "shellVersion": "0.2.0-test.localfirst.2",
+  "shellRuleVersion": 2026082603,
   "managerVersion": "standalone-local-builder-v1",
   "delivery": "local-first-single-runtime-bundle",
   "architecture": "standalone-product-first-model-first",
-  "release": "apps/video/pornhub/releases/0.2.0-test.1/release.json",
-  "rule": "apps/video/pornhub/pornhub_remote_test_v3_b20001.txt",
-  "sourceRef": "ffeee0e973c23410bbc6466717cd70ffe8b16953",
-  "builderRef": "cdc6ea284f3bb839e10c6a26a2d83ae7e1fc599b",
-  "entryRef": "f7a5c0356d1d96cdd5c22cbb8ea89787d3ef83ba",
-  "shellRef": "9573abc9b1aadc6f396946c4ec2545c0898759b2",
-  "shellBlob": "17ea47785ca4a48e779cb5a40451e8fd653056ff",
+  "release": "apps/video/pornhub/releases/0.2.0-test.2/release.json",
+  "rule": "apps/video/pornhub/pornhub_remote_test_v4_b20002.txt",
+  "sourceRef": "235dbed2a6b3c2bc99b8d7a553fae4394fac524e",
+  "builderRef": "904e2e3144441a4bef606fc7f4bfbfd3e0c0d2a1",
+  "entryRef": "f2d0fcaaf12a41ecd6da3dcbaa503f6b67b13082",
+  "shellRef": "828974bfc29328d03dd6d7e93352e88b281f84a4",
+  "shellBlob": "65aa754f8847516e135c6ce70401eabce6f8af80",
   "updatedAt": "2026-08-26",
-  "status": "active-test-v2-pending-device-validation",
+  "status": "active-test-v2-devicefix2-pending-validation",
   "deviceValidation": {
-    "level": "pending",
+    "level": "pending-retest",
     "result": "not-tested",
     "date": "2026-08-26",
-    "scope": "Requires real-device Home/Search/Category/Detail/Playback/Comments/Creator/Library/Account/Shorts/Playlist/UI validation before promotion."
+    "scope": "Retest category secondary page, video detail, creator center layout, creator detail and playback."
   },
-  "previousTest": {
+  "supersededTest": {
+    "version": "0.2.0-test.1",
+    "build": 20001,
+    "release": "apps/video/pornhub/releases/0.2.0-test.1/release.json",
+    "deviceResult": "partial-fail",
+    "reason": "Real-device hiker://page parameters remained percent-encoded; category/detail URLs were therefore not restored before Provider requests. Creator Center UI also required redesign."
+  },
+  "recoveryTest": {
     "version": "0.1.1-test.2",
     "build": 10202,
     "release": "apps/video/pornhub/releases/0.1.1-test.2/release.json",
@@ -37,17 +44,11 @@
     "deviceResult": "basic-pass",
     "role": "Local-First migration recovery reference"
   },
-  "failedHistoricalTest": {
-    "version": "0.1.1-test.1",
-    "build": 10201,
-    "error": "Runtime 仍残留远程代码/资产依赖：raw.githubusercontent.com/huoguotiankong/asset-core-7f3",
-    "status": "frozen-failed-immutable"
-  },
   "stablePromotionSource": {
     "version": "0.1.0-test.7",
     "build": 10107,
     "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
     "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt"
   },
-  "notes": "V2 clean rewrite. Stable0.1.0/Build10108 and Latest remain frozen. The new Test no longer assembles the historical Test1-Test7 patch stack; first install builds one local standalone runtime from 8 immutable V2 parts plus local assets. Real-device validation is mandatory."
+  "notes": "V2 Test2 fixes the real-device route parameter boundary and redesigns the Creator Center with native icon task selectors and two-column round creator cards. Stable0.1.0/Build10108 and Latest remain frozen."
 }
