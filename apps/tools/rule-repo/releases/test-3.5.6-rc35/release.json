@@ -1,0 +1,20 @@
+{
+  "schema":1,
+  "id":"rule-repo-test",
+  "name":"我的规则仓库·测试版",
+  "version":"3.5.6-rc35",
+  "build":425,
+  "ref":"f10a932e7b91355d53b2665f93088299f9c525a2",
+  "baseStable":{"version":"3.5.5","build":389,"release":"apps/tools/rule-repo/releases/3.5.5/release.json"},
+  "previousTest":{"version":"3.5.6-rc34","build":424,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc34/release.json"},
+  "runtimeBase":{"version":"3.5.6-rc34","build":424,"generatedRuntime":"hiker://files/rules/asset-core-local/rule-repo-test/flat_runtime_b424.js"},
+  "control":"apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_control_v3.js",
+  "patch":"apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_channel_truth_patch_v1.js",
+  "builder":"apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_builder_v3.js",
+  "entry":"apps/tools/rule-repo/releases/test-3.5.6-rc35/flat_entry_v3.js",
+  "rule":"apps/tools/rule-repo/rule_repo_test_v172.txt",
+  "generatedRuntime":"hiker://files/rules/asset-core-local/rule-repo-test/flat_runtime_b425.js",
+  "delivery":{"mode":"local-first-flat-runtime","normalStartup":"flat-entry-plus-single-generated-bundle","channelTruth":"per-app-channels-authoritative","rootSnapshot":"offline-summary-only","selfUpdate":"main-direct-multi-source-no-github-api-head","installIdentity":"repo-import-plus-device-rule-version-fingerprint"},
+  "verify":{"global":"HikerRuleRepo","property":"build","equals":425},
+  "notes":"RC35 修复 RC34 实机暴露的两项控制面回归：GitHub API main HEAD 在设备上返回 invalid，导致检查版本失败；统一 channel_catalog_snapshot 自身可能滞后于程序 channels.json，导致 JavBus 已发布 2.0.1-test.1 但测试仓仍显示 alpha4。RC35 恢复 RC11 已有的 per-app channels 权威原则：首页快照只做离线浏览，进入程序详情/检查版本直接读取 item.channelsPath；自更新不再依赖 GitHub API HEAD。同步程序通道时同时读取 Stable/Test Shell numeric rule version，用手机 getLastRules 规则 version 自愈当前安装身份；新导入立即写 Verified Install Index。Stable 3.5.5 保持不变。"
+}
