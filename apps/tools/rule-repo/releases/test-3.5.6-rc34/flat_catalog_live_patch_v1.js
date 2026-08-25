@@ -1,0 +1,38 @@
+/* 我的规则仓库 3.5.6-rc34 - mutable catalog live-file overlay */
+var RuleRepoRC34=(function(){
+var VERSION='3.5.6-rc34',BUILD=424,RULE='apps/tools/rule-repo/rule_repo_test_v171.txt';
+var ROOT='hiker://files/rules/asset-core-local/rule-repo-test/',CATALOG_FILE=ROOT+'channel_catalog_v3.json',SELF_FILE=ROOT+'self_channels_v4.json',CONTROL=ROOT+'flat_control_v2.js',ENTRY=ROOT+'flat_entry_v2.js';
+function parse(s){try{return JSON.parse(String(s||''));}catch(e){return null;}}
+function fileJson(p){try{return fileExist(p)?parse(readFile(p)):null;}catch(e){return null;}}
+function clone(x){try{return JSON.parse(JSON.stringify(x));}catch(e){return x||{};}}
+function testOf(x){var a=x&&x.channels||[];for(var i=0;i<a.length;i++)if(String(a[i]&&a[i].channel||'')==='test')return a[i];return null;}
+function buildOf(x){var t=testOf(x);return Number(t&&t.build||0);}
+function currentMeta(){return{schema:4,id:'rule-repo',name:'我的规则仓库',updatedAt:'2026-08-25 21:20',channels:[{channel:'stable',label:'正式版',id:'rule-repo',name:'我的规则仓库',version:'3.5.5',build:389,displayVersion:'正式版 3.5.5 · Build 389',path:'apps/tools/rule-repo/rule_repo_remote_v355.txt',mode:'remote',recommended:true},{channel:'test',label:'测试版',id:'rule-repo-test',name:'我的规则仓库·测试版',version:VERSION,build:BUILD,displayVersion:'测试版 '+VERSION+' · Build '+BUILD,path:RULE,mode:'remote-local-first-flat',recommended:false,baseVersion:'3.5.5',targetVersion:'3.5.6'}]};}
+function selfMeta(){var x=fileJson(SELF_FILE),cur=currentMeta();return x&&buildOf(x)>=BUILD?clone(x):cur;}
+function catalog(){var x=fileJson(CATALOG_FILE);return x&&x.apps?x:{schema:1,revision:'',apps:{}};}
+function metaOf(id){if(String(id||'')==='rule-repo')return selfMeta();var c=catalog(),x=c.apps&&c.apps[String(id||'')];return x&&Array.isArray(x.channels)?clone(x):null;}
+function loadControl(method){var u=getPath(CONTROL);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}if(typeof RuleRepoFlatControl!=='object'||typeof RuleRepoFlatControl[method]!=='function')throw new Error('控制面 '+method+' 不可用');return RuleRepoFlatControl[method]();}
+function apply(R){
+ if(!R||typeof R.home!=='function')throw new Error('规则仓 Runtime 不完整');
+ var baseAction=R.workspaceAction,baseStatic=R.workspaceStaticAction,baseStatics=R.workspaceStaticActions;
+ R.__flat424=true;R.version=VERSION;R.build=BUILD;R.channel='test';R.releaseLabel='Flat Runtime 20.0';R.localFirstRuntimeVersion='20.0';R.fastHomeVersion='20.0.0';R.isTestChannel=function(){return true;};
+ R.catalogRevision=function(){return String(catalog().revision||'');};
+ R.ruleRepoChannelFallback=function(){return selfMeta();};
+ R.fastChannelCache=function(item){var m=metaOf(item&&item.id);return m?{schema:21,time:Date.now(),revision:R.catalogRevision(),sig:'live:'+String(item&&item.id||''),meta:m}:null;};
+ R.channelMeta=function(item){return metaOf(item&&item.id);};
+ R.loadChannelMetaLive=function(item){var m=metaOf(item&&item.id);if(m)return m;throw new Error('本地版本目录暂无 '+String(item&&item.id||'')+'，请点检查版本/同步');};
+ R.workspaceAction=function(kind,item){var k=String(kind||''),id=String(item&&item.id||'');
+   if(k==='check')return $('#noLoading#').lazyRule(function(appId){var loading=false;try{showLoading(appId==='rule-repo'?'正在检查测试仓版本…':'正在刷新版本目录…');loading=true;var C='hiker://files/rules/asset-core-local/rule-repo-test/flat_control_v2.js',u=getPath(C);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}var x=appId==='rule-repo'?RuleRepoFlatControl.refreshSelf():RuleRepoFlatControl.refreshCatalog();hideLoading();loading=false;refreshPage(false);return'toast://'+(appId==='rule-repo'?('测试仓已刷新 · '+x.version+' / Build'+x.build):('版本目录已刷新 · '+x.revision+' · 当前页立即生效'));}catch(e){if(loading)try{hideLoading();}catch(_e){}return'toast://检查失败：'+String(e.message||e);}},id);
+   if(k==='open')return $('#noLoading#').lazyRule(function(appId){try{var E='hiker://files/rules/asset-core-local/rule-repo-test/flat_entry_v2.js',u=getPath(E);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}var r=RuleRepoFlatEntry.load(),x=r.findById(appId,false);if(!x)return'toast://程序不存在';var d=r.deviceRuleOpenDescriptor(x);if(!d)return'toast://未取得已安装程序描述，请先同步';return'rr-native-open://'+encodeURIComponent(JSON.stringify(d));}catch(e){return'toast://打开失败：'+String(e.message||e);}},id);
+   if(k==='load-channels')return $('#noLoading#').lazyRule(function(appId){try{var E='hiker://files/rules/asset-core-local/rule-repo-test/flat_entry_v2.js',u=getPath(E);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}var r=RuleRepoFlatEntry.load(),x=r.findById(appId,false),c=r.fastChannelCache(x),n=c&&c.meta&&c.meta.channels?c.meta.channels.length:0;putVar('hc_repo_hybrid_pending_detail',appId);return'toast://本地版本信息：'+n+' 个 · revision '+(r.catalogRevision?r.catalogRevision():'--');}catch(e){return'toast://版本信息不可用：'+String(e.message||e);}},id);
+   return typeof baseAction==='function'?baseAction.call(this,kind,item):'hiker://empty';
+ };
+ R.syncManifest=function(){return loadControl('syncAll');};R.lightSync=function(){return loadControl('syncAll');};
+ R.workspaceStaticAction=function(kind){if(String(kind||'')!=='sync')return typeof baseStatic==='function'?baseStatic.call(this,kind):'hiker://empty';return $('#noLoading#').lazyRule(function(){var loading=false;try{showLoading('正在同步目录、图标与版本…');loading=true;var C='hiker://files/rules/asset-core-local/rule-repo-test/flat_control_v2.js',u=getPath(C);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}var x=RuleRepoFlatControl.syncAll();hideLoading();loading=false;refreshPage(false);return x&&x.ok?'toast://同步完成 · revision '+String(x.revision||'--')+' · 当前页立即生效':'toast://同步失败，保留现有本地数据';}catch(e){if(loading)try{hideLoading();}catch(_e){}return'toast://同步失败：'+String(e.message||e);}});};
+ R.workspaceStaticActions=function(){var a=typeof baseStatics==='function'?baseStatics.call(this):{};a=a||{};a.sync=this.workspaceStaticAction('sync');return a;};
+ R.settingsPage=function(){setPageTitle('设置');var d=[],cache=this.cacheMs(),probe=this.probeMs();d.push(this.hero('设置','RC34 · 可变目录实时读取',this.uiIcon('settings'),'hiker://empty'));this.pushSection(d,'同步与版本','目录刷新后不再被内存旧快照遮蔽');d.push(this.quickAction('立即同步','sync',this.workspaceStaticAction('sync')));d.push(this.quickAction('版本更新','updates','hiker://page/ruleRepoUpdate?rule=&simple=true'));d.push(this.infoRow('当前目录 revision',this.catalogRevision()||'尚未同步'));d.push(this.infoRow('当前策略',(probe<=0?'自动检查关闭':'每 '+Math.round(probe/1000)+' 秒检查')+' · 缓存 '+Math.round(cache/60000)+' 分钟'));d.push(this.sectionLine());this.pushSection(d,'诊断','只读本地控制面小状态');d.push(this.quickAction('诊断信息','settings',$('#noLoading#').lazyRule(function(){try{var C='hiker://files/rules/asset-core-local/rule-repo-test/flat_control_v2.js',u=getPath(C);try{require(u);}catch(e0){try{deleteCache(u);}catch(e1){}require(u);}return'confirm://'+RuleRepoFlatControl.diagnostics();}catch(e){return'toast://诊断失败：'+String(e.message||e);}})));d.push(this.quickAction('活动记录','history','hiker://page/ruleRepoHistory?rule=&simple=true'));d.push(this.sectionLine());this.pushNav(d,'settings');setResult(d);};
+ R.aboutPage=function(){setPageTitle('关于');var d=[],repo=this.findById('rule-repo')||{};d.push(this.hero('我的规则仓库','海阔视界专属 · Flat Runtime',this.iconOf(repo),'hiker://empty'));d.push(this.infoRow('当前 Core',VERSION));d.push(this.infoRow('Build',BUILD));d.push(this.infoRow('目录 revision',this.catalogRevision()||'--'));d.push(this.infoRow('运行架构','single local bundle + mutable catalog live-file'));d.push(this.infoRow('通道','Test'));d.push(this.sectionLine());this.pushNav(d,'settings');setResult(d);};
+ return R;
+}
+return{version:'1.0.0',apply:apply,selfMeta:currentMeta};
+})();
