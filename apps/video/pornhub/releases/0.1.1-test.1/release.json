@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "id": "pornhub-test",
+  "appId": "pornhub",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.1.1-test.1",
+  "build": 10201,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10108,
+    "release": "apps/video/pornhub/releases/0.1.0/release.json"
+  },
+  "previousTest": {
+    "version": "0.1.0-test.7",
+    "build": 10107,
+    "release": "apps/video/pornhub/releases/0.1.0-test.7/release.json",
+    "rule": "apps/video/pornhub/pornhub_remote_test_v7_b10107.txt",
+    "status": "stable-promotion-source-preserved"
+  },
+  "sourceSnapshot": {
+    "ref": "9b866985b1882c3b52f770a804ee75c71f447d2e",
+    "modules": [
+      "apps/video/pornhub/releases/0.1.0-test.1/core.js",
+      "apps/video/pornhub/releases/0.1.0-test.2/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.3/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.4/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.5/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.6/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.7/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.1/runtime.js",
+      "apps/video/pornhub/releases/0.1.0-test.2/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.3/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.4/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.5/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.6/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.7/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0/stable_patch.js",
+      "apps/video/pornhub/releases/0.1.1-test.1/final_local_patch.js"
+    ],
+    "assets": [
+      "apps/video/pornhub/assets/account.svg",
+      "apps/video/pornhub/assets/banner.svg",
+      "apps/video/pornhub/assets/categories.svg",
+      "apps/video/pornhub/assets/comment.svg",
+      "apps/video/pornhub/assets/creators.svg",
+      "apps/video/pornhub/assets/favorite.svg",
+      "apps/video/pornhub/assets/feed.svg",
+      "apps/video/pornhub/assets/gifs.svg",
+      "apps/video/pornhub/assets/history.svg",
+      "apps/video/pornhub/assets/home.svg",
+      "apps/video/pornhub/assets/icon.svg",
+      "apps/video/pornhub/assets/local.svg",
+      "apps/video/pornhub/assets/search.svg",
+      "apps/video/pornhub/assets/shorts.svg",
+      "apps/video/pornhub/assets/subscribe.svg"
+    ],
+    "sourceCount": 31,
+    "moduleCount": 16,
+    "assetCount": 15
+  },
+  "builder": {
+    "path": "apps/video/pornhub/releases/0.1.1-test.1/local_bundle_builder.js",
+    "ref": "d56cf32216e6f8bbf25ba5adca4e1e21ed02d3e9"
+  },
+  "entry": {
+    "path": "apps/video/pornhub/releases/0.1.1-test.1/local_entry.js",
+    "ref": "b57edba9df00a0beba53ec344a83e444bce16579"
+  },
+  "shell": {
+    "path": "apps/video/pornhub/pornhub_remote_test_localfirst_v1_b10201.txt",
+    "ref": "56c210873dbac204bd59eb5f145f26eb04286f25",
+    "blob": "7c6f6660cadc326d417d19c8ba6d8f2b03270b47",
+    "ruleVersion": 2026082523
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/pornhub-test/b10201/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "bootstrapShim": "local_bootstrap.js",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "PornhubLocalRuntime",
+    "localFirstVersion": "0.1.1-test.1",
+    "localFirstBuild": 10201,
+    "businessBase": "Stable 0.1.0 / Build10108"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "localBootstrapShim": true,
+    "historicalLazyRuleReentry": "rewritten to local bootstrap shim by bundle sanitizer",
+    "repositoryAssets": "15 SVG files localized",
+    "updateOwner": "rule-repo"
+  },
+  "notes": "Delivery-only migration from Stable 0.1.0 / Build10108. The exact 15-layer Stable business chain is frozen in original order and followed by a Local-First overlay. The builder localizes all 15 repository SVG assets and rewrites historical Pornhub Bootstrap URLs to a local Bootstrap Shim before producing one Runtime bundle; generated Runtime is rejected if private repository executable/asset URLs or Remote Manager references remain. Stable/Latest are untouched pending device validation."
+}
