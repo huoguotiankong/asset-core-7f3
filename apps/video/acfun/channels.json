@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "acfun",
   "name": "ACFun",
-  "versionPolicy": "stable-localfirst-test-native-candidate-web-v2",
-  "updatedAt": "2026-08-25 18:51",
+  "versionPolicy": "stable-localfirst-storage-guard-test-native-candidate-web-v3",
+  "updatedAt": "2026-08-25 19:32",
   "channels": [
     {
       "channel": "stable",
@@ -18,7 +18,13 @@
       "updatedAt": "2026-08-21",
       "recommended": true,
       "desc": "当前实机可用正式基线；播放、封面 XOR 解密与持久缓存、精选/里番 Station、动态分类、短视频和漫画阅读底座保持冻结。",
-      "highlights": ["当前正式恢复基线", "真实 Build149", "极速播放已验证", "封面持久缓存", "本轮不修改 Stable"],
+      "highlights": [
+        "当前正式恢复基线",
+        "真实 Build149",
+        "极速播放已验证",
+        "封面持久缓存",
+        "本轮不修改 Stable"
+      ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     },
     {
@@ -26,18 +32,28 @@
       "label": "测试版",
       "id": "acfun-test",
       "name": "ACFun",
-      "version": "0.5.0-test.1",
+      "version": "0.5.0-test.2",
       "baseVersion": "0.4.9",
       "targetVersion": "0.5.0",
-      "build": 50001,
-      "displayVersion": "Test 0.5.0-test.1 · Build 50001 · Local-First",
-      "path": "apps/video/acfun/acfun_remote_test_localfirst_v1_b50001.txt",
-      "importRef": "959cf0a45f9083423b2976dbecb23cdf4e615e48",
+      "build": 50002,
+      "displayVersion": "Test 0.5.0-test.2 · Build 50002 · Local-First Storage Guard",
+      "path": "apps/video/acfun/acfun_remote_test_localfirst_v2_b50002.txt",
+      "importRef": "f6fb42e4cf44e1b0a355cc9c72f1b407fa9ab8dc",
       "mode": "remote-local-first",
       "updatedAt": "2026-08-25",
       "recommended": false,
-      "desc": "从 Stable 0.4.9 原业务链派生的 Local-First 交付测试：首次生成单个本地 Runtime bundle + 本地 ImageDecoder，后续正常启动只读本地 Entry/Runtime；Alpha11 失败实验不并入。",
-      "highlights": ["业务基线严格来自 Stable 0.4.9 / Build149", "8 个 Stable 模块 + 1 个本地兼容覆盖层", "正常启动 1× require(file://) Runtime", "图片解码器本地化", "播放/收藏 lazyRule 通过 $.require('acfun') 回完整 Runtime", "更新由我的规则仓库统一管理", "Alpha11 保留在 Candidate", "Stable/Web 不变"],
+      "desc": "Test50001 实机触发海阔私有 KV 1MB 上限后的修复版。业务仍严格来自 Stable 0.4.9；启动先清理可重建旧大值，Remote Config / Frontend Discovery 改存 hiker://files，超大旧收藏/历史只在必要时备份压缩。",
+      "highlights": [
+        "Stable 0.4.9 / Build149 八模块业务代码不变",
+        "Test50001 已冻结为 1MB 私有存储失败样本",
+        "全新 b50002 本地 Runtime，不复用旧 bundle",
+        "启动前清理可重建大型诊断/配置旧值",
+        "Remote Config / Frontend Discovery 改为文件缓存",
+        "收藏/历史默认保留，只有历史列表异常超大才备份后压缩",
+        "辅助 setItem 配额失败不再拖垮主业务",
+        "正常启动仍为 1× require(file://) Runtime",
+        "Alpha11 Candidate 与 Web3 均不动"
+      ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     },
     {
@@ -53,7 +69,13 @@
       "updatedAt": "2026-08-23",
       "recommended": false,
       "desc": "海阔原生网页源兜底 Web3；原生首页/详情继续保留，最终播放/漫画终端固定使用 APP 风格 Flutter H5。",
-      "highlights": ["海阔原生主界面", "封面内联 XOR 解密", "固定 APP版H5 终端", "Flutter 语义节点自动导航", "与 Stable/Test 隔离"],
+      "highlights": [
+        "海阔原生主界面",
+        "封面内联 XOR 解密",
+        "固定 APP版H5 终端",
+        "Flutter 语义节点自动导航",
+        "与 Stable/Test 隔离"
+      ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/tools/rule-repo/assets/acfun.svg"
     }
   ]
