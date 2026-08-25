@@ -1,0 +1,39 @@
+  var Store={
+    read:function(key,def){var x=getItem(key,'');if(!x)return def;try{return JSON.parse(x);}catch(e){return def;}},
+    write:function(key,v){try{setItem(key,JSON.stringify(v));return true;}catch(e){return false;}},
+    modelKey:function(k){return'phv2_model_'+SCHEMA+'_'+hash(k);},
+    modelGet:function(k,ttl){var o=this.read(this.modelKey(k),null);if(!o||!o.time||!o.data)return null;if(ttl&&now()-o.time>ttl)return null;return o.data;},
+    modelPut:function(k,data){try{var raw=JSON.stringify({time:now(),data:data});if(raw.length>180000)return false;setItem(this.modelKey(k),raw);return true;}catch(e){return false;}},
+    list:function(key){var a=this.read(key,[]);return isArray(a)?a:[];},
+    putList:function(key,a,max){a=(a||[]).slice(0,max||100);return this.write(key,a);},
+    addRecent:function(key,item,max){item=item||{};if(!item.url)return;var a=this.list(key),out=[item],i;for(i=0;i<a.length;i++)if(a[i].url!==item.url)out.push(a[i]);this.putList(key,out,max||80);},
+    toggle:function(key,item,max){item=item||{};var a=this.list(key),out=[],found=false,i;for(i=0;i<a.length;i++){if(a[i].url===item.url){found=true;continue;}out.push(a[i]);}if(!found)out.unshift(item);this.putList(key,out,max||80);return!found;},
+    contains:function(key,url){var a=this.list(key),i;for(i=0;i<a.length;i++)if(a[i].url===url)return true;return false;},
+    searchHistory:function(){return this.list(KEYS.searchHistory);},
+    pushSearch:function(v){v=clean(v);if(!v)return;var a=this.searchHistory(),out=[v],i;for(i=0;i<a.length;i++)if(a[i]!==v)out.push(a[i]);this.putList(KEYS.searchHistory,out,12);},
+    clearSearch:function(){this.putList(KEYS.searchHistory,[],12);}
+  };
+
+  var Session={
+    liveCookie:function(){var c='';try{c=clean(getCookie(base()));}catch(e){c='';}return c||clean(getItem(KEYS.cookie,''));},
+    fingerprint:function(c){c=clean(c||this.liveCookie());return c?String(hash(c+'|'+c.length)):'';},
+    ready:function(){return getItem(KEYS.auth,'0')==='1'&&!!this.liveCookie();},
+    account:function(){return clean(getItem(KEYS.account,''));},
+    avatar:function(){return clean(getItem(KEYS.avatar,''));},
+    source:function(){return clean(getItem(KEYS.identity,''));},
+    identityReady:function(){return this.ready()&&!!this.account()&&/^security-/.test(this.source());},
+    clear:function(){setItem(KEYS.auth,'0');setItem(KEYS.cookie,'');setItem(KEYS.account,'');setItem(KEYS.avatar,'');setItem(KEYS.identity,'');setItem(KEYS.session,'');},
+    securityIdentity:function(html){var x=s(html),re=/<input\b[^>]*>/ig,m,tag,key,name='';while((m=re.exec(x))){tag=m[0];key=(attr(tag,'name')||attr(tag,'id')||'').toLowerCase();if(/username/.test(key)){name=decode(attr(tag,'value'));if(this.safeName(name))return{name:name,source:'security-input'};}}m=x.match(/\bdata-(?:username|profile-username|user-name)=["']([^"']+)["']/i);if(m&&this.safeName(m[1]))return{name:decode(m[1]),source:'security-data'};var a=allAnchors(x,base()),i,u,n;for(i=0;i<a.length;i++){m=a[i].href.match(/\/users\/([^\/?#]+)/i);if(!m)continue;n=decode(m[1]);if(!this.safeName(n))continue;if(/(?:profile|account|username|userMenu|user-menu|headerLogin|topRight)/i.test(a[i].raw||''))return{name:n,source:'security-header'};}return{name:'',source:''};},
+    safeName:function(v){v=clean(v);return !!v&&v.length>=2&&v.length<=80&&!/^(login|logout|signup|register|users?|account|profile|settings)$/i.test(v)&&!/^\d+$/.test(v);},
+    loggedMarker:function(html){var x=s(html);if(isBad(x))return false;return /change\s+your\s+username|email\s+and\s+password|\/user\/security|logout|log\s*out|my\s+settings/i.test(x);},
+    sync:function(){var c='';try{c=clean(getCookie(base()));}catch(e){c='';}if(!c)return{ok:false,message:'没有读取到 X5 登录 Cookie，请先用本页官方登录完成登录。'};var h={'User-Agent':UA,'Referer':base()+'/user/security','Cookie':c,'Accept-Language':'en-US,en;q=0.9'},body='';try{body=s(fetch(base()+'/user/security',{timeout:12000,headers:h}));}catch(ex){body='';}var id=this.securityIdentity(body),logged=this.loggedMarker(body)||!!id.name;if(!logged){this.clear();return{ok:false,message:'X5 Cookie 已读取，但官方账号安全页没有确认登录状态。'};}setItem(KEYS.cookie,c);setItem(KEYS.auth,'1');setItem(KEYS.session,this.fingerprint(c));setItem(KEYS.account,'');setItem(KEYS.avatar,'');setItem(KEYS.identity,'');if(id.name){setItem(KEYS.account,id.name);setItem(KEYS.identity,id.source);this.refreshAvatar(id.name,c);return{ok:true,identity:true,name:id.name,message:'账号会话已验证：'+id.name};}return{ok:true,identity:false,message:'登录会话已验证，但当前页面没有可靠身份字段。推荐/Feed 可使用；账号私有列表暂不标记为“我的”。'};},
+    refreshAvatar:function(name,c){if(!this.safeName(name))return'';var u=base()+'/users/'+q(name),h={'User-Agent':UA,'Referer':u,'Cookie':c||this.liveCookie()},x='';try{x=s(fetch(u,{timeout:9000,headers:h}));}catch(e){}var im=Parser.profileAvatar(x,u)||meta(x,'og:image');if(im&&!/(default|placeholder|blank|loading)/i.test(im)){setItem(KEYS.avatar,im);return im;}return'';}
+  };
+
+  function headers(ref,auth,accept){var h={'User-Agent':UA,'Referer':ref||base()+'/','Accept':accept||'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Language':'en-US,en;q=0.9'};h.Cookie=auth?(Session.liveCookie()||'platform=pc'):'platform=pc';return h;}
+  var Request={
+    key:function(url,auth){return'phv2_req_'+SCHEMA+'_'+(auth?Session.fingerprint()+'_':'')+hash(url);},
+    get:function(url,opt){opt=opt||{};var auth=!!opt.auth,key=this.key(url,auth),old=Store.read(key,null),ttl=opt.ttl===undefined?180000:opt.ttl;if(!opt.force&&old&&old.time&&now()-old.time<ttl&&old.body)return{ok:true,status:200,source:'cache',body:old.body,url:url,error:'',stage:'request'};var body='',err='';try{body=s(fetch(url,{timeout:opt.timeout||10000,headers:headers(opt.ref||url,auth,opt.accept)}));}catch(e){err=s(e.message||e);}if(!isBad(body)){if(body.length<260000)Store.write(key,{time:now(),body:body});return{ok:true,status:200,source:'network',body:body,url:url,error:'',stage:'request'};}if(old&&old.body)return{ok:true,status:200,source:'stale',body:old.body,url:url,error:err||'网络响应异常，已使用缓存',stage:'request'};return{ok:false,status:0,source:'network',body:body,url:url,error:err||'页面返回异常或验证页',stage:'request'};},
+    post:function(url,data,opt){opt=opt||{};var h=headers(opt.ref||url,!!opt.auth,opt.accept||'application/json,text/plain,*/*');h['X-Requested-With']='XMLHttpRequest';h['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8';var body='',err='';try{body=s(fetch(url,{method:'POST',body:typeof data==='string'?data:form(data||{}),timeout:opt.timeout||12000,headers:h}));}catch(e){err=s(e.message||e);}return{ok:!!body,status:body?200:0,source:'network',body:body,url:url,error:err||(!body?'空响应':''),stage:'request'};}
+  };
+
