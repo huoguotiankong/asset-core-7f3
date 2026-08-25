@@ -2,8 +2,8 @@
   "schema": 4,
   "id": "51chigua",
   "name": "51吃瓜",
-  "versionPolicy": "remote-stable-test-v1",
-  "updatedAt": "2026-08-23 18:46",
+  "versionPolicy": "remote-stable-localfirst-test-v1",
+  "updatedAt": "2026-08-25 23:00",
   "channels": [
     {
       "channel":"stable","label":"正式版","id":"51chigua","name":"51吃瓜","version":"0.1.0","build":10106,
@@ -13,10 +13,10 @@
       "icon":"https://51cg1.com/favicon.ico"
     },
     {
-      "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.0-test.5","build":10105,
-      "displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/51chigua/51chigua_remote_test_v5_b10105.txt","mode":"remote","updatedAt":"2026-08-23","recommended":false,
-      "desc":"Stable 0.1.0 的晋级来源与回退参考。评论与楼中楼统一使用 51CG 官方 favicon，保留 Test4 评论布局和独立搜索。",
-      "highlights":["Stable 晋级来源","评论统一官方 51CG 头像","纵向评论卡片","独立搜索页","播放/分类/封面链保持验证状态"],
+      "channel":"test","label":"测试版","id":"51chigua-test","name":"51吃瓜","version":"0.1.1-test.1","build":10201,
+      "displayVersion":"Test 0.1.1-test.1 · Local-First","path":"apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt","mode":"remote-local-first","updatedAt":"2026-08-25","recommended":false,
+      "desc":"从 Stable 0.1.0 / Build10106 重基线，只迁移交付链：10 层 Stable 业务代码 + Local Overlay + 7 个 SVG 共 18 源进入本地 Runtime；历史 C.bootstrap 点击重入改走本地 Bootstrap Shim。",
+      "highlights":["10 层 Stable 业务链原顺序冻结","11 个代码单元 + 7 个 SVG = 18 源完整本地闭包","历史 Bootstrap lazyRule 点击重入改走本地 Shim","搜索/分类/收藏/历史/评论等仓库 SVG 本地化","图片 AES 继续使用海阔内置 crypto-java.js","最终 Runtime 保留私人仓库/Remote Manager 硬门禁","Stable 0.1.0 / Latest 不变","等待海阔实机验证"],
       "icon":"https://51cg1.com/favicon.ico"
     }
   ]

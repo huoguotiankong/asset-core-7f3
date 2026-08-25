@@ -1,196 +1,118 @@
 # 51吃瓜 CHANGELOG
 
-## 当前基线
+> 当前恢复入口。Local-First 迁移前的 Test1-Test5 / Stable0.1.0 / 图片 AES、评论、播放、分类、搜索完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
-- App ID：`51chigua`
-- 当前正式版：`0.1.0` / Build `10106`
-- Stable Shell：`0.1.0-stable.1` / rule version `2026082306`
-- 当前测试版：`0.1.0-test.5` / Build `10105`
-- 正式运行仓库：`huoguotiankong/asset-core-7f3@main`
-- 源站入口：`https://51cg1.com/`
-- 源站 favicon：`https://51cg1.com/favicon.ico`
-- 源站页面 Logo：`https://51cg1.com/usr/themes/Mirages/images/logo-2.png`
-- Stable 0.1.0 已按用户明确发布要求由实机验证 Test5 原样晋级；Test5 保留为不可变晋级来源与回退参考。
+## 当前活动边界
+- Stable：`0.1.0 / Build10106`，继续冻结，是当前业务稳定恢复基线。
+- Latest：仍指向 Stable `0.1.0`，本轮不修改。
+- Test：`0.1.1-test.1 / Build10201`，Native Local-First Candidate，等待海阔实机验证。
+- Test Shell：`apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt`，rule version `2026082526`。
+- Previous Test：`0.1.0-test.5 / Build10105`，Stable0.1.0 的晋级来源，继续保留为不可变历史对照。
+- 源站入口：`https://51cg1.com/`；动态域名与失败转移逻辑继续沿用 Stable。
 
-## 0.1.0 / Build 10106 — 2026-08-23
+## 2026-08-25 · 0.1.1-test.1 / Build10201 · Stable-derived Local-First
 
-### Stable 晋级
+### 迁移边界
+本轮只迁移交付、启动、点击重入与仓库静态资产控制面，不主动修改 Stable0.1.0 已实机验证业务：
+- 首页文章流、动态域名、分类与独立搜索。
+- `/xiao/`、`/upload/upload/` 图片 AES/CBC/PKCS7 解密链。
+- 图文详情与正文图片。
+- DPlayer/HLS 结构化媒体提取和海阔原生播放。
+- `/comments/<postId>.json` 评论接口、纵向评论与楼中楼。
+- 本地收藏、浏览历史、设置/诊断。
 
-用户明确要求发布正式版。Stable 0.1.0 由 `0.1.0-test.5 / Build10105` 原样晋级，不修改业务逻辑。
+`hiker://assets/crypto-java.js` 继续作为海阔内置图片解密依赖，不属于私人 GitHub 远程代码。
 
-正式版保留当前已实机验证链：
-
-- 首页文章流、加密封面解密和正文图片解密。
-- 分类中心、首页快捷分类和分类分页。
-- 独立站内搜索页与搜索分页。
-- 图文详情、DPlayer/HLS 媒体提取和海阔原生播放。
-- 播放 Primary Action 与收藏/评论/正文隔离，播放器只接收真实视频条目。
-- `/comments/<postId>.json` 真实评论接口、纵向评论卡片与楼中楼回复层级。
-- 一级评论与楼中楼回复统一使用 51CG 官方 favicon 头像，对齐原站默认评论身份。
-- 本地收藏、浏览历史、动态可用域名与设置/诊断链。
-
-### Stable 发布结构
-
+### Stable 真实执行闭包
 ```text
-stable.json / latest.json
-→ releases/0.1.0/release.json
-→ Test1~Test5 不可变模块
-→ releases/0.1.0/stable_patch.js
-→ bootstrap_stable_v1_b10106.js
-→ 51chigua_remote_stable_v1_b10106.txt
+Core Test1
+→ Runtime Test1
+→ Core Patch2
+→ Runtime Patch2
+→ Core Patch3
+→ Runtime Patch3
+→ Core Patch4
+→ Runtime Patch4
+→ Runtime Patch5
+→ Stable Patch
 ```
 
-`stable_patch.js` 仅切换 `version/build/channel/bootstrap` 为 Stable 身份，不改变 Provider、Parser、评论、播放、图片解密或 UI 行为。
+除这 10 层外，审计还确认：
+1. Stable Shell 每个入口都会远程加载 `Bootstrap → Remote Manager → Release`。
+2. 历史 `lazyRule` 会携带 `C.bootstrap`，收藏、播放、站点探测、清理等点击动作可能重新进入远程 Bootstrap。
+3. Runtime/Test3/Test4/Test5 使用仓库 `apps/video/51chigua/assets/*.svg` 作为 UI 资产。
 
-后续新 Test 必须从 Stable 0.1.0 向前开发，不得覆盖 Test5 或 Stable 0.1.0 的不可变 Release。
-
-## 0.1.0-test.5 / Build 10105 — 2026-08-23
-
-### 本轮实机结论
-
-Test4 已确认新的纵向评论布局明显优于 Test3，但评论头像仍与原站不一致：海阔页面会显示接口中的 K / Y 等字母或随机用户头像，而源站评论区实际统一使用 51CG 官方黑底粉白图标作为默认头像。
-
-### 修复
-
-- 评论页不再读取 `comment.img/avatar` 作为显示头像。
-- 一级评论与所有楼中楼回复统一使用源站官方 `https://51cg1.com/favicon.ico`。
-- 评论页顶部品牌头像也统一为同一官方 favicon。
-- 保留 Test4 的昵称 / 时间 / 回复层级 / 独立正文卡片结构。
-- 不修改 `/comments/<postId>.json` 评论协议、不修改评论 Parser、不修改独立搜索页、不修改播放/分类/封面链。
-
-### Test5 门禁
-
-- `runtime_patch.js` 已通过 `node --check`。
-- Test1–Test4 Release 保持不可变；Test5 只追加新的 Runtime Patch、Release、Bootstrap 和 Shell。
-- Runtime 继续动态 `R.module=function(){return R;}`。
-
-## 0.1.0-test.4 / Build 10104 — 2026-08-23
-
-### 本轮实机结论
-
-Test3 实机确认：
-
-- `/comments/<postId>.json` 已成功读取真实评论，当前测试文章可加载 58 条。
-- 评论页功能已经打通，但旧 `avatar` 单行布局把昵称、正文、回复、时间横向挤在一起，阅读层级不清晰。
-- 首页四个图标显示正常，但“搜索”仍走 `input://` 系统弹窗，不符合独立页面交互目标。
-
-### 评论页重构
-
-Test4 不再把一条评论全部塞进单个 `avatar`：
-
+### Test1 完整本地闭包
 ```text
-头像 + 昵称
-      ↓
-评论 / 回复 · 时间 · 点赞数
-      ↓
-独立可换行正文
-      ↓
-分隔线
+10 个 Stable 业务模块
++ 1 个 Local-First final overlay
++ 7 个 SVG
+= 18 sources
 ```
 
-- 每条评论拆成“用户头部 + 独立正文”两层，长评论自然换行。
-- `depth > 0` 的楼中楼回复增加 `↳ 回复` 与正文缩进，避免与一级评论混在同一视觉层。
-- 评论 JSON Parser 增强 nested `user / author / member / profile / account` 对象解析。
-- 头像兼容 `avatar/avatar_url/avatarUrl/head/headimg/headImg/face/photo/image`。
-- 昵称兼容 `nickname/nick/username/name/displayName` 等字段。
-- 增加点赞数字段兼容；接口没有头像时使用程序自己的 `comment.svg` 兜底。
-- 单次评论上限从 120 调整为 160，仍避免超大评论区一次性压垮页面。
+本地 SVG：`categories / comment / favorite / history / icon / search / web`。
 
-### 独立搜索页
-
-- 首页“搜索”图标不再打开系统 `input://` 对话框。
-- 点击搜索直接进入 `cg51Search` 独立页面。
-- 搜索页首屏固定显示搜索头部与页面内输入框。
-- 未输入关键词时显示常用分类快捷入口。
-- 搜索后继续留在独立页面，显示清空搜索、全部分类与结果列表。
-- 搜索数据链继续复用 Test3 已修正的 `/search/<keyword>/<page>/`，不改 Provider。
-
-### Test4 静态门禁
-
-- `core_patch.js`：`node --check` 通过。
-- `runtime_patch.js`：`node --check` 通过。
-- Test1 / Test2 / Test3 Release 保持不可变；Test4 追加 Patch + 新 Bootstrap + 新 Shell。
-- Runtime 继续动态 `R.module=function(){return R;}`。
-
-## 0.1.0-test.3 / Build 10103 — 2026-08-23
-
-### 本轮实机结论
-
-Test2 已由用户实机确认：
-
-- 首页加密封面已经恢复。
-- 文章详情可以正常进入，正文文本可见。
-- DPlayer/HLS 视频可以在海阔原生播放器连续播放。
-- 分类中心可以显示当前官网动态分类。
-- 仍存在四类产品问题：评论为空、播放器把收藏/评论/正文带成无关列表、首页/详情操作按钮过于文字化、分类页扁平且首页分类入口路由体验错误。
-
-### 评论协议
-
-当前详情 HTML 底部明确存在：
-
-```html
-<script ... VirtualList/virtuallist.js ... data-api="/comments/<postId>.json"></script>
-```
-
-因此 Test1/Test2 的静态 `<li id="comment-*">` Parser 路线判定为失败方案。Test3 改为：
-
+### 新运行链
 ```text
-/archives/<postId>/
-→ 提取 postId
-→ GET /comments/<postId>.json
-→ 递归兼容 data/items/list/comments/replies/children 等容器
-→ 统一 Comment Model
-→ 海阔 avatar 评论流
-→ JSON 无法识别时才退回旧 HTML Parser
+51吃瓜 Test Shell / rule 2026082526
+→ hiker://files/rules/asset-core-local/51chigua-test/b10201/local_entry.js
+→ local_bundle_builder.js
+→ 首次安装 immutable Source Ref 的 18 sources
+→ 每源 marker / 正文校验
+→ C.bootstrap 赋值重写 + 仓库资产根本地化
+→ 每模块私人仓库残留门禁
+→ runtime_bundle.js + local_bootstrap.js + assets/*.svg + bundle_meta.json
+→ 后续正常启动 $.require('cg51')
+→ require(file:// runtime_bundle.js)
+→ Cg51LocalRuntime.module()
 ```
 
-当前单次最多渲染 120 条，避免数千评论直接压垮页面。评论 JSON 不写入私有 KV。
+正常二次启动不再加载 Stable/Test Bootstrap、`libs/updater/remote_manager.js`、远程 Core/Runtime/Patch 或仓库 SVG。51CG 站点 HTML、评论 JSON、图片、HLS、favicon 仍属于正常业务网络。
 
-### 播放上下文
+### Local Bootstrap Shim 与硬门禁
+Builder 将历史 `C.bootstrap=<远程 Bootstrap>` 统一重写为 `file://.../b10201/local_bootstrap.js`。Shim 从当前 Runtime 重建 `Cg51Core / Cg51RemoteRuntime / Cg51Boot`，旧 lazyRule 合同继续成立，但不再进入 Remote Manager。
 
-Test2 视频已经实机可播，所以 Test3 不重写成功的 HLS 交付链，只修播放器上下文：
+最终 Runtime 禁止残留：
+- `raw.githubusercontent.com/huoguotiankong/asset-core-7f3`
+- `cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3`
+- `github.com/huoguotiankong/asset-core-7f3/raw`
+- `libs/updater/remote_manager.js`
 
-- 详情页 Primary Play 改为独立 `text_center_1`。
-- 播放项后立即加入 `line` 分隔。
-- 收藏、评论、分类、原站统一改成 `icon_4`，不再作为 `text_1` 紧贴播放项。
-- “正文/图片/标签/相关推荐”标题改成 `rich_text` 信息标题，避免海阔播放器把它们误收为播放列表操作。
-- 详情已经取得 `x.media` 后直接构造 Player Contract，点击播放不再重新加载 Bootstrap + 重新请求同一详情。
-- 多个 DPlayer 视频使用 `data-video_title / data-video_id` 作为播放器真实条目名；无名称才使用“视频 N”。
+门禁同时在单模块清洗后和最终 Runtime 执行，失败时应返回具体模块与附近上下文。
 
-### 首页与分类 UX
+### Local-First 诊断
+新增 `cg51LocalFirst` 页面，可查看 Runtime ready、Source Ref、18 sources、11 modules、7 SVG、Runtime bytes、rewrites，并可重建本地包和复制无敏感信息诊断摘要。
 
-- 首页搜索 / 分类 / 收藏 / 历史改为程序自有 SVG 图标四宫格。
-- 首页快捷分类继续保留横向 chip，但全部直接进入分类 Feed。
-- 新建互不重名的内部页面：`cg51Hub`（分类中心）和 `cg51Feed`（分类内容）。
-- 分类中心按官网导航重新分组：吃瓜热门 / 娱乐天地 / 黑料事件 / 吃瓜百科 / 51原创；官网动态发现且未映射的分类落到“更多分类”。
-- 分类真实分页修正为 `/category/<slug>/<page>/`。
-- 搜索真实入口修正为 `/search/<keyword>/`，分页为 `/search/<keyword>/<page>/`。
+### 静态门禁
+- `final_local_patch.js`、`local_bundle_builder.js`、`local_entry.js` 已实际 `node --check` 通过。
+- Test Shell 外层 JSON 与嵌套 `pages` JSON 已实际解析通过。
+- Shell 共 10 个页面；`find_rule + searchFind + pages` 共 12 个 JS 片段已逐个语法检查通过。
+- rule version `2026082526` 与 Build `10201` 均满足海阔 32 位整数约束。
 
-### UI 资产
+### 实机验收
+Test1 在以下项目完成前不得晋级 Stable：
+1. “我的规则仓库”轻同步/覆盖后显示 `0.1.1-test.1 / Build10201`。
+2. 首次打开完成 18 源本地包构建并进入首页。
+3. “本地化诊断”显示 Runtime ready、18 sources、7 SVG。
+4. 完全退出后二次打开正常，确认本地 Entry + Runtime Bundle。
+5. 首页封面、正文加密图片至少各验证一处。
+6. 分类、独立搜索、详情、评论至少各进入一次。
+7. 至少播放一个已有 DPlayer/HLS 视频。
+8. 点击收藏、重新探测站点、清理历史等历史动作，确认不再重入远程 Bootstrap/Manager。
+9. 条件允许时，本地包完成后屏蔽 GitHub/CDN 再重开；程序代码/UI/本地图标仍应进入。
 
-新增程序自有操作图标：`search.svg / categories.svg / favorite.svg / history.svg / comment.svg / web.svg`。
-程序主图标使用源站 `favicon.ico`。
+## 恢复与回退
+- Stable 恢复入口：`0.1.0 / Build10106`。
+- 当前 Local-First Test：`0.1.1-test.1 / Build10201`。
+- Test1 若实机失败，冻结该 immutable Release，从 Stable0.1.0 新建更高 Test build；禁止原地覆盖 Test1。
+- `0.1.0-test.5 / Build10105` 继续保留为 Stable 晋级来源。
 
-## 0.1.0-test.2 / Build 10102 — 2026-08-23
+## 长期不可回退事实
+- 51吃瓜 Local-First 完成定义包含 Shell、业务模块、历史 lazyRule 重入和仓库 SVG。
+- 图片 AES 属于已验证业务能力，不因交付迁移重写；`hiker://assets/crypto-java.js` 是海阔本地内置依赖。
+- 评论 JSON、DPlayer/HLS、分类、搜索、收藏/历史继续以 Stable0.1.0 为事实基线。
+- Local-First Test 不得顺手重构 Stable Parser/播放/图片协议。
 
-### 实机问题与修复
-
-- 修复中文规则名被 URL 编码导致内部页面“找不到小程序”。
-- 列表/正文支持 `loadBannerDirect / loadImage / data-xkrkllgl / data-src / data-original`。
-- `/xiao/` 与 `/upload/upload/` 使用 AES/CBC/PKCS7，key=`f5d965df75336270`，iv=`97b60394abc2fbe1`；海阔通过 `hiker://assets/crypto-java.js` 执行 `InputStream → AES decrypt → toInputStream()`。
-- Shell/渠道图标改为源站 `https://51cg1.com/favicon.ico`。
-- 首页过滤活动卡，增加 DPlayer `data-config` 媒体提取，请求加入 `user-choose=true`。
-
-### 已知失败结论
-
-- 禁止把中文规则名整体编码后放入 `rule=`。
-- 禁止把 51CG `/xiao/`、`/upload/upload/` 当普通明文图片直出。
-- 禁止继续以静态 `<li id="comment-*">` 作为评论主链。
-
-## 0.1.0-test.1 / Build 10101 — 2026-08-23
-
-首版建立首页/分类/搜索/图文详情、动态域名、本地收藏/历史、直链/iframe/video:// 播放和静态评论 Parser。Test1 已冻结，不再覆盖。
-
-## 恢复规则
-
-Test1、Test2、Test3、Test4、Test5 与 Stable 0.1.0 都是不可变 Release。Stable 0.1.0 来自 Test5 原样晋级。后续新问题必须从 Stable 0.1.0 派生更高 Test，禁止覆盖既有 Test 或 Stable。
+## 历史
+- Local-First 前完整历史：`apps/video/51chigua/CHANGELOG_PRE_LOCAL_FIRST_20260825.md`
+- Stable Release：`apps/video/51chigua/releases/0.1.0/release.json`

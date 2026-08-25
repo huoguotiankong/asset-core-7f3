@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "appId": "51chigua",
+  "name": "51吃瓜",
+  "channel": "test",
+  "version": "0.1.1-test.1",
+  "build": 10201,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10106,
+    "release": "apps/video/51chigua/releases/0.1.0/release.json"
+  },
+  "sourceSnapshot": {
+    "ref": "9bfc77fe270c30bad1228e8a8ea93842c6c9a75f",
+    "modules": [
+      "apps/video/51chigua/releases/0.1.0-test.1/core.js",
+      "apps/video/51chigua/releases/0.1.0-test.1/runtime.js",
+      "apps/video/51chigua/releases/0.1.0-test.2/core_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.2/runtime_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.3/core_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.3/runtime_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.4/core_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.4/runtime_patch.js",
+      "apps/video/51chigua/releases/0.1.0-test.5/runtime_patch.js",
+      "apps/video/51chigua/releases/0.1.0/stable_patch.js",
+      "apps/video/51chigua/releases/0.1.1-test.1/final_local_patch.js"
+    ],
+    "assets": [
+      "apps/video/51chigua/assets/categories.svg",
+      "apps/video/51chigua/assets/comment.svg",
+      "apps/video/51chigua/assets/favorite.svg",
+      "apps/video/51chigua/assets/history.svg",
+      "apps/video/51chigua/assets/icon.svg",
+      "apps/video/51chigua/assets/search.svg",
+      "apps/video/51chigua/assets/web.svg"
+    ],
+    "sourceCount": 18,
+    "moduleCount": 11,
+    "assetCount": 7
+  },
+  "builder": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.1/local_bundle_builder.js",
+    "ref": "bf5c2279691761353f6f50374585af9d5384905f",
+    "sanitizer": "strict-marker+bootstrap-assignment+asset-root-v2"
+  },
+  "entry": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.1/local_entry.js",
+    "ref": "59ee6c0df5b799f705e2c9ae39ae55fced97067e"
+  },
+  "shell": {
+    "path": "apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt",
+    "ref": "d895590cd3a794978da6dfac547c80e68bda1faa",
+    "blob": "3c15611e7f22cc77ed3e9b417e41d03f64f94198",
+    "ruleVersion": 2026082526
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/51chigua-test/b10201/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "bootstrapShim": "local_bootstrap.js",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "Cg51LocalRuntime",
+    "localFirstVersion": "0.1.1-test.1",
+    "localFirstBuild": 10201,
+    "businessBase": "Stable 0.1.0 / Build10106"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "localBootstrapShim": true,
+    "historicalLazyRuleReentry": "C.bootstrap assignment rewritten to local Bootstrap Shim",
+    "repositoryAssets": "7 SVG files localized",
+    "sourceValidation": "per-module exact marker + body normalization",
+    "remoteResidualGate": "enabled with per-module residual context",
+    "builtInDependencies": ["hiker://assets/crypto-java.js"],
+    "updateOwner": "rule-repo"
+  },
+  "notes": "Stable-derived Local-First Test1. The exact Stable 0.1.0 / Build10106 execution chain is preserved; repository SVG assets and historical Bootstrap re-entry are localized. The 51CG AES image decryptor continues to use Hiker's built-in crypto-java asset and business-site HTML/comments/HLS/favicons remain normal site network, not private repository code delivery."
+}
