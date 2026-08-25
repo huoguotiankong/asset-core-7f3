@@ -1,9 +1,9 @@
 {
-  "schema": 1,
+  "schema": 2,
   "id": "911baoliao",
   "name": "911爆料",
   "category": "video",
-  "mode": "remote/self-use",
+  "mode": "remote-test/self-use",
   "repository": "huoguotiankong/asset-core-7f3",
   "branch": "main",
   "source": "https://begin.mrbyudbq.com/",
@@ -16,5 +16,14 @@
   "articleContract": "/archives/<numeric-id>/",
   "test": "apps/video/911baoliao/test.json",
   "channels": "apps/video/911baoliao/channels.json",
-  "changelog": "apps/video/911baoliao/CHANGELOG.md"
+  "testVersion": "0.1.1-test.1",
+  "testBuild": 10201,
+  "testRule": "apps/video/911baoliao/911baoliao_remote_test_localfirst_v1_b10201.txt",
+  "testRelease": "apps/video/911baoliao/releases/0.1.1-test.1/release.json",
+  "testDelivery": "local-first-single-runtime-bundle",
+  "changelog": "apps/video/911baoliao/CHANGELOG.md",
+  "migration": {
+    "stage": "test5-business-baseline-localfirst-011t1-pending-device-validation",
+    "note": "No Stable exists yet. Current Test5 / Build10105 remains the business recovery baseline. Test 0.1.1-test.1 / Build10201 changes only delivery/startup/control-plane, localizes the one repository SVG, and redirects historical C.bootstrap callback re-entry through a local Bootstrap Shim."
+  }
 }
