@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "hanime1-test",
+  "name": "Hanime1",
+  "version": "2.0.2-test.1",
+  "build": 20101,
+  "baseStable": {
+    "version": "2.0.1",
+    "build": 20040,
+    "release": "apps/video/hanime1/releases/2.0.1/release.json"
+  },
+  "businessBaseline": {
+    "promotedFrom": "2.0.0-test.40",
+    "stableVersion": "2.0.1",
+    "stableBuild": 20040,
+    "note": "Business behavior is preserved from the user-approved Stable 2.0.1/Test40 recovery chain. This release changes delivery/startup only."
+  },
+  "sourceSnapshot": {
+    "ref": "4adf88294895d309308ebfe8a10f70e42bcde011",
+    "moduleCount": 91,
+    "groups": ["base", "mid", "upper"]
+  },
+  "entry": {
+    "path": "apps/video/hanime1/releases/2.0.2-test.1/local_entry.js",
+    "ref": "39cb410017ce5e37e56b9c2dae968a072ba43cb5"
+  },
+  "builder": "apps/video/hanime1/releases/2.0.2-test.1/local_bundle_builder.js",
+  "finalOverlay": "apps/video/hanime1/releases/2.0.2-test.1/final_local_patch.js",
+  "shell": {
+    "path": "apps/video/hanime1/hanime1_remote_test_localfirst_v1_b20101.txt",
+    "ref": "c26431aa3372bdba46f38523155a031d25f76d09",
+    "ruleVersion": 2026082510
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/hanime1-test/b20101/",
+    "base": "runtime_base.js",
+    "mid": "runtime_mid.js",
+    "upper": "runtime_upper.js",
+    "meta": "bundle_meta.json"
+  },
+  "verify": {
+    "global": "HanimePages",
+    "property": "build",
+    "equals": "2.0.2-test.1",
+    "requiredGlobals": ["HanimeCore", "HanimeProvider", "HanimePages", "HanimeUI9", "HanimeLayout12"]
+  },
+  "delivery": {
+    "mode": "local-first-generated-three-bundle",
+    "normalStartup": "local-entry + 3x require(file://)",
+    "networkOnNormalStartup": false,
+    "networkOnFirstInstall": true,
+    "updateOwner": "rule-repo",
+    "legacyRecoveryRuntime": false
+  },
+  "notes": "First launch downloads the immutable 91-module Stable 2.0.1 business graph and generates three local bundles. Later launches do not traverse Test15→...→Test40 recovery loaders and do not load Remote Manager/Bootstrap. Historical business module order is preserved exactly."
+}
