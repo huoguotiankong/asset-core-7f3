@@ -1,0 +1,19 @@
+{
+  "schema":1,
+  "id":"rule-repo-test",
+  "name":"我的规则仓库·测试版",
+  "version":"3.5.6-rc33",
+  "build":423,
+  "ref":"d3dc2d0168992f458a171a589fadc70e5bb3241e",
+  "baseRuntime":{"version":"3.5.6-rc12","build":402,"release":"apps/tools/rule-repo/releases/test-3.5.6-rc12/release.json"},
+  "previousTest":{"version":"3.5.6-rc32","build":422,"rule":"apps/tools/rule-repo/rule_repo_test_v169.txt"},
+  "rule":"apps/tools/rule-repo/rule_repo_test_v170.txt",
+  "entry":"apps/tools/rule-repo/releases/test-3.5.6-rc33/flat_entry_v1.js",
+  "builder":"apps/tools/rule-repo/releases/test-3.5.6-rc33/flat_builder_v1.js",
+  "control":"apps/tools/rule-repo/releases/test-3.5.6-rc33/flat_control_v1.js",
+  "finalPatch":"apps/tools/rule-repo/releases/test-3.5.6-rc33/flat_final_patch.js",
+  "generatedRuntime":"hiker://files/rules/asset-core-local/rule-repo-test/flat_runtime_b423.js",
+  "delivery":{"mode":"local-first-flat-runtime","normalStartup":"flat-entry-plus-single-generated-bundle","firstBuild":"reuse-local-build402-files-and-concatenate-once","controlPlane":"standalone-small-local-module","import":"direct-payload-sequential-fixed-ref-fast-lane"},
+  "verify":{"global":"HikerRuleRepo","property":"build","equals":423},
+  "notes":"RC33 为结构性扁平化版本，不再叠加 Bridge v6-v10。首次启动从已存在的 Build402 Local Module Manager 包按原 release 顺序生成单一 flat_runtime_b423.js；后续启动只加载 Flat Entry + 单 bundle。检查版本/同步/诊断使用独立 flat_control_v1.js，不重建 Runtime。设置页移除 hiker://page/ruleRepoCore 模块式 require。普通 .txt 导入优先 fixed ref Raw 1.8s，失败再切 jsDelivr/GitHub Raw。Stable 3.5.5 保持不变。"
+}
