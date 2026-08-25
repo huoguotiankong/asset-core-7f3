@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "id": "pornhub-test",
+  "appId": "pornhub",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.1.1-test.2",
+  "build": 10202,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10108,
+    "release": "apps/video/pornhub/releases/0.1.0/release.json"
+  },
+  "failedPreviousTest": {
+    "version": "0.1.1-test.1",
+    "build": 10201,
+    "release": "apps/video/pornhub/releases/0.1.1-test.1/release.json",
+    "rule": "apps/video/pornhub/pornhub_remote_test_localfirst_v1_b10201.txt",
+    "deviceResult": "failed-first-install-runtime-residual-gate",
+    "error": "Runtime 仍残留远程代码/资产依赖：raw.githubusercontent.com/huoguotiankong/asset-core-7f3",
+    "status": "frozen-failed-immutable"
+  },
+  "sourceSnapshot": {
+    "ref": "50a6d1514170f85f1751e877794de0d9759fa437",
+    "modules": [
+      "apps/video/pornhub/releases/0.1.0-test.1/core.js",
+      "apps/video/pornhub/releases/0.1.0-test.2/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.3/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.4/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.5/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.6/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.7/core_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.1/runtime.js",
+      "apps/video/pornhub/releases/0.1.0-test.2/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.3/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.4/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.5/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.6/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0-test.7/ui_patch.js",
+      "apps/video/pornhub/releases/0.1.0/stable_patch.js",
+      "apps/video/pornhub/releases/0.1.1-test.2/final_local_patch.js"
+    ],
+    "assets": [
+      "apps/video/pornhub/assets/account.svg",
+      "apps/video/pornhub/assets/banner.svg",
+      "apps/video/pornhub/assets/categories.svg",
+      "apps/video/pornhub/assets/comment.svg",
+      "apps/video/pornhub/assets/creators.svg",
+      "apps/video/pornhub/assets/favorite.svg",
+      "apps/video/pornhub/assets/feed.svg",
+      "apps/video/pornhub/assets/gifs.svg",
+      "apps/video/pornhub/assets/history.svg",
+      "apps/video/pornhub/assets/home.svg",
+      "apps/video/pornhub/assets/icon.svg",
+      "apps/video/pornhub/assets/local.svg",
+      "apps/video/pornhub/assets/search.svg",
+      "apps/video/pornhub/assets/shorts.svg",
+      "apps/video/pornhub/assets/subscribe.svg"
+    ],
+    "sourceCount": 31,
+    "moduleCount": 16,
+    "assetCount": 15
+  },
+  "builder": {
+    "path": "apps/video/pornhub/releases/0.1.1-test.2/local_bundle_builder.js",
+    "ref": "29b1f8255b5257f9a7b48705ff66dc19f18df60d",
+    "sanitizer": "strict-marker+bootstrap-assignment+asset-root-v2"
+  },
+  "entry": {
+    "path": "apps/video/pornhub/releases/0.1.1-test.2/local_entry.js",
+    "ref": "ab4e70127bb9097fb174f4c5d7b5c30ad3484481"
+  },
+  "shell": {
+    "path": "apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt",
+    "ref": "19106230606f059f18d5b8965ea1aca0915d18cb",
+    "blob": "d7db4dcbec856a7c24db8b1b1eaf6bdfff0cdb4d",
+    "ruleVersion": 2026082524
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/pornhub-test/b10202/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "bootstrapShim": "local_bootstrap.js",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "PornhubLocalRuntime",
+    "localFirstVersion": "0.1.1-test.2",
+    "localFirstBuild": 10202,
+    "businessBase": "Stable 0.1.0 / Build10108"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "localBootstrapShim": true,
+    "historicalLazyRuleReentry": "C.bootstrap assignment rewritten to local Bootstrap Shim",
+    "repositoryAssets": "15 SVG files localized",
+    "sourceValidation": "per-module exact marker + body normalization",
+    "remoteResidualGate": "kept enabled with per-module residual context",
+    "updateOwner": "rule-repo"
+  },
+  "notes": "Test2 is a new immutable build after Test1 was rejected by the real-device remote-residual gate. Stable business logic remains unchanged. Test2 replaces the fragile URL-only Bootstrap sanitizer with deterministic C.bootstrap assignment rewriting, exact asset-root replacement, strict per-module source markers, defensive response-body normalization and path-specific residual diagnostics. The final Runtime gate remains enabled."
+}

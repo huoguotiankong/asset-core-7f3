@@ -1,30 +1,64 @@
 # Pornhub Changelog
 
-> 当前恢复入口。2026-08-25 Local-First 迁移前的 Test1-Test7 / Stable0.1.0 / 账号、评论、Shorts、片单与播放历史已原样归档到 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
+> 当前恢复入口。Local-First 迁移前的 Test1-Test7 / Stable0.1.0 / 账号、评论、Shorts、片单与播放历史已归档到 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
 ## 当前活动边界
 - Stable：`0.1.0 / Build10108`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `0.1.0`，本轮不修改。
-- Test：`0.1.1-test.1 / Build10201`，Native Local-First Candidate，等待海阔实机验证。
-- Test Shell：`apps/video/pornhub/pornhub_remote_test_localfirst_v1_b10201.txt`，rule version `2026082523`。
-- Previous Test：`0.1.0-test.7 / Build10107`，Stable0.1.0 的晋级来源，保留为历史对照。
+- Test：`0.1.1-test.2 / Build10202`，Native Local-First Candidate，等待海阔实机验证。
+- Test Shell：`apps/video/pornhub/pornhub_remote_test_localfirst_v2_b10202.txt`，rule version `2026082524`。
+- Failed Test：`0.1.1-test.1 / Build10201`，已冻结，不允许原地覆盖。
+- Stable 晋级来源：`0.1.0-test.7 / Build10107`，继续保留为历史对照。
 - 数据源：`https://www.pornhub.com/`。
 
-## 2026-08-25 · 0.1.1-test.1 / Build10201 · Stable-derived Local-First
+## 2026-08-25 · 0.1.1-test.2 / Build10202 · Local-First Residual Gate Repair
 
-### 迁移边界
-本轮只迁移交付、启动、点击重入和程序静态资产控制面，不主动改 Stable0.1.0 已有业务：
-- 首页公开内容与账号推荐 Feed。
-- 搜索、中文分类、创作者、详情与评论。
-- X5 Cookie 登录、账号身份、推荐/Feed/历史/收藏/订阅。
-- 本地影片/创作者/片单收藏与浏览历史。
-- Shorts `/shorties/<id>` 与 Playlist chunk 分页实现。
-- 4 档 HLS 多画质播放与媒体回退。
+### 用户当前实机结果
+Test1 首次打开在 Runtime 构建阶段被硬门禁主动拒绝，实机错误为：
 
-Stable0.1.0 / Latest 原文件、原 build、原 Shell/Bootstrap 全部冻结。
+```text
+Pornhub解析失败！
+Error: Runtime 仍残留远程代码/资产依赖：
+raw.githubusercontent.com/huoguotiankong/asset-core-7f3
+```
 
-### Stable 真实执行闭包
-Stable Release 表层共有 15 个业务模块：
+因此 Test1 不得标记为“基础通过”，也不得晋级 Stable。该版本保持 immutable，后续修复必须使用更高 Test build。
+
+### Test1 失败定位
+Test1 的方向本身正确：
+- 15 层 Stable 业务模块原顺序冻结。
+- 15 个仓库 SVG 纳入本地包。
+- 旧 `lazyRule` 的 `C.bootstrap` 计划重定向到本地 Bootstrap Shim。
+- Runtime 最终保留私人仓库 URL / Remote Manager 硬门禁。
+
+问题出在 **Runtime 合成前的清洗器不够确定性**。Test1 主要依赖 URL 形态正则替换；真实设备证明，至少有一处历史远程字符串没有被该策略可靠清除，最终被硬门禁正确拦截。
+
+同时核对海阔官方 JS 文档：`batchFetch()` 返回与输入顺序一致的字符串数组，超过 16 项时自动分批同步循环。因此这次不能把错误简单归因于“batchFetch 返回包装对象”。Test2 仍保留防御性正文归一化，但真正修复重点放在源码 marker 校验和确定性重写。
+
+### Test2 修复原则
+本轮仍只改交付 / 启动 / 本地代码控制面，不主动修改 Stable0.1.0 的业务 Parser、账号、评论、Shorts、片单或播放协议。
+
+Test2 新 Builder：
+1. **每个 JS 源必须命中精确 marker**，否则该批量结果无效并自动回退单源下载。
+2. 批量/单源结果统一经过 `bodyOf()` 正文归一化；如果未来运行时返回对象，优先读取 `body/content`。
+3. Pornhub SVG 资产根不再只靠宽泛正则，改为三个已知仓库根的精确字符串替换：Raw / jsDelivr / GitHub WebRaw。
+4. 历史 Core Patch / Stable Patch 的 `C.bootstrap='...'` 不再依赖 URL 结构匹配，直接按 **赋值语句** 重写为当前本地 `local_bootstrap.js`。
+5. 仍额外保留三类 Bootstrap URL 的明确规则作为第二层兜底。
+6. 每个模块清洗完成后立即执行私人仓库残留检测；若失败，错误必须包含 **具体模块路径 + 附近上下文**，不能只报一个域名。
+7. 所有模块拼成 Runtime 后再次执行全局硬门禁；门禁没有放宽。
+8. `bundle_meta.json` 新增 `rewrites` 与 sanitizer 标识，便于实机诊断。
+
+### Test2 完整本地闭包
+仍固定 31 sources：
+
+```text
+15 个 Stable 业务模块
++ 1 个 Test2 Local-First final overlay
++ 15 个 Pornhub SVG 资产
+= 31 sources
+```
+
+Stable 业务模块原顺序：
 
 ```text
 Core Test1
@@ -32,127 +66,104 @@ Core Test1
 → Runtime Test1
 → UI Patch2/3/4/5/6/7
 → Stable Patch
+→ Test2 Local-First Overlay
 ```
 
-审计发现表层 15 个文件之外仍存在两类 Local-First 隐性依赖：
-1. Shell 每个页面都先远程 `Bootstrap → Remote Manager → Release`。
-2. 历史 Runtime/UI 中多个 `lazyRule` 动作把 `C.bootstrap` 序列化进点击回调；即使首页已本地化，播放、登录同步、退出账号、清历史/收藏等动作仍会在真正点击时重新进入远程 Bootstrap。
-3. Runtime/UI 使用仓库 `apps/video/pornhub/assets/*.svg` 作为 banner、账号、搜索、分类、创作者、收藏、历史等图标资产。
-
-因此仅把 15 个业务 JS 下载到本地仍不算完成。
-
-### Test1 完整本地闭包
-本轮固定：
-
-```text
-15 个 Stable 业务模块
-+ 1 个 Local-First final overlay
-+ 15 个 Pornhub SVG 资产
-= 31 sources
-```
-
-本地化的 15 个 SVG：
+本地化 SVG：
 `account / banner / categories / comment / creators / favorite / feed / gifs / history / home / icon / local / search / shorts / subscribe`。
 
-### 新运行链
+### Test2 运行链
 ```text
-Pornhub Test Shell / rule 2026082523
-→ hiker://files/rules/asset-core-local/pornhub-test/b10201/local_entry.js
+Pornhub Test Shell / rule 2026082524
+→ hiker://files/rules/asset-core-local/pornhub-test/b10202/local_entry.js
 → local_bundle_builder.js
-→ 首次安装：从 immutable source ref 下载 31 个源码/资产单元
-→ 生成 runtime_bundle.js
-→ 生成 local_bootstrap.js
-→ 写入 assets/*.svg + bundle_meta.json
+→ 首次安装：immutable Source Ref 下载 31 sources
+→ 每源 marker / 正文校验
+→ C.bootstrap 赋值重写 + 资产根本地化
+→ 每模块残留门禁
+→ runtime_bundle.js + local_bootstrap.js + assets/*.svg + bundle_meta.json
 → 后续正常启动 $.require('pornhub')
 → require(file:// runtime_bundle.js)
 → PornhubLocalRuntime.module()
 ```
 
-正常二次启动不再加载：
+正常二次启动不应再加载：
 - Stable/Test Bootstrap。
 - `libs/updater/remote_manager.js`。
 - 远程 Core/Runtime/UI/Patch。
 - 仓库 Pornhub SVG 运行资产。
 
-Pornhub 原站 HTML/API、X5 Cookie、图片、HLS、Shorts/片单业务请求仍属于业务网络，不属于程序代码交付。
+Pornhub 原站 HTML/API、X5 Cookie、图片、HLS、Shorts/片单请求仍属于业务网络，不属于程序代码交付。
 
 ### Local Bootstrap Shim
-旧业务代码已经把 `C.bootstrap` 写进多个 lazyRule/select/action 回调，不能只改页面首入口。
+旧 Stable 代码中播放、登录同步、在线收藏、退出账号、清历史等动作会把 `C.bootstrap` 带入 `lazyRule`。
 
-Builder 在合成 Runtime 前统一把历史 Pornhub Bootstrap URL 改为：
-`file://.../local_bootstrap.js`。
+Test2 在合成 Runtime 时直接把历史：
 
-本地 Shim 从 `runtime_bundle.js` 重建：
-- `PornhubCore`
-- `PornhubRemoteRuntime`
-- `PornhubBoot`
+```text
+C.bootstrap = <任何历史远程 Bootstrap 字符串>
+```
 
-并保留 `PornhubBoot.loadOnly/module/info/check/update/rollback/reinstall` 的兼容接口，但全部在本地执行；版本检查/升级职责交回“我的规则仓库”。这样旧 lazyRule 的行为合同继续成立，同时不再访问 Remote Manager。
+重写为当前本地：
 
-### 静态资产本地化
-Builder 将历史：
-- `raw.githubusercontent.com/.../apps/video/pornhub/assets/`
-- `cdn.jsdelivr.net/.../apps/video/pornhub/assets/`
+```text
+C.bootstrap = file://.../pornhub-test/b10202/local_bootstrap.js
+```
 
-统一改为本地 `hiker://files/rules/asset-core-local/pornhub-test/b10201/assets/`。
-
-Test Shell 自身使用站点 favicon，不依赖私人仓库图标作为规则壳图标。
+Shim 从当前 `runtime_bundle.js` 重建 `PornhubCore / PornhubRemoteRuntime / PornhubBoot`，保持旧回调接口合同，但不再进入 Remote Manager。
 
 ### 远程残留硬门禁
-Runtime 生成完成前执行字符串门禁；若仍包含以下任一代码/资产依赖则拒绝安装：
+禁止在最终 Runtime 中残留：
 - `raw.githubusercontent.com/huoguotiankong/asset-core-7f3`
 - `cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3`
 - `github.com/huoguotiankong/asset-core-7f3/raw`
 - `libs/updater/remote_manager.js`
 
-这项门禁只针对程序代码与仓库资产；业务站点网络不在禁止范围。
-
-### Local-First 诊断
-新增 `pornhubLocalFirst` 页面，可查看：
-- `0.1.1-test.1 / Build10201`。
-- Runtime ready 状态。
-- immutable source ref。
-- source 数量、Runtime 字节数。
-- 本地 SVG 数量。
-- Stable 业务基线。
-- 点击重入是否由 Local Bootstrap Shim 接管。
-- 重建本地包。
-- 不含 Cookie/Token/Authorization 的诊断摘要。
+Test2 与 Test1 的区别不是“取消门禁”，而是让门禁前的清洗和定位变得可验证、可追踪。
 
 ### 静态门禁
 - `final_local_patch.js`：实际 `node --check` 通过。
 - `local_bundle_builder.js`：实际 `node --check` 通过。
 - `local_entry.js`：实际 `node --check` 通过。
-- Test Shell 外层规则 JSON 与嵌套 `pages` JSON 均解析通过。
-- Shell 共 21 个页面：原 20 个业务页 + 本地化诊断。
-- Shell `find_rule/searchFind/pages` 共 23 个 JS 片段已逐个 `node --check` 通过。
-- rule version `2026082523` 与 Build `10201` 均在 32 位有符号整数安全范围内。
+- Test2 Shell 外层 JSON 与嵌套 `pages` JSON 实际解析通过。
+- Shell 共 21 个页面。
+- `find_rule + searchFind + pages` 共 23 个 JS 片段逐个 `node --check` 通过。
+- rule version `2026082524`、Build `10202` 均在 32 位有符号整数安全范围内。
 
-### 实机验收
-Test1 在以下项目完成前不得晋级 Stable：
-1. “我的规则仓库”同步/覆盖后显示 `0.1.1-test.1 / Build10201`。
-2. 首次打开允许一次本地包构建，首页正常进入。
-3. 完全退出后第二次打开仍正常，确认本地 Entry + Runtime Bundle 链有效。
-4. 打开“本地化诊断”，应显示 Runtime ready、31 sources、15 SVG assets。
+### Test2 实机验收
+在以下项目完成前不得晋级 Stable：
+1. “我的规则仓库”同步/覆盖后显示 `0.1.1-test.2 / Build10202`。
+2. 首次打开能完成本地包构建，不再出现 Test1 的远程残留报错。
+3. 打开“本地化诊断”，应显示 Runtime ready、31 sources、15 SVG assets，并可看到 rewrites 数量。
+4. 完全退出后二次打开正常，确认走本地 Entry + Runtime Bundle。
 5. 首页 / 搜索 / 分类 / 创作者 / 详情 / 评论无明显回归。
-6. 至少实际播放一部视频，确认已有 4 档 HLS/媒体回退没有因交付迁移失效。
-7. 重点验证“立即播放”等历史 lazyRule 点击动作，不能因 Local Bootstrap Shim 出现 `PornhubBoot/PornhubCore 未定义`。
-8. 若使用账号，验证 X5 登录同步、账号页、退出本小程序账号会话。
-9. Shorts 与公开片单至少能正常进入；Playlist chunk 加载保持 Stable 合同。
-10. 如条件允许，首次安装完成后屏蔽 GitHub/CDN再重开；程序代码/UI/本地图标仍应进入，Pornhub 业务站点仍需正常网络。
+6. 至少实际播放一部视频，并重点验证“立即播放”这类历史 lazyRule 不会重新进入远程 Bootstrap。
+7. 若使用账号，验证 X5 登录同步、账号页、退出本小程序账号会话。
+8. Shorts 与公开片单至少能正常进入。
+9. 如仍触发残留门禁，新的错误必须带具体模块路径和上下文，直接按该模块继续收敛。
+10. 如条件允许，本地包完成后屏蔽 GitHub/CDN再重开，程序代码/UI/本地图标仍应进入。
+
+## 失败版本记录
+### 0.1.1-test.1 / Build10201
+- 状态：`frozen-failed-immutable`。
+- 实机：首次 Runtime 构建失败。
+- 错误：私人仓库 Raw URL 残留被最终硬门禁拦截。
+- 处理：禁止覆盖 Test1；从 Stable0.1.0 新建 Test2 / Build10202。
 
 ## 恢复与回退
 - 正式恢复入口：Stable `0.1.0 / Build10108`。
-- 当前 Local-First Test：`0.1.1-test.1 / Build10201`。
-- Test1 失败时冻结该 immutable release，从 Stable0.1.0 新建更高 Test build 修复，禁止原地覆盖 Test1 资产赌缓存刷新。
-- `0.1.0-test.7 / Build10107` 继续保留为 Stable 晋级来源，但不再作为新 Test 的开发基线。
+- 当前 Local-First Test：`0.1.1-test.2 / Build10202`。
+- Test2 如果仍失败，继续冻结 Test2，再从 Stable0.1.0 建更高 Build；禁止修改已经发布的 Test2 immutable 源。
+- `0.1.0-test.7 / Build10107` 继续保留为 Stable0.1.0 的晋级来源。
 
 ## 长期不可回退事实
-- Local-First 必须审计页面入口之外的 lazyRule/select/action 重入；不能只确认首页本地启动。
-- 仓库 SVG/banner 等静态 UI 资产属于程序运行闭包，也必须纳入本地包或明确替换为非私人仓库资产。
-- X5 Cookie 登录只保存会话结果，不保存账号密码；账号真实性继续以官方网页与安全页为准。
-- Shorts 与 Playlist 必须继续使用当前真实实体和 chunk 合同，不恢复旧 `/short/` 或伪标题 Parser。
-- Stable0.1.0 的业务逻辑只能在后续独立功能 Test 中修改，Local-First 迁移不得顺手重构已验证 Parser/播放链。
+- Local-First 完成定义包含顶层入口、传递依赖、静态资产和点击时重入。
+- 生成 Runtime 的远程去除不能只靠“一个看起来能匹配所有 URL 的正则”；优先使用结构化赋值重写、固定资产根替换、每源 marker 和最终残留门禁组合。
+- 硬门禁失败是发布保护，不允许为了“先跑起来”而删除门禁。
+- 仓库 SVG/banner 属于程序运行闭包。
+- X5 Cookie 登录不保存账号密码。
+- Stable0.1.0 业务逻辑只能在独立功能 Test 中改，不得借 Local-First 维修顺手重构。
 
 ## 历史
 - Local-First 前完整历史：`apps/video/pornhub/CHANGELOG_PRE_LOCAL_FIRST_20260825.md`
+- Test1 immutable Release：`apps/video/pornhub/releases/0.1.1-test.1/release.json`
