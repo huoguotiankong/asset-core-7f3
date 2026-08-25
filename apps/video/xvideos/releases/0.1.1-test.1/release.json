@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "id": "xvideos-test",
+  "appId": "xvideos",
+  "name": "XVideos",
+  "channel": "test",
+  "version": "0.1.1-test.1",
+  "build": 10201,
+  "baseTest": {
+    "version": "0.1.0-test.7",
+    "build": 10107,
+    "release": "apps/video/xvideos/releases/0.1.0-test.7/release.json"
+  },
+  "sourceSnapshot": {
+    "ref": "fe11b01997a0e3ff82885dddca0a36a078c5f774",
+    "moduleCount": 16,
+    "assetCount": 24,
+    "sourceCount": 40,
+    "businessModules": 15,
+    "localOverlay": "apps/video/xvideos/releases/0.1.1-test.1/final_local_patch.js"
+  },
+  "builder": {
+    "path": "apps/video/xvideos/releases/0.1.1-test.1/local_bundle_builder.js",
+    "ref": "8d871c1d85b209cc2da64cab01d8905c2e12a81b",
+    "sanitizer": "strict-marker+bootstrap-expression+asset-root+app-root-v4"
+  },
+  "entry": {
+    "path": "apps/video/xvideos/releases/0.1.1-test.1/local_entry.js",
+    "ref": "40c63e805e26d96c98e14a44ce79191bdcee497c"
+  },
+  "shell": {
+    "path": "apps/video/xvideos/xvideos_remote_test_localfirst_v1_b10201.txt",
+    "ref": "3c99c9fbee8bc420b0c4d40c717cb043e342eb55",
+    "blob": "99ef81aff41b97f1bf7b8d98346225b8d0351c6c",
+    "ruleVersion": 2026082528
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/xvideos-test/b10201/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "bootstrapShim": "local_bootstrap.js",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "XVideosLocalRuntime",
+    "localFirstVersion": "0.1.1-test.1",
+    "localFirstBuild": 10201,
+    "businessBase": "Test7 0.1.0-test.7 / Build10107"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "localBootstrapShim": true,
+    "historicalLazyRuleReentry": "C.bootstrap assignments and ROOT-derived bootstrap are rewritten to local Bootstrap Shim",
+    "repositoryAssets": "24 SVG files localized",
+    "sourceValidation": "per-module exact marker + source-body validation",
+    "remoteResidualGate": "private repo URLs + historical Bootstrap names",
+    "updateOwner": "rule-repo"
+  },
+  "preservedBusinessContracts": [
+    "Test5 private-file storage rescue and live X5 Cookie boundary",
+    "Test5/Test6 device-validated detail and highest-quality playback chain",
+    "Test7 eid/u/t/tf/i/d/pn/pu short-key video payload parser",
+    "Test7 profile/channel /videos/new and /videos/best/straight contracts",
+    "Test7 account XHR/JSON parsing and rendered WebView fallback",
+    "Test7 rendered WebView comment DOM fallback",
+    "Test7 creator-region normalization and profile seed-image fallback"
+  ],
+  "notes": "Test7-derived Local-First candidate. No Stable exists for XVideos; Test7 / Build10107 remains the immutable recovery business baseline until this Local-First Test passes real-device validation."
+}
