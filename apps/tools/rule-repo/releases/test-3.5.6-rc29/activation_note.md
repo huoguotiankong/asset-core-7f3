@@ -1,0 +1,1 @@
+RC29 activation updates only the rule-repo Test pointer, its own channels feed, app manifest and current CHANGELOG. Stable/latest remain untouched. Activation must fast-forward from the latest main HEAD; no force push.
