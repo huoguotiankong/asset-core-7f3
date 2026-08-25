@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "id": "javbus-test",
+  "appId": "javbus",
+  "name": "JavBus",
+  "channel": "test",
+  "version": "2.0.1-test.1",
+  "build": 20101,
+  "baseStable": {
+    "version": "2.0.0",
+    "build": 20005,
+    "release": "apps/video/javbus/releases/2.0.0/release.json"
+  },
+  "previousTest": {
+    "version": "2.0.0-alpha4",
+    "build": 20004,
+    "release": "apps/video/javbus/releases/2.0.0-alpha4/release.json",
+    "status": "stable-promotion-source-preserved"
+  },
+  "sourceSnapshot": {
+    "ref": "b6ca12089d2e85912cc830199bae0de2f1373af8",
+    "modules": [
+      "apps/video/javbus/releases/2.0.0-alpha1/core.js",
+      "apps/video/javbus/releases/2.0.0-alpha1/compat.js",
+      "apps/video/javbus/releases/2.0.0-alpha1/runtime.js",
+      "apps/video/javbus/releases/2.0.0-alpha2/patch_alpha2.js",
+      "apps/video/javbus/releases/2.0.0-alpha3/patch_alpha3.js",
+      "apps/video/javbus/releases/2.0.0-alpha4/patch_alpha4.js",
+      "apps/video/javbus/releases/2.0.0/stable_patch.js",
+      "apps/video/javbus/releases/2.0.1-test.1/final_local_patch.js"
+    ],
+    "sharedPlaybackBase": "shared/jav-playback/releases/1.0.0-test.2/index.js",
+    "sharedPlaybackStable": "shared/jav-playback/releases/1.0.0-test.4/index.js",
+    "sharedPlaybackIcon": "shared/jav-playback/assets/123av.svg",
+    "domainConfig": "apps/video/javbus/domains.json",
+    "sourceCount": 12
+  },
+  "builder": {
+    "path": "apps/video/javbus/releases/2.0.1-test.1/local_bundle_builder.js",
+    "ref": "578d6359227f0471c01911086fd408d57b60ed43"
+  },
+  "entry": {
+    "path": "apps/video/javbus/releases/2.0.1-test.1/local_entry.js",
+    "ref": "2fe1e6a9d8a0182794497720bdd9900036f350eb"
+  },
+  "shell": {
+    "path": "apps/video/javbus/javbus_remote_test_localfirst_v1_b20101.txt",
+    "ref": "26a5d21faf51978afae74c92c21b3b22e20ea3f7",
+    "blob": "556a794be10eab931e612a3794844c4937419e19",
+    "ruleVersion": 2026082516
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/javbus-test/b20101/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "sharedPlaybackIcon": "123av.svg",
+    "domainConfig": "domains.json"
+  },
+  "verify": {
+    "runtimeGlobal": "JavBusLocalRuntime",
+    "localFirstVersion": "2.0.1-test.1",
+    "localFirstBuild": 20101,
+    "businessBase": "Stable 2.0.0 / Build20005"
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + one require(file://) Runtime bundle",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFirstInstallForCode": true,
+    "legacyRemoteManager": false,
+    "sharedPlayback": "1.0.0-test.4 embedded with local lazyRule/select re-entry",
+    "domainControl": "local domains.json + static fallback; remote domain sync is user-triggered only",
+    "updateOwner": "rule-repo"
+  },
+  "notes": "Delivery-only migration from Stable 2.0.0. The exact Stable Core/Compat/Runtime and alpha2/alpha3/alpha4/Stable patch chain are frozen into an immutable source snapshot. Shared JAV Playback, 123AV icon and domains.json are included in the local package. The device-verified alpha3 magnet parser is not changed. Normal second startup does not load Bootstrap, Remote Manager or remote executable code. Stable/Latest remain untouched pending device validation."
+}
