@@ -1,24 +1,24 @@
 {
-  "schema":4,
-  "id":"myav",
-  "name":"MyAv",
-  "versionPolicy":"remote-stable-test-v1",
-  "updatedAt":"2026-08-23 13:42",
-  "channels":[
+  "schema": 4,
+  "id": "myav",
+  "name": "MyAv",
+  "versionPolicy": "remote-stable-localfirst-test-v2",
+  "updatedAt": "2026-08-25 21:22",
+  "channels": [
     {
-      "channel":"stable",
-      "label":"正式版",
-      "id":"myav",
-      "name":"MyAv",
-      "version":"0.1.0",
-      "build":10112,
-      "displayVersion":"Stable 0.1.0 · Build 10112",
-      "path":"apps/video/myav/myav_remote_stable_v1_b10112.txt",
-      "mode":"remote",
-      "updatedAt":"2026-08-23",
-      "recommended":true,
-      "desc":"首个 MyAv 正式版，由 Test11 按用户明确要求晋级；保留完整筛选双链、九类索引、演员/影片双收藏、磁链、预览与共享第三方播放。",
-      "highlights":[
+      "channel": "stable",
+      "label": "正式版",
+      "id": "myav",
+      "name": "MyAv",
+      "version": "0.1.0",
+      "build": 10112,
+      "displayVersion": "Stable 0.1.0 · Build 10112",
+      "path": "apps/video/myav/myav_remote_stable_v1_b10112.txt",
+      "mode": "remote",
+      "updatedAt": "2026-08-23",
+      "recommended": true,
+      "desc": "首个 MyAv 正式版，由 Test11 晋级；本轮 Local-First 仅在 Test 验证，Stable 不变。",
+      "highlights": [
         "有码 / 欧美 / 国产 / 无码多频道资料",
         "高级筛选结果链与完整 Ttype=2 控制链分离",
         "九类片商 / 演员 / TAG 索引与实体页",
@@ -26,23 +26,35 @@
         "磁力点击复制，长按调用迅雷 / PikPak / 123云盘 / 光鸭云盘",
         "MissAV / 123AV / Jable 共享播放 SDK"
       ],
-      "icon":"https://thumbsnap.com/i/uc3CZiMx.jpg"
+      "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     },
     {
-      "channel":"test",
-      "label":"测试版",
-      "id":"myav-test",
-      "name":"MyAv",
-      "version":"0.1.0-test.11",
-      "build":10111,
-      "displayVersion":"Test 0.1.0-test.11 · Promotion Source",
-      "path":"apps/video/myav/myav_remote_test_v11_b10111.txt",
-      "mode":"remote",
-      "updatedAt":"2026-08-23",
-      "recommended":false,
-      "desc":"Stable 0.1.0 的晋级来源；后续新 Test 应从 Stable 0.1.0 重新 rebase。",
-      "highlights":["保留为首个 Stable 的晋级来源和问题对照","下一轮 Test 不继续叠加旧测试身份，应从新 Stable 向前开发"],
-      "icon":"https://thumbsnap.com/i/uc3CZiMx.jpg"
+      "channel": "test",
+      "label": "测试版",
+      "id": "myav-test",
+      "name": "MyAv",
+      "version": "0.1.1-test.1",
+      "baseVersion": "0.1.0",
+      "baseBuild": 10112,
+      "targetVersion": "0.1.1",
+      "build": 10201,
+      "displayVersion": "Test 0.1.1-test.1 · Local-First",
+      "path": "apps/video/myav/myav_remote_test_localfirst_v1_b10201.txt",
+      "mode": "remote-local-first",
+      "updatedAt": "2026-08-25",
+      "recommended": false,
+      "desc": "从 Stable 0.1.0 重新 rebase；首次安装完整本地 Runtime，后续正常启动使用本地 Entry + require(file://)，不加载 Remote Manager/远程 Runtime。",
+      "highlights": [
+        "23 层 Stable MyAv 业务模块原顺序冻结",
+        "28 个源码/资产单元组成完整本地执行闭包",
+        "Shared JAV Playback 1.0.0-test.4 与 test.2 基线一并本地化",
+        "Provider lazyRule/select 点击时重新进入本地 myav",
+        "123AV 图标与 MyAv 仓库图标进入本地包",
+        "Settings 不再提供会重新 require Bootstrap 的 Remote Manager 维护动作",
+        "Stable 0.1.0 / Latest 不变",
+        "等待海阔实机验证"
+      ],
+      "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
   ]
 }
