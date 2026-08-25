@@ -17,7 +17,8 @@
   "sourceRef": "848879b13bc5de5510af68b6791cc94c6307f198",
   "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1",
   "entryRef": "2d3d2c942f00a37814fed5261f4d0c03f8e9c255",
-  "shellRef": "0944e9600a6f870c5a7d951530538d41057bd6d8",
+  "shellRef": "f07078f3bf3f4cecce5ac47f0b9928f9c0169311",
+  "shellBlob": "3d6d01eb19baf250d2866c38f78148ab15549728",
   "updatedAt": "2026-08-25",
   "status": "active-test-local-first-pending-device-validation",
   "previousTest": {
