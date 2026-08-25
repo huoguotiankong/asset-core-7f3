@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "rule-repo-test",
+  "name": "我的规则仓库·测试版",
+  "version": "3.5.6-rc41",
+  "build": 431,
+  "baseStable": {"version":"3.5.5","build":389,"release":"apps/tools/rule-repo/releases/3.5.5/release.json"},
+  "runtime": "stable-3.5.5-exact",
+  "startupMode": "local-startup-capsule-multi-mirror-resolver",
+  "startupResolver": "apps/tools/rule-repo/releases/test-3.5.6-rc41/startup_resolver.js",
+  "startupLoader": "apps/tools/rule-repo/releases/test-3.5.6-rc40/startup_loader.js",
+  "startupBootstrap": "apps/tools/rule-repo/releases/test-3.5.6-rc40/startup_bootstrap.js",
+  "manager": {"version":"2.0.4","path":"libs/updater/v2.0.4/remote_manager.js","ref":"fe26fe9f8f9c40efd60f93753b84b350af6a7612"},
+  "runtimeRef": "5036c15d8beabd4ade6482b0bcdd02910ceb6d43",
+  "moduleCount": 39,
+  "localFiles": ["remote_manager_204.js","startup_bootstrap.js"],
+  "selfUpdate": false,
+  "notes": "RC40 首次启动实机失败不是 Runtime 问题，而是 Shell 仅依赖固定 commit 的 jsDelivr startup_loader。RC41 只修启动运输：新增 Raw/GitHub Raw/jsDelivr 三镜像 Resolver，并保留 Stable3.5.5 Bootstrap 救援回退；Stable3.5.5 的39业务模块和 UI/详情/版本中心/导入逻辑继续完全不改。性能结论仍只看胶囊成功建立后的第2/3次启动。"
+}
