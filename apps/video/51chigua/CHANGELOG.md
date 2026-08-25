@@ -4,11 +4,31 @@
 
 ## 当前活动边界
 - Stable：`0.1.0 / Build10106`，继续冻结，是当前业务稳定恢复基线。
-- Latest：仍指向 Stable `0.1.0`，本轮不修改。
-- Test：`0.1.1-test.1 / Build10201`，Native Local-First Candidate，等待海阔实机验证。
+- Latest：仍指向 Stable `0.1.0`，不修改。
+- Test：`0.1.1-test.1 / Build10201`，Native Local-First，**基础实机验证已通过**。
 - Test Shell：`apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt`，rule version `2026082526`。
 - Previous Test：`0.1.0-test.5 / Build10105`，Stable0.1.0 的晋级来源，继续保留为不可变历史对照。
 - 源站入口：`https://51cg1.com/`；动态域名与失败转移逻辑继续沿用 Stable。
+
+## 2026-08-25 · Test1 Local-First 基础实机通过
+用户提供当前海阔实机截图，明确显示：
+
+```text
+51吃瓜 0.1.1-test.1
+Build 10201 · Native Local-First
+本地 Runtime 已就绪
+Source 9bfc77fe270c · 18 源 · 68653 bytes
+```
+
+因此当前可确认：
+- Shell 已进入 Build10201 Local-First Test。
+- 首次本地包构建已经成功。
+- 本地 Runtime 已成功加载。
+- 实机识别到预期 18 sources。
+- Runtime 实际包大小为 68653 bytes。
+- 当前设备运行的 Source Ref 前缀与 Release 预期 `9bfc77fe270c...` 一致。
+
+当前只记为 **basic-local-first-device-validated**。该截图没有逐项证明加密封面/正文图片、分类、搜索、详情、评论、DPlayer/HLS、收藏/历史点击重入等所有业务回归，因此不得把“基础 Local-First 通过”扩大写成“完整业务回归通过”，也不据此自动晋级 Stable。
 
 ## 2026-08-25 · 0.1.1-test.1 / Build10201 · Stable-derived Local-First
 
@@ -78,41 +98,28 @@ Builder 将历史 `C.bootstrap=<远程 Bootstrap>` 统一重写为 `file://.../b
 - `github.com/huoguotiankong/asset-core-7f3/raw`
 - `libs/updater/remote_manager.js`
 
-门禁同时在单模块清洗后和最终 Runtime 执行，失败时应返回具体模块与附近上下文。
-
-### Local-First 诊断
-新增 `cg51LocalFirst` 页面，可查看 Runtime ready、Source Ref、18 sources、11 modules、7 SVG、Runtime bytes、rewrites，并可重建本地包和复制无敏感信息诊断摘要。
-
-### 静态门禁
-- `final_local_patch.js`、`local_bundle_builder.js`、`local_entry.js` 已实际 `node --check` 通过。
-- Test Shell 外层 JSON 与嵌套 `pages` JSON 已实际解析通过。
-- Shell 共 10 个页面；`find_rule + searchFind + pages` 共 12 个 JS 片段已逐个语法检查通过。
-- rule version `2026082526` 与 Build `10201` 均满足海阔 32 位整数约束。
-
-### 实机验收
-Test1 在以下项目完成前不得晋级 Stable：
-1. “我的规则仓库”轻同步/覆盖后显示 `0.1.1-test.1 / Build10201`。
-2. 首次打开完成 18 源本地包构建并进入首页。
-3. “本地化诊断”显示 Runtime ready、18 sources、7 SVG。
-4. 完全退出后二次打开正常，确认本地 Entry + Runtime Bundle。
-5. 首页封面、正文加密图片至少各验证一处。
-6. 分类、独立搜索、详情、评论至少各进入一次。
-7. 至少播放一个已有 DPlayer/HLS 视频。
-8. 点击收藏、重新探测站点、清理历史等历史动作，确认不再重入远程 Bootstrap/Manager。
-9. 条件允许时，本地包完成后屏蔽 GitHub/CDN 再重开；程序代码/UI/本地图标仍应进入。
+### 当前后续验收边界
+基础 Runtime 已通过；若未来准备晋级 Stable，再补完整业务回归：
+1. 完全退出后二次打开正常。
+2. 首页封面、正文加密图片各验证一处。
+3. 分类、独立搜索、详情、评论各进入一次。
+4. 至少实际播放一个 DPlayer/HLS 视频。
+5. 收藏、站点探测、清历史等历史 lazyRule 不得重新进入 Remote Bootstrap/Manager。
+6. 条件允许时屏蔽 GitHub/CDN 再重开验证本地代码闭包。
 
 ## 恢复与回退
 - Stable 恢复入口：`0.1.0 / Build10106`。
-- 当前 Local-First Test：`0.1.1-test.1 / Build10201`。
-- Test1 若实机失败，冻结该 immutable Release，从 Stable0.1.0 新建更高 Test build；禁止原地覆盖 Test1。
-- `0.1.0-test.5 / Build10105` 继续保留为 Stable 晋级来源。
+- 当前 Local-First Test：`0.1.1-test.1 / Build10201`，基础实机已通过。
+- 若后续业务回归发现问题，从 Stable0.1.0 新建更高 Test build；禁止原地覆盖 Test1 immutable 工件。
 
 ## 长期不可回退事实
 - 51吃瓜 Local-First 完成定义包含 Shell、业务模块、历史 lazyRule 重入和仓库 SVG。
 - 图片 AES 属于已验证业务能力，不因交付迁移重写；`hiker://assets/crypto-java.js` 是海阔本地内置依赖。
-- 评论 JSON、DPlayer/HLS、分类、搜索、收藏/历史继续以 Stable0.1.0 为事实基线。
+- 评论 JSON、DPlayer/HLS、分类、搜索、收藏/历史继续以 Stable0.1.0 为业务事实基线。
 - Local-First Test 不得顺手重构 Stable Parser/播放/图片协议。
+- 实机 Local-First 诊断通过与完整业务回归是两层验收，必须分别记录。
 
 ## 历史
 - Local-First 前完整历史：`apps/video/51chigua/CHANGELOG_PRE_LOCAL_FIRST_20260825.md`
 - Stable Release：`apps/video/51chigua/releases/0.1.0/release.json`
+- Local-First Test1 Release：`apps/video/51chigua/releases/0.1.1-test.1/release.json`
