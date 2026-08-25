@@ -13,14 +13,17 @@
   "bootstrap": "apps/video/51chigua/bootstrap_stable_v1_b10106.js",
   "test": "apps/video/51chigua/test.json",
   "channels": "apps/video/51chigua/channels.json",
-  "testVersion": "0.1.0-test.5",
-  "testBuild": 10105,
-  "testShellVersion": "1.0.0-test.5",
-  "testBootstrap": "apps/video/51chigua/bootstrap_test_v5_b10105.js",
-  "testRule": "apps/video/51chigua/51chigua_remote_test_v5_b10105.txt",
-  "testRelease": "apps/video/51chigua/releases/0.1.0-test.5/release.json",
+  "testVersion": "0.1.1-test.1",
+  "testBuild": 10201,
+  "testShellVersion": "0.1.1-test.localfirst.1",
+  "testRule": "apps/video/51chigua/51chigua_remote_test_localfirst_v1_b10201.txt",
+  "testRelease": "apps/video/51chigua/releases/0.1.1-test.1/release.json",
+  "testDelivery": "local-first-single-runtime-bundle",
   "changelog": "apps/video/51chigua/CHANGELOG.md",
   "sourceSite": "https://51cg1.com/",
   "icon": "https://51cg1.com/favicon.ico",
-  "migration": {"stage":"stable-010-promoted-test5","note":"Stable 0.1.0 / Build10106 is promoted unchanged from the user-validated Test5. Test5 remains the immutable promotion source and rollback reference; future Test work must move forward from Stable 0.1.0."}
+  "migration": {
+    "stage":"stable-010-localfirst-test-011t1-pending-device-validation",
+    "note":"Stable 0.1.0 / Build10106 remains frozen. Test 0.1.1-test.1 / Build10201 localizes the exact Stable execution chain plus 7 repository SVG assets and redirects historical C.bootstrap action re-entry through a local Bootstrap Shim."
+  }
 }
