@@ -1,0 +1,94 @@
+{
+  "schema": 2,
+  "id": "pornhub-test",
+  "appId": "pornhub",
+  "name": "Pornhub",
+  "channel": "test",
+  "version": "0.2.0-test.2",
+  "build": 20002,
+  "architecture": "standalone-product-first-model-first-local-first",
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10108,
+    "release": "apps/video/pornhub/releases/0.1.0/release.json",
+    "role": "protocol-and-regression-fact-source-only"
+  },
+  "supersedes": {
+    "version": "0.2.0-test.1",
+    "build": 20001,
+    "release": "apps/video/pornhub/releases/0.2.0-test.1/release.json",
+    "deviceResult": "partial-fail",
+    "observed": [
+      "Category secondary page title remained percent-encoded and content was empty.",
+      "Video detail page failed to load.",
+      "Creator list worked but the four type selectors plus single-column avatar list looked unfinished."
+    ]
+  },
+  "sourceSnapshot": {
+    "ref": "235dbed2a6b3c2bc99b8d7a553fae4394fac524e",
+    "parts": [
+      "apps/video/pornhub/releases/0.2.0-test.2/runtime_parts/01_kernel.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/02_store_session_request.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/03_parsers_models.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/04_providers_actions_playback.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/05_ui_helpers.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/06_home_search_category_detail.part",
+      "apps/video/pornhub/releases/0.2.0-test.2/runtime_parts/06b_creator_center.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/07_creator_library_account_extras.part",
+      "apps/video/pornhub/releases/0.2.0-test.1/runtime_parts/08_runtime_export.part"
+    ],
+    "partCount": 9,
+    "assets": [
+      "account.svg","categories.svg","creators.svg","library.svg","icon.svg","shorts.svg","playlist.svg","gifs.svg","local.svg","favorite.svg","official.svg","subscribe.svg","home.svg","feed.svg","search.svg","comment.svg","history.svg","channel.svg","model.svg"
+    ],
+    "assetCount": 19,
+    "sourceCount": 28
+  },
+  "fixes": {
+    "routeParameterContract": "Page parameters are now restored from MY_PARAMS/getParam/MY_URL through one decodeParam boundary. This fixes device behavior where encodeURIComponent output arrived still percent-encoded, causing category names, category URLs and detail URLs to be treated as literal encoded strings.",
+    "creatorCenter": "Creator type selection is promoted to a four-icon task row and creator results use icon_2_round two-column cards instead of a long single-column avatar list.",
+    "creatorLocalization": "Per-card raw type noise such as pornstar/channel/model/user and Videos/Views/Subscribers is normalized for the Chinese UI where shown."
+  },
+  "builder": {
+    "path": "apps/video/pornhub/releases/0.2.0-test.2/local_bundle_builder.js",
+    "ref": "904e2e3144441a4bef606fc7f4bfbfd3e0c0d2a1",
+    "mode": "marker-validated-module-concat-plus-local-assets",
+    "remoteResidualGate": true
+  },
+  "entry": {
+    "path": "apps/video/pornhub/releases/0.2.0-test.2/local_entry.js",
+    "ref": "f2d0fcaaf12a41ecd6da3dcbaa503f6b67b13082"
+  },
+  "shell": {
+    "path": "apps/video/pornhub/pornhub_remote_test_v4_b20002.txt",
+    "ref": "828974bfc29328d03dd6d7e93352e88b281f84a4",
+    "ruleVersion": 2026082603
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/pornhub-test/b20002/",
+    "runtime": "runtime_bundle.js",
+    "meta": "bundle_meta.json",
+    "assetRoot": "assets/"
+  },
+  "verify": {
+    "runtimeGlobal": "PornhubV2",
+    "localFirstVersion": "0.2.0-test.2",
+    "localFirstBuild": 20002,
+    "requiredMethods": ["home","searchPage","categories","category","detail","comments","creators","creator","library","account","shorts","playlists","playlist","play"]
+  },
+  "validation": {
+    "static": "Kernel fragment syntax, Creator Center module syntax, Builder syntax, Entry syntax, Shell outer JSON and nested pages JSON passed before activation.",
+    "device": "pending",
+    "requiredRetest": ["category secondary page","video detail","creator center layout","creator detail","playback after detail restore"],
+    "stablePromotionAllowed": false
+  },
+  "delivery": {
+    "mode": "local-first-single-runtime-bundle",
+    "normalStartup": "local Entry + require(file:// runtime_bundle.js)",
+    "networkOnFirstInstallForCode": true,
+    "networkOnNormalStartupForCode": false,
+    "legacyRemoteManager": false,
+    "runtimeAssetsLocalized": true
+  },
+  "notes": "Device-fix release derived from Pornhub V2 Test1. It keeps the V2 Provider/Parser/Session/Playback model intact, fixes the cross-page route parameter boundary, and limits UI restructuring to the Creator Center. Stable0.1.0 and Latest remain frozen."
+}
