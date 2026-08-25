@@ -21,7 +21,16 @@
   "shellRef": "26a5d21faf51978afae74c92c21b3b22e20ea3f7",
   "shellBlob": "556a794be10eab931e612a3794844c4937419e19",
   "updatedAt": "2026-08-25",
-  "status": "active-test-local-first-pending-device-validation",
+  "status": "active-test-local-first-basic-device-diagnostic-passed",
+  "deviceValidation": {
+    "level": "basic-diagnostic",
+    "confirmedAt": "2026-08-25",
+    "runtimeReady": true,
+    "sourceCount": 12,
+    "runtimeBytes": 106804,
+    "sourceRefPrefix": "b6ca12089d2e",
+    "businessRegression": "not-fully-itemized-by-current-screenshot"
+  },
   "previousTest": {
     "version": "2.0.0-alpha4",
     "build": 20004,
@@ -29,5 +38,5 @@
     "rule": "apps/video/javbus/javbus_remote_test_v4_b20004.txt",
     "status": "stable-promotion-source-preserved"
   },
-  "notes": "Rebased from Stable 2.0.0 / Build20005 as required by the JavBus recovery contract. Only delivery/startup/control-plane architecture changes: Stable business modules and the device-verified alpha3 magnet parser are preserved; Shared JAV Playback 1.0.0-test.4, 123AV icon and domains.json are localized. Normal second startup uses local Entry + require(file://) Runtime and does not load Bootstrap/Remote Manager/GitHub executable code. Stable/Latest remain unchanged pending device validation."
+  "notes": "Rebased from Stable 2.0.0 / Build20005. User device screenshot confirms Local-First Runtime ready with 12 source units and 106804-byte generated runtime. This is a basic delivery/diagnostic pass only; magnet and all three Shared JAV Playback providers are not falsely marked as individually revalidated by that screenshot. Stable/Latest remain unchanged."
 }
