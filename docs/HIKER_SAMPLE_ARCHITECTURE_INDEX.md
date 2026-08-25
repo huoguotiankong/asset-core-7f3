@@ -1,7 +1,7 @@
 # 海阔小程序样本架构索引
 
 日期：2026-08-21  
-最近复核：2026-08-21（新增模板/免嗅/工具样本）  
+最近复核：2026-08-25（新增网飞猫 UI/筛选/专题样本复核）  
 性质：研究档案 / 非启动必读 / 结论已提炼进 `HIKER_APP_DEVELOPMENT_GUIDE.md`
 
 > 本文件记录项目来源中现有 `.hk小程序/.hkzip` 样本的持续扫描结果。它不是第四份启动文档；新对话仍按三份主文档恢复。需要追溯某种架构、UI、播放、图片解密、网盘或开发工具实现的来源时再查本文件。
@@ -55,9 +55,21 @@
 
 ### 网飞猫APP
 
-定位：APP/API Client。  
-重点：动态域名发现、DoH/TXT、Token、HMAC、AES-CBC、游标分页、统一请求入口。  
-长期结论：站点协议必须集中在 Protocol/API Client；页面不直接承担签名和解密。
+定位：APP/API Client + 高密度影视库 UI 样本。  
+重点：动态域名发现、DoH/TXT、Token、HMAC、AES-CBC、游标分页、统一请求入口；UI 侧使用 `icon_5 + input + scroll_button + text_icon + movie_2/movie_3/movie_1_vertical_pic + pic_1_full` 组合出首页、筛选、上映、榜单、Netflix、专题和放映厅。  
+实机 UI 结论：
+
+- 首页先放 5 个核心任务入口，再放大搜索框、主栏目和内容区，适合影视库快速扫描。
+- 绿色 `#3CB371` 只承担活动态，白字 + 绿底已经足够，不叠其它状态符号。
+- 类型/地区/年份等长筛选使用连续 `scroll_button`；真实溢出后系统 `>` 打开“请选择”九宫格，可作为正式“更多选项”交互。短列表中无意义的 `>` 仍应避免。
+- 上映页按“年份 → 日期/数量 → 海报组”分层，适合时间型目录。
+- 普通海报用 `movie_3`，专题/放映用 `movie_2`，高 metadata 榜单用 `movie_1_vertical_pic`，证明同一 App 应按内容语义选择组件，不需要强行统一成一种卡片。
+- 专题详情使用 `pic_1_full` Hero + 分区标题 + 海报组；`text_icon` 右箭头承担弱“查看更多”。
+- 首页先 `setResult` 固定骨架/Loading，再 `deleteItem + addItemAfter` 渐进补网络内容，页面速度也是 UI 体验的一部分。
+- 二级库大量使用 `#gameTheme#`；可以学习全屏目录与系统右上角菜单，但不复制外部 `top.png` 占位图，也不因该样本继续扩大 `immersiveTheme` 默认使用。
+- 内联 Base64 PNG 图标在该样本可显示，但正式长期项目仍优先仓库 versioned assets + fallback。
+
+长期结论：协议继续集中在 Protocol/API Client；UI 方面保留“网飞猫式 Catalog”作为与“新片场式 Feed”并列的设计模板，先判断核心任务再选，不形成万能模板。
 
 ### 瓜子影视
 
@@ -213,6 +225,7 @@
 - AES/加密处理、InputStream、WebView/嗅探在多个样本中重复出现，说明 Protocol/Image/Playback 分层非常必要。
 - `video://` 比 `webRule/x5Rule` 更常见，但官方当前明确推荐 `webRule` 作为不依赖 X5 的网页资源提取方式；新项目仍按当前官方能力排序。
 - `cacheM3u8/startProxyServer` 只出现在部分复杂媒体应用，说明它们应“按协议启用”，不是默认每个视频都套。
+- 网飞猫样本证明 `scroll_button` 的溢出入口需要按语义判断：长筛选可把系统 `>`/选择面板当作“更多”，短列表无意义溢出仍属于 UI 问题。
 
 此统计只用于发现工程趋势，不用于证明某样本的协议当前仍有效。
 
