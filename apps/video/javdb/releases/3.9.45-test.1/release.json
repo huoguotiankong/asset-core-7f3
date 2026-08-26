@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.1",
+  "build": 2026082601,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "builder": "apps/video/javdb/releases/3.9.44-test.1/local_bundle_builder.js",
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1",
+    "sourceRef": "848879b13bc5de5510af68b6791cc94c6307f198",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "productUi": {
+    "path": "apps/video/javdb/releases/3.9.45-test.1/product_ui_patch.js",
+    "ref": "d22dde89479cfff74b5b1f04dce55ef6068dcf70",
+    "version": "3.9.45-test.1",
+    "build": 2026082601,
+    "scope": ["home", "category", "rank", "actor", "my", "more", "settings"]
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.1/local_entry.js",
+    "ref": "45d0289bffb2f45e75110e87efdab383b7e77538",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082601/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.1/javdb_v3.9.45_test1_localfirst_ui.txt",
+    "ref": "0777277e84e4da7a98ccacc20071e3b66a5d8528",
+    "blob": "7c7dfae88d2a98796a6cfb536e587dc5e34ecc59",
+    "ruleVersion": 2026082601,
+    "pages": 35
+  },
+  "delivery": {
+    "mode": "local-first-product-overlay-over-3.9.44-runtime",
+    "normalStartup": "local Entry + local Product/UI Overlay + validated 3.9.44 local Runtime",
+    "networkOnNormalStartupForCode": false,
+    "networkOnFreshInstallForCode": true,
+    "legacyRemoteManager": false,
+    "sameScopeEval": "validated 3.9.44 Runtime keeps Core eval -> stable patches -> Product/UI overlay eval -> call in one core() scope",
+    "rollback": "remove/replace Test shell; Stable 3.9.42 and previous Test 3.9.44-test.1 remain immutable"
+  },
+  "productChanges": {
+    "navigation": "Search + compact discovery/rank/category/actor/my/more navigation",
+    "home": "Discovery-first home with recent-search recovery, task shortcuts, continue-browsing and cleaner content modes",
+    "category": "Type -> resource condition -> collapsible dynamic advanced filters -> inline sort -> poster results",
+    "ranking": "High-metadata rankings switch from three-column posters to movie_1_vertical_pic list",
+    "actor": "Recommendation sections preserved; validated UI tab2/type3 and tab3/type2 list mapping preserved",
+    "my": "Local library and JavDB account content visually separated",
+    "more": "Existing articles/database/magnet/subtitle/cloud/search/display/diagnostic capabilities regrouped by user task",
+    "settings": "Blank-block density reduced; build/diagnostics remain in low-frequency settings"
+  },
+  "businessScope": {
+    "api": "inherits Stable 3.9.42",
+    "auth": "inherits Stable 3.9.42",
+    "detail": "inherits Stable 3.9.42 pending screenshot-driven detail UI pass",
+    "officialPlayback": "inherits Stable 3.9.42",
+    "sharedPlayback": "inherits localized 1.0.0-test.4 from 3.9.44-test.1",
+    "magnetsAndCustomTools": "inherits Stable 3.9.42 / 3.9.44 local bundle"
+  },
+  "verify": {
+    "runtimeGlobal": "JavDBLocal -> wrapper module -> base JDBCLOUD",
+    "version": "3.9.45-test.1",
+    "build": 2026082601,
+    "shellRuleVersion": 2026082601,
+    "static": [
+      "product_ui_patch.js node --check passed",
+      "local_entry.js node --check passed",
+      "shell outer JSON parsed",
+      "shell pages JSON parsed",
+      "shell contains 35 pages"
+    ],
+    "device": "pending UI/product regression screenshots and action smoke tests"
+  },
+  "status": "test-candidate-pending-device-ui-validation",
+  "notes": "Major Product/UI Test built as a thin immutable overlay over the already basic-device-validated 3.9.44 Local-First runtime. Stable 3.9.42 and Latest remain untouched. This release is intentionally not eligible for Stable until real-device screenshots and Home/Category/Rank/Actor/My/Detail/Search/Playback smoke tests close the loop."
+}
