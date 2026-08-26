@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.3",
+  "build": 2026082603,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "previousUiTest": {
+    "version": "3.9.45-test.2",
+    "build": 2026082602,
+    "release": "apps/video/javdb/releases/3.9.45-test.2/release.json",
+    "status": "device-screenshots-reviewed-2026-08-26"
+  },
+  "productUi": {
+    "baseOverlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.1/product_ui_patch.js",
+      "ref": "d22dde89479cfff74b5b1f04dce55ef6068dcf70"
+    },
+    "refinementOverlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.2/product_ui_patch2.js",
+      "ref": "3f949f36dcaca5486e334f2958f4fdffe8eb6e4f"
+    },
+    "netflxCatOverlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.3/product_ui_patch3.js",
+      "ref": "57d6ee2a55dcdf7cc1e97265daec63c14ae80b1f"
+    },
+    "scope": [
+      "search-input-compact",
+      "category-independent-page",
+      "netflxcat-filter-layout",
+      "advanced-filter-subpage",
+      "provider-icon-layout"
+    ]
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.3/local_entry.js",
+    "ref": "b298f8f36c049e96f67073ddc9c66c9883e181c9",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082603/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.3/javdb_v3.9.45_test3_localfirst_ui.txt",
+    "ref": "8aae90421de8e7c7a9daa1dd55aa736537f19abf",
+    "blob": "640ca848161bfaea4dc0424040206df8da8cd063",
+    "ruleVersion": 2026082603,
+    "pages": 39
+  },
+  "deviceFindingsFromTest2": [
+    "Search Hub input button text was too long and consumed excessive horizontal space.",
+    "Third-party playback became compact but lost provider identity because MissAV/123AV/Jable were rendered as plain text buttons without icons.",
+    "Progressive advanced filter rows were still difficult to scan and edit on-device.",
+    "Category should be a dedicated secondary Catalog page instead of replacing the current top-level page through refreshPage(false).",
+    "The previously agreed NetflxCat pattern is a better fit: independent simple=true Catalog page, continuous scroll_button filter rows, native overflow selector for long rows, and a separate advanced-filter task page."
+  ],
+  "changes": {
+    "search": "Search Hub input keeps a short right-side action title '搜索'; the hint moves to the left input area, reducing wasted horizontal space.",
+    "categoryNavigation": "The primary Category tab now opens hiker://page/javdb3Filters?page=fypage&rule=&simple=true directly. Category no longer changes jdb3_nav and refreshes the current main page.",
+    "categoryCatalog": "The existing javdb3Filters route is repurposed into a dedicated NetflxCat-style Catalog page. Type, resource, year and sort are compact continuous scroll_button rows above the poster results. Long rows intentionally use Hiker native overflow / selector behavior.",
+    "advancedFilters": "Low-frequency month/duration/theme/role/clothing/body/action/play/category filters move to a separate simple=true advanced page. The advanced page uses continuous rows; selections refresh only that page. '完成筛选' uses back(true) so the previous Catalog page closes the edit task and refreshes results.",
+    "homeQuickFilters": "Home quick filters now set the requested resource condition and enter the independent Category page instead of forcing a same-page category refresh.",
+    "externalPlayback": "MissAV, 123AV and Jable use the Shared Playback provider icon contract and render as icon_small_3. JavDB official VIP/preview actions use compact icon_2 rows; underlying providerUrl/resolve behavior is unchanged."
+  },
+  "delivery": {
+    "mode": "local-first-three-ui-overlays-over-3.9.44-runtime",
+    "normalStartupForCode": "local Entry + local UI1 + local UI2 + local UI3 + validated 3.9.44 local Runtime",
+    "networkOnNormalStartupForCode": false,
+    "freshInstall": "immutable UI1/UI2/UI3/Base Builder snapshots only",
+    "sameScopeEval": "Base Runtime core() evaluates Stable patches then UI1 then UI2 then UI3 then page call in the same JDB scope",
+    "stableChanged": false
+  },
+  "staticGate": [
+    "product_ui_patch3.js node --check passed before upload",
+    "local_entry.js node --check passed before upload",
+    "shell version/build/local-entry immutable refs were re-read after upload",
+    "shell reuses the existing javdb3Filters page so page count remains 39",
+    "all new lazyRule callbacks depend only on explicit arguments and Hiker globals",
+    "advanced-filter completion uses documented secondary-page back(true) semantics",
+    "provider icons come from the already-localized Shared JAV Playback providers() contract"
+  ],
+  "device": "pending Test3 screenshots and interaction regression",
+  "status": "active-test-netflxcat-category-refinement-pending-device-validation",
+  "notes": "Built from the user's 2026-08-26 Test2 screenshots and explicit request to restore usability by moving Category into an independent NetflxCat-style page. Stable 3.9.42 and Latest remain untouched."
+}
