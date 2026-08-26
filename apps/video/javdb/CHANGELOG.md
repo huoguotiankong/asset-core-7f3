@@ -6,14 +6,216 @@
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.45-test.2 / Build2026082602`。
-- Test Shell：`cloud/javdb/v3.9.45-test.2/javdb_v3.9.45_test2_localfirst_ui.txt`，rule version `2026082602`。
-- Test Release：`apps/video/javdb/releases/3.9.45-test.2/release.json`。
+- Test：`3.9.45-test.3 / Build2026082603`。
+- Test Shell：`cloud/javdb/v3.9.45-test.3/javdb_v3.9.45_test3_localfirst_ui.txt`，rule version `2026082603`。
+- Test Release：`apps/video/javdb/releases/3.9.45-test.3/release.json`。
 - Test 基础 Runtime：继续复用已完成基础实机验证的 `3.9.44-test.1 / Build2026082501` Local-First bundle，不重写 Stable 协议/API/账号/播放底层。
-- Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已收到完整实机截图并完成第二阶段问题归因。
+- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
+- Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已完成第一轮完整实机截图审计。
 - Previous Local-First Test：`3.9.44-test.1 / Build2026082501`，2026-08-25 已确认本地 Runtime 基础实机正常（26 源 / 148084 bytes）。
 - Local：`3.9.41-local / Build2026082103`，独立 Pure Local 线，本轮不修改。
-- Shared JAV Playback Stable：`1.0.0-test.4`；Test2 继续使用 3.9.44 已本地化执行闭包，不移动共享 Stable 指针。
+- Shared JAV Playback Stable：`1.0.0-test.4`；Test3 继续使用 3.9.44 已本地化执行闭包，不移动共享 Stable 指针。
+
+---
+
+## 2026-08-26 · 3.9.45-test.3 / Build2026082603 · 网飞猫式独立分类页与播放源图标
+
+### 1. Test2 实机确认的问题
+
+用户对 `3.9.45-test.2` 提供搜索中心、更多播放、分类高级筛选等实机截图，并明确反馈：**“现在感觉还没原来好用好看”**。当前事实以该实机结果为准。
+
+确认的问题：
+
+1. 搜索已经拆成独立页，但 `input` 右侧按钮仍显示“输入番号 / 片名 / 演员 / 系列”，按钮文字占用过多横向空间。
+2. 更多播放从大图标页缩成了文字 Provider，但又走到另一个极端：MissAV / 123AV / Jable 没有品牌图标，辨识度下降。
+3. Test2 的 Progressive Disclosure 高级筛选虽然不再一次铺满所有标签，但变成“年份 / 月份 / 主题 / 角色 / 服装 / 体型 / 行为 / 玩法 / 类别 / 时长”一整列箭头，实机仍然难扫、难选、难回到影片。
+4. 分类作为一级 Tab 仍依赖 `putMyVar('jdb3_nav','分类') + refreshPage(false)` 原地替换当前页面。对于 Catalog 这种独立任务，用户明确要求进入一个新的页面。
+5. 用户要求恢复之前讨论过的“网飞猫”写法：独立 `hiker://page/...?...simple=true` Catalog，筛选使用连续 `scroll_button`；长列表允许海阔原生 `>` 溢出及“请选择”选择器承担完整选项，而不是再人为堆一列折叠组。
+
+因此 Test3 不继续修 Test2 的折叠列表，而是直接更换分类信息架构。
+
+### 2. 搜索输入框：右侧按钮只保留动作
+
+海阔 `input` 组件的 `title` 是右侧确定按钮。本轮改为：
+
+```text
+title = 搜索
+desc  = 输入番号、片名或演员
+```
+
+目标：
+- 右侧只表达“搜索”动作。
+- 输入提示回到输入区域，不再让按钮承担说明文案。
+- 搜索历史、演员/系列/片商/导演资料入口、原 `javdb3Search` 结果链全部保留。
+
+### 3. 分类从一级同页状态切换改为独立 Catalog
+
+Test2：
+
+```text
+点“分类”
+→ putMyVar(jdb3_nav=分类)
+→ refreshPage(false)
+→ 当前主页面切成分类
+```
+
+Test3：
+
+```text
+点“分类”
+→ hiker://page/javdb3Filters?page=fypage&rule=&simple=true
+→ 独立分类 Catalog
+```
+
+这里直接复用已有 `javdb3Filters` 路由，不增加不必要的新 page path；UI3 覆盖 `JDB.filters()`，将旧“高级标签”页接管成完整分类 Catalog。
+
+固定原则：
+- 分类是独立浏览任务，可以 push 新二级页。
+- `simple=true` 保持系统单行标题栏正常显示，禁止回到 immersiveTheme 详情页叠加问题。
+- 一级主页面不再为了分类强制刷新和替换内容。
+- 首页“可播放 / 有字幕 / 可下载 / 全部分类”快捷入口设置筛选状态后直接进入该独立分类页。
+
+### 4. 网飞猫式分类页：高频条件连续横向显示
+
+分类主页面只放高频条件：
+
+```text
+类型
+有码 / 无码 / 欧美 / FC2 / 动漫
+
+资源
+全部 / 可播放 / 可下载 / 含字幕 / 单体 / 预览图 / 预览视频
+
+年份
+全部 / 2026 / 2025 / 2024 / ...
+
+排序
+新发布 / 最近更新 / 评分 / 热度 / 想看 / 看过
+
+更多筛选 →
+
+影片结果
+三列海报
+```
+
+实现原则：
+- 类型、资源、年份、排序全部采用连续 `scroll_button`。
+- 短列表正常一屏显示。
+- 年份等长列表允许海阔原生溢出 `>` 承担完整选择器；不再手工做一列箭头组。
+- 分类结果仍使用原已验证合同：
+
+```text
+GET /api/v1/movies/tags
+filter_by = {type}:t:{main}:{extra}:{year}:{duration}:{month}
+```
+
+- 动态标签仍来自：`GET /api/v2/tags?type={0..4}`。
+- 主列表 API、排序字段、封面布局都不重写。
+
+### 5. 低频高级标签进入单独编辑页
+
+月份、时长、主题、角色、服装、体型、行为、玩法、类别等不再挤占 Catalog 首屏。
+
+流程：
+
+```text
+分类 Catalog
+→ 更多筛选
+→ 独立 simple=true 高级筛选页
+→ 连续横向标签行
+→ 选择时只刷新高级筛选页
+→ 完成筛选
+→ back(true)
+→ 关闭高级筛选页并刷新上一层分类结果
+```
+
+海阔官方 JS 文档明确支持二级页 `back(true)`：关闭当前页面并刷新前一个页面。Test3 正式使用该能力完成“编辑筛选 → 返回 Catalog → 自动刷新结果”的闭环。
+
+高级页规则：
+- `month / duration` 保持单选，并提供“全部”。
+- 主题、角色、服装等继续多选。
+- 长标签行继续使用海阔原生横向溢出与选择器。
+- “清空更多筛选”只清低频标签，保留类型 / 资源 / 年份 / 排序。
+- 切换影片类型仍清理不兼容的动态标签，避免跨类型残留。
+
+### 6. 更多播放恢复 Provider 图标，但保持紧凑
+
+Test1：图标过大，占满首屏。
+
+Test2：纯文字过轻，品牌辨识度不足。
+
+Test3 使用组件语义折中：
+
+```text
+JavDB VIP / 官方预览 → icon_2
+MissAV / 123AV / Jable → icon_small_3
+JavDB 官方磁链 → text_icon
+```
+
+Provider 图标不另写一套来源，直接复用已经本地化的 Shared JAV Playback `providers()` 合同：
+- MissAV：`https://missav.live/favicon.ico`
+- 123AV：3.9.44 Local-First Runtime 内本地 `123av.svg`
+- Jable：`https://jable.tv/favicon.ico`
+
+点击行为继续调用：
+
+```text
+JAVPlayback.providerUrl(providerId, code)
+```
+
+因此本轮只改 Renderer，不动 MissAV / 123AV / Jable 解析器和真实播放合同。
+
+### 7. Test3 Local-First 运行链
+
+```text
+3.9.45-test.3 Shell / rule 2026082603
+→ b2026082603/local_entry.js
+→ 3.9.44 已验证 Base Builder / Runtime
+→ UI1: 3.9.45-test.1 Product/UI Overlay
+→ UI2: 3.9.45-test.2 Screenshot Refinement Overlay
+→ UI3: 3.9.45-test.3 NetflxCat Category/Search/Playback Overlay
+→ JDB page call
+```
+
+所有 Overlay 与最终调用继续在 Base Runtime `core()` 的同一 JDB direct-eval 作用域内执行，不能拆 helper 后假定 `JDB` 跨函数可见。
+
+不可变引用：
+- UI1 Ref：`d22dde89479cfff74b5b1f04dce55ef6068dcf70`
+- UI2 Ref：`3f949f36dcaca5486e334f2958f4fdffe8eb6e4f`
+- UI3 Ref：`57d6ee2a55dcdf7cc1e97265daec63c14ae80b1f`
+- Entry Ref：`b298f8f36c049e96f67073ddc9c66c9883e181c9`
+- Shell Ref：`8aae90421de8e7c7a9daa1dd55aa736537f19abf`
+- Shell Blob：`640ca848161bfaea4dc0424040206df8da8cd063`
+- Release commit：`9a00ebb0f7e86059fc2bb6f31aef544e2a514df3`
+- Base Builder Ref：`2361fbbfc21c540191495b979b30a6828adfe9c1`
+- Base Source Ref：`848879b13bc5de5510af68b6791cc94c6307f198`
+
+### 8. Test3 静态门禁
+
+发布前完成：
+- `product_ui_patch3.js` → `node --check` 通过。
+- `local_entry.js` → `node --check` 通过。
+- 新 Shell 回读确认 rule version `2026082603`。
+- 新 Shell 回读确认 Entry 本地路径为 `b2026082603/local_entry.js`，固定远程 Ref 为 Test3 Entry commit。
+- 复用现有 `javdb3Filters` 路由，因此页面总数仍为 **39**。
+- 新增 lazyRule 回调只依赖显式参数和海阔全局 API，不依赖外层 helper 闭包。
+- 高级筛选完成动作采用官方文档支持的二级页 `back(true)`。
+- 第三方播放图标来自已本地化 Shared Playback `providers()`，不增加新的远程业务代码依赖。
+
+### 9. Test3 待实机验证
+
+当前只能称：**Test3 发布链完成，等待实机确认是否真正比 Test1/Test2 更好用。**
+
+优先验证：
+1. 搜索右侧是否只显示短“搜索”，输入区域是否不再被右侧文字挤压。
+2. 主页面点“分类”是否打开新的系统标题栏二级页，而不是原页刷新。
+3. 分类页类型 / 资源 / 年份 / 排序是否符合网飞猫式横向浏览；年份长列表右侧原生 `>` 是否可正常展开选择。
+4. “更多筛选”是否进入另一个独立页；选主题/角色等后点“完成筛选”，是否自动返回并刷新分类影片。
+5. 连续修改 5 次高级筛选后，返回链是否仍只回一层，不制造同级页面栈。
+6. MissAV / 123AV / Jable 是否显示紧凑图标；三个播放源实际点击行为不能因 UI3 回归。
+7. Test2 已改善的演员月榜、详情/评论、我的/更多等页面不能因 UI3 回归。
+
+Stable `3.9.42` / Latest 在 Test3 实机闭环前继续冻结。
 
 ---
 
@@ -251,22 +453,14 @@ custom('javdb3ExternalPlay')
 - 原 `javdb3Search` 仍指向既有 Search Custom，不把首页 `searchFind` 和独立搜索结果页混淆。
 - `javdb3ExternalPlay` 已明确走新版 `core()` 重入。
 
-### 13. Test2 待实机验证
+### 13. Test2 实机结果
 
-当前只能称：**代码与发布链完成，等待目标海阔实机 UI/交互回归。**
+2026-08-26 用户实机确认：
+- 独立搜索页已经生效，但输入框右侧说明文字过长。
+- 更多播放已经成功进入 Test2 Overlay 并从大图标变成紧凑按钮，但用户要求恢复 Provider 图标。
+- 分类 Progressive Disclosure 已生效，但实机仍然难用，用户明确要求废弃该交互，改独立分类页 + 网飞猫写法。
 
-优先验证：
-1. 主页面是否只显示五项导航且不再有无意义 `>`。
-2. 搜索是否进入独立 Search Hub，历史搜索/清空/搜索结果是否正常。
-3. 分类高级筛选是否只展开一个标签组，连续切 5 次筛选后返回一次是否直接退出分类任务。
-4. 演员月榜是否变成紧凑三列人物卡。
-5. 我的 → 更多功能是否能进入独立工具页。
-6. 详情页是否正常；若 UI polish 不生效但业务仍正常，记录为海阔不允许结果拦截，不能强行继续此方案。
-7. 评论日期/metadata 是否正常且下滑加载不受影响。
-8. 更多播放是否变成紧凑 Provider，MissAV / 123AV / Jable 实际点击仍需分别验证。
-9. 磁链和长按调用网盘不应因 UI2 回归。
-
-Stable `3.9.42` / Latest 在 Test2 实机闭环前继续冻结。
+因此 Test2 冻结为第二阶段截图基线，不晋级 Stable；上述问题由 Test3 处理。
 
 ---
 
@@ -382,13 +576,14 @@ Source 848879b13bc5…
 - 该交换**只作用 `/api/v1/actors`**。
 - 影片分类与排行榜不得跟着交换。
 
-### 分类 API
+### 分类 API 与当前交互边界
 
 - 动态标签：`GET /api/v2/tags?type={0..4}`。
 - 影片筛选：`GET /api/v1/movies/tags`。
 - `filter_by`：`{type}:t:{main}:{extra}:{year}:{duration}:{month}`。
 - 高频基本条件：`p=可播放`、`m=可下载`、`c=含字幕`、`s=单体影片`、`i=预览图`、`v=预览视频`。
 - 排序：`release/update/score/hit/want_watch_count/watched_count`。
+- 当前 Product 约束：分类为独立 `simple=true` Catalog；高频类型/资源/年份/排序直接横向展示；低频标签进入独立高级筛选页；完成编辑使用 `back(true)` 回到并刷新 Catalog。
 
 ### 排行 API
 
@@ -411,18 +606,20 @@ Source 848879b13bc5…
 - 123AV / Jable 曾有明确实机播放通过记录。
 - MissAV 历史经历多轮修复；后续若失败，只修 MissAV Provider，不无必要重写 123AV/Jable。
 - Player Queue 只允许真实媒体线路，收藏/评论/设置/官网等非媒体动作不得混入。
+- Provider UI 可使用 `providers()` 中的 icon 做紧凑图标卡，不应退化成占满首屏的大 Logo，也不应完全去掉品牌识别只剩文字。
 
 ---
 
 ## 恢复与回退
 
 - 正式恢复入口：Stable `3.9.42 / Build2026082301`。
-- 当前 UI Test：`3.9.45-test.2 / Build2026082602`，等待第二轮实机 UI/业务回归。
-- Previous UI Test：`3.9.45-test.1 / Build2026082601`，已完成截图审计，冻结保留。
+- 当前 UI Test：`3.9.45-test.3 / Build2026082603`，等待网飞猫式独立分类页 / 高级筛选返回刷新 / Provider 图标实机回归。
+- Previous UI Test：`3.9.45-test.2 / Build2026082602`，已完成第二轮截图审计，冻结保留。
+- Previous UI Test：`3.9.45-test.1 / Build2026082601`，已完成第一轮截图审计，冻结保留。
 - Local-First 基础回退：`3.9.44-test.1 / Build2026082501`，基础实机验证通过。
 - 历史远程传输实现：`3.9.43-test.3`。
 - Pure Local：`3.9.41-local / Build2026082103`。
-- Stable 当前不自动晋级；Test2 如发现回归，冻结 immutable release，再从 Stable 3.9.42 + 已验证 Local-First 基线建立更高 Test，不原地覆盖。
+- Stable 当前不自动晋级；Test3 如发现回归，冻结 immutable release，再从 Stable 3.9.42 + 已验证 Local-First 基线建立更高 Test，不原地覆盖。
 
 ## 历史归档
 
