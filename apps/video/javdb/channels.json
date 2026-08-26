@@ -3,7 +3,7 @@
   "id": "javdb-v3",
   "name": "JavDB v3",
   "versionPolicy": "remote-stable-localfirst-product-ui-test-local-lineage-v3",
-  "updatedAt": "2026-08-26 16:34",
+  "updatedAt": "2026-08-26 19:00",
   "channels": [
     {
       "channel": "stable",
@@ -24,7 +24,7 @@
         "共享 JAV Playback Stable",
         "Shell 直接依赖 GitHub Raw runtime，网络异常时可能报 JDBCLOUD 未定义",
         "Stable 3.9.41 完整保留可回退",
-        "本轮 Product/UI 大改只在 Test 验证，Stable 不变"
+        "当前 Product/UI 大改继续只在 Test 验证，Stable 不变"
       ],
       "icon": "https://javdb.com/favicon.ico"
     },
@@ -33,26 +33,25 @@
       "label": "测试版",
       "id": "javdb-v3-test",
       "name": "JavDB v3",
-      "version": "3.9.45-test.1",
+      "version": "3.9.45-test.2",
       "baseVersion": "3.9.42",
       "targetVersion": "3.9.45",
-      "build": 2026082601,
-      "displayVersion": "Test 3.9.45-test.1 · Product/UI Overhaul",
-      "path": "cloud/javdb/v3.9.45-test.1/javdb_v3.9.45_test1_localfirst_ui.txt",
-      "mode": "remote-local-first-product-overlay",
+      "build": 2026082602,
+      "displayVersion": "Test 3.9.45-test.2 · Screenshot UI Refinement",
+      "path": "cloud/javdb/v3.9.45-test.2/javdb_v3.9.45_test2_localfirst_ui.txt",
+      "mode": "remote-local-first-two-ui-overlays",
       "updatedAt": "2026-08-26",
       "recommended": false,
-      "desc": "基于已完成基础实机验证的 3.9.44 Local-First Runtime 增加独立 Product/UI Overlay；大改发现、分类、排行、演员、我的、更多与设置，Stable 业务底层不动。",
+      "desc": "根据 3.9.45-test.1 用户实机截图继续做第二阶段 UI 收敛：搜索独立页、五项主导航、分类高级筛选按组展开、演员月榜组件修正，并继续处理详情/评论/更多播放的旧式视觉。",
       "highlights": [
-        "首页由按钮墙改成 Discovery：搜索 / 最近搜索 / 常用任务 / 继续浏览 / 内容 Feed",
-        "分类改为 类型 → 资源条件 → 可折叠动态高级筛选 → 行内排序 → 结果，筛选切换不压新页面栈",
-        "排行从三列海报改为高 metadata 纵向图文列表，排名、评分、热度更适合横向比较",
-        "演员推荐与分类重新分区，继续保留已验证的 无码/欧美女 API 映射修正",
-        "我的将本地片库与 JavDB 账号内容分层；更多按内容、资源工具、体验、维护重组",
-        "现有磁力搜索、字幕搜索、网盘播放、内置磁力、0cili、自定义搜索、封面布局、体验增强、API状态、隐私入口统一收拢",
-        "旧 $().select 排序器从新版分类主链移除，改用原生横向排序状态切换",
-        "复用 3.9.44 Local-First 基础 Runtime，API/登录/详情/官方播放/Shared Playback 继续继承 Stable 3.9.42",
-        "Stable 3.9.42 / Latest 不变；需实机截图与业务回归后才能晋级"
+        "搜索从首页大输入框拆成独立搜索中心：搜索历史、清空历史、演员/系列/片商/导演入口集中处理",
+        "主导航收敛为发现 / 排行 / 分类 / 演员 / 我的，去掉实机出现的顶层无意义 > 溢出",
+        "分类高级筛选改成分组渐进展开，同一时间只展开一个年份/月/主题/角色/服装/行为等标签组",
+        "影片排行榜继续使用高 metadata 纵向列表；演员月榜改回三列人物卡，避免大面积空白",
+        "继续浏览去除无意义浏览状态叠层；更多功能从主导航下沉到我的并使用独立低频工具页",
+        "详情/评论使用 Test-only 安全结果收敛：去旧黑方块标题、减少空白、评论日期简化；不支持拦截时回退原 Renderer",
+        "更多播放通过 core() 重入新版 Overlay，第三方 Provider 改成紧凑真实播放动作，不再使用占满首屏的大图标卡",
+        "Stable 3.9.42 / Latest / API / 登录 / 官方播放 / 磁链协议不变，需 Test2 实机验证后再继续"
       ],
       "icon": "https://javdb.com/favicon.ico"
     },
