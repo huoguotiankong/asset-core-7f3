@@ -3,7 +3,7 @@
   "id": "mdai",
   "name": "麻豆AI",
   "versionPolicy": "stable-test-local-lineage-v1",
-  "updatedAt": "2026-08-26 23:38",
+  "updatedAt": "2026-08-27 00:24",
   "channels": [
     {
       "channel": "stable",
@@ -26,17 +26,17 @@
       "label": "测试版",
       "id": "mdai-test",
       "name": "麻豆AI",
-      "version": "2.9.0-test.1",
+      "version": "2.9.0-test.2",
       "baseVersion": "2.8.0",
       "targetVersion": "2.9.0",
-      "build": 29001,
-      "displayVersion": "Test 2.9.0-test.1 · UI + Comments",
-      "path": "apps/video/mdai/mdai_remote_test_v10.txt",
+      "build": 29002,
+      "displayVersion": "Test 2.9.0-test.2 · UI + Comments",
+      "path": "apps/video/mdai/mdai_remote_test_v11.txt",
       "mode": "remote-local-first-native-require",
-      "updatedAt": "2026-08-26",
+      "updatedAt": "2026-08-27",
       "recommended": false,
-      "desc": "开发指南 2.12 重构版 · Feed+Catalog UI · 视频/帖子只读评论 · Local-First",
-      "highlights": ["从 Stable 2.8.0 重建显式 Core/Community/UI/Page 模块","首页重新按发现 Feed + 片库 Catalog 分工","视频详情简介/评论同页 Tab，帖子正文/评论同页 Tab","评论只读浏览，无账号、发评和回复写操作","搜索改 idle/hot/history/result 状态机","沿用 Stable 已验证 PlaybackAdapter","Local Module Manager 2.2.0 + require(file://)"],
+      "desc": "开发指南 2.12 重构版 · 修复短剧详情选集 sel 作用域回归",
+      "highlights": ["从 Stable 2.8.0 重建显式 Core/Community/UI/Page 模块","首页重新按发现 Feed + 片库 Catalog 分工","视频详情简介/评论同页 Tab，帖子正文/评论同页 Tab","评论只读浏览，无账号、发评和回复写操作","搜索改 idle/hot/history/result 状态机","沿用 Stable 已验证 PlaybackAdapter","Test2 修复短剧选集范围变量作用域","Local Module Manager 2.2.0 + require(file://)"],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@main/apps/video/mdai/assets/mdai_official.png"
     },
     {
