@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "mdai-test",
+  "name": "麻豆AI",
+  "version": "2.9.0-test.2",
+  "build": 29002,
+  "ref": "032a7ff165fc602583d0606bdd9eff4500851253",
+  "baseStable": {
+    "version": "2.8.0",
+    "build": 28003,
+    "release": "apps/video/mdai/releases/2.8.0/release.json"
+  },
+  "previousTest": {
+    "version": "2.9.0-test.1",
+    "build": 29001,
+    "release": "apps/video/mdai/releases/2.9.0-test.1/release.json",
+    "status": "frozen-short-drama-detail-sel-scope-regression"
+  },
+  "modules": [
+    {"name":"core","path":"apps/video/mdai/releases/2.9.0-test.1/core.js"},
+    {"name":"playback-adapter","path":"apps/video/mdai/releases/2.7.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/video/mdai/releases/2.9.0-test.1/ui.js"},
+    {"name":"community","path":"apps/video/mdai/releases/2.9.0-test.1/community.js"},
+    {"name":"home","path":"apps/video/mdai/releases/2.9.0-test.1/pages_home.js"},
+    {"name":"library","path":"apps/video/mdai/releases/2.9.0-test.1/pages_library.js"},
+    {"name":"search-mine","path":"apps/video/mdai/releases/2.9.0-test.1/pages_search_mine.js"},
+    {"name":"detail","path":"apps/video/mdai/releases/2.9.0-test.2/pages_detail.js"},
+    {"name":"settings","path":"apps/video/mdai/releases/2.9.0-test.1/settings.js"},
+    {"name":"runtime","path":"apps/video/mdai/releases/2.9.0-test.2/runtime.js"}
+  ],
+  "verify": {"global":"MDAIRemoteRuntime","property":"build","equals":"2.9.0-test.2"},
+  "delivery": {"mode":"local-first-native","moduleManager":"2.2.0","execution":"require(file://)","code":"hiker-files-rules","assets":"hiker-files-rules","controlPlane":"remote-on-install-update-only"},
+  "notes": "冻结 Test1，不原地覆盖。Test2 仅修复短剧详情选集范围变量 sel/count/rk 被错误绑定到 rs>60 条件分支的问题；其余 2.9 UI、只读评论、搜索、片库和 PlaybackAdapter 保持 Test1。"
+}
