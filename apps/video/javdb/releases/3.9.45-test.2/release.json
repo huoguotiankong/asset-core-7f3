@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.2",
+  "build": 2026082602,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "previousUiTest": {
+    "version": "3.9.45-test.1",
+    "build": 2026082601,
+    "release": "apps/video/javdb/releases/3.9.45-test.1/release.json",
+    "status": "device-screenshots-reviewed-2026-08-26"
+  },
+  "productUi": {
+    "baseOverlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.1/product_ui_patch.js",
+      "ref": "d22dde89479cfff74b5b1f04dce55ef6068dcf70"
+    },
+    "refinementOverlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.2/product_ui_patch2.js",
+      "ref": "3f949f36dcaca5486e334f2958f4fdffe8eb6e4f"
+    },
+    "scope": ["search-hub", "home-navigation", "category-progressive-disclosure", "ranking-actor-layout", "my-more-ia", "detail-polish", "reviews-polish", "external-play"]
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.2/local_entry.js",
+    "ref": "39561829090ff8978c1d3e5b483feefbb8786267",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082602/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.2/javdb_v3.9.45_test2_localfirst_ui.txt",
+    "ref": "ab0f1e852e56e8fbdd2f1c1e430b4a04c04b2c28",
+    "blob": "e51f44b5ce2cb1e22caed27e31679b6334e52c76",
+    "ruleVersion": 2026082602,
+    "pages": 39
+  },
+  "deviceFindingsFromTest1": [
+    "global inline search occupies too much vertical space and should become a dedicated search task",
+    "six primary tabs overflow to a meaningless top-level arrow on the target device",
+    "advanced category expansion exposes every dynamic tag group at once and creates an excessively long control wall",
+    "actor monthly ranking used a high-metadata one-column component despite having little metadata, causing large blank rows",
+    "continue-browsing cards exposed an unnecessary history overlay/status",
+    "More page looked like a disabled grey control matrix instead of a low-frequency settings/tool hub",
+    "detail and review pages retained legacy black-square section markers and technical-list visual hierarchy",
+    "external playback provider logos were oversized and consumed most of the viewport"
+  ],
+  "changes": {
+    "search": "Remove global input from the main page. Add dedicated Search Hub with input, recent history, clear-history and actor/series/maker/director entry points; existing javdb3Search result route remains unchanged.",
+    "navigation": "Primary navigation is reduced to Discovery / Ranking / Category / Actor / My. Search is a dedicated page and More becomes a low-frequency page entered from My, eliminating the top-level overflow arrow.",
+    "home": "Quick task filters use compact chips and continue-browsing cards no longer inject release/history overlay metadata.",
+    "category": "Advanced filters use progressive disclosure: show one row per dynamic tag group and expand only the group being edited. Only one group is open at a time. Existing API filter semantics and same-page state changes remain unchanged.",
+    "ranking": "Movie rankings retain high-metadata vertical cards; actor monthly ranking switches to a three-column portrait grid with TOP labels.",
+    "myMore": "My remains the primary account/local-data hub and exposes one More entry. More is rebuilt as a dedicated low-frequency page with full-width tool rows and compact experience/maintenance controls.",
+    "detail": "Test-only result interception removes legacy blank blocks and black-square section markers, renames local movie action to local collection, and visually emphasizes More Playback without changing underlying detail API/action URLs. If Hiker does not allow result interception, it safely falls back to the original detail renderer.",
+    "reviews": "Test-only result interception removes legacy section markers, removes duplicate score text from metadata and shortens ISO timestamps to YYYY-MM-DD; underlying review loading/pagination remains unchanged.",
+    "externalPlayback": "Local Entry now re-enters the core overlay for javdb3ExternalPlay. Provider logos are replaced by compact real-provider actions, while official VIP/preview and official magnet links remain separate."
+  },
+  "delivery": {
+    "mode": "local-first-two-ui-overlays-over-3.9.44-runtime",
+    "normalStartupForCode": "local Entry + local UI1 + local UI2 + validated 3.9.44 local Runtime",
+    "networkOnNormalStartupForCode": false,
+    "freshInstall": "immutable UI1/UI2/Base Builder snapshots only",
+    "sameScopeEval": "Base Runtime core() evaluates Stable patches then UI1 then UI2 then page call in the same JDB scope",
+    "stableChanged": false
+  },
+  "staticGate": [
+    "product_ui_patch2.js node --check passed before upload",
+    "local_entry.js node --check passed before upload",
+    "shell outer JSON parsed before upload",
+    "shell pages JSON parsed before upload",
+    "shell contains 39 pages",
+    "existing javdb3Search route still calls custom('javdb3Search')",
+    "javdb3ExternalPlay is intentionally special-cased through core() so UI2 can override it"
+  ],
+  "device": "pending Test2 screenshots and interaction regression",
+  "status": "active-test-screenshot-driven-ui-refinement-pending-device-validation",
+  "notes": "Built directly from the user's 2026-08-26 Test1 screenshots. Stable 3.9.42 and Latest remain untouched. Detail/review interception is intentionally Test-only and must be validated on the target Hiker build before promotion."
+}
