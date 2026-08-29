@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608292259",
+  "revision": "202608292303",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-29 22:59",
+  "updated": "2026-08-29 23:03",
   "taxonomy": {
     "categories": [
       {
@@ -591,9 +591,9 @@
     {
       "id": "yeshe",
       "name": "夜社短剧",
-      "version": "Test 0.1.0-test.2",
-      "desc": "Test2 根据首轮实机失败修复：跨页参数显式 URLDecode；列表改用正则 Anchor/Card Parser；普通 fetch 失败自动使用 WebView 源码；协议/播放诊断改为可见。继续等待首页、分类、搜索与播放实机回归。",
-      "path": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
+      "version": "Test 0.1.0-test.3",
+      "desc": "Test3 修复首轮实机失败：中文/URL 参数显式解码，列表解析改为 Anchor/Card Adapter，普通 fetch 失败自动 WebView 回退；并修复 /upload/ 图片被广告正则误杀导致卡片全部消失的问题。",
+      "path": "apps/video/yeshe/yeshe_remote_test_v3_b10103.txt",
       "entryType": "channel-group",
       "channelsPath": "apps/video/yeshe/channels.json",
       "category": "video",
