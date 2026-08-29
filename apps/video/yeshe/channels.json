@@ -3,28 +3,29 @@
   "id": "yeshe",
   "name": "夜社短剧",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-29 23:12",
+  "updatedAt": "2026-08-29 23:34",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "yeshe-test",
       "name": "夜社短剧",
-      "version": "0.1.0-test.4",
-      "build": 10104,
-      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
-      "path": "apps/video/yeshe/yeshe_remote_test_v4_b10104.txt",
+      "version": "0.1.0-test.5",
+      "build": 10105,
+      "displayVersion": "Test 0.1.0-test.5 · Build 10105",
+      "path": "apps/video/yeshe/yeshe_remote_test_v5_b10105.txt",
       "mode": "remote",
       "updatedAt": "2026-08-29",
       "recommended": true,
-      "desc": "Test4 修复当前实机“点封面和分类都报错”：内部二级页恢复 Test1 已证明能打开的 rule=&simple=true 合同，保留显式 URLDecode；内容卡只传 url/title 减少路由负担；首页大横幅改为紧凑品牌卡，去掉大面积空白占位。",
+      "desc": "Test5 针对二级详情和分类重构：视频/漫画/写真/小说分 Adapter，视频不再混入整页正文和114张图片；剧集严格按 /play/<id>/<line>/<episode> 生成；详情使用列表缓存的标题/封面；分类发现扩展到 /filter/ 并合并多入口导航。",
       "highlights": [
-        "修复封面/分类点击二级页报错",
-        "内部 hiker://page 恢复 rule=&simple=true",
-        "保留 MY_URL 显式 decodeURIComponent 参数恢复",
-        "卡片跨页只传 url/title，减少长 URL/封面参数风险",
-        "首页 Hero 改为紧凑 movie_1_left_pic，不再占用大块空白",
-        "Test3 协议/WebView/图片过滤修复全部继承"
+        "视频详情不再混入正文/图集噪声",
+        "剧集标题严格生成第N集，过滤剧情解/下一集/相关推荐等脏文本",
+        "列表点击前缓存 title/cover/kind，修复详情标题只剩“夜社”和错误封面",
+        "漫画/写真/小说独立详情展示，不再与视频互相污染",
+        "分类导航合并首页、type/13、filter/13，并支持 /filter/ 与 query 分类链接",
+        "未解析到真实 URL 的分类按钮直接标记待解析，不再进入空白错误页",
+        "设置中的刷新线路/清缓存同步修正为当前 v2 缓存键"
       ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c5ef26fb06a13904b6ce9830a179cacdbfa8cb04/apps/video/yeshe/assets/icon_v1.svg"
     }
