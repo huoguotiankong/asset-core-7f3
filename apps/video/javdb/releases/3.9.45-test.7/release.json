@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.7",
+  "build": 2026082904,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501
+  },
+  "productUi": {
+    "path": "apps/video/javdb/releases/3.9.45-test.7/product_ui_patch7.js",
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.7/local_entry.js",
+    "ref": "31cd86585b0ef1c527c551d83dc8a0ebafcde400"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.7/javdb_v3.9.45_test7_netflxcat.txt",
+    "ref": "537aa4344142c1ea8b6a37e768e7add8b67b79fd",
+    "blob": "96e68a8e244812c0bd26b6f15293eb73001aca0f",
+    "ruleVersion": 2026082904,
+    "pages": 41
+  },
+  "changes": [
+    "Fix article metadata fields that can return structured objects.",
+    "Move Articles out of More and place it as the last home content channel.",
+    "Render article text and inline images in source order.",
+    "Keep More focused on entities, account functions and tools."
+  ],
+  "stableChanged": false,
+  "status": "active-test-pending-device-validation",
+  "updatedAt": "2026-08-29"
+}
