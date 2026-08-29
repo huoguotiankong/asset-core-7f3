@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "name": "JAV Playback SDK",
+  "version": "1.1.0-test.1",
+  "build": 11001,
+  "baseVersion": "1.0.0-test.4",
+  "status": "test-pending-device-validation",
+  "providers": [
+    "MissAV",
+    "123AV",
+    "Jable",
+    "AV01",
+    "TKTUBE",
+    "JavGuru"
+  ],
+  "entry": "shared/jav-playback/releases/1.1.0-test.1/index.js",
+  "upgrade": "shared/jav-playback/releases/1.1.0-test.1/upgrade.js",
+  "stableChanged": false,
+  "notes": [
+    "Preserves the promoted 1.0.0-test.4 base and mutates only a new Test SDK instance.",
+    "Adds self-contained AV01, TKTUBE and JavGuru providers without external Hiker-rule dependencies or hard-coded Cloudflare clearance cookies.",
+    "MissAV keeps the Test4 parser while adding last-good domain rotation, missav.to fallback and the historical embed-id HLS fallback.",
+    "123AV and Jable resolvers are intentionally frozen in this first expansion test to protect their previously device-confirmed playback chains.",
+    "NJAV is intentionally not added because njav.tv currently redirects users to 123av.com and would duplicate the same provider family.",
+    "SupJav is deferred because current ordinary fetches are Cloudflare-blocked; no clearance bypass is embedded."
+  ],
+  "updatedAt": "2026-08-29"
+}
