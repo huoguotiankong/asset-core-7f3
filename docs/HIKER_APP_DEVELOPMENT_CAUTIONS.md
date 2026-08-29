@@ -589,6 +589,16 @@ Renderer 只调用 ImageAdapter。
 - 视频详情如果出现几十/上百张“正文图片”，优先判定为 Parser 串型，不要先去修图片加载。
 - 漫画/写真详情出现播放线路、小说详情出现图库，同样按跨类型污染处理。
 
+## 57B-2. 禁止按分类中文名直接推断媒体类型
+夜社短剧 Test5 实机事故：把“有声”映射为 audio、把“写真”映射为 photo/gallery，但站点实际都按视频播放，导致正确资源进入了错误详情/阅读器。
+
+固定规则：
+- Category/Channel/Section 是导航 taxonomy，MediaKind 是消费协议，两者必须分字段。
+- “动漫/有声/写真/直播/短剧”等栏目名都不能单独作为媒体类型证据。
+- MediaKind 需要至少由真实详情结构、播放动作、Reader/Player 协议或实机结果确认。
+- 用户实机确认后，优先修 CatalogAdapter 的映射，不在 UI 中根据栏目名继续猜。
+- 回归必须检查：同一分类下列表 → 详情 → Primary Action → Player/Reader 全链一致。
+
 ## 57C. 选集标题不能直接信任“下一集/剧情解析”等 Anchor 文本
 如果 href 已含稳定的 contentId / line / episode，EpisodeModel 必须从 URL 结构生成编号并按主键去重。
 
