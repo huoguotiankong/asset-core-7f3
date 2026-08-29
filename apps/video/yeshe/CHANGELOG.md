@@ -2,6 +2,26 @@
 
 > 程序级长期技术记忆。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 全局文档。未实机确认的内容明确标记“待验证”。
 
+## 2026-08-29 · 0.1.0-test.4 / Build10104 · 二级路由与首页占位修复
+
+### Test3 实机结果
+- 首页主体 UI 已正常渲染，用户明确指出上方 Hero 图片占位过大，页面首屏信息密度偏低。
+- 点击内容封面和分类入口会报错。
+- Test1 的分类二级页曾实际成功进入，只是参数没有 URLDecode；Test3 为修参数时把内部页面 URL 从 `rule=&simple=true` 改成了显式 `rule=<当前标题>`，与当前夜社 Shell 的已验证行为发生冲突。
+
+### Test4 修复
+- 所有内部 `hiker://page` 路由恢复为 Test1 已证明可进入的 `rule=&simple=true`；继续保留 Test2/Test3 的 `MY_URL → decodeURIComponent()` 参数恢复，因此不会再回退到百分号编码标题问题。
+- 内容卡详情路由只携带 `yeshe_url + yeshe_title`，不再把 cover/desc 一并塞进页面 URL，降低长 URL 与特殊字符造成的路由风险。
+- 首页 `pic_1_full` 大横幅移除，改为紧凑 `movie_1_left_pic` 品牌卡，缩短首页顶部空白区，让搜索和分类入口更靠前。
+- Test3 的 direct→WebView HTML fallback、`/upload/` 图片误杀修复、可见协议诊断全部继承。
+
+### Test4 必测
+1. 点击首页任意内容封面，应能进入详情页。
+2. 点击“分类大全”以及任意分类，应能进入对应页面，不再报错。
+3. 分类中文标题必须正常显示，不能再出现 `%E7...`。
+4. 首页顶部品牌区高度明显缩短，搜索和分类入口应进入首屏。
+5. 若某个入口仍报错，请保留完整错误提示截图；下一版只针对该具体 action 修复，不再同时大改协议层。
+
 ## 2026-08-29 · 0.1.0-test.3 / Build10103 · Test2 交付前 Parser Fixture 修复
 
 - Test2 元数据切换后，在发布前补做 Parser fixture，使用真实站常见的 `/upload/...jpg` 图片路径模拟短剧卡片。
@@ -51,7 +71,7 @@ yeshe_remote_test_v2_b10102.txt / rule 2026082902
 
 - App ID：`yeshe`
 - Stable：无
-- Test：`0.1.0-test.3 / Build10103`
+- Test：`0.1.0-test.4 / Build10104`
 - 模式：自用 Remote Test
 - 网站品牌入口：`https://yeshe.tv/`
 - 用户 2026-08-29 当前可用入口：`https://宽宏大量f562sym.baitasi.org/`
