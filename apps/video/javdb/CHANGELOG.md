@@ -6,9 +6,9 @@
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.45-test.6 / Build2026082903`。
-- Test Shell：`cloud/javdb/v3.9.45-test.6/javdb_v3.9.45_test6_netflxcat.txt`，rule version `2026082903`。
-- Test Release：`apps/video/javdb/releases/3.9.45-test.6/release.json`。
+- Test：`3.9.45-test.7 / Build2026082904`。
+- Test Shell：`cloud/javdb/v3.9.45-test.7/javdb_v3.9.45_test7_netflxcat.txt`，rule version `2026082904`。
+- Test Release：`apps/video/javdb/releases/3.9.45-test.7/release.json`。
 - Test 基础 Runtime：继续复用已完成基础实机验证的 `3.9.44-test.1 / Build2026082501` Local-First bundle，不重写 Stable 协议/API/账号/播放底层。
 - Previous UI Test：`3.9.45-test.3 / Build2026082603`，实机确认整体视觉继续偏工具化、难用，已被 Clean UI Reset 取代。\n- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
 - Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已完成第一轮完整实机截图审计。
@@ -18,6 +18,42 @@
 
 ---
 
+## 2026-08-29 · 3.9.45-test.7 / Build2026082904 · 资讯对象字段、首页频道与正文图文顺序
+
+### Test6 实机确认
+
+- 资讯列表和详情里的 `author` / `category` 实际返回结构化对象，直接转字符串会显示 `[object Object]`。
+- 资讯属于内容浏览，不应该放在“更多”工具页。
+- 资讯详情当前能显示正文和图片，但需要按原内容顺序组织，而不是把文本和图片割裂。
+
+### Test7 修改
+
+- 新增动态字段归一化：字符串、数字、数组、对象都先提取可读文本；对象优先读取 `name/title/label/display_name/nickname/username/value/text/slug/id`，避免 `[object Object]`。
+- 首页频道调整为：`推荐 / 最新 / 有码 / 无码 / 欧美 / FC2 / 动漫 / 资讯`，资讯固定放最后。
+- 资讯频道使用 `scroll_button`，点击进入独立 `simple=true` 资讯页。
+- “更多”页删除资讯入口，只保留资料库实体、账号功能和工具。
+- 资讯列表保留封面、标题、分类、作者、日期。
+- 资讯详情保留来源链接和相关影片；正文 HTML 按 `<img>` 位置切块，按原顺序渲染“文字 → 图片 → 文字 → 图片”。
+- 正文图片去重，避免同一图片被重复渲染。
+
+### Test7 不可变引用
+
+- UI7 Ref：`10f182e75bbfd0ee89cb4f41c2f0606a678a05e0`
+- Entry Ref：`31cd86585b0ef1c527c551d83dc8a0ebafcde400`
+- Shell Ref：`537aa4344142c1ea8b6a37e768e7add8b67b79fd`
+- Shell Blob：`96e68a8e244812c0bd26b6f15293eb73001aca0f`
+- Release commit：`e9e4511174506b5cd66684b80beb65dc5f49a181`
+
+### 待实机验证
+
+1. 资讯列表的作者/分类是否不再出现 `[object Object]`。
+2. 首页频道最后是否出现“资讯”，且“更多”中已没有资讯。
+3. 资讯详情正文文字与图片是否按文章原顺序显示。
+4. 来源链接、相关影片和翻页不能回归。
+
+Stable `3.9.42` / Latest 继续冻结。
+
+---
 ## 2026-08-29 · 3.9.45-test.6 / Build2026082903 · 搜索记录、筛选分层、资讯与播放页修复
 
 ### Test5 实机确认
