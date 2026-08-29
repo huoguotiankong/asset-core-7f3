@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608291853",
+  "revision": "202608291910",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-29 18:53",
+  "updated": "2026-08-29 19:10",
   "taxonomy": {
     "categories": [
       {
@@ -386,8 +386,8 @@
     {
       "id": "javdb-v3",
       "name": "JavDB v3",
-      "version": "Stable 3.9.42 / Test 3.9.45-test.4 / Local 3.9.41",
-      "desc": "Stable 3.9.42 / Build2026082301 继续冻结；Test 3.9.45-test.4 / Build2026082901 为 Clean NetflxCat UI 重置版，停止叠加前三轮测试 UI，只保留已验证 Local-First 业务基线 + 单层 UI4；首页改为绿色快捷入口、大搜索框、横向频道和三列海报，分类改为网飞猫式紧凑横向筛选。等待实机截图验证。",
+      "version": "Stable 3.9.42 / Test 3.9.45-test.5 / Local 3.9.41",
+      "desc": "Stable 3.9.42 继续冻结；Test 3.9.45-test.5 / Build2026082902 延续 Clean NetflxCat UI：标签分类修正且不截断原站标签数据，影片排行两列/演员三列，搜索独立成页并可删除历史，同时恢复资讯、系列、片商、导演及完整账号数据入口。等待实机验证。",
       "path": "cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt",
       "entryType": "channel-group",
       "channelsPath": "apps/video/javdb/channels.json",
