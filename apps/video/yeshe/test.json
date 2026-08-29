@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "yeshe-test",
+  "name": "夜社短剧",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "mode": "remote",
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026082901,
+  "managerVersion": "2.0.4",
+  "release": "apps/video/yeshe/releases/0.1.0-test.1/release.json",
+  "rule": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
+  "bootstrap": "apps/video/yeshe/bootstrap_test_v1_b10101.js",
+  "updatedAt": "2026-08-29",
+  "status": "active-test-pending-device-validation",
+  "notes": "Fresh rewrite. Native short-drama home + dynamic all-site categories + search + generic video/gallery/text detail + local favorites/history + web login bridge + direct-first playback. Device validation required before Stable."
+}
