@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608292158",
+  "revision": "202608292230",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-29 21:58",
+  "updated": "2026-08-29 22:30",
   "taxonomy": {
     "categories": [
       {
@@ -386,8 +386,8 @@
     {
       "id": "javdb-v3",
       "name": "JavDB v3",
-      "version": "Stable 3.9.42 / Test 3.9.45-test.6 / Local 3.9.41",
-      "desc": "Stable 3.9.42 继续冻结；Test 3.9.45-test.6 / Build2026082903 修复搜索记录清理报错、筛选标签分层、资讯缺失和更多播放官方/第三方混排问题；继续保持 Clean NetflxCat UI 与原站数据完整性。",
+      "version": "Stable 3.9.42 / Test 3.9.45-test.7 / Local 3.9.41",
+      "desc": "Stable 3.9.42 继续冻结；Test 3.9.45-test.7 / Build2026082904 修正资讯对象字段显示和正文图文顺序，并将资讯从更多页移到首页内容频道最后。",
       "path": "cloud/javdb/v3.9.42/javdb_v3.9.42_cloud.txt",
       "entryType": "channel-group",
       "channelsPath": "apps/video/javdb/channels.json",
