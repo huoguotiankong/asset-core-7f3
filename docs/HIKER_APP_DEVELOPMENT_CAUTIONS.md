@@ -412,6 +412,16 @@ Test → 实机截图 → 看层级/密度/比例/长文本/空状态 → 只改
 ## 41A. 页面关键实体参数不能只依赖 `extra`
 关键 ID 放 URL query，详情同时读 `MY_PARAMS + getParam()`；有 ID 无 seed 时按 Provider 恢复。
 
+## 41A-2. `hiker://page` 查询参数不能假设 `getParam()` 一定已完成 URLDecode
+夜社短剧 Test1 实机事故：页面跳转时正确使用 `encodeURIComponent('AI短剧')`，但目标页 `getParam('yeshe_category_name')` 实际得到 `AI%E7%9F%AD%E5%89%A7`，页面标题直接显示百分号编码；同样被编码的分类 URL 也无法进入网络层。
+
+固定规则：
+- 重要业务参数如果通过 `hiker://page/...?...=${encodeURIComponent(value)}` 传递，目标页必须把“参数是否已解码”视为**宿主版本相关行为**，不能假设 `getParam()` 永远返回原文。
+- 当前已验证的稳妥恢复方式：从 `MY_URL` 中按业务命名空间键读取原始 query value，再显式 `decodeURIComponent()`；失败时保留原值。
+- 标题、分类名、搜索词、entityId、真实 HTTP URL 都要使用同一 Param Adapter，不允许部分用 `getParam`、部分手工 decode，避免双重编码/解码不一致。
+- UI 如果出现 `%E4%... / https%3A%2F%2F...`，优先查跨页参数合同，不要先去改 Provider/DOM Parser。
+- 修复后至少回归：中文标题、带 `?&=` 的完整业务 URL、搜索关键词，以及返回栈。
+
 ## 41B. 动态分类不能原样暴露服务端所有 Station/Category
 推荐：CategoryExtractor → CategoryModel → UserFacing CatalogAdapter → State → Renderer。
 
