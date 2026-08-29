@@ -3,28 +3,28 @@
   "id": "yeshe",
   "name": "夜社短剧",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-29 23:03",
+  "updatedAt": "2026-08-29 23:12",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "yeshe-test",
       "name": "夜社短剧",
-      "version": "0.1.0-test.3",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/yeshe/yeshe_remote_test_v3_b10103.txt",
+      "version": "0.1.0-test.4",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/yeshe/yeshe_remote_test_v4_b10104.txt",
       "mode": "remote",
       "updatedAt": "2026-08-29",
       "recommended": true,
-      "desc": "Test3 是首轮实机恢复版的可交付版本：修复中文/URL 参数百分号编码、加入 direct→WebView HTML 回退和可见诊断；同时通过 fixture 发现并修复 /upload/ 图片被 ads?\\b 误判成广告而导致所有内容卡被过滤的问题。",
+      "desc": "Test4 修复当前实机“点封面和分类都报错”：内部二级页恢复 Test1 已证明能打开的 rule=&simple=true 合同，保留显式 URLDecode；内容卡只传 url/title 减少路由负担；首页大横幅改为紧凑品牌卡，去掉大面积空白占位。",
       "highlights": [
-        "修复 AI%E7... 百分号编码标题与分类 URL 丢失",
-        "首页/分类列表改用正则 Anchor/Card Parser",
-        "普通 fetch 失败才使用 WebView 源码回退",
-        "修复 /upload/ 图片路径被误判为广告的过滤漏洞",
-        "协议/播放诊断内容可直接显示",
-        "Test1/Test2 均保持不可变"
+        "修复封面/分类点击二级页报错",
+        "内部 hiker://page 恢复 rule=&simple=true",
+        "保留 MY_URL 显式 decodeURIComponent 参数恢复",
+        "卡片跨页只传 url/title，减少长 URL/封面参数风险",
+        "首页 Hero 改为紧凑 movie_1_left_pic，不再占用大块空白",
+        "Test3 协议/WebView/图片过滤修复全部继承"
       ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c5ef26fb06a13904b6ce9830a179cacdbfa8cb04/apps/video/yeshe/assets/icon_v1.svg"
     }
