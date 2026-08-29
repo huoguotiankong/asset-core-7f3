@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.6",
+  "build": 2026082903,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "previousUiTest": {
+    "version": "3.9.45-test.5",
+    "build": 2026082902,
+    "status": "device-reviewed-2026-08-29"
+  },
+  "productUi": {
+    "strategy": "single-clean-overlay-with-device-fixes",
+    "overlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.6/product_ui_patch6.js",
+      "ref": "25397e148fbf3b5874a9ed4ee6dee504b256ca8f"
+    },
+    "assets": {
+      "path": "apps/video/javdb/releases/3.9.45-test.4/assets/",
+      "ref": "52f6456329113bff98f5124a823009e023272fc2"
+    }
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.6/local_entry.js",
+    "ref": "e5f5c82ffefb04c1c13eef603c9690c4e9f6a8ad",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082903/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.6/javdb_v3.9.45_test6_netflxcat.txt",
+    "ref": "aaa6e9509c4642e4cc3a21511f229850f65da91b",
+    "blob": "5e5c32bd9b5fef1653ee478553006a9eeb5ea89e",
+    "ruleVersion": 2026082903,
+    "pages": 41
+  },
+  "deviceFindingsFromTest5": [
+    "Hand-authored select:// JSON for search-history management returned an invalid JSEngine value on-device.",
+    "The Articles entry was visible but the page did not reliably expose actual JavDB article data.",
+    "The Filter page still felt visually inconsistent around the Tag dimension and label/value semantics.",
+    "More Playback placed JavDB official playback and third-party providers in the same visual row."
+  ],
+  "changes": {
+    "searchHistory": "Replaces handcrafted select:// JSON with the documented $(options,1,title).select(...) interaction. Single-record deletion and clear-all both mutate local history then refresh the Search page.",
+    "filters": "Left-side green chips are now treated as stable dimension labels for Resource/Year/Month/Duration/Tag. The Tag group row and the active Tag-value row are separated: Tag is the green label, groups are neutral choices, then the selected group becomes the green label for its full value row. Resource/Year/Month/Duration also expose an explicit All choice.",
+    "articles": "Adds direct public signed GET /api/v1/articles list rendering and GET /api/v1/articles/:id detail rendering. Article title/cover/author/category/date/content/images/source link and related movies are preserved when returned.",
+    "playback": "More Playback is split into three blocks: JavDB Playback, Third-party Playback, and JavDB Official Magnets. Official VIP/preview can no longer share a row with MissAV/123AV/Jable.",
+    "dataCompleteness": "Keeps the Test5 restored entry points for news, series, makers, directors, TOP250, playback rankings, actor rankings, account want/watched/favorites/lists/recent, and resource tools."
+  },
+  "delivery": {
+    "mode": "local-first-clean-single-ui-overlay-over-3.9.44-runtime",
+    "networkOnNormalStartupForCode": false,
+    "stableChanged": false
+  },
+  "staticGate": [
+    "product_ui_patch6.js passed V8 new Function syntax parsing.",
+    "local_entry.js passed V8 new Function syntax parsing.",
+    "shell outer home_rule JSON and nested pages JSON re-parsed successfully.",
+    "shell has 41 pages, SearchHub and Articles routes, and immutable Test6 Entry ref.",
+    "shell main module contains no Test5 Entry ref."
+  ],
+  "device": "pending Test6 search/filter/articles/playback screenshot and interaction validation",
+  "status": "active-test-device-fix-search-filter-articles-playback-pending-validation",
+  "updatedAt": "2026-08-29"
+}
