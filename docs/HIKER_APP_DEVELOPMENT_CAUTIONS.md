@@ -579,6 +579,29 @@ Renderer 只调用 ImageAdapter。
 - 新增图片过滤正则时必须至少用 `/upload/`、`/download/`、`/avatar/`、真实广告 URL 做正反 fixture。
 - “列表 HTML 有内容但所有卡片都没封面/全被过滤”时，除了查 DOM Parser，也要查 Image Noise Filter 是否误杀。
 
+## 57B. 多内容站详情页禁止无条件跑全部 Parser
+夜社短剧 Test4 实机出现：视频详情既有选集，又出现整页长文本和“正文图片 114 张”。根因是 Provider 在不知道内容类型的情况下同时运行 Episode / Article / Gallery / Related。
+
+固定规则：
+- Video / Comic / Photo / Novel 详情 Adapter 分离。
+- 列表已知 kind 时，详情必须沿用，不再二次猜类型。
+- 只有 unknown 才允许有限自动判型，而且最终只能进入一个主 Adapter。
+- 视频详情如果出现几十/上百张“正文图片”，优先判定为 Parser 串型，不要先去修图片加载。
+- 漫画/写真详情出现播放线路、小说详情出现图库，同样按跨类型污染处理。
+
+## 57C. 选集标题不能直接信任“下一集/剧情解析”等 Anchor 文本
+如果 href 已含稳定的 contentId / line / episode，EpisodeModel 必须从 URL 结构生成编号并按主键去重。
+
+典型错误：
+- 第1集被页面文案显示成“剧情解析无H”。
+- 第2集先被“下一集”链接命中，真正的“第2集”按钮因 href 去重被丢弃。
+- 相关推荐误混进同一个选集。
+
+固定规则：
+- 先按 href 结构验证同一 contentId。
+- 去重键使用 `contentId|line|episode`，不是完整 Anchor 文本。
+- UI 标题优先生成 `第N集`；Anchor 文本只作为无结构编号时的最后 fallback。
+
 ## 58. 图片失败分阶段诊断
 至少 URL_FIELD_EMPTY / REQUEST_FAIL / HEADER_FAIL / UNKNOWN_FORMAT / DECRYPT_FAIL / STREAM_FAIL / CACHE_FAIL。
 
