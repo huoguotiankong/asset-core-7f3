@@ -2,6 +2,16 @@
 
 > 程序级长期技术记忆。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 全局文档。未实机确认的内容明确标记“待验证”。
 
+## 2026-08-29 · 0.1.0-test.3 / Build10103 · Test2 交付前 Parser Fixture 修复
+
+- Test2 元数据切换后，在发布前补做 Parser fixture，使用真实站常见的 `/upload/...jpg` 图片路径模拟短剧卡片。
+- Fixture 发现 Test2 的图片噪声过滤正则 `ads?\\b` 会命中单词 `upload` 末尾的 `ad`（`d` 与后续 `/` 构成 word boundary），导致 `/upload/` 下的正常封面被当作广告图片丢弃；没有封面后 Card Adapter 会继续过滤整张内容卡。
+- 这与 Test1 实机“页面结构能出、业务卡片全空”的现象高度吻合，因此 Test2 不再作为推荐交付，冻结并立即新建 Test3。
+- Test3 将广告图片判断收紧为独立路径段 `/ad/`、`/ads/` 或明确广告资源名，不再用裸 `ad(s)?\\b` 扫整条 URL。
+- 同一 fixture 已验证：`<a href="/play/123/1/2.html"><img data-src="/upload/2026/a.jpg"></a>` 可以正常产出内容卡与绝对封面 URL。
+- Test3 继续完整继承 Test2 的：MY_URL 显式 URLDecode、direct → WebView HTML fallback、可见协议诊断。
+- 当前推荐 Test：`0.1.0-test.3 / Build10103`；仍需用户实机确认首页、分类和实际播放，禁止晋级 Stable。
+
 ## 2026-08-29 · 0.1.0-test.2 / Build10102 · 首轮实机恢复版
 
 ### Test1 实机结果
@@ -41,7 +51,7 @@ yeshe_remote_test_v2_b10102.txt / rule 2026082902
 
 - App ID：`yeshe`
 - Stable：无
-- Test：`0.1.0-test.2 / Build10102`
+- Test：`0.1.0-test.3 / Build10103`
 - 模式：自用 Remote Test
 - 网站品牌入口：`https://yeshe.tv/`
 - 用户 2026-08-29 当前可用入口：`https://宽宏大量f562sym.baitasi.org/`
