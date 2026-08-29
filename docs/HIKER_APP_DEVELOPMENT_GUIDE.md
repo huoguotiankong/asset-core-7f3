@@ -2274,6 +2274,32 @@ fresh cached endpoint
 
 真正可复用的是“发现 → 解码 → 排序 → 有界探活 → last-good cache”，不是某个样本的 DoH 域名、AES Key、固定设备号或签名常量。
 
+### 品牌落地页 → 短链 → 轮换业务域名：把 Redirect 当 Endpoint Discovery
+
+夜社短剧 Test1 补充了一类常见站点结构：公开品牌页本身只承担 SEO/入口展示，真实业务列表通过稳定短链 302 到经常轮换的业务域名。此时不要把某一个随机业务 Host 写死成长期唯一入口。
+
+推荐链：
+
+```text
+fresh last-good origin
+→ 正常业务请求
+→ 失败时对稳定短链使用 redirect:false
+→ 读取 Location，仅提取 origin
+→ 用一个低成本业务路径验证目标站
+→ 替换旧 URL 的 origin，保留 path/query
+→ 更新 last-good
+→ 用户当前可用 gateway 只作为 seed/fallback
+```
+
+约束：
+
+- 品牌落地页、短链服务、真实业务站是三个不同职责，不把 SEO 页误当 Provider。
+- 正常首屏有 fresh last-good 时不重复解析短链/全量探活；只在失败或用户主动“刷新线路”时重新发现。
+- Redirect 发现只信任可解析的 `http/https Location`，并在写缓存前做业务 HTML/schema 验证。
+- 业务 URL 的 contentId、typeId、episodeId、query 参数与 Host 分离；切域名只替换 origin，不能重造业务路径。
+- 诊断记录 discovery stage、origin、HTTP 状态和 fallback 顺序，不保存 Cookie/Token。
+- 如果用户当前实机已经给出可用域名，可作为 bootstrap seed，但仍必须保留自动发现，避免下一次换域名再次整程序失效。
+
 ## 33.9 多个小程序可以共享 Shell/SDK，但共享 Runtime 必须显式、版本化、可隔离
 
 “瓜子影视 / 一起刷”可见壳层证明不同产品可以复用同一 `home()/search()` 合约。自己的长期方案应做成：
