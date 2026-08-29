@@ -2,11 +2,46 @@
 
 > 程序级长期技术记忆。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 全局文档。未实机确认的内容明确标记“待验证”。
 
+## 2026-08-29 · 0.1.0-test.2 / Build10102 · 首轮实机恢复版
+
+### Test1 实机结果
+用户当前设备确认 Test1 **不能正常使用**：
+- 首页 Hero / 搜索 / 快捷入口 / Tab UI 能正常渲染，但“最近更新”没有任何业务卡片。
+- 点击“AI短剧”等分类后，系统标题直接显示 `AI%E7%9F%AD%E5%89%A7`，说明当前海阔设备的 `getParam()` 在这条 `hiker://page` 链上没有替我们完成 URLDecode。
+- 同一分类页显示“分类地址待解析 / 分类暂不可用”，证明分类名和 URL 的跨页恢复合同失效。
+- 设置页能看到当前线路，但“协议诊断 / 播放诊断”标题下面没有具体 JSON，说明 Test1 把诊断放在 `long_text.desc` 的写法在当前设备不可见。
+
+### 根因与修改边界
+Test2 不继续堆 UI，而是只修四个已被实机证明的运行层问题：
+1. **跨页参数**：不再直接依赖 `getParam()`。新增与 18AV 已验证方案一致的 `MY_URL → 正则取参数 → decodeURIComponent()` 恢复函数；所有 `yeshe_category_name / yeshe_category_url / yeshe_url / yeshe_title / yeshe_cover / yeshe_desc / kw` 都走同一合同。
+2. **列表解析**：Test1 的通用 `pdfa(html,'a') → 对 node 再 pdfh` 方案对当前页面没有产出卡片；Test2 改成直接扫描完整 HTML 的 `<a href>...</a>`，从 anchor 内提取 `img data-original/data-src/data-lazy-src/data-echo/src` 与标题，减少对 node 形态的假设。
+3. **传输层**：普通 `fetch()` 拿不到可解析 HTML 时，Test2 才退到 `fetchCodeByWebView()` 获取浏览器渲染后的源码；fresh last-good 仍优先，不把 WebView 变成每次首屏固定启动税。
+4. **诊断可见性**：协议/播放诊断改为写到 `long_text.title`；首页空数据也会直接显示 stage / transport / HTML length，下一轮截图能区分“没请求到”还是“请求到了但 Parser 没命中”。
+
+### Test2 运行链
+```text
+yeshe_remote_test_v2_b10102.txt / rule 2026082902
+→ bootstrap_test_v2_b10102.js
+→ Remote Manager 2.0.4 / id yeshe-test / minBuild 10102
+→ releases/0.1.0-test.2
+   protocol.js  Test2
+   provider.js  复用冻结 Test1
+   playback.js  复用冻结 Test1
+   runtime.js   Test2
+```
+
+### Test2 必测
+1. 覆盖导入后，首页“最近更新”是否开始出现真实卡片；若仍为空，截图里必须能看到 `stage / transport / HTML length`。
+2. 点击“AI短剧”后页面标题必须正常显示“AI短剧”，不能再出现 `%E7...`。
+3. “AI短剧 / 国产视频 / 动漫 / 漫画 / 写真 / 小说”各至少进入一个，确认分类 URL 已恢复。
+4. 设置页必须能看到完整协议诊断 JSON；若首页仍空，把该页截图回传。
+5. 只有分类和首页恢复后才继续冻结搜索、详情、播放、漫画/写真/小说 DOM；Test2 仍禁止晋级 Stable。
+
 ## 当前基线
 
 - App ID：`yeshe`
 - Stable：无
-- Test：`0.1.0-test.1 / Build10101`
+- Test：`0.1.0-test.2 / Build10102`
 - 模式：自用 Remote Test
 - 网站品牌入口：`https://yeshe.tv/`
 - 用户 2026-08-29 当前可用入口：`https://宽宏大量f562sym.baitasi.org/`
