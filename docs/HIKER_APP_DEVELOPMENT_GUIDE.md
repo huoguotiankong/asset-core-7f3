@@ -410,6 +410,23 @@ SearchPage.render(ctx);
 
 `putMyVar` 适合页内选中态、临时输入、缓存当前筛选；重要主键和可恢复参数优先存在 URL/明确模型中。
 
+### 查询参数恢复：统一 Param Adapter，不假设宿主已 URLDecode
+
+当前海阔实机已经出现同一个 `hiker://page` 链中，`encodeURIComponent(value)` 传入后 `getParam()` 仍返回 `%E4%...` 的情况。因此长期页面模块应统一封装参数恢复：
+
+```js
+function pageParam(name, def){
+    var u = String(MY_URL || '');
+    var m = u.match(new RegExp('[?&]' + name + '=([^&#]*)'));
+    if (!m) return def == null ? '' : def;
+    try { return decodeURIComponent(m[1]); }
+    catch (e) { return m[1]; }
+}
+```
+
+适用范围：entityId、中文标题、分类名、搜索词、完整 HTTP URL。页面内部不要一部分直接 `getParam()`、另一部分手工 decode；统一经过 Param Adapter，避免双重编码和宿主版本差异。跨页业务 URL 仍使用应用命名空间字段，例如 `app_url / app_id / app_title`，不要复用通用 `url`。
+
+
 ---
 
 # 5. Hiker Native Design System：UI 先设计，再编码
