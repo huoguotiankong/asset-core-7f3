@@ -476,6 +476,27 @@
       "testRelease": "apps/video/18av/releases/0.1.0-test.4/release.json",
       "changelog": "apps/video/18av/CHANGELOG.md",
       "migration": "test4-rhino-regex-repeat-limit-hotfix"
+    },
+    {
+      "id": "yeshe",
+      "name": "夜社短剧",
+      "category": "video",
+      "mode": "remote-test/self-use",
+      "version": "0.1.0-test.1",
+      "build": 10101,
+      "shellVersion": "1.0.0-test.1",
+      "managerVersion": "2.0.4",
+      "manifest": "apps/video/yeshe/manifest.json",
+      "test": "apps/video/yeshe/test.json",
+      "channels": "apps/video/yeshe/channels.json",
+      "rule": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
+      "bootstrap": "apps/video/yeshe/bootstrap_test_v1_b10101.js",
+      "testVersion": "0.1.0-test.1",
+      "testBuild": 10101,
+      "testRule": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
+      "testRelease": "apps/video/yeshe/releases/0.1.0-test.1/release.json",
+      "changelog": "apps/video/yeshe/CHANGELOG.md",
+      "migration": "fresh-test1-dynamic-domain-native-ui"
     }
   ],
   "legacyManifest": "manifest.json"
