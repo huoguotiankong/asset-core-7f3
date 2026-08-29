@@ -997,3 +997,16 @@ fresh last-good
 - `refreshPage(false)` 只是副作用调用，不能把它自身的返回值当 URL 返回。
 - 需要删除单条、切换排序、选择线路等低频动作，优先原生 select，而不是再造一整页按钮。
 - 实机验证选择器回调；JSEngine 对无效返回值比普通 JS 语法检查更严格。
+
+## API 字段可能从标量升级为对象：禁止直接 `String(object)`
+
+2026-08-29 JavDB v3 Test6 实机确认：资讯接口中的 `author`、`category` 在当前返回中是结构化对象，UI 若直接 `String(value)` 会显示 `[object Object]`。
+
+以后所有远程 API 的展示字段都按动态结构处理：
+
+- 标量：直接显示。
+- 数组：逐项提取可读字段后合并。
+- 对象：优先读取 `name/title/label/display_name/nickname/username/value/text/slug/id` 等语义字段。
+- 找不到预期字段时再递归寻找第一个可读标量，禁止直接把对象转字符串作为 UI。
+- 协议 ID、筛选值和业务参数保留原对象/原 ID，不要为了显示而改写协议值。
+- 这类问题属于“数据合同漂移”，静态代码检查无法发现，必须以实机返回为准。
