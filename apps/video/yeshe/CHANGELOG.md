@@ -2,6 +2,60 @@
 
 > 程序级长期技术记忆。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 全局文档。未实机确认的内容明确标记“待验证”。
 
+## 2026-08-29 · 0.1.0-test.5 / Build10105 · 二级详情与分类 Adapter 重构
+
+### Test4 实机结果
+- 首页/二级路由已恢复，内容卡和分类页可以进入。
+- 视频详情页仍存在明显跨类型污染：标题可能只剩“夜社”，封面可能取到广告/无关图片；选集出现“剧情解 / 下一集 / 我的男…”等非剧集文本。
+- 同一视频详情页还可能被通用正文/图库解析污染，出现大段整页导航文字与“图集 / 正文图片 · 114张”。
+- 写真/漫画类页面的内容类型识别不稳定。
+- “素人系列”等分类名称能正常解码，但当前分类映射只接受 `/type/ /list/ /category/ /class/`，没有覆盖当前站点实际存在的 `/filter/` 入口，因此部分分类按钮有名称但没有真实 URL。
+
+### Test5 架构调整
+1. **Typed Detail Adapter**
+   - `video / anime / audio`：只解析 meta、标准剧集和相关推荐；禁止执行整页 Article/Gallery 兜底。
+   - `comic / photo`：只解析图集和相关推荐；不混入视频选集。
+   - `novel`：只解析章节/正文。
+   - 未知类型才执行有限自动判型，优先标准剧集，其次图集、章节、正文。
+2. **Strict Episode Model**
+   - 剧集只接受 `/play/<contentId>/<line>/<episode>.html`。
+   - 当前详情存在 contentId 时，只保留同 contentId。
+   - 去重键使用 `contentId|line|episode`。
+   - UI 标题直接由 episode number 生成“第N集”，不再信任“下一集 / 剧情解析 / 推荐标题”等 Anchor 文本。
+3. **Detail Seed Cache**
+   - 列表点击进入详情前，把 `url/title/cover/desc/kind` 写入单一 detail seed。
+   - 二级页只在 URL 匹配时使用该 seed，避免详情页面自己的通用 `<title>` 或首图把标题覆盖成“夜社”、把广告图当封面。
+   - 页面 URL 仍只携带真正主键 `yeshe_url`，不重新引入长 cover/desc query。
+4. **Category Discovery**
+   - 导航来源从单一页面扩大为：根页面 + `/type/13.html?chl=yeshetv` + `/filter/13.html?chl=yeshetv`。
+   - 接受 `/filter/` 与 query 型 `type/tid/cat/category/class` 分类链接。
+   - 额外解析 `data-href / data-url`。
+   - 分类名称先 exact，再 normalized，再受限 fuzzy 匹配。
+   - AI短剧/短剧继续使用已确认的 `/type/13.html?chl=yeshetv`。
+   - 仍未解析到真实 URL 的分类显示“待解析”并禁用，不再打开一个必失败的空分类页。
+5. **Detail UI**
+   - 二级 Hero 改为紧凑 `movie_1_left_pic`，不再用大面积 blur 背景。
+   - 视频只显示播放、选集、动作区和相关推荐。
+   - 漫画/写真显示图片入口与最多 3 张预览。
+   - 小说显示章节或正文，不与视频/图集 UI 混用。
+6. **缓存键修复**
+   - 设置页“刷新线路/清理页面缓存”从旧 v1 key 修正到当前实际使用的 v2 key。
+
+### Test5 静态验收
+- Protocol / Provider / Runtime / Bootstrap 均通过 JS 语法检查。
+- Fixture：`/filter/22.html` 可进入分类映射。
+- Fixture：同一 contentId 下含“下一集/剧情解析”等 Anchor 文本时，EpisodeModel 仍只输出 `第1集 / 第2集 / …`。
+- Release 使用不可变 ref，Test4 保持冻结。
+
+### Test5 实机必测
+1. 首页任意短剧 → 详情：标题、封面必须与列表一致。
+2. 视频详情不再出现“图集 / 正文图片 114张”或整页导航长文本。
+3. 选集只显示“第N集”，不能出现“剧情解 / 下一集 / 我的男…”等脏标题。
+4. 漫画/写真各打开一项，确认只出现图集阅读链。
+5. 小说打开一项，确认只出现章节/正文链。
+6. 分类大全检查“素人系列”等此前失败分类；若仍显示“待解析”，进入设置页截图 NAV 诊断的 `count / HTML len / transport`。
+7. 仍禁止晋级 Stable；Test5 必须继续以用户实机结果冻结分类和播放协议。
+
 ## 2026-08-29 · 0.1.0-test.4 / Build10104 · 二级路由与首页占位修复
 
 ### Test3 实机结果
@@ -71,7 +125,7 @@ yeshe_remote_test_v2_b10102.txt / rule 2026082902
 
 - App ID：`yeshe`
 - Stable：无
-- Test：`0.1.0-test.4 / Build10104`
+- Test：`0.1.0-test.5 / Build10105`
 - 模式：自用 Remote Test
 - 网站品牌入口：`https://yeshe.tv/`
 - 用户 2026-08-29 当前可用入口：`https://宽宏大量f562sym.baitasi.org/`
