@@ -3,16 +3,21 @@
   "channel": "test",
   "id": "yeshe-test",
   "name": "夜社短剧",
-  "version": "0.1.0-test.1",
-  "build": 10101,
+  "version": "0.1.0-test.2",
+  "build": 10102,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026082901,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026082902,
   "managerVersion": "2.0.4",
-  "release": "apps/video/yeshe/releases/0.1.0-test.1/release.json",
-  "rule": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
-  "bootstrap": "apps/video/yeshe/bootstrap_test_v1_b10101.js",
+  "release": "apps/video/yeshe/releases/0.1.0-test.2/release.json",
+  "rule": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
+  "bootstrap": "apps/video/yeshe/bootstrap_test_v2_b10102.js",
   "updatedAt": "2026-08-29",
   "status": "active-test-pending-device-validation",
-  "notes": "Fresh rewrite. Native short-drama home + dynamic all-site categories + search + generic video/gallery/text detail + local favorites/history + web login bridge + direct-first playback. Device validation required before Stable."
+  "notes": "Real-device Test2 recovery: fixes percent-encoded hiker page parameters, replaces fragile generic list parsing with regex anchor/card parsing, adds direct -> fetchCodeByWebView HTML fallback, and makes protocol/playback diagnostics visible. Test1 remains immutable.",
+  "previousTest": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/video/yeshe/releases/0.1.0-test.1/release.json"
+  }
 }
