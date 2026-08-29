@@ -3,22 +3,21 @@
   "channel": "test",
   "id": "yeshe-test",
   "name": "夜社短剧",
-  "version": "0.1.0-test.3",
-  "build": 10103,
+  "version": "0.1.0-test.4",
+  "build": 10104,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.3",
-  "shellRuleVersion": 2026082903,
+  "shellVersion": "1.0.0-test.4",
+  "shellRuleVersion": 2026082904,
   "managerVersion": "2.0.4",
-  "release": "apps/video/yeshe/releases/0.1.0-test.3/release.json",
-  "rule": "apps/video/yeshe/yeshe_remote_test_v3_b10103.txt",
-  "bootstrap": "apps/video/yeshe/bootstrap_test_v3_b10103.js",
+  "release": "apps/video/yeshe/releases/0.1.0-test.4/release.json",
+  "rule": "apps/video/yeshe/yeshe_remote_test_v4_b10104.txt",
+  "bootstrap": "apps/video/yeshe/bootstrap_test_v4_b10104.js",
   "updatedAt": "2026-08-29",
   "status": "active-test-pending-device-validation",
-  "notes": "Test3 includes Test2 route-decode/WebView/diagnostics recovery and fixes an image noise regex false-positive that treated /upload/ paths as ads, which could discard all real covers/cards. Fixture verified.",
+  "notes": "Test4 fixes real-device cover/category click failures by restoring rule=&simple=true internal page URLs (the Test1 subpage contract that was known to open), keeps explicit MY_URL URLDecode, reduces card navigation payload to url/title, and replaces the oversized full-width hero with a compact branded movie_1_left_pic header.",
   "previousTest": {
-    "version": "0.1.0-test.2",
-    "build": 10102,
-    "release": "apps/video/yeshe/releases/0.1.0-test.2/release.json",
-    "status": "superseded-before-device-test-by-fixture-found-parser-bug"
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/yeshe/releases/0.1.0-test.3/release.json"
   }
 }
