@@ -6,15 +6,162 @@
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.45-test.3 / Build2026082603`。
-- Test Shell：`cloud/javdb/v3.9.45-test.3/javdb_v3.9.45_test3_localfirst_ui.txt`，rule version `2026082603`。
-- Test Release：`apps/video/javdb/releases/3.9.45-test.3/release.json`。
+- Test：`3.9.45-test.4 / Build2026082901`。
+- Test Shell：`cloud/javdb/v3.9.45-test.4/javdb_v3.9.45_test4_netflxcat.txt`，rule version `2026082901`。
+- Test Release：`apps/video/javdb/releases/3.9.45-test.4/release.json`。
 - Test 基础 Runtime：继续复用已完成基础实机验证的 `3.9.44-test.1 / Build2026082501` Local-First bundle，不重写 Stable 协议/API/账号/播放底层。
-- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
+- Previous UI Test：`3.9.45-test.3 / Build2026082603`，实机确认整体视觉继续偏工具化、难用，已被 Clean UI Reset 取代。\n- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
 - Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已完成第一轮完整实机截图审计。
 - Previous Local-First Test：`3.9.44-test.1 / Build2026082501`，2026-08-25 已确认本地 Runtime 基础实机正常（26 源 / 148084 bytes）。
 - Local：`3.9.41-local / Build2026082103`，独立 Pure Local 线，本轮不修改。
 - Shared JAV Playback Stable：`1.0.0-test.4`；Test3 继续使用 3.9.44 已本地化执行闭包，不移动共享 Stable 指针。
+
+---
+
+## 2026-08-29 · 3.9.45-test.4 / Build2026082901 · Clean NetflxCat UI Reset
+
+### 1. 实机结论：前三轮 UI 方向失败，停止继续叠补丁
+
+用户对 Test1 → Test3 的连续实机结论是：**越来越不像正式版，也越来越不像网飞猫，视觉和交互都变得更工具化、更难用。**
+
+当前问题不再归因于单个间距或按钮，而是 UI 架构本身：
+
+- 首页被“发现/资源条件/继续浏览/更多说明”等产品说明和工具分组占据，内容进入首屏太慢。
+- 顶部导航和独立工具入口层级反复变化，缺少网飞猫那种稳定的“快捷入口 → 搜索 → 内容频道 → 海报”骨架。
+- 分类虽然改成独立页，但仍有“筛选说明/更多筛选/重置”等控制感，和样本的一行一个维度差距明显。
+- Test1/Test2/Test3 通过 Overlay 叠加实现，每轮都继承前轮视觉结构，导致新版本很难真正回到干净状态。
+
+因此 Test4 **不再加载 Test1/Test2/Test3 UI Overlay**，直接回到：
+
+```text
+Stable 3.9.42 业务合同
+→ 已验证 3.9.44-test.1 Local-First Runtime
+→ 单层 3.9.45-test.4 UI4
+```
+
+这是一次展示层重置，不重写 API、登录、详情数据、评论、磁链和第三方播放协议。
+
+### 2. 首页按网飞猫骨架重做
+
+Test4 首页顺序固定为：
+
+```text
+五个绿色圆形快捷入口
+筛选 / 排行 / 演员 / 收藏 / 更多
+↓
+大搜索框
+↓
+推荐 / 最新 / 有码 / 无码 / 欧美 / FC2 / 动漫
+↓
+分区标题
+↓
+三列海报
+```
+
+原则：
+
+- 首屏先给内容任务和海报，不先解释功能。
+- 快捷入口使用统一绿色圆形 SVG 图标。
+- 搜索框只保留“搜索”动作和简短 hint。
+- 内容频道只用一排 `scroll_button`；长列表自然使用海阔原生 `>`。
+- 首页不再常驻“资源条件 / 高级筛选 / 技术状态 / 诊断 / 更多功能”。
+- 搜索结果仍进入独立 `javdb3Search` 页面，不把结果塞回首页。
+
+### 3. 分类按“网飞猫式一行一个维度”重做
+
+分类主页面只保留紧凑筛选行：
+
+```text
+有码 / 无码 / 欧美 / FC2 / 动漫
+资源 / 可播放 / 可下载 / 字幕 / 单体 / 预览图 / ...
+年份 / 2026 / 2025 / 2024 / ...
+综合 / 最新 / 评分 / 热度 / 想看 / 看过
+标签 / 主题 / 角色 / 服装 / 体型 / ...
+↓
+三列海报结果
+```
+
+取消：
+
+- “分类 先选内容类型……”
+- “资源条件 常用条件一屏直达”
+- “排序 常用排序直接切换”
+- 大面积灰色操作卡
+- 主页面上的“重置全部筛选”说明区
+
+筛选维度之间只用受控 `blank_block` 换行，不再用大片灰色分隔带。
+
+### 4. 高级筛选：一次只编辑一个标签组
+
+Test4 高级筛选继续是独立 `simple=true` 页面，但不再一次渲染所有组：
+
+```text
+主题 / 角色 / 服装 / 体型 / 行为 / 玩法 / 月份 / 时长 ...
+↓
+当前组完整标签横向行
+↓
+清空本组 / 完成筛选
+```
+
+- 主题/角色/服装等多选。
+- 月份/时长单选。
+- 完成后 `back(true)` 返回并刷新分类页。
+- 长标签交给 `scroll_button` 原生溢出，不造一整屏箭头列表。
+
+### 5. 排行 / 演员 / 收藏 / 更多独立页面
+
+首页五个绿色入口分别进入独立 `simple=true` 页面：
+
+- `javdb3Filters`
+- `javdb3RankHub`
+- `javdb3ActorHub`
+- `javdb3LibraryHub`
+- `javdb3MoreHub`
+
+主首页不再承担“所有功能都在一个顶栏切换”的职责。
+
+### 6. 更多播放保留图标，但不恢复大 Logo
+
+MissAV / 123AV / Jable：
+
+- 继续使用 Shared Playback `providers()` 的品牌图标。
+- 使用紧凑 `icon_small_3`。
+- 点击仍走 `providerUrl(providerId, code)`。
+- 不改 Provider Resolver。
+
+### 7. Test4 运行与不可变引用
+
+- Base Builder Ref：`2361fbbfc21c540191495b979b30a6828adfe9c1`
+- UI4 Ref：`2de45533bf09e7f7ec2effecfbaddeb92176bbec`
+- UI Asset Ref：`52f6456329113bff98f5124a823009e023272fc2`
+- Entry Ref：`b1372f8deed020a477d58633e86f95cb73ef859c`
+- Shell Ref：`89d0f1ff09d6c963b6b650a62e3e4b9227f674e0`
+- Shell Blob：`ee9841c730cb7cb1bc204fd77c5cffcf4d2d2ec9`
+- Release commit：`808804abbb21e6eba8bb04142fd69e2c6d0d64ff`
+
+静态门禁：
+
+- UI4 通过 V8 `new Function` 语法解析。
+- Local Entry 通过 V8 `new Function` 语法解析。
+- Shell 外层 JSON / `pages` 二次 JSON 回读通过。
+- 页面数 39。
+- Shell 主模块明确引用 Test4 Entry。
+- Test4 主模块不含 Test1/Test2/Test3 UI Overlay 引用。
+
+### 8. 待实机验证
+
+优先只看视觉和高频交互：
+
+1. 首页五个绿色快捷入口是否接近网飞猫视觉。
+2. 大搜索框和频道横排是否舒服。
+3. 首页海报是否能尽快进入首屏。
+4. 分类页 5 条筛选行是否像网飞猫，而不是工具页。
+5. 分类长选项的 `>` 是否自然可用。
+6. 高级筛选是否只显示一个组，返回后结果是否刷新。
+7. 排行/演员/收藏/更多是否独立进入，不再污染首页。
+8. 第三方播放图标和实际播放不能回归。
+
+Stable `3.9.42` / Latest 继续冻结。
 
 ---
 
