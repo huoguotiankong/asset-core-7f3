@@ -2339,6 +2339,31 @@ ListItem.kind / DetailSeed.kind
 - 未知类型自动判型要有优先级和阈值，不能“什么解析器有结果就全部展示”。
 - 详情导航 URL 只携带真正主键；大 cover/desc 可以用短生命周期 DetailSeed 恢复，避免超长 query 和特殊字符污染路由。
 
+### 分类名称不等于媒体类型：Category Taxonomy 与 Media Kind 必须解耦
+
+夜社短剧 Test6 实机确认：站点把“有声”“写真”作为内容栏目名称，但具体条目仍通过视频详情和视频播放器消费。仅凭栏目中文名推断 `audio/photo` 媒体类型会把正确的视频错误送进音频/图片 UI。
+
+推荐模型：
+
+```text
+CategoryGroup
+  id / name / url
+  ↓
+CatalogAdapter
+  ↓
+ListItem.mediaKind
+  video | comic | novel | ...
+  ↓
+Typed Detail Adapter
+```
+
+规则：
+- 分类组 ID 只描述产品导航，不直接充当 `mediaKind`。
+- `mediaKind` 优先来自实机行为、详情结构、播放器/阅读器协议，而不是栏目名称。
+- 同一站点允许多个分类组映射到同一媒体类型，例如：视频/动漫/有声/写真 → video。
+- Renderer 和 Playback/Reader 只看标准 `mediaKind`，不在 UI 层重新根据分类中文名猜。
+- 当用户实机确认栏目行为与名称不一致时，修改 CatalogAdapter 映射，不要在 Detail Adapter 里堆特殊 case。
+
 ### 连载选集：路径中的结构化编号优先于 Anchor 文本
 
 当站点已有 `/play/<contentId>/<line>/<episode>` 一类明确路径时，EpisodeModel 应由路径重建：
