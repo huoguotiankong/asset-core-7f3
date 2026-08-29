@@ -3,29 +3,28 @@
   "id": "yeshe",
   "name": "夜社短剧",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-29 22:58",
+  "updatedAt": "2026-08-29 23:03",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "yeshe-test",
       "name": "夜社短剧",
-      "version": "0.1.0-test.2",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
+      "version": "0.1.0-test.3",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/yeshe/yeshe_remote_test_v3_b10103.txt",
       "mode": "remote",
       "updatedAt": "2026-08-29",
       "recommended": true,
-      "desc": "Test2 根据首轮实机失败重构运行链：修复 hiker://page 参数被百分号编码后未解码的问题；列表解析改为正则 Anchor/Card Adapter；普通 fetch 无法拿到业务 HTML 时自动切 WebView 源码；诊断信息改为实机可见。",
+      "desc": "Test3 是首轮实机恢复版的可交付版本：修复中文/URL 参数百分号编码、加入 direct→WebView HTML 回退和可见诊断；同时通过 fixture 发现并修复 /upload/ 图片被 ads?\\b 误判成广告而导致所有内容卡被过滤的问题。",
       "highlights": [
-        "修复分类标题显示 AI%E7... 与分类 URL 丢失",
-        "分类/详情/搜索跨页参数改为从 MY_URL 显式 decodeURIComponent",
-        "首页列表解析不再依赖 fragile pdfa node，改为正则 Anchor/Card Adapter",
-        "普通 fetch 失败自动尝试 fetchCodeByWebView 获取渲染后 HTML",
-        "首页空数据会显示实际 request stage / transport / HTML 长度",
-        "设置页协议诊断与播放诊断改为 long_text 可见正文",
-        "Test1 冻结不覆盖，Test2 独立 Shell/Bootstrap/Release"
+        "修复 AI%E7... 百分号编码标题与分类 URL 丢失",
+        "首页/分类列表改用正则 Anchor/Card Parser",
+        "普通 fetch 失败才使用 WebView 源码回退",
+        "修复 /upload/ 图片路径被误判为广告的过滤漏洞",
+        "协议/播放诊断内容可直接显示",
+        "Test1/Test2 均保持不可变"
       ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c5ef26fb06a13904b6ce9830a179cacdbfa8cb04/apps/video/yeshe/assets/icon_v1.svg"
     }
