@@ -2317,6 +2317,41 @@ fresh last-good origin
 - 诊断记录 discovery stage、origin、HTTP 状态和 fallback 顺序，不保存 Cookie/Token。
 - 如果用户当前实机已经给出可用域名，可作为 bootstrap seed，但仍必须保留自动发现，避免下一次换域名再次整程序失效。
 
+## 33.8A 多内容站详情页必须先判型，再进入独立 Detail Adapter
+
+夜社短剧 Test5 再次证明：同一站同时存在视频、漫画、写真、小说时，详情页不能把 `article()`、`gallery()`、`episodes()`、`related()` 无条件全部运行。否则视频页会吞进整页导航文本和数百张图片，漫画页也可能误出现视频动作。
+
+推荐：
+
+```text
+ListItem.kind / DetailSeed.kind
+→ VideoDetailAdapter
+→ Comic/PhotoDetailAdapter
+→ NovelDetailAdapter
+→ UnknownAdapter（有限自动判型）
+```
+
+规则：
+- 列表阶段能知道内容类型时，把 `kind` 放进标准 Model；进入详情前缓存 `url/title/cover/desc/kind`。
+- 详情页自己的 `<title>`、`og:image` 只作为 fallback，不能覆盖列表已确认的作品标题和封面。
+- Video Adapter 只解析媒体、标准剧集、必要简介、相关推荐；禁止执行整页正文和图库兜底。
+- Comic/Photo Adapter 只解析图片链和必要元数据；Novel Adapter 只解析章节/正文。
+- 未知类型自动判型要有优先级和阈值，不能“什么解析器有结果就全部展示”。
+- 详情导航 URL 只携带真正主键；大 cover/desc 可以用短生命周期 DetailSeed 恢复，避免超长 query 和特殊字符污染路由。
+
+### 连载选集：路径中的结构化编号优先于 Anchor 文本
+
+当站点已有 `/play/<contentId>/<line>/<episode>` 一类明确路径时，EpisodeModel 应由路径重建：
+
+```text
+contentId + line + episode
+→ 去重
+→ 按 line / episode 排序
+→ UI 标题生成“第N集”
+```
+
+“下一集”“剧情解析”“推荐标题”等 Anchor 文本只属于页面文案，不能直接成为播放器选集标题。只有路径本身没有集数语义时，才退到经过白名单清洗的文本。
+
 ## 33.9 多个小程序可以共享 Shell/SDK，但共享 Runtime 必须显式、版本化、可隔离
 
 “瓜子影视 / 一起刷”可见壳层证明不同产品可以复用同一 `home()/search()` 合约。自己的长期方案应做成：
