@@ -3,21 +3,22 @@
   "channel": "test",
   "id": "yeshe-test",
   "name": "夜社短剧",
-  "version": "0.1.0-test.2",
-  "build": 10102,
+  "version": "0.1.0-test.3",
+  "build": 10103,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.2",
-  "shellRuleVersion": 2026082902,
+  "shellVersion": "1.0.0-test.3",
+  "shellRuleVersion": 2026082903,
   "managerVersion": "2.0.4",
-  "release": "apps/video/yeshe/releases/0.1.0-test.2/release.json",
-  "rule": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
-  "bootstrap": "apps/video/yeshe/bootstrap_test_v2_b10102.js",
+  "release": "apps/video/yeshe/releases/0.1.0-test.3/release.json",
+  "rule": "apps/video/yeshe/yeshe_remote_test_v3_b10103.txt",
+  "bootstrap": "apps/video/yeshe/bootstrap_test_v3_b10103.js",
   "updatedAt": "2026-08-29",
   "status": "active-test-pending-device-validation",
-  "notes": "Real-device Test2 recovery: fixes percent-encoded hiker page parameters, replaces fragile generic list parsing with regex anchor/card parsing, adds direct -> fetchCodeByWebView HTML fallback, and makes protocol/playback diagnostics visible. Test1 remains immutable.",
+  "notes": "Test3 includes Test2 route-decode/WebView/diagnostics recovery and fixes an image noise regex false-positive that treated /upload/ paths as ads, which could discard all real covers/cards. Fixture verified.",
   "previousTest": {
-    "version": "0.1.0-test.1",
-    "build": 10101,
-    "release": "apps/video/yeshe/releases/0.1.0-test.1/release.json"
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/video/yeshe/releases/0.1.0-test.2/release.json",
+    "status": "superseded-before-device-test-by-fixture-found-parser-bug"
   }
 }
