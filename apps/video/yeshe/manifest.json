@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "yeshe",
+  "name": "夜社短剧",
+  "category": "video",
+  "mode": "remote/self-use",
+  "repository": "huoguotiankong/asset-core-7f3",
+  "branch": "main",
+  "source": "https://yeshe.tv/",
+  "gateway": "https://xn--f562sym-ph2mz2penax520c.baitasi.org/",
+  "contentTypes": [
+    "short-drama",
+    "video",
+    "anime",
+    "audio",
+    "comic",
+    "photo",
+    "novel"
+  ],
+  "test": "apps/video/yeshe/test.json",
+  "channels": "apps/video/yeshe/channels.json",
+  "changelog": "apps/video/yeshe/CHANGELOG.md"
+}
