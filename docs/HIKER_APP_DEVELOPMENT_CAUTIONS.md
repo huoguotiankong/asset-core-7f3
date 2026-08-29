@@ -980,3 +980,20 @@ fresh last-good
 - 仓库迁移相关 → REPOSITORY_SPLIT_MIGRATION。
 
 同一个坑发生一次，就必须让以后任何新对话都能查到。
+## 原生选择器：不要手写 `select://` JSON 协议
+
+2026-08-29 JavDB v3 Test5 实机确认：为了做“搜索记录删除/清空”而自行拼接 `select://{...}` URL，在目标海阔版本中会出现：
+
+`error:返回的值无效 (JSEngine#13)`
+
+以后需要单选/操作菜单时优先使用海阔正式 JS 选择器：
+
+`$(options,1,title).select(function(){ ... })`
+
+约束：
+
+- 不自行猜测或拼接 select:// 内部 JSON 格式。
+- select 回调完成修改后必须返回有效海阔 URL，例如 `hiker://empty` 或 `toast://...`。
+- `refreshPage(false)` 只是副作用调用，不能把它自身的返回值当 URL 返回。
+- 需要删除单条、切换排序、选择线路等低频动作，优先原生 select，而不是再造一整页按钮。
+- 实机验证选择器回调；JSEngine 对无效返回值比普通 JS 语法检查更严格。
