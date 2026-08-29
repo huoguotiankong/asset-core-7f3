@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "yeshe-test",
+  "name": "夜社短剧",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "f90c745039433bcebb3a65803566096977a981e3",
+  "baseStable": null,
+  "baseTest": {
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/yeshe/releases/0.1.0-test.3/release.json"
+  },
+  "modules": [
+    {
+      "name": "protocol",
+      "path": "apps/video/yeshe/releases/0.1.0-test.3/protocol.js",
+      "baseVersion": "0.1.0-test.3"
+    },
+    {
+      "name": "provider",
+      "path": "apps/video/yeshe/releases/0.1.0-test.1/provider.js",
+      "baseVersion": "0.1.0-test.1"
+    },
+    {
+      "name": "playback",
+      "path": "apps/video/yeshe/releases/0.1.0-test.1/playback.js",
+      "baseVersion": "0.1.0-test.1"
+    },
+    {
+      "name": "runtime",
+      "path": "apps/video/yeshe/releases/0.1.0-test.4/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "YesheRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.4"
+  },
+  "notes": "Real-device Test4: restore rule=&simple=true for all internal hiker pages because Test1 proved this shell contract opens subpages while Test3 explicit rule title caused cover/category click failures; reduce card navigation payload to url/title only; replace oversized pic_1_full hero with compact movie_1_left_pic brand card."
+}
