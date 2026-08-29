@@ -6,9 +6,9 @@
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.45-test.4 / Build2026082901`。
-- Test Shell：`cloud/javdb/v3.9.45-test.4/javdb_v3.9.45_test4_netflxcat.txt`，rule version `2026082901`。
-- Test Release：`apps/video/javdb/releases/3.9.45-test.4/release.json`。
+- Test：`3.9.45-test.5 / Build2026082902`。
+- Test Shell：`cloud/javdb/v3.9.45-test.5/javdb_v3.9.45_test5_netflxcat.txt`，rule version `2026082902`。
+- Test Release：`apps/video/javdb/releases/3.9.45-test.5/release.json`。
 - Test 基础 Runtime：继续复用已完成基础实机验证的 `3.9.44-test.1 / Build2026082501` Local-First bundle，不重写 Stable 协议/API/账号/播放底层。
 - Previous UI Test：`3.9.45-test.3 / Build2026082603`，实机确认整体视觉继续偏工具化、难用，已被 Clean UI Reset 取代。\n- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
 - Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已完成第一轮完整实机截图审计。
@@ -18,6 +18,51 @@
 
 ---
 
+## 2026-08-29 · 3.9.45-test.5 / Build2026082902 · 标签语义、排行密度、独立搜索与原站数据补全
+
+### 实机结论
+
+Test4 的大方向已经回到网飞猫式 Catalog，但用户继续确认四类问题：
+
+1. 标签分类语义错误：月份、时长被塞进“标签”分类；同时标签类别和标签值没有清楚分层。
+2. 排行榜影片卡密度不合适，要求影片一行 2 部，演员一行 3 位。
+3. 首页搜索应先进入独立搜索页面；搜索历史必须可删除。
+4. UI 简化不能以删功能/删数据为代价，JavDB 原站资讯、系列、片商、导演、TOP250、热播、演员月榜以及账号想看/看过/收藏/清单/近期浏览都必须保留入口。
+
+### Test5 修改
+
+- 月份、时长从“标签”中拆出，成为独立筛选维度。
+- 标签仅保留真实语义组：主题、角色、服装、体型、行为、玩法、类别等。
+- 标签页先选“标签组”，下一行直接显示该组完整标签值；不再对标签数组做 slice 截断。
+- 影片排行榜改用 movie_2 两列；演员月榜与演员页固定 movie_3 三列。
+- 排行页恢复：TOP250 / 热播 / 有码 / 无码 / 欧美 / FC2 / 演员月榜。
+- 首页搜索改为可点击假搜索框，进入 javdb3SearchHub 后才显示真正 input。
+- SearchHub 保留最近搜索，可点击复搜；新增原生 select:// 管理弹窗，可删除单条或清空全部。
+- SearchHub 同时恢复演员 / 系列 / 片商 / 导演资料入口。
+- “更多”恢复：资讯、系列、片商、导演、账号中心、想看、看过、账号收藏、我的清单、近期浏览；磁力/字幕/网盘等增强工具继续保留。
+- 主要任务继续使用 simple=true 独立页，保留系统标题栏和右上角原生页面菜单。
+
+### 当前 Test5 不可变引用
+
+- UI5c Ref：0b133bebaedaf2577f42ae035e4a2bda14cfb349
+- Entry Ref：671c67e15376f7f8f5072f1acfc27062838a018e
+- Shell Ref：67faf7302e8c5f080c6fc900abb1cc5ede17d214
+- Shell Blob：ffc87bec8292f8306563f0e7b228f67d9d701bad
+- Release commit：1de5c9440a0dc2c652626875be9a5c5ee75783e5
+
+### 待实机验证
+
+1. 筛选页月份/时长是否已从标签分类消失并各自独立。
+2. 标签组与标签值是否对应正确，右侧原生 > 弹层不再丢类别。
+3. 影片排行榜是否稳定两列，演员榜/演员页是否稳定三列。
+4. 首页搜索是否只负责进入独立 SearchHub。
+5. SearchHub 最近搜索的单条删除和清空全部是否可用。
+6. 资讯 / 系列 / 片商 / 导演 / 账号数据入口是否都能打开。
+7. 原详情、评论、磁链、VIP/预览、第三方播放不能因 UI5 回归。
+
+Stable 3.9.42 / Latest 继续冻结。
+
+---
 ## 2026-08-29 · 3.9.45-test.4 / Build2026082901 · Clean NetflxCat UI Reset
 
 ### 1. 实机结论：前三轮 UI 方向失败，停止继续叠补丁
