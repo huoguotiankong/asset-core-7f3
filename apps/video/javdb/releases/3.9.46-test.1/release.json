@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.46-test.1",
+  "build": 2026082905,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "baseProductUi": {
+    "version": "3.9.45-test.7",
+    "build": 2026082904,
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "sharedPlaybackStable": {
+    "version": "1.0.0-test.4",
+    "build": 10004,
+    "changed": false
+  },
+  "sharedPlaybackTest": {
+    "version": "1.1.0-test.1",
+    "build": 11001,
+    "ref": "8a8a3ead9dc234bb26bd9251907ae2794a0e65c5",
+    "path": "shared/jav-playback/releases/1.1.0-test.1/upgrade.js"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.46-test.1/local_entry.js",
+    "ref": "a4ed0041665583bafb01287d52217eb62742e2d1",
+    "blob": "e33c54de6940ba2e6d48979fca9e4547122044de"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.46-test.1/javdb_v3.9.46_test1_playback.txt",
+    "blob": "7026d2f059e1e90d752a9294f600ecec33d048b9",
+    "ruleVersion": 2026082905
+  },
+  "providers": [
+    "MissAV",
+    "123AV",
+    "Jable",
+    "AV01",
+    "TKTUBE",
+    "JavGuru"
+  ],
+  "status": "active-test-pending-device-validation",
+  "stableChanged": false,
+  "latestChanged": false,
+  "validation": [
+    "Old-provider regression: MissAV / 123AV / Jable",
+    "New-provider device playback: AV01 / TKTUBE / JavGuru",
+    "At least one FC2 code",
+    "HLS headers/child request/progress and multi-line array alignment"
+  ],
+  "updatedAt": "2026-08-29"
+}

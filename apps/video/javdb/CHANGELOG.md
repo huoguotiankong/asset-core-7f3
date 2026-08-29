@@ -1,5 +1,32 @@
 # JavDB v3 Changelog
 
+## 3.9.46-test.1 / Build 2026082905 — 2026-08-29
+
+状态：**JAV 第三方外链播放专项 Test；等待海阔实机逐站验证，禁止直接晋级 Stable。**
+
+### 本次修改边界
+- 继续使用 Stable 3.9.42、3.9.44-test.1 Local-First Runtime 和 3.9.45-test.7 Product UI。
+- 只叠加 Shared JAV Playback 1.1.0-test.1；不重写 JavDB API、详情、账号、收藏、磁链或 UI7。
+- Stable 3.9.42、Latest 与 Shared Playback Stable 1.0.0-test.4 均保持不变。
+
+### 第三方播放 Provider
+- Provider 从 **MissAV / 123AV / Jable** 扩展为 **MissAV / 123AV / Jable / AV01 / TKTUBE / JavGuru**。
+- **MissAV**：保留 Test4 解析链；增加 last-good 域名优先、`missav.to` 回退和历史 embed-id HLS 兜底。
+- **123AV / Jable**：本轮冻结 1.0.0-test.4 已验证解析主体，避免扩源时破坏原有可播放链。
+- **AV01**：从 `av01.tv/<番号>` 跟随到真实内容页，允许内容域变化；HTML HLS → 页面脚本 Base64/HLS → browser-assisted。
+- **TKTUBE**：自包含 KVS `flashvars` 解析，不再依赖其它海阔规则。
+- **JavGuru**：结构化搜索 → 普通 HTML → WebView 媒体解析 → browser-assisted。
+- **NJAV 不新增**：当前 `njav.tv` 明确迁移到 123AV，单独增加只会重复。
+- **SupJav 暂缓**：当前普通抓取受 Cloudflare 403 阻断；禁止硬编码旧 `cf_clearance` 或外部小程序依赖。
+
+### 运行与回归
+- Local-First 入口固定 Ref：`a4ed0041665583bafb01287d52217eb62742e2d1`；Playback Upgrade 固定 Ref：`8a8a3ead9dc234bb26bd9251907ae2794a0e65c5`。
+- 第三方解析仍只在点击对应 Provider 时执行，不在详情首屏并发探测全部站点。
+- 实机先回归 MissAV / 123AV / Jable，再验证 AV01 / TKTUBE / JavGuru；至少追加一个 FC2 番号。
+- 检查起播、时长、进度、HLS 子请求 headers，以及多线路 `urls / names / headers` 对齐。
+- 单站失败只新建后续 Playback Test 修复，不覆盖已发布版本。
+
+
 > **程序级恢复入口。** 2026-08-25 Local-First 迁移前的 Stable 3.9.42 / Test 3.9.43 / Local 3.9.41 完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell / Release / 源码 > 本文件 > registry / manifest > 历史归档。
 
 ## 当前活动边界

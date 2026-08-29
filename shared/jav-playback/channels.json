@@ -1,21 +1,32 @@
 {
   "schema": 1,
   "name": "JAV Playback SDK",
-  "updatedAt": "2026-08-23 01:34",
+  "updatedAt": "2026-08-29 23:55",
   "stable": {
     "version": "1.0.0-test.4",
     "build": 10004,
     "path": "releases/1.0.0-test.4/index.js",
     "status": "promoted-by-user",
-    "providers": ["MissAV", "123AV", "Jable"],
+    "providers": [
+      "MissAV",
+      "123AV",
+      "Jable"
+    ],
     "notes": "Pinned immutable release for Stable callers. 123AV/Jable retain the device-confirmed playable logic; 123AV uses the repository icon. MissAV uses the search→real detail→packed source→master HLS→highest-quality chain from Test5 promotion. Future SDK tests must move only the test pointer and must not change this stable pointer in place."
   },
   "test": {
-    "version": "1.0.0-test.4",
-    "build": 10004,
-    "path": "releases/1.0.0-test.4/index.js",
-    "status": "promoted-to-stable-baseline",
-    "providers": ["MissAV", "123AV", "Jable"],
-    "notes": "Current test baseline is identical to the promoted stable SDK. The next provider change must create a new immutable test release."
+    "version": "1.1.0-test.1",
+    "build": 11001,
+    "path": "releases/1.1.0-test.1/index.js",
+    "status": "active-test-pending-device-validation",
+    "providers": [
+      "MissAV",
+      "123AV",
+      "Jable",
+      "AV01",
+      "TKTUBE",
+      "JavGuru"
+    ],
+    "notes": "Playback expansion test. Stable stays pinned to 1.0.0-test.4. Adds AV01/TKTUBE/JavGuru, improves MissAV domain rotation, and freezes the device-confirmed 123AV/Jable resolver bodies."
   }
 }

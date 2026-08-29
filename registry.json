@@ -333,14 +333,14 @@
       "latest": "apps/video/javdb/latest.json",
       "stableRelease": "apps/video/javdb/releases/3.9.42/release.json",
       "test": "apps/video/javdb/test.json",
-      "testVersion": "3.9.45-test.7",
-      "testBuild": 2026082904,
-      "testRule": "cloud/javdb/v3.9.45-test.7/javdb_v3.9.45_test7_netflxcat.txt",
-      "testRelease": "apps/video/javdb/releases/3.9.45-test.7/release.json",
+      "testVersion": "3.9.46-test.1",
+      "testBuild": 2026082905,
+      "testRule": "cloud/javdb/v3.9.46-test.1/javdb_v3.9.46_test1_playback.txt",
+      "testRelease": "apps/video/javdb/releases/3.9.46-test.1/release.json",
       "channels": "apps/video/javdb/channels.json",
       "changelog": "apps/video/javdb/CHANGELOG.md",
-      "migration": "stable-3942-localfirst-clean-netflxcat-ui-test-3945t7-pending-device-validation",
-      "testDelivery": "local-first-clean-single-ui-overlay-over-3.9.44-runtime"
+      "migration": "stable-3942-localfirst-clean-ui7-playback-3946t1-pending-device-validation",
+      "testDelivery": "local-first-ui7-shared-playback-11001-overlay"
     },
     {
       "id": "51chigua",
@@ -499,5 +499,6 @@
       "migration": "test5-typed-detail-strict-episodes-filter-category-discovery"
     }
   ],
-  "legacyManifest": "manifest.json"
+  "legacyManifest": "manifest.json",
+  "updatedAt": "2026-08-29"
 }
