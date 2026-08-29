@@ -2385,3 +2385,14 @@ Provider result
 ```
 
 这样协议字段、UI 组件和缓存 schema 可以独立演进；只有非常短生命周期的 page render cache 才考虑缓存 Item。
+
+
+### 第三方播放 Provider 扩展与回归准则（2026-08-29）
+
+- **先确认 Provider 身份，再增加入口**：域名迁移、镜像、别名若最终进入同一站点或同一播放后端，不应伪装成多个 Provider。先记录 canonical Provider，避免“按钮变多但真实线路没有增加”。
+- **已实机验证的 Provider 默认冻结解析主体**：扩源时优先通过新 Test Overlay 增加 Provider；没有当前实机失败证据，不顺手重写已经能播放的解析器。
+- **动态域名优先 last-good 缓存**：易换域名站点优先尝试最近一次成功域名，再走候选域名；成功后回写 last-good，避免每次点击都串行探测所有域名。
+- **Provider 尽量自包含**：播放适配器不得依赖用户可能未安装的另一个海阔小程序；不得把短期 Cookie、`cf_clearance`、会话 Token 当长期源码常量。
+- **播放降级顺序统一**：结构化 HTML/API → 页面脚本/播放器对象 → WebView 获取媒体 → browser-assisted `video://` 最终兜底。只有明确拿到真实媒体 URL 才称为结构化直连成功。
+- **一个 Provider 一条故障链**：诊断至少区分 search / detail / player / master / handoff；Provider 私有失败不得阻塞或污染其它已稳定站点。
+- **发布必须旧站回归 + 新站验证**：同番号先回归旧 Provider，再测新增 Provider；至少追加一个 FC2/特殊番号，并检查番号归一化、播放器 Header、HLS 子请求、持续进度和多线路 `urls / names / headers` 一一对应。
