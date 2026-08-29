@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.4",
+  "build": 2026082901,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "previousUiTests": [
+    {
+      "version": "3.9.45-test.1",
+      "status": "superseded-ui"
+    },
+    {
+      "version": "3.9.45-test.2",
+      "status": "superseded-ui"
+    },
+    {
+      "version": "3.9.45-test.3",
+      "status": "superseded-ui"
+    }
+  ],
+  "productUi": {
+    "strategy": "clean-reset",
+    "overlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.4/product_ui_patch4.js",
+      "ref": "2de45533bf09e7f7ec2effecfbaddeb92176bbec"
+    },
+    "assets": {
+      "path": "apps/video/javdb/releases/3.9.45-test.4/assets/",
+      "ref": "52f6456329113bff98f5124a823009e023272fc2"
+    },
+    "scope": [
+      "home",
+      "category",
+      "rank",
+      "actor",
+      "library",
+      "more",
+      "external-play"
+    ]
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.4/local_entry.js",
+    "ref": "b1372f8deed020a477d58633e86f95cb73ef859c",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082901/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.4/javdb_v3.9.45_test4_netflxcat.txt",
+    "ref": "89d0f1ff09d6c963b6b650a62e3e4b9227f674e0",
+    "blob": "ee9841c730cb7cb1bc204fd77c5cffcf4d2d2ec9",
+    "ruleVersion": 2026082901,
+    "pages": 39
+  },
+  "deviceFindingsFromTest3": [
+    "The iterative Test1-Test3 UI overlays became visually heavier and less usable than Stable.",
+    "The desired product direction is explicitly the NetflxCat visual language shown in current device screenshots.",
+    "The home page should prioritize green circular shortcuts, a large search box, compact horizontal content tabs and poster content instead of explanatory sections and tool-style blocks.",
+    "The category page should use one compact horizontal filter row per dimension and immediately show posters beneath, avoiding stacked section descriptions and filter-control walls."
+  ],
+  "changes": {
+    "reset": "Test4 stops loading Test1/Test2/Test3 UI overlays. Only the validated 3.9.44 Local-First Base Runtime and a single UI4 overlay participate in rendering.",
+    "home": "Five green circular shortcuts (Filter/Ranking/Actors/Favorites/More), large search input, compact content tabs and immediate three-column poster feed.",
+    "category": "NetflxCat-style compact rows: content type, resource, year, sort and tag groups. Long rows intentionally use Hiker scroll_button overflow.",
+    "advanced": "Only one advanced tag group is edited at a time; back(true) returns to and refreshes the catalog.",
+    "rank": "Independent ranking page with compact type/period rows and metadata-oriented ranking cards.",
+    "actor": "Independent actor page with compact tabs and three-column actor cards.",
+    "library": "Independent local/account library page, no top-level gray control wall.",
+    "more": "Low-frequency tools use simple text_icon rows rather than large gray button matrices.",
+    "playback": "Third-party providers retain compact icons and existing Shared Playback providerUrl/resolve contracts."
+  },
+  "delivery": {
+    "mode": "local-first-clean-single-ui-overlay-over-3.9.44-runtime",
+    "normalStartupForCode": "local Entry + local UI4 + validated 3.9.44 local Runtime",
+    "networkOnNormalStartupForCode": false,
+    "stableChanged": false
+  },
+  "staticGate": [
+    "UI4 parsed successfully in V8 new Function syntax check.",
+    "local_entry.js parsed successfully in V8 new Function syntax check.",
+    "shell outer home_rule JSON and nested pages JSON re-parsed successfully.",
+    "shell contains 39 pages and immutable Test4 Entry ref.",
+    "shell module contains no Test1/Test2/Test3 UI overlay references."
+  ],
+  "device": "pending Test4 NetflxCat-style screenshot validation",
+  "status": "active-test-clean-netflxcat-ui-reset-pending-device-validation",
+  "updatedAt": "2026-08-29",
+  "notes": "This is a visual reset based on the user's current comparison against the NetflxCat reference screenshots. Stable 3.9.42 and Latest remain untouched."
+}
