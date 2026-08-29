@@ -3,21 +3,21 @@
   "channel": "test",
   "id": "yeshe-test",
   "name": "夜社短剧",
-  "version": "0.1.0-test.5",
-  "build": 10105,
+  "version": "0.1.0-test.6",
+  "build": 10106,
   "mode": "remote",
-  "shellVersion": "1.0.0-test.5",
-  "shellRuleVersion": 2026082905,
+  "shellVersion": "1.0.0-test.6",
+  "shellRuleVersion": 2026082906,
   "managerVersion": "2.0.4",
-  "release": "apps/video/yeshe/releases/0.1.0-test.5/release.json",
-  "rule": "apps/video/yeshe/yeshe_remote_test_v5_b10105.txt",
-  "bootstrap": "apps/video/yeshe/bootstrap_test_v5_b10105.js",
+  "release": "apps/video/yeshe/releases/0.1.0-test.6/release.json",
+  "rule": "apps/video/yeshe/yeshe_remote_test_v6_b10106.txt",
+  "bootstrap": "apps/video/yeshe/bootstrap_test_v6_b10106.js",
   "updatedAt": "2026-08-29",
   "status": "active-test-pending-device-validation",
-  "notes": "Test5 rebuilds detail parsing by content type, strictly reconstructs episodes from /play/id/line/episode, caches card title/cover/type before entering detail, merges root/type/filter navigation for category mapping, and disables unresolved categories instead of opening dead pages.",
+  "notes": "Test6 corrects category-label/media-type mismatch from real-device feedback: audio and photo groups use video playback; comic remains image content and novel remains text. Comic detail removes inline giant previews and opens a dedicated vertical reader page.",
   "previousTest": {
-    "version": "0.1.0-test.4",
-    "build": 10104,
-    "release": "apps/video/yeshe/releases/0.1.0-test.4/release.json"
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/video/yeshe/releases/0.1.0-test.5/release.json"
   }
 }
