@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608292231",
+  "revision": "202608292259",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-29 22:31",
+  "updated": "2026-08-29 22:59",
   "taxonomy": {
     "categories": [
       {
@@ -591,9 +591,9 @@
     {
       "id": "yeshe",
       "name": "夜社短剧",
-      "version": "Test 0.1.0-test.1",
-      "desc": "全新 Test1：夜蓝+品牌红原生 UI，短剧首页与全站分类中心覆盖视频/动漫/有声/漫画/写真/小说；支持动态域名恢复、搜索、选集/图集/正文、本地收藏历史、网站登录桥和直链优先播放。等待实机验证。",
-      "path": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
+      "version": "Test 0.1.0-test.2",
+      "desc": "Test2 根据首轮实机失败修复：跨页参数显式 URLDecode；列表改用正则 Anchor/Card Parser；普通 fetch 失败自动使用 WebView 源码；协议/播放诊断改为可见。继续等待首页、分类、搜索与播放实机回归。",
+      "path": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
       "entryType": "channel-group",
       "channelsPath": "apps/video/yeshe/channels.json",
       "category": "video",
