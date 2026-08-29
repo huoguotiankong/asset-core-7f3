@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.45-test.5",
+  "build": 2026082902,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "release": "apps/video/javdb/releases/3.9.42/release.json"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "release": "apps/video/javdb/releases/3.9.44-test.1/release.json",
+    "status": "basic-device-validated-2026-08-25"
+  },
+  "previousUiTest": {
+    "version": "3.9.45-test.4",
+    "build": 2026082901,
+    "status": "device-reviewed-2026-08-29"
+  },
+  "productUi": {
+    "strategy": "single-clean-overlay-with-test5-usability-fixes",
+    "overlay": {
+      "path": "apps/video/javdb/releases/3.9.45-test.5/product_ui_patch5c.js",
+      "ref": "0b133bebaedaf2577f42ae035e4a2bda14cfb349"
+    },
+    "assets": {
+      "path": "apps/video/javdb/releases/3.9.45-test.4/assets/",
+      "ref": "52f6456329113bff98f5124a823009e023272fc2"
+    }
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.45-test.5/local_entry2.js",
+    "ref": "671c67e15376f7f8f5072f1acfc27062838a018e",
+    "localPath": "hiker://files/rules/asset-core-local/javdb-v3-test/b2026082902/local_entry.js"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.45-test.5/javdb_v3.9.45_test5_netflxcat.txt",
+    "ref": "67faf7302e8c5f080c6fc900abb1cc5ede17d214",
+    "blob": "ffc87bec8292f8306563f0e7b228f67d9d701bad",
+    "ruleVersion": 2026082902,
+    "pages": 41
+  },
+  "deviceFindingsFromTest4": [
+    "Tag taxonomy was wrong because month and duration were presented inside the generic Tag selector.",
+    "Movie ranking cards should be two columns per row; actor ranking and actor pages should be three columns per row.",
+    "Home search must open a dedicated Search page before typing/searching.",
+    "Search history must be manageable and deletable.",
+    "Independent simple=true pages and native selector/menu interactions should be used more often for low-frequency actions.",
+    "UI simplification must not remove original JavDB site functions or data access."
+  ],
+  "changes": {
+    "filters": "Month and duration are independent filter rows. The Tag row contains only real semantic tag groups. A second tag-value row shows the complete values for the selected tag group; no tag slicing/truncation is applied.",
+    "ranking": "Movie rankings use movie_2; actor monthly ranking uses movie_3 and is restored as a first-class ranking tab.",
+    "search": "Home uses a clickable faux search bar that opens javdb3SearchHub. SearchHub contains the real input, recent searches, per-record deletion/clear-all through native select:// management, plus actor/series/maker/director lookup entries.",
+    "dataCompleteness": "More restores visible access to JavDB news, series, makers, directors, account center, want-to-watch, watched, account favorites, lists and recent browsing, alongside the existing magnet/subtitle/cloud tools.",
+    "nativeUi": "All major task pages remain independent simple=true pages so the system title bar and native page menu behavior remain available."
+  },
+  "delivery": {
+    "mode": "local-first-clean-single-ui-overlay-over-3.9.44-runtime",
+    "networkOnNormalStartupForCode": false,
+    "stableChanged": false
+  },
+  "staticGate": [
+    "product_ui_patch5c.js passed V8 new Function syntax parsing.",
+    "local_entry2.js passed V8 new Function syntax parsing.",
+    "shell outer JSON and nested pages JSON re-parsed successfully.",
+    "shell has 41 pages and contains SearchHub and Articles routes.",
+    "shell RankHub routes to JDB.rankHub5() and MoreHub routes to JDB.moreHub5().",
+    "shell main module uses immutable Test5 Entry ref and no Test4 Entry ref."
+  ],
+  "device": "pending Test5 screenshot and interaction validation",
+  "status": "active-test-netflxcat-usability-data-completeness-pending-device-validation",
+  "updatedAt": "2026-08-29"
+}
