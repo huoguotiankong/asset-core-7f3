@@ -3,29 +3,29 @@
   "id": "yeshe",
   "name": "夜社短剧",
   "versionPolicy": "remote-test-v1",
-  "updatedAt": "2026-08-29 22:28",
+  "updatedAt": "2026-08-29 22:58",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "yeshe-test",
       "name": "夜社短剧",
-      "version": "0.1.0-test.1",
-      "build": 10101,
-      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
-      "path": "apps/video/yeshe/yeshe_remote_test_v1_b10101.txt",
+      "version": "0.1.0-test.2",
+      "build": 10102,
+      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
+      "path": "apps/video/yeshe/yeshe_remote_test_v2_b10102.txt",
       "mode": "remote",
       "updatedAt": "2026-08-29",
       "recommended": true,
-      "desc": "夜社短剧全新 Test1：重做夜蓝+品牌红原生 UI，首页聚焦短剧，分类中心覆盖视频/动漫/有声/漫画/写真/小说；加入动态域名恢复、搜索、详情/选集、直链优先播放、本地收藏历史与网站登录桥。",
+      "desc": "Test2 根据首轮实机失败重构运行链：修复 hiker://page 参数被百分号编码后未解码的问题；列表解析改为正则 Anchor/Card Adapter；普通 fetch 无法拿到业务 HTML 时自动切 WebView 源码；诊断信息改为实机可见。",
       "highlights": [
-        "短剧首页：Hero + 搜索 + 高频入口 + 九类短剧 Tab + 三列内容流",
-        "全站分类：视频/动漫/有声/漫画/写真/小说动态映射当前网站导航",
-        "动态域名：last-good 优先，失败后通过 ysurl.win 与当前 gateway 恢复",
-        "详情：选集/多线路/图集/正文/章节/相关推荐",
-        "播放：媒体标签/player JSON/iframe 结构化解析优先，失败再嗅探",
-        "本地收藏、浏览历史、搜索历史和网站登录会话桥",
-        "首版仅 Test，等待海阔实机 UI/分类/搜索/播放回归"
+        "修复分类标题显示 AI%E7... 与分类 URL 丢失",
+        "分类/详情/搜索跨页参数改为从 MY_URL 显式 decodeURIComponent",
+        "首页列表解析不再依赖 fragile pdfa node，改为正则 Anchor/Card Adapter",
+        "普通 fetch 失败自动尝试 fetchCodeByWebView 获取渲染后 HTML",
+        "首页空数据会显示实际 request stage / transport / HTML 长度",
+        "设置页协议诊断与播放诊断改为 long_text 可见正文",
+        "Test1 冻结不覆盖，Test2 独立 Shell/Bootstrap/Release"
       ],
       "icon": "https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c5ef26fb06a13904b6ce9830a179cacdbfa8cb04/apps/video/yeshe/assets/icon_v1.svg"
     }
