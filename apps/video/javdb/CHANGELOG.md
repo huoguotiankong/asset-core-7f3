@@ -6,9 +6,9 @@
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.45-test.5 / Build2026082902`。
-- Test Shell：`cloud/javdb/v3.9.45-test.5/javdb_v3.9.45_test5_netflxcat.txt`，rule version `2026082902`。
-- Test Release：`apps/video/javdb/releases/3.9.45-test.5/release.json`。
+- Test：`3.9.45-test.6 / Build2026082903`。
+- Test Shell：`cloud/javdb/v3.9.45-test.6/javdb_v3.9.45_test6_netflxcat.txt`，rule version `2026082903`。
+- Test Release：`apps/video/javdb/releases/3.9.45-test.6/release.json`。
 - Test 基础 Runtime：继续复用已完成基础实机验证的 `3.9.44-test.1 / Build2026082501` Local-First bundle，不重写 Stable 协议/API/账号/播放底层。
 - Previous UI Test：`3.9.45-test.3 / Build2026082603`，实机确认整体视觉继续偏工具化、难用，已被 Clean UI Reset 取代。\n- Previous UI Test：`3.9.45-test.2 / Build2026082602`，2026-08-26 已收到第二轮实机截图并完成第三阶段问题归因。
 - Previous UI Test：`3.9.45-test.1 / Build2026082601`，2026-08-26 已完成第一轮完整实机截图审计。
@@ -18,6 +18,45 @@
 
 ---
 
+## 2026-08-29 · 3.9.45-test.6 / Build2026082903 · 搜索记录、筛选分层、资讯与播放页修复
+
+### Test5 实机确认
+
+1. 搜索记录“清空/删除”使用手写 select:// JSON，在海阔实机触发 `error:返回的值无效 (JSEngine#13)`。
+2. “资讯”入口存在但没有稳定展示真实 JavDB 资讯数据。
+3. 筛选页虽然已经拆出月份/时长，但“标签 / 主题 / 标签值”的视觉角色仍混乱，不够接近网飞猫一行一个维度的结构。
+4. 更多播放页把 `JavDB VIP` 与 `MissAV` 排在同一行，官方播放与第三方播放的语义边界不清晰。
+
+### Test6 修改
+
+- 搜索历史管理改为标准 `$(options,1,title).select(...)`；删除单条和清空全部后直接刷新搜索页，不再手写 select:// URL。
+- 资源 / 年份 / 月份 / 时长改成固定绿色维度标签，后面明确提供“全部”和具体选项。
+- 标签分为两层：第一行 `标签 → 主题 / 角色 / 服装 / 体型 / 行为 / 玩法 / 类别`；第二行以当前组名为绿色标签并显示该组完整值。
+- 标签组按常用语义顺序排序；服务端完整标签值继续保留，不做 slice 截断。
+- 资讯页直接使用 JavDB 公共签名接口 `GET /api/v1/articles`。
+- 资讯详情直接使用 `GET /api/v1/articles/:id`，保留标题、封面、作者、分类、日期、正文文本、正文图片、原文链接与相关影片。
+- 更多播放页固定拆成 `JavDB 播放`、`第三方播放`、`JavDB 官方磁链` 三个区块；官方 VIP/预览与 MissAV/123AV/Jable 不再同行。
+- Stable 3.9.42 的详情、评论、磁链、账号和第三方 Provider Resolver 不重写。
+
+### Test6 不可变引用
+
+- UI6 Ref：`25397e148fbf3b5874a9ed4ee6dee504b256ca8f`
+- Entry Ref：`e5f5c82ffefb04c1c13eef603c9690c4e9f6a8ad`
+- Shell Ref：`aaa6e9509c4642e4cc3a21511f229850f65da91b`
+- Shell Blob：`5e5c32bd9b5fef1653ee478553006a9eeb5ea89e`
+- Release commit：`10ffdf630cef6725f164bfbdab2db52c9cd94a5a`
+
+### 待实机验证
+
+1. 搜索历史单条删除和清空全部是否不再报 JSEngine#13。
+2. 筛选页标签组/标签值是否更清楚，`资源/年份/月/时长` 是否都能正常清到“全部”。
+3. 资讯列表是否真实返回 JavDB 文章，进入详情后正文/图片/相关影片是否正常。
+4. 更多播放页官方区和第三方区是否彻底分开。
+5. MissAV / 123AV / Jable 实际播放、JavDB VIP/预览和官方磁链不能回归。
+
+Stable `3.9.42` / Latest 继续冻结。
+
+---
 ## 2026-08-29 · 3.9.45-test.5 / Build2026082902 · 标签语义、排行密度、独立搜索与原站数据补全
 
 ### 实机结论
