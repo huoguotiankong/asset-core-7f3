@@ -333,13 +333,13 @@
       "latest": "apps/video/javdb/latest.json",
       "stableRelease": "apps/video/javdb/releases/3.9.42/release.json",
       "test": "apps/video/javdb/test.json",
-      "testVersion": "3.9.45-test.6",
-      "testBuild": 2026082903,
-      "testRule": "cloud/javdb/v3.9.45-test.6/javdb_v3.9.45_test6_netflxcat.txt",
-      "testRelease": "apps/video/javdb/releases/3.9.45-test.6/release.json",
+      "testVersion": "3.9.45-test.7",
+      "testBuild": 2026082904,
+      "testRule": "cloud/javdb/v3.9.45-test.7/javdb_v3.9.45_test7_netflxcat.txt",
+      "testRelease": "apps/video/javdb/releases/3.9.45-test.7/release.json",
       "channels": "apps/video/javdb/channels.json",
       "changelog": "apps/video/javdb/CHANGELOG.md",
-      "migration": "stable-3942-localfirst-clean-netflxcat-ui-test-3945t6-pending-device-validation",
+      "migration": "stable-3942-localfirst-clean-netflxcat-ui-test-3945t7-pending-device-validation",
       "testDelivery": "local-first-clean-single-ui-overlay-over-3.9.44-runtime"
     },
     {
