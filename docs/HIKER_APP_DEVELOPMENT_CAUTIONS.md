@@ -571,6 +571,14 @@ Renderer 只调用 ImageAdapter。
 ## 57. 首页不要无脑拉原图
 首页 thumbnail；详情高分；Reader 原图。
 
+## 57A. 图片噪声正则禁止用裸 `ad(s)?\\b` 扫完整 URL
+夜社短剧 Test2 fixture 发现：`/upload/2026/a.jpg` 中单词 `upload` 以 `ad` 结尾，后面紧跟 `/`，因此裸正则 `ads?\\b` 会把正常上传目录误判为广告路径，导致封面被过滤，进一步让整张内容卡消失。
+
+固定规则：
+- 广告过滤必须匹配明确路径段/域名，例如 `/(ad|ads)/`、`adserver`、已知广告 host；不要对整条 URL 搜索裸 `ad\\b`。
+- 新增图片过滤正则时必须至少用 `/upload/`、`/download/`、`/avatar/`、真实广告 URL 做正反 fixture。
+- “列表 HTML 有内容但所有卡片都没封面/全被过滤”时，除了查 DOM Parser，也要查 Image Noise Filter 是否误杀。
+
 ## 58. 图片失败分阶段诊断
 至少 URL_FIELD_EMPTY / REQUEST_FAIL / HEADER_FAIL / UNKNOWN_FORMAT / DECRYPT_FAIL / STREAM_FAIL / CACHE_FAIL。
 
