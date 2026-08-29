@@ -2,6 +2,47 @@
 
 > 程序级长期技术记忆。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 全局文档。未实机确认的内容明确标记“待验证”。
 
+## 2026-08-29 · 0.1.0-test.6 / Build10106 · 媒体类型语义修正 + 漫画 Reader 拆分
+
+### Test5 实机结果
+- 用户确认站点分类名称不能直接等同于媒体类型：
+  - “有声”分类实际仍按视频详情/视频播放器播放。
+  - “写真”分类实际仍按视频详情/视频播放器播放。
+- Test5 把 `audio` 和 `photo` 当成独立媒体类型，因此写真进入了图片 Gallery，出现“查看全部图片 · 37张”等错误交互。
+- 用户同时确认漫画二级详情与图片页面体验仍有问题。Test5 在漫画详情页直接塞 3 张 `pic_1_full` 大预览，导致详情被图片撑得过长；图片阅读继续依赖 Gallery 式入口，不符合漫画连续阅读任务。
+
+### Test6 产品/架构修正
+1. **Category Group 与 Media Kind 分离**
+   - 分类组只是导航标签，不再直接决定详情类型。
+   - 当前实机确认映射：
+     - 视频 → `video`
+     - 动漫 → `video`
+     - 有声 → `video`
+     - 写真 → `video`
+     - 漫画 → `comic`
+     - 小说 → `novel`
+   - 因此“有声/写真”继续使用 Video Detail Adapter 与既有 PlaybackAdapter，不再走 Audio/Gallery UI。
+2. **漫画详情收口**
+   - 取消详情页 3 张超大 `pic_1_full` 预览。
+   - 详情只保留紧凑 Hero、图片数量、Primary “开始阅读”、收藏/原页/登录/设置和相关推荐。
+   - 若 Gallery 第一张与列表封面完全相同，会在图片数量足够时移除重复封面，减少正文前重复图。
+3. **独立 Reader**
+   - 新增 Shell Page：`yesheReader`。
+   - 进入阅读前只把 `title/ref/images` 写入短生命周期 ReaderSeed，URL 只传 seed key。
+   - Reader 页面只渲染图片，不混详情动作、选集、推荐或设置。
+   - 图片按 `pic_1_full` 原比例纵向连续排布，统一复用当前 Referer/User-Agent Header。
+   - Reader 为独立页面，返回一次直接回漫画详情。
+4. **简介噪声**
+   - 列表/页面摘要若只是裸数字（例如 screenshot 中的 `2`）视为无效描述，不再占据详情 Hero。
+
+### Test6 实机必测
+1. “有声”任意内容：应进入视频详情，并走视频播放链，不出现音频专用 UI。
+2. “写真”任意内容：应进入视频详情，不再出现“查看全部图片 N 张”。
+3. “漫画”任意内容：详情页不再直接铺 3 张大图。
+4. 点击“开始阅读”：进入独立纵向图片页；图片连续滚动、比例正常；返回一次回漫画详情。
+5. 漫画 Reader 若仍混入推荐封面/广告图，下一版根据该页截图继续冻结 Comic Gallery Selector；不回退到把所有图片重新堆进详情。
+6. Stable 继续保持不存在；Test6 仍需实机验证后再进入下一阶段。
+
 ## 2026-08-29 · 0.1.0-test.5 / Build10105 · 二级详情与分类 Adapter 重构
 
 ### Test4 实机结果
@@ -125,7 +166,7 @@ yeshe_remote_test_v2_b10102.txt / rule 2026082902
 
 - App ID：`yeshe`
 - Stable：无
-- Test：`0.1.0-test.5 / Build10105`
+- Test：`0.1.0-test.6 / Build10106`
 - 模式：自用 Remote Test
 - 网站品牌入口：`https://yeshe.tv/`
 - 用户 2026-08-29 当前可用入口：`https://宽宏大量f562sym.baitasi.org/`
