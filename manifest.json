@@ -1,8 +1,8 @@
 {
   "schema": 8,
-  "revision": "202608292335",
+  "revision": "202608292353",
   "name": "天空的海阔云仓库",
-  "updated": "2026-08-29 23:35",
+  "updated": "2026-08-29 23:53",
   "taxonomy": {
     "categories": [
       {
@@ -591,9 +591,9 @@
     {
       "id": "yeshe",
       "name": "夜社短剧",
-      "version": "Test 0.1.0-test.5",
-      "desc": "Test5 重构二级详情与分类：视频/漫画/写真/小说分类型解析；剧集严格按 /play/id/line/episode；详情使用列表缓存标题/封面；分类合并 root/type/filter 导航并支持 /filter/；未解析分类不再进入空页。",
-      "path": "apps/video/yeshe/yeshe_remote_test_v5_b10105.txt",
+      "version": "Test 0.1.0-test.6",
+      "desc": "Test6 修正分类名与媒体类型不一致：有声/写真实际按视频播放；漫画独立为图片阅读，详情取消超大预览并新增纵向 Reader；小说继续文本链。",
+      "path": "apps/video/yeshe/yeshe_remote_test_v6_b10106.txt",
       "entryType": "channel-group",
       "channelsPath": "apps/video/yeshe/channels.json",
       "category": "video",
