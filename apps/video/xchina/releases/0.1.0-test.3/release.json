@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name": "runtimeBundle", "path": "apps/video/xchina/releases/0.1.0-test.3/runtime_bundle.js"}
+  ],
+  "verify": {"global": "XChinaRemoteRuntime", "property": "version", "equals": "0.1.0-test.3"},
+  "promotedFrom": null,
+  "previousTest": {"version":"0.1.0-test.2","build":10102,"release":"apps/video/xchina/releases/0.1.0-test.2/release.json"},
+  "notes": "Test3 consolidated single-layer bundle over immutable Test1: folds route fixes, private-file HTML cache and bounded WebView fallback. Test2 is not loaded."
+}

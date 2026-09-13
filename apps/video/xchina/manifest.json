@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.2",
-  "defaultBuild": 10102,
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "0.1.0-test.2",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v2_b10102.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.2/release.json",
+  "defaultVersion": "0.1.0-test.3",
+  "defaultBuild": 10103,
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "0.1.0-test.3",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v3_b10103.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.3/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test2-hiker-route-contract-hotfix",
-    "note": "Test1 remains immutable; Test2 fixes Hiker Chinese rule inheritance and reserved url query collision before first device validation."
+    "stage": "test3-consolidated-route-cache-webview-hardening",
+    "note": "Test3 loads immutable Test1 once and applies one consolidated source transform; Test2 remains historical and is not loaded."
   }
 }
