@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {
+      "name": "runtime",
+      "path": "apps/video/xchina/releases/0.1.0-test.1/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "XChinaRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.1"
+  },
+  "notes": "Initial test release. Multi-content HTML implementation for xChina: videos, photo sets, fiction and models. Video/photo selectors and legacy URL patterns are based on public xChina reading-source rules; Cloudflare/domain switching is isolated in the request layer. No Stable exists before device validation."
+}
