@@ -1,5 +1,51 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.4 / Build 10104 — 2026-09-13
+
+状态：**当前 Test，代码门禁与本地合约 smoke test 已通过；待海阔实机验证；无 Stable。**
+
+### 阅读源协议补齐
+- [附件源码确认] 参考用户上传的 `✈️ 小黄书-夜明空` 阅读源（源内最后更新 2025-11-13），主站仍为 `https://xchina.co/`，发布页为 `https://xiaohuangshu.me`，漫画链独立使用 `https://litu100.xyz`。
+- [附件源码确认] 阅读源在返回 `Just a moment` 时会清 Cookie、打开浏览器完成验证后再连接；Test4 因此保留 Test3 的普通 fetch → 限次 WebView 兜底，并在设置页提供主站/漫画线路浏览器验证入口。
+- [附件源码确认] 搜索契约：小说 `/fictions/keyword-<key>/<page>.html`、套图 `/photos/keyword-<key>/<page>.html`、视频 `/videos/keyword-<key>/<page>.html`、漫画 `/comics/kk-<key>/<page>.html`。
+- [附件源码确认] 列表封面不仅可能来自 `<img>`，还大量来自 `.img` 的 `style:url(...)`；Test4 的封面解析同时支持 CSS background 与 `data-original/data-src/src`。
+- [附件源码确认] 小说目录主要位于 `.chapter-container`，漫画目录位于 `.chapters`；漫画正文图片位于 `.comic-img-box`，套图/自拍正文主要位于 `.photo-image/.amateur-image`。
+- [附件源码确认] 视频与带视频套图既可能直接包含 m3u8，也可能使用 `var domain` + `var videos=[...]`；Test4 统一解析两种媒体形态并附带 Referer/UA。
+- [附件源码确认] 发现页提供小说标签、漫画状态/地区、套图专辑/工作室/地区、视频系列等大量固定路由；Test4 按内容类型分组还原大部分当前路由，并保留 Test3 已有模特链。
+
+### Test4 架构与交互
+- Test4 改为**独立 Runtime**：不再启动时下载 Test1 再做字符串替换；Test1 / Test2 / Test3 全部保持不可变历史版本。
+- 继续使用 `rule=&simple=true` 与 `xc_url / xc_path` 命名空间，避免中文规则名和海阔保留 `url` 参数事故回归。
+- 保留 Test3 私有文件 HTML 缓存、最近成功线路、主域/备用域轮询、最多两条主站 WebView 与单条漫画 WebView 兜底。
+- 首页主链调整为小说 / 套图 / 漫画 / 视频，可进入模特列表；分类页按阅读源分组展示，不再使用 Test1 的少量旧系列 ID。
+- 小说详情自动区分“书籍目录页 / 章节正文页”；有章节时进入目录，无章节时直接阅读正文。
+- 漫画详情自动区分“作品章节页 / 图片正文页”；章节正文使用独立漫画域名并支持相对/绝对图片地址。
+- 套图不再复制阅读源的“视频模式”开关：图片阅读、分页和附带视频入口并存，更适合海阔原生交互。
+- 新增独立章节页、阅读器页、播放页，同时继续保留原站网页兜底与验证入口。
+
+### 已完成门禁
+- `node --check`：Test4 Runtime / Bootstrap 通过。
+- Shell 外层规则 JSON 与 `pages` 内层 JSON 均可解析，规则 version 为 `2026091304`。
+- Runtime 全局导出 smoke：`XChinaRemoteRuntime 0.1.0-test.4 / Build 10104`，14 个 Shell 调用入口均存在。
+- 合成 HTML 功能 smoke 已验证：漫画列表 + CSS 封面、小说章节识别、小说正文、漫画图片、`var domain + var videos` 媒体解析。
+- Git blob 与本地 `git hash-object` 对 runtime/bootstrap/release/test/manifest/channels/shell 逐字节核对一致。
+
+### Test4 实机验收优先级
+1. 覆盖导入 Test4 后首页可打开，Build 为 10104。
+2. 小说 / 套图 / 漫画 / 视频四主标签与“模特”入口均可进入；二级页不出现规则名/URL scheme 异常。
+3. 主站当前网络下普通 fetch、备用域、浏览器验证、WebView 兜底的实际表现与耗时。
+4. 漫画：列表封面 → 详情/章节 → 图片正文，重点确认 `litu100.xyz` 当前网络可访问性。
+5. 小说：列表 → 目录 → 正文，确认章节容器和正文 class 未变化。
+6. 套图：列表 CSS 封面 → 图片 → 分页 → 附带视频。
+7. 视频：列表 → 详情 → m3u8 / MP4 / `var videos` 播放；直链失败时再根据实机 HTML/报错调整 Header。
+8. 搜索四类型、分组分类、翻页、模特关联作品。
+9. 根据真实截图继续优化卡片比例、首页密度、分类页分组和详情页层级。
+
+### 发布边界
+- Test4 未经过海阔实机核心链验证前不得晋级 Stable。
+- 本轮只切 Test，不创建或宣传 Stable。
+- 若实机与附件历史规则冲突，以当前实机 HTML / 当前站点结果为最高事实，附件规则仅作为可复核协议基线。
+
 ## 0.1.0-test.3 / Build 10103 — 2026-09-13
 
 状态：**当前 Test，待海阔实机验证；无 Stable。**

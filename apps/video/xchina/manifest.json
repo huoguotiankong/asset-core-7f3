@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.3",
-  "defaultBuild": 10103,
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "0.1.0-test.3",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v3_b10103.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.3/release.json",
+  "defaultVersion": "0.1.0-test.4",
+  "defaultBuild": 10104,
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "0.1.0-test.4",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v4_b10104.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.4/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test3-consolidated-route-cache-webview-hardening",
-    "note": "Test3 loads immutable Test1 once and applies one consolidated source transform; Test2 remains historical and is not loaded."
+    "stage": "test4-reader-source-protocol-consolidation",
+    "note": "Standalone Test4; Test1-3 remain immutable. Integrates uploaded reader-source routes while preserving Test3 routing/cache/WebView hardening."
   }
 }

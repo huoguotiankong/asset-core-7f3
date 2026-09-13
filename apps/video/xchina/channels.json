@@ -3,29 +3,30 @@
   "id": "xchina",
   "name": "小黄书",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-13 16:05",
+  "updatedAt": "2026-09-13 16:35",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.3",
+      "version": "0.1.0-test.4",
       "targetVersion": "0.1.0",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/xchina/xchina_remote_test_v3_b10103.txt",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/xchina/xchina_remote_test_v4_b10104.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-13",
       "recommended": true,
-      "desc": "Test3：直接从冻结 Test1 整合生成，不加载 Test2；保留影片、套图、小说、模特四条链，同时合并海阔路由修复、私有文件 HTML 缓存与限次 WebView 兜底。",
+      "desc": "Test4：独立 Runtime，保留 Test3 路由/私有文件缓存/WebView 加固，并按上传阅读源补齐漫画、CSS封面、章节阅读、套图分页、媒体数组和大部分发现分类。",
       "highlights": [
-        "影片 / 套图 / 小说 / 模特四条内容链",
-        "中文二级页 rule=&simple=true 与 xc_url 命名空间",
-        "直连域名全部失败后最多尝试两条 WebView",
-        "HTML 页面缓存改用海阔规则私有文件，KV 只存小状态",
-        "搜索 / 分类 / 翻页 / 影片直链与网页兜底",
-        "无 Stable，实机通过前不晋级"
+        "小说 / 套图 / 漫画 / 视频四条阅读源主链 + 既有模特链",
+        "漫画独立 litu100.xyz 域名、搜索、分类、章节与图片阅读",
+        "列表封面支持 CSS style:url(...) 与普通 img/data-src",
+        "小说目录/正文自动分流，套图图片/分页/附带视频并存",
+        "视频支持 m3u8 及 var domain + var videos 数组地址",
+        "保留 rule=&simple=true、xc_url 命名空间、私有文件 HTML 缓存、限次 WebView 兜底",
+        "无 Stable，实机核心链通过前不晋级"
       ],
       "icon": "https://xchina.co/favicon.ico"
     }
