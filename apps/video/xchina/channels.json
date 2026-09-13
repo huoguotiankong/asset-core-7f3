@@ -1,0 +1,33 @@
+{
+  "schema": 4,
+  "id": "xchina",
+  "name": "小黄书",
+  "versionPolicy": "test-first",
+  "updatedAt": "2026-09-13 15:08",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "xchina-test",
+      "name": "小黄书",
+      "version": "0.1.0-test.1",
+      "targetVersion": "0.1.0",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/xchina/xchina_remote_test_v1_b10101.txt",
+      "mode": "remote/self-use",
+      "updatedAt": "2026-09-13",
+      "recommended": true,
+      "desc": "首个 Test：视频、套图、小说、模特四条内容线；请求层支持主域名/最新域名切换，先做实机验证再建立 Stable。",
+      "highlights": [
+        "视频首页/分类/搜索/详情/HLS 解析",
+        "套图首页/分类/搜索/多图阅读/附带视频",
+        "小说列表/搜索/章节正文/上一章下一章",
+        "模特人物页及关联作品",
+        "Cloudflare/网络失败诊断与网页兜底",
+        "无 Stable，实机通过前不晋级"
+      ],
+      "icon": "https://xchina.co/favicon.ico"
+    }
+  ]
+}

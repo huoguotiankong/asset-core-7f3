@@ -1,0 +1,24 @@
+{
+  "schema": 4,
+  "id": "xchina",
+  "name": "小黄书",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/xchina/test.json",
+  "channels": "apps/video/xchina/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "0.1.0-test.1",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/xchina/CHANGELOG.md",
+  "source": "https://xchina.co/",
+  "stableExists": false,
+  "migration": {
+    "stage": "initial-test1",
+    "note": "New application; no prior recovery chain. Stable will only be created after Hiker device validation."
+  }
+}
