@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name": "hotfixBundle", "path": "apps/video/xchina/releases/0.1.0-test.2/hotfix_bundle.js"}
+  ],
+  "verify": {"global": "XChinaRemoteRuntime", "property": "version", "equals": "0.1.0-test.2"},
+  "promotedFrom": null,
+  "previousTest": {"version": "0.1.0-test.1", "build": 10101, "release": "apps/video/xchina/releases/0.1.0-test.1/release.json"},
+  "notes": "Test2 P0 Hiker navigation hotfix over immutable Test1: internal pages inherit rule context via rule=&simple=true and business detail URL moves from reserved url to xc_url. Business parsers remain Test1-equivalent."
+}
