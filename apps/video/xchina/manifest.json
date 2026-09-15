@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.4",
-  "defaultBuild": 10104,
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "0.1.0-test.4",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v4_b10104.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.4/release.json",
+  "defaultVersion": "0.1.0-test.5",
+  "defaultBuild": 10105,
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "0.1.0-test.5",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v5_b10105.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.5/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test4-reader-source-protocol-consolidation",
-    "note": "Standalone Test4; Test1-3 remain immutable. Integrates uploaded reader-source routes while preserving Test3 routing/cache/WebView hardening."
+    "stage": "test5-x5-live-cookie-hardening",
+    "note": "Test5 changes only verification/session transport. Test4 business parsers remain the recovery baseline and immutable."
   }
 }
