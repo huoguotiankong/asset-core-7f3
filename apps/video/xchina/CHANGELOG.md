@@ -1,8 +1,29 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.5 / Build 10105 — 2026-09-15
+
+状态：**当前 Test；代码门禁与仓库静态回读通过，待海阔实机验证；无 Stable。**
+
+### X5 / Cookie 会话加固
+- 保留 Test4 的小说、套图、漫画、视频、模特、搜索、分类、章节、图片和媒体 Parser，不改业务协议面。
+- 主站与漫画站“浏览器验证”入口由 `web://` 改为 `x5://`，与项目已验证的 `getCookie()` 会话容器语义对齐。
+- HTML 请求每次实时调用 `getCookie(url)` / `getCookie(origin)`，有 Cookie 时才附加 `Cookie` Header；不保存账号密码，不把 Cookie 明文写入 KV、文件、CHANGELOG 或日志。
+- 图片请求按图片 URL 自身域名实时读取可用 Cookie，避免把主站会话无条件泄漏到第三方媒体域。
+- 设置页仅显示“主站/漫画 Cookie 已读取或未读取”，不展示凭据内容。
+- Cloudflare/验证页仍遵循：普通 fetch（现在自动带 live Cookie）→ 限次 WebView 兜底 → stale cache；验证页本身不写入正常 HTML 缓存。
+- Test5 只以冻结 Test4 为唯一 seed 做一次确定性变换，Test1–Test4 均保持不可变；未重新引入 Test1→Test2→Test3 多层补丁链。
+
+### Test5 实机验收
+1. 覆盖导入后设置页显示 Test5 / Build 10105。
+2. 打开“当前线路完成验证”应进入 X5；完成站点验证后返回设置页，主站 Cookie 状态应由“未读取”变为“已读取”（如果站点确实下发 Cookie）。
+3. 刷新首页，确认无需重复验证即可读取列表；若仍失败，记录错误页/耗时，不把 403 当 Parser 空数据。
+4. 漫画线路同样用 X5 验证，随后测试漫画列表 → 章节 → 图片。
+5. 回归 Test4 全部核心链：小说目录/正文、套图分页/图片/附带视频、视频播放、搜索、分类、模特关联作品。
+6. 未完成上述实机验证前不得晋级 Stable。
+
 ## 0.1.0-test.4 / Build 10104 — 2026-09-13
 
-状态：**当前 Test，代码门禁与本地合约 smoke test 已通过；待海阔实机验证；无 Stable。**
+状态：**历史 Test，代码门禁与本地合约 smoke test 已通过；未完成海阔实机验证。**
 
 ### 阅读源协议补齐
 - [附件源码确认] 参考用户上传的 `✈️ 小黄书-夜明空` 阅读源（源内最后更新 2025-11-13），主站仍为 `https://xchina.co/`，发布页为 `https://xiaohuangshu.me`，漫画链独立使用 `https://litu100.xyz`。
@@ -48,7 +69,7 @@
 
 ## 0.1.0-test.3 / Build 10103 — 2026-09-13
 
-状态：**当前 Test，待海阔实机验证；无 Stable。**
+状态：**历史 Test，待海阔实机验证；无 Stable。**
 
 ### Test3 单层整合发布
 - Test3 不加载 Test2 热补丁，而是每次直接读取冻结的 Test1 Runtime，并通过一个 `runtime_bundle.js` 一次性整合 Test2 的海阔路由修复与本轮网络/缓存加固，避免 Test1 → Test2 → Test3 多层补丁链。
@@ -82,7 +103,7 @@
 
 ### P0 海阔路由热修复
 - 保留 Test1 的影片、套图、小说、模特四条内容链及请求/解析逻辑，不改站点业务 Parser。
-- 修复中文规则二级页路由：Test1 的 `rule=` 使用 `encodeURIComponent("小黄书")`，与已归档的中文规则路由事故冲突；Test2 统一使用 `rule=&simple=true` 继承当前规则上下文。
+- 修复中文规则二级页路由：Test1 的 `rule=` 使用 `encodeURIComponent("小黄书")`，与已验证的海阔中文规则路由事故冲突；Test2 统一使用 `rule=&simple=true` 继承当前规则上下文。
 - 修复业务 URL 路由参数：详情、下一页、分类跳转不再使用通用 `url` query，改为应用命名空间 `xc_url`，避免海阔页面模型/路由字段与业务参数碰撞。
 - 采用 immutable hotfix：Test1 Runtime 不覆盖；Test2 `hotfix_bundle.js` 拉取 Test1 Runtime、校验锚点、只做上述合同替换后加载为 `XChinaRemoteRuntime 0.1.0-test.2 / Build10102`。
 
