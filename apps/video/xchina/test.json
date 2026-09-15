@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.5",
+  "version": "0.1.0-test.6",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10105,
-  "shellVersion": "0.1.0-test.5",
-  "shellRuleVersion": 2026091501,
+  "build": 10106,
+  "shellVersion": "0.1.0-test.6",
+  "shellRuleVersion": 2026091502,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.5/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v5_b10105.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v5_b10105.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.6/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v6_b10106.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v6_b10106.txt",
   "updatedAt": "2026-09-15",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.4",
-    "build": 10104,
-    "release": "apps/video/xchina/releases/0.1.0-test.4/release.json"
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/video/xchina/releases/0.1.0-test.5/release.json"
   },
-  "notes": "Test5 keeps Test4 content contracts unchanged and hardens Cloudflare verification via x5:// plus live getCookie() forwarding. No Stable until device validation."
+  "notes": "Test6 decodes and applies the uploaded reader-source hidden content rules, adds exact content scopes, media-domain live Cookie handoff, and the missing fiction tag-2 category. No Stable until device validation."
 }
