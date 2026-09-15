@@ -1,8 +1,41 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.6 / Build 10106 — 2026-09-15
+
+状态：**当前 Test；隐藏正文规则已解码并完成本地合约 smoke，待海阔实机验证；无 Stable。**
+
+### 阅读源隐藏正文规则落地
+- [附件源码确认] 已递归解开 `ruleContent.content` 的 Base64 包装，不再只根据表层目录规则猜正文：小说正文为 `.fiction-body@p@html`；自拍图片为 `.amateur-image@html`；漫画图片为 `.comic-img-box@html`；套图图片为 `.photo-image@html`；视频与套图视频从 `main-container` 读取。
+- [附件源码确认] 套图视频优先识别 m3u8；否则读取 `var domain` + `var videos=[...]`，目录里的 `#video=N` 对应数组第 N 项。Test6 在海阔侧统一展示检测到的全部媒体线路。
+- [附件源码确认] 漫画图片 Referer 使用漫画独立站，套图/自拍使用主站 Referer。Test6 延续此边界，并只从图片自身域读取可用 Cookie。
+- [附件源码确认] 补回 Test4 分类表漏掉的小说 `tag-2` 路由。
+
+### Parser / 会话加固
+- 正文/图片不再从命中 class 后无限向后扫描整页，而是按 `fiction-body / amateur-image / comic-img-box / photo-image` 建立内容作用域，减少推荐区、页脚图、头像混入正文。
+- 小说正文不再用“遇到第一个 `</div>` 就结束”的非嵌套正则，避免正文内部嵌套节点导致后半章丢失。
+- 媒体解析限定 `main-container`，支持 quoted m3u8、`var domain`、`var videos` JSON 及 JSON 失败时的 URL 回退提取。
+- 继承 Test5：主站/漫画验证使用 `x5://`；HTML 与图片请求实时读取对应域 `getCookie()`。
+- 新增媒体直链 live Cookie：播放 URL 按媒体自身域读取 Cookie，同时继续携带原详情页 Referer 与 UA；不会把主站 Cookie 无条件发给第三方媒体域。
+- Test6 仍以冻结 Test4 为唯一 seed 做一次确定性变换，不叠加 Test5 Runtime，Test1–Test5 均保持不可变。
+
+### 本地门禁
+- `node --check`：Test6 Runtime Bundle / Bootstrap 通过。
+- 合成页面 smoke：小说嵌套正文可完整提取；漫画目标容器外图片不会混入；`var domain + var videos` 可生成多条 MP4；媒体域 live Cookie 能进入播放 Header。
+- Shell 外层 JSON 与 `pages` 内层 JSON 解析通过，规则 version `2026091502`。
+- Release/Test/Manifest/Channels JSON 结构检查通过。
+
+### 实机验收
+1. 覆盖导入 Test6，设置页确认 `0.1.0-test.6 / Build 10106`。
+2. 主站需要验证时进入 X5，返回后确认 Cookie 状态与首页加载。
+3. 小说：列表 → 目录 → 长正文，重点检查正文中部/后半段不再截断。
+4. 漫画：列表 → 章节 → 图片，确认没有头像/推荐图混入且图片 Referer 正常。
+5. 套图/自拍：分页图片数量与原站一致；有视频的套图同时检查 m3u8 / 多 MP4。
+6. 视频：详情 → 直链播放；若仍失败，记录实际播放器报错与媒体域，继续按实机 Header 调整。
+7. 搜索、分类、翻页、模特关联作品做回归；未完成实机核心链验证前不得晋级 Stable。
+
 ## 0.1.0-test.5 / Build 10105 — 2026-09-15
 
-状态：**当前 Test；代码门禁与仓库静态回读通过，待海阔实机验证；无 Stable。**
+状态：**历史 Test；代码门禁与仓库静态回读通过，未完成海阔实机验证；无 Stable。**
 
 ### X5 / Cookie 会话加固
 - 保留 Test4 的小说、套图、漫画、视频、模特、搜索、分类、章节、图片和媒体 Parser，不改业务协议面。
