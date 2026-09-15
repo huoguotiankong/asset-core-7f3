@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "runtimeBundle",
+      "path": "apps/video/xchina/releases/0.1.0-test.6/runtime_bundle.js"
+    }
+  ],
+  "verify": {
+    "global": "XChinaRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.6"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/video/xchina/releases/0.1.0-test.5/release.json"
+  },
+  "notes": "Test6 keeps Test4 as immutable seed, includes Test5 X5/live-cookie hardening, and aligns reader/image/media extraction with the decoded uploaded reader-source content contracts."
+}
