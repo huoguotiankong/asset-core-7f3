@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"huangguo-test",
+  "name":"黄果短剧",
+  "version":"0.1.0-test.4",
+  "build":10104,
+  "ref":"main",
+  "baseStable":null,
+  "previousTest":{"version":"0.1.0-test.3","build":10103,"release":"apps/video/huangguo/releases/0.1.0-test.3/release.json","status":"superseded-before-user-delivery-image-header-contract"},
+  "modules":[
+    {"name":"core","path":"apps/video/huangguo/releases/0.1.0-test.3/core.js"},
+    {"name":"provider","path":"apps/video/huangguo/releases/0.1.0-test.3/provider.js"},
+    {"name":"image","path":"apps/video/huangguo/releases/0.1.0-test.4/image.js"},
+    {"name":"playback","path":"apps/video/huangguo/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/video/huangguo/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/video/huangguo/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/video/huangguo/releases/0.1.0-test.3/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/huangguo/releases/0.1.0-test.4/runtime.js"}
+  ],
+  "verify":{"global":"HuangGuoRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "notes":"在 Test3 的线路/Provider 修复基础上，按仓库图片 Header 事故规范把封面链收紧为 $(url, headers).image(InputStream)，同时继续使用 crypto-java AES/CBC/NoPadding 解密；Test3 未交付用户即冻结。"
+}
