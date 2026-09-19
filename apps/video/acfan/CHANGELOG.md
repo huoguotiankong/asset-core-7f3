@@ -1,163 +1,58 @@
 # ACFAN Changelog
 
-> 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 冻结为历史实现，不作为本程序运行依赖。
+> 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 不作为本程序运行依赖；但旧 Stable 中经实机验证成功的协议事实可以作为恢复依据。
 
 ## 当前基线
-- Test：`0.1.0-test.4 / Build10104 / Shell 2026091909`
+- Test：`0.1.0-test.5 / Build10105 / Shell 2026091910`
 - Stable：不存在
-- Test Shell：`apps/video/acfan/acfan_remote_test_v4_b10104.txt`
-- Bootstrap：`apps/video/acfan/bootstrap_test_v4_b10104.js`
-- Release：`apps/video/acfan/releases/0.1.0-test.4/release.json`
+- Test Shell：`apps/video/acfan/acfan_remote_test_v5_b10105.txt`
+- Bootstrap：`apps/video/acfan/bootstrap_test_v5_b10105.js`
+- Release：`apps/video/acfan/releases/0.1.0-test.5/release.json`
 - 当前网站终端：`https://aasf.wwvgadm0.work/mobile`
-- Test1/Test2/Test3 已冻结，不原地覆盖。
+- Test1~Test4 已冻结，不原地覆盖。
 
-## 2026-09-19 · 0.1.0-test.4 · APK Contract + Proven Image Request Contract
+## 2026-09-19 · 0.1.0-test.5 · Restore Device-Validated Contracts
 
-### Test2/3 后续实机结论
-- 用户明确反馈 Test2 与最初版本相比“基本没有变化”，继续围绕旧 Provider/旧页面别名打补丁已经失去价值。
-- 因此 Test4 不再把 Test1/Test2 视为可继续增补的基础，而是以用户上传的 `acfun_1.9.7.apk` 当前路由/字段为主证据重新收敛 Provider。
-- Test3 在中断前曾出现远端 Blob 与本地准备源码不一致的风险，因此冻结，不作为推荐实机版本；Test4 重新构造并在挂到 main 前核对远端 Blob SHA。
+### Test4 实机事实
+- 用户确认：仅里番分类少量视频能显示封面，其它大部分封面仍为空白。
+- 动漫分类、漫画详情/阅读、网站终端等此前问题基本原样，说明 Test3/Test4 的 APK 字符串推断没有命中真实运行合同。
 
-### APK 1.9.7 当前协议事实
-- 当前 APK 可见：`video/classTypeList`、`video/classifyList`、`video/tags/getTags`、`video/tagTitleList`、`video/getByClassify`。
-- 当前 APK 不再以 Test1/Test2 使用的 `video/getZoneListByClassifyId` / `video/tags/getTagsZ` 作为当前分类链。
-- 图片字段扩展到 `imageUrl / imgUrl / thumbUrl / posterMainUrl / posterDownloadUrl / verticalImg / backImg / cardImg / dynamicImg / generatedCoverImg / templateCoverImg` 等。
-- APK 仍存在 `_480`、`imgDomain`、`2020-zq3-888` 与 `https://cdn.ukaim.com/` 相关事实，说明 XOR 图片合同仍需保留。
+### 根因复核
+重新对照旧 ACFun Stable `0.4.9` 及其长期技术记录，确认 Test4 偏离了当时真正实机成功的实现：
+1. **图片**：Stable 0.4.2 成功链是 `相对图 → 当前 session imgDomain → 仅 asigoo 封面 _480 + XOR → Dalvik UA + Referer=""`。普通 HTTP/CDN 图片直接显示。Test4 错误地把更多 HTTP 图片统一送解密器，并改变了 jhimage/Referer 处理。
+2. **动漫/视频标签**：Stable 0.4.8 当前 APK 1.9.7 主链为 `classTypeList → getTagsZ → tagTitleList`，Zone 仅兼容 fallback。Test4 改成 `getTags` 主链，方向错误。
+3. **漫画**：Stable 0.4.7 已实机闭环为 `comics/base/info?comicsId → chapterList → comics/base/chapterInfo?chapterId → domain + imgList`。Test4 使用泛型递归抽目录，破坏了明确主合同。
 
-### Test4 实现
-1. **Provider 重建**
-   - 视频/短视频/漫画/小说/有声/社区模型统一补齐 APK 1.9.7 当前图片字段。
-   - 动漫/视频链改为 `classTypeList → classifyList fallback → tags/getTags → tagTitleList → getByClassify fallback`。
-   - 社区详情使用 `community/dynamic/dynamicInfo`；其它详情、章节接口保持当前已验证路径。
+### Test5 修复
+- 图片适配器恢复 Stable 0.4.2 合同：相对图使用 session `imgDomain`；只有 `.asigoo.com` 执行 `_480 + XOR前100字节`；普通图直接返回；Header 恢复 Dalvik UA + 空 Referer；独立 T5 解码页负责明文 magic 判断与缓存。
+- 动漫/视频恢复 Stable 0.4.8：`classTypeList/classifyList → getTagsZ → tagTitleList`，Zone/queryVideoByZone 与 `getTags` 仅作兼容后备。
+- 漫画恢复 Stable 0.4.7：详情只认 `chapterList` 主目录；章节优先 GET `chapterInfo?chapterId`；正文只认 `domain + imgList` 主结构。
+- 视频详情增加 **原生播放优先**：列表/详情已有 path 则直接使用，否则 `GET video/can/watch`，失败再 POST；相对 path 进入 `/api/m3u8/h5/decode?path=`；网页播放降为第二兜底。
+- 新增 `ACFAN·T5 实机诊断` 页面，直接输出当前 Host、imgDomain、各频道首批真实图片字段、动漫分类/标签探针和漫画详情/目录探针。后续失败以实机诊断数据为准，不再盲猜。
+- 所有页面切换为 `acfanT5*` 独立别名，绕开旧页面缓存。
 
-2. **图片请求合同恢复**
-   - 不再使用空 Referer。
-   - 复刻旧 ACFun 曾实机成功的海阔图片请求形态：`当前 API Host Referer/Origin + 独立图片解码页`。
-   - `jhimage/` 明确解析到 `https://cdn.ukaim.com/`；asigoo 缩略图仍支持 `_480`。
-   - 所有 HTTP 图片先判断 JPEG/PNG/GIF/WebP magic，已经是明文则直接返回；非明文才 XOR 前100字节，key=`2020-zq3-888`。
-   - 缓存后缀改为 `.img`，避免强行假定图片格式。
+### Test5 静态门禁
+- Provider/Image/ImageDecoder/Playback/UI/Runtime 与页面源片段均通过 JS 语法检查；页面源在加载器中拼接后执行。
+- Release JSON、Shell 外层 JSON/嵌套 pages JSON 均已解析通过。
+- Test5 仍为 `pending-device-validation`，不得晋级 Stable。
 
-3. **彻底绕开旧缓存**
-   - 主页面及全部二级页改为 `acfanT4 / acfanT4Detail / acfanT4Search / acfanT4Comments / acfanT4ComicReader / acfanT4FictionReader / acfanT4Bridge / acfanT4Mine / acfanT4Settings`。
-   - 图片解码页改为 `acfanImageDecoderT4`。
-   - Shell 标题固定显示 `ACFAN·T4`，便于实机确认真实运行版本。
+### Test5 实机验收
+1. 导入后必须显示 `ACFAN·T5`。
+2. 精选、里番、短视频、漫画分别查看多张封面。
+3. 动漫检查分类/标签是否恢复，不应再固定卡在旧 Zone 报错。
+4. 漫画详情检查 chapterList，打开章节检查 domain+imgList 原图。
+5. 视频详情先点“原生播放”；失败再点“网页播放”。
+6. 若仍有问题，进入首页“诊断”，复制“运行环境 / 对应频道 / 动漫链探针 / 漫画链探针”反馈。
 
-4. **详情与阅读**
-   - 视频/漫画/小说/有声详情统一使用紧凑左图布局。
-   - 漫画目录使用 `text_4` 网格；正文明确使用 original 图片链，不套 `_480`。
-   - 无图社区动态保持文本卡，减少无意义的大白块。
+## 2026-09-19 · Test1~Test4 历史摘要
+- Test1：新 ACFAN clean rewrite，建立九频道、搜索、详情、漫画/小说/社区与 H5 终端框架。
+- Test2：尝试修封面、Zone 容错、漫画详情和 H5 定位；实机反馈基本无变化。
+- Test3：按 APK 1.9.7 静态字符串重建 Provider/字段，并版本化 T3 页面；后续发现部分推断与旧 Stable 实机事实冲突。
+- Test4：继续强化当前字段和图片请求合同；实机仅里番少量封面有效，其它关键问题仍未解决，因此冻结。
 
-5. **网站终端**
-   - 仍只承担最终播放/阅读授权，不把网页当主 UI。
-   - 保留输入赋值、Enter、form submit、搜索按钮、标题点击、播放器/阅读器检测多级定位。
-   - 当前仍需实机验证网站路由本身是否变化；未宣称播放终端已经完成闭环。
-
-### Test4 发布门禁
-- 不可变代码先生成独立 commit，再检查远端 release 目录内 Blob SHA 与准备时 SHA 一致，确认后才 fast-forward `main`。
-- Shell 外层 JSON 与嵌套 `pages` JSON 已在生成时解析通过。
-- Release/Bootstrap/Shell 使用 Build `10104` 与 Shell `2026091909`，并与 `acfanT4*` 页面别名一致。
-- Stable 继续不存在，Test4 只能作为实机验证版。
-
-### Test4 实机验收重点
-1. 顶部规则名必须显示 **`ACFAN·T4`**；若不是，先停止后续测试并排查旧规则缓存。
-2. 精选 / 短视频 / 漫画分别抽查至少 8 张封面，确认是否真正恢复。
-3. 动漫频道确认不再出现 `getZoneListByClassifyId` 报错，并验证分类/标签可切换。
-4. 漫画详情必须能出现标题/操作区/章节目录或明确兜底，再进入一个章节验证正文原图。
-5. 视频详情点击“立即播放”，检查网站终端是否真正提交搜索并进入目标内容。
-6. 若封面仍为空，下一步必须抓取实机实际图片 URL / Host / Header，不再继续盲改 XOR 算法。
-
-## 2026-09-19 · 0.1.0-test.3 · APK 1.9.7 Contract Rebuild
-
-### Test2 实机事实
-- 用户明确反馈 Test2 与 Test1 相比“基本没有变化”，说明继续围绕旧 Provider 打补丁没有命中真实故障点。
-- 实机仍表现为封面空白、动漫分类不可用、漫画详情/正文不正常、网站终端不能稳定定位目标。
-
-### APK 1.9.7 静态证据
-重新检查用户上传的 `acfun_1.9.7` APK 后确认：
-- 当前 APK 存在 `video/classTypeList`、`video/classifyList`、`video/tags/getTags`、`video/tagTitleList`、`video/getByClassify`。
-- 当前 APK **不存在** Test1/Test2 沿用的 `video/getZoneListByClassifyId` 与 `video/tags/getTagsZ` 字符串，因此旧动漫筛选链已经过时。
-- 当前 APK 可见图片字段包括 `imageUrl / imgUrl / thumbUrl / posterMainUrl / posterDownloadUrl / verticalImg / backImg / cardImg / dynamicImg / generatedCoverImg / templateCoverImg` 等；Test1/Test2 Provider 未完整覆盖，部分“空封面”实际可能是没有抽取到图片 URL，而不只是 XOR 解密失败。
-- APK 仍可见 `2020-zq3-888`、`_480`、`imgDomain` 和 `https://cdn.ukaim.com/`，因此历史 XOR 图片合同仍保留，但必须建立在正确取到当前图片字段的前提上。
-
-### Test3 重构
-1. **Provider 按当前 APK 合同重建**
-   - 视频/短视频/漫画/小说/有声/社区模型补齐当前字段。
-   - 动漫/视频分类改为 `classTypeList → classifyList fallback → tags/getTags → tagTitleList → getByClassify fallback`。
-   - 不再调用 APK 1.9.7 已不存在的 Zone / getTagsZ 接口。
-   - 社区详情优先 `community/dynamic/dynamicInfo`。
-
-2. **图片链重建**
-   - 所有 HTTP 图片统一进入独立 `acfanImageDecoderT3`，先判断 JPEG/PNG/GIF/WebP magic；已经是明文则直接返回，非明文才 XOR 前100字节。
-   - asigoo 缩略图使用 `_480`；漫画正文使用 original 链。
-   - 补齐当前 APK 的图片字段后再解密，避免把“字段没取到”误判为“算法不对”。
-
-3. **彻底绕开旧页面缓存**
-   - 主模块从 `acfan` 改为 `acfanT3`。
-   - 详情、搜索、评论、漫画阅读、小说/有声、网站终端、收藏历史、设置全部改为 `acfanT3*` 独立页面别名。
-   - Shell 标题改为 `ACFAN·T3`，实机可直接确认是否真正加载了新版本。
-
-4. **UI/详情继续收敛**
-   - 主色改为 ACFAN 橙色。
-   - 视频/漫画/小说详情统一使用紧凑左图详情，不再让空封面占据整屏。
-   - 社区无图内容继续走纯文本卡。
-   - 漫画章节使用紧凑网格；正文使用原图链。
-
-5. **网站终端**
-   - 保持网站只承担最终播放/阅读授权。
-   - 搜索定位继续使用 value setter、input/change、Enter、form submit、搜索按钮和标题匹配多级策略。
-
-### Test3 实机验收重点
-1. 导入后顶部规则名必须明确显示 **`ACFAN·T3`**；若仍显示 `ACFAN·测试版`，说明实际未加载 Test3。
-2. 精选、短视频、漫画分别抽查多张封面。
-3. 动漫频道不应再出现 `getZoneListByClassifyId` 报错；检查分类与标签数据。
-4. 漫画详情应至少显示标题/封面/操作区/目录或明确的网站阅读兜底，再打开章节测试原图正文。
-5. 视频详情点击“立即播放”检查网站搜索是否真正提交并进入目标内容/播放器。
-
-## 2026-09-19 · 0.1.0-test.2 · First Device Recovery
-
-### Test1 实机事实
-用户首轮截图确认：
-- 精选、短视频、漫画、社区等列表接口已经能返回真实数据，说明游客会话/API Host/基础 Provider 主链成立。
-- 首页、详情、漫画列表等封面全部为空白；视频详情本身能加载标题/播放量。
-- 动漫频道被 `video/getZoneListByClassifyId` 的 GET/POST 双失败直接拖成整页“加载失败”。
-- 漫画列表有数据，但详情进入后呈现大面积空白，现有 blur 大卡 + 图片失败放大了问题。
-- 网站终端可以打开当前 `/mobile`，注入标题也能出现在网站搜索框，但没有可靠触发搜索结果/目标卡片点击，最终播放未闭环。
-- 社区列表能出数据，但无图动态仍占据大图片位，信息密度差。
-
-### 根因与修复
-- 封面尝试恢复独立 XOR 解码页；动漫/视频 Zone 失败增加降级；漫画详情改紧凑布局；网站终端增强搜索提交；社区无图动态改文本卡。
-- Test2 实机反馈“基本没有变化”，因此该方案冻结，由后续 APK 合同重建接管。
-
-## 2026-09-19 · 0.1.0-test.1 · Clean Rewrite
-
-### 用户目标
-- 原旧 ACFun 小程序基本废弃，要求重新设计实现。
-- 新程序必须功能完整、UI 精美，不继续在旧补丁链上修修补补。
-
-### 架构
-```text
-Shell / Bootstrap
-→ Core
-→ Protocol/Auth
-→ Provider/Model
-→ ImageAdapter
-→ Playback/H5 Terminal
-→ Native UI / Pages
-→ Runtime
-```
-
-### 复用的“已验证协议事实”，不复用旧代码
-- 游客认证：`POST user/traveler/`，Header 包含 `deviceId / t / s / User-Mark=acfun`。
-- `s = MD5(t.substring(3,8))`；认证响应 Token 用于 `aut`。
-- `encData` 使用 `token.substring(2,18)` 作为 AES/CBC/PKCS5Padding key/iv 解密。
-- 历史图片合同：asigoo `_480` + XOR key=`2020-zq3-888`，只 XOR 前100字节，明文图片不得重复 XOR。
-- 漫画、小说/有声、社区、Station、搜索、详情、评论等接口作为首版协议参考。
-
-### 产品
-- 首页九频道：精选 / 里番 / 动漫 / 视频 / 短视频 / 漫画 / 小说 / 有声 / 社区。
-- 原生搜索、分类、标签、排序、详情、评论、收藏、历史、设置。
-- 漫画章节优先原生阅读；小说/有声章节优先原生解析。
-- 视频首版最终授权交给当前 `/mobile` 网站终端，小程序主体保持海阔原生 UI。
-
-### 当前边界
-- Test1/Test2 已被实机证明存在关键问题；Test3 冻结；当前仅 Test4 为推荐测试基线，仍不得晋级 Stable。
+## 长期协议事实
+- 游客认证：`POST user/traveler/`；Header `deviceId / t / s / User-Mark=acfun`；`s=MD5(t.substring(3,8))`。
+- `encData`：`token.substring(2,18)` 作为 AES/CBC/PKCS5Padding key/iv。
+- 图片成功合同：相对图 + 当前 `imgDomain`；asigoo `_480`; XOR key `2020-zq3-888`, 仅前100字节；先判断 JPEG/PNG/GIF/WebP；Dalvik UA + 空 Referer。
+- 漫画成功合同：`comics/base/info → chapterList → chapterInfo?chapterId → domain + imgList`。
+- 动漫/视频已验证标签合同：`classTypeList → getTagsZ → tagTitleList`，Zone 兼容 fallback。
