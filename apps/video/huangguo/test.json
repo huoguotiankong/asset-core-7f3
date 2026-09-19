@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "huangguo-test",
   "name": "黄果短剧",
-  "version": "0.1.0-test.4",
-  "baseVersion": "0.1.0-test.3",
+  "version": "0.1.0-test.5",
+  "baseVersion": "0.1.0-test.4",
   "targetVersion": "0.1.0",
-  "build": 10104,
-  "shellVersion": "0.1.0-test.4",
-  "shellRuleVersion": 2026091904,
+  "build": 10105,
+  "shellVersion": "0.1.0-test.5",
+  "shellRuleVersion": 2026091905,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/video/huangguo/releases/0.1.0-test.4/release.json",
-  "bootstrap": "apps/video/huangguo/bootstrap_test_v4_b10104.js",
-  "rule": "apps/video/huangguo/huangguo_remote_test_v4_b10104.txt",
+  "release": "apps/video/huangguo/releases/0.1.0-test.5/release.json",
+  "bootstrap": "apps/video/huangguo/bootstrap_test_v5_b10105.js",
+  "rule": "apps/video/huangguo/huangguo_remote_test_v5_b10105.txt",
   "updatedAt": "2026-09-19",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.3",
-    "build": 10103,
-    "release": "apps/video/huangguo/releases/0.1.0-test.3/release.json"
+    "version": "0.1.0-test.4",
+    "build": 10104,
+    "release": "apps/video/huangguo/releases/0.1.0-test.4/release.json"
   },
-  "notes": "Test4 在 Test3 的线路与 Provider 修复上继续收紧封面链：使用 $(url, headers).image(InputStream) 显式传递 UA/Referer，并继续采用 crypto-java AES/CBC/NoPadding 解密。Test3 未交付用户即冻结。"
+  "notes": "Test5 按附件书源与第二轮实机反馈修复：封面改为海阔 $().image 后缀式 AES/CBC/NoPadding 解密；搜索框右侧文案缩为“搜索”；播放只解析 videoSrc 真实媒体直链，移除 video:// 网页兜底，避免多余播放列表。"
 }
