@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "huangguo-test",
+  "name": "黄果短剧",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/video/huangguo/releases/0.1.0-test.1/release.json",
+    "status": "superseded-before-device-test-endpoint-hardening"
+  },
+  "modules": [
+    {"name":"core","path":"apps/video/huangguo/releases/0.1.0-test.2/core.js"},
+    {"name":"provider","path":"apps/video/huangguo/releases/0.1.0-test.1/provider.js"},
+    {"name":"image","path":"apps/video/huangguo/releases/0.1.0-test.1/image.js"},
+    {"name":"playback","path":"apps/video/huangguo/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/video/huangguo/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/video/huangguo/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/video/huangguo/releases/0.1.0-test.2/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/huangguo/releases/0.1.0-test.2/runtime.js"}
+  ],
+  "verify":{"global":"HuangGuoRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes":"冻结 Test1；Test2 只收紧动态线路发现/验证，排除品牌落地页误判，并让设置页显示真实 Test2 版本。其它 Provider/Image/Playback/UI 业务链保持 Test1。"
+}
