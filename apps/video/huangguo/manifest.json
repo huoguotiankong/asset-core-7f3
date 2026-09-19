@@ -6,21 +6,22 @@
   "mode": "remote-test",
   "test": "apps/video/huangguo/test.json",
   "channels": "apps/video/huangguo/channels.json",
-  "defaultVersion": "0.1.0-test.1",
-  "defaultBuild": 10101,
-  "testVersion": "0.1.0-test.1",
-  "testBuild": 10101,
-  "testShellVersion": "0.1.0-test.1",
-  "testBootstrap": "apps/video/huangguo/bootstrap_test_v1_b10101.js",
-  "testRule": "apps/video/huangguo/huangguo_remote_test_v1_b10101.txt",
-  "testRelease": "apps/video/huangguo/releases/0.1.0-test.1/release.json",
+  "defaultVersion": "0.1.0-test.2",
+  "defaultBuild": 10102,
+  "testVersion": "0.1.0-test.2",
+  "testBuild": 10102,
+  "testShellVersion": "0.1.0-test.2",
+  "testBootstrap": "apps/video/huangguo/bootstrap_test_v2_b10102.js",
+  "testRule": "apps/video/huangguo/huangguo_remote_test_v2_b10102.txt",
+  "testRelease": "apps/video/huangguo/releases/0.1.0-test.2/release.json",
   "changelog": "apps/video/huangguo/CHANGELOG.md",
   "sourceBook": "bookSource_黄果短剧.json",
   "sourceApk": "hgdj1.0.5.apk",
   "migration": {
-    "stage": "initial-test1",
+    "stage": "initial-test2-endpoint-hardening",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "note": "首版从附件事实独立建立，无 Stable；先做网页业务链实机验证。"
+    "previousTest": "0.1.0-test.1",
+    "note": "Test2 在首次实机前主动修正品牌落地页误判风险；其它业务模块沿用 Test1 不可变工件。"
   }
 }

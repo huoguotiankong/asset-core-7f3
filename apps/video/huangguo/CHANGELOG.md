@@ -5,12 +5,22 @@
 ## 当前基线
 
 - App ID：`huangguo`
-- Test：`0.1.0-test.1 / Build 10101 / Shell 0.1.0-test.1`
+- Test：`0.1.0-test.2 / Build 10102 / Shell 0.1.0-test.2`
 - Stable：不存在
-- Test Shell：`apps/video/huangguo/huangguo_remote_test_v1_b10101.txt`
-- Bootstrap：`apps/video/huangguo/bootstrap_test_v1_b10101.js`
-- Release：`apps/video/huangguo/releases/0.1.0-test.1/release.json`
+- Test Shell：`apps/video/huangguo/huangguo_remote_test_v2_b10102.txt`
+- Bootstrap：`apps/video/huangguo/bootstrap_test_v2_b10102.js`
+- Release：`apps/video/huangguo/releases/0.1.0-test.2/release.json`
 - 交付：不可变版本路径 + direct loader；不写 Remote Manager active state。
+
+## 2026-09-19 · 0.1.0-test.2 / Build10102 · 动态线路误判加固
+
+- Test1 冻结，不原地覆盖。
+- 发现 `huangguo.com` 品牌落地页仅凭“黄果/短剧”文案可能误通过弱校验，因此在首次实机前主动升 Test2。
+- Endpoint Discovery 现在优先只消费发现页里的“线路 N”候选；只有没有线路候选时才检查普通外链，并显式排除 `huangguo.com / huangguoai.ai` 两个发现/品牌入口自身。
+- 业务 Host 校验收紧为 `hg-drama / hg-card-grid / /recommend/ / /search/video/` 等真实内容结构，不再把品牌文案当业务有效性证据。
+- Provider / Image / Playback / UI / Pages 主体仍复用 Test1 不可变模块；只新增 Core、Settings Patch 与 Runtime，降低变更面。
+- Settings 诊断版本同步为 Test2 / Build10102。
+- 状态：**待海阔实机验证**。
 
 ## 2026-09-19 · 0.1.0-test.1 / Build10101 · 初始测试版
 
@@ -57,7 +67,7 @@ Shell
 
 ### 实机验收（未完成）
 
-1. 从“我的规则仓库”导入 Test1，首页可打开。
+1. 从“我的规则仓库”导入 Test2，首页可打开。
 2. 推荐/最新/AI短剧/AI漫剧/AI换脸/AI魔改至少各切换一次；连续切换后返回一次直接退出当前页，不逐级退 Tab。
 3. 封面至少验证一张加密图与一张可能的明文图。
 4. 片库标签、三榜、三个专题、搜索均能出数据。
@@ -70,4 +80,4 @@ Shell
 
 - APP API 的签名、设备指纹、请求/响应加密与账号 Session 完整逆向。
 - 协议确认后再评估评论、点赞、APP 原生推荐/搜索与账号收藏是否作为 P2 Provider 接入。
-- Test1 实机通过后再创建 Candidate/Stable，不直接把首版设为正式版。
+- Test2 实机通过后再创建 Candidate/Stable，不直接把首版设为正式版。
