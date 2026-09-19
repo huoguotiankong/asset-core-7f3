@@ -3,29 +3,30 @@
   "id": "acfan",
   "name": "ACFAN",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-19 21:50",
+  "updatedAt": "2026-09-19 22:22",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "acfan-test",
       "name": "ACFAN",
-      "version": "0.1.0-test.3",
+      "version": "0.1.0-test.4",
       "targetVersion": "0.1.0",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/acfan/acfan_remote_test_v3_b10103.txt",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/acfan/acfan_remote_test_v4_b10104.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-19",
       "recommended": true,
-      "desc": "APK 1.9.7 协议证据驱动重建 Provider；T3 独立页面别名避免旧模块缓存。",
+      "desc": "APK 1.9.7 当前字段/路由驱动 Provider + 旧 ACFun 已实机成功的图片请求合同；全新 T4 页面别名。",
       "highlights": [
-        "补齐 imageUrl/imgUrl/thumbUrl/posterMainUrl/verticalImg/backImg/cardImg 等当前图片字段",
-        "移除 APK 1.9.7 中已不存在的 Zone 接口，改用 classType/classify + tags/getTags + tagTitleList/getByClassify",
-        "所有页面改为 acfanT3* 独立别名",
-        "所有 HTTP 图片统一走明文识别/XOR 兼容解码器",
-        "漫画详情与正文、网站终端、社区卡片继续收敛",
-        "无 Stable，必须实机验证"
+        "补齐 imageUrl/imgUrl/thumbUrl/posterMainUrl/posterDownloadUrl/verticalImg/backImg/cardImg/dynamicImg 等当前字段",
+        "动漫/视频使用 classTypeList/classifyList + tags/getTags + tagTitleList/getByClassify 当前协议链",
+        "jhimage 明确走 cdn.ukaim.com；所有 HTTP 图片先判明文格式，非明文再 XOR 前100字节",
+        "图片请求恢复当前 API Host Referer/Origin + 独立 acfanImageDecoderT4 页面合同",
+        "所有页面改为 acfanT4*，彻底绕开 Test1/Test2/Test3 页面缓存",
+        "详情页继续使用紧凑左图布局，漫画正文使用 original 图片链",
+        "无 Stable，Test4 必须继续实机验证"
       ]
     }
   ]
