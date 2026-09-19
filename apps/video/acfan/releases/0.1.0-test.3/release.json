@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"acfan-test",
+  "name":"ACFAN",
+  "version":"0.1.0-test.3",
+  "build":10103,
+  "ref":"main",
+  "baseTest":"0.1.0-test.2",
+  "modules":[
+    {"name":"core","path":"apps/video/acfan/releases/0.1.0-test.1/core.js"},
+    {"name":"protocol","path":"apps/video/acfan/releases/0.1.0-test.1/protocol.js"},
+    {"name":"provider-t3","path":"apps/video/acfan/releases/0.1.0-test.3/provider_v3.js"},
+    {"name":"image-t3","path":"apps/video/acfan/releases/0.1.0-test.3/image_v3.js"},
+    {"name":"playback-t3","path":"apps/video/acfan/releases/0.1.0-test.3/playback_v3.js"},
+    {"name":"ui-t3","path":"apps/video/acfan/releases/0.1.0-test.3/ui_v3.js"},
+    {"name":"pages-t3","path":"apps/video/acfan/releases/0.1.0-test.3/pages_v3.js"},
+    {"name":"runtime","path":"apps/video/acfan/releases/0.1.0-test.3/runtime.js"}
+  ],
+  "sidecars":[{"name":"image-decoder-t3","path":"apps/video/acfan/releases/0.1.0-test.3/image_decoder.js","page":"acfanImageDecoderT3"}],
+  "verify":{"global":"ACFANRuntime","property":"version","equals":"0.1.0-test.3"},
+  "notes":"APK 1.9.7 evidence driven provider rebuild; versioned Hiker page aliases to bypass stale page/module cache."
+}
