@@ -1,0 +1,26 @@
+{
+  "schema": 4,
+  "id": "huangguo",
+  "name": "黄果短剧",
+  "category": "video",
+  "mode": "remote-test",
+  "test": "apps/video/huangguo/test.json",
+  "channels": "apps/video/huangguo/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "0.1.0-test.1",
+  "testBootstrap": "apps/video/huangguo/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/huangguo/huangguo_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/huangguo/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/huangguo/CHANGELOG.md",
+  "sourceBook": "bookSource_黄果短剧.json",
+  "sourceApk": "hgdj1.0.5.apk",
+  "migration": {
+    "stage": "initial-test1",
+    "managerVersion": "direct-loader",
+    "stableExists": false,
+    "note": "首版从附件事实独立建立，无 Stable；先做网页业务链实机验证。"
+  }
+}

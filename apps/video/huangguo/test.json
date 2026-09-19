@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "huangguo-test",
+  "name": "黄果短剧",
+  "version": "0.1.0-test.1",
+  "baseVersion": null,
+  "targetVersion": "0.1.0",
+  "build": 10101,
+  "shellVersion": "0.1.0-test.1",
+  "shellRuleVersion": 2026091901,
+  "managerVersion": "direct-loader",
+  "delivery": "remote-immutable-direct-loader",
+  "release": "apps/video/huangguo/releases/0.1.0-test.1/release.json",
+  "bootstrap": "apps/video/huangguo/bootstrap_test_v1_b10101.js",
+  "rule": "apps/video/huangguo/huangguo_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-09-19",
+  "status": "active-test-pending-device-validation",
+  "notes": "首版 Test。动态线路 + HTML Provider + AES 封面 ImageAdapter + 结构化 videoSrc 播放 + 原生 UI；无 Stable，等待首页/搜索/详情/图片/播放实机闭环。"
+}

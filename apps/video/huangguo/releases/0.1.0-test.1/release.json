@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "huangguo-test",
+  "name": "黄果短剧",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {"name": "core", "path": "apps/video/huangguo/releases/0.1.0-test.1/core.js"},
+    {"name": "provider", "path": "apps/video/huangguo/releases/0.1.0-test.1/provider.js"},
+    {"name": "image", "path": "apps/video/huangguo/releases/0.1.0-test.1/image.js"},
+    {"name": "playback", "path": "apps/video/huangguo/releases/0.1.0-test.1/playback.js"},
+    {"name": "ui", "path": "apps/video/huangguo/releases/0.1.0-test.1/ui.js"},
+    {"name": "pages", "path": "apps/video/huangguo/releases/0.1.0-test.1/pages.js"},
+    {"name": "runtime", "path": "apps/video/huangguo/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global": "HuangGuoRemoteRuntime", "property": "version", "equals": "0.1.0-test.1"},
+  "notes": "初始 Test：网页 HTML/动态线路为 P0 业务链；封面 AES/CBC/NoPadding 独立 ImageAdapter；videoSrc 结构化播放优先，video:// 仅最终兜底；无 Stable，等待实机验证。"
+}

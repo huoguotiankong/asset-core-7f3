@@ -1,0 +1,35 @@
+{
+  "schema": 4,
+  "id": "huangguo",
+  "name": "黄果短剧",
+  "versionPolicy": "test-first-v1",
+  "updatedAt": "2026-09-19 19:40",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "huangguo-test",
+      "name": "黄果短剧",
+      "version": "0.1.0-test.1",
+      "targetVersion": "0.1.0",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/huangguo/huangguo_remote_test_v1_b10101.txt",
+      "mode": "remote-direct-loader",
+      "updatedAt": "2026-09-19",
+      "recommended": true,
+      "desc": "根据黄果网页书源与 hgdj 1.0.5 APK 研究建立的首个原生海阔测试版；先验证网页 P0 业务链，APP 私有 API 只记录候选，不在未确认协议前伪接入。",
+      "highlights": [
+        "动态线路自动发现与 last-good 缓存",
+        "推荐/最新/AI短剧/AI漫剧/换脸/魔改六频道",
+        "12 个题材标签、三大榜单、三类专题",
+        "搜索/详情/选集/播放/收藏/历史/设置",
+        "AES/CBC/NoPadding 封面解密并兼容明文图片",
+        "结构化 videoSrc 优先，video:// 仅作最终兜底",
+        "原生 Hiker UI，分类/榜单同页切换不堆返回栈",
+        "无 Stable，实机验证通过前不晋级"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/huangguo/assets/v1/logo.svg"
+    }
+  ]
+}
