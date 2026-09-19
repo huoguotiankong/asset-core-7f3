@@ -1,0 +1,11 @@
+{
+  "schema":1,
+  "id":"acfan",
+  "name":"ACFAN",
+  "category":"video",
+  "mode":"remote-test/self-use",
+  "test":"apps/video/acfan/test.json",
+  "channels":"apps/video/acfan/channels.json",
+  "changelog":"apps/video/acfan/CHANGELOG.md",
+  "updatedAt":"2026-09-19"
+}
