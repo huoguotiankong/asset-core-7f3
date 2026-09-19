@@ -1,0 +1,25 @@
+{
+  "schema":1,
+  "id":"acfan-test",
+  "name":"ACFAN",
+  "version":"0.1.0-test.2",
+  "build":10102,
+  "ref":"main",
+  "baseTest":"0.1.0-test.1",
+  "modules":[
+    {"name":"core","path":"apps/video/acfan/releases/0.1.0-test.1/core.js"},
+    {"name":"protocol","path":"apps/video/acfan/releases/0.1.0-test.1/protocol.js"},
+    {"name":"provider","path":"apps/video/acfan/releases/0.1.0-test.1/provider.js"},
+    {"name":"image-base","path":"apps/video/acfan/releases/0.1.0-test.1/image.js"},
+    {"name":"playback-base","path":"apps/video/acfan/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui-base","path":"apps/video/acfan/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/video/acfan/releases/0.1.0-test.1/pages.js"},
+    {"name":"device-fix-v2","path":"apps/video/acfan/releases/0.1.0-test.2/fix_v2.js"},
+    {"name":"runtime","path":"apps/video/acfan/releases/0.1.0-test.2/runtime.js"}
+  ],
+  "sidecars":[
+    {"name":"image-decoder","path":"apps/video/acfan/releases/0.1.0-test.2/image_decoder.js","page":"acfanImageDecoder"}
+  ],
+  "verify":{"global":"ACFANRuntime","property":"version","equals":"0.1.0-test.2"},
+  "notes":"第二轮实机修复：恢复独立 XOR 图片解密页；动漫/视频 zone 失败降级；漫画详情与原图阅读收敛；网站终端移除调试头并增强搜索/定位。"
+}
