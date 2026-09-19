@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"huangguo-test",
+  "name":"黄果短剧",
+  "version":"0.1.0-test.3",
+  "build":10103,
+  "ref":"main",
+  "baseStable":null,
+  "previousTest":{"version":"0.1.0-test.2","build":10102,"release":"apps/video/huangguo/releases/0.1.0-test.2/release.json","status":"device-test-found-sparse-data-and-image-failure"},
+  "modules":[
+    {"name":"core","path":"apps/video/huangguo/releases/0.1.0-test.3/core.js"},
+    {"name":"provider","path":"apps/video/huangguo/releases/0.1.0-test.3/provider.js"},
+    {"name":"image","path":"apps/video/huangguo/releases/0.1.0-test.3/image.js"},
+    {"name":"playback","path":"apps/video/huangguo/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/video/huangguo/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/video/huangguo/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/video/huangguo/releases/0.1.0-test.3/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/huangguo/releases/0.1.0-test.3/runtime.js"}
+  ],
+  "verify":{"global":"HuangGuoRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "notes":"根据 2026-09-19 实机截图修复：旧动态线路正则无法识别 xovufj.com/cxvwyp.com/zvbucj.com 这类单点域名；更换 endpoint cache key 强制摆脱 Test2 错误缓存；业务 Host 需通过多卡片评分；Provider 扩展卡片/详情 URL 与图片属性；封面解密改用海阔 crypto-java 已验证写法。"
+}
