@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "huangguo-test",
   "name": "黄果短剧",
-  "version": "0.1.0-test.3",
-  "baseVersion": "0.1.0-test.2",
+  "version": "0.1.0-test.4",
+  "baseVersion": "0.1.0-test.3",
   "targetVersion": "0.1.0",
-  "build": 10103,
-  "shellVersion": "0.1.0-test.3",
-  "shellRuleVersion": 2026091903,
+  "build": 10104,
+  "shellVersion": "0.1.0-test.4",
+  "shellRuleVersion": 2026091904,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/video/huangguo/releases/0.1.0-test.3/release.json",
-  "bootstrap": "apps/video/huangguo/bootstrap_test_v3_b10103.js",
-  "rule": "apps/video/huangguo/huangguo_remote_test_v3_b10103.txt",
+  "release": "apps/video/huangguo/releases/0.1.0-test.4/release.json",
+  "bootstrap": "apps/video/huangguo/bootstrap_test_v4_b10104.js",
+  "rule": "apps/video/huangguo/huangguo_remote_test_v4_b10104.txt",
   "updatedAt": "2026-09-19",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.2",
-    "build": 10102,
-    "release": "apps/video/huangguo/releases/0.1.0-test.2/release.json"
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/huangguo/releases/0.1.0-test.3/release.json"
   },
-  "notes": "Test3 根据首轮实机截图修复两条主链：动态线路正则兼容 xovufj.com/cxvwyp.com/zvbucj.com 等一级域名并强制弃用 Test2 错误缓存；封面改用海阔 crypto-java AES/CBC/NoPadding 解密，同时扩展卡片、详情 URL 和图片属性解析。"
+  "notes": "Test4 在 Test3 的线路与 Provider 修复上继续收紧封面链：使用 $(url, headers).image(InputStream) 显式传递 UA/Referer，并继续采用 crypto-java AES/CBC/NoPadding 解密。Test3 未交付用户即冻结。"
 }
