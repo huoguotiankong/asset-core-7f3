@@ -1,0 +1,14 @@
+/* ACFAN 0.1.0-test.4 native UI */
+var ACFANUI=(function(){
+  var C=ACFANCore,I=ACFANImage;
+  var ROOT='https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/acfan/assets/v1/';
+  var D={brand:'#FF8A2A',active:'#FFF0E3',muted:'#858585',icons:{logo:ROOT+'logo.svg',search:ROOT+'search.svg',fav:ROOT+'fav.svg',history:ROOT+'history.svg',settings:ROOT+'settings.svg',play:ROOT+'play.svg'}};
+  function line(){return{col_type:'line_blank'};}
+  function section(title,desc){return{title:C.clean(title),desc:desc?C.clean(desc):'',url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}};}
+  function chip(title,on,url,col){return{title:on?'““””<b><font color="'+D.brand+'">'+C.clean(title)+'</font></b>':C.clean(title),url:url,col_type:col||'scroll_button',extra:{backgroundColor:on?D.active:'',lineVisible:false}};}
+  function state(key,val){return $('#noLoading#').lazyRule(function(k,v){putMyVar(k,String(v));refreshPage(false);return'hiker://empty';},key,String(val));}
+  function empty(title,desc){return{title:title||'暂无内容',desc:desc||'',url:'hiker://empty',col_type:'text_center_1',extra:{lineVisible:false}};}
+  function quick(title,img,url){return{title:title,img:img,url:url,col_type:'icon_small_4',extra:{lineVisible:false}};}
+  function card(info){info=info||{};var kind=info.kind||'video',img=I.url(info.img||''),desc='',m=[];if(kind==='video'||kind==='short'){if(info.watch)m.push('播放 '+C.fmtNum(info.watch));if(info.duration)m.push(C.s(info.duration));if(!m.length&&info.author)m.push(info.author);desc=m.join(' · ');}else if(kind==='community'){if(info.author)m.push(info.author);if(info.comment)m.push('评 '+C.fmtNum(info.comment));desc=m.join(' · ');}else desc=[info.author,info.desc].filter(Boolean).join(' · ');var col=kind==='community'?(info.img?'movie_1_left_pic':'text_1'):(kind==='video'?'movie_2':'movie_3');return{title:C.clean(info.title||'未命名'),desc:C.clean(desc),img:img,pic_url:img,url:C.page('acfanT4Detail',{acf_kind:kind,acf_id:info.id||'',acf_title:info.title||'',acf_img:info.img||'',acf_author:info.author||''}),col_type:col,extra:{lineVisible:false}};}
+  return{design:D,line:line,section:section,chip:chip,state:state,empty:empty,quick:quick,card:card};
+})();
