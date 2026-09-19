@@ -1,33 +1,10 @@
 {
-  "schema": 4,
-  "id": "acfan",
-  "name": "ACFAN",
-  "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-19 22:22",
-  "channels": [
-    {
-      "channel": "test",
-      "label": "测试版",
-      "id": "acfan-test",
-      "name": "ACFAN",
-      "version": "0.1.0-test.4",
-      "targetVersion": "0.1.0",
-      "build": 10104,
-      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
-      "path": "apps/video/acfan/acfan_remote_test_v4_b10104.txt",
-      "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-19",
-      "recommended": true,
-      "desc": "APK 1.9.7 当前字段/路由驱动 Provider + 旧 ACFun 已实机成功的图片请求合同；全新 T4 页面别名。",
-      "highlights": [
-        "补齐 imageUrl/imgUrl/thumbUrl/posterMainUrl/posterDownloadUrl/verticalImg/backImg/cardImg/dynamicImg 等当前字段",
-        "动漫/视频使用 classTypeList/classifyList + tags/getTags + tagTitleList/getByClassify 当前协议链",
-        "jhimage 明确走 cdn.ukaim.com；所有 HTTP 图片先判明文格式，非明文再 XOR 前100字节",
-        "图片请求恢复当前 API Host Referer/Origin + 独立 acfanImageDecoderT4 页面合同",
-        "所有页面改为 acfanT4*，彻底绕开 Test1/Test2/Test3 页面缓存",
-        "详情页继续使用紧凑左图布局，漫画正文使用 original 图片链",
-        "无 Stable，Test4 必须继续实机验证"
-      ]
-    }
-  ]
+  "schema":4,
+  "id":"acfan",
+  "name":"ACFAN",
+  "versionPolicy":"test-first-v1",
+  "updatedAt":"2026-09-19 22:22",
+  "channels":[{
+    "channel":"test","label":"测试版","id":"acfan-test","name":"ACFAN","version":"0.1.0-test.5","targetVersion":"0.1.0","build":10105,"displayVersion":"Test 0.1.0-test.5 · Build 10105","path":"apps/video/acfan/acfan_remote_test_v5_b10105.txt","mode":"remote-direct-loader","updatedAt":"2026-09-19","recommended":true,"desc":"恢复旧 Stable 已实机验证的图片/标签分类/漫画合同，并新增原生播放优先和实机诊断。","highlights":["图片恢复 Stable 0.4.2：相对图→session imgDomain；仅 asigoo _480 走 XOR；普通 HTTP 图片直接显示；Dalvik UA + 空 Referer","动漫/视频恢复 Stable 0.4.8：classTypeList + getTagsZ/tagTitleList，Zone 仅兼容 fallback","漫画恢复 Stable 0.4.7：comics/base/info.chapterList → chapterInfo?chapterId → domain + imgList","视频详情原生播放优先，网页终端降为兜底","新增实机诊断页，直接输出 Host/imgDomain/图片字段/动漫链/漫画链真实数据","所有页面使用 acfanT5* 独立别名","无 Stable，Test5 必须继续实机验证"]
+  }]
 }
