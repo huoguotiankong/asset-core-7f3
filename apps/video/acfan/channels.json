@@ -1,0 +1,10 @@
+{
+  "schema":4,
+  "id":"acfan",
+  "name":"ACFAN",
+  "versionPolicy":"test-first-v1",
+  "updatedAt":"2026-09-19 21:01",
+  "channels":[{
+    "channel":"test","label":"测试版","id":"acfan-test","name":"ACFAN","version":"0.1.0-test.1","targetVersion":"0.1.0","build":10101,"displayVersion":"Test 0.1.0-test.1 · Build 10101","path":"apps/video/acfan/acfan_remote_test_v1_b10101.txt","mode":"remote-direct-loader","updatedAt":"2026-09-19","recommended":true,"desc":"全新重写：海阔原生首页/分类/搜索/详情，网站仅承担最终播放/阅读授权。","highlights":["精选/里番/动漫/视频/短视频/漫画/小说/有声/社区九大频道","分类/分区/标签/排序同页切换","视频/漫画/小说/有声/社区搜索","视频详情/评论/收藏/历史","漫画原生章节阅读、小说/有声章节页","当前 ACFAN /mobile 网站终端兜底播放","游客认证、动态 API Host、AES 响应解密、XOR 封面适配","无 Stable，必须实机验证后再晋级"]
+  }]
+}
