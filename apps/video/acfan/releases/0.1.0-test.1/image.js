@@ -1,0 +1,10 @@
+/* ACFAN 0.1.0-test.1 image adapter */
+var ACFANImage=(function(){
+  var C=ACFANCore,XOR='2020-zq3-888';
+  function abs(raw,domain){var s=C.s(raw).trim().replace(/\\\//g,'/');if(!s)return'';if(/^(?:data:|hiker:|file:)/i.test(s))return s;if(s.indexOf('//')===0)return'https:'+s;if(/^https?:\/\//i.test(s))return s;var d=C.s(domain||getItem(C.K.imgDomain,'')).replace(/\/+$/,'');if(!d)d='https://cdn.ukaim.com';return d+'/'+s.replace(/^\/+/, '');}
+  function target(url){url=C.s(url);if(!/\.asigoo\.com\//i.test(url)||/_480(?:[?#]|$)/i.test(url))return url;var q=url.indexOf('?');return q>=0?url.substring(0,q)+'_480'+url.substring(q):url+'_480';}
+  function known(bytes){if(!bytes||bytes.length<12)return false;function b(i){return bytes[i]&255;}if(b(0)===255&&b(1)===216&&b(2)===255)return true;if(b(0)===137&&b(1)===80&&b(2)===78&&b(3)===71)return true;if(b(0)===71&&b(1)===73&&b(2)===70&&b(3)===56)return true;if(b(0)===82&&b(1)===73&&b(2)===70&&b(3)===70&&b(8)===87&&b(9)===69&&b(10)===66&&b(11)===80)return true;return false;}
+  function decode(){var FileUtil=com.example.hikerview.utils.FileUtil,bytes=FileUtil.toBytes(input);if(!bytes||bytes.length<4)return FileUtil.toInputStream(bytes);if(known(bytes))return FileUtil.toInputStream(bytes);try{var key=XOR.split('').map(function(c){return c.charCodeAt(0);}),len=Math.min(100,bytes.length);for(var i=0;i<len;i++)bytes[i]=bytes[i]^key[i%key.length];if(!known(bytes))C.diag('IMAGE_UNKNOWN','xor header not known');return FileUtil.toInputStream(bytes);}catch(e){C.diag('IMAGE_FAIL',String(e.message||e));return FileUtil.toInputStream(bytes);}}
+  function url(raw,domain){var plain=abs(raw,domain);if(!plain)return'';if(/^(?:data:|hiker:|file:)/i.test(plain))return plain;if(!/\.asigoo\.com\//i.test(plain))return plain+'@Referer=';var t=target(plain),headers={'User-Agent':'Dalvik/2.1.0 (Linux; U; Android 11; M2012K10C Build/RP1A.200720.011)','Referer':''};try{return $(t,{headers:headers}).image(function(){return $.require('acfan').decodeImage();});}catch(e){C.diag('IMAGE_URL_FAIL',t+' '+String(e.message||e));return t+'@Referer=';}}
+  return{abs:abs,url:url,decode:decode};
+})();
