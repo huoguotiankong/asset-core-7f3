@@ -5,79 +5,74 @@
 ## 当前基线
 
 - App ID：`huangguo`
-- Test：`0.1.0-test.4 / Build 10104 / Shell 0.1.0-test.4`
+- Test：`0.1.0-test.5 / Build 10105 / Shell 0.1.0-test.5`
 - Stable：不存在
-- Test Shell：`apps/video/huangguo/huangguo_remote_test_v4_b10104.txt`
-- Bootstrap：`apps/video/huangguo/bootstrap_test_v4_b10104.js`
-- Release：`apps/video/huangguo/releases/0.1.0-test.4/release.json`
-- 交付：不可变版本路径 + direct loader；开发测试优先直接给海阔可识别导入口令，不再要求先经过“我的规则仓库”。
+- Test Shell：`apps/video/huangguo/huangguo_remote_test_v5_b10105.txt`
+- Bootstrap：`apps/video/huangguo/bootstrap_test_v5_b10105.js`
+- Release：`apps/video/huangguo/releases/0.1.0-test.5/release.json`
+- 交付：不可变版本路径 + direct loader；开发测试直接提供海阔可识别完整导入口令。
 
-## 2026-09-19 · 0.1.0-test.4 / Build10104 · 图片 Header 合同收紧
+## 2026-09-19 · 0.1.0-test.5 / Build10105 · 封面、搜索与播放器收敛
 
-- Test3 在尚未交付用户前再次复核仓库事故文档，发现图片链虽然已改用 `crypto-java.js`，但 URL Header 仍未严格按项目既有规范交给海阔图片请求器，因此冻结 Test3，不原地覆盖。
-- Test4 只替换 ImageAdapter 与 Runtime：封面统一走 `$(url, {headers}).image(function(){ return InputStream; })`，请求阶段显式携带 UA / Referer，再在回调内执行 AES/CBC/NoPadding 解密。
-- 仍保留明文 JPEG/PNG/GIF/WebP 头识别，明文直接透传，密文再解密。
-- 线路、列表解析、页面 Patch 继续复用 Test3，不扩大变更面。
-- 状态：**当前推荐测试版，等待第二轮实机验证。**
+### 第二轮实机现象
 
-## 2026-09-19 · 0.1.0-test.3 / Build10103 · 首轮实机线路与封面修复
+- 列表数据已恢复为多条真实短剧，说明 Test3/4 的线路与 Provider 修复有效。
+- 所有封面仍为空白占位；用户明确指出附件书源已能成功解密同站封面。
+- 首页搜索框右侧显示“搜索短剧、剧情、关键词”，占用过宽，输入体验差。
+- 播放可打开，但播放器出现“立即播放 / 剧情简介”等多余播放列表项。
 
-### 实机现象
+### 证据与根因
 
-- 首页/片库在多个频道或标签下只出现同一部《AI换脸…》，榜单也仅有极少数条目，说明页面框架能运行，但实际业务 Host/列表解析结果错误。
-- 首页、片库、榜单封面均显示空白占位，说明 Test2 图片回调链未在海阔实机正常完成。
-- `动态线路 · 原生页面` 等开发态文案直接暴露在首页，影响成品感。
+- `[附件源码确认]` `bookSource_黄果短剧.json` 的 `coverDecodeJs` 为 `AES/CBC/NoPadding`，Key `f5d965df75336270`，IV `97b60394abc2fbe1`，对图片响应字节直接解密。
+- `[附件源码确认]` 章节正文/播放只从页面严格提取 `"videoSrc":"...",`，没有网页播放器兜底。
+- `[海阔成熟规则确认]` 同一 Key/IV 的既有小程序使用 `$().image(function(){ ... })` 生成图片处理后缀，再以 `imageUrl + suffix` 方式交给海阔图片加载器。
+- Test4 使用 `$(url,{headers}).image(...)` 作为完整 URL，和成熟规则的后缀式调用不同；实机封面仍失败，因此 Test5 改为完全同型的 `$().image` 后缀式解密。
+- Test1-4 播放适配器在 `videoSrc` 解析失败时回退 `video://页面地址`；这会把网页本身交给海阔通用解析器，从而把页面中的“立即播放/剧情简介”等节点混入播放器列表。
 
-### 根因与修复
+### Test5 修改
 
-- `[确认]` Test2 的“线路 N”域名正则要求至少两个 `.`，无法识别当前官方发布页公开的 `xovufj.com / cxvwyp.com / zvbucj.com` 这类一级域名，导致线路候选缺失并可能回落到错误外链。
-- `[确认]` Test2 使用 `huangguo_endpoint_v1` 缓存；即使代码修正，只要旧错误 Host 仍缓存，也会继续复现。因此 Test3 改为 `huangguo_endpoint_v2`，首次导入自动避开 Test2 错误缓存，同时“重新检测线路”会清理 v1/v2。
-- Discovery 新增 `huangguo21.com`，并保留当前三条直连线路和 `huangguo.me` 作为候选；线路正则改为支持任意合法域名层级。
-- 业务 Host 不再只看单个 marker，改为对 `/recommend/1/` / 首页进行结构评分；至少要出现足量 `hg-drama-card / hg-rank-item / hg-card-grid / search / recommend` 特征才通过，避免再次接受只有一两条演示数据的假业务页。
-- Provider 对齐附件书源并扩大容错：优先 `.hg-card-grid&&.hg-drama-card` / `.hg-rank-list&&.hg-rank-item`，同时支持 `detail/video/play/drama/ep` 详情路径及 `data-src/data-original/data-lazy-src/src/srcset` 图片字段。
-- ImageAdapter 不再直接使用自写 Java `Cipher` 链，改用海阔成熟规则已使用的 `hiker://assets/crypto-java.js`，算法保持 `AES/CBC/NoPadding`、Key `f5d965df75336270`、IV `97b60394abc2fbe1`；明文 JPEG/PNG/GIF/WebP 先透传。
-- 首页开发态副标题改为普通页码信息。
-- 状态：被 Test4 在交付前取代，保留为不可变中间版本。
+- ImageAdapter：`img = 原图 URL + $().image(decrypt callback)`；回调内使用 `hiker://assets/crypto-java.js`，`AES/CBC/NoPadding`，与附件算法一致。
+- PlaybackAdapter：只接受页面 `videoSrc` 真实媒体直链；支持 `\\u0026`、转义斜杠和协议相对 URL；彻底移除 `video://` 网页兜底。解析失败时明确 Toast，不再伪成功。
+- Search：首页和搜索页输入框右侧标题统一缩为“搜索”。
+- 继续复用 Test3 已验证出数据的 Core/Provider，避免同时重动线路与解析层。
+- 状态：**当前推荐测试版，等待第三轮实机验证。**
 
-### 当前回归重点
+### Test5 回归重点
 
-1. 覆盖导入 Test4 后，推荐/最新/AI短剧/AI漫剧/AI换脸/AI魔改不应再只剩同一部作品。
-2. 首页、片库、榜单至少抽查 6 张封面，确认不再统一空白。
-3. 设置页应显示当前测试链，当前线路应是实际业务域名而不是 `huangguo.com` 品牌页。
-4. 片库至少测试后宫/熟女/系统/奇幻；榜单测试热播/推荐/潜力；专题至少进入一个列表。
-5. 数据和图片通过后再继续二级详情、选集、播放与 UI 密度第二轮优化。
+1. 首页至少抽查 6 张封面；片库/榜单再各抽查 2 张，确认 AES 图片实际显示。
+2. 搜索框右侧应只显示“搜索”，输入区域明显变宽。
+3. 任意两部短剧各播放 1 集：播放器应直接进入真实媒体，不再出现网页派生的多余列表。
+4. 若某集 Toast“视频直链解析失败”，记录剧名与集数；不要恢复 `video://` 兜底，后续只扩展真实媒体字段解析。
+5. 三项通过后继续处理详情页、选集密度与整体 UI 第二轮美化。
+
+## 2026-09-19 · 0.1.0-test.4 / Build10104 · 图片 Header 合同尝试
+
+- Test4 继续复用 Test3 线路/Provider，只替换 ImageAdapter 与 Runtime。
+- 封面尝试 `$(url,{headers}).image(InputStream)` + `crypto-java` AES/CBC/NoPadding，并保留明文图片头透传。
+- 第二轮实机证明：列表数据已正常，但封面仍全空白，因此该图片挂载形态对本程序无效；已由 Test5 取代。
+
+## 2026-09-19 · 0.1.0-test.3 / Build10103 · 首轮实机线路与列表修复
+
+- Test2 实机首页/片库只剩同一部作品、榜单极少条目，确认业务 Host 误选。
+- 修复“线路 N”域名解析，支持当前一级域名；升级 endpoint cache key，摆脱旧错误缓存。
+- 加强业务 Host 结构评分，Provider 对齐附件 `.hg-card-grid / .hg-drama-card / .hg-rank-item` 与多种 lazy-image 字段。
+- 首页开发态文案移除。Test3 未交付即由 Test4 取代。
 
 ## 2026-09-19 · 0.1.0-test.2 / Build10102 · 动态线路误判加固
 
-- Test1 冻结，不原地覆盖。
-- 发现 `huangguo.com` 品牌落地页仅凭“黄果/短剧”文案可能误通过弱校验，因此在首次实机前主动升 Test2。
-- Endpoint Discovery 优先消费发现页里的“线路 N”候选，并收紧真实内容结构校验。
-- 实机最终发现数据稀疏与封面失败，已由 Test3/Test4 取代。
+- 冻结 Test1；排除 `huangguo.com / huangguoai.ai` 品牌/发现页本身，尝试优先线路候选。
+- 实机后确认仍有线路识别缺陷，已由 Test3 修复。
 
 ## 2026-09-19 · 0.1.0-test.1 / Build10101 · 初始测试版
 
-### 证据与边界
+### 初始能力
 
-- `[源码确认]` 用户上传的“黄果短剧”书源使用 `https://huangguoai.ai/` 作为线路发现入口，从页面“线路 N”中提取真实业务域名，并缓存可用线路。
-- `[源码确认]` 网页内容结构包含 `hg-drama-card / hg-rank-item`，支持推荐、最新、题材标签、热播/推荐/潜力榜、专题、AI短剧、AI漫剧、AI换脸、AI魔改与 `/search/video/<keyword>/` 搜索。
-- `[源码确认]` 封面算法为 AES/CBC/NoPadding。
-- `[源码确认]` 播放页优先从页面 `videoSrc` 结构化字段提取媒体地址；首版同时提供 `<source>`、m3u8/mp4 源码扫描，最终才降级 `video://`。
-- `[网页确认]` `https://huangguo.com/` 当前是黄果短剧品牌落地页，不把它直接当作固定业务 Host。
-- `[APK 静态确认]` `hgdj1.0.5.apk` 为 Flutter 客户端，可见 playlet 分类、详情、章节、推荐、搜索、评论、收藏/点赞、权限解锁等 endpoint 字符串，同时出现 `X-Device-Fingerprint` 等协议线索。签名/设备指纹/响应加密合同未完整确认前，不伪装成已可用能力。
-
-### Product / UI
-
-- Home：搜索 → 六个频道原地切换 → 片库/榜单/专题/我的 → 继续观看 → 内容 Feed。
-- Library：12 个题材标签同页切换。
-- Rank：热播/推荐/潜力三 Tab。
-- Topics：精品高分 / 灵异诡事 / 魔改电视剧。
-- Search：历史词 + 结果页。
-- Detail：Hero → Primary Play → 简介 → 标签 → 选集 → 低频操作 → 相关推荐。
-- Mine：本地收藏与观看历史。
-- Settings：海报布局、线路重发现、本地数据清理、诊断。
+- 推荐/最新/AI短剧/AI漫剧/AI换脸/AI魔改六频道。
+- 12 个题材标签、热播/推荐/潜力榜、三类专题、搜索、详情、选集、收藏、历史、设置。
+- `[APK 静态确认]` `hgdj1.0.5.apk` 可见 playlet 分类、详情、章节、推荐、搜索、评论、收藏/点赞、权限解锁等 endpoint，以及 `X-Device-Fingerprint`。签名/设备指纹/响应加密合同未完整确认前，不接入为已可用功能。
 
 ### 待后续
 
-- APP API 的签名、设备指纹、请求/响应加密与账号 Session 完整逆向。
-- 协议确认后再评估评论、点赞、APP 原生推荐/搜索与账号收藏是否作为 P2 Provider 接入。
-- Test4 实机通过后再创建 Candidate/Stable，不直接把首版设为正式版。
+- Test5 实机通过后再做详情/选集/UI 密度优化。
+- APP API 签名、设备指纹、请求/响应加密与账号 Session 完整逆向后，再评估评论、点赞、APP 原生推荐/搜索与账号收藏。
+- 未完成实机回归前不创建 Stable。
