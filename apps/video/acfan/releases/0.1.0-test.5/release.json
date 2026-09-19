@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "acfan-test",
+  "name": "ACFAN",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "baseTest": "0.1.0-test.4",
+  "modules": [
+    {"name":"core","path":"apps/video/acfan/releases/0.1.0-test.1/core.js"},
+    {"name":"protocol","path":"apps/video/acfan/releases/0.1.0-test.1/protocol.js"},
+    {"name":"provider-stable-contracts","path":"apps/video/acfan/releases/0.1.0-test.5/provider_v5.js"},
+    {"name":"image-stable-contract","path":"apps/video/acfan/releases/0.1.0-test.5/image_v5.js"},
+    {"name":"playback-native-first","path":"apps/video/acfan/releases/0.1.0-test.5/playback_v5.js"},
+    {"name":"ui-t5","path":"apps/video/acfan/releases/0.1.0-test.5/ui_v5.js"},
+    {"name":"pages-src-1","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_1.js"},
+    {"name":"pages-src-2","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_2.js"},
+    {"name":"pages-src-3","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_3.js"},
+    {"name":"pages-src-4","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_4.js"},
+    {"name":"pages-src-5","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_5.js"},
+    {"name":"pages-src-6","path":"apps/video/acfan/releases/0.1.0-test.5/pages_src_6.js"},
+    {"name":"pages-loader","path":"apps/video/acfan/releases/0.1.0-test.5/pages_loader.js"},
+    {"name":"runtime","path":"apps/video/acfan/releases/0.1.0-test.5/runtime.js"}
+  ],
+  "sidecars":[{"name":"image-decoder-t5","path":"apps/video/acfan/releases/0.1.0-test.5/image_decoder.js","page":"acfanImageDecoderT5"}],
+  "verify":{"global":"ACFANRuntime","property":"version","equals":"0.1.0-test.5"},
+  "notes":"Restore Stable 0.4.2/0.4.7/0.4.8 device-validated image, taxonomy and comic contracts; native playback first; add device diagnostic page."
+}
