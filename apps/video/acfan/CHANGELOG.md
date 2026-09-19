@@ -3,13 +3,68 @@
 > 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 冻结为历史实现，不作为本程序运行依赖。
 
 ## 当前基线
-- Test：`0.1.0-test.3 / Build10103 / Shell 2026091908`
+- Test：`0.1.0-test.4 / Build10104 / Shell 2026091909`
 - Stable：不存在
-- Test Shell：`apps/video/acfan/acfan_remote_test_v3_b10103.txt`
-- Bootstrap：`apps/video/acfan/bootstrap_test_v3_b10103.js`
-- Release：`apps/video/acfan/releases/0.1.0-test.3/release.json`
+- Test Shell：`apps/video/acfan/acfan_remote_test_v4_b10104.txt`
+- Bootstrap：`apps/video/acfan/bootstrap_test_v4_b10104.js`
+- Release：`apps/video/acfan/releases/0.1.0-test.4/release.json`
 - 当前网站终端：`https://aasf.wwvgadm0.work/mobile`
-- Test1/Test2 已冻结，不原地覆盖。
+- Test1/Test2/Test3 已冻结，不原地覆盖。
+
+## 2026-09-19 · 0.1.0-test.4 · APK Contract + Proven Image Request Contract
+
+### Test2/3 后续实机结论
+- 用户明确反馈 Test2 与最初版本相比“基本没有变化”，继续围绕旧 Provider/旧页面别名打补丁已经失去价值。
+- 因此 Test4 不再把 Test1/Test2 视为可继续增补的基础，而是以用户上传的 `acfun_1.9.7.apk` 当前路由/字段为主证据重新收敛 Provider。
+- Test3 在中断前曾出现远端 Blob 与本地准备源码不一致的风险，因此冻结，不作为推荐实机版本；Test4 重新构造并在挂到 main 前核对远端 Blob SHA。
+
+### APK 1.9.7 当前协议事实
+- 当前 APK 可见：`video/classTypeList`、`video/classifyList`、`video/tags/getTags`、`video/tagTitleList`、`video/getByClassify`。
+- 当前 APK 不再以 Test1/Test2 使用的 `video/getZoneListByClassifyId` / `video/tags/getTagsZ` 作为当前分类链。
+- 图片字段扩展到 `imageUrl / imgUrl / thumbUrl / posterMainUrl / posterDownloadUrl / verticalImg / backImg / cardImg / dynamicImg / generatedCoverImg / templateCoverImg` 等。
+- APK 仍存在 `_480`、`imgDomain`、`2020-zq3-888` 与 `https://cdn.ukaim.com/` 相关事实，说明 XOR 图片合同仍需保留。
+
+### Test4 实现
+1. **Provider 重建**
+   - 视频/短视频/漫画/小说/有声/社区模型统一补齐 APK 1.9.7 当前图片字段。
+   - 动漫/视频链改为 `classTypeList → classifyList fallback → tags/getTags → tagTitleList → getByClassify fallback`。
+   - 社区详情使用 `community/dynamic/dynamicInfo`；其它详情、章节接口保持当前已验证路径。
+
+2. **图片请求合同恢复**
+   - 不再使用空 Referer。
+   - 复刻旧 ACFun 曾实机成功的海阔图片请求形态：`当前 API Host Referer/Origin + 独立图片解码页`。
+   - `jhimage/` 明确解析到 `https://cdn.ukaim.com/`；asigoo 缩略图仍支持 `_480`。
+   - 所有 HTTP 图片先判断 JPEG/PNG/GIF/WebP magic，已经是明文则直接返回；非明文才 XOR 前100字节，key=`2020-zq3-888`。
+   - 缓存后缀改为 `.img`，避免强行假定图片格式。
+
+3. **彻底绕开旧缓存**
+   - 主页面及全部二级页改为 `acfanT4 / acfanT4Detail / acfanT4Search / acfanT4Comments / acfanT4ComicReader / acfanT4FictionReader / acfanT4Bridge / acfanT4Mine / acfanT4Settings`。
+   - 图片解码页改为 `acfanImageDecoderT4`。
+   - Shell 标题固定显示 `ACFAN·T4`，便于实机确认真实运行版本。
+
+4. **详情与阅读**
+   - 视频/漫画/小说/有声详情统一使用紧凑左图布局。
+   - 漫画目录使用 `text_4` 网格；正文明确使用 original 图片链，不套 `_480`。
+   - 无图社区动态保持文本卡，减少无意义的大白块。
+
+5. **网站终端**
+   - 仍只承担最终播放/阅读授权，不把网页当主 UI。
+   - 保留输入赋值、Enter、form submit、搜索按钮、标题点击、播放器/阅读器检测多级定位。
+   - 当前仍需实机验证网站路由本身是否变化；未宣称播放终端已经完成闭环。
+
+### Test4 发布门禁
+- 不可变代码先生成独立 commit，再检查远端 release 目录内 Blob SHA 与准备时 SHA 一致，确认后才 fast-forward `main`。
+- Shell 外层 JSON 与嵌套 `pages` JSON 已在生成时解析通过。
+- Release/Bootstrap/Shell 使用 Build `10104` 与 Shell `2026091909`，并与 `acfanT4*` 页面别名一致。
+- Stable 继续不存在，Test4 只能作为实机验证版。
+
+### Test4 实机验收重点
+1. 顶部规则名必须显示 **`ACFAN·T4`**；若不是，先停止后续测试并排查旧规则缓存。
+2. 精选 / 短视频 / 漫画分别抽查至少 8 张封面，确认是否真正恢复。
+3. 动漫频道确认不再出现 `getZoneListByClassifyId` 报错，并验证分类/标签可切换。
+4. 漫画详情必须能出现标题/操作区/章节目录或明确兜底，再进入一个章节验证正文原图。
+5. 视频详情点击“立即播放”，检查网站终端是否真正提交搜索并进入目标内容。
+6. 若封面仍为空，下一步必须抓取实机实际图片 URL / Host / Header，不再继续盲改 XOR 算法。
 
 ## 2026-09-19 · 0.1.0-test.3 · APK 1.9.7 Contract Rebuild
 
@@ -51,19 +106,12 @@
    - 保持网站只承担最终播放/阅读授权。
    - 搜索定位继续使用 value setter、input/change、Enter、form submit、搜索按钮和标题匹配多级策略。
 
-### Test3 静态门禁
-- `provider_v3.js / image_v3.js / image_decoder.js / playback_v3.js / ui_v3.js / pages_v3.js / runtime.js / bootstrap` 全部通过 `node --check`。
-- Release/Test/Channels JSON 已解析通过。
-- Shell 外层 JSON 与嵌套 pages JSON 已解析通过。
-- Test3 不修改 Test1/Test2 immutable release。
-
 ### Test3 实机验收重点
 1. 导入后顶部规则名必须明确显示 **`ACFAN·T3`**；若仍显示 `ACFAN·测试版`，说明实际未加载 Test3。
 2. 精选、短视频、漫画分别抽查多张封面。
 3. 动漫频道不应再出现 `getZoneListByClassifyId` 报错；检查分类与标签数据。
 4. 漫画详情应至少显示标题/封面/操作区/目录或明确的网站阅读兜底，再打开章节测试原图正文。
 5. 视频详情点击“立即播放”检查网站搜索是否真正提交并进入目标内容/播放器。
-6. 如仍有空图，优先记录图片字段与 `acfanImageDecoderT3` 实际回调情况，不再回退旧 Provider。
 
 ## 2026-09-19 · 0.1.0-test.2 · First Device Recovery
 
@@ -78,7 +126,7 @@
 
 ### 根因与修复
 - 封面尝试恢复独立 XOR 解码页；动漫/视频 Zone 失败增加降级；漫画详情改紧凑布局；网站终端增强搜索提交；社区无图动态改文本卡。
-- Test2 实机反馈“基本没有变化”，因此该方案冻结，由 Test3 的 APK 1.9.7 合同重建接管。
+- Test2 实机反馈“基本没有变化”，因此该方案冻结，由后续 APK 合同重建接管。
 
 ## 2026-09-19 · 0.1.0-test.1 · Clean Rewrite
 
@@ -112,4 +160,4 @@ Shell / Bootstrap
 - 视频首版最终授权交给当前 `/mobile` 网站终端，小程序主体保持海阔原生 UI。
 
 ### 当前边界
-- Test1/Test2 均已被实机证明存在关键问题，不得晋级 Stable；当前仅 Test3 为推荐测试基线。
+- Test1/Test2 已被实机证明存在关键问题；Test3 冻结；当前仅 Test4 为推荐测试基线，仍不得晋级 Stable。
