@@ -3,12 +3,61 @@
 > 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 冻结为历史实现，不作为本程序运行依赖。
 
 ## 当前基线
-- Test：`0.1.0-test.1 / Build10101 / Shell 2026091906`
+- Test：`0.1.0-test.2 / Build10102 / Shell 2026091907`
 - Stable：不存在
-- Test Shell：`apps/video/acfan/acfan_remote_test_v1_b10101.txt`
-- Bootstrap：`apps/video/acfan/bootstrap_test_v1_b10101.js`
-- Release：`apps/video/acfan/releases/0.1.0-test.1/release.json`
+- Test Shell：`apps/video/acfan/acfan_remote_test_v2_b10102.txt`
+- Bootstrap：`apps/video/acfan/bootstrap_test_v2_b10102.js`
+- Release：`apps/video/acfan/releases/0.1.0-test.2/release.json`
 - 当前网站终端：`https://aasf.wwvgadm0.work/mobile`
+- Test1 已冻结，不原地覆盖。
+
+## 2026-09-19 · 0.1.0-test.2 · First Device Recovery
+
+### Test1 实机事实
+用户首轮截图确认：
+- 精选、短视频、漫画、社区等列表接口已经能返回真实数据，说明游客会话/API Host/基础 Provider 主链成立。
+- 首页、详情、漫画列表等封面全部为空白；视频详情本身能加载标题/播放量。
+- 动漫频道被 `video/getZoneListByClassifyId` 的 GET/POST 双失败直接拖成整页“加载失败”。
+- 漫画列表有数据，但详情进入后呈现大面积空白，现有 blur 大卡 + 图片失败放大了问题。
+- 网站终端可以打开当前 `/mobile`，注入标题也能出现在网站搜索框，但没有可靠触发搜索结果/目标卡片点击，最终播放未闭环。
+- 社区列表能出数据，但无图动态仍占据大图片位，信息密度差。
+
+### 根因与修复
+1. **封面解密链**
+   - Test1 把 XOR 解码挂在主模块的 `$.require('acfan').decodeImage()` 回调上，算法虽与历史一致，但没有复刻旧 ACFun 已实机成功的独立图片页面合同。
+   - Test2 新增独立 `acfanImageDecoder` 页面：`$().image(...) → InputStream → JPEG/PNG/GIF/WebP magic 判断 → 非明文才 XOR 前100字节 → 本地缓存`。
+   - asigoo 列表/详情缩略图继续 `_480`；漫画正文新增 original 链，不再强制 `_480`。
+
+2. **动漫/视频分类容错**
+   - `video/getZoneListByClassifyId` 降为可选增强层。
+   - Zone 失败时继续尝试 `video/tags/getTagsZ`；仍失败则直接 `video/getByClassify`，禁止单个筛选接口拖死整个页面。
+
+3. **漫画详情/阅读**
+   - 漫画详情从 `movie_1_vertical_pic_blur` 改为更紧凑的竖图详情，避免空封面把整个首屏撑成大白块。
+   - 章节使用 `text_4` 网格；目录为空时明确显示网站阅读入口。
+   - 原生漫画正文使用 `I.original()`，保留原图尺寸。
+
+4. **网站终端**
+   - 删除“网站终端/仅承担最终授权”等开发说明头，X5 终端尽量占满页面。
+   - 注入定位增强为：原生 input value setter → input/change → Enter → form.requestSubmit/form.submit → 搜索按钮 → 标题结果点击 → video/player/reader 检测。
+   - 当前仍属于 H5 终端兜底，必须继续实机验证；没有宣称已经解决网站自身路由/授权变化。
+
+5. **UI**
+   - 社区无图动态改为文本卡；有图动态改左图卡，减少空白占位。
+   - 其它页面继续保持原生同页筛选与统一红色品牌色，后续在图片/播放闭环后继续做视觉精修。
+
+### Test2 静态门禁
+- `fix_v2.js / image_decoder.js / runtime.js / bootstrap_test_v2_b10102.js` 已通过 `node --check`。
+- Test2 release JSON 与 Shell 外层 JSON / pages JSON 已解析通过。
+- Shell version `2026091907` 位于 32 位有符号整数安全范围。
+
+### Test2 实机验收重点
+1. 精选/短视频/漫画至少抽查 8 张封面是否恢复。
+2. 动漫频道不再因为 Zone 失败整页报错，至少能退化到 class 列表。
+3. 漫画详情能看到封面/标题/收藏/网页阅读/章节目录；打开一个章节验证原图正文。
+4. 视频详情点击立即播放后，网站终端是否能真正提交搜索、点击目标并进入播放器。
+5. 社区无图动态是否不再出现大面积空白图位。
+6. 如果图片仍空白，优先检查 `acfanImageDecoder` 页面是否真正被当前 Shell 注册，不再继续改 XOR 算法。
 
 ## 2026-09-19 · 0.1.0-test.1 · Clean Rewrite
 
@@ -51,17 +100,6 @@ Shell / Bootstrap
 - Shell 内 pages JSON 与应用元数据 JSON 已完成解析检查。
 - 壳 version `2026091906` 位于 32 位有符号整数安全范围。
 
-### 首轮实机验收
-1. 首页是否能建立游客会话并正常加载精选。
-2. 九频道分别切换；精选/里番 Station、动漫/视频分类分区、漫画 Station、小说/有声标签必须能切换且不叠加返回栈。
-3. asigoo 封面至少抽查 6 张；其它普通图片也应正常。
-4. 搜索视频、漫画、小说、有声、社区。
-5. 视频详情与评论；点击立即播放后 `/mobile` 网站终端能定位目标并出画面。
-6. 漫画详情/目录/章节原生阅读。
-7. 小说/有声详情/章节；音频存在时可直接播放。
-8. 收藏/历史/设置/接口重发现正常。
-9. 依据实机截图再做第二轮 UI 密度和信息层级优化。
-
 ### 当前边界
-- 本会话工具无法直接访问用户提供的动态 `.work` 域名进行网页抓取；首版网站终端按用户明确提供的最新地址配置，并以旧项目中已实机确认的协议事实建立 Provider。
-- Test1 未实机验证，不得晋级 Stable。
+- 本会话工具无法直接访问用户提供的动态 `.work` 域名进行网页抓取；网站终端按用户明确提供的最新地址配置，并以旧项目中已实机确认的协议事实建立 Provider。
+- Test1 首轮实机已确认存在图片、Zone、漫画详情与 H5 定位问题，已由 Test2 接管；Test1 不得晋级 Stable。
