@@ -1,0 +1,19 @@
+{
+  "schema":1,
+  "channel":"test",
+  "id":"acfan-test",
+  "name":"ACFAN",
+  "version":"0.1.0-test.1",
+  "targetVersion":"0.1.0",
+  "build":10101,
+  "shellVersion":"0.1.0-test.1",
+  "shellRuleVersion":2026091906,
+  "managerVersion":"direct-loader",
+  "delivery":"remote-immutable-direct-loader",
+  "release":"apps/video/acfan/releases/0.1.0-test.1/release.json",
+  "bootstrap":"apps/video/acfan/bootstrap_test_v1_b10101.js",
+  "rule":"apps/video/acfan/acfan_remote_test_v1_b10101.txt",
+  "updatedAt":"2026-09-19",
+  "status":"active-test-pending-device-validation",
+  "notes":"全新 ACFAN：原生 UI/Provider + 当前 /mobile 网站终端；不继承旧 ACFun 补丁链。"
+}
