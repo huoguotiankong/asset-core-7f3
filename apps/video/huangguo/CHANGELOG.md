@@ -1,16 +1,43 @@
 # 黄果短剧 Changelog
 
-> 程序级长期技术记忆。当前只有 Test，未经过用户实机验证，不得晋级 Stable。
+> 程序级长期技术记忆。当前只有 Test，未经过用户实机完整验证，不得晋级 Stable。
 
 ## 当前基线
 
 - App ID：`huangguo`
-- Test：`0.1.0-test.2 / Build 10102 / Shell 0.1.0-test.2`
+- Test：`0.1.0-test.3 / Build 10103 / Shell 0.1.0-test.3`
 - Stable：不存在
-- Test Shell：`apps/video/huangguo/huangguo_remote_test_v2_b10102.txt`
-- Bootstrap：`apps/video/huangguo/bootstrap_test_v2_b10102.js`
-- Release：`apps/video/huangguo/releases/0.1.0-test.2/release.json`
-- 交付：不可变版本路径 + direct loader；不写 Remote Manager active state。
+- Test Shell：`apps/video/huangguo/huangguo_remote_test_v3_b10103.txt`
+- Bootstrap：`apps/video/huangguo/bootstrap_test_v3_b10103.js`
+- Release：`apps/video/huangguo/releases/0.1.0-test.3/release.json`
+- 交付：不可变版本路径 + direct loader；开发测试优先直接给海阔可识别导入口令，不再要求先经过“我的规则仓库”。
+
+## 2026-09-19 · 0.1.0-test.3 / Build10103 · 首轮实机线路与封面修复
+
+### 实机现象
+
+- 首页/片库在多个频道或标签下只出现同一部《AI换脸…》，榜单也仅有极少数条目，说明页面框架能运行，但实际业务 Host/列表解析结果错误。
+- 首页、片库、榜单封面均显示空白占位，说明 Test2 图片回调链未在海阔实机正常完成。
+- `动态线路 · 原生页面` 等开发态文案直接暴露在首页，影响成品感。
+
+### 根因与修复
+
+- `[确认]` Test2 的“线路 N”域名正则要求至少两个 `.`，无法识别当前官方发布页公开的 `xovufj.com / cxvwyp.com / zvbucj.com` 这类一级域名，导致线路候选缺失并可能回落到错误外链。
+- `[确认]` Test2 使用 `huangguo_endpoint_v1` 缓存；即使代码修正，只要旧错误 Host 仍缓存，也会继续复现。因此 Test3 改为 `huangguo_endpoint_v2`，首次导入自动避开 Test2 错误缓存，同时“重新检测线路”会清理 v1/v2。
+- Discovery 新增 `huangguo21.com`，并保留当前三条直连线路和 `huangguo.me` 作为候选；线路正则改为支持任意合法域名层级。
+- 业务 Host 不再只看单个 marker，改为对 `/recommend/1/` / 首页进行结构评分；至少要出现足量 `hg-drama-card / hg-rank-item / hg-card-grid / search / recommend` 特征才通过，避免再次接受只有一两条演示数据的假业务页。
+- Provider 对齐附件书源并扩大容错：优先 `.hg-card-grid&&.hg-drama-card` / `.hg-rank-list&&.hg-rank-item`，同时支持 `detail/video/play/drama/ep` 详情路径及 `data-src/data-original/data-lazy-src/src/srcset` 图片字段。
+- ImageAdapter 不再直接使用自写 Java `Cipher` 链，改用海阔成熟规则已使用的 `hiker://assets/crypto-java.js`，算法保持 `AES/CBC/NoPadding`、Key `f5d965df75336270`、IV `97b60394abc2fbe1`；明文 JPEG/PNG/GIF/WebP 先透传。
+- 首页开发态副标题改为普通页码信息。
+- 状态：**Test3 已发布，等待第二轮实机验证；不得晋级 Stable。**
+
+### Test3 回归重点
+
+1. 覆盖导入 Test3 后，推荐/最新/AI短剧/AI漫剧/AI换脸/AI魔改不应再只剩同一部作品。
+2. 首页、片库、榜单至少抽查 6 张封面，确认不再统一空白。
+3. 设置页应显示 `Test 0.1.0-test.3 · Build 10103`，当前线路应是实际业务域名而不是 `huangguo.com` 品牌页。
+4. 片库至少测试后宫/熟女/系统/奇幻；榜单测试热播/推荐/潜力；专题至少进入一个列表。
+5. 数据和图片通过后再继续二级详情、选集、播放与 UI 密度第二轮优化。
 
 ## 2026-09-19 · 0.1.0-test.2 / Build10102 · 动态线路误判加固
 
@@ -20,7 +47,7 @@
 - 业务 Host 校验收紧为 `hg-drama / hg-card-grid / /recommend/ / /search/video/` 等真实内容结构，不再把品牌文案当业务有效性证据。
 - Provider / Image / Playback / UI / Pages 主体仍复用 Test1 不可变模块；只新增 Core、Settings Patch 与 Runtime，降低变更面。
 - Settings 诊断版本同步为 Test2 / Build10102。
-- 状态：**待海阔实机验证**。
+- 状态：实机发现数据稀疏与封面失败，已由 Test3 取代。
 
 ## 2026-09-19 · 0.1.0-test.1 / Build10101 · 初始测试版
 
@@ -65,19 +92,8 @@ Shell
 - `PlaybackAdapter`：`videoSrc`/源码结构化直链优先，`video://` 最终兜底。
 - `Pages/UI`：只消费标准模型，不散落域名/AES/播放解析。
 
-### 实机验收（未完成）
-
-1. 从“我的规则仓库”导入 Test2，首页可打开。
-2. 推荐/最新/AI短剧/AI漫剧/AI换脸/AI魔改至少各切换一次；连续切换后返回一次直接退出当前页，不逐级退 Tab。
-3. 封面至少验证一张加密图与一张可能的明文图。
-4. 片库标签、三榜、三个专题、搜索均能出数据。
-5. 进入详情，标题/封面/简介/选集不串型；选集只显示真实集数。
-6. 至少播放 2 部不同短剧、不同集数；播放器列表不得出现收藏/官网/设置。
-7. 收藏、观看历史、线路重发现与诊断可用。
-8. 提供实机截图后继续做 UI 比例/密度第二轮优化。
-
 ### 待后续
 
 - APP API 的签名、设备指纹、请求/响应加密与账号 Session 完整逆向。
 - 协议确认后再评估评论、点赞、APP 原生推荐/搜索与账号收藏是否作为 P2 Provider 接入。
-- Test2 实机通过后再创建 Candidate/Stable，不直接把首版设为正式版。
+- Test3 实机通过后再创建 Candidate/Stable，不直接把首版设为正式版。
