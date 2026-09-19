@@ -1,0 +1,22 @@
+{
+  "schema":1,
+  "id":"huangguo-test",
+  "name":"黄果短剧",
+  "version":"0.1.0-test.5",
+  "build":10105,
+  "ref":"main",
+  "baseStable":null,
+  "previousTest":{"version":"0.1.0-test.4","build":10104,"release":"apps/video/huangguo/releases/0.1.0-test.4/release.json","status":"superseded-after-device-feedback-cover-search-playlist"},
+  "modules":[
+    {"name":"core","path":"apps/video/huangguo/releases/0.1.0-test.3/core.js"},
+    {"name":"provider","path":"apps/video/huangguo/releases/0.1.0-test.3/provider.js"},
+    {"name":"image","path":"apps/video/huangguo/releases/0.1.0-test.5/image.js"},
+    {"name":"playback","path":"apps/video/huangguo/releases/0.1.0-test.5/playback.js"},
+    {"name":"ui","path":"apps/video/huangguo/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/video/huangguo/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/video/huangguo/releases/0.1.0-test.5/pages_patch.js"},
+    {"name":"runtime","path":"apps/video/huangguo/releases/0.1.0-test.5/runtime.js"}
+  ],
+  "verify":{"global":"HuangGuoRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "notes":"按附件书源和实机反馈收敛：封面改为海阔 $().image 后缀式 AES/CBC/NoPadding 解密；搜索输入右侧文案缩为“搜索”；播放只接受页面 videoSrc 直链，不再使用 video:// 网页兜底，避免额外播放列表。"
+}
