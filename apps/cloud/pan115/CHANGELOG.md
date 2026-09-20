@@ -110,3 +110,26 @@
 5. 原版 `player.resolve` 经 Test1b 的 `115Api` 转发页重新进入时，是否仍能正常取得直链。
 
 只有以上实机关键链通过后，才继续 Test2 或考虑完整远程版/Stable。
+
+## 2026-09-21 · Test1c 海阔解析兼容修订
+
+### 用户实机反馈
+
+- Test1b 通过 `home_rule_url` 直指 GitHub Raw 时，海阔首页弹出：`规则有误: syntax error, unexpected token error`，导入失败。
+- 因错误发生在业务入口之前，本次先按“导入/解析兼容”处理，不继续修改 115 协议层。
+
+### 修订
+
+- 新增 `apps/cloud/pan115/test/115_enhance_overlay_test1c_rule.json`，version `2026092103`。
+- 规则缩减为首页 + `115Open` 两个最小必要部分。
+- 高风险语法统一回退为传统 `var` / 普通函数 / IIFE，避免把 Node 语法通过误判为海阔 JSEngine 兼容。
+- 播放点击时直接跨规则加载 `hiker://page/115Api?rule=115.简`，不再保留 Test1b 的同名代理页。
+- 交付改用官方支持的 `@import=js:` 机制：先下载规则到海阔本地 cache，再返回本地 `home_rule_url`，避免直接让导入器解析 GitHub Raw 响应。
+- 远程工件固定到不可变 commit `2fe49a053b298cb16b1b7703ca4fda82317c0561`，本轮不切 Stable。
+
+### 下一步实机门槛
+
+1. Test1c 云口令能正常弹出导入页并完成导入。
+2. 首页能打开且不再出现 syntax error。
+3. 能加载原版 `115.简` 的 `115Api`。
+4. 再进入 magnet → 离线 → 定位 → 播放链验证。
