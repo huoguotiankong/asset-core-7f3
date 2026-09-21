@@ -313,3 +313,32 @@ Registry 当前顺序
 - 若返回 Challenge / reCAPTCHA 页面，仅提示用户先在海阔网页手动完成站点验证；不实现自动绕过验证逻辑，避免把单站风控拖成聚合搜索卡死。
 - 搜索 `find`、详情 `findAliUrl` 和 Installer 已通过语法检查；模拟 DOM 已验证标题、详情 URL、大小、文件数、日期解析。真实站点当前搜索请求存在 403/Challenge 风险，最终以海阔实机验证为准。
 - SkrBT 规则版本 `meta.version = 2`；当前冻结规则 commit：`73767bdc0578913fdedcb6aad3dada5a3009e85e`。
+
+### BT联盟 (`mm.btlm.in` / `se.btlm.one`)
+
+#### v1 ～ v8 失败链
+
+- 早期版本依次尝试了旧页面解析、固定 URL 猜测、WebView 提交、多个候选域、DOM 扫描以及动态表单识别。
+- 实机已经证明：站点本身可以搜索，且页面能显示类似 `8338 条` 的结果总数，但旧规则无法稳定取得资源列表；WebView 方案还出现过超时。
+- 这些版本的共同问题是没有先还原站点真实后端路由，属于试探式适配，继续堆选择器价值有限。
+
+#### v9 / v10 · SCDht 源码级还原
+
+- 进一步确认 BT联盟当前页面结构与开源 `SCDht` 实现一致；SCDht 路由源码明确注册：`GET /search/:k` 与 `GET /search/:k/:sort`。
+- SCDht 前端 `common.js` 的搜索按钮明确执行：`window.location = '/search/' + encodeURIComponent($('#key').val())`，因此正式停止猜测 `q=`、`keyword=`、POST/API 等入口。
+- SCDht `list.html` 明确使用 `ul.media-list > li.media`，结果标题为 `h4 > a.title`，详情 URL 直接包含 40 位 `InfoHash`，列表同时输出 `magnet:?xt=urn:btih:<InfoHash>`。
+- v9 首次改为 `https://se.btlm.one/search/<keyword>` 的服务端 HTML 直取，不再依赖 WebView。
+- v10 在 v9 基础上进一步降低海阔 DOM 解析器兼容风险：优先直接扫描 `a.title`，从详情 URL 提取 40 位 InfoHash 并本地构造 magnet；只有直提失败才回退 `parseDomForArray(...li.media)`。
+- `Hot` 只作为描述元数据展示，不再错误映射成 seeders/做种数。
+- Rule：`apps/tools/magnet-jun/rules/btlm-in-v10.json`。
+- Installer：`apps/tools/magnet-jun/rules/btlm-in-v10-installer.js`。
+- Test6 Registry id：`btlm_in`；规则目录当前指向 v10，Stable/Test6 核心均未改动。
+- v10 `find` / `findAliUrl` 与 Installer 已通过 Node 语法检查；真实站点网络与海阔运行时仍必须实机验收。
+
+#### v10 实机验收
+
+1. 使用 v10 Installer 更新现有 `BT联盟` Provider。
+2. 单独选择 `BT联盟`，搜索此前用于对照的关键词（优先继续用 `斗破苍穹`）。
+3. 正常预期：直接出现资源列表，不再打开 WebView；点击结果应直接进入当前播放模式，因为 magnet 已在搜索阶段由 InfoHash 构造。
+4. 再翻到第 2 页，确认 `?p=2` 分页可用。
+5. 若仍失败，保留 Provider 诊断完整文字；此时重点只剩站点当前部署与原版 SCDht 的差异或网络风控，不再回退到 URL 猜测方案。
