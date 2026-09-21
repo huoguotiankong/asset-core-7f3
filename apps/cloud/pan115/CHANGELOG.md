@@ -1,375 +1,256 @@
 # 115.简 / Pan115 开发记录
 
-状态：**Candidate RC1 / Stable 仍保留原版基线**  
+状态：**Stable 1.1.0 / Build 2026092111 / 已实机验证**  
 首次纳入：2026-09-21
 
-## 基线与已确认事实
+## 当前 Stable
 
-- 基线来自用户上传的 `115.简.hk小程序.zip`，原规则为单文件 `rule.json`。
-- 原实现已经具备：115 Cookie/扫码登录、文件列表、全盘搜索、115 分享、离线任务、`magnet/ed2k/http(s)` 离线添加、个人网盘文件直链解析与播放。
-- `addOfflineTaskURIs()` 使用 `https://lixian.115.com/lixianssp/?ac=add_task_urls`，支持 HTTP / ED2K / magnet。
-- `listOfflineTask()` 返回的 `file_id` 是离线完成后生成的文件或文件夹 ID；`wp_path_id` 在当前 JS 中映射为 `dirId`。
-- 原 `player.resolve()` 已能通过 `pickcode` → `proapi.115.com/app/chrome/downurl` 获取个人网盘直链并带 UA/Header 播放。
+- Stable：`1.1.0`
+- Build / rule version：`2026092111`
+- Stable pointer：`apps/cloud/pan115/stable.json`
+- Latest：`apps/cloud/pan115/latest.json`
+- Release：`apps/cloud/pan115/releases/1.1.0/release.json`
+- Installer：`apps/cloud/pan115/releases/1.1.0/installer.js`
+- 发布来源：`1.1.0-rc1`
+- 交付方式：`local-clone-patch/self-use`
+- 业务模块固定引用：commit `c473d00a292010a63c9f5364cf45d66dbfc9593d`
 
-## 原版磁链入口：最终实机结论
+Stable 1.1.0 是已实机通过的 RC1 **原样晋级**，没有在晋级阶段继续修改磁链业务逻辑。
 
-用户实机确认“原版 115 首页直接输入磁力链接”可以离线；结合源码核对，首页输入框真实分流为：
+## 基线与协议事实
 
-```text
-115 分享链接
-→ 115Share?sc=<原文>
+基线来自用户上传的 `115.简.hk小程序.zip`，原规则为单文件 `rule.json`。原实现已具备：
 
-magnet / ed2k / HTTP(S)
-→ 115Offline?add=<原文>
+- 115 Cookie / 扫码登录；
+- 文件列表与全盘搜索；
+- 115 分享；
+- 离线任务；
+- `magnet / ed2k / http(s)` 离线添加；
+- 个人网盘文件直链解析与播放。
 
-普通关键词
-→ 115Search?kw=<关键词>
-```
+已确认：
 
-因此其它小程序传 magnet 的正确稳定入口是：
+- `addOfflineTaskURIs()` 使用 `https://lixian.115.com/lixianssp/?ac=add_task_urls`；
+- `listOfflineTask()` 的 `file_id` 映射为任务结果 `fileId`；
+- `wp_path_id` 映射为 `dirId`，它是任务结果的父目录；
+- 原 `player.resolve()` 能通过 pickcode / fileId 取得 115 直链并带 UA/Header 播放。
+
+## 对外磁链调用协议
+
+其它小程序调用 115 播放 magnet 的正式入口固定为：
 
 ```js
 "hiker://page/115Offline?rule=115.简&page=fypage&add=" + encodeURIComponent(url)
 ```
 
-不是：
+原版旧“复制调用”里的：
 
 ```js
 "hiker://page/115Search?rule=115.简&page=fypage&kw=" + encodeURIComponent(url)
 ```
 
-用户实机已证明后者只会把整条 magnet 当成网盘搜索关键词，页面显示 `共0条 / 无结果`。
+**禁止用于 magnet。** 用户实机已证明它只会把整条 magnet 当普通网盘搜索关键词，结果为 `共0条 / 无结果`。
 
-### 原版“复制调用”现存缺陷
-
-原版首页“复制调用”按钮当前仍生成 `115Search?kw=` 模板，对 magnet 不正确。正式增强版必须改成 `115Offline?add=`，或做按输入类型分流。
-
-## 2026-09-21 · Test1 / Test1b / Test1c / Test1d 失败链
-
-### Test1
-
-曾新增 `115Open`，自行实现 magnet → 离线任务 → file_id → 播放/选集。静态检查与 mock 通过，但实机推进后确认没有必要，且引入跨规则模块兼容风险，停止继续发展。
-
-### Test1b
-
-远程完整壳直接 `home_rule_url` 导入时实机报：
+首页真实输入分流：
 
 ```text
-规则有误: syntax error, unexpected token error
-```
+115 分享链接
+→ 115Share?sc=
 
-后续改成 `@import=js:` 先下载到 `hiker://files/cache/...` 再本地导入，云口令导入链恢复。
-
-### Test1c
-
-点击磁链页后实机报：
-
-```text
-Expected URL scheme 'http' or 'https' but no colon was found
-```
-
-根因：`$.require('hiker://page/115Api?rule=115.简')` 被当前海阔进入 HTTP require/request 路径。结论：**跨规则 `hiker://page/...` 不能作为 `$.require()` 模块 URL 使用。**
-
-### Test1d
-
-尝试 `fetch('hiker://home@115.简') → 解析 pages → eval 原版 115Api` 建桥，实机仍报同类 URL scheme 错误。后续禁止继续绕模块边界复用 `115Api`。
-
-同时用户指出输入框长提示影响体验；测试壳和后续磁链专用入口统一使用短提示。
-
-## 2026-09-21 · Test1e 错误回归路线
-
-Test1e 曾根据原版“复制调用”模板直接跳：
-
-```text
-115Search?kw=<magnet>
-```
-
-用户实机截图确认结果为：
-
-```text
-关键词：magnet?... · 共0条
-（无结果）
-```
-
-因此 Test1e 判定失败并冻结；以当前实机结果和原版首页源码为准。
-
-## 2026-09-21 · Test1f 正确回归原版离线入口
-
-- 工件：`apps/cloud/pan115/test/115_enhance_overlay_test1f_rule.json`
-- version：`2026092106`
-- 标题：`115.简·测试`
-- Test only，不覆盖原版 `115.简`。
-
-Test1f 不再加载任何 115Api，也不自行实现离线逻辑，仅做最薄调用壳：
-
-```text
-粘贴磁链
-→ hiker://page/115Offline?rule=115.简&page=fypage&add=<encoded magnet>
-→ 原版 115Offline 自动 addOfflineTaskURIs([autoAdd], "0")
-→ 原版离线任务列表
-```
-
-### Test1f 实机结果
-
-用户确认 magnet 能正确自动添加并完成离线，说明 `115Offline?add=` 外部入口成立；但完成任务点击后仍需多次进入文件夹才能找到视频。
-
-实机截图：
-
-```text
-离线任务 meyd-553（完成）
-→ 点击后进入父目录
-→ 再点 meyd-553 文件夹
-→ UUE29.mp4（62.71 MB）
-→ meyd-553.mp4（4.95 GB）
-→ 再点正片播放
-```
-
-源码核对确认：原 `115Offline` 完成任务点击使用 `t.dirId`，而 `dirId = wp_path_id` 是**任务结果父目录**；真正的任务结果 ID 已由离线接口返回在 `t.fileId`。
-
-## 2026-09-21 · Test2 完成任务直播放增强
-
-### 目标
-
-只修完成任务点击链，不改 115 登录、m115 加解密、离线 API 和直链解析：
-
-```text
-完成任务
-→ 优先 t.fileId
-→ fileId 是视频：直接 player.resolve
-→ fileId 是目录：最多递归 4 层 / 500 项寻找视频
-→ 按大小降序
-→ 默认播放最大视频
-→ 找不到视频才回退文件浏览
-```
-
-用户当前 `meyd-553` 例子中，应直接选 `4.95 GB` 的 `meyd-553.mp4`，而不是 `62.71 MB` 的小视频。
-
-### 架构
-
-Test2 采用**本地克隆补丁**，避免跨规则 require：
-
-```text
-读取当前已安装 hiker://home@115.简
-→ 保留完整原版 115Api / List / Search / Share / Account
-→ 仅替换 115Offline
-→ title = 115.简·测试
-→ version = 2026092107
-→ 作为完整规则导入
-```
-
-- 补丁：`apps/cloud/pan115/test/pan115_test2_patch.js`
-- Test only。
-- 同时修正原“复制调用”磁链模板为 `115Offline?add=`。
-- 本地静态验证：克隆后保留全部 7 个原版页面；全部页面 `node --check` 通过。
-
-## 2026-09-21 · Test3 磁链播放链集中优化
-
-用户决定先把 115 的磁链调用/播放链优化好，再给其它小程序批量接入。因此 Test3 继续保持 Architecture-First：不改已经稳定的登录、协议、文件列表和个人网盘直链，仅强化 `115Offline` 与离线结果选择。
-
-### 工件
-
-- 补丁：`apps/cloud/pan115/test/pan115_test3_patch.js`
-- commit：`0bbf7eda8c2c2a450321b1ceef4381c9aeeafdf3`
-- 生成测试规则：`115.简·测试`
-- version：`2026092108`
-- 新增本地页面：`115OfflineResult`
-- 保持 Test only，不覆盖 `115.简` Stable。
-
-### 1. 外部 magnet 调用改成“当前任务聚焦模式”
-
-当页面带 `add=<magnet>` 时，不再展示整页历史任务作为主界面，而是：
-
-```text
-其它小程序调用 magnet
+magnet / ed2k / HTTP(S)
 → 115Offline?add=
-→ 查重
-→ 当前磁链状态卡
-→ 刷新当前状态
-→ 完成后点击播放
-→ 需要时可进入全部离线任务
+
+普通关键词
+→ 115Search?kw=
 ```
 
-这样其它小程序调用后不会被几十条历史任务淹没，更接近播放器而不是下载管理器。
-
-### 2. 防重复提交
-
-外部调用和手动添加都会先查现有离线任务：
-
-- magnet 使用 40 位 hex BTIH 与 `task.infoHash` 比较；
-- 同时以完整 `task.url` 精确比较兜底；
-- 已存在下载中任务：直接复用，不再次 `addOfflineTaskURIs()`；
-- 已存在完成任务：直接复用已下载结果。
-
-本地 mock 已验证：相同已完成 magnet 再次调用时 `addOfflineTaskURIs()` 调用次数为 0；新 magnet 调用次数为 1。
-
-### 3. 完成任务优先 `fileId`
-
-点击完成任务时：
+## Stable 1.1.0 磁链播放链
 
 ```text
-t.fileId
-→ 直接 getFile
-→ 文件则检查是否视频
-→ 文件夹则受控递归扫描
+其它小程序传 magnet
+→ 115Offline?add=
+→ BTIH / URL 查重
+→ 当前任务聚焦
+→ 已存在则复用，不重复离线
+→ 新任务才提交到 115 离线
+→ 完成后优先 task.fileId
+→ fileId 是视频：直接进入原版 player.resolve
+→ fileId 是目录：受控扫描视频
+→ 过滤 sample / preview / trailer / 试看 / 预告 / 花絮 / 广告等噪声
+→ 单一明显主片：直接播放
+→ 多集 / 多段：进入 115OfflineResult 选集
+→ 播放结果缓存复用
 ```
 
-只有 `fileId` 缺失时才在 `t.dirId` 父目录里**按任务名精确找结果**，避免直接扫描整个父目录后误播其它历史任务。
+扫描边界：最多递归 4 层、最多约 500 项，避免大目录拖死页面。
 
-最多递归 4 层、扫描 500 项。
+## 主视频与选集判定
 
-### 4. 主视频智能识别
-
-不再无条件“最大文件必播”。候选视频先过滤明显噪声：
+单主片场景：
 
 ```text
-sample / preview / trailer / teaser / promo
-试看 / 试播 / 预告 / 花絮 / 广告 / 宣传 / 二维码
+62.71 MB 小视频
+4.95 GB 正片
+→ 直接选择 4.95 GB 正片
 ```
 
-同时优先使用 `>= 80 MB` 的正常视频候选。
-
-判断逻辑：
-
-```text
-只有 1 个有效视频
-→ 直接播放
-
-最大视频 >= 500 MB，且 > 第二大视频 1.65 倍
-→ 认为主片明显，直接播放
-
-多个视频大小接近
-→ 不猜主片
-→ 进入 115OfflineResult 选集页
-```
-
-因此：
-
-```text
-62.71 MB 小视频 + 4.95 GB 正片
-→ 直接播放 4.95 GB 正片
-```
-
-而类似：
+剧集/多段场景：
 
 ```text
 EP01 1.91 GB
 EP02 1.92 GB
 EP03 1.93 GB
+→ 不猜“最大的一集”
+→ 进入选集页
 ```
 
-会进入选集页，不会错误播放“最大的一集”。
+Test4/RC1 进一步增加：
 
-本地 mock 已验证这两条分支：电影样例返回正片播放；三集近似大小资源返回 `115OfflineResult`。
+- 40 位 Hex 与 32 位 Base32 BTIH 去重；
+- `info_hash → 播放结果` 缓存；
+- 任务记录被删除后，只要网盘目标文件仍存在，可尝试继续复用播放结果；
+- 失败任务支持删除后重新提交；
+- `EP1 / EP2 / EP10` 等自然排序；
+- sample/preview/试看等附带小视频与主要内容分组；
+- 多集/多段命名识别优先进入选集。
 
-### 5. 多视频选集页
+## 2026-09-21 实机验证结论
 
-新增 `115OfflineResult`：
+### 原版基线
 
-- 从 `fileId` 开始递归扫描当前离线结果；
-- `fileId` 缺失时按任务名在父目录精确定位；
-- 最多扫描 500 项；
-- 按文件名排列视频；
-- 每个视频直接复用原版 `api.player.resolve` 播放。
+用户实机确认：原版首页直接输入 magnet 可成功添加 115 离线任务。
 
-### 6. 首页调用体验
+### 原版完成任务问题
 
-生成测试规则时同步：
-
-- 原首页长说明缩短为 `文件名 / 115分享链接 / 磁链`；
-- `复制调用` 改名为 `复制磁链调用`；
-- 复制出的 magnet 调用模板目标应为 `115Offline?add=`。
-
-### Test3 静态/模拟验证
-
-- Patch 本身 `node --check` 通过。
-- 用用户上传的原版 `115.简` mock 执行 Patch 后，可生成 `115.简·测试` version `2026092108`。
-- 保留原版 7 个页面并新增 `115OfflineResult`，共 8 页。
-- 生成后的全部 8 个页面脚本 `node --check` 通过。
-- mock 场景通过：
-  1. 已完成相同 magnet → 不重复添加；
-  2. `62 MB sample + 4.95 GB 正片` → 直接选择正片；
-  3. 多集近似大小 → 进入选集页；
-  4. 新 magnet → 只创建 1 个新任务。
-
-## 2026-09-21 · Test4 收口增强
-
-Test4 在 Test3 基础上继续收紧磁链播放边界：
-
-- BTIH 去重同时支持 40 位 Hex 与 32 位 Base32；
-- 增加 `info_hash → 播放结果` 缓存，离线任务记录删除后只要网盘文件仍存在仍可复用；
-- 失败任务提供删除并重新提交；
-- 电影 / 剧集 / 多段文件识别进一步区分；
-- 选集采用自然排序，`EP1 → EP2 → EP10`；
-- sample/preview/试看等小视频与主内容分组；
-- 保留 `fileId` 优先、父目录只兜底、最多 4 层 / 500 项扫描边界。
-
-Test4 模块路径：
+用户实机截图确认原版完成任务点击后：
 
 ```text
-apps/cloud/pan115/test/test4/offline_part1.txt
-apps/cloud/pan115/test/test4/offline_part2.txt
-apps/cloud/pan115/test/test4/offline_part3.txt
-apps/cloud/pan115/test/test4/offline_part4.txt
-apps/cloud/pan115/test/test4/result.js
+meyd-553 完成任务
+→ 进入父目录
+→ 再点 meyd-553 文件夹
+→ 看到 UUE29.mp4 62.71 MB
+→ 看到 meyd-553.mp4 4.95 GB
+→ 再点正片播放
 ```
 
-本地静态检查与 mock 回归通过，但截至本次收敛时**尚未收到 Test4 最终磁链直放/选集的实机回执**，因此不得直接晋级 Stable。
+根因：原版完成任务使用 `t.dirId`，而真正结果应优先从 `t.fileId` 开始定位。
 
-同时在收敛检查中发现 Test4 installer 的首页按钮虽然已改名为“复制磁链调用”，但由于字符串替换模式未命中，实际复制内容仍残留 `115Search?kw=`。该问题已在 RC1 installer 中修正为 `115Offline?add=`，禁止将 Test4 installer 本身直接晋级 Stable。
+### RC1 / Stable 验证
 
-## 2026-09-21 · 1.1.0-rc1 正式收敛候选
+用户在 `1.1.0-rc1` 实机确认通过后明确回复“可以了”。按约定将冻结 RC1 原样晋级 Stable 1.1.0。
 
-用户要求“收敛”。按发布规范将 Test4 的已完成能力冻结为 **Candidate RC1**，停止继续叠 Test5；Stable 仍保留用户当前原版 `115.简`，待一次实机 smoke test 后再晋级。
+实机通过的关键链：
 
-### RC1 元数据
+1. magnet 能进入正确的 115 离线入口；
+2. 已完成单主片任务可直接定位主视频，不再手动逐层进入父目录/任务目录；
+3. 重复调用同一 magnet 不应重复创建相同离线任务；
+4. 播放仍复用原版 `player.resolve`，未改登录、解密、直链算法。
 
-- Candidate：`1.1.0-rc1`
-- Build / rule version：`2026092110`
-- Release：`apps/cloud/pan115/releases/1.1.0-rc1/release.json`
-- Installer：`apps/cloud/pan115/releases/1.1.0-rc1/installer.js`
-- Candidate pointer：`apps/cloud/pan115/candidate.json`
-- Manifest：`apps/cloud/pan115/manifest.json`
-- Channels：`apps/cloud/pan115/channels.json`
-- 候选规则标题：`115.简·候选`，与当前正式 `115.简` 并存，不覆盖 Stable。
+多集选集逻辑已经过静态/mock 回归并随 RC1 冻结进入 Stable；后续如出现特殊命名误判，继续在 Test/Candidate 小步修复，不原地覆盖 Stable。
 
-### RC1 冻结功能边界
+## 失败方案与禁止回退
+
+### Test1：自行重实现完整 magnet 控制器
+
+曾尝试自行实现：
 
 ```text
-其它小程序 magnet
-→ 115Offline?add=
-→ BTIH/URL 去重
-→ 当前任务聚焦
-→ 离线完成
-→ fileId 优先定位
-→ 过滤 sample/预告等噪声
-→ 明显单主片直接播放
-→ 多集/多段进入 115OfflineResult 选集
-→ 原版 player.resolve 取 115 直链播放
-→ 结果缓存复用
+magnet → 离线 → info_hash → fileId → 播放/选集
 ```
 
-不修改：
+功能上可行，但没有必要重写原版已经成熟的协议层，且增加模块边界风险，停止发展。
+
+### Test1b：完整远程 JSON 直接 home_rule_url
+
+实机报：
+
+```text
+syntax error, unexpected token error
+```
+
+后续安装器统一通过 `@import=js:` 执行生成/导入链。
+
+### Test1c：跨规则 require 115Api
+
+```js
+$.require("hiker://page/115Api?rule=115.简")
+```
+
+实机报：
+
+```text
+Expected URL scheme 'http' or 'https'
+```
+
+结论：跨规则 `hiker://page/...` 不能作为 `$.require()` 模块 URL 使用。
+
+### Test1d：fetch hiker://home 后 eval 跨规则模块
+
+仍出现模块/URL 运行时问题。禁止继续用这种方式绕过规则模块边界。
+
+### Test1e：magnet → 115Search?kw=
+
+实机显示 `共0条 / 无结果`。这是已证伪路线，禁止恢复。
+
+## Test2 → Test4 → RC1 演进摘要
+
+### Test2
+
+- 完成任务改为 `fileId` 优先；
+- 单视频/目录扫描；
+- 最大主片初版识别。
+
+### Test3
+
+- 外部 magnet 当前任务聚焦；
+- 防重复提交；
+- sample/预告过滤；
+- 电影直放 / 多集选集；
+- 新增 `115OfflineResult`。
+
+### Test4
+
+- Hex/Base32 BTIH；
+- 播放结果缓存；
+- 失败任务重试；
+- 自然选集排序；
+- 主内容与附带小视频分组；
+- 继续保持 fileId 优先和扫描上限。
+
+### 1.1.0-rc1
+
+- 冻结 Test4 业务逻辑；
+- 修复 Test4 installer “按钮名已改但实际复制仍是 `115Search?kw=`”的遗漏；
+- 候选规则 `115.简·候选` 与原 Stable 并存；
+- 实机确认后晋级 Stable 1.1.0。
+
+## Stable 发布边界
+
+Stable 1.1.0 没有修改：
 
 - 115 登录 / Cookie / 扫码；
 - m115 加解密；
-- 分享链接播放；
-- 普通文件浏览 / 搜索；
-- `player.resolve` 直链算法。
+- 115 分享链接协议；
+- 普通文件列表与搜索；
+- 原版 `player.resolve` 直链算法。
 
-### RC1 收敛检查
+正式版只强化：
 
-- Test4 生成规则 JSON 可解析；
-- 原版 7 页全部保留，并新增 `115OfflineResult`，共 8 页；
-- 8 个页面脚本全部通过 `node --check`；
-- 修复 Test4 installer 中“复制磁链调用”实际仍复制 `115Search?kw=` 的遗漏；RC1 明确复制 `115Offline?add=`；
-- Candidate 使用与 Stable 不同标题并存，未切 Stable/Latest。
+- magnet 外部调用入口；
+- 离线查重与当前任务体验；
+- `fileId` 结果定位；
+- 主片/选集识别；
+- 播放结果缓存与失败重试。
 
-### Stable 晋级唯一剩余门槛
+## 后续其它小程序接入规范
 
-RC1 只需要一次最小实机 smoke test：
+其它带 magnet 的小程序只依赖这一条稳定契约：
 
-1. 用已完成的 `meyd-553` 或同类单主片 magnet：确认直接播放 4.95 GB 正片，不再进入父目录；
-2. 再次调用相同 magnet：确认不重复新建任务；
-3. 若手边有多集 magnet，再确认进入选集；没有多集样本时不阻塞单主片链验证，但多集能力继续标记 Candidate 已静态/mock 验证。
+```js
+function playBy115(url) {
+    if (!url) return "toast://未获取到磁力链接";
+    return "hiker://page/115Offline?rule=115.简&page=fypage&add=" + encodeURIComponent(url);
+}
+```
 
-通过后可将**同一冻结 RC1 逻辑**改名覆盖为 `115.简` 并建立 Stable 元数据，不再继续修改业务逻辑。
+调用方不得直接依赖 115Api、fileId、离线接口或播放器内部实现。115 内部以后升级时必须继续兼容 `115Offline?add=`，避免批量修改所有上游小程序。
