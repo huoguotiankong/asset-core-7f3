@@ -13,11 +13,23 @@
     "source": "device-installed baseline"
   },
   "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js",
+  "modules": [
+    "apps/tools/magnet-jun/releases/1.0.0-test.5/search_core.js",
+    "apps/tools/magnet-jun/releases/1.0.0-test.5/search_page.js",
+    "apps/tools/magnet-jun/releases/1.0.0-test.5/select_torrent.js"
+  ],
+  "immutableModuleRefs": {
+    "searchCore": "e442dd37c98a01bd06e0e701a39a43cc529ce7f7",
+    "searchPage": "bf0f0d27d4bf31f8abe93bb58e905a14b5f4b1a2",
+    "selectTorrent": "37ec1612df91a84af19238375dd510888a7ccd1e"
+  },
   "delivery": {
     "mode": "local-clone-patch",
     "requiresInstalledBaseline": "磁力君.简",
     "testTitle": "磁力君.简·测试",
-    "overwritesStable": false
+    "overwritesStable": false,
+    "installTimePinnedModules": true,
+    "normalRuntimeRemoteExecutableDependency": false
   },
   "searchArchitecture": {
     "legacyRulesConfigCarryRule": "disabled",
@@ -34,11 +46,13 @@
     "all cloud modes route to Hiker mini-programs instead of Android apps",
     "115 uses Stable 115Offline?add= entry",
     "replace SelectTorrent open modes with the same unified Hiker router",
-    "disable legacy preRule updater in Test5"
+    "disable legacy preRule updater in Test5",
+    "split installer payload into immutable install-time modules for reliable delivery"
   ],
   "validation": {
     "installerSyntax": "passed",
-    "searchCoreSyntax": "passed",
+    "installerGitBlobVerified": true,
+    "searchCoreSyntax": "passed-local-source",
     "searchPageSyntax": "passed",
     "selectTorrentSyntax": "passed",
     "deviceValidation": "pending"
