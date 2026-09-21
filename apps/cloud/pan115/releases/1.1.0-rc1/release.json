@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "pan115-rc1",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "candidate",
+  "version": "1.1.0-rc1",
+  "build": 2026092110,
+  "ruleVersion": 2026092110,
+  "base": {
+    "name": "115.简",
+    "ruleVersion": 1,
+    "source": "user-uploaded baseline / device-installed rule"
+  },
+  "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
+  "modules": [
+    "apps/cloud/pan115/test/test4/offline_part1.txt",
+    "apps/cloud/pan115/test/test4/offline_part2.txt",
+    "apps/cloud/pan115/test/test4/offline_part3.txt",
+    "apps/cloud/pan115/test/test4/offline_part4.txt",
+    "apps/cloud/pan115/test/test4/result.js"
+  ],
+  "moduleRef": "c473d00a292010a63c9f5364cf45d66dbfc9593d",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "115.简",
+    "candidateTitle": "115.简·候选",
+    "overwritesStable": false
+  },
+  "features": [
+    "magnet external entry via 115Offline?add=",
+    "deduplicate existing offline tasks",
+    "fileId-first result location",
+    "single-main-video direct playback",
+    "multi-video episode selection",
+    "sample/preview noise filtering",
+    "playback result cache reuse",
+    "failed-task retry"
+  ],
+  "validation": {
+    "staticSyntax": "passed",
+    "mockRegression": "passed",
+    "deviceValidation": "pending",
+    "stablePromotionAllowed": false
+  },
+  "notes": "Converged from Test4. Stable remains the user's current installed 115.简 until the RC1 playback path receives device smoke-test confirmation."
+}
