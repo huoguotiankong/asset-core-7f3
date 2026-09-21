@@ -10,6 +10,24 @@
       "file": "apps/tools/magnet-jun/rules/btsearch-love.json",
       "installer": "apps/tools/magnet-jun/rules/btsearch-love-installer.js",
       "status": "device-validation-pending"
+    },
+    {
+      "id": "skrbtso_top",
+      "name": "SkrBT",
+      "type": "script",
+      "source": "https://skrbtso.top/",
+      "file": "apps/tools/magnet-jun/rules/skrbtso-top.json",
+      "installer": "apps/tools/magnet-jun/rules/skrbtso-top-installer.js",
+      "status": "device-validation-pending"
+    },
+    {
+      "id": "btlm_in",
+      "name": "BT联盟",
+      "type": "script",
+      "source": "https://mm.btlm.in/",
+      "file": "apps/tools/magnet-jun/rules/btlm-in.json",
+      "installer": "apps/tools/magnet-jun/rules/btlm-in-installer.js",
+      "status": "device-validation-pending"
     }
   ]
 }
