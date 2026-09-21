@@ -6,12 +6,17 @@
   "channels": [
     {
       "channel": "stable",
-      "label": "正式基线",
+      "label": "正式版",
       "name": "115.简",
-      "ruleVersion": 1,
-      "mode": "device-installed-baseline",
+      "version": "1.1.0",
+      "build": 2026092111,
+      "ruleVersion": 2026092111,
+      "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+      "installer": "apps/cloud/pan115/releases/1.1.0/installer.js",
+      "mode": "local-clone-patch",
       "recommended": true,
-      "status": "preserved-unmodified"
+      "status": "device-validated",
+      "desc": "磁链调用正式版：查重、fileId优先定位、主片直放、多集选集、缓存复用、失败重试。"
     },
     {
       "channel": "candidate",
@@ -23,8 +28,8 @@
       "release": "apps/cloud/pan115/releases/1.1.0-rc1/release.json",
       "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
       "recommended": false,
-      "status": "device-validation-pending",
-      "desc": "Test4 功能收敛候选：磁链去重、fileId 优先定位、主视频直放、多集选集、缓存复用与失败重试。"
+      "status": "promoted-to-stable",
+      "desc": "已完成实机验证并原样晋级 Stable 1.1.0。"
     }
   ]
 }
