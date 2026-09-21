@@ -1,5 +1,5 @@
 (function(){
-var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@3d7c6191a842b6f0f7aea7bda37a3b448f350505/apps/tools/magnet-jun/rules/skrbtso-top.json";
+var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c7652a47c4e4aded6b59b844d9a47c2095a17522/apps/tools/magnet-jun/rules/skrbtso-top.json";
 var raw="";
 try{raw=fetch(ruleUrl);}catch(e){return "toast://下载 SkrBT 规则失败："+(e.message||e);}
 var rule;
