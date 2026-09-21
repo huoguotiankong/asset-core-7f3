@@ -10,80 +10,109 @@
 - `addOfflineTaskURIs()` 使用 `https://lixian.115.com/lixianssp/?ac=add_task_urls`，支持 HTTP / ED2K / magnet。
 - `listOfflineTask()` 返回的 `file_id` 是离线完成后生成的文件或文件夹 ID；`wp_path_id` 在当前 JS 中映射为 `dirId`。
 - 原 `player.resolve()` 已能通过 `pickcode` → `proapi.115.com/app/chrome/downurl` 获取个人网盘直链并带 UA/Header 播放。
-- **用户实机确认：原版 `115.简` 直接调用 `hiker://page/115Search?rule=115.简&page=fypage&kw=<encoded magnet>` 可以完成磁链离线并进入播放链。** 这一实机事实高于此前基于静态源码对 `115Search` 的推断。
+
+## 原版磁链入口：最终实机结论
+
+2026-09-21 用户说明“原版 115 直接输入磁力链接可以离线播放”。进一步结合用户实机截图与原版源码核对后，确认这里的“直接输入”指的是 **原版首页搜索/打开输入框**，不是 `115Search?kw=` 页面参数。
+
+原版首页输入框真实逻辑：
+
+```text
+115 分享链接
+→ 115Share?sc=<原文>
+
+magnet / ed2k / HTTP(S)
+→ 115Offline?add=<原文>
+
+普通关键词
+→ 115Search?kw=<关键词>
+```
+
+因此外部小程序传 magnet 的正确入口是：
+
+```js
+"hiker://page/115Offline?rule=115.简&page=fypage&add=" + encodeURIComponent(url)
+```
+
+而不是：
+
+```js
+"hiker://page/115Search?rule=115.简&page=fypage&kw=" + encodeURIComponent(url)
+```
+
+用户实机已证明后者只会把整条 magnet 当成网盘搜索关键词，页面显示 `共0条 / 无结果`。
+
+### 原版“复制调用”现存缺陷
+
+原版首页“复制调用”按钮当前仍生成 `115Search?kw=` 模板。对普通关键词可用，但对 magnet 不正确；这是原版现存调用模板缺陷。后续如正式增强原版，应把外部调用做成按输入类型分流，至少磁链走 `115Offline?add=`。
 
 ## 2026-09-21 · Test1 本地完整增强
 
-曾新增 `115Open`，尝试自行实现：
+曾新增 `115Open`，自行实现 magnet → 离线任务 → file_id → 播放/选集。静态检查与 mock 通过，但实机推进后确认该方案没有必要，且引入跨规则模块加载兼容风险，停止继续发展。
 
-```text
-magnet / ed2k / HTTP(S)
-→ 查已有任务避免重复提交
-→ addOfflineTaskURIs
-→ 保存/跟踪 info_hash
-→ listOfflineTask
-→ 完成后按 task.file_id 定位
-→ 单视频播放 / 多视频选集
-```
-
-本地 JSON/脚本静态检查通过，但后续实机证明这条重实现路线没有必要，且增加了跨规则模块加载兼容风险。
-
-此前把原版“复制调用”中的 `115Search?kw=` 判断为磁链设计问题，**该判断已被用户当前实机结果证伪**，后续禁止继续沿用。
-
-## 2026-09-21 · Test1b / Test1c / Test1d 失败链记录
+## 2026-09-21 · Test1b / Test1c / Test1d 失败链
 
 ### Test1b
 
 - 远程完整壳直接 `home_rule_url` 导入时实机报 `syntax error, unexpected token error`。
-- 后续改为 `@import=js:` 先下载到 `hiker://files/cache/...` 再本地导入，导入链恢复。
+- 改成 `@import=js:` 先下载到 `hiker://files/cache/...` 再本地导入后，云口令导入链恢复。
 
 ### Test1c
 
-用户实机确认 Test1c 能成功导入并打开，但点击磁链页后报：
+点击磁链页后实机报：
 
 ```text
-ArticleListModel-HttpRequestError-msg:
-java.lang.IllegalArgumentException:
 Expected URL scheme 'http' or 'https' but no colon was found
 ```
 
-根因：`$.require('hiker://page/115Api?rule=115.简')` 被当前海阔进入 HTTP require/request 路径。**跨规则 `hiker://page/...` 不能当成 `$.require()` 的模块 URL 使用。**
+根因：`$.require('hiker://page/115Api?rule=115.简')` 被当前海阔进入 HTTP require/request 路径。结论：**跨规则 `hiker://page/...` 不能作为 `$.require()` 模块 URL 使用。**
 
 ### Test1d
 
-尝试通过 `fetch('hiker://home@115.简') → JSON.parse(rule.pages) → eval 原版 115Api` 建立本地桥接，但用户实机仍出现同类 URL scheme 错误，说明继续绕模块边界复用 `115Api` 价值低、风险高。
+尝试 `fetch('hiker://home@115.简') → 解析 pages → eval 原版 115Api` 建桥，实机仍报同类 URL scheme 错误。停止继续绕模块边界复用 115Api。
 
-同时用户指出输入框提示 `粘贴 magnet / ed2k / HTTP下载链接` 太长，影响输入体验；后续统一缩短为 `粘贴磁链`。
+同时用户指出输入框长提示影响体验，后续输入框统一缩短为 `粘贴磁链`。
 
-## 2026-09-21 · Test1e 回归原版已验证调用链
+## 2026-09-21 · Test1e 错误回归路线
 
-### 核心决策
-
-停止自行重实现磁链离线播放链，直接复用用户实机已确认可工作的原版入口：
+Test1e 曾根据原版“复制调用”模板直接跳：
 
 ```text
-"hiker://page/115Search?rule=115.简&page=fypage&kw=" + encodeURIComponent(url)
+115Search?kw=<magnet>
 ```
 
-Test1e 只做调用壳，不再：
+用户实机截图确认结果为：
 
-- 跨规则 `require` 原版 `115Api`。
-- `fetch/eval` 原版 `115Api`。
-- 自行跟踪离线任务 / file_id。
-- 自行重写播放器。
+```text
+关键词：magnet?... · 共0条
+（无结果）
+```
 
-### 工件
+因此 Test1e 判定失败并冻结。此前关于“`115Search?kw=` 可直接完成磁链离线播放”的判断撤销，以当前截图和原版首页源码为准。
 
-- `apps/cloud/pan115/test/115_enhance_overlay_test1e_rule.json`
-- version：`2026092105`
-- 标题继续 `115.简·测试`，覆盖前一测试壳，不影响原版 `115.简`。
-- 首页输入框只显示短提示 `粘贴磁链`。
-- 输入后直接进入原版 `115Search?kw=`。
-- 提供外部调用模板，供磁力君/JavDB 等小程序直接调用原版 115。
+## 2026-09-21 · Test1f 正确回归原版离线入口
+
+- 工件：`apps/cloud/pan115/test/115_enhance_overlay_test1f_rule.json`
+- version：`2026092106`
+- 标题：`115.简·测试`
+- Test only，不覆盖原版 `115.简`。
+
+Test1f 不再加载任何 115Api，也不自行实现离线逻辑，仅做最薄调用壳：
+
+```text
+粘贴磁链
+→ hiker://page/115Offline?rule=115.简&page=fypage&add=<encoded magnet>
+→ 原版 115Offline 在第 1 页自动 addOfflineTaskURIs([autoAdd], "0")
+→ 原版离线任务列表
+→ 完成任务点击进入其保存目录
+→ 使用原版文件页 / player.resolve 播放
+```
 
 ### 当前验收重点
 
-1. Test1e 覆盖导入成功。
-2. 首页提示精简，输入区不再被长文案挤压。
-3. 粘贴同一条用户已确认可工作的 magnet，能直接进入原版 115 的离线播放链。
-4. 如果 Test1e 调用链通过，则后续其它小程序直接使用原版 `115Search?kw=`，不再依赖 `115.简·测试` 中转。
+1. 覆盖导入 Test1f。
+2. 输入框保持短提示 `粘贴磁链`。
+3. 粘贴 magnet 后应进入原版“离线下载”页，而不是搜索页。
+4. 页面应出现“已自动添加任务”或对应离线任务。
+5. 已完成任务点击后进入其保存目录，视频可由原版播放器正常播放。
+6. 通过后，磁力君/JavDB/JavBus 等外部小程序直接调用 `115Offline?add=`，无需依赖测试壳中转。
