@@ -342,3 +342,24 @@ Registry 当前顺序
 3. 正常预期：直接出现资源列表，不再打开 WebView；点击结果应直接进入当前播放模式，因为 magnet 已在搜索阶段由 InfoHash 构造。
 4. 再翻到第 2 页，确认 `?p=2` 分页可用。
 5. 若仍失败，保留 Provider 诊断完整文字；此时重点只剩站点当前部署与原版 SCDht 的差异或网络风控，不再回退到 URL 猜测方案。
+
+#### v11 · 详情链接二段解析（当前目录版本）
+
+- 对 v10 的假设做了收口修正：上游 SCDht 模板可能让详情 URL 直接携带 InfoHash，但 BT联盟当前实际部署不能再强依赖这一点。此前已出现“搜索页确认命中大量结果，但列表阶段拿不到 40 位 InfoHash”的症状。
+- Test6 `MJSearchCore` 原生支持脚本 Provider 返回普通 HTTP `url`，并在用户点击结果时调用该规则的 `findAliUrl`；因此搜索阶段没有必要强制提前拿到 magnet。
+- v11 保留已确认的 `https://se.btlm.one/search/<keyword>` 路由和 `?p=<page>` 分页，不再回退到 `q=` / `keyword=` / WebView 等旧猜测链。
+- 列表解析改为三层：优先 `a.title`；其次 `h2/h3/h4` 中的结果链接；最后扫描带 `media/result/torrent/search-item/list-item` 特征的结果容器。链接若带 InfoHash 仍直接构造 magnet；否则保留为绝对详情 URL。
+- `findAliUrl` 负责第二段解析：自动补全相对 URL，优先读取显式 magnet，再从 `href/value/data/link/url` 属性、可见文本节点或 `infohash/info_hash/btih/hash` 字段中提取 40 位 InfoHash。
+- Rule：`apps/tools/magnet-jun/rules/btlm-in-v11.json`；规则冻结 commit：`2bae6a0d078fb69d6949ad4b48646a859cfbf9e7`。
+- Installer：`apps/tools/magnet-jun/rules/btlm-in-v11-installer.js`，安装时从上述不可变 commit 获取规则。
+- 规则目录 `apps/tools/magnet-jun/rules/registry.json` 已指向 v11；Stable 与 Test6 主程序均未改动。
+- 已通过 Node `new Function` 语法检查，并用模拟 HTML 验证：`a.title + 详情 URL`、`h3/h4 + 详情 URL`、列表直接 40 位 InfoHash、详情页显式 magnet 四条路径均正常。
+
+#### v11 实机验收
+
+1. 用 v11 Installer 更新现有 `BT联盟` Provider 后，单独选择 `BT联盟` 搜索 `斗破苍穹`。
+2. 首要验收点从“列表必须直接生成 magnet”改为“能否先正常显示搜索结果列表”；若结果链接不带 hash，列表仍应出现。
+3. 点击任意结果后再验证 `findAliUrl` 是否得到 magnet，并进入当前选择的播放/云盘模式。
+4. 再验证第 2 页，确认 `?p=2` 仍能返回列表。
+5. 若搜索页仍显示类似 `8338 条` 但规则报错，新的关键诊断应为“未提取到结果详情链接”；此时只需针对当前结果卡片 HTML 调整候选链接选择器，不再修改搜索路由。
+6. 未完成上述实机验证前，v11 继续保持 `device-validation-pending`，不得晋级 Stable。
