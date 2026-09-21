@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test2",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.2",
+  "build": 2026092102,
+  "ruleVersion": 2026092102,
+  "base": {
+    "ruleVersion": 20250604,
+    "source": "user-uploaded baseline / device-installed rule"
+  },
+  "previousTest": {
+    "version": "1.0.0-test.1",
+    "build": 2026092101,
+    "status": "device-failed-remote-title-coupling"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.2/installer.js",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "磁力君.简",
+    "testTitle": "磁力君.简·测试",
+    "overwritesStable": false
+  },
+  "fixes": [
+    "keep test title separate while pinning original remote data key to 磁力君.简",
+    "avoid invalid remote script fetch caused by MY_RULE.title=磁力君.简·测试"
+  ],
+  "featuresInheritedFromTest1": [
+    "keep only eight magnet modes",
+    "115 playback via 115Offline?add=",
+    "cloud modes call Hiker mini-programs instead of Android apps"
+  ],
+  "validation": {
+    "test1DeviceResult": "failed at remote data eval after title changed",
+    "rootCause": "rules page used MY_RULE.title as local/remote Apollo data filename",
+    "staticSyntax": "passed",
+    "deviceValidation": "pending"
+  }
+}
