@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test6",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.6",
+  "build": 2026092106,
+  "ruleVersion": 2026092106,
+  "base": {
+    "version": "1.0.0-test.5",
+    "build": 2026092105,
+    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js",
+  "searchArchitecture": {
+    "registry": "hiker://files/rules/LoyDgIk/magnetjunProviders_v2.json",
+    "builtinProviders": [
+      "BTDig",
+      "Knaben",
+      "PirateBay"
+    ],
+    "customScriptCompatibility": "original 磁力君 find/findAliUrl rule format",
+    "aggregateOrder": "registry order",
+    "providerIsolation": true
+  },
+  "changes": [
+    "add provider rule management backed by local registry",
+    "support add/import/delete/enable-disable/move/top/reset/clear",
+    "custom order controls aggregate provider priority",
+    "support original 磁力君 search rule JSON/base64/cloud-pass imports",
+    "built-in providers become manageable registry entries",
+    "custom script provider errors isolated per rule",
+    "search page provider chips generated dynamically from enabled registry",
+    "keep 8 playback modes and Hiker-only cloud app routing"
+  ],
+  "validation": {
+    "installerSyntax": "passed",
+    "moduleSyntax": "passed",
+    "deviceValidation": "pending"
+  }
+}
