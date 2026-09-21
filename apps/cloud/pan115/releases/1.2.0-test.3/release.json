@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.3",
+  "appId": "pan115",
+  "name": "115.简·测试",
+  "channel": "test",
+  "version": "1.2.0-test.3",
+  "build": 2026092204,
+  "ruleVersion": 2026092204,
+  "basedOn": {
+    "version": "1.2.0-test.2",
+    "build": 2026092203,
+    "release": "apps/cloud/pan115/releases/1.2.0-test.2/release.json",
+    "deviceValidated": false
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.3/installer.js",
+  "delivery": {
+    "mode": "local-test-hotfix",
+    "requiresInstalledBaseline": "115.简·测试 1.2.0-test.2",
+    "testTitle": "115.简·测试",
+    "overwritesStable": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "fixes": [
+    "remove page-level _115CloudCid declaration that triggers JS redeclaration error on device",
+    "replace page-level cloud CID state with _115SavedCloudCid() reads",
+    "preserve Test2 fast-open, cloud-download CID cache, shortened dedup scan, timeout handling and inline result behavior"
+  ],
+  "scope": {
+    "patchedPage": "115Offline",
+    "unchanged": [
+      "Stable 1.1.0",
+      "115 login/cookie/QR",
+      "m115 crypto",
+      "115 share",
+      "normal file list/search",
+      "115Api.player.resolve"
+    ]
+  },
+  "status": "active-test-redeclare-hotfix-pending-device-validation",
+  "validation": [
+    "open a new external magnet through 115.简·测试 and confirm no JS redeclaration dialog",
+    "confirm first-screen 115 magnet page opens promptly",
+    "confirm cached cloud-download CID is reused",
+    "confirm timeout is shown as uncertain submission instead of hard failure",
+    "confirm Stable 1.1.0 remains unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
