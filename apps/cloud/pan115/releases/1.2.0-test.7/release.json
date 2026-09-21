@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.7",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.7",
+  "build": 2026092208,
+  "ruleVersion": 2026092208,
+  "basedOn": {
+    "version": "1.2.0-test.6",
+    "build": 2026092207,
+    "deviceFeedback": "focus page stayed on static connecting state while all-offline page already showed current task completed"
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.7/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "replace static external-magnet waiting page with dynamic task card",
+    "use batchExecute for staggered background submit/status checks without blocking first render",
+    "use updateItem to show submitted, task-created, downloading percentage/rate, failure and completed states in place",
+    "treat submission timeout as uncertain while background task lookup continues",
+    "auto-refresh once task exposes fileId/completion, then expand result folder/video rows",
+    "retain root/海阔视界 -> 云下载/离线下载 -> root destination policy from test.6",
+    "retain same-title 115.简 import and existing login state"
+  ],
+  "diagnosticConclusion": "In the 2026-09-22 FNS-252 device test, the focus page still showed 正在连接115 at 01:51 while the all-offline page at the same minute already showed FNS-252 completed. This proves the dominant delay in that case was focus-page state propagation, not 115 offline completion itself. Actual server-side download time can still vary by 115 and torrent availability after submission.",
+  "status": "active-test-dynamic-focus-pending-device-validation",
+  "validation": [
+    "new magnet page should render immediately and status should change in place without manual refresh",
+    "same-minute fast completed tasks should automatically reach result/file rows instead of remaining on connecting screen",
+    "download-in-progress tasks should show percentage/rate when 115 returns them",
+    "new tasks should still save to root/海阔视界 when available",
+    "program title remains 115.简 and login remains usable"
+  ],
+  "updatedAt": "2026-09-22"
+}
