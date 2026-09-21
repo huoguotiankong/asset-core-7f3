@@ -25,11 +25,11 @@
       "name": "搜番",
       "type": "script",
       "source": "https://ma.sefan.pw/",
-      "file": "apps/tools/magnet-jun/rules/sefan-pw.json",
-      "installer": "apps/tools/magnet-jun/rules/sefan-pw-installer.js",
+      "file": "apps/tools/magnet-jun/rules/sefan-pw-v2.json",
+      "installer": "apps/tools/magnet-jun/rules/sefan-pw-v2-installer.js",
       "status": "device-validation-pending",
-      "version": 1,
-      "strategy": "runtime search-form discovery + adaptive JSON/HTML parser + detail fallback"
+      "version": 2,
+      "strategy": "runtime form+JS endpoint discovery, multi-domain fallback, adaptive JSON/HTML parser"
     },
     {
       "id": "bt4g",
