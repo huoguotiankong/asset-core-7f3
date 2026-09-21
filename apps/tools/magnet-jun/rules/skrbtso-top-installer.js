@@ -1,16 +1,23 @@
 (function(){
-var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c7652a47c4e4aded6b59b844d9a47c2095a17522/apps/tools/magnet-jun/rules/skrbtso-top.json";
+var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@73767bdc0578913fdedcb6aad3dada5a3009e85e/apps/tools/magnet-jun/rules/skrbtso-top.json";
 var raw="";
 try{raw=fetch(ruleUrl);}catch(e){return "toast://下载 SkrBT 规则失败："+(e.message||e);}
 var rule;
 try{rule=JSON.parse(raw);}catch(e2){return "toast://SkrBT 规则内容异常";}
-var testRule="";
-try{testRule=fetch("hiker://home@磁力君.简·测试");}catch(e3){}
-if(!testRule||testRule==="null")return "toast://请先安装磁力君.简·测试 Test6";
+var testRaw="";
+try{testRaw=fetch("hiker://home@磁力君.简·测试");}catch(e3){}
+if(!testRaw||testRaw==="null")return "toast://请先安装磁力君.简·测试 Test6";
+try{
+    var testObj=JSON.parse(testRaw);
+    if(Number(testObj.version||0)<2026092106)return "toast://磁力君.简·测试版本过旧，请先升级到 Test6";
+    var ps=typeof testObj.pages==="string"?JSON.parse(testObj.pages||"[]"):(testObj.pages||[]),ok=false;
+    for(var pi=0;pi<ps.length;pi++){if(ps[pi]&&ps[pi].path==="MJSearchCore"){ok=true;break;}}
+    if(!ok)return "toast://当前磁力君测试版缺少 Test6 搜索核心，请重新导入 Test6";
+}catch(e4){return "toast://读取磁力君.简·测试版本失败";}
 var path="hiker://files/rules/LoyDgIk/magnetjunProviders_v2.json";
 var arr=[];
 if(fileExist(path)){
-    try{arr=JSON.parse(readFile(path)||"[]");}catch(e4){arr=[];}
+    try{arr=JSON.parse(readFile(path)||"[]");}catch(e5){arr=[];}
 }
 if(!Array.isArray(arr))arr=[];
 var idx=-1;
