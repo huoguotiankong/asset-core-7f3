@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.6",
-      "build": 2026092207,
-      "ruleVersion": 2026092207,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.6/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.6/installer.js",
+      "version": "1.2.0-test.8",
+      "build": 2026092209,
+      "ruleVersion": 2026092209,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.8/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.8/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "restored-after-test7-regression",
-      "desc": "恢复到Test6：统一优先保存到根目录/海阔视界，未找到则云下载/离线下载；撤销Test7高频并发轮询，避免115接口返回HTML/风控和我的文件空白。"
+      "status": "pending-device-validation",
+      "desc": "Test7事故后的安全低频版：只改115Offline磁链聚焦页；单后台任务、单页查询、最多两次低频确认后停止。继续优先保存到海阔视界，不碰我的文件/登录/普通网盘。"
     },
     {
       "channel": "candidate",
