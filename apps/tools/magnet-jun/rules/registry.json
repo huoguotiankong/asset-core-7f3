@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "updatedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "btsearch_love",
+      "name": "BTSearch",
+      "type": "script",
+      "source": "https://www.btsearch.love/",
+      "file": "apps/tools/magnet-jun/rules/btsearch-love.json",
+      "installer": "apps/tools/magnet-jun/rules/btsearch-love-installer.js",
+      "status": "device-validation-pending"
+    }
+  ]
+}
