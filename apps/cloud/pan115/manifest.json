@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "pan115",
+  "name": "115.简",
+  "category": "cloud",
+  "mode": "local-clone-patch/self-use",
+  "currentStable": {
+    "ruleVersion": 1,
+    "source": "device-installed baseline",
+    "status": "preserved"
+  },
+  "candidate": {
+    "version": "1.1.0-rc1",
+    "build": 2026092110,
+    "release": "apps/cloud/pan115/releases/1.1.0-rc1/release.json",
+    "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js"
+  },
+  "changelog": "apps/cloud/pan115/CHANGELOG.md"
+}
