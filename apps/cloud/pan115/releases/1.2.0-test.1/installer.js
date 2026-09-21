@@ -35,21 +35,23 @@ function resolveCloudDownloadCid(c){
     if(cached){ try{setItem("115CloudDownloadCid","");}catch(e1){} }
     let cookie="";
     try { cookie=String(getCookie("https://115.com/")||""); } catch(e2){}
+    if(!cookie){ try{cookie=String(getCookie("https://clouddownload.115.com/")||"");}catch(e3){} }
+    let ua="Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
     let urls=[
         "https://clouddownload.115.com/?ac=get_id&torrent=1&_="+Date.now(),
         "https://115.com/?ct=lixian&ac=get_id&torrent=1&_="+Date.now()
     ];
     for(let i=0;i<urls.length;i++){
         try{
-            let txt=fetch(urls[i],{timeout:4500,headers:{"User-Agent":MOBILE_UA,"Referer":"https://115.com/","Cookie":cookie}});
+            let txt=fetch(urls[i],{timeout:4500,headers:{"User-Agent":ua,"Referer":"https://115.com/","Cookie":cookie}});
             let cid=_115CloudCidFrom(_115Json(txt));
             if(cid){
-                try{setItem("115CloudDownloadCid",cid);setItem("115CloudDownloadCidMode","official-get-id");}catch(e3){}
+                try{setItem("115CloudDownloadCid",cid);setItem("115CloudDownloadCidMode","official-get-id");}catch(e4){}
                 return cid;
             }
-        }catch(e4){}
+        }catch(e5){}
     }
-    // 极端兼容兜底：只在根目录寻找已有“云下载/离线下载”目录，不创建猜测目录。
+    // 极端兼容兜底：只寻找已有“云下载/离线下载”目录，不自行创建猜测目录。
     try{
         let r=c.getFiles("0",{offset:0,pageSize:120,order:"file_name",asc:"1",showDir:"1"});
         let a=(r&&r.files)||[];
@@ -57,16 +59,15 @@ function resolveCloudDownloadCid(c){
             let f=a[j]||{};
             if(f.isDirectory&&/^(云下载|离线下载)$/i.test(String(f.name||""))){
                 let cid2=String(f.fileId||"");
-                if(cid2){ try{setItem("115CloudDownloadCid",cid2);setItem("115CloudDownloadCidMode","root-name-fallback");}catch(e5){} return cid2; }
+                if(cid2){ try{setItem("115CloudDownloadCid",cid2);setItem("115CloudDownloadCidMode","root-name-fallback");}catch(e6){} return cid2; }
             }
         }
-    }catch(e6){}
-    try{setItem("115CloudDownloadCidMode","root-fallback");}catch(e7){}
+    }catch(e7){}
+    try{setItem("115CloudDownloadCidMode","root-fallback");}catch(e8){}
     return "0";
 }
 function _115Sleep(ms){
-    try { java.lang.Thread.sleep(ms); return; } catch(e){}
-    try { Packages.java.lang.Thread.sleep(ms); } catch(e2){}
+    try { Packages.java.lang.Thread.sleep(ms); } catch(e){}
 }
 function _115FindTaskByHashOrUrl(tasks,hash,link){
     let hh=String(hash||"").toLowerCase(),raw=String(link||"").trim();
@@ -78,9 +79,9 @@ function _115FindTaskByHashOrUrl(tasks,hash,link){
     return null;
 }
 function pollCurrentTask(link,hash){
-    let waits=[260,420,650,900,1250];
+    let waits=[260,420,650,900];
     let last=null;
-    for(let n=0;n<waits.length;n++){
+    for(let n=0;n<=waits.length;n++){
         try{
             let a=listTasks(2);
             let t=_115FindTaskByHashOrUrl(a,hash,link);
@@ -89,7 +90,7 @@ function pollCurrentTask(link,hash){
                 if(t.status===2||t.status===-1||String(t.fileId||"")) return t;
             }
         }catch(e){}
-        if(n<waits.length-1) _115Sleep(waits[n]);
+        if(n<waits.length) _115Sleep(waits[n]);
     }
     return last;
 }
@@ -108,12 +109,12 @@ function _115TaskRoot(c,t){
     return null;
 }
 function appendFastResultItems(t,out){
-    if(!t||t.status!==2) return false;
+    if(!t||(!t.fileId&&t.status!==2)) return false;
     let c;
     try{c=api.newClient();}catch(e){return false;}
     let root=_115TaskRoot(c,t);
     if(!root) return false;
-    out.push({title:'<b>📂 '+String(root.name||t.name||"离线结果")+'</b>',desc:"离线完成 · 已进入文件夹，点视频直接播放",col_type:"rich_text",extra:{textSize:17}});
+    out.push({title:'<b>📂 '+String(root.name||t.name||"离线结果")+'</b>',desc:(t.status===2?"离线完成":"115已返回结果")+" · 已进入文件夹，点视频直接播放",col_type:"rich_text",extra:{textSize:17}});
     let arr=[];
     if(root.isDirectory){
         try{
@@ -145,43 +146,45 @@ function appendFastResultItems(t,out){
     if(root.isDirectory){
         out.push({title:"📂 打开完整文件夹",desc:arr.length>80?("当前快速展示前80项 · 共"+arr.length+"项"):"进入原版115文件浏览",col_type:"text_2",url:"hiker://page/115List?rule="+encodeURIComponent(String(MY_RULE.title||"115.简·测试"))+"&page=fypage&cid="+encodeURIComponent(String(root.fileId||""))+"&cname="+encodeURIComponent(String(root.name||t.name||"离线结果"))});
     }
-    return shown>0;
+    return true;
 }
 `;
 
 off=off.replace("function statusLine(t) {",helper+"\nfunction statusLine(t) {");
-off=off.replace(/client\.addOfflineTaskURIs\(\[autoAdd\],\s*[\"']0[\"']\)/g,"client.addOfflineTaskURIs([autoAdd], resolveCloudDownloadCid(client))");
-off=off.replace(/c\.addOfflineTaskURIs\(\[link\],\s*[\"']0[\"']\)/g,"c.addOfflineTaskURIs([link], resolveCloudDownloadCid(c))");
-off=off.replace(/c\.addOfflineTaskURIs\(add,\s*[\"']0[\"']\)/g,"c.addOfflineTaskURIs(add, resolveCloudDownloadCid(c))");
+var stateMarker='let currentTask = null;';
+if(off.indexOf(stateMarker)<0) return "toast://Test补丁定位失败：未找到任务状态";
+off=off.replace(stateMarker,'let _115CloudCid = (myPage === 1 ? resolveCloudDownloadCid(client) : "0");\n'+stateMarker);
+off=off.replace(/client\.addOfflineTaskURIs\(\[autoAdd\],\s*[\"']0[\"']\)/g,'client.addOfflineTaskURIs([autoAdd], _115CloudCid || "0")');
+off=off.replace(/c\.addOfflineTaskURIs\(\[link\],\s*[\"']0[\"']\)/g,'c.addOfflineTaskURIs([link], String(getItem("115CloudDownloadCid","0")||"0"))');
+off=off.replace(/c\.addOfflineTaskURIs\(add,\s*[\"']0[\"']\)/g,'c.addOfflineTaskURIs(add, String(getItem("115CloudDownloadCid","0")||"0"))');
 
 var marker="if (myPage === 1) {\n    d.push({";
-var poll=`if (focusMode && currentHash && (!currentTask || currentTask.status !== 2)) {
+var poll=`if (focusMode && (!currentTask || currentTask.status !== 2)) {
     let ptask = pollCurrentTask(autoAdd, currentHash);
     if (ptask) {
         currentTask = ptask;
         currentHash = String(ptask.infoHash || currentHash || "");
         autoMessage = ptask.status === 2 ? "离线已完成，文件已就绪" :
-            (ptask.status === -1 ? "离线任务失败，可删除后重试" : "任务已创建，正在由115处理");
+            (ptask.status === -1 ? "离线任务失败，可删除后重试" :
+                (ptask.fileId ? "115已返回文件结果，可直接进入" : "任务已创建，正在由115处理"));
     }
 }
 
 `;
 if(off.indexOf(marker)<0) return "toast://Test补丁定位失败：未找到首屏标记";
 off=off.replace(marker,poll+marker);
+var msgMarker='d.push({ title: autoMessage || "正在处理磁链", col_type: "text_center_1", extra: { lineVisible: false } });';
+if(off.indexOf(msgMarker)<0) return "toast://Test补丁定位失败：未找到磁链状态";
+off=off.replace(msgMarker,msgMarker+'\n        d.push({ title: (_115CloudCid && _115CloudCid !== "0") ? "☁ 保存到 115 云下载" : "⚠ 未识别云下载目录，暂退根目录", desc: (_115CloudCid && _115CloudCid !== "0") ? ("CID: " + _115CloudCid + " · " + String(getItem("115CloudDownloadCidMode","")||"")) : "把此状态截图反馈，正式版不会在未验证前覆盖", col_type: "text_center_1", extra: { lineVisible: false } });');
 var itemMarker="d.push(makeTaskItem(currentTask, true));";
 if(off.indexOf(itemMarker)<0) return "toast://Test补丁定位失败：未找到当前任务卡";
-off=off.replace(itemMarker,itemMarker+"\n            if (currentTask.status === 2) appendFastResultItems(currentTask, d);");
+off=off.replace(itemMarker,itemMarker+"\n            if (currentTask.status === 2 || currentTask.fileId) appendFastResultItems(currentTask, d);");
 
-pages[idx].rule=off.replace(/115\.简·测试/g,"115.简·测试");
+pages[idx].rule=off;
 rule.title="115.简·测试";
 rule.author="AI&三鲜汤 · 云下载目录/快速离线 Test 1.2.0-test.1";
 rule.version=2026092202;
 rule.pages=JSON.stringify(pages);
-try{
-  var fr=String(rule.find_rule||"");
-  fr=fr.replace(/115\.简(?!·测试)/g,"115.简·测试");
-  rule.find_rule=fr;
-}catch(e3){}
 var out="hiker://files/cache/115_test_12001_fast_offline.json";
 saveFile(out,JSON.stringify(rule));
 return "海阔视界首页频道规则￥home_rule_url￥"+getPath(out);
