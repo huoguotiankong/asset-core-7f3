@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "pan115",
   "name": "115.简",
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-22",
   "channels": [
     {
       "channel": "stable",
@@ -17,6 +17,20 @@
       "recommended": true,
       "status": "device-validated",
       "desc": "磁链调用正式版：查重、fileId优先定位、主片直放、多集选集、缓存复用、失败重试。"
+    },
+    {
+      "channel": "test",
+      "label": "测试版",
+      "name": "115.简·测试",
+      "version": "1.2.0-test.1",
+      "build": 2026092202,
+      "ruleVersion": 2026092202,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.1/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.1/installer.js",
+      "mode": "local-clone-patch",
+      "recommended": false,
+      "status": "pending-device-validation",
+      "desc": "快速磁链离线测试：默认云下载目录、短时自动追踪、fileId提前就绪、当前页直接展开文件夹/视频。"
     },
     {
       "channel": "candidate",
