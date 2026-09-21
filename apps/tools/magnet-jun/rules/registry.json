@@ -21,6 +21,17 @@
       "status": "device-validation-pending"
     },
     {
+      "id": "sefan_pw",
+      "name": "搜番",
+      "type": "script",
+      "source": "https://ma.sefan.pw/",
+      "file": "apps/tools/magnet-jun/rules/sefan-pw.json",
+      "installer": "apps/tools/magnet-jun/rules/sefan-pw-installer.js",
+      "status": "device-validation-pending",
+      "version": 1,
+      "strategy": "runtime search-form discovery + adaptive JSON/HTML parser + detail fallback"
+    },
+    {
       "id": "bt4g",
       "name": "BT4G",
       "type": "script",
