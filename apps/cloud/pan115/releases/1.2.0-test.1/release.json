@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.1",
+  "appId": "pan115",
+  "name": "115.简·测试",
+  "channel": "test",
+  "version": "1.2.0-test.1",
+  "build": 2026092202,
+  "ruleVersion": 2026092202,
+  "basedOn": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.1/installer.js",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "115.简 Stable 1.1.0",
+    "testTitle": "115.简·测试",
+    "overwritesStable": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "features": [
+    "resolve 115 canonical cloud-download directory through get_id/dest_cid",
+    "use canonical cloud-download cid as wp_path_id instead of root cid 0",
+    "cache and validate cloud-download cid with safe fallback",
+    "bounded short polling after external magnet submission",
+    "use fileId as early result readiness signal instead of waiting only for status=completed",
+    "inline magnet result folder contents on focused offline page",
+    "video rows continue to use original 115Api.player.resolve playback",
+    "retain Stable 1.1.0 deduplication, result cache, retry and multi-video behavior"
+  ],
+  "scope": {
+    "patchedPage": "115Offline",
+    "unchanged": [
+      "115 login/cookie/QR",
+      "m115 crypto",
+      "115 share",
+      "normal file list/search",
+      "115Api.player.resolve",
+      "Stable 1.1.0"
+    ]
+  },
+  "status": "active-test-pending-device-validation",
+  "validation": [
+    "External magnet should no longer require several manual refreshes before a task/file result appears",
+    "When fileId becomes available, the focused page should expose the generated result folder and playable video rows quickly",
+    "Tapping a video row should play through the existing 115 player chain",
+    "New offline files should be created under 115 cloud-download directory rather than root when canonical dest_cid resolves",
+    "The Test page should display cloud-download CID mode for device verification",
+    "Repeated magnet calls should still deduplicate and reuse existing results",
+    "Stable 1.1.0 must remain unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
