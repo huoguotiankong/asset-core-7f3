@@ -20,17 +20,17 @@
     },
     {
       "channel": "test",
-      "label": "测试版",
-      "name": "115.简·测试",
-      "version": "1.2.0-test.3",
-      "build": 2026092204,
-      "ruleVersion": 2026092204,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.3/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.3/installer.js",
-      "mode": "local-test-hotfix",
+      "label": "测试版（同名覆盖）",
+      "name": "115.简",
+      "version": "1.2.0-test.4",
+      "build": 2026092205,
+      "ruleVersion": 2026092205,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.4/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.4/installer.js",
+      "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "Test2语法热修：移除_115CloudCid页面级重复声明，保留秒开、云下载CID缓存、缩短查重与超时待确认逻辑。"
+      "desc": "自用测试改为同名覆盖115.简，不再创建115.简·测试；复用原登录状态，并修复Test2/Test3变量重声明与导入依赖问题。"
     },
     {
       "channel": "candidate",
