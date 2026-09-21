@@ -17,15 +17,15 @@
       "channel": "test",
       "label": "测试版",
       "name": "磁力君.简·测试",
-      "version": "1.0.0-test.2",
-      "build": 2026092102,
-      "ruleVersion": 2026092102,
-      "release": "apps/tools/magnet-jun/releases/1.0.0-test.2/release.json",
-      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.2/installer.js",
+      "version": "1.0.0-test.3",
+      "build": 2026092103,
+      "ruleVersion": 2026092103,
+      "release": "apps/tools/magnet-jun/releases/1.0.0-test.3/release.json",
+      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js",
       "mode": "local-clone-patch",
       "recommended": false,
       "status": "device-validation-pending",
-      "desc": "修复测试标题导致远程搜索引擎脚本取错文件的问题；继续验证八模式与海阔云盘调用。"
+      "desc": "隔离测试版搜索规则缓存并关闭会删除正式规则缓存的标题耦合自动更新；保留八种模式和海阔云盘调用。"
     }
   ]
 }
