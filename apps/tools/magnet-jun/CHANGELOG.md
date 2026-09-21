@@ -1,6 +1,6 @@
 # 磁力君.简开发记录
 
-状态：**Test5 / 全新搜索架构待实机验证**  
+状态：**Test6 / 可管理 Provider 搜索待实机验证**  
 首次纳入：2026-09-21
 
 ## 当前基线
@@ -148,24 +148,143 @@ PikPak → 对应海阔小程序 diaoyong
 
 所有旧 Android `openAppIntent()` / PikPak App Scheme 不进入 Test5 新搜索/播放链。
 
-### `SelectTorrent` 收口
+## Test6 · 可管理 Provider Registry
 
-- 打开方式同样只保留上述 8 个模式。
-- 云盘播放统一调用 `MJSearchCore.routeMagnet()`，不再维护第二套 App Intent 路由。
-- `whatslink.info` 元数据查询继续保留，但 magnet 参数改为 `encodeURIComponent()`。
+### 元数据
+
+- Test：`1.0.0-test.6`
+- Build / rule version：`2026092106`
+- Release：`apps/tools/magnet-jun/releases/1.0.0-test.6/release.json`
+- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js`
+- Stable：不覆盖。
+
+### 用户新增要求
+
+在 Test5 全新搜索架构上恢复“规则管理”能力，要求：
+
+```text
+可导入新的磁力搜索规则
+可删除失效规则
+可禁用 / 启用
+可自定义排序
+排序交互尽量保持原版习惯
+```
+
+### 新规则仓
+
+Test6 不回退到旧 `ciliSimpleRules.json`，新建独立 Registry：
+
+```text
+hiker://files/rules/LoyDgIk/magnetjunProviders_v2.json
+```
+
+默认初始化为：
+
+```text
+BTDig
+Knaben
+PirateBay
+```
+
+三个内置 Provider 也作为 Registry 条目参与管理，因此可以禁用、删除、移动、置顶；执行“重置”可恢复内置规则。
+
+### 管理能力
+
+`ruleManage` 页面改为新 Registry 管理器，支持：
+
+```text
+新增
+导入
+重置
+清空
+编辑（自定义脚本规则）
+禁用 / 启用
+删除
+移动到指定序号
+置顶
+```
+
+列表序号顺序就是**聚合搜索 Provider 优先级**。聚合结果按规则顺序依次合并，再按 BTIH 去重；同一磁链由排在前面的规则优先保留，因此自定义排序具有真实业务意义。
+
+搜索页同时增加：
+
+```text
+⚙ 规则
+```
+
+并在“模式”菜单末尾增加“规则管理”，两处都可直接进入管理页。
+
+### 导入兼容
+
+Test6 兼容三种导入输入：
+
+1. 原版 `磁力君.简` 搜索引擎完整口令；
+2. JSON 对象 / JSON 数组；
+3. Base64 编码 JSON。
+
+对于原版规则字段：
+
+```text
+name
+find
+findAliUrl
+basicUrl
+page
+user
+```
+
+继续兼容。`find` 在新 Provider 沙箱边界内通过 `new Function(s,page,user,basicUrl)` 执行，返回数组即可；单条脚本规则失败只进入该 Provider 的诊断，不影响其它 Provider。
+
+`findAliUrl` 继续作为点击结果后的延迟解析器；字符串/对象/数组结果均有兜底处理。
+
+### 新增/编辑
+
+`ruleEdit` 保留原版主要编辑体验：
+
+- 名称；
+- `find` 搜索脚本；
+- `findAliUrl` 链接解析脚本；
+- `basicUrl`；
+- 是否翻页。
+
+保存前会做 `new Function` 语法检查，避免明显语法错误进入活动 Registry。
+
+### 搜索核心变化
+
+`MJSearchCore.providers()` 不再写死 Provider，而是从 `configs.getUsefulJson()` 动态生成搜索源按钮。
+
+搜索执行：
+
+```text
+Registry 当前顺序
+→ 逐 Provider 隔离执行
+→ 标准化 Result Model
+→ 精准筛选（可选）
+→ BTIH / URL 去重
+→ 保留 Registry 优先顺序
+```
+
+自定义脚本规则与内置 Provider 共用同一搜索结果和磁链播放路由，因此导入的新规则天然支持 115 / 迅雷 / PikPak / 光鸭 / 123 等现有播放模式。
 
 ### 静态验证
 
-- `MJSearchCore`：Node 语法检查通过。
-- 新 `sou`：Node 语法检查通过。
-- 新 `SelectTorrent`：Node 语法检查通过。
-- Installer：Node 语法检查通过。
-- Test5 不依赖旧 `preRule` 自动更新器，`rule.preRule = ""`。
+- `configs.js`：Node 语法检查通过。
+- `import.js`：Node 语法检查通过。
+- `rule_manage.js`：去除 `js:` 后 Node 语法检查通过。
+- `rule_edit.js`：去除 `js:` 后 Node 语法检查通过。
+- `search_core.js`：Node 语法检查通过。
+- `search_page.js`：去除 `js:` 后 Node 语法检查通过。
+- `installer.js`：Node 语法检查通过。
+- Test6 模块固定到不可变 commit，不依赖 `@main` 热变更。
 
-### 当前实机验收
+### Test6 实机验收
 
-1. 导入 Test5 后搜索此前关键词 `斗破苍穹`。
-2. 分别查看“聚合 / BTDig / Knaben / PirateBay”是否至少有 Provider 返回结果；若某源不可用，应出现单源诊断而不是全页空白。
-3. 搜到结果后先测试 `115云盘`，确认进入 `115.简` 的磁链离线/播放链。
-4. 再逐个验证 迅雷 / PikPak / 光鸭 / 123 的真实海阔规则名与 `diaoyong` 外部调用协议。
-5. 未完成实机验证前不得晋级 Stable。
+1. 首页应出现 `⚙ 规则`，模式菜单中也应出现“规则管理”。
+2. 规则管理默认显示 `BTDig / Knaben / PirateBay` 三条规则。
+3. 测试禁用一条规则：首页对应 Provider 按钮应消失；重新启用后恢复。
+4. 测试“移动/置顶”：首页 Provider 顺序同步变化，聚合优先级随之变化。
+5. 导入一条原版磁力搜索规则，确认可出现在规则列表和首页 Provider 按钮中。
+6. 删除失效规则后，其 Provider 不再参与聚合搜索。
+7. 搜索结果继续验证 `115云盘` 调用链。
+
+未完成以上实机验证前不得晋级 Stable。
