@@ -1,6 +1,6 @@
 # 115.简 / Pan115 开发记录
 
-状态：**Test only / 待海阔实机验证**  
+状态：**Candidate RC1 / Stable 仍保留原版基线**  
 首次纳入：2026-09-21
 
 ## 基线与已确认事实
@@ -277,7 +277,7 @@ EP03 1.93 GB
 
 - 原首页长说明缩短为 `文件名 / 115分享链接 / 磁链`；
 - `复制调用` 改名为 `复制磁链调用`；
-- 复制出的 magnet 调用模板改成 `115Offline?add=`。
+- 复制出的 magnet 调用模板目标应为 `115Offline?add=`。
 
 ### Test3 静态/模拟验证
 
@@ -291,12 +291,85 @@ EP03 1.93 GB
   3. 多集近似大小 → 进入选集页；
   4. 新 magnet → 只创建 1 个新任务。
 
-### 当前实机验收重点
+## 2026-09-21 · Test4 收口增强
 
-1. Test3 云口令导入成功，原版 `115.简` 保留。
-2. 从 magnet 调用进入后只突出“当前任务”，不再先看到整页历史任务。
-3. 重复调用同一 magnet 不新增重复任务。
-4. `meyd-553` 已完成任务点击后直接播放 `4.95 GB` 正片。
-5. 多集/多视频近似大小资源进入选集页，而不是误播最大文件。
-6. 视频播放继续由原版 `player.resolve` 取得直链，确认 Header/UA 无回归。
-7. 以上通过后再考虑把 Test3 能力合入正式 `115.简`，然后批量给其它磁力小程序接入。
+Test4 在 Test3 基础上继续收紧磁链播放边界：
+
+- BTIH 去重同时支持 40 位 Hex 与 32 位 Base32；
+- 增加 `info_hash → 播放结果` 缓存，离线任务记录删除后只要网盘文件仍存在仍可复用；
+- 失败任务提供删除并重新提交；
+- 电影 / 剧集 / 多段文件识别进一步区分；
+- 选集采用自然排序，`EP1 → EP2 → EP10`；
+- sample/preview/试看等小视频与主内容分组；
+- 保留 `fileId` 优先、父目录只兜底、最多 4 层 / 500 项扫描边界。
+
+Test4 模块路径：
+
+```text
+apps/cloud/pan115/test/test4/offline_part1.txt
+apps/cloud/pan115/test/test4/offline_part2.txt
+apps/cloud/pan115/test/test4/offline_part3.txt
+apps/cloud/pan115/test/test4/offline_part4.txt
+apps/cloud/pan115/test/test4/result.js
+```
+
+本地静态检查与 mock 回归通过，但截至本次收敛时**尚未收到 Test4 最终磁链直放/选集的实机回执**，因此不得直接晋级 Stable。
+
+同时在收敛检查中发现 Test4 installer 的首页按钮虽然已改名为“复制磁链调用”，但由于字符串替换模式未命中，实际复制内容仍残留 `115Search?kw=`。该问题已在 RC1 installer 中修正为 `115Offline?add=`，禁止将 Test4 installer 本身直接晋级 Stable。
+
+## 2026-09-21 · 1.1.0-rc1 正式收敛候选
+
+用户要求“收敛”。按发布规范将 Test4 的已完成能力冻结为 **Candidate RC1**，停止继续叠 Test5；Stable 仍保留用户当前原版 `115.简`，待一次实机 smoke test 后再晋级。
+
+### RC1 元数据
+
+- Candidate：`1.1.0-rc1`
+- Build / rule version：`2026092110`
+- Release：`apps/cloud/pan115/releases/1.1.0-rc1/release.json`
+- Installer：`apps/cloud/pan115/releases/1.1.0-rc1/installer.js`
+- Candidate pointer：`apps/cloud/pan115/candidate.json`
+- Manifest：`apps/cloud/pan115/manifest.json`
+- Channels：`apps/cloud/pan115/channels.json`
+- 候选规则标题：`115.简·候选`，与当前正式 `115.简` 并存，不覆盖 Stable。
+
+### RC1 冻结功能边界
+
+```text
+其它小程序 magnet
+→ 115Offline?add=
+→ BTIH/URL 去重
+→ 当前任务聚焦
+→ 离线完成
+→ fileId 优先定位
+→ 过滤 sample/预告等噪声
+→ 明显单主片直接播放
+→ 多集/多段进入 115OfflineResult 选集
+→ 原版 player.resolve 取 115 直链播放
+→ 结果缓存复用
+```
+
+不修改：
+
+- 115 登录 / Cookie / 扫码；
+- m115 加解密；
+- 分享链接播放；
+- 普通文件浏览 / 搜索；
+- `player.resolve` 直链算法。
+
+### RC1 收敛检查
+
+- Test4 生成规则 JSON 可解析；
+- 原版 7 页全部保留，并新增 `115OfflineResult`，共 8 页；
+- 8 个页面脚本全部通过 `node --check`；
+- 修复 Test4 installer 中“复制磁链调用”实际仍复制 `115Search?kw=` 的遗漏；RC1 明确复制 `115Offline?add=`；
+- Candidate 使用与 Stable 不同标题并存，未切 Stable/Latest。
+
+### Stable 晋级唯一剩余门槛
+
+RC1 只需要一次最小实机 smoke test：
+
+1. 用已完成的 `meyd-553` 或同类单主片 magnet：确认直接播放 4.95 GB 正片，不再进入父目录；
+2. 再次调用相同 magnet：确认不重复新建任务；
+3. 若手边有多集 magnet，再确认进入选集；没有多集样本时不阻塞单主片链验证，但多集能力继续标记 Candidate 已静态/mock 验证。
+
+通过后可将**同一冻结 RC1 逻辑**改名覆盖为 `115.简` 并建立 Stable 元数据，不再继续修改业务逻辑。
