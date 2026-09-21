@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "appId": "pan115",
+  "name": "115.简",
+  "latestStable": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "ruleVersion": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "installer": "apps/cloud/pan115/releases/1.1.0/installer.js"
+  },
+  "candidate": {
+    "version": "1.1.0-rc1",
+    "build": 2026092110,
+    "status": "promoted-to-stable"
+  },
+  "updatedAt": "2026-09-21"
+}
