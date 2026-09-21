@@ -363,3 +363,16 @@ Registry 当前顺序
 4. 再验证第 2 页，确认 `?p=2` 仍能返回列表。
 5. 若搜索页仍显示类似 `8338 条` 但规则报错，新的关键诊断应为“未提取到结果详情链接”；此时只需针对当前结果卡片 HTML 调整候选链接选择器，不再修改搜索路由。
 6. 未完成上述实机验证前，v11 继续保持 `device-validation-pending`，不得晋级 Stable。
+
+### 2026-09-21 · BT联盟冻结 / BT4G 接替验证
+
+- 用户明确停止继续投入 BT联盟适配；`btlm_in` v11 保留历史实现，但规则目录状态改为 `frozen-after-repeated-device-failure`。除非用户以后明确重新开启，不再继续升 v12/v13。
+- 新增 BT4G Provider，来源参考 `https://torrends.to/site/bt4g`；Torrends 当前列出的可用官方域包括 `bt4gprx.com / bt4g.com / bt4g.org`。
+- 采用 BT4G RSS/XML 搜索接口，不抓普通 HTML：`/search?q=<keyword>&orderby=relevance&category=all&p=<page>&page=rss`。
+- SearXNG 当前 BT4G 引擎同样使用上述 RSS 接口，并从每个 `<item>` 读取 `title / guid / description / link / pubDate`；其中 `<link>` 为 magnet，`description` 用于提取大小。
+- Rule：`apps/tools/magnet-jun/rules/bt4g.json`；规则冻结 commit：`41500c7a82696d31211c753011f7a75d4b62734c`。
+- Installer：`apps/tools/magnet-jun/rules/bt4g-installer.js`；安装器固定从上述不可变 commit 获取规则，避免 `@main` 热变更。
+- 搜索时按 `basicUrl → bt4gprx.com → bt4g.com → bt4g.org` 去重后依次尝试，单个镜像出现网络错误、Challenge 或非 RSS 返回时自动尝试下一个。
+- RSS 解析直接输出 `title / magnet / bytes / date / desc`，因此可直接复用 Test6 现有 115 / 迅雷 / PikPak / 光鸭 / 123 播放路由，无需详情页二段解析。
+- `find` / `findAliUrl` 与 Installer 已通过 Node 语法检查；额外使用模拟 BT4G RSS 验证了标题、magnet、1.5 GB 大小换算及日期输出。
+- 当前无法从开发容器直接联网请求 BT4G RSS，最终网络可达性及真实 RSS 内容仍以海阔实机为准；未实机通过前状态保持 `device-validation-pending`。
