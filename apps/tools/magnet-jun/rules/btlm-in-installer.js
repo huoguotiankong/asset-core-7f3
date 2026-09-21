@@ -1,9 +1,9 @@
 (function(){
-var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@c59e6b0a3437f0bf64563d07c826f546f799d62e/apps/tools/magnet-jun/rules/btlm-in.json";
+var ruleUrl="https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@2bae6a0d078fb69d6949ad4b48646a859cfbf9e7/apps/tools/magnet-jun/rules/btlm-in-v11.json";
 var raw="";
-try{raw=fetch(ruleUrl);}catch(e){return "toast://下载 BT联盟 规则失败："+(e.message||e);}
+try{raw=fetch(ruleUrl);}catch(e){return "toast://下载 BT联盟 v11 规则失败："+(e.message||e);}
 var rule;
-try{rule=JSON.parse(raw);}catch(e2){return "toast://BT联盟 规则内容异常";}
+try{rule=JSON.parse(raw);}catch(e2){return "toast://BT联盟 v11 规则内容异常";}
 var testRaw="";
 try{testRaw=fetch("hiker://home@磁力君.简·测试");}catch(e3){}
 if(!testRaw||testRaw==="null")return "toast://请先安装磁力君.简·测试 Test6";
@@ -29,5 +29,5 @@ if(idx>=0){
     arr[idx]=old;
 }else{arr.unshift(rule);}
 saveFile(path,JSON.stringify(arr));
-return "toast://BT联盟 搜索规则已"+(idx>=0?"更新":"导入")+"，请返回磁力君刷新页面";
+return "toast://BT联盟 v11 搜索规则已"+(idx>=0?"更新":"导入")+"，请返回磁力君刷新页面";
 })()
