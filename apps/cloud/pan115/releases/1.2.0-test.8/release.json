@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.8",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.8",
+  "build": 2026092209,
+  "ruleVersion": 2026092209,
+  "basedOn": {
+    "version": "1.2.0-test.6",
+    "build": 2026092207,
+    "deviceValidatedRecovery": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.8/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "patch only 115Offline external-magnet focus UI on top of restored Test6",
+    "use exactly one background batch task instead of Test7 multi-task polling",
+    "perform at most one pre-check plus two low-frequency status confirmations after submit",
+    "stop automatic checks after the bounded confirmation window to avoid 115 rate-control regression",
+    "refresh into inline file/video results only when fileId or completed status is actually observed",
+    "manual status confirmation no longer returns false/unknown-link toast",
+    "retain root/海阔视界 -> 云下载/离线下载 -> root destination policy",
+    "leave login, my files, normal file list/search/share/player pages untouched"
+  ],
+  "safetyBoundary": {
+    "test7Disabled": true,
+    "maxConcurrent115StatusWorkers": 1,
+    "maxAutomaticTaskListReads": 3,
+    "pollPagesPerRead": 1,
+    "noContinuousPolling": true
+  },
+  "status": "active-test-safe-single-flight-pending-device-validation",
+  "validation": [
+    "my files must remain normally accessible while/after magnet submission",
+    "all-offline list must not return HTML/non-JSON due to this page",
+    "new magnet should save to root/海阔视界 when available",
+    "focus page should render immediately and either complete automatically within the short confirmation window or stop cleanly with manual-confirm guidance",
+    "completed task should expose file/video rows without opening the all-offline list"
+  ],
+  "updatedAt": "2026-09-22"
+}
