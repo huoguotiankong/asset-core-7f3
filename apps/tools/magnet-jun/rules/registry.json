@@ -21,13 +21,24 @@
       "status": "device-validation-pending"
     },
     {
+      "id": "bt4g",
+      "name": "BT4G",
+      "type": "script",
+      "source": "https://torrends.to/site/bt4g",
+      "file": "apps/tools/magnet-jun/rules/bt4g.json",
+      "installer": "apps/tools/magnet-jun/rules/bt4g-installer.js",
+      "status": "device-validation-pending",
+      "version": 1,
+      "strategy": "BT4G RSS/XML endpoint with bt4gprx.com -> bt4g.com -> bt4g.org mirror fallback"
+    },
+    {
       "id": "btlm_in",
       "name": "BT联盟",
       "type": "script",
       "source": "https://mm.btlm.in/",
       "file": "apps/tools/magnet-jun/rules/btlm-in-v11.json",
       "installer": "apps/tools/magnet-jun/rules/btlm-in-v11-installer.js",
-      "status": "device-validation-pending",
+      "status": "frozen-after-repeated-device-failure",
       "version": 11,
       "strategy": "confirmed /search/<keyword>; return result detail URL when list has no InfoHash, resolve magnet on detail click"
     }
