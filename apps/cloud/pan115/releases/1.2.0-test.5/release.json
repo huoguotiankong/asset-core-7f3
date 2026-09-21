@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.5",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.5",
+  "build": 2026092206,
+  "ruleVersion": 2026092206,
+  "basedOn": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.5/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "offlineDestinationPolicy": [
+    "root/海阔视界",
+    "root/云下载 or root/离线下载",
+    "root as final fallback"
+  ],
+  "features": [
+    "all new offline submissions prefer a root-level 海阔视界 folder",
+    "when 海阔视界 is absent, fall back to root-level 云下载/离线下载",
+    "use a dedicated 115HikerVisionCid cache so prior cloud-download cache cannot override 海阔视界 priority",
+    "apply the same destination policy to external magnet calls, manual offline adds, and failed-task retries",
+    "keep the imported rule title as 115.简 to reuse existing login/cookie state",
+    "retain Stable 1.1.0 playback resolver and Test4 fast-entry/result-expansion behavior"
+  ],
+  "status": "active-test-hiker-folder-priority-pending-device-validation",
+  "validation": [
+    "if root has 海阔视界, a new magnet must save into that folder",
+    "if 海阔视界 is absent but 云下载 exists, the new task must save into 云下载",
+    "existing 115.简 login state must remain valid after in-place import",
+    "external magnet, manual add, and retry paths must all use the same destination policy",
+    "Stable 1.1.0 must remain unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
