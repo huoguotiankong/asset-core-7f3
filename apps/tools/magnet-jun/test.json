@@ -3,11 +3,11 @@
   "appId": "magnet-jun",
   "name": "磁力君.简",
   "channel": "test",
-  "version": "1.0.0-test.3",
-  "build": 2026092103,
-  "ruleVersion": 2026092103,
-  "release": "apps/tools/magnet-jun/releases/1.0.0-test.3/release.json",
-  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js",
+  "version": "1.0.0-test.4",
+  "build": 2026092104,
+  "ruleVersion": 2026092104,
+  "release": "apps/tools/magnet-jun/releases/1.0.0-test.4/release.json",
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.4/installer.js",
   "previousTests": [
     {
       "version": "1.0.0-test.1",
@@ -17,7 +17,12 @@
     {
       "version": "1.0.0-test.2",
       "build": 2026092102,
-      "status": "device-failed-search-rules-empty"
+      "status": "device-failed-search-empty"
+    },
+    {
+      "version": "1.0.0-test.3",
+      "build": 2026092103,
+      "status": "device-failed-search-empty-after-cache-isolation"
     }
   ],
   "status": "device-validation-pending",
