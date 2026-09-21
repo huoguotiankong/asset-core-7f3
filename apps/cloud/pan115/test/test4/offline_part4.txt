@@ -1,0 +1,78 @@
+"toast://已取消";
+            let links = t.split(/\s+/).filter((s) => s);
+            let api2 = $.require("115Api");
+            try {
+                let c = api2.newClient();
+                let old = [];
+                try {
+                    for (let p = 1; p <= 5; p++) {
+                        let r = c.listOfflineTask(p), a = (r && r.tasks) || [];
+                        if (!a.length) break;
+                        a.forEach((x) => old.push(x));
+                        if (r.pageCount && p >= r.pageCount) break;
+                    }
+                } catch (e0) { }
+                let add = [];
+                links.forEach((u) => {
+                    let same = false;
+                    let raw = String(u || "").trim();
+                    let m = /(?:^|[?&])xt=urn:btih:([0-9A-Fa-f]{40})/i.exec(raw);
+                    let hh = m ? String(m[1]).toLowerCase() : "";
+                    for (let i = 0; i < old.length; i++) {
+                        if ((hh && String(old[i].infoHash || "").toLowerCase() === hh) || String(old[i].url || "").trim() === raw) { same = true; break; }
+                    }
+                    if (!same) add.push(raw);
+                });
+                if (!add.length) return "toast://这些任务已经存在";
+                c.addOfflineTaskURIs(add, "0");
+                refreshPage();
+                return "toast://已添加 " + add.length + " 个任务";
+            } catch (e) { return "toast://添加失败：" + e.message; }
+        })
+    });
+
+    d.push({ title: "🔄 刷新", col_type: "text_2", url: $("刷新").lazyRule(() => { refreshPage(); return false; }) });
+    d.push({
+        title: "🗑 删除已完成任务",
+        col_type: "text_2",
+        url: $("确认删除所有已完成的离线任务？（不删除已下载文件）").confirm(() => {
+            let api3 = $.require("115Api");
+            try {
+                let c = api3.newClient();
+                let done = [];
+                for (let p = 1; p <= 10; p++) {
+                    let r = c.listOfflineTask(p), a = (r && r.tasks) || [];
+                    if (!a.length) break;
+                    a.filter((t) => t.status === 2).forEach((t) => done.push(t));
+                    if (r.pageCount && p >= r.pageCount) break;
+                }
+                if (!done.length) return "toast://没有已完成的任务";
+                c.deleteOfflineTasks(done.map((t) => t.infoHash), false);
+                refreshPage();
+                return "toast://已删除 " + done.length + " 个任务";
+            } catch (e) { return "toast://失败：" + e.message; }
+        })
+    });
+    }
+}
+
+if (focusMode) {
+    if (myPage === 1) setResult(d);
+} else {
+let tasks = null, errText = "";
+try { tasks = client.listOfflineTask(myPage); } catch (e) { errText = e.message; }
+if (errText || !tasks) {
+    if (myPage === 1) d.push({ title: "获取任务列表失败：" + (errText || "接口没有返回内容"), col_type: "text_center_1" });
+    setResult(myPage === 1 ? d : []);
+} else {
+    let list = tasks.tasks || [];
+    let sig = list.length + "|" + (list[0] ? list[0].infoHash : "");
+    let sigKey = "115OfflineSig";
+    let lastSig = getItem(sigKey, "");
+    let noMore = (myPage > 1) && (list.length === 0 || sig === lastSig);
+    if (!noMore) setItem(sigKey, sig);
+    if (!list.length && myPage === 1) d.push({ title: "（暂无离线任务）", col_type: "text_center_1" });
+    list.forEach((t) => d.push(makeTaskItem(t, false)));
+    setResult(noMore ? [] : d);
+}
+}
