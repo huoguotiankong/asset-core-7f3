@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "magnet-jun",
+  "name": "磁力君.简",
+  "category": "tools",
+  "mode": "local-clone-patch/self-use",
+  "currentStable": {
+    "ruleVersion": 20250604,
+    "source": "user-uploaded baseline / device-installed rule",
+    "status": "preserved"
+  },
+  "test": {
+    "version": "1.0.0-test.1",
+    "build": 2026092101,
+    "release": "apps/tools/magnet-jun/releases/1.0.0-test.1/release.json",
+    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js",
+    "status": "device-validation-pending"
+  },
+  "channels": "apps/tools/magnet-jun/channels.json",
+  "changelog": "apps/tools/magnet-jun/CHANGELOG.md"
+}
