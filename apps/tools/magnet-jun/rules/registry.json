@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-22",
   "rules": [
     {
       "id": "btsearch_love",
@@ -25,11 +25,11 @@
       "name": "搜番",
       "type": "script",
       "source": "https://ma.sefan.pw/",
-      "file": "apps/tools/magnet-jun/rules/sefan-pw-v2.json",
-      "installer": "apps/tools/magnet-jun/rules/sefan-pw-v2-installer.js",
+      "file": "apps/tools/magnet-jun/rules/sefan-pw-v3.json",
+      "installer": "apps/tools/magnet-jun/rules/sefan-pw-v3-installer.js",
       "status": "device-validation-pending",
-      "version": 2,
-      "strategy": "runtime form+JS endpoint discovery, multi-domain fallback, adaptive JSON/HTML parser"
+      "version": 3,
+      "strategy": "confirmed cdn.sofan.one:65533 /s?word=<keyword>&page=<page> + .list-unstyled + #magnet-link"
     },
     {
       "id": "bt4g",
