@@ -32,6 +32,17 @@
       "strategy": "confirmed cdn.sofan.one:65533 /s?word=<keyword>&page=<page> + .list-unstyled + #magnet-link"
     },
     {
+      "id": "duo6_top",
+      "name": "磁力多",
+      "type": "script",
+      "source": "https://m.duo6.top/",
+      "file": "apps/tools/magnet-jun/rules/duo6-top-v1.json",
+      "installer": "apps/tools/magnet-jun/rules/duo6-top-v1-installer.js",
+      "status": "device-validation-pending",
+      "version": 1,
+      "strategy": "confirmed doc2.htmcdn.com:39988 /search?word=<keyword>&sort=&page=<page> + .ssbox + direct magnet/detail fallback"
+    },
+    {
       "id": "bt4g",
       "name": "BT4G",
       "type": "script",
