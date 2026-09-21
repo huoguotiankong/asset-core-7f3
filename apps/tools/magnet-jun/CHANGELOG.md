@@ -288,3 +288,28 @@ Registry 当前顺序
 7. 搜索结果继续验证 `115云盘` 调用链。
 
 未完成以上实机验证前不得晋级 Stable。
+
+## 2026-09-21 · 独立可导入搜索规则
+
+### BTSearch (`btsearch.love`)
+
+- Rule：`apps/tools/magnet-jun/rules/btsearch-love.json`
+- Installer：`apps/tools/magnet-jun/rules/btsearch-love-installer.js`
+- Test6 Registry id：`btsearch_love`
+- 使用站点当前 `/api/search` JSON 接口，不抓取搜索结果 HTML。
+- 请求需要动态 `x-timestamp / x-nonce / x-sign`；签名参数按站点当前前端协议生成。
+- 统一输出标题 / BTIH / magnet / bytes / 文件数 / 日期等字段，天然复用 Test6 的 115 / 迅雷 / PikPak / 光鸭 / 123 路由。
+- 静态/模拟校验通过；真实设备网络调用仍以用户实机为准。
+
+### SkrBT (`skrbtso.top`)
+
+- Rule：`apps/tools/magnet-jun/rules/skrbtso-top.json`
+- Installer：`apps/tools/magnet-jun/rules/skrbtso-top-installer.js`
+- Test6 Registry id：`skrbtso_top`
+- 主域：`https://skrbtso.top`；当前保留 `https://skrbtlz.top` 作为兼容回退域。
+- 搜索入口：`/search?keyword=<keyword>&p=<page>`。
+- 当前结果结构按 `.list-unstyled` + `a.rrt.common-link` 解析；`li.rrmi` 的 span 用于大小 / 文件数 / 日期元数据。
+- 搜索列表不假定直接包含 BTIH；点击结果后通过详情页 `#magnet` 延迟取得真实 magnet，再进入统一播放路由。这修正了早期“从详情 URL 猜 40 位 hash”的错误方案。
+- 若返回 Challenge / reCAPTCHA 页面，仅提示用户先在海阔网页手动完成站点验证；不实现自动绕过验证逻辑，避免把单站风控拖成聚合搜索卡死。
+- 搜索 `find`、详情 `findAliUrl` 和 Installer 已通过语法检查；模拟 DOM 已验证标题、详情 URL、大小、文件数、日期解析。真实站点当前搜索请求存在 403/Challenge 风险，最终以海阔实机验证为准。
+- SkrBT 规则版本 `meta.version = 2`；当前冻结规则 commit：`73767bdc0578913fdedcb6aad3dada5a3009e85e`。
