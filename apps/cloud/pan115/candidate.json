@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "candidate",
+  "version": "1.1.0-rc1",
+  "build": 2026092110,
+  "ruleVersion": 2026092110,
+  "release": "apps/cloud/pan115/releases/1.1.0-rc1/release.json",
+  "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
+  "status": "device-validation-pending",
+  "updatedAt": "2026-09-21"
+}
