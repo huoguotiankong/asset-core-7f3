@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "magnet-jun",
+  "name": "磁力君.简",
+  "updatedAt": "2026-09-21",
+  "channels": [
+    {
+      "channel": "stable",
+      "label": "当前正式基线",
+      "name": "磁力君.简",
+      "ruleVersion": 20250604,
+      "mode": "device-installed-baseline",
+      "recommended": true,
+      "status": "preserved-unmodified"
+    },
+    {
+      "channel": "test",
+      "label": "测试版",
+      "name": "磁力君.简·测试",
+      "version": "1.0.0-test.1",
+      "build": 2026092101,
+      "ruleVersion": 2026092101,
+      "release": "apps/tools/magnet-jun/releases/1.0.0-test.1/release.json",
+      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js",
+      "mode": "local-clone-patch",
+      "recommended": false,
+      "status": "device-validation-pending",
+      "desc": "精简磁链打开模式；115/迅雷/PikPak/光鸭/123全部改为调用对应海阔小程序。"
+    }
+  ]
+}
