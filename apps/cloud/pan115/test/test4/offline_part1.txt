@@ -1,0 +1,175 @@
+js:
+// 115Offline Test3：磁链调用专用体验 + 离线任务管理
+let d = [];
+let api = $.require("115Api");
+let client = api.newClient();
+
+function q(name, dflt) {
+    let v = "";
+    try { v = String(getParam(name, "") || ""); } catch (e) { v = ""; }
+    if (v) {
+        try { v = decodeURIComponent(v); } catch (e2) { }
+        return v;
+    }
+    try {
+        let mv = (typeof MY_PARAMS !== "undefined" && MY_PARAMS) ? MY_PARAMS[name] : undefined;
+        if (mv !== undefined && mv !== null && mv !== "") return String(mv);
+    } catch (e3) { }
+    return dflt || "";
+}
+
+function resolvePage() {
+    let n = 1;
+    try {
+        if (typeof MY_PAGE !== "undefined" && MY_PAGE !== null && MY_PAGE !== "") {
+            let p = parseInt(MY_PAGE, 10);
+            if (!isNaN(p) && p > 0) n = p;
+        }
+    } catch (e) { }
+    if (n === 1) {
+        try {
+            let p2 = String(getParam("page", "") || "");
+            if (/^\d+$/.test(p2) && parseInt(p2, 10) > 0) n = parseInt(p2, 10);
+        } catch (e2) { }
+    }
+    return n;
+}
+let myPage = resolvePage();
+let autoAdd = myPage === 1 ? q("add", "").trim() : "";
+let focusMode = !!autoAdd;
+
+function statusLine(t) {
+    if (t.status === 2) return "✅ 已完成";
+    if (t.status === -1) return "❌ 失败";
+    if (t.status === 1) {
+        let pct = t.percent > 0 ? (Math.round(t.percent * 100) / 100) + "%" : "";
+        let rate = t.rateDownload > 0 ? " · " + api.tool.formatSize(t.rateDownload) + "/s" : "";
+        let left = t.leftTime > 0 ? " · 剩余 " + Math.ceil(t.leftTime / 60) + " 分钟" : "";
+        return "⬇ 下载中 " + pct + rate + left;
+    }
+    return "⏳ 等待中";
+}
+
+function base32ToHex(s) {
+    let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    let bits = "";
+    let out = "";
+    let t = String(s || "").toUpperCase().replace(/=+$/g, "");
+    for (let i = 0; i < t.length; i++) {
+        let n = alphabet.indexOf(t.charAt(i));
+        if (n < 0) return "";
+        let b = n.toString(2);
+        bits += ("00000" + b).slice(-5);
+    }
+    for (let j = 0; j + 8 <= bits.length; j += 8) {
+        out += ("0" + parseInt(bits.slice(j, j + 8), 2).toString(16)).slice(-2);
+    }
+    return out.length === 40 ? out.toLowerCase() : "";
+}
+
+function btihOf(s) {
+    let raw = String(s || "");
+    try { raw = decodeURIComponent(raw); } catch (e) { }
+    let m = /(?:^|[?&])xt=urn:btih:([A-Za-z0-9]+)/i.exec(raw);
+    if (!m) return "";
+    let h = String(m[1] || "");
+    if (/^[0-9a-f]{40}$/i.test(h)) return h.toLowerCase();
+    if (/^[A-Z2-7]{32}$/i.test(h)) return base32ToHex(h);
+    return "";
+}
+
+function resultCacheKey(hash) {
+    return "115MagnetResult_" + String(hash || "").toLowerCase();
+}
+
+function readResultCache(hash) {
+    if (!hash) return null;
+    try {
+        let s = getItem(resultCacheKey(hash), "");
+        return s ? JSON.parse(s) : null;
+    } catch (e) { return null; }
+}
+
+function listTasks(maxPages) {
+    let out = [], seen = {};
+    for (let p = 1; p <= maxPages; p++) {
+        let r = client.listOfflineTask(p);
+        let a = (r && r.tasks) || [];
+        if (!a.length) break;
+        let sig = a.length + "|" + (a[0] ? a[0].infoHash : "");
+        if (seen[sig]) break;
+        seen[sig] = true;
+        a.forEach((x) => out.push(x));
+        if (r.pageCount && p >= r.pageCount) break;
+    }
+    return out;
+}
+
+function findSameTask(tasks, link) {
+    let raw = String(link || "").trim();
+    let hh = btihOf(raw);
+    for (let i = 0; i < tasks.length; i++) {
+        let t = tasks[i] || {};
+        if (hh && String(t.infoHash || "").toLowerCase() === hh) return t;
+        if (raw && String(t.url || "").trim() === raw) return t;
+    }
+    return null;
+}
+
+function taskPlayUrl(t) {
+    return $().lazyRule((fid, pid, taskName, ruleTitle, taskHash) => {
+        let api2 = $.require("115Api");
+        let c = api2.newClient();
+        let videos = [];
+        let queue = [];
+        let seen = {};
+        let scanned = 0;
+        let cacheKey = taskHash ? ("115MagnetResult_" + String(taskHash).toLowerCase()) : "";
+
+        function isNoiseName(name) {
+            return /(sample|preview|trailer|teaser|promo|readme|试看|试播|预告|花絮|广告|宣传|二维码|广告片|福利片)/i.test(String(name || ""));
+        }
+        function isEpisodeName(name) {
+            let n = String(name || "").toLowerCase();
+            return /(?:^|[\s._-])(?:s\d{1,2}e\d{1,3}|e\d{1,3}|ep\d{1,3}|episode\d{1,3}|part\d{1,3}|pt\d{1,3}|cd\d{1,2}|disc\d{1,2})(?:[\s._-]|$)/i.test(n) ||
+                /第?\s*\d{1,3}\s*[集话期]/.test(n);
+        }
+        function addVideo(f) {
+            if (!f || f.isDirectory) return;
+            try {
+                if (api2.tool.fileKind(f.name) === "video") videos.push(f);
+            } catch (e) { }
+        }
+        function queueRoot(id, depth) {
+            if (id) queue.push({ id: String(id), depth: depth || 0 });
+        }
+        function playFile(f) {
+            return api2.player.resolve(JSON.stringify({
+                pc: f.pickCode || "",
+                fid: f.fileId || "",
+                name: f.name || taskName || "",
+                kind: "video"
+            }));
+        }
+        function saveSingle(f) {
+            if (!cacheKey || !f) return;
+            try {
+                setItem(cacheKey, JSON.stringify({
+                    mode: "single",
+                    fid: String(f.fileId || ""),
+                    pc: String(f.pickCode || ""),
+                    name: String(f.name || taskName || ""),
+                    size: Number(f.size || 0),
+                    rootFid: String(fid || ""),
+                    rootPid: String(pid || ""),
+                    taskName: String(taskName || ""),
+                    updated: Date.now()
+                }));
+            } catch (e) { }
+        }
+        function saveMulti(arr) {
+            if (!cacheKey || !arr || !arr.length) return;
+            try {
+                let items = arr.slice(0, 80).map((f) => ({
+                    fileId: String(f.fileId || ""),
+                    pickCode: String(f.pickCode || ""),
