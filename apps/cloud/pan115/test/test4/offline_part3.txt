@@ -1,0 +1,144 @@
+((h) => {
+                let api4 = $.require("115Api");
+                try {
+                    api4.newClient().deleteOfflineTasks([h], false);
+                    refreshPage();
+                    return "toast://已删除";
+                } catch (e) { return "toast://失败：" + e.message; }
+            }, hash);
+            return false;
+        }, t.infoHash, t.name)
+    };
+    if (t.status === 2) {
+        item.url = taskPlayUrl(t);
+        item.desc += " · 点击播放";
+    }
+    return item;
+}
+
+let currentTask = null;
+let currentHash = "";
+let autoMessage = "";
+let callHash = focusMode ? btihOf(autoAdd) : "";
+let cachedResult = callHash ? readResultCache(callHash) : null;
+
+function cachedResultUrl(cached, hash, ruleTitle) {
+    if (!cached) return "";
+    if (cached.mode === "single" && cached.fid) {
+        return $().lazyRule((cacheText, cacheKey) => {
+            let api2 = $.require("115Api");
+            let c = api2.newClient();
+            let x;
+            try { x = JSON.parse(cacheText); } catch (e) { return "toast://播放缓存损坏"; }
+            try {
+                let f = c.getFile(String(x.fid || ""));
+                if (!f || f.isDirectory) {
+                    setItem(cacheKey, "");
+                    return "toast://缓存文件已失效，请重新进入磁链";
+                }
+                if (!f.pickCode && x.pc) f.pickCode = x.pc;
+                return api2.player.resolve(JSON.stringify({
+                    pc: f.pickCode || "",
+                    fid: f.fileId || "",
+                    name: f.name || x.name || "",
+                    kind: "video"
+                }));
+            } catch (e2) {
+                setItem(cacheKey, "");
+                return "toast://缓存文件已失效，请重新进入磁链";
+            }
+        }, JSON.stringify(cached), resultCacheKey(hash));
+    }
+    if (cached.mode === "multi" && cached.videos && cached.videos.length) {
+        return "hiker://page/115OfflineResult?rule=" + encodeURIComponent(ruleTitle) +
+            "&page=fypage&fid=" + encodeURIComponent(String(cached.rootFid || "")) +
+            "&pid=" + encodeURIComponent(String(cached.rootPid || "")) +
+            "&hash=" + encodeURIComponent(String(hash || "")) +
+            "&name=" + encodeURIComponent(String(cached.taskName || "离线结果"));
+    }
+    return "";
+}
+
+// 外部磁链调用模式：先查重；任务记录已清理时允许复用已经识别过的网盘结果。
+if (focusMode) {
+    try {
+        let all = listTasks(10);
+        currentTask = findSameTask(all, autoAdd);
+        if (currentTask) {
+            currentHash = String(currentTask.infoHash || callHash || "");
+            autoMessage = currentTask.status === 2 ? "已存在完成任务，可直接播放" :
+                (currentTask.status === -1 ? "已有失败任务，可删除后重试" : "已存在相同任务，不重复添加");
+        } else if (cachedResult) {
+            currentHash = callHash;
+            autoMessage = "离线任务记录已清理，但网盘播放结果仍可复用";
+        } else {
+            let added = client.addOfflineTaskURIs([autoAdd], "0");
+            currentHash = (added && added[0]) ? String(added[0]) : callHash;
+            autoMessage = "已提交到 115 离线";
+            if (currentHash) {
+                try {
+                    let latest = listTasks(2);
+                    for (let i = 0; i < latest.length; i++) {
+                        if (String(latest[i].infoHash || "").toLowerCase() === currentHash.toLowerCase()) {
+                            currentTask = latest[i];
+                            break;
+                        }
+                    }
+                } catch (e2) { }
+            }
+        }
+    } catch (e) {
+        autoMessage = "处理磁链失败：" + e.message;
+    }
+}
+
+if (myPage === 1) {
+    d.push({
+        title: focusMode ? '<b>🎬 115 磁链播放</b>'.fontcolor("#2B6CB0") : '<b>⚡ 离线下载</b>'.fontcolor("#2B6CB0"),
+        col_type: "rich_text",
+        extra: { textSize: 19 }
+    });
+
+    if (focusMode) {
+        d.push({ title: autoMessage || "正在处理磁链", col_type: "text_center_1", extra: { lineVisible: false } });
+        if (currentTask) {
+            d.push(makeTaskItem(currentTask, true));
+            if (currentTask.status === -1) {
+                d.push({
+                    title: "♻ 删除失败任务并重新提交",
+                    col_type: "text_1",
+                    url: $("#noLoading#").lazyRule((taskHash, link) => {
+                        let api2 = $.require("115Api");
+                        try {
+                            let c = api2.newClient();
+                            if (taskHash) c.deleteOfflineTasks([taskHash], false);
+                            c.addOfflineTaskURIs([link], "0");
+                            refreshPage();
+                            return "toast://已重新提交";
+                        } catch (e) { return "toast://重试失败：" + e.message; }
+                    }, String(currentTask.infoHash || ""), String(autoAdd || ""))
+                });
+            }
+        } else if (cachedResult) {
+            let cUrl = cachedResultUrl(cachedResult, callHash, String(MY_RULE.title || "115.简·测试"));
+            d.push({
+                title: cachedResult.mode === "multi" ? "🎞 已有网盘结果 · 选择视频" : "▶ 已有网盘结果 · 直接播放",
+                desc: cachedResult.mode === "single" ? (String(cachedResult.name || "") + " · " + api.tool.formatSize(cachedResult.size || 0)) :
+                    ("已缓存 " + ((cachedResult.videos && cachedResult.videos.length) || 0) + " 个视频"),
+                col_type: "text_1",
+                url: cUrl || "toast://缓存结果不可用"
+            });
+        } else if (currentHash) {
+            d.push({ title: "⏳ 任务已创建，等待 115 返回状态", desc: "稍后点刷新即可查看进度", col_type: "text_center_1" });
+        }
+        d.push({ title: "🔄 刷新当前状态", col_type: "text_2", url: $("刷新").lazyRule(() => { refreshPage(); return false; }) });
+        d.push({ title: "📋 全部离线任务", col_type: "text_2", url: "hiker://page/115Offline?rule=" + MY_RULE.title + "&page=fypage" });
+    } else {
+
+    d.push({
+        title: "➕ 添加离线任务",
+        desc: "magnet / ed2k / HTTP，多个链接可用空格分隔",
+        col_type: "text_1",
+        url: $("", "输入离线链接").input(() => {
+            let t = String(input || "").trim();
+            if (!t) return 
