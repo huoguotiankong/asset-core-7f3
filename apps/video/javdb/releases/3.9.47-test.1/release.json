@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.47-test.1",
+  "build": 2026092201,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseTest": {
+    "version": "3.9.46-test.1",
+    "build": 2026082905,
+    "entryRef": "a4ed0041665583bafb01287d52217eb62742e2d1"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "baseProductUi": {
+    "version": "3.9.45-test.7",
+    "build": 2026082904,
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.47-test.1/local_entry.js",
+    "ref": "8641ea42799c34466f3bbf236d7e9b380d81420a",
+    "blob": "9ecc313d2d2109ff3239ee94bf9dcd9abaa33ff2"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.47-test.1/javdb_v3.9.47_test1_115.txt",
+    "blob": "14b985b341bb374eafa9a2e691c420083352398e",
+    "ruleVersion": 2026092201
+  },
+  "feature": {
+    "id": "magnet-115-longpress",
+    "scope": "javdb3Magnets only",
+    "menuTitle": "调用115",
+    "menuPosition": 1,
+    "route": "hiker://page/115Offline?rule=115.简&page=fypage&add=<encoded magnet>",
+    "preserveExistingLongClickOrder": true
+  },
+  "status": "active-test-pending-device-validation",
+  "stableChanged": false,
+  "latestChanged": false,
+  "validation": [
+    "Open JavDB official magnet page and long-press a real magnet row",
+    "First long-click action must be 调用115",
+    "Existing long-click actions must remain after 调用115 in original order",
+    "调用115 must open 115.简 / 115Offline and carry the exact magnet",
+    "Non-magnet rows and all non-magnet JavDB pages must remain unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
