@@ -9,10 +9,18 @@
     "release": "apps/cloud/pan115/releases/1.1.0/release.json",
     "installer": "apps/cloud/pan115/releases/1.1.0/installer.js"
   },
+  "test": {
+    "version": "1.2.0-test.1",
+    "build": 2026092202,
+    "ruleVersion": 2026092202,
+    "release": "apps/cloud/pan115/releases/1.2.0-test.1/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.0-test.1/installer.js",
+    "status": "pending-device-validation"
+  },
   "candidate": {
     "version": "1.1.0-rc1",
     "build": 2026092110,
     "status": "promoted-to-stable"
   },
-  "updatedAt": "2026-09-21"
+  "updatedAt": "2026-09-22"
 }
