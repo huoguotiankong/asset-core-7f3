@@ -1,17 +1,18 @@
 {
   "schema": 1,
   "appId": "pan115",
-  "name": "115.简·测试",
+  "name": "115.简",
   "channel": "test",
-  "version": "1.2.0-test.3",
-  "build": 2026092204,
-  "ruleVersion": 2026092204,
-  "baseVersion": "1.2.0-test.2",
-  "baseBuild": 2026092203,
-  "release": "apps/cloud/pan115/releases/1.2.0-test.3/release.json",
-  "installer": "apps/cloud/pan115/releases/1.2.0-test.3/installer.js",
-  "status": "active-test-redeclare-hotfix-pending-device-validation",
+  "version": "1.2.0-test.4",
+  "build": 2026092205,
+  "ruleVersion": 2026092205,
+  "baseVersion": "1.1.0",
+  "baseBuild": 2026092111,
+  "release": "apps/cloud/pan115/releases/1.2.0-test.4/release.json",
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.4/installer.js",
+  "status": "active-test-in-place-pending-device-validation",
   "stableChanged": false,
+  "sameTitleImport": true,
   "updatedAt": "2026-09-22",
-  "notes": "Hotfixes Test2 device JS compile failure by removing page-level _115CloudCid declaration and replacing it with cached CID reads. Stable 1.1.0 remains unchanged."
+  "notes": "Self-use test channel now imports in-place as 115.简 (no ·测试 suffix) so login/cookie state is reused. Rebuilds the magnetic page from Stable 1.1.0 before patching, removes Test2/Test3 dependency and fixes the _115CloudCid redeclaration failure."
 }
