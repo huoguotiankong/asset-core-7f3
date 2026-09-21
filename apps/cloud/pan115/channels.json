@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.5",
-      "build": 2026092206,
-      "ruleVersion": 2026092206,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.5/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.5/installer.js",
+      "version": "1.2.0-test.6",
+      "build": 2026092207,
+      "ruleVersion": 2026092207,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.6/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.6/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "115离线保存目录统一为根目录/海阔视界优先；未找到则回退云下载/离线下载；程序名保持115.简并复用登录状态。"
+      "desc": "115离线统一优先保存到根目录/海阔视界；未找到则回退云下载/离线下载；外部磁链、手动添加、失败重试三条链一致；程序名保持115.简。"
     },
     {
       "channel": "candidate",
