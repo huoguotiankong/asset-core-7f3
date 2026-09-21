@@ -17,15 +17,15 @@
       "channel": "test",
       "label": "测试版",
       "name": "磁力君.简·测试",
-      "version": "1.0.0-test.4",
-      "build": 2026092104,
-      "ruleVersion": 2026092104,
-      "release": "apps/tools/magnet-jun/releases/1.0.0-test.4/release.json",
-      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.4/installer.js",
+      "version": "1.0.0-test.5",
+      "build": 2026092105,
+      "ruleVersion": 2026092105,
+      "release": "apps/tools/magnet-jun/releases/1.0.0-test.5/release.json",
+      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js",
       "mode": "local-clone-patch",
       "recommended": false,
       "status": "device-validation-pending",
-      "desc": "从原版重新生成；搜索改为同页串行 carryRule 并显示真实引擎错误，排除 batchExecute/模块上下文静默失败；保留八模式与海阔云盘调用。"
+      "desc": "完全废弃旧 rules/configs/carryRule 搜索链；新建 BTDig + Knaben + PirateBay 独立 Provider 聚合搜索，按 BTIH 去重；保留八种播放模式并统一调用海阔小程序。"
     }
   ]
 }
