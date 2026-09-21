@@ -25,9 +25,11 @@
       "name": "BT联盟",
       "type": "script",
       "source": "https://mm.btlm.in/",
-      "file": "apps/tools/magnet-jun/rules/btlm-in.json",
-      "installer": "apps/tools/magnet-jun/rules/btlm-in-installer.js",
-      "status": "device-validation-pending"
+      "file": "apps/tools/magnet-jun/rules/btlm-in-v9.json",
+      "installer": "apps/tools/magnet-jun/rules/btlm-in-v9-installer.js",
+      "status": "device-validation-pending",
+      "version": 9,
+      "strategy": "SCDht /search/<keyword> direct HTML parser"
     }
   ]
 }
