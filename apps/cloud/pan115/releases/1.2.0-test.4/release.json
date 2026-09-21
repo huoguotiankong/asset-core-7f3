@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.4",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.4",
+  "build": 2026092205,
+  "ruleVersion": 2026092205,
+  "basedOn": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.4/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "features": [
+    "rebuild 115Offline from the validated Stable 1.1.0 module before applying test changes",
+    "keep imported rule title fixed as 115.简 so existing login/cookie namespace is reused",
+    "remove dependency on a separate 115.简·测试 rule",
+    "avoid page-level _115CloudCid declarations that triggered JS variable redeclaration",
+    "render a first-screen status skeleton before remote magnet processing",
+    "reuse or quickly discover 云下载/离线下载 directory CID and submit new offline tasks there",
+    "reduce external magnet dedup scan from 10 pages to 2 pages and post-submit lookup to 1 page",
+    "treat read/socket timeout as uncertain submission instead of definite failure",
+    "expand result folders and playable video rows inline once fileId is available"
+  ],
+  "scope": {
+    "patchedPages": ["115Offline", "115OfflineResult"],
+    "unchanged": [
+      "115 login/cookie/QR",
+      "m115 crypto",
+      "115 share",
+      "normal file list/search",
+      "115Api.player.resolve"
+    ]
+  },
+  "status": "active-test-in-place-pending-device-validation",
+  "validation": [
+    "import should overwrite the existing 115.简 rather than create 115.简·测试",
+    "existing login state should remain usable after same-title import",
+    "JavDB/磁力君 magnet call should enter 115Offline without JS redeclaration error",
+    "first screen should appear materially faster than 1.2.0-test.1",
+    "new offline task should land in 云下载 when its CID is discovered/cached",
+    "fileId availability should expose folder/video rows without repeated deep navigation"
+  ],
+  "updatedAt": "2026-09-22"
+}
