@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test3",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.3",
+  "build": 2026092103,
+  "ruleVersion": 2026092103,
+  "base": {
+    "ruleVersion": 20250604,
+    "source": "user-uploaded baseline / device-installed rule"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js",
+  "baseInstaller": {
+    "version": "1.0.0-test.1",
+    "ref": "662b606c8ecfd87a25da87649d86a167a74beb91"
+  },
+  "delivery": {
+    "mode": "local-clone-patch",
+    "generatedTitle": "磁力君.简·测试",
+    "overwritesStable": false
+  },
+  "searchRuntime": {
+    "preRuleAutoUpdateDisabledInTest": true,
+    "remoteRulesTitlePinned": "磁力君.简",
+    "configPath": "hiker://files/rules/LoyDgIk/ciliSimpleRules_magnetjun_test3.json",
+    "configSeed": "copy current stable config if present",
+    "sameRulePageRequire": "hiker://page/data"
+  },
+  "modes": [
+    "海阔视界",
+    "查询云数据",
+    "复制磁链",
+    "115云盘",
+    "迅雷云盘",
+    "PikPak",
+    "光鸭云盘",
+    "123云盘"
+  ],
+  "validation": {
+    "installerSyntax": "passed",
+    "generatedPageSyntax": "passed-local-mock",
+    "deviceValidation": "pending"
+  },
+  "notes": "Rebased from Test1 and isolates search-engine state from Stable. Test1/Test2 changed MY_RULE.title-dependent update paths and could reset the shared ciliSimpleRules.json; Test3 disables that updater, pins the upstream rules script name to the original title, copies the current Stable search-rule config into a test-only path, and makes getModeUrl self-contained for lazyRule serialization."
+}
