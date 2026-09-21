@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test1",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.1",
+  "build": 2026092101,
+  "ruleVersion": 2026092101,
+  "base": {
+    "name": "磁力君.简",
+    "ruleVersion": 20250604,
+    "source": "user-uploaded baseline / device-installed rule"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js",
+  "installerRef": "662b606c8ecfd87a25da87649d86a167a74beb91",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "磁力君.简",
+    "testTitle": "磁力君.简·测试",
+    "overwritesStable": false
+  },
+  "features": [
+    "retain only Hiker, cloud metadata query, copy magnet, 115, Xunlei, PikPak, Guangya and 123 modes",
+    "remove legacy Android app intent modes",
+    "115 mode calls 115.简 115Offline?add=",
+    "Xunlei/PikPak/Guangya/123 modes call installed Hiker mini-program diaoyong page",
+    "legacy mode names migrate to new names",
+    "SelectTorrent reuses shared mode router"
+  ],
+  "validation": {
+    "installerSyntax": "passed",
+    "generatedRuleSyntax": "passed-13-pages",
+    "deviceValidation": "pending",
+    "stablePromotionAllowed": false
+  }
+}
