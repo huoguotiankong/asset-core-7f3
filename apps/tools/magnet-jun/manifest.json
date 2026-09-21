@@ -10,10 +10,10 @@
     "status": "preserved"
   },
   "test": {
-    "version": "1.0.0-test.3",
-    "build": 2026092103,
-    "release": "apps/tools/magnet-jun/releases/1.0.0-test.3/release.json",
-    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js",
+    "version": "1.0.0-test.4",
+    "build": 2026092104,
+    "release": "apps/tools/magnet-jun/releases/1.0.0-test.4/release.json",
+    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.4/installer.js",
     "status": "device-validation-pending"
   },
   "channels": "apps/tools/magnet-jun/channels.json",
