@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.7",
-      "build": 2026092208,
-      "ruleVersion": 2026092208,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.7/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.7/installer.js",
+      "version": "1.2.0-test.6",
+      "build": 2026092207,
+      "ruleVersion": 2026092207,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.6/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.6/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation",
-      "desc": "磁链页改为动态任务卡：后台提交/轮询，原地显示任务建立、下载进度/速度、完成状态；完成后自动进入文件结果。继续优先保存到海阔视界，程序名保持115.简。"
+      "status": "restored-after-test7-regression",
+      "desc": "恢复到Test6：统一优先保存到根目录/海阔视界，未找到则云下载/离线下载；撤销Test7高频并发轮询，避免115接口返回HTML/风控和我的文件空白。"
     },
     {
       "channel": "candidate",
