@@ -1,0 +1,135 @@
+     name: String(f.name || ""),
+                    size: Number(f.size || 0)
+                }));
+                setItem(cacheKey, JSON.stringify({
+                    mode: "multi",
+                    rootFid: String(fid || ""),
+                    rootPid: String(pid || ""),
+                    taskName: String(taskName || ""),
+                    videos: items,
+                    updated: Date.now()
+                }));
+            } catch (e) { }
+        }
+
+        if (cacheKey) {
+            try {
+                let cachedText = getItem(cacheKey, "");
+                let cached = cachedText ? JSON.parse(cachedText) : null;
+                if (cached && cached.mode === "single" && cached.fid) {
+                    let cf = c.getFile(String(cached.fid));
+                    if (cf && !cf.isDirectory) {
+                        if (!cf.pickCode && cached.pc) cf.pickCode = cached.pc;
+                        return playFile(cf);
+                    }
+                    setItem(cacheKey, "");
+                } else if (cached && cached.mode === "multi" && cached.videos && cached.videos.length) {
+                    return "hiker://page/115OfflineResult?rule=" + encodeURIComponent(ruleTitle) +
+                        "&page=fypage&fid=" + encodeURIComponent(String(fid || cached.rootFid || "")) +
+                        "&pid=" + encodeURIComponent(String(pid || cached.rootPid || "")) +
+                        "&hash=" + encodeURIComponent(String(taskHash || "")) +
+                        "&name=" + encodeURIComponent(String(taskName || cached.taskName || ""));
+                }
+            } catch (e0) { }
+        }
+
+        if (fid) {
+            try {
+                let root = c.getFile(String(fid));
+                if (root && root.fileId) {
+                    if (root.isDirectory) queueRoot(root.fileId, 0);
+                    else addVideo(root);
+                } else {
+                    queueRoot(fid, 0);
+                }
+            } catch (e) {
+                queueRoot(fid, 0);
+            }
+        }
+
+        if (!fid && pid) {
+            try {
+                let pr = c.getFiles(String(pid), { offset: 0, pageSize: 100, order: "file_name", asc: "1", showDir: "1" });
+                let pa = (pr && pr.files) || [];
+                let exact = null;
+                for (let i = 0; i < pa.length; i++) {
+                    if (String(pa[i].name || "") === String(taskName || "")) { exact = pa[i]; break; }
+                }
+                if (exact) {
+                    if (exact.isDirectory) queueRoot(exact.fileId, 0);
+                    else addVideo(exact);
+                }
+            } catch (e2) { }
+        }
+
+        while (queue.length && scanned < 500) {
+            let cur = queue.shift();
+            if (!cur || seen[cur.id]) continue;
+            seen[cur.id] = true;
+            let offset = 0, loops = 0;
+            while (loops < 10 && scanned < 500) {
+                let r;
+                try {
+                    r = c.getFiles(String(cur.id), { offset: offset, pageSize: 50, order: "file_size", asc: "0", showDir: "1" });
+                } catch (e3) { break; }
+                let arr = (r && r.files) || [];
+                if (!arr.length) break;
+                for (let i = 0; i < arr.length && scanned < 500; i++) {
+                    let f = arr[i];
+                    scanned++;
+                    if (f && f.isDirectory) {
+                        if (cur.depth < 3) queueRoot(f.fileId, cur.depth + 1);
+                    } else {
+                        addVideo(f);
+                    }
+                }
+                offset += 50;
+                loops++;
+                if (r.count !== undefined && offset >= r.count) break;
+            }
+        }
+
+        if (videos.length) {
+            videos.sort((a, b) => Number(b.size || 0) - Number(a.size || 0));
+            let good = videos.filter((f) => !isNoiseName(f.name) && Number(f.size || 0) >= 80 * 1024 * 1024);
+            let pool = good.length ? good : videos;
+            let first = pool[0];
+            let second = pool.length > 1 ? pool[1] : null;
+            let episodeCount = pool.filter((f) => isEpisodeName(f.name)).length;
+            let ratio = second ? (Number(first.size || 0) / Math.max(1, Number(second.size || 0))) : 99;
+            let seriesLike = episodeCount >= 2 || (pool.length >= 3 && ratio < 1.45);
+            let dominant = !seriesLike && (!second || (
+                Number(first.size || 0) >= 500 * 1024 * 1024 &&
+                Number(first.size || 0) > Number(second.size || 0) * 1.65
+            ));
+
+            if (pool.length === 1 || dominant) {
+                saveSingle(first);
+                return playFile(first);
+            }
+
+            saveMulti(pool);
+            return "hiker://page/115OfflineResult?rule=" + encodeURIComponent(ruleTitle) +
+                "&page=fypage&fid=" + encodeURIComponent(String(fid || "")) +
+                "&pid=" + encodeURIComponent(String(pid || "")) +
+                "&hash=" + encodeURIComponent(String(taskHash || "")) +
+                "&name=" + encodeURIComponent(String(taskName || ""));
+        }
+
+        let cid = fid || pid || "0";
+        return "hiker://page/115List?rule=" + encodeURIComponent(ruleTitle) +
+            "&page=fypage&cid=" + encodeURIComponent(String(cid)) +
+            "&cname=" + encodeURIComponent("离线 - " + String(taskName || "").slice(0, 18));
+    }, String(t.fileId || ""), String(t.dirId || ""), String(t.name || ""), String(MY_RULE.title || "115.简·测试"), String(t.infoHash || ""));
+}
+
+function makeTaskItem(t, current) {
+    let line = statusLine(t);
+    let title = (t.status === 2 ? "🎬 " : "📄 ") + (t.name || "离线任务");
+    if (current) title = "当前：" + title;
+    let item = {
+        title: title,
+        desc: line + " · " + api.tool.formatSize(t.size),
+        col_type: "text_1",
+        url: $("#noLoading#").lazyRule((hash, name) => {
+            $("确认删除离线任务「" + name + "」？\n（不删除已下载的文件）").confirm
