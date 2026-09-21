@@ -3,16 +3,16 @@
   "appId": "pan115",
   "name": "115.简",
   "channel": "test",
-  "version": "1.2.0-test.5",
-  "build": 2026092206,
-  "ruleVersion": 2026092206,
+  "version": "1.2.0-test.6",
+  "build": 2026092207,
+  "ruleVersion": 2026092207,
   "baseVersion": "1.1.0",
   "baseBuild": 2026092111,
-  "release": "apps/cloud/pan115/releases/1.2.0-test.5/release.json",
-  "installer": "apps/cloud/pan115/releases/1.2.0-test.5/installer.js",
+  "release": "apps/cloud/pan115/releases/1.2.0-test.6/release.json",
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.6/installer.js",
   "status": "active-test-hiker-folder-priority-pending-device-validation",
   "stableChanged": false,
   "sameTitleImport": true,
   "updatedAt": "2026-09-22",
-  "notes": "Self-use same-title test. All 115 offline submissions now prefer root/海阔视界, fall back to root/云下载 or 离线下载 when absent, and use root only as final fallback."
+  "notes": "Same-title self-use test. Offline destination policy is root/海阔视界 first, then root/云下载 or 离线下载, then root. External magnet, manual add, and retry paths all use the same policy, including independent lazyRule runtimes."
 }
