@@ -25,11 +25,11 @@
       "name": "BT联盟",
       "type": "script",
       "source": "https://mm.btlm.in/",
-      "file": "apps/tools/magnet-jun/rules/btlm-in-v10.json",
-      "installer": "apps/tools/magnet-jun/rules/btlm-in-v10-installer.js",
+      "file": "apps/tools/magnet-jun/rules/btlm-in-v11.json",
+      "installer": "apps/tools/magnet-jun/rules/btlm-in-v11-installer.js",
       "status": "device-validation-pending",
-      "version": 10,
-      "strategy": "SCDht confirmed /search/<keyword>; direct InfoHash anchor parser with DOM fallback"
+      "version": 11,
+      "strategy": "confirmed /search/<keyword>; return result detail URL when list has no InfoHash, resolve magnet on detail click"
     }
   ]
 }
