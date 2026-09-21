@@ -3,11 +3,16 @@
   "appId": "magnet-jun",
   "name": "磁力君.简",
   "channel": "test",
-  "version": "1.0.0-test.1",
-  "build": 2026092101,
-  "ruleVersion": 2026092101,
-  "release": "apps/tools/magnet-jun/releases/1.0.0-test.1/release.json",
-  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js",
+  "version": "1.0.0-test.2",
+  "build": 2026092102,
+  "ruleVersion": 2026092102,
+  "release": "apps/tools/magnet-jun/releases/1.0.0-test.2/release.json",
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.2/installer.js",
+  "previousTest": {
+    "version": "1.0.0-test.1",
+    "build": 2026092101,
+    "status": "device-failed-remote-title-coupling"
+  },
   "status": "device-validation-pending",
   "updatedAt": "2026-09-21"
 }
