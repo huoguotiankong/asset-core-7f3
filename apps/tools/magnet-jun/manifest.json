@@ -10,12 +10,12 @@
     "status": "preserved"
   },
   "test": {
-    "version": "1.0.0-test.5",
-    "build": 2026092105,
-    "release": "apps/tools/magnet-jun/releases/1.0.0-test.5/release.json",
-    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js",
+    "version": "1.0.0-test.6",
+    "build": 2026092106,
+    "release": "apps/tools/magnet-jun/releases/1.0.0-test.6/release.json",
+    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js",
     "status": "device-validation-pending",
-    "architecture": "clean-provider-search"
+    "architecture": "managed-provider-search"
   },
   "channels": "apps/tools/magnet-jun/channels.json",
   "changelog": "apps/tools/magnet-jun/CHANGELOG.md"
