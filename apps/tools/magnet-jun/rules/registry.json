@@ -36,11 +36,11 @@
       "name": "磁力多",
       "type": "script",
       "source": "https://m.duo6.top/",
-      "file": "apps/tools/magnet-jun/rules/duo6-top-v1.json",
-      "installer": "apps/tools/magnet-jun/rules/duo6-top-v1-installer.js",
+      "file": "apps/tools/magnet-jun/rules/duo6-top-v2.json",
+      "installer": "apps/tools/magnet-jun/rules/duo6-top-v2-installer.js",
       "status": "device-validation-pending",
-      "version": 1,
-      "strategy": "confirmed doc2.htmcdn.com:39988 /search?word=<keyword>&sort=&page=<page> + .ssbox + direct magnet/detail fallback"
+      "version": 2,
+      "strategy": "confirmed doc2.htmcdn.com:39988 backend + regex-first fast parser + 40-result cap + DOM fallback"
     },
     {
       "id": "bt4g",
