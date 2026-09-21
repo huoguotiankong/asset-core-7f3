@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.1",
+  "build": 2026092101,
+  "ruleVersion": 2026092101,
+  "release": "apps/tools/magnet-jun/releases/1.0.0-test.1/release.json",
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js",
+  "status": "device-validation-pending",
+  "updatedAt": "2026-09-21"
+}
