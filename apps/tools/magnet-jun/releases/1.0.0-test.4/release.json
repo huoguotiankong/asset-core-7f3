@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test4",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.4",
+  "build": 2026092104,
+  "ruleVersion": 2026092104,
+  "base": {
+    "name": "磁力君.简",
+    "ruleVersion": 20250604,
+    "source": "user-uploaded baseline / device-installed rule"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.4/installer.js",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "磁力君.简",
+    "testTitle": "磁力君.简·测试",
+    "overwritesStable": false
+  },
+  "changes": [
+    "rebuild Test4 directly from original installed rule instead of prior tests",
+    "keep original shared search config and original data/configs module contract",
+    "disable title-coupled preRule updater in test rule",
+    "pin rules remote data filename to 磁力君.简",
+    "replace batchExecute search with same-page serial carryRule calls for diagnosis",
+    "show per-engine search errors instead of swallowing all exceptions",
+    "retain only 海阔视界/查询云数据/复制磁链/115/迅雷/PikPak/光鸭/123 modes",
+    "remove Android app launch modes",
+    "115 uses Stable 115Offline?add= external entry"
+  ],
+  "validation": {
+    "installerSyntax": "passed",
+    "generatedRuleJson": "passed",
+    "generatedPageSyntax": "passed",
+    "deviceValidation": "pending"
+  }
+}
