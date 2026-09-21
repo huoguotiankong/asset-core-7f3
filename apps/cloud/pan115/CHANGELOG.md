@@ -3,133 +3,113 @@
 状态：**Test only / 待海阔实机验证**  
 首次纳入：2026-09-21
 
-## 2026-09-21 · 磁链播放增强 Test1
+## 基线与已确认事实
 
-### 来源与边界
-
-- 基线来自用户当前上传的 `115.简.hk小程序.zip`，原规则为单文件 `rule.json`。
+- 基线来自用户上传的 `115.简.hk小程序.zip`，原规则为单文件 `rule.json`。
 - 原实现已经具备：115 Cookie/扫码登录、文件列表、全盘搜索、115 分享、离线任务、`magnet/ed2k/http(s)` 离线添加、个人网盘文件直链解析与播放。
-- 本轮只强化“外部磁链调用 → 115 离线 → 定位结果 → 播放/选集”链路，不改原有登录协议、m115 加解密、下载直链算法和分享播放链。
-- 当前未晋级 Stable；必须经过用户海阔实机验证后再决定正式化。
-
-### 已确认的协议事实
-
 - `addOfflineTaskURIs()` 使用 `https://lixian.115.com/lixianssp/?ac=add_task_urls`，支持 HTTP / ED2K / magnet。
-- `listOfflineTask()` 返回的 `file_id` 是离线成功后生成的文件或文件夹 ID；`wp_path_id`/当前 JS 映射 `dirId` 是其所在父文件夹 ID。
-- 原 `player.resolve()` 已能通过 `pickcode` 走 `proapi.115.com/app/chrome/downurl` 获取个人网盘文件直链，并带 UA/Header 播放。
+- `listOfflineTask()` 返回的 `file_id` 是离线完成后生成的文件或文件夹 ID；`wp_path_id` 在当前 JS 中映射为 `dirId`。
+- 原 `player.resolve()` 已能通过 `pickcode` → `proapi.115.com/app/chrome/downurl` 获取个人网盘直链并带 UA/Header 播放。
+- 本轮只增强“外部磁链 → 115 离线 → 定位结果 → 播放/选集”，不改原版 m115 加解密、登录和直链算法。
 
-### Test1 改动
+## 2026-09-21 · Test1 本地完整增强
 
-新增页面 `115Open`：
+新增 `115Open`：
 
 ```text
-外部 magnet / ed2k / HTTP(S)
-→ 识别已有任务，避免重复添加
+magnet / ed2k / HTTP(S)
+→ 查已有任务避免重复提交
 → addOfflineTaskURIs
-→ 保存 info_hash 本地映射
-→ listOfflineTask 跟踪状态
-→ 完成后优先按 task.file_id 直接 getFile
-→ 失败时才从 task.dirId 父目录按 file_id 精确兜底
-→ 文件：直接识别视频
-→ 文件夹：最多 4 层、500 项、100 目录受控扫描
-→ 单视频：生成直接播放入口
-→ 多视频：生成选集 + “连续播放全部”播放列表
+→ 保存/跟踪 info_hash
+→ listOfflineTask
+→ 完成后优先 task.file_id 精确定位
+→ 失败时才从 task.dirId 父目录兜底
+→ 单视频播放 / 多视频选集
 ```
 
-同步修改：
+同时修正原“复制调用”把 magnet 传给 `115Search?kw=` 的设计问题，统一目标为 `115Open?url=`。
 
-- 首页粘贴 magnet/ed2k/http(s) 从 `115Offline?add=` 改走 `115Open?url=`。
-- 首页增加“磁链播放”入口。
-- “复制调用”由旧 `115Search?kw=` 改为 `115Open?url=`，修复磁链被当关键词搜索的问题。
-- `115Search` 输入框识别 magnet/ed2k/http(s)，自动转 `115Open`。
-- `115Offline` 已完成任务点击后转 `115Open?hash=<info_hash>`，直接定位视频/选集，而不是仅打开父目录。
-- 新规则测试标题使用 `115.简·测试`，本地完整 Test1 规则 version `2026092101`，与原版并存，避免未验证代码覆盖原规则。
+本地 `rule.json` / `pages` JSON 可解析，首页和页面脚本通过 `node --check`；mock 通过无链接、下载中、单视频完成、多视频完成四种状态。
 
-### 防重复与性能策略
+用户反馈：本地 `.hk小程序.zip` 导入存在问题，因此后续测试主交付改为云口令。
 
-- 新入口先查询已有任务，再决定是否调用添加接口；页面刷新和同一链接重复进入不应重复创建任务。
-- 每条外部链接使用本地轻量 hash key 保存对应 `info_hash`。
-- 离线完成后优先使用 115 返回的 `file_id` 精确定位，不做全盘同名模糊搜索。
-- 仅在直接 `getFile(file_id)` 失败时扫描 `wp_path_id` 父目录，并优先按 file_id 精确匹配；名称只作为最后的同目录精确兜底。
-- 目录视频扫描设置硬上限，避免超大目录拖死页面。
+## 2026-09-21 · Test1b 云端轻量增强壳
 
-### 本地静态验证
+- 标题：`115.简·测试`。
+- version：`2026092102`。
+- 目标：保留原版 `115.简`，测试壳仅复用原版登录/协议/播放器并新增磁链链路。
+- 远程工件：`apps/cloud/pan115/test/115_enhance_overlay_test1_rule.json`。
 
-- `rule.json` 与内嵌 `pages` JSON 均能正常解析。
-- 首页 + 8 个页面脚本全部通过 `node --check`。
-- Node mock 模拟通过四条状态路径：无链接入口、下载中、单视频完成、多视频完成。
+用户实机反馈：直接 `home_rule_url` 导入时出现 `规则有误: syntax error, unexpected token error`，因此判定导入/解析兼容失败，未进入 115 业务逻辑。
 
-### 待实机验证
+## 2026-09-21 · Test1c 导入兼容修订
 
-1. 使用当前有效 115 Cookie/扫码登录打开 Test1。
-2. 测一个可秒传 magnet：确认只生成一个离线任务。
-3. 任务完成后确认 `file_id` 能被 `getFile` 直接读取。
-4. 单视频磁链：确认播放卡取直链并正常播放。
-5. 多文件磁链：确认递归选集完整、顺序合理、“连续播放全部”有效。
-6. 测真实下载中的 magnet：确认刷新状态不会重复添加任务。
-7. 测失败磁链：确认“删除失败任务并重新提交”可用。
-8. 从其它小程序按 `hiker://page/115Open?rule=115.简·测试&page=fypage&url=<encoded>` 调用，确认跨规则路由正常。
+- 工件：`apps/cloud/pan115/test/115_enhance_overlay_test1c_rule.json`。
+- version：`2026092103`。
+- 页面缩为首页 + `115Open`，高风险写法回退为 `var` / 普通函数 / IIFE。
+- 云口令改为官方 `@import=js:`：先下载规则到 `hiker://files/cache/...`，再返回本地 `home_rule_url`。
+- 用户实机确认：**Test1c 已能成功导入并打开首页**，说明云口令/本地缓存导入链可用。
 
-### 本地 Test1 工件
+### Test1c 新暴露问题
 
-`115.简_磁链播放增强_Test1.hk小程序.zip`
-
-## 2026-09-21 · Test1b 云口令交付壳
-
-### 用户实机反馈
-
-- 本地 `.hk小程序.zip` 导入存在问题，因此停止把 ZIP 作为当前测试主交付方式。
-- 改为远程规则口令导入；仍保持 Test only，不覆盖原版 `115.简`。
-
-### 架构调整
-
-为了减少云端规则体积并避免重复公开/复制原版 115 协议实现，Test1b 改为轻量增强壳：
+进入“磁链播放”后弹出：
 
 ```text
-115.简·测试
-├─ 首页 / 115Open：磁链增强逻辑
-└─ 115Api 转发页
-      ↓
-已安装的原版 115.简 / 115Api
-      ↓
-登录 / m115 协议 / 离线接口 / 文件接口 / player.resolve
+ArticleListModel-HttpRequestError-msg:
+java.lang.IllegalArgumentException:
+Expected URL scheme 'http' or 'https' but no colon was found
 ```
 
-- 原版 `115.简` 必须继续安装在设备上；Test1b 只复用其当前登录状态、协议和播放器。
-- Test1b 自己保留同名 `115Api` 转发页，因为原版 `player.resolve` 的序列化 `lazyRule` 会在点击时重新 `$.require("115Api")`；转发页确保测试壳上下文仍回到原版驱动。
-- 云端壳 version：`2026092102`。
-- 当前远程 Test 工件：`apps/cloud/pan115/test/115_enhance_overlay_test1_rule.json`。
-- 远程地址必须显式指向 `asset-core-7f3@main`，不得依赖默认 `landing`。
+根因已定位：Test1c 使用 `$.require('hiker://page/115Api?rule=115.简')` 跨规则加载原版模块；当前海阔将该参数进入 HTTP require/request 路径，要求 `http/https`，因此失败。**跨规则 `hiker://page/...` 不能作为 `$.require()` 的模块源使用。**
 
-### 当前测试重点
+另外用户指出 Test1c 首页输入框右侧提示 `粘贴 magnet / ed2k / HTTP下载链接` 过长，挤压输入区，影响体验。
 
-1. 云口令是否能正常识别并导入 `115.简·测试`。
-2. 首页是否显示“已检测到原版 115.简”。
-3. 原版账号/文件/离线按钮是否可以跨规则正常打开。
-4. 输入可秒传 magnet 后，是否能提交任务、定位 `file_id` 并播放。
-5. 原版 `player.resolve` 经 Test1b 的 `115Api` 转发页重新进入时，是否仍能正常取得直链。
+## 2026-09-21 · Test1d 本地页桥接修复
 
-只有以上实机关键链通过后，才继续 Test2 或考虑完整远程版/Stable。
+- 工件：`apps/cloud/pan115/test/115_enhance_overlay_test1d_rule.json`。
+- version：`2026092104`。
+- 保持 Test only，不覆盖 Stable/原版。
 
-## 2026-09-21 · Test1c 海阔解析兼容修订
+### 关键修复：不再跨规则 require hiker URL
 
-### 用户实机反馈
+Test1d 在自身规则里重新建立本地 `115Api` 页面，但不复制 9 万字协议代码。桥接逻辑改为：
 
-- Test1b 通过 `home_rule_url` 直指 GitHub Raw 时，海阔首页弹出：`规则有误: syntax error, unexpected token error`，导入失败。
-- 因错误发生在业务入口之前，本次先按“导入/解析兼容”处理，不继续修改 115 协议层。
+```text
+$.require('115Api')
+→ Test1d 本地 115Api 页面
+→ fetch('hiker://home@115.简') 读取已安装原版规则文本
+→ JSON.parse(rule.pages)
+→ 精确找到 path === '115Api'
+→ eval 原版 115Api 页面代码
+→ 原版代码正常写入 $.exports
+```
 
-### 修订
+这样首页、离线接口和 `player.resolve` 内部再次执行 `$.require('115Api')` 时，都只命中 Test1d 的**本地页面模块**，不会再把 `hiker://page/...` 当 HTTP URL。
 
-- 新增 `apps/cloud/pan115/test/115_enhance_overlay_test1c_rule.json`，version `2026092103`。
-- 规则缩减为首页 + `115Open` 两个最小必要部分。
-- 高风险语法统一回退为传统 `var` / 普通函数 / IIFE，避免把 Node 语法通过误判为海阔 JSEngine 兼容。
-- 播放点击时直接跨规则加载 `hiker://page/115Api?rule=115.简`，不再保留 Test1b 的同名代理页。
-- 交付改用官方支持的 `@import=js:` 机制：先下载规则到海阔本地 cache，再返回本地 `home_rule_url`，避免直接让导入器解析 GitHub Raw 响应。
-- 远程工件固定到不可变 commit `2fe49a053b298cb16b1b7703ca4fda82317c0561`，本轮不切 Stable。
+该方案仍以用户当前安装的原版 `115.简` 为协议事实源，不复制/分叉原版 115 加密与直链实现。
 
-### 下一步实机门槛
+### UI 修订
 
-1. Test1c 云口令能正常弹出导入页并完成导入。
-2. 首页能打开且不再出现 syntax error。
-3. 能加载原版 `115.简` 的 `115Api`。
-4. 再进入 magnet → 离线 → 定位 → 播放链验证。
+首页和 `115Open` 输入框标题统一缩短为：
+
+```text
+粘贴磁链
+```
+
+删除 `magnet / ed2k / HTTP下载链接` 的长右侧提示，保留更大的实际输入空间。
+
+### Test1d 静态验证
+
+- 规则 JSON、`pages` JSON 均可正常解析。
+- 首页、`115Api` 本地桥、`115Open` 全部通过 `node --check`。
+- 待实机验证：桥接 `eval` 能否在目标海阔 JSEngine 中正确让原版 `115Api` 设置 `$.exports`；随后再验证 magnet → 离线 → file_id → player.resolve。
+
+## 当前实机验收顺序
+
+1. 用 Test1d 云口令覆盖 `115.简·测试`。
+2. 首页确认输入框右侧只显示短提示“粘贴磁链”。
+3. 点击“磁链播放”，不再出现 `Expected URL scheme 'http' or 'https'`。
+4. 粘贴一个可秒传 magnet，确认只创建一个 115 离线任务。
+5. 完成后确认能按 `file_id` 定位结果并显示视频。
+6. 点击视频确认原版 `player.resolve` 仍能取得直链并播放。
+7. 单视频链通过后再继续多文件/选集和外部小程序调用验证。
