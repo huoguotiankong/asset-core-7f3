@@ -1,22 +1,20 @@
 # 磁力君.简开发记录
 
-状态：**Test only / 待海阔实机验证**  
+状态：**Test5 / 全新搜索架构待实机验证**  
 首次纳入：2026-09-21
 
 ## 当前基线
 
 - 基线来自用户上传的 `磁力君.简.hk小程序.zip`，原规则 `rule.json`。
-- 原标题：`磁力君.简`。
-- 原规则 version：`20250604`。
+- 原标题：`磁力君.简`；原规则 version：`20250604`。
 - 原版共 13 个页面：`data / sou / ysfx / Main / Donate.v / configs / ruleManage / ruleEdit / password / import / rules / codetest / SelectTorrent`。
-- 当前仓库此前没有 `磁力君.简` 的 registry / CHANGELOG / Stable/Test 元数据，因此本轮以用户上传规则 + 当前实机截图为真实基线建立程序记录。
+- Stable 仍保留用户设备中的原版基线，所有新改动先走 `磁力君.简·测试`。
 
-## 2026-09-21 · 用户当前产品要求
+## 产品目标（2026-09-21）
 
-设置页旧版模式过多，而且大量模式直接通过 Android Intent 或 App Scheme 打开第三方 App。用户要求：
+设置中的播放模式只保留：
 
 ```text
-只保留：
 海阔视界
 查询云数据
 复制磁链
@@ -27,173 +25,147 @@ PikPak
 123云盘
 ```
 
-其中 115 / 迅雷 / PikPak / 光鸭 / 123 都必须调用**对应海阔小程序**，不再打开对应 Android App。
+115 / 迅雷 / PikPak / 光鸭 / 123 均必须调用**对应海阔小程序**，禁止再通过 Android Intent / App Scheme 拉起外部 App。
 
-`规则管理 / 支持作者` 属于工具入口，不属于播放模式，本轮继续保留。
+## 115 正式外部调用接口
 
-## 原版已确认问题
-
-原 `data.getModeUrl()` 中：
-
-- 迅雷已部分改为 `hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`；
-- PikPak 仍使用 `pikpakapp://...` App Scheme；
-- 115生活、二驴、新闪存云、柚子、飞驰、海马、鲨鱼、悟空、浩克、影视播放、无限云盘等仍使用 `openAppIntent()` 或 App Scheme；
-- `SelectTorrent` 页面仍重复维护另一套 App Intent 分流；
-- 设置菜单仍暴露上述全部旧模式；
-- `查询元数据` 命名与当前产品目标不一致，统一改为 `查询云数据`。
-
-## 依赖：115.简 Stable 1.1.0
-
-115 磁链外部调用已在本项目中实机确认，正式接口固定为：
+`115.简` Stable 1.1.0 已实机验证，磁链固定通过：
 
 ```js
 "hiker://page/115Offline?rule=115.简&page=fypage&add=" + encodeURIComponent(magnet)
 ```
 
-禁止回退到 `115Search?kw=`；后者已实机证明只会把 magnet 当普通搜索关键词。
+禁止使用 `115Search?kw=`；该入口已实机证明只会把 magnet 当普通网盘搜索关键词。
 
-## 2026-09-21 · Test1 云盘播放模式精简
+## Test1 ～ Test4 失败链（已冻结）
 
-### 工件
+### Test1 · 1.0.0-test.1 / 2026092101
 
-- Test：`1.0.0-test.1`
-- Build / rule version：`2026092101`
-- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.1/installer.js`
-- Release：`apps/tools/magnet-jun/releases/1.0.0-test.1/release.json`
-- 生成标题：`磁力君.简·测试`
-- 交付：读取手机已安装 `磁力君.简`，本地克隆并替换 `data / sou / SelectTorrent`，不覆盖原版。
+目标：精简模式并把云盘模式改为海阔小程序调用。
 
-### 模式列表
-
-Test1 设置页只保留 8 个模式：
-
-```text
-海阔视界
-查询云数据
-复制磁链
-115云盘
-迅雷云盘
-PikPak
-光鸭云盘
-123云盘
-```
-
-旧持久化模式自动迁移：
-
-```text
-查询元数据 → 查询云数据
-迅雷下载 → 迅雷云盘
-PIKPAK → PikPak
-115生活 → 115云盘
-```
-
-其它已删除旧模式若仍残留在 `openMode`，自动回退 `海阔视界`。
-
-### 云盘调用策略
-
-- 115：固定调用 `115.简 / 115Offline?add=`，该链已实机验证。
-- 迅雷：优先检测规则名 `迅雷`，兼容 `迅雷云盘`；调用其 `diaoyong` 页面。
-- PikPak：依次检测 `PikPakM / PikPak / PIKPAK`；调用其 `diaoyong` 页面。
-- 光鸭：依次检测 `光鸭云盘 / 光鸭`；调用其 `diaoyong` 页面。
-- 123：依次检测 `123云盘 / 123云盘M / 123Pan / 123盘`；调用其 `diaoyong` 页面。
-- 未安装对应规则时给出明确 Toast；已安装但缺少 `diaoyong` 页面时不猜参数协议，提示用户更新/反馈，避免错误拉起外部 App。
-
-### 结构收口
-
-- `data.getModeUrl()` 成为统一磁链模式路由。
-- 新增 `$.exports.getModeUrl = getModeUrl`。
-- `SelectTorrent` 不再复制一套模式实现，统一调用 `data.getModeUrl(...)`。
-- Test1 生成后的完整规则不再包含 `openAppIntent`。
-- `查询云数据` 路由对 magnet 使用 `encodeURIComponent`，避免 magnet 中 `&` 参数截断。
-
-### Test1 实机失败
-
-用户实机启动后报：
+实机启动报：
 
 ```text
 SyntaxError: 在语句前面缺少“;”
 ```
 
-同时出现“远程数据已更新到本地”。根因不是 115/云盘调用，而是原版把 `MY_RULE.title` 同时当作远程规则数据文件名：Test1 标题改成 `磁力君.简·测试` 后，`rules`/`preRule` 去请求并缓存不存在的测试标题脚本，随后 `eval()` 非 JS 内容失败。
+根因：原版把 `MY_RULE.title` 同时作为远程 Apollo 搜索脚本文件名；测试标题 `磁力君.简·测试` 导致远程脚本取错并 `eval()` 非有效 JS。
 
-## 2026-09-21 · Test2 标题耦合修复
+### Test2 · 1.0.0-test.2 / 2026092102
 
-- Test：`1.0.0-test.2`
-- Build：`2026092102`
-- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.2/installer.js`
+固定远程脚本名为 `磁力君.简` 后启动恢复，但搜索 `斗破苍穹` 时 `老王磁力 / BTSOW` 等全部为空。
 
-Test2 将 `rules` 页面中的 `MY_RULE.title` 固定回原版 `磁力君.简`，启动解析错误消失；用户实机确认首页可正常打开、设置可切换到 `115云盘`。
+### Test3 · 1.0.0-test.3 / 2026092103
 
-### Test2 实机失败：搜索规则全部空
+尝试隔离 `ciliSimpleRules.json`、关闭标题耦合 `preRule` 更新并显式加载当前 `data` 页面，实机仍全部搜不到。
 
-用户搜索 `斗破苍穹`，当前可见的 `老王磁力 / BTSOW` 等规则全部返回：
+### Test4 · 1.0.0-test.4 / 2026092104
 
-```text
-~~~什么资源都没有哦~~~
-```
+从原版重新生成，搜索改为同页串行 `carryRule()` 并增加诊断，实机仍无结果。随后用户确认**原版 `磁力君.简` 搜索也已经失效**。
 
-继续复核原版后确认 Test1/Test2 还有两个风险：
+结论：继续修旧 `rules → configs → data.carryRule → batchExecute` 链价值很低；从 Test5 起正式废弃旧搜索体系，不再把旧 Apollo 规则作为搜索事实源。
 
-1. 原版 `preRule` 也有 4 处 `MY_RULE.title`，Test1 曾因此执行测试标题远程更新，并会 `deleteFile("hiker://files/rules/LoyDgIk/ciliSimpleRules.json")`；这会影响正式版和测试版共用的搜索规则缓存。
-2. 搜索线程中的 `$.require("data")` 以及 `lazyRule` 传入的 `getModeUrl` 对测试标题/序列化上下文过于依赖；Test1 的 `getModeUrl` 还引用外部 helper，序列化后存在作用域丢失风险。
+## Test5 · 全新 Provider 搜索架构
 
-因此 Test2 冻结，不作为后续基线。
+### 元数据
 
-## 2026-09-21 · Test3 搜索运行时隔离
-
-### 工件
-
-- Test：`1.0.0-test.3`
-- Build / rule version：`2026092103`
-- Release：`apps/tools/magnet-jun/releases/1.0.0-test.3/release.json`
-- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js`
+- Test：`1.0.0-test.5`
+- Build / rule version：`2026092105`
+- Release：`apps/tools/magnet-jun/releases/1.0.0-test.5/release.json`
+- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js`
 - 生成标题：`磁力君.简·测试`
+- Stable：不覆盖。
 
-### 修复边界
+### 架构边界
 
-Test3 不再让测试版自动更新器碰正式搜索规则状态：
-
-```text
-rule.preRule = ""
-```
-
-测试搜索规则改用独立路径：
+Test5 **不再调用旧搜索实现**：
 
 ```text
-hiker://files/rules/LoyDgIk/ciliSimpleRules_magnetjun_test3.json
+旧链（停用）
+rules
+→ Apollo 远程脚本
+→ configs / ciliSimpleRules.json
+→ data.carryRule
+→ batchExecute
+
+Test5 新链
+sou UI
+→ MJSearchCore
+→ Provider 并发请求
+→ 统一 Result Model
+→ BTIH 去重
+→ 排序/精准筛选
+→ 统一磁链路由
 ```
 
-首次运行时，如果正式版当前搜索规则文件存在，则复制：
+原版 `data/configs/rules/ruleManage` 页面暂时保留在规则包内仅作为兼容遗留，但 Test5 正常搜索运行链不再引用它们；后续 Stable 收口时可进一步清理。
+
+### 当前 Provider
+
+#### BTDig
+
+- 请求：`https://www.btdig.com/search?q=<keyword>&p=<page>&order=0`
+- 解析 `one_result / torrent_name / torrent_size / magnet`。
+- 不依赖旧磁力君搜索规则。
+- 若出现验证码/Cloudflare/Forbidden，仅该 Provider 报错，不拖垮其它 Provider。
+
+#### Knaben
+
+- API：`https://api.knaben.org/v1`
+- JSON POST；按 seeders 降序，请求分页。
+- 读取 `title / hash / magnetUrl / bytes / seeders / peers / date / category`。
+
+#### PirateBay / APIBay
+
+- API：`https://apibay.org/q.php?q=<keyword>&cat=0`
+- JSON GET。
+- 使用 `info_hash` 本地构造 magnet；按 seeders/size 排序并在本地分页。
+
+### 聚合与容错
+
+- 默认“聚合”同时请求三个 Provider。
+- 可以单独切换 `BTDig / Knaben / PirateBay`。
+- 使用 BTIH/infohash 去重。
+- 单 Provider 失败进入“搜索源诊断”，其它源继续展示。
+- 结果统一展示：来源 / 做种数（可用时）/ 大小 / 日期。
+- 默认模式按做种数、大小排序。
+- 精准模式要求标题包含关键词拆分后的全部主要 token。
+
+### 播放模式
+
+Test5 搜索结果与“查询云数据”页面统一走 `MJSearchCore.routeMagnet()`：
 
 ```text
-ciliSimpleRules.json
-→ ciliSimpleRules_magnetjun_test3.json
+海阔视界 → 返回 magnet
+查询云数据 → SelectTorrent
+复制磁链 → copy
+115云盘 → 115.简 / 115Offline?add=
+迅雷云盘 → 对应海阔小程序 diaoyong
+PikPak → 对应海阔小程序 diaoyong
+光鸭云盘 → 对应海阔小程序 diaoyong
+123云盘 → 对应海阔小程序 diaoyong
 ```
 
-因此 Test3 后续的规则管理、禁用/启用、搜索测试都不会再修改正式版搜索规则文件。
+所有旧 Android `openAppIntent()` / PikPak App Scheme 不进入 Test5 新搜索/播放链。
 
-`rules` 页面继续固定读取原版远程数据名 `磁力君.简`，避免测试标题参与上游文件名。
+### `SelectTorrent` 收口
 
-### 搜索执行上下文修复
-
-- 搜索线程 `$.require("data").carryRule(...)` 改为当前规则显式页面 `$.require("hiker://page/data").carryRule(...)`；
-- `SelectTorrent` 调用同样显式进入 `hiker://page/data`；
-- `getModeUrl()` 改为**完全自包含函数**，云盘规则检测/`diaoyong` 页面检测都放到函数内部，避免作为 `lazyRule` 参数序列化后丢失外部 helper 作用域。
+- 打开方式同样只保留上述 8 个模式。
+- 云盘播放统一调用 `MJSearchCore.routeMagnet()`，不再维护第二套 App Intent 路由。
+- `whatslink.info` 元数据查询继续保留，但 magnet 参数改为 `encodeURIComponent()`。
 
 ### 静态验证
 
-以用户上传原版为基线生成 Test3 mock：
+- `MJSearchCore`：Node 语法检查通过。
+- 新 `sou`：Node 语法检查通过。
+- 新 `SelectTorrent`：Node 语法检查通过。
+- Installer：Node 语法检查通过。
+- Test5 不依赖旧 `preRule` 自动更新器，`rule.preRule = ""`。
 
-- 13 个页面全部保留；
-- 所有页面 `node --check` 通过；
-- 生成规则不含 `openAppIntent`；
-- Test3 `preRule` 不再删除/刷新正式 `ciliSimpleRules.json`；
-- 设置仍只保留 8 个指定模式。
+### 当前实机验收
 
-### 当前实机验收顺序
-
-1. 先搜索 `斗破苍穹` 或此前确认能命中的关键词，确认搜索结果恢复；
-2. 如果 Test3 仍然只有 `老王磁力 / BTSOW` 且原版 `磁力君.简` 也同时无结果，则判定 Test1 已重置共享规则文件或这两个上游引擎本身失效，需要进入“搜索规则恢复/更新”子任务；
-3. 搜索恢复后再验证 115 / 迅雷 / PikPak / 光鸭 / 123 的海阔小程序调用。
-
-未通过实机验证前不晋级 Stable。
+1. 导入 Test5 后搜索此前关键词 `斗破苍穹`。
+2. 分别查看“聚合 / BTDig / Knaben / PirateBay”是否至少有 Provider 返回结果；若某源不可用，应出现单源诊断而不是全页空白。
+3. 搜到结果后先测试 `115云盘`，确认进入 `115.简` 的磁链离线/播放链。
+4. 再逐个验证 迅雷 / PikPak / 光鸭 / 123 的真实海阔规则名与 `diaoyong` 外部调用协议。
+5. 未完成实机验证前不得晋级 Stable。
