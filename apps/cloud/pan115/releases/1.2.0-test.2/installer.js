@@ -145,9 +145,9 @@ off=off.replace(/c\.addOfflineTaskURIs\(add,\s*["']0["']\)/g,'c.addOfflineTaskUR
 // 首屏先给出可见骨架，再做网络动作；云下载目录只走缓存/根目录快速识别，不再自动访问 get_id。
 var stateMarker='let currentTask = null;';
 if(off.indexOf(stateMarker)<0) return "toast://Test2补丁定位失败：未找到任务状态";
-off=off.replace(stateMarker,'let _115CloudCid = "";\\n'+stateMarker);
+off=off.replace(stateMarker,'let _115CloudCid = "";\n'+stateMarker);
 
-var focusMarker='// 外部磁链调用模式：先查重；任务记录已清理时允许复用已经识别过的网盘结果。\\nif (focusMode) {';
+var focusMarker='// 外部磁链调用模式：先查重；任务记录已清理时允许复用已经识别过的网盘结果。\nif (focusMode) {';
 if(off.indexOf(focusMarker)<0) return "toast://Test2补丁定位失败：未找到外部磁链入口";
 var preFocus=`// 外部磁链调用模式：先查重；任务记录已清理时允许复用已经识别过的网盘结果。
 if (focusMode && myPage === 1) {
@@ -166,7 +166,7 @@ off=off.replace(focusMarker,preFocus);
 off=off.replace("let latest = listTasks(2);","let latest = listTasks(1);");
 
 // 超时并不等价于提交失败：115 端可能已受理，给出可刷新确认的状态。
-var catchMarker='} catch (e) {\\n        autoMessage = "处理磁链失败：" + e.message;\\n    }\\n}';
+var catchMarker='} catch (e) {\n        autoMessage = "处理磁链失败：" + e.message;\n    }\n}';
 if(off.indexOf(catchMarker)<0) return "toast://Test2补丁定位失败：未找到外部磁链异常处理";
 off=off.replace(catchMarker,`} catch (e) {
         if (_115TimeoutLike(e)) {
