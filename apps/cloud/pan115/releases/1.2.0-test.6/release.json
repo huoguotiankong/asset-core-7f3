@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.6",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.6",
+  "build": 2026092207,
+  "ruleVersion": 2026092207,
+  "basedOn": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.6/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "offlineDestinationPolicy": [
+    "root/海阔视界",
+    "root/云下载 or root/离线下载",
+    "root as final fallback"
+  ],
+  "features": [
+    "all external magnet submissions prefer root/海阔视界",
+    "manual offline adds and failed-task retries use the same destination policy inside their independent lazyRule runtime",
+    "fall back to root/云下载 or root/离线下载 only when 海阔视界 is absent",
+    "dedicated 115HikerVisionCid cache prevents older cloud-download cache from overriding 海阔视界 priority",
+    "same-title import keeps 115.简 login/cookie state",
+    "retain Stable 1.1.0 playback resolver and fast result expansion"
+  ],
+  "status": "active-test-hiker-folder-priority-pending-device-validation",
+  "validation": [
+    "when root has 海阔视界, new external magnet must save into it",
+    "manual add and failed-task retry must also save into 海阔视界",
+    "when 海阔视界 is absent, tasks must save into 云下载/离线下载 if present",
+    "same-title import must preserve existing 115 login state",
+    "Stable 1.1.0 remains unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
