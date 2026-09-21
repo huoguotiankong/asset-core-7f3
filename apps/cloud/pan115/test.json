@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "appId": "pan115",
+  "name": "115.简·测试",
+  "channel": "test",
+  "version": "1.2.0-test.1",
+  "build": 2026092202,
+  "ruleVersion": 2026092202,
+  "baseVersion": "1.1.0",
+  "baseBuild": 2026092111,
+  "release": "apps/cloud/pan115/releases/1.2.0-test.1/release.json",
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.1/installer.js",
+  "status": "active-test-fast-offline-pending-device-validation",
+  "stableChanged": false,
+  "updatedAt": "2026-09-22",
+  "notes": "Only patches 115Offline over device-validated Stable 1.1.0. Uses canonical cloud-download dest_cid when available, bounded task polling, fileId-early readiness, and inline result-folder playback rows."
+}
