@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "pan115",
+  "name": "115.简",
+  "updatedAt": "2026-09-21",
+  "channels": [
+    {
+      "channel": "stable",
+      "label": "正式基线",
+      "name": "115.简",
+      "ruleVersion": 1,
+      "mode": "device-installed-baseline",
+      "recommended": true,
+      "status": "preserved-unmodified"
+    },
+    {
+      "channel": "candidate",
+      "label": "候选版",
+      "name": "115.简·候选",
+      "version": "1.1.0-rc1",
+      "build": 2026092110,
+      "ruleVersion": 2026092110,
+      "release": "apps/cloud/pan115/releases/1.1.0-rc1/release.json",
+      "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
+      "recommended": false,
+      "status": "device-validation-pending",
+      "desc": "Test4 功能收敛候选：磁链去重、fileId 优先定位、主视频直放、多集选集、缓存复用与失败重试。"
+    }
+  ]
+}
