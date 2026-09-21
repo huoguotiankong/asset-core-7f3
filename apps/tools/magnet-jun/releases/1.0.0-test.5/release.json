@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test5",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.5",
+  "build": 2026092105,
+  "ruleVersion": 2026092105,
+  "base": {
+    "name": "磁力君.简",
+    "ruleVersion": 20250604,
+    "source": "device-installed baseline"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "磁力君.简",
+    "testTitle": "磁力君.简·测试",
+    "overwritesStable": false
+  },
+  "searchArchitecture": {
+    "legacyRulesConfigCarryRule": "disabled",
+    "providers": ["BTDig", "Knaben", "PirateBay"],
+    "aggregateDedup": "BTIH hash",
+    "providerIsolation": true
+  },
+  "changes": [
+    "rewrite search layer from scratch without old rules/configs/carryRule/Apollo dependency",
+    "add independent provider core with BTDig HTML, Knaben JSON API and PirateBay apibay JSON API",
+    "aggregate provider results and deduplicate by infohash",
+    "keep default/precise search modes",
+    "retain only 海阔视界/查询云数据/复制磁链/115云盘/迅雷云盘/PikPak/光鸭云盘/123云盘",
+    "all cloud modes route to Hiker mini-programs instead of Android apps",
+    "115 uses Stable 115Offline?add= entry",
+    "replace SelectTorrent open modes with the same unified Hiker router",
+    "disable legacy preRule updater in Test5"
+  ],
+  "validation": {
+    "installerSyntax": "passed",
+    "searchCoreSyntax": "passed",
+    "searchPageSyntax": "passed",
+    "selectTorrentSyntax": "passed",
+    "deviceValidation": "pending"
+  }
+}
