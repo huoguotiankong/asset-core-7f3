@@ -17,15 +17,15 @@
       "channel": "test",
       "label": "测试版",
       "name": "磁力君.简·测试",
-      "version": "1.0.0-test.5",
-      "build": 2026092105,
-      "ruleVersion": 2026092105,
-      "release": "apps/tools/magnet-jun/releases/1.0.0-test.5/release.json",
-      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.5/installer.js",
+      "version": "1.0.0-test.6",
+      "build": 2026092106,
+      "ruleVersion": 2026092106,
+      "release": "apps/tools/magnet-jun/releases/1.0.0-test.6/release.json",
+      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js",
       "mode": "local-clone-patch",
       "recommended": false,
       "status": "device-validation-pending",
-      "desc": "完全废弃旧 rules/configs/carryRule 搜索链；新建 BTDig + Knaben + PirateBay 独立 Provider 聚合搜索，按 BTIH 去重；保留八种播放模式并统一调用海阔小程序。"
+      "desc": "Test5 全新 Provider 搜索继续保留，并加入独立规则仓：可新增/导入/删除/禁用/移动/置顶/重置/清空搜索规则；列表顺序即聚合优先级；兼容原版 find/findAliUrl 规则格式。"
     }
   ]
 }
