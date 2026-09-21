@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.2",
+  "appId": "pan115",
+  "name": "115.简·测试",
+  "channel": "test",
+  "version": "1.2.0-test.2",
+  "build": 2026092203,
+  "ruleVersion": 2026092203,
+  "basedOn": {
+    "version": "1.1.0",
+    "build": 2026092111,
+    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.2/installer.js",
+  "delivery": {
+    "mode": "local-clone-patch",
+    "requiresInstalledBaseline": "115.简 Stable 1.1.0",
+    "testTitle": "115.简·测试",
+    "overwritesStable": false,
+    "normalRuntimeRemoteExecutableDependency": false
+  },
+  "features": [
+    "remove synchronous get_id probing from first render",
+    "reuse cached cloud-download cid immediately and otherwise scan root once for 云下载/离线下载",
+    "reduce external-magnet dedup scan from 10 pages to 3 pages",
+    "remove sleep polling from first render and reduce post-submit task lookup to one page",
+    "treat socket/read timeout as uncertain submission rather than definite failure",
+    "show first-screen status skeleton before remote magnet processing",
+    "when fileId is available, expand result folder/video rows inline",
+    "retain Stable 1.1.0 playback resolver, dedup cache, retry and multi-video behavior"
+  ],
+  "scope": {
+    "patchedPage": "115Offline",
+    "unchanged": [
+      "115 login/cookie/QR",
+      "m115 crypto",
+      "115 share",
+      "normal file list/search",
+      "115Api.player.resolve",
+      "Stable 1.1.0"
+    ]
+  },
+  "status": "active-test-fast-open-pending-device-validation",
+  "validation": [
+    "JavDB/磁力君调用新 magnet 后应更快进入 115Offline 页面",
+    "页面不得因自动 get_id 探测额外阻塞约 9 秒",
+    "设备已缓存的云下载 CID 应被直接复用作为 wp_path_id",
+    "若 add_task_urls Read timed out，应提示提交结果待确认而不是直接判失败",
+    "刷新后出现 fileId 时应直接展示结果目录与视频项",
+    "实际离线文件应落在 115 云下载目录而非根目录",
+    "Stable 1.1.0 must remain unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
