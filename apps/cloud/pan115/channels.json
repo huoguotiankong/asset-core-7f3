@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版",
       "name": "115.简·测试",
-      "version": "1.2.0-test.2",
-      "build": 2026092203,
-      "ruleVersion": 2026092203,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.2/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.2/installer.js",
-      "mode": "local-clone-patch",
+      "version": "1.2.0-test.3",
+      "build": 2026092204,
+      "ruleVersion": 2026092204,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.3/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.3/installer.js",
+      "mode": "local-test-hotfix",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "磁链秒开测试：取消首屏get_id/sleep阻塞，缓存云下载CID，缩短查重，并对Read timed out改为待确认状态。"
+      "desc": "Test2语法热修：移除_115CloudCid页面级重复声明，保留秒开、云下载CID缓存、缩短查重与超时待确认逻辑。"
     },
     {
       "channel": "candidate",
