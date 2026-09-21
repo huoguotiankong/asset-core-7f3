@@ -102,27 +102,98 @@ PIKPAK → PikPak
 
 - `data.getModeUrl()` 成为统一磁链模式路由。
 - 新增 `$.exports.getModeUrl = getModeUrl`。
-- `SelectTorrent` 不再复制一套模式实现，统一调用 `$.require("data").getModeUrl(...)`。
+- `SelectTorrent` 不再复制一套模式实现，统一调用 `data.getModeUrl(...)`。
 - Test1 生成后的完整规则不再包含 `openAppIntent`。
 - `查询云数据` 路由对 magnet 使用 `encodeURIComponent`，避免 magnet 中 `&` 参数截断。
 
+### Test1 实机失败
+
+用户实机启动后报：
+
+```text
+SyntaxError: 在语句前面缺少“;”
+```
+
+同时出现“远程数据已更新到本地”。根因不是 115/云盘调用，而是原版把 `MY_RULE.title` 同时当作远程规则数据文件名：Test1 标题改成 `磁力君.简·测试` 后，`rules`/`preRule` 去请求并缓存不存在的测试标题脚本，随后 `eval()` 非 JS 内容失败。
+
+## 2026-09-21 · Test2 标题耦合修复
+
+- Test：`1.0.0-test.2`
+- Build：`2026092102`
+- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.2/installer.js`
+
+Test2 将 `rules` 页面中的 `MY_RULE.title` 固定回原版 `磁力君.简`，启动解析错误消失；用户实机确认首页可正常打开、设置可切换到 `115云盘`。
+
+### Test2 实机失败：搜索规则全部空
+
+用户搜索 `斗破苍穹`，当前可见的 `老王磁力 / BTSOW` 等规则全部返回：
+
+```text
+~~~什么资源都没有哦~~~
+```
+
+继续复核原版后确认 Test1/Test2 还有两个风险：
+
+1. 原版 `preRule` 也有 4 处 `MY_RULE.title`，Test1 曾因此执行测试标题远程更新，并会 `deleteFile("hiker://files/rules/LoyDgIk/ciliSimpleRules.json")`；这会影响正式版和测试版共用的搜索规则缓存。
+2. 搜索线程中的 `$.require("data")` 以及 `lazyRule` 传入的 `getModeUrl` 对测试标题/序列化上下文过于依赖；Test1 的 `getModeUrl` 还引用外部 helper，序列化后存在作用域丢失风险。
+
+因此 Test2 冻结，不作为后续基线。
+
+## 2026-09-21 · Test3 搜索运行时隔离
+
+### 工件
+
+- Test：`1.0.0-test.3`
+- Build / rule version：`2026092103`
+- Release：`apps/tools/magnet-jun/releases/1.0.0-test.3/release.json`
+- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.3/installer.js`
+- 生成标题：`磁力君.简·测试`
+
+### 修复边界
+
+Test3 不再让测试版自动更新器碰正式搜索规则状态：
+
+```text
+rule.preRule = ""
+```
+
+测试搜索规则改用独立路径：
+
+```text
+hiker://files/rules/LoyDgIk/ciliSimpleRules_magnetjun_test3.json
+```
+
+首次运行时，如果正式版当前搜索规则文件存在，则复制：
+
+```text
+ciliSimpleRules.json
+→ ciliSimpleRules_magnetjun_test3.json
+```
+
+因此 Test3 后续的规则管理、禁用/启用、搜索测试都不会再修改正式版搜索规则文件。
+
+`rules` 页面继续固定读取原版远程数据名 `磁力君.简`，避免测试标题参与上游文件名。
+
+### 搜索执行上下文修复
+
+- 搜索线程 `$.require("data").carryRule(...)` 改为当前规则显式页面 `$.require("hiker://page/data").carryRule(...)`；
+- `SelectTorrent` 调用同样显式进入 `hiker://page/data`；
+- `getModeUrl()` 改为**完全自包含函数**，云盘规则检测/`diaoyong` 页面检测都放到函数内部，避免作为 `lazyRule` 参数序列化后丢失外部 helper 作用域。
+
 ### 静态验证
 
-本地使用用户上传的原版执行 Installer mock：
+以用户上传原版为基线生成 Test3 mock：
 
-- 成功生成 `磁力君.简·测试`；
-- 13 个原版页面全部保留；
-- 所有 `js:` 页面脚本 `node --check` 通过；
-- 生成规则中不再存在 `openAppIntent`；
-- `data / sou / SelectTorrent` 只暴露新 8 模式（兼容旧名仅存在迁移映射中）。
+- 13 个页面全部保留；
+- 所有页面 `node --check` 通过；
+- 生成规则不含 `openAppIntent`；
+- Test3 `preRule` 不再删除/刷新正式 `ciliSimpleRules.json`；
+- 设置仍只保留 8 个指定模式。
 
-### 当前实机验收重点
+### 当前实机验收顺序
 
-1. 设置弹窗模式数量与顺序是否符合预期；
-2. 115云盘：选择后点击 magnet，应进入 `115.简` 的磁链播放/离线链；
-3. 迅雷云盘：确认调用海阔 `迅雷` 小程序，不拉起迅雷 App；
-4. PikPak：确认实际安装规则名及 `diaoyong` 外部调用页；
-5. 光鸭云盘 / 123云盘：确认实际安装规则名及 `diaoyong` 外部调用页；
-6. 查询云数据 / 复制磁链 / 海阔视界原有行为无回归。
+1. 先搜索 `斗破苍穹` 或此前确认能命中的关键词，确认搜索结果恢复；
+2. 如果 Test3 仍然只有 `老王磁力 / BTSOW` 且原版 `磁力君.简` 也同时无结果，则判定 Test1 已重置共享规则文件或这两个上游引擎本身失效，需要进入“搜索规则恢复/更新”子任务；
+3. 搜索恢复后再验证 115 / 迅雷 / PikPak / 光鸭 / 123 的海阔小程序调用。
 
-未完成以上实机验证前，不晋级 Stable。
+未通过实机验证前不晋级 Stable。
