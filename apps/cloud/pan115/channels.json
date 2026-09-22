@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.9",
-      "build": 2026092210,
-      "ruleVersion": 2026092210,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.9/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.9/installer.js",
+      "version": "1.2.0-test.13",
+      "build": 2026092214,
+      "ruleVersion": 2026092214,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.13/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.13/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "安全低频磁链页安装修正版：修复Test8 focus定位失败；仍只改单个115Offline磁链聚焦页，单后台任务、低频确认，不碰我的文件/登录/普通网盘。"
+      "desc": "自用首页精简版：保留Test12路由修复，去除搜索框右侧长提示、底部状态/Build说明和冗余副标题。"
     },
     {
       "channel": "candidate",
