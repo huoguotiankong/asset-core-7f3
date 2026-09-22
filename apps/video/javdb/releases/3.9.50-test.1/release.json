@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.50-test.1",
+  "build": 2026092204,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "baseProductUi": {
+    "version": "3.9.45-test.7",
+    "build": 2026082904,
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "sharedPlaybackTest": {
+    "version": "1.1.0-test.1",
+    "build": 11001,
+    "ref": "8a8a3ead9dc234bb26bd9251907ae2794a0e65c5",
+    "path": "shared/jav-playback/releases/1.1.0-test.1/upgrade.js"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.50-test.1/local_entry.js",
+    "ref": "8474f9b758cff4141a4ab101c34e5eef42190a52",
+    "blob": "8857a9fc4a8245620f7fa6002c82ead3046f66ff"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.50-test.1/javdb_v3.9.50_test1_livehls.txt",
+    "blob": "29e7dcc4f8d469adf07b0eb823a82611cf120cbb",
+    "ruleVersion": 2026092204
+  },
+  "feature": {
+    "id": "vip-live-hls-no-preload",
+    "scope": "javdb3Play HLS rows only",
+    "removeBackgroundCacheSwap": true,
+    "normalPlayback": "live-direct-hls-no-preload",
+    "fallbacks": ["原始VIP播放", "本地索引播放（备用）"],
+    "preserveMagnetMeta": true,
+    "preserve115LongPress": true
+  },
+  "status": "active-test-pending-device-validation",
+  "stableChanged": false,
+  "latestChanged": false,
+  "validation": [
+    "VIP play page should remain fast to enter",
+    "Normal VIP HLS should start without synchronous cacheM3u8",
+    "Seek to 10/30/60 minutes and confirm playback resumes instead of hanging",
+    "Compare normal no-preload click with long-click 原始VIP播放 on the same line",
+    "Magnet size/HD/4K/subtitle and 调用115 must not regress"
+  ],
+  "updatedAt": "2026-09-22"
+}
