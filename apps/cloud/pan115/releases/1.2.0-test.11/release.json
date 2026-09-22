@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.11",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.11",
+  "build": 2026092212,
+  "ruleVersion": 2026092212,
+  "basedOn": {
+    "version": "1.2.0-test.9",
+    "build": 2026092210,
+    "reason": "Test10 home UI compiled incorrectly on Hiker device; Test11 hotfix rebuilds the generated find_rule with conservative ES5 syntax and no regex-based routing."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.11/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "APP-style home phase 1 hotfix",
+    "home script uses conservative ES5 syntax",
+    "input routing uses string prefix checks instead of regex literals",
+    "only find_rule/home UI changes; pages, 115Api, login, files, offline protocol and player are preserved",
+    "accepts both Test9 and broken Test10 as installation base"
+  ],
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
