@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.8",
-      "build": 2026092228,
-      "ruleVersion": 2026092228,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.8/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.8/installer.js",
+      "version": "1.2.1-test.9",
+      "build": 2026092229,
+      "ruleVersion": 2026092229,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.9/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.9/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-search-dual-auth",
-      "desc": "搜索专项：先识别当前115Api实际使用OpenAPI Bearer还是WebAPI Cookie认证，再分别调用/open/ufile/search或/files/search；按对应返回字段解析真实文件夹ID/父目录ID，保留首页右侧搜索按钮及现有文件管理、批量、回收站、磁链播放能力。"
+      "status": "pending-device-validation-search-recovery",
+      "desc": "搜索恢复版：Test8已确认真实运行通道为WebAPI但仍返回0条，因此停止继续猜/files/search请求合同，直接从手机Test4/Stable本地快照恢复Test5之前已实机能搜到ipx-641的原始115Search运行链；首页右侧搜索按钮及现有文件管理、批量、回收站、磁链播放能力保留。"
     },
     {
       "channel": "candidate",
