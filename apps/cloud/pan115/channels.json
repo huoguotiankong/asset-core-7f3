@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.16",
-      "build": 2026092217,
-      "ruleVersion": 2026092217,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.16/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.16/installer.js",
+      "version": "1.2.0-test.17",
+      "build": 2026092218,
+      "ruleVersion": 2026092218,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.17/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.17/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "文件管理Phase2删除补强：保留已验证的回收站列表/还原，新增长按永久删除；普通文件删除扩展115Api方法探测与同会话OpenAPI兜底。"
+      "desc": "文件管理Phase2删除接口修复：普通删除改用完整webapi rb/delete请求；回收站永久删除直接调用cleanRecycleBin并临时输入115安全密码。"
     },
     {
       "channel": "candidate",
