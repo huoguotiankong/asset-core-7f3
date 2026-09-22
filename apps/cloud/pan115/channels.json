@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.15",
-      "build": 2026092235,
-      "ruleVersion": 2026092235,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.15/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.15/installer.js",
+      "version": "1.2.1-test.16",
+      "build": 2026092236,
+      "ruleVersion": 2026092236,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.16/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.16/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-offline-center-phase2",
-      "desc": "离线中心Phase2：延续短输入和技术信息降级，补充进度/速度/剩余时间/任务时间、任务总数，并为完成任务增加保守的单视频一步播放；多视频/嵌套结果仍回落既有智能结果页，外部磁链低频focusMode不变。"
+      "status": "pending-device-validation-account-center-phase1",
+      "desc": "按规划进入账号/容量/设置中心Phase1：保留原账号登录页，新增加账号与设置中心、容量信息、文件/离线/回收快捷入口、保存目录摘要以及独立诊断与高级设置；Test15离线中心原样携带，搜索/文件管理/回收站/外部磁链协议不改。"
     },
     {
       "channel": "candidate",
