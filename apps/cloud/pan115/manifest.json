@@ -13,12 +13,12 @@
     "status": "device-validated"
   },
   "currentTest": {
-    "version": "1.2.1-test.8",
-    "build": 2026092228,
-    "ruleVersion": 2026092228,
-    "release": "apps/cloud/pan115/releases/1.2.1-test.8/release.json",
-    "installer": "apps/cloud/pan115/releases/1.2.1-test.8/installer.js",
-    "status": "pending-device-validation-search-dual-auth"
+    "version": "1.2.1-test.9",
+    "build": 2026092229,
+    "ruleVersion": 2026092229,
+    "release": "apps/cloud/pan115/releases/1.2.1-test.9/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.1-test.9/installer.js",
+    "status": "pending-device-validation-search-recovery"
   },
   "candidate": {
     "version": "1.1.0-rc1",
