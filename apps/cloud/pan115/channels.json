@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.20",
-      "build": 2026092240,
-      "ruleVersion": 2026092240,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.20/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.20/installer.js",
+      "version": "1.2.1-test.21",
+      "build": 2026092241,
+      "ruleVersion": 2026092241,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.21/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.21/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-play-history-safe-retry",
-      "desc": "Test19文件管理热修已实机确认恢复。Test20以已验证Test17文件管理为不可变基线，仅通过小型115PlayStore模块接入最近播放；安装前后均有JS语法门禁，不再注入复杂longClick源码。"
+      "status": "pending-device-validation-folder-search-and-recent-play",
+      "desc": "基于已实机恢复正常的Test19。继续携带Test20的小型最近播放核心，并新增当前目录搜索：只使用现有getFiles，单次最多顺序扫描500项，可手动继续下一批；不碰已验证脆弱的全盘115Search请求链。"
     },
     {
       "channel": "candidate",
