@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.9",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.9",
+  "build": 2026092210,
+  "ruleVersion": 2026092210,
+  "basedOn": {
+    "version": "1.2.0-test.6",
+    "build": 2026092207,
+    "reason": "Test8 installer failed before import because focus marker used escaped literal \\n instead of real newline"
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.9/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "same safe single-worker low-frequency magnet status design as Test8",
+    "fix Test8 focus marker newline matching so installer can actually patch Test6",
+    "fix old focusMode tail replacement newline matching so dynamic page is not overwritten by legacy setResult",
+    "only 115Offline external magnet focus page changes; my files, login, search, share and player remain untouched",
+    "retain root/海阔视界 -> root/云下载 or 离线下载 -> root destination policy"
+  ],
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
