@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.54-test.1",
+  "build": 2026092208,
+  "baseVersion": "3.9.52-test.1",
+  "baseBuild": 2026092206,
+  "entry": "apps/video/javdb/releases/3.9.54-test.1/local_entry.js",
+  "mode": "dynamic-guangya-route-discovery-overlay",
+  "status": "pending-device-validation",
+  "deviceFeedbackBase": "Test53 reached Hiker but failed with 找不到‘magnet’这个页面, proving the installed Guangya rule does not expose a fixed magnet page.",
+  "changes": [
+    "Do not hard-code hiker://page/magnet for Guangya",
+    "At click time inspect the installed 光鸭云盘 / 光鸭 home rule and parse its pages array",
+    "Prefer pages whose name/path/rule indicates 磁力, 云添加, 离线, add, magnet, diaoyong or fxlj",
+    "Pass the magnet through realurl, url, add, magnet and input for compatibility",
+    "If no dedicated page is found, fall back to the installed Guangya rule search entry and attempt clipboard compatibility",
+    "Keep menu order, magnet metadata and VIP playback unchanged"
+  ],
+  "stableUnchanged": "3.9.42",
+  "cloudTestPointerUnchanged": "3.9.50-test.1"
+}
