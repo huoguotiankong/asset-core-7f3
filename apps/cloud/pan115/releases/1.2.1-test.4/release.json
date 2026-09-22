@@ -42,6 +42,9 @@
     "folderPicker": "apps/cloud/pan115/modules/folder_picker_v2.js",
     "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
   },
-  "status": "pending-device-validation",
+  "status": "pending-device-validation-superseded",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.5",
+  "supersededReason": "Device screenshots exposed a search-result navigation defect before Test4 received an explicit overall validation result; Test5 keeps Test4 modules and repairs search first.",
   "updatedAt": "2026-09-22"
 }
