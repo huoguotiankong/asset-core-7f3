@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.48-test.1",
+  "build": 2026092202,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseTest": {
+    "version": "3.9.47-test.1",
+    "build": 2026092201,
+    "entryRef": "8641ea42799c34466f3bbf236d7e9b380d81420a"
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "baseProductUi": {
+    "version": "3.9.45-test.7",
+    "build": 2026082904,
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.48-test.1/local_entry.js",
+    "ref": "439b4fc256c895a05b56344885949549d669eec1",
+    "blob": "ffa9f8e953bf71c4205081cce797fccd6b521bb9"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.48-test.1/javdb_v3.9.48_test1_media.txt",
+    "blob": "d7468c400953c280e5a915e00b7a9136d6796f75",
+    "ruleVersion": 2026092202
+  },
+  "features": [
+    {
+      "id": "magnet-metadata-v2",
+      "scope": "javdb3Magnets only",
+      "details": [
+        "Convert the leading magnet size value from MB to human-readable G, e.g. 4830 -> 4.72G and 5130 -> 5.01G",
+        "Expose HD/4K and subtitle labels from the existing row title/object metadata",
+        "Preserve date/provider/tail text and the 3.9.47 first long-click action 调用115"
+      ]
+    },
+    {
+      "id": "vip-hls-seek-cache",
+      "scope": "JDB.playPage only",
+      "details": [
+        "Only HLS/m3u8 playback rows are wrapped",
+        "cacheM3u8 is executed when the user clicks the VIP playback item so the player seeks against a local playlist index",
+        "Per-line headers are preserved for direct and multi-line playback contracts",
+        "A long-click 原始VIP播放 fallback keeps the pre-optimization URL for device A/B validation",
+        "Non-HLS playback URLs are left unchanged"
+      ]
+    }
+  ],
+  "status": "active-test-pending-device-validation",
+  "stableChanged": false,
+  "latestChanged": false,
+  "validation": [
+    "Magnet row 5130 should display 5.01G and an [HD] title should expose 高清",
+    "Magnet row 4830 should display 4.72G plus 高清 and 字幕 for the [中字][HD] item",
+    "Long-press a real magnet and confirm 调用115 is still the first action",
+    "Start a known JavDB VIP video and confirm cold start still succeeds",
+    "Seek to approximately 10/30/60 minutes and compare resume delay with the old path",
+    "Long-press the optimized VIP playback item and confirm 原始VIP播放 still works as fallback",
+    "Confirm required media headers are preserved and no 403/black-screen regression appears",
+    "Confirm third-party playback and non-magnet UI are unchanged"
+  ],
+  "updatedAt": "2026-09-22"
+}
