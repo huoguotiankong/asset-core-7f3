@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.11",
-      "build": 2026092231,
-      "ruleVersion": 2026092231,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.11/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.11/installer.js",
+      "version": "1.2.1-test.12",
+      "build": 2026092232,
+      "ruleVersion": 2026092232,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.12/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.12/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-raw-cid-capture",
-      "desc": "Test10已确认搜索6条、视频播放和关键词显示正常，但目录点击仍拿不到cid。Test11不再二次猜搜索接口，而是透明捕获已经工作正常的旧搜索请求/Client原始返回值，从同一份结果中提取目录真实cid后进入增强文件管理。"
+      "status": "pending-device-validation-normalized-folder-fileId",
+      "desc": "Test11实机仍提示目录ID未捕获。已核对当前文件管理V8的真实115Api对象合同：目录使用isDirectory=true区分，而目录ID就在fileId。Test12保持已经验证能搜到6条的旧搜索请求完全不动，只修捕获器把目录fileId直接作为cid进入文件管理。"
     },
     {
       "channel": "candidate",
