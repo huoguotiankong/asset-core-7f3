@@ -1,0 +1,2 @@
+云口令，迅雷 1.1.0-test.2 磁链可靠性修复版，复制整条口令打开海阔即可覆盖导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/d34e9a0a0fe30a02d11e605fa8b0263823d433cb/cloud/xunlei/v1.1.0-test.2/import_magnet_reliability.js@import=js:eval(fetch(input))
