@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.12",
-      "build": 2026092232,
-      "ruleVersion": 2026092232,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.12/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.12/installer.js",
+      "version": "1.2.1-test.13",
+      "build": 2026092233,
+      "ruleVersion": 2026092233,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.13/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.13/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-normalized-folder-fileId",
-      "desc": "Test11实机仍提示目录ID未捕获。已核对当前文件管理V8的真实115Api对象合同：目录使用isDirectory=true区分，而目录ID就在fileId。Test12保持已经验证能搜到6条的旧搜索请求完全不动，只修捕获器把目录fileId直接作为cid进入文件管理。"
+      "status": "pending-device-validation-offline-center-phase1",
+      "desc": "Test12目录跳转已实机确认。Test13按原规划进入离线下载中心第一阶段：独立任务中心、状态筛选、手动刷新、新建离线、完成结果入口和保留文件的任务记录移除；外部磁链仍走原已验证安全低频focusMode，不增加后台轮询。"
     },
     {
       "channel": "candidate",
