@@ -13,12 +13,12 @@
     "status": "device-validated"
   },
   "currentTest": {
-    "version": "1.2.1-test.19",
-    "build": 2026092239,
-    "ruleVersion": 2026092239,
-    "release": "apps/cloud/pan115/releases/1.2.1-test.19/release.json",
-    "installer": "apps/cloud/pan115/releases/1.2.1-test.19/installer.js",
-    "status": "pending-device-validation-hotfix"
+    "version": "1.2.1-test.20",
+    "build": 2026092240,
+    "ruleVersion": 2026092240,
+    "release": "apps/cloud/pan115/releases/1.2.1-test.20/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.1-test.20/installer.js",
+    "status": "pending-device-validation-play-history-safe-retry"
   },
   "candidate": {
     "version": "1.1.0-rc1",
