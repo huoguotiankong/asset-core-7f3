@@ -11,7 +11,7 @@
     "version": "1.2.1-test.5",
     "build": 2026092225,
     "deviceValidated": false,
-    "note": "Device test showed Test5 search UI rendered correctly but the same known keyword that returned six results before now returned zero results."
+    "note": "Test5 returned zero results for a known-good keyword; Test6 tried aid=1 through a retargeted getFiles transport."
   },
   "installer": "apps/cloud/pan115/releases/1.2.1-test.6/installer.js",
   "delivery": {
@@ -23,24 +23,17 @@
   },
   "scope": "search-aid-hotfix-home-search-button",
   "features": [
-    "switch the WebAPI search area parameter from aid=7 to the legacy-compatible aid=1 used by the working 115 /files/search contract",
-    "use the authenticated getFiles transport directly for search instead of preferring an uncertain filesSearch method signature",
-    "keep the Test5 folder-ID normalization and direct folder navigation",
-    "keep video direct playback, type filters, sorting and pagination protections",
-    "turn the existing home input confirmation control back on so the search box has a visible right-side search button",
-    "do not modify login, magnet/offline flow, player, file operations, batch operations or recycle-bin contracts"
+    "aid=1 WebAPI search experiment through captured getFiles transport",
+    "visible homepage search confirmation button",
+    "Test5 result rendering/navigation improvements"
   ],
   "moduleSnapshot": {
     "commit": "b98b9dd68d3340486d32f25a2f7b53b2bded6f5e",
-    "search": "apps/cloud/pan115/modules/search_v2.js",
-    "fileManage": "apps/cloud/pan115/modules/file_manage_v8.js",
-    "fileInfo": "apps/cloud/pan115/modules/file_info_v1.js",
-    "fileOps": "apps/cloud/pan115/modules/file_ops_v1.js",
-    "batchOps": "apps/cloud/pan115/modules/batch_ops_v1.js",
-    "fileBatch": "apps/cloud/pan115/modules/file_batch_v2.js",
-    "folderPicker": "apps/cloud/pan115/modules/folder_picker_v2.js",
-    "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
+    "search": "apps/cloud/pan115/modules/search_v2.js"
   },
-  "status": "pending-device-validation-search-hotfix",
+  "status": "failed-device-validation-search-zero-results",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.7",
+  "failure": "User device confirmed ipx-641 still returned zero results. Changing aid from 7 to 1 did not restore the working legacy search. The getFiles transport must not be assumed reusable for /files/search merely because it is authenticated. Test7 restores the exact pre-Test5 search runtime from the locally saved rule snapshot.",
   "updatedAt": "2026-09-22"
 }
