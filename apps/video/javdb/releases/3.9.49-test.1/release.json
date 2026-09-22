@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "javdb-v3-test",
+  "name": "JavDB v3",
+  "version": "3.9.49-test.1",
+  "build": 2026092203,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301
+  },
+  "baseLocalFirst": {
+    "version": "3.9.44-test.1",
+    "build": 2026082501,
+    "builderRef": "2361fbbfc21c540191495b979b30a6828adfe9c1"
+  },
+  "baseProductUi": {
+    "version": "3.9.45-test.7",
+    "build": 2026082904,
+    "ref": "10f182e75bbfd0ee89cb4f41c2f0606a678a05e0"
+  },
+  "sharedPlaybackTest": {
+    "version": "1.1.0-test.1",
+    "build": 11001,
+    "ref": "8a8a3ead9dc234bb26bd9251907ae2794a0e65c5",
+    "lazyLoad": true
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.49-test.1/local_entry.js",
+    "ref": "180f7f4236d666fe782faa1be93dcb898e09510a",
+    "blob": "18b459a092605f0297e2f1ee3df52cb1a5159be9"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.49-test.1/javdb_v3.9.49_test1_fastvip.txt",
+    "blob": "b3c5622a1d61ca6ab7c6347b78ea1efff467a253",
+    "ruleVersion": 2026092203
+  },
+  "features": {
+    "flattenedRuntime": true,
+    "magnetMetaV2": true,
+    "magnet115LongPress": true,
+    "vipDirectStart": true,
+    "vipWarmSeek": true,
+    "vipWarmLines": 2,
+    "vipManualSeekFallback": "流畅拖动播放",
+    "vipRawFallback": "原始VIP播放"
+  },
+  "performanceIntent": {
+    "pageEntry": "remove stacked 3.9.47/3.9.48 eval chain and do not preflight third-party playback on ordinary core pages",
+    "firstPlay": "do not synchronously cacheM3u8 on normal click; raw VIP HLS remains immediately playable",
+    "seek": "after the play page is rendered, asynchronously warm up the first two direct HLS lines and swap their row URL to the local cached m3u8 index when ready"
+  },
+  "status": "active-test-pending-device-validation",
+  "stableChanged": false,
+  "latestChanged": false,
+  "previousTest": {
+    "version": "3.9.48-test.1",
+    "build": 2026092202,
+    "release": "apps/video/javdb/releases/3.9.48-test.1/release.json",
+    "shell": "cloud/javdb/v3.9.48-test.1/javdb_v3.9.48_test1_media.txt",
+    "deviceFeedback": "seek improved somewhat, but page entry and initial playback became slower than before; seek still slower than original website"
+  },
+  "validation": [
+    "Compare VIP play-page entry time against 3.9.48-test.1",
+    "Immediately tap the first VIP HLS line after page entry and compare initial playback time against 3.9.48-test.1",
+    "Wait 2-5 seconds on the VIP page, then play the first or second HLS line and test seeks to about 10/30/60 minutes",
+    "Long-press VIP HLS row: 流畅拖动播放 and 原始VIP播放 must both work",
+    "Magnet size/HD/4K/subtitle display and long-press 调用115 must not regress",
+    "Third-party playback providers must still load on demand"
+  ],
+  "updatedAt": "2026-09-22"
+}
