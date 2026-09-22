@@ -40,6 +40,23 @@
     "taskListing": "one listOfflineTask call per page load",
     "saveDirectoryLookup": "only on explicit new-task submission when cached target is unavailable"
   },
+  "deviceEvidence": {
+    "status": "partial-device-validation",
+    "confirmed": [
+      "offline center page opens on device",
+      "existing completed tasks are listed with name/status/size",
+      "cached save directory 海阔视界 is recognized",
+      "top-level navigation buttons render"
+    ],
+    "notYetConfirmed": [
+      "filter cycling",
+      "manual refresh progress update",
+      "new task submission",
+      "completed result navigation",
+      "remove-record-keep-file behavior"
+    ],
+    "uxFinding": "The long input placeholder, raw CID/mode and info_hash strings create excessive visual noise; addressed by Test14 UI-only cleanup."
+  },
   "validationTarget": [
     "existing search and folder navigation remain unchanged",
     "existing external magnet call still follows the validated low-frequency focusMode chain",
@@ -50,6 +67,6 @@
     "completed task opens existing result page",
     "removing a task record does not delete downloaded files"
   ],
-  "status": "pending-device-validation-offline-center-phase1",
+  "status": "partial-device-validated-offline-center-render-and-list",
   "updatedAt": "2026-09-22"
 }
