@@ -11,51 +11,16 @@
     "version": "1.2.1-test.17",
     "build": 2026092237,
     "deviceValidated": true,
-    "note": "User explicitly reported Test17 as normal. Test18 starts the next planned slice: playback history and video favorites, without changing 115 network/search/offline/file-operation protocols."
+    "note": "Test17 was explicitly reported normal. Test18 attempted playback-history/video-favorite integration by runtime source-string injection into File Management."
   },
   "installer": "apps/cloud/pan115/releases/1.2.1-test.18/installer.js",
-  "delivery": {
-    "mode": "in-place-self-use-test",
-    "ruleTitle": "115.简",
-    "overwritesSameTitle": true,
-    "preservesLoginNamespace": true,
-    "createsSecondRule": false
-  },
   "scope": "playback-history-video-favorites-phase1",
-  "features": [
-    "add a compact 最近 entry to File Management",
-    "record up to 50 recently played videos when playback is initiated from File Management",
-    "allow long-pressing a video in File Management to add/remove it from local video favorites",
-    "add a dedicated 最近播放 page with 最近 and 收藏 tabs",
-    "recent/favorite records keep fileId, pickCode, display name, size and source-folder breadcrumb so playback and return-to-folder stay one tap away",
-    "history-center playback refreshes the recent timestamp and reuses the existing 115Api player.resolve contract",
-    "allow open-source-folder, remove-one-item and clear-current-list actions",
-    "all history/favorite data is local UI state; no extra 115 request is made when recording or browsing lists"
-  ],
-  "limitations": [
-    "Phase1 records playback launched from File Management and from the new history center itself",
-    "legacy Search and OfflineResult playback paths are intentionally not patched in this version because their request/result chains are established stable baselines; broader cross-entry history capture can be added later after this slice is device-validated"
-  ],
-  "safety": {
-    "stableChanged": false,
-    "searchChanged": false,
-    "offlineCenterChanged": false,
-    "accountCenterChanged": false,
-    "recycleChanged": false,
-    "fileOperationProtocolChanged": false,
-    "networkRequestsAddedForHistory": false,
-    "historyStorage": "local setItem/getItem only",
-    "playerContract": "reuse existing 115Api.player.resolve"
+  "deviceResult": {
+    "status": "failed",
+    "symptom": "Opening File Management immediately fails with JS compile error: 在属性列表的后面缺少 } (JSEngine#68).",
+    "rootCause": "The injected video-favorite longClick expression in the serialized File Management rule has an unbalanced object/property closure."
   },
-  "validationTarget": [
-    "File Management shows a compact 最近 entry",
-    "playing a video from File Management creates/updates a recent-play record",
-    "最近播放 page can replay the stored video",
-    "long-press video 收藏/取消收藏视频 works and 收藏 tab reflects it",
-    "打开所在目录 returns to the real source directory with breadcrumb preserved",
-    "clearing recent/favorites only clears local UI records and never deletes 115 files",
-    "Test17 folder favorites/recent directories, sort/filter, file operations, search, account center, offline center, recycle bin and external magnet flow do not regress"
-  ],
-  "status": "pending-device-validation-play-history-phase1",
+  "status": "failed-device-validation-file-manager-js-compile",
+  "supersededBy": "1.2.1-test.19",
   "updatedAt": "2026-09-22"
 }
