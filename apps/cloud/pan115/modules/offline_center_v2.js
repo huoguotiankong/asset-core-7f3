@@ -82,7 +82,7 @@ for(var i=0;i<all.length;i++){
  var t=all[i]||{};if(!match(t,fk))continue;shown++;
  var name=String(t.name||t.url||"离线任务"),hash=String(t.infoHash||""),s=taskStatus(t),desc=statusText(t);
  var item={title:(s==="done"?"🎬 ":(s==="failed"?"⚠ ":"📥 "))+name,desc:desc,col_type:"text_1",url:s==="done"?resultUrl(t):"toast://"+(s==="failed"?"任务失败，长按可处理":"任务尚未完成，稍后手动刷新"),extra:{longClick:[]}};
- if(hash)item.extra.longClick.push({title:"复制 info_hash",js:"copy://"+hash});
+ if(hash)item.extra.longClick.push({title:"复制 info_hash",js:$.toString(function(h){return "copy://"+String(h||"");},hash)});
  if(hash)item.extra.longClick.push({title:"移除任务记录（保留文件）",js:$.toString(function(h,n){return $("确认移除任务记录「"+n+"」？\n已下载文件不会删除").confirm(function(x){try{$.require("115Api").newClient().deleteOfflineTasks([String(x)],false);refreshPage(false);return "toast://已移除任务记录";}catch(e){return "toast://移除失败："+String(e.message||e);}},h);},hash,name)});
  if(s==="failed"&&hash&&t.url&&validLink(t.url))item.extra.longClick.push({title:"删除失败任务并重新提交",js:$.toString(function(h,u){return $("确认重新提交此任务？").confirm(function(x,link){try{var c=$.require("115Api").newClient();c.deleteOfflineTasks([String(x)],false);var dest=String(getItem("115HikerVisionCid","0")||"0");if(dest==="0")dest=String(getItem("115CloudDownloadCid","0")||"0");c.addOfflineTaskURIs([String(link)],dest);refreshPage(false);return "toast://已重新提交";}catch(e){return "toast://重新提交失败："+String(e.message||e);}},h,u);},hash,String(t.url))});
  d.push(item);
