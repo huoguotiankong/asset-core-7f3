@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.13",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.13",
+  "build": 2026092214,
+  "ruleVersion": 2026092214,
+  "basedOn": {
+    "version": "1.2.0-test.12",
+    "build": 2026092213
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.13/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "remove long right-side text from the home search input",
+    "use compact search placeholder only",
+    "remove bottom status/build/development notes",
+    "remove redundant section subtitles and item descriptions for self-use",
+    "retain Test12 route fix and all existing page/function behavior"
+  ],
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
