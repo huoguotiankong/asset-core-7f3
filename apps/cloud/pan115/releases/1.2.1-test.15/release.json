@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.15",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.15",
+  "build": 2026092235,
+  "ruleVersion": 2026092235,
+  "basedOn": {
+    "version": "1.2.1-test.14",
+    "build": 2026092234,
+    "deviceValidated": false,
+    "note": "User requested continuing the planned optimization after the compact-input cleanup; Test14 was not separately device-validated, so Test15 also accepts Test13 as an upgrade base and carries the compact UI forward."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.15/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "offline-center-phase2-status-time-single-video-direct-play",
+  "features": [
+    "keep the short 粘贴链接 input and hide technical CID/mode/hash details from normal rows",
+    "remove the redundant in-page center title so the system page title remains the only page heading",
+    "show useful task state details only: status, percent, speed, remaining time, size and compact task time when available",
+    "show total task count and page count on the save-directory row without exposing internal IDs",
+    "completed-task click performs an on-demand result check: a direct video file plays immediately; a directory with exactly one non-noise top-level video also plays immediately; multi-video/nested cases continue to the existing smart 115OfflineResult page",
+    "keep long-press technical/management actions out of the normal visual flow: open result page, copy source link, copy info_hash, remove task record while keeping files, retry failed tasks",
+    "preserve the validated external magnet low-frequency focusMode chain and the established save-directory priority"
+  ],
+  "evidence": {
+    "offlineTaskContract": "SheltonZhu/115driver OfflineTask exposes add_time, last_update, left_time, rateDownload, percentDone, file_id and wp_path_id; the existing 115Api wrapper already exposes the normalized counterparts used by current pan115 code.",
+    "existingResultContract": "115OfflineResult already scans nested results and separates primary videos from noise/extras, so Test15 only adds a conservative single-video fast path and falls back to that existing result page."
+  },
+  "safety": {
+    "stableChanged": false,
+    "searchChanged": false,
+    "fileManagerChanged": false,
+    "externalMagnetFocusModeChanged": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false,
+    "pageLoadTaskRequests": "one listOfflineTask call per page load",
+    "completedFastPathRequests": "only after explicit completed-task click; at most getFile plus one top-level getFiles request before fallback"
+  },
+  "validationTarget": [
+    "input remains compact and normal task rows do not show raw info_hash/CID/internal mode",
+    "running tasks show useful progress/speed/remaining time when 115 provides those fields",
+    "completed tasks show compact size/time information",
+    "single-video completed tasks play directly when detected",
+    "multi-video or nested results still open the existing smart result page",
+    "long-press task record removal still keeps downloaded files",
+    "search, file management, recycle bin and external magnet call remain unchanged"
+  ],
+  "status": "pending-device-validation-offline-center-phase2",
+  "updatedAt": "2026-09-22"
+}
