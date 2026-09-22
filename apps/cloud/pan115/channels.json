@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.14",
-      "build": 2026092215,
-      "ruleVersion": 2026092215,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.14/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.14/installer.js",
+      "version": "1.2.0-test.15",
+      "build": 2026092216,
+      "ruleVersion": 2026092216,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.15/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.15/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "文件管理Phase2：新增独立文件管理页、长按删除到回收站、回收站列表与还原；不改原我的文件、115Api、磁链与播放器。"
+      "desc": "文件管理Phase2认证修复：删除、回收站列表和还原统一复用已登录115Api Client，不再自行读取Cookie。"
     },
     {
       "channel": "candidate",
