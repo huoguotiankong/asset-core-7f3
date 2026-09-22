@@ -50,6 +50,8 @@
     "sort/filter, new folder, batch operations, rename/copy/move/delete remain unchanged",
     "search, account center, offline center, recycle bin and external magnet flow do not regress"
   ],
-  "status": "pending-device-validation-file-management-phase3",
+  "deviceValidated": true,
+  "deviceResult": "User explicitly reported Test17 as normal, so the File Management UX Phase3 slice is accepted as the next device-validated baseline.",
+  "status": "device-validated-file-management-phase3",
   "updatedAt": "2026-09-22"
 }
