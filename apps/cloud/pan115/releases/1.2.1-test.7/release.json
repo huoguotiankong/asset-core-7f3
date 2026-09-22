@@ -11,7 +11,7 @@
     "version": "1.2.1-test.6",
     "build": 2026092226,
     "deviceValidated": false,
-    "note": "User device confirmed Test6 still returned zero results for the known keyword ipx-641. Test5/Test6 both replaced the previously working legacy search request path, so Test7 stops guessing the request contract and restores the exact pre-Test5 115Search page from the device-local Test4/Stable installer snapshot."
+    "note": "User device confirmed Test6 still returned zero results for the known keyword ipx-641. Test7 was prepared as a fail-closed recovery of the exact pre-Test5 search page from device-local installer snapshots."
   },
   "installer": "apps/cloud/pan115/releases/1.2.1-test.7/installer.js",
   "delivery": {
@@ -23,12 +23,9 @@
   },
   "scope": "legacy-search-runtime-recovery",
   "features": [
-    "restore the exact 115Search page that existed before Test5 by reading the locally saved Test4/Test3/Test2/Test1/Stable rule snapshots on the user's device",
-    "prefer the newest pre-Test5 snapshot, normally 115_12104_file_manage_ux_test.json, which is the same runtime lineage that demonstrably returned six results for ipx-641",
-    "do not issue any new guessed /files/search request and do not reuse a getFiles transport for a different endpoint",
-    "retain the current Test6 homepage search confirmation button by only restoring the 115Search page, not the homepage or other pages",
-    "leave File Management V8, File Information, FileOps, BatchOps, FolderPicker, recycle-bin, login, magnet/offline flow and player unchanged",
-    "fail closed without overwriting the installed rule if no valid pre-Test5 local snapshot can be recovered"
+    "restore the exact 115Search page that existed before Test5 by reading locally saved Test4/Test3/Test2/Test1/Stable rule snapshots",
+    "do not issue a new guessed search request",
+    "retain the homepage search confirmation button and all current file-management modules"
   ],
   "recoverySnapshots": [
     "hiker://files/cache/115_12104_file_manage_ux_test.json",
@@ -37,6 +34,9 @@
     "hiker://files/cache/115_12101_recycle_clear_test.json",
     "hiker://files/cache/115_stable_120_rule.json"
   ],
-  "status": "pending-device-validation-search-recovery",
+  "status": "superseded-before-device-validation",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.8",
+  "supersededReason": "Further protocol inspection identified the missing distinction between OpenAPI Bearer and WebAPI Cookie transports. Test7 remains a recovery fallback, but restoring the legacy page would also restore the original folder-click empty-link defect, so Test8 supersedes it before device validation with an authentication-mode-aware search implementation.",
   "updatedAt": "2026-09-22"
 }
