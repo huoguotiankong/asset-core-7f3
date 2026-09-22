@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.12",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.12",
+  "build": 2026092232,
+  "ruleVersion": 2026092232,
+  "basedOn": {
+    "version": "1.2.1-test.11",
+    "build": 2026092231,
+    "deviceValidated": "partial",
+    "note": "User device confirms Test11 still returns six results and preserves the known-good search/UI behavior, but folder click reports that the directory ID was not captured. Review of the current File Management V8 establishes the missing field contract: normalized 115 directory objects use fileId as the directory ID together with isDirectory=true, not necessarily cid."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.12/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "legacy-search-normalized-directory-fileId-fix",
+  "features": [
+    "restore the exact pre-Test5 search source again and leave its working request contract unchanged",
+    "keep transparent capture of the already-working legacy request/client return values",
+    "fix directory identification for the actual normalized 115Api contract: isDirectory=true plus fileId means fileId is the folder ID",
+    "continue supporting raw WebAPI directory objects where fid is absent and cid is present",
+    "route the captured normalized folder fileId directly into 115FileManage without a second search request",
+    "preserve six-result search behavior, video playback and cleaned keyword summary"
+  ],
+  "evidence": {
+    "fileManagerModule": "apps/cloud/pan115/modules/file_manage_v8.js",
+    "contract": "File Management V8 reads fid=String(f.fileId), isDir=!!f.isDirectory, then uses that same fileId as cid when opening a directory. Test11 incorrectly treated fileId as a file-only fid and required a separate cid field."
+  },
+  "safety": {
+    "stableChanged": false,
+    "searchRequestChanged": false,
+    "extraSearchRequest": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false
+  },
+  "validationTarget": [
+    "ipx-641 still returns six results",
+    "ipx-641 and ipx-641-C open their corresponding directories",
+    "mp4 search results continue to play",
+    "keyword summary remains plain text"
+  ],
+  "status": "pending-device-validation-normalized-folder-fileId",
+  "updatedAt": "2026-09-22"
+}
