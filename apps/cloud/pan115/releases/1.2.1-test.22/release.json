@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.22",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.22",
+  "build": 2026092242,
+  "ruleVersion": 2026092242,
+  "basedOn": {
+    "version": "1.2.1-test.21",
+    "build": 2026092241,
+    "deviceValidated": false,
+    "note": "Test21 current-folder search and carried recent-play path have not yet received an explicit device result. Test22 leaves those pages untouched and isolates the next planned slice to offline save-target selection plus Offline Center Phase3."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.22/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "offline-target-selection-and-offline-center-phase3",
+  "features": [
+    "add an independent offline save-directory picker with root/up navigation and create-folder support",
+    "allow setting any selected 115 folder as the default offline destination, with one-tap reset to automatic selection",
+    "custom destination takes priority over the existing automatic 海阔视界 -> 云下载/离线下载 -> root fallback chain",
+    "Account Center V2 exposes the current offline destination and opens the destination picker directly",
+    "Offline Center V4 adds a compact 改目录 entry and shows whether the current target is custom or automatic",
+    "preserve Phase2 progress/speed/remaining-time/task-time display and conservative single-video direct-play behavior",
+    "surface common failure text when the normalized offline task provides one",
+    "show per-page task counts for active/completed/failed and keep manual refresh only",
+    "failed-task resubmit uses the selected custom target when configured"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "globalSearchChanged": false,
+    "fileManagerChanged": false,
+    "recentPlayChanged": false,
+    "accountLoginProtocolChanged": false,
+    "recycleChanged": false,
+    "externalMagnetFocusModeChanged": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false,
+    "syntaxGuard": "offline_target_picker_v1.js, account_center_v2.js, offline_center_v4.js and installer.js passed node --check; installer also parses all three replacement modules with new Function before saving"
+  },
+  "validationTarget": [
+    "Test21 File Management/current-folder search/recent-play behavior does not regress",
+    "离线中心 改目录 opens the folder picker and navigation works",
+    "selecting a folder changes the displayed save directory to 自定义",
+    "a newly submitted offline task uses the selected custom directory",
+    "恢复自动 returns destination behavior to the existing automatic priority chain",
+    "Account Center shows the same selected destination and can reopen the picker",
+    "completed tasks still use the Phase2 direct-play/result fallback behavior",
+    "manual refresh/filter/task-record removal/retry remain functional"
+  ],
+  "status": "pending-device-validation-offline-target-phase3",
+  "updatedAt": "2026-09-22"
+}
