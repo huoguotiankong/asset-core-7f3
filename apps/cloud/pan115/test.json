@@ -3,22 +3,16 @@
   "appId": "pan115",
   "name": "115.简",
   "channel": "test",
-  "version": "1.2.0-test.18",
-  "build": 2026092219,
-  "ruleVersion": 2026092219,
-  "baseVersion": "1.2.0-test.17",
-  "baseBuild": 2026092218,
-  "release": "apps/cloud/pan115/releases/1.2.0-test.18/release.json",
-  "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
-  "status": "promoted-to-stable",
-  "deviceValidated": true,
-  "stableChanged": true,
+  "version": "1.2.1-test.1",
+  "build": 2026092221,
+  "ruleVersion": 2026092221,
+  "baseVersion": "1.2.0",
+  "baseBuild": 2026092220,
+  "release": "apps/cloud/pan115/releases/1.2.1-test.1/release.json",
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.1/installer.js",
+  "status": "pending-device-validation-recycle-clear",
+  "stableChanged": false,
   "sameTitleImport": true,
-  "promotedTo": {
-    "version": "1.2.0",
-    "build": 2026092220,
-    "release": "apps/cloud/pan115/releases/1.2.0/release.json"
-  },
   "updatedAt": "2026-09-22",
-  "notes": "Device validation passed: normal file/folder deletion works. Test18 is frozen and promoted to Stable 1.2.0 without business-logic changes."
+  "notes": "Recycle-bin-only Test from Stable 1.2.0: adds password-protected, double-confirmed clear-all using the already validated cleanRecycleBin client method with sequential ID snapshot and bounded batches."
 }

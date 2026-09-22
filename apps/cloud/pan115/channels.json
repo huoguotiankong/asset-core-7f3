@@ -20,17 +20,17 @@
     },
     {
       "channel": "test",
-      "label": "测试版（已晋级）",
+      "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.18",
-      "build": 2026092219,
-      "ruleVersion": 2026092219,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.18/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
+      "version": "1.2.1-test.1",
+      "build": 2026092221,
+      "ruleVersion": 2026092221,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.1/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.1/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "promoted-to-stable",
-      "desc": "设备已验证普通文件/文件夹删除可用；冻结为Stable 1.2.0的晋级来源。"
+      "status": "pending-device-validation-recycle-clear",
+      "desc": "仅增强回收站：新增需要115安全密码和二次确认的清空回收站，顺序快照rid后分批永久删除；其它Stable 1.2.0能力不改。"
     },
     {
       "channel": "candidate",
