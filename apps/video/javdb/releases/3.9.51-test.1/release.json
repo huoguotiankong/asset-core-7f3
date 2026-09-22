@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.51-test.1",
+  "build": 2026092205,
+  "baseVersion": "3.9.50-test.1",
+  "baseBuild": 2026092204,
+  "entry": "apps/video/javdb/releases/3.9.51-test.1/local_entry.js",
+  "mode": "raw-vip-hls-verification-overlay",
+  "status": "pending-device-validation",
+  "changes": [
+    "Keep the fast flattened 3.9.50 runtime and page-entry path",
+    "Remove #noPre# from VIP playback results before setResult",
+    "Do not restore background cacheM3u8 warming or updateItem URL replacement",
+    "Default VIP playback is therefore the exact original HLS URL/header contract from the base runtime",
+    "Keep magnet metadata and 调用115 behavior inherited from 3.9.50"
+  ],
+  "deviceFeedbackBase": "3.9.50 page entry is fast but first playback can remain at 0 kb/s and 00:00 for a long time; seeking is unusable.",
+  "stableUnchanged": "3.9.42"
+}
