@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "stable",
+  "version": "1.2.0",
+  "build": 2026092220,
+  "ruleVersion": 2026092220,
+  "promotedFrom": {
+    "version": "1.2.0-test.18",
+    "build": 2026092219,
+    "ruleVersion": 2026092219,
+    "deviceValidated": true,
+    "note": "User confirmed normal file/folder deletion works on device; recycle list, restore and permanent delete remain the previously validated Test17 chain."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-stable",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "promote the current device-validated Test18 rule without changing business logic",
+    "keep the safe low-frequency single-worker magnet flow and root/海阔视界 destination policy",
+    "keep the compact APP-style home and corrected internal routes from the validated Test chain",
+    "keep isolated file management and recycle-bin pages",
+    "normal file/folder deletion reuses the authenticated revertRecycleBin request transport and rewrites only rb/revert to rb/delete plus rid to fid[0]",
+    "keep recycle-bin list, restore and permanent deletion behavior unchanged from the validated Test17 chain",
+    "keep login, Cookie, m115 crypto, original file browsing, share protocol, offline playback and player.resolve unchanged"
+  ],
+  "moduleSnapshot": {
+    "commit": "d54bc67b0c3b65978b268d694967292a177b9179",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v5.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v4.js"
+  },
+  "status": "device-validated",
+  "updatedAt": "2026-09-22"
+}
