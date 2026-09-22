@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.16",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.16",
+  "build": 2026092236,
+  "ruleVersion": 2026092236,
+  "basedOn": {
+    "version": "1.2.1-test.15",
+    "build": 2026092235,
+    "deviceValidated": false,
+    "note": "User asked to continue with other planned optimization areas before separately validating Test15. Test16 therefore keeps the Test15 offline center intact and starts the account/capacity/settings slice without marking Test15 as passed."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.16/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "account-capacity-settings-center-phase1",
+  "features": [
+    "add a dedicated account/settings center while preserving the original 115Account page for login, QR scan and account switching",
+    "show current login state, username/avatar/VIP information when exposed by the current 115Api client",
+    "show total/used/remaining storage and usage percentage when client.getInfo is available",
+    "provide compact direct entries to File Management, Offline Center, Recycle Bin and refresh",
+    "show the current offline save-directory name without exposing CID or internal mode on the normal page",
+    "add a separate diagnostics/advanced page for build state, cached directory IDs, UI state and safe reset actions",
+    "diagnostics explicitly exclude Cookie/SEID/KID/login credentials",
+    "carry Test15 offline_center_v3 for users upgrading directly from Test13/Test14"
+  ],
+  "evidence": {
+    "driverGetUser": "SheltonZhu/115driver GetUser returns UserInfo including user_name, face, user_id, vip and expire.",
+    "driverGetInfo": "SheltonZhu/115driver GetInfo returns space_info.all_total/all_use/all_remain plus login device info.",
+    "compatibility": "The account center reads camelCase and raw JSON-style field aliases defensively because the current 115Api wrapper normalizes several driver objects."
+  },
+  "safety": {
+    "stableChanged": false,
+    "originalAccountPageReplaced": false,
+    "loginProtocolChanged": false,
+    "searchChanged": false,
+    "fileManagerChanged": false,
+    "externalMagnetFocusModeChanged": false,
+    "backgroundPolling": false,
+    "credentialExposure": false,
+    "networkRequests": "account center makes at most one getUser and one getInfo request on explicit page load"
+  },
+  "validationTarget": [
+    "home 账号与设置 entry opens the new center, or the original account page shows a fallback center entry",
+    "existing QR/login/account-switch functions remain available through 登录与账号管理",
+    "username/login status render correctly",
+    "capacity information renders when supported by the installed 115Api",
+    "offline save directory shows a human-readable name only",
+    "diagnostics page does not expose cookies or credentials",
+    "Test15 offline center, search, file management, recycle bin and external magnet flow do not regress"
+  ],
+  "status": "pending-device-validation-account-center-phase1",
+  "updatedAt": "2026-09-22"
+}
