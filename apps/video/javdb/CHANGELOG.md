@@ -9,62 +9,88 @@
 - 云仓当前 Test 指针：`3.9.50-test.1 / Build2026092204`；该版已被当前实机证实存在 VIP 首播回归，暂不晋级。
 - VIP 专项 Hotfix：`3.9.51-test.1 / Build2026092205`，通过云口令单独验证，暂不切云仓 Test 指针。
 - 磁链菜单专项：`3.9.52-test.1 / Build2026092206` 已完成 6 项菜单收敛，但当前实机发现“光鸭”仍沿用旧复制磁链 handler。
-- 光鸭调用修复 Test：`3.9.53-test.1 / Build2026092207`，仅把“光鸭”改为标准 `光鸭云盘 / magnet / realurl` handoff；其它菜单、磁链 metadata、VIP 播放不动，等待实机验证。
+- 光鸭固定页尝试：`3.9.53-test.1 / Build2026092207`，实机提示“找不到 magnet 这个页面”，证明当前已安装光鸭规则没有固定 `magnet` page；该方案停止继续沿用。
+- 光鸭动态路由 Test：`3.9.54-test.1 / Build2026092208`，点击时读取已安装 `光鸭云盘 / 光鸭` 规则的真实 pages 并动态寻找磁力/云添加/离线入口；等待实机验证。
 - Base Runtime：`3.9.44-test.1 / Build2026082501` Local-First。
 - Product UI：`3.9.45-test.7 / Build2026082904`。
 - Shared JAV Playback Test：`1.1.0-test.1 / Build11001`，第三方播放页按需加载。
 
 ---
 
-## 2026-09-22 · 3.9.53-test.1 / Build2026092207 · 光鸭磁链调用修复
+## 2026-09-22 · 3.9.54-test.1 / Build2026092208 · 光鸭动态页面发现
 
 ### 当前实机事实
 
-用户确认 Test52 中点击长按菜单的“光鸭”后，实际行为仍是复制磁链，并没有进入光鸭云盘播放。
+用户截图确认 Test53 点击 `光鸭` 后海阔提示：
 
-根因不是菜单排序，而是 Test52 为了“保留原 handler”直接复用了基础 Runtime 的旧 `光鸭` action；该旧 action 当前实际语义就是复制磁链，因此标题虽然显示“光鸭”，行为却没有真正 handoff 到光鸭程序。
+```text
+找不到“magnet”这个页面
+```
 
-### 修复
+这说明跨小程序跳转本身已经发生，但当前设备安装的光鸭规则并没有注册 `magnet` 这个 page path。因此此前根据旧版本实现写死：
 
-Test53 继续冻结 Test52 菜单结构，只替换 `光鸭` 这一项：
+```text
+hiker://page/magnet?rule=光鸭云盘&realurl=<magnet>
+```
+
+在当前实际安装版本上无效。
+
+### Test54 修复方式
+
+不再猜固定 path。长按点击 `光鸭` 时动态执行：
+
+1. 依次读取 `request('hiker://home@光鸭云盘')`、`request('hiker://home@光鸭')`。
+2. 解析当前已安装规则真实 `home_rule` 和 `pages`。
+3. 根据 page 的 `name / path / rule` 对 `磁力 / 云添加 / 离线 / magnet / cloudAdd / add / diaoyong / fxlj` 等入口打分。
+4. 只跳转到当前规则确实存在的 page，不再写死不存在的 `magnet`。
+5. 为兼容不同光鸭版本，同时传入：`realurl / url / add / magnet / input` 五种参数名，值均为完整磁链。
+6. 跳转前尝试将磁链写入剪贴板，兼容仍从剪贴板读取链接的旧版光鸭。
+7. 如果当前规则没有任何专用云添加 page，则退回该已安装规则的定向搜索入口，而不是报“页面不存在”。
+
+### 不变边界
+
+- 长按菜单继续固定：`115 → 迅雷 → PikPak → 光鸭 → 123 → 复制磁链`。
+- 115 / 迅雷 / PikPak / 123 不改。
+- `复制磁链` 仍只由最后一项负责。
+- 磁链大小 / 高清 / 4K / 字幕 metadata 不改。
+- VIP 播放继续继承 `3.9.51-test.1`，本轮完全不碰播放链。
+- Stable `3.9.42`、Latest、云仓 Test 指针均不修改。
+
+### 发布形态
+
+- Entry：`apps/video/javdb/releases/3.9.54-test.1/local_entry.js`
+- Release：`apps/video/javdb/releases/3.9.54-test.1/release.json`
+- 云口令入口：`cloud/javdb/v3.9.54-test.1/import_guangya_dynamic.js`
+- 云口令文本：`cloud/javdb/v3.9.54-test.1/cloud_token.txt`
+
+### 实机验收
+
+1. 点击 `光鸭` 不再出现“找不到 magnet 页面”。
+2. 若当前光鸭规则含磁力/云添加/离线专页，应直接进入该真实页面。
+3. 光鸭页面应拿到完整磁链并继续云添加/播放流程。
+4. 若只能进入光鸭搜索页，说明当前安装版没有对外暴露云添加 page；届时需要读取该安装版光鸭规则源码，不能继续猜路由。
+
+---
+
+## 2026-09-22 · 3.9.53-test.1 / Build2026092207 · 光鸭固定 magnet 页尝试（实机证伪）
+
+### 当前实机事实
+
+Test52 中点击长按菜单的“光鸭”后，实际行为仍是复制磁链，并没有进入光鸭云盘播放。
+
+Test53 因此不再复用旧 handler，改为固定：
 
 ```text
 hiker://page/magnet?rule=光鸭云盘&realurl=<encodeURIComponent(magnet)>
 ```
 
-该调用协议来自此前光鸭 v2 已验证的标准磁链入口：
+但当前实机明确返回：
 
 ```text
-page = magnet
-rule = 光鸭云盘
-realurl = 完整磁力链接
+找不到“magnet”这个页面
 ```
 
-本轮明确不再复用旧“光鸭” longClick handler，也不采用“先复制磁链再打开光鸭”的兼容路径。
-
-### 不变边界
-
-- 长按顺序仍为：`115 → 迅雷 → PikPak → 光鸭 → 123 → 复制磁链`。
-- 115 / 迅雷 / PikPak / 123 保持 Test52 行为。
-- `网盘播放中心` 继续不进入长按菜单。
-- 大小 / 高清 / 4K / 字幕 metadata 不改。
-- VIP 播放继续继承 `3.9.51-test.1`，本轮不碰播放链。
-- Stable `3.9.42`、Latest、云仓 Test 指针都不修改。
-
-### 发布形态
-
-- Entry：`apps/video/javdb/releases/3.9.53-test.1/local_entry.js`
-- Release：`apps/video/javdb/releases/3.9.53-test.1/release.json`
-- 云口令入口：`cloud/javdb/v3.9.53-test.1/import_guangya.js`
-- 云口令文本：`cloud/javdb/v3.9.53-test.1/cloud_token.txt`
-
-### 实机验收
-
-1. 长按磁链仍只有 6 项，顺序不变。
-2. 点击 `光鸭` 后直接进入 `光鸭云盘` 的 magnet 页面，不再出现仅复制磁链的行为。
-3. 光鸭能收到完整磁链并继续创建任务/播放流程。
-4. `复制磁链` 仍单独保留为最后一项，且只该项负责复制。
-5. 其它 4 个云盘入口和磁链 metadata 无回归。
+结论：旧版本曾使用过的 `magnet` page 不能代表当前安装的光鸭规则。后续禁止继续写死该 path，改由 Test54 动态读取当前规则 pages。
 
 ---
 
@@ -96,7 +122,6 @@ realurl = 完整磁力链接
 
 - 菜单收敛方向保留。
 - 当前实机发现 `光鸭` 的旧 handler 实际只是复制磁链，因此“保留旧 handler”的假设已证伪。
-- Test53 起仅针对光鸭改用标准 `hiker://page/magnet?rule=光鸭云盘&realurl=...` handoff。
 
 ### 发布形态
 
@@ -200,14 +225,15 @@ realurl = 完整磁力链接
 - 标题/对象 metadata 用于识别 HD/4K/字幕。
 - 磁链长按固定 6 项顺序：`115 → 迅雷 → PikPak → 光鸭 → 123 → 复制磁链`。
 - `115` 路由到 `115.简 / 115Offline?add=<magnet>`。
-- `光鸭` 必须显式使用 `hiker://page/magnet?rule=光鸭云盘&realurl=<encoded magnet>`；禁止再复用旧 copy handler。
+- `光鸭` 不允许再写死旧版 `magnet` page；当前策略是运行时读取已安装光鸭规则 pages 后动态选择真实磁力/云添加入口。
 - `网盘播放中心` 不再进入磁链长按菜单；如未来仍需该页面，只保留独立页面入口，不抢长按主流程。
 
 ### 恢复与回退
 
 - 正式恢复入口：Stable `3.9.42 / Build2026082301`。
-- 光鸭调用专项：`3.9.53-test.1 / Build2026092207`，基于 Test52，只修光鸭磁链 handoff，等待实机验证。
-- 磁链菜单专项：`3.9.52-test.1 / Build2026092206`，菜单收敛有效但光鸭 handler 已证伪，不作为最终菜单基线。
+- 光鸭动态调用专项：`3.9.54-test.1 / Build2026092208`，基于 Test52，只改光鸭路由发现，等待实机验证。
+- Test53：固定 `magnet` page 已被当前实机证伪，不作为调用基线。
+- Test52：菜单收敛有效但光鸭旧 handler 已证伪，不作为最终菜单基线。
 - VIP 专项：`3.9.51-test.1 / Build2026092205`，只验证原始 VIP HLS，不晋级 Stable。
 - Test50：播放页快但首播可 `0 kb/s / 00:00`，不作为恢复基线。
 - Test49：播放页快但自动换本地索引后 Seek 可长期卡死，不作为恢复基线。
