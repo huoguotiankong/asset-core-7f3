@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.5",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.5",
+  "build": 2026092225,
+  "ruleVersion": 2026092225,
+  "basedOn": {
+    "version": "1.2.1-test.4",
+    "build": 2026092224,
+    "deviceValidated": false,
+    "note": "User screenshots exposed a concrete search regression: results are returned, but tapping search-result folders produces an empty-link rule error; Test4 file-manager UX has not yet been explicitly device-approved."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.5/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "cloud-search-rewrite",
+  "features": [
+    "replace the legacy 115Search page with a dedicated search module instead of leaving result URLs to the old rule",
+    "fix folder search results by routing the real folder ID into the enhanced 115FileManage page",
+    "make video search results play through the existing player.resolve contract and route other files to File Information",
+    "remove literal HTML markup from the keyword summary and use plain native text",
+    "add server-side search category filters for folder/video/image/audio/document/archive and sort cycling for name/time/size",
+    "support pagination with duplicate-page termination protection",
+    "prefer an existing filesSearch client method when present; otherwise capture the already-authenticated getFiles GET transport and safely retarget it to webapi /files/search",
+    "keep login, Cookie/m115, magnet/offline flow, player, recycle-bin operations, BatchOps and FileOps contracts unchanged"
+  ],
+  "moduleSnapshot": {
+    "commit": "6e2572d6bc025fd73b5c9b43f7539ed04be798ae",
+    "search": "apps/cloud/pan115/modules/search_v1.js",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v8.js",
+    "fileInfo": "apps/cloud/pan115/modules/file_info_v1.js",
+    "fileOps": "apps/cloud/pan115/modules/file_ops_v1.js",
+    "batchOps": "apps/cloud/pan115/modules/batch_ops_v1.js",
+    "fileBatch": "apps/cloud/pan115/modules/file_batch_v2.js",
+    "folderPicker": "apps/cloud/pan115/modules/folder_picker_v2.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
