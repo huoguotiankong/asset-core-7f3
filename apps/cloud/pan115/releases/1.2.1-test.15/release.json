@@ -54,6 +54,9 @@
     "long-press task record removal still keeps downloaded files",
     "search, file management, recycle bin and external magnet call remain unchanged"
   ],
-  "status": "pending-device-validation-offline-center-phase2",
+  "status": "pending-device-validation-superseded",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.16",
+  "supersededReason": "User chose to continue with the next planned optimization area before separately validating Test15; Test16 carries the Test15 offline center forward unchanged.",
   "updatedAt": "2026-09-22"
 }
