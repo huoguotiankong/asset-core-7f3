@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.19",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.19",
+  "build": 2026092239,
+  "ruleVersion": 2026092239,
+  "basedOn": {
+    "version": "1.2.1-test.18",
+    "build": 2026092238,
+    "deviceValidated": false,
+    "note": "User device immediately exposed a JavaScript compile error when opening File Management after Test18. Test19 is an emergency rollback of File Management to the device-validated Test17 V9 module while preserving the standalone playback-history page for later re-integration."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.19/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test-hotfix",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "file-manager-js-compile-hotfix",
+  "rootCause": "Test18 injected the video-favorite longClick hook into the serialized File Management rule with an unbalanced property/object closure, producing the device error '在属性列表的后面缺少 }'.",
+  "fix": [
+    "restore 115FileManage exactly to the known-good Test17 file_manage_v9.js snapshot",
+    "keep the standalone 115PlayHistory page module installed but do not patch playback/favorite hooks into File Management in this hotfix",
+    "accept both broken Test18 and known-good Test17 as direct upgrade bases",
+    "do not touch search, offline center, account center, recycle bin, login, magnet focusMode or file-operation protocols"
+  ],
+  "tradeoff": "Recent-play automatic capture and long-press video favorite entry from File Management are temporarily disabled until they are reintroduced as a fully materialized module rather than runtime source-string injection.",
+  "status": "pending-device-validation-hotfix",
+  "updatedAt": "2026-09-22"
+}
