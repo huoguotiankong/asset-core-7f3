@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.5",
-      "build": 2026092225,
-      "ruleVersion": 2026092225,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.5/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.5/installer.js",
+      "version": "1.2.1-test.6",
+      "build": 2026092226,
+      "ruleVersion": 2026092226,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.6/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.6/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-search",
-      "desc": "针对实机搜索结果页专项修复：重写115Search，文件夹结果使用真实目录ID进入增强文件管理，视频结果直接播放，普通文件进入信息页，同时修复关键词HTML裸显并补齐类型筛选、排序和安全分页。"
+      "status": "pending-device-validation-search-hotfix",
+      "desc": "修复Test5搜索结果变0的问题：WebAPI搜索改回兼容aid=1并直接复用已登录getFiles传输；保留真实目录ID直达文件管理、视频直放、筛选/排序/分页，同时恢复首页搜索框右侧确认按钮。"
     },
     {
       "channel": "candidate",
