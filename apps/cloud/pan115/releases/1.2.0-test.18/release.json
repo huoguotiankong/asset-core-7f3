@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.18",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.18",
+  "build": 2026092219,
+  "ruleVersion": 2026092219,
+  "basedOn": {"version":"1.2.0-test.17","build":2026092218},
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "fix normal file/folder deletion without guessing client.request signature",
+    "reuse the already device-validated revertRecycleBin authenticated transport by capturing its request argument shape locally",
+    "rewrite only rb/revert to rb/delete and rid parameters to fid[0] before dispatching through the original request function",
+    "preserve current authenticated client context, cookies, headers and request argument ordering",
+    "keep Test17 recycle list, restore and validated permanent deletion unchanged",
+    "do not modify login, offline magnet chain, original file browsing or player"
+  ],
+  "moduleSnapshot": {
+    "commit": "d54bc67b0c3b65978b268d694967292a177b9179",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v5.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v4.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
