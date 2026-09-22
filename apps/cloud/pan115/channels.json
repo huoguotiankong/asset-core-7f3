@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.4",
-      "build": 2026092224,
-      "ruleVersion": 2026092224,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.4/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.4/installer.js",
+      "version": "1.2.1-test.5",
+      "build": 2026092225,
+      "ruleVersion": 2026092225,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.5/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.5/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-file-manager-ux",
-      "desc": "在现有文件管理能力上继续优化交互：根目录/上一级/面包屑导航、名称/时间/大小排序、类型筛选、文件信息页、批量操作返回目录保持，以及带最近目标和目录内新建的新版目标文件夹选择器。"
+      "status": "pending-device-validation-search",
+      "desc": "针对实机搜索结果页专项修复：重写115Search，文件夹结果使用真实目录ID进入增强文件管理，视频结果直接播放，普通文件进入信息页，同时修复关键词HTML裸显并补齐类型筛选、排序和安全分页。"
     },
     {
       "channel": "candidate",
