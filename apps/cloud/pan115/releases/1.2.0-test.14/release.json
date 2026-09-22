@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.14",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.14",
+  "build": 2026092215,
+  "ruleVersion": 2026092215,
+  "basedOn": {
+    "version": "1.2.0-test.13",
+    "build": 2026092214
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.14/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "add isolated 115FileManage page based on existing 115Api getFiles client",
+    "add long-press delete-to-recycle-bin with confirmation",
+    "add isolated 115Recycle page using webapi.115.com/rb cookie-mode endpoint",
+    "add click-to-restore from recycle bin using webapi.115.com/rb/revert",
+    "add home shortcuts for file management and recycle bin",
+    "do not change Stable login, 115Api, original My Files page, offline magnet chain or player",
+    "no permanent delete or recycle-bin clear in this phase"
+  ],
+  "moduleSnapshot": {
+    "commit": "0f05fc037ea8920807e61b981e742c8d009740a9",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v1.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v1.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
