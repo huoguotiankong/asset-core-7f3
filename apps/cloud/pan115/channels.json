@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.7",
-      "build": 2026092227,
-      "ruleVersion": 2026092227,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.7/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.7/installer.js",
+      "version": "1.2.1-test.8",
+      "build": 2026092228,
+      "ruleVersion": 2026092228,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.8/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.8/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-search-recovery",
-      "desc": "Test5/Test6连续实机0结果后停止猜搜索接口：从手机中Test4/Stable安装器留下的本地规则快照恢复Test5之前真实可返回结果的115Search页面；保留首页右侧搜索按钮及现有文件管理、批量、回收站、磁链播放能力。"
+      "status": "pending-device-validation-search-dual-auth",
+      "desc": "搜索专项：先识别当前115Api实际使用OpenAPI Bearer还是WebAPI Cookie认证，再分别调用/open/ufile/search或/files/search；按对应返回字段解析真实文件夹ID/父目录ID，保留首页右侧搜索按钮及现有文件管理、批量、回收站、磁链播放能力。"
     },
     {
       "channel": "candidate",
