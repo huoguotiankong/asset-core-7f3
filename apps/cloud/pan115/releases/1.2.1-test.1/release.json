@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.1",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.1",
+  "build": 2026092221,
+  "ruleVersion": 2026092221,
+  "basedOn": {
+    "version": "1.2.0",
+    "build": 2026092220,
+    "deviceValidated": true
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.1/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "recycle-bin-only",
+  "features": [
+    "add a top-level clear recycle bin action to 115Recycle",
+    "require the existing 115 security password before destructive execution",
+    "show a second irreversible confirmation before any deletion starts",
+    "snapshot recycle-bin item IDs sequentially before deleting so pagination is not shifted during deletion",
+    "reuse the already device-validated cleanRecycleBin(password, ids) client method",
+    "delete in bounded sequential batches and report partial progress if a later batch fails",
+    "keep per-item restore and permanent delete behavior unchanged",
+    "do not modify login, file management delete-to-recycle, magnet/offline flow, original file browsing or player"
+  ],
+  "moduleSnapshot": {
+    "commit": "976eb266c5bb55bba43b6676eb379cf50655ae0c",
+    "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
