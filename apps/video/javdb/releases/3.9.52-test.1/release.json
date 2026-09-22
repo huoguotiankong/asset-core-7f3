@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.52-test.1",
+  "build": 2026092206,
+  "baseVersion": "3.9.51-test.1",
+  "baseBuild": 2026092205,
+  "entry": "apps/video/javdb/releases/3.9.52-test.1/local_entry.js",
+  "mode": "magnet-longpress-menu-cleanup-overlay",
+  "status": "pending-device-validation",
+  "changes": [
+    "Only adjusts the magnet long-press menu; VIP playback remains inherited from 3.9.51-test.1",
+    "Keeps and orders: 115, 迅雷, PikPak, 光鸭, 123, 复制磁链",
+    "Removes 网盘播放中心 and any other unspecified long-press items",
+    "Preserves existing handlers for 迅雷/PikPak/光鸭/123 instead of rewriting their routes",
+    "Adds direct 115 and 复制磁链 fallbacks when the base menu does not provide them"
+  ],
+  "stableUnchanged": "3.9.42"
+}
