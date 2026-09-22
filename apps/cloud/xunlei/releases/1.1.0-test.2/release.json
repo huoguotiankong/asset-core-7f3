@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "xunlei",
+  "channel": "test-experimental",
+  "version": "1.1.0-test.2",
+  "build": 11002,
+  "baseVersion": "1.1.0-test.1",
+  "baseBuild": 11001,
+  "installer": "cloud/xunlei/v1.1.0-test.2/import_magnet_reliability.js",
+  "mode": "installed-rule-overlay",
+  "status": "pending-device-validation",
+  "deviceFeedback": "Test1 can list magnet files, but clicking a video returns 文件(夹)不存在，请检查确认.",
+  "changes": [
+    "Stop accepting create-response ids or reference_resource.id as playable file ids",
+    "Only accept offline task.file_id after the file has actually landed in drive storage",
+    "Poll task.file_id with short backoff instead of fixed 1s sleep",
+    "Retry PLAY detail on temporary 文件(夹)不存在 consistency errors instead of failing immediately",
+    "Call activity(false) before cloud-add to preserve original entitlement refresh semantics while retaining Test1 TTL cache",
+    "Keep the Test1 fast diaoyong page and deferred temp cleanup"
+  ],
+  "stableUnchanged": true
+}
