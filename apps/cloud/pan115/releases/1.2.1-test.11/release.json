@@ -11,7 +11,7 @@
     "version": "1.2.1-test.10",
     "build": 2026092230,
     "deviceValidated": "partial",
-    "note": "Test10 kept the recovered search request chain intact: ipx-641 still returns six results, video playback remains normal and the keyword HTML display is fixed. Device testing shows the only remaining failure is directory navigation: the post-render lookup still cannot reconstruct a real directory cid."
+    "note": "Test10 kept the recovered search request chain intact: ipx-641 still returns six results, video playback remains normal and the keyword HTML display is fixed."
   },
   "installer": "apps/cloud/pan115/releases/1.2.1-test.11/installer.js",
   "delivery": {
@@ -22,30 +22,15 @@
     "createsSecondRule": false
   },
   "scope": "legacy-search-raw-response-directory-id-capture",
-  "features": [
-    "restore the exact known-good pre-Test5 search page again, so no Test10 lazy lookup code is stacked on top of it",
-    "instrument only the existing legacy search execution path: capture the return values of its own request/fetch calls without changing their URL, parameters, authentication or timing",
-    "wrap the 115Api client methods actually referenced by the legacy source, plus common search/getFiles methods, and capture their unchanged return values",
-    "at final setResult rendering, recursively inspect the already-returned raw search payload and card metadata for the matching folder name and real cid",
-    "when a cid is captured, route that exact directory directly into enhanced 115FileManage",
-    "keep the proven six-result search behavior and video URLs unchanged",
-    "keep the Test10 keyword HTML cleanup",
-    "do not perform a second synthesized /files/search request when a folder is tapped"
-  ],
-  "safety": {
-    "stableChanged": false,
-    "searchRequestChanged": false,
-    "extraSearchRequest": false,
-    "backgroundPolling": false,
-    "concurrent115Requests": false,
-    "captureMode": "transparent return-value observation of the already-working legacy request"
+  "result": {
+    "searchResults": "device-validated",
+    "videoPlayback": "device-validated-from-Test9-lineage",
+    "keywordSummary": "device-validated-clean",
+    "folderNavigation": "failed-device-validation-folder-id-not-captured",
+    "deviceToast": "目录ID仍未捕获：ipx-641。请截图此提示"
   },
-  "validationTarget": [
-    "ipx-641 still returns six results",
-    "ipx-641 and ipx-641-C folder cards now open their real directories",
-    "mp4 results still play normally",
-    "keyword summary remains free of literal HTML tags"
-  ],
-  "status": "pending-device-validation-raw-cid-capture",
+  "failureCause": "The capture walker assumed fileId/file_id represented only a file fid and required a separate cid to navigate folders. Current File Management V8 proves the normalized 115Api model uses fileId as the ID for both files and directories, distinguished by isDirectory. Therefore a normalized folder can legitimately be {fileId, isDirectory:true} with no cid.",
+  "status": "failed-device-validation-folder-id-not-captured",
+  "supersededBy": "1.2.1-test.12",
   "updatedAt": "2026-09-22"
 }
