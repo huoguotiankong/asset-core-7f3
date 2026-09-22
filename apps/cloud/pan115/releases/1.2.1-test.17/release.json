@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.17",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.17",
+  "build": 2026092237,
+  "ruleVersion": 2026092237,
+  "basedOn": {
+    "version": "1.2.1-test.16",
+    "build": 2026092236,
+    "deviceValidated": true,
+    "note": "User explicitly reported Test16 as normal. Test17 therefore continues from the account/capacity/settings baseline and changes only file-management UX."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.17/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "file-management-ux-phase3-shortcuts-recent-favorites-density",
+  "features": [
+    "add a compact 常用 entry in File Management instead of putting recent/favorite folders directly into the main list",
+    "automatically remember up to 12 recently opened folders without extra network requests",
+    "allow long-pressing a folder to add/remove it from 收藏目录",
+    "add a dedicated 常用目录 page with 收藏目录 and 最近访问 plus root and clear-recent controls",
+    "reuse stored breadcrumb trail so shortcuts reopen the real directory with normal Root/Up navigation",
+    "keep existing name/time/size sorting and type-filter state persistence",
+    "use lightweight resource-type icons for video/image/audio/document/archive/other rows while keeping the existing click and long-press management contracts",
+    "shorten a few prompts and labels to reduce information density"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "searchChanged": false,
+    "accountCenterChanged": false,
+    "offlineCenterChanged": false,
+    "recycleChanged": false,
+    "fileOperationProtocolChanged": false,
+    "networkRequestsAdded": false,
+    "recentFavoritesStorage": "local UI state only"
+  },
+  "validationTarget": [
+    "entering folders records recent directories and 常用 page can reopen them",
+    "long-press folder 收藏目录 / 取消收藏 works",
+    "clearing recent access does not delete files or favorite folders",
+    "Root/Up breadcrumb navigation remains correct after opening from shortcuts",
+    "sort/filter, new folder, batch operations, rename/copy/move/delete remain unchanged",
+    "search, account center, offline center, recycle bin and external magnet flow do not regress"
+  ],
+  "status": "pending-device-validation-file-management-phase3",
+  "updatedAt": "2026-09-22"
+}
