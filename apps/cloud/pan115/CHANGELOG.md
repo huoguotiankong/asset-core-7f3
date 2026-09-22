@@ -1,146 +1,89 @@
 # 115.简 / Pan115 开发记录
 
-状态：**Stable 1.2.0 / Build 2026092220 / 已实机验证；Test 1.2.1-test.8 / Build 2026092228 / 待实机验证**  
+状态：**Stable 1.2.0 / Build 2026092220 / 已实机验证；Test 1.2.1-test.9 / Build 2026092229 / 待实机验证**  
 首次纳入：2026-09-21  
 最近更新：2026-09-22
 
-## 1.2.1-test.8 / Build 2026092228 — 搜索认证模式识别修复
+## 1.2.1-test.9 / Build 2026092229 — 恢复 Test5 前原始搜索运行链
 
-### 新确认的根因
+### Test8 实机结论
 
-用户用同一已知关键词 `ipx-641` 连续验证：旧搜索可返回约 6 条，Test5/Test6 均退化为 0 条。继续核对当前 115Api 的文件列表能力、115 WebAPI 实现和 115 开放平台接口后，确认此前漏掉了一个关键边界：**当前 Client 的 `getFiles()` 可能运行在两套不同认证体系之一**。
-
-```text
-OpenAPI 模式
-proapi.115.com/open/ufile/files
-Authorization: Bearer access_token
-
-WebAPI 模式
-webapi.115.com/files
-Cookie 登录态
-```
-
-Test5/Test6 虽然捕获了 `getFiles()` 的认证传输，但无论捕获到哪种模式，都把业务地址强行改成 `webapi.115.com/files/search`。因此“认证存在”并不等于“认证可以跨体系复用”。如果当前设备 Client 实际走 OpenAPI Bearer，把它改到 WebAPI 搜索端点就可能得到合法但为空的响应。这与实机连续 0 结果现象一致。
-
-### Test8 搜索链
-
-`search_v3.js` 不再预设搜索认证模式，而是先真实调用一次被拦截的 `client.getFiles()`，只读取它实际使用的请求结构并判断模式：
+用户在 14:34 实机再次搜索已知关键词 `ipx-641`：
 
 ```text
-捕获 getFiles()
-├─ /open/ufile/files → OpenAPI Bearer
-│   └─ GET /open/ufile/search
-└─ /files            → WebAPI Cookie
-    └─ GET /files/search
+共 0 条结果
+搜索通道：115 WebAPI
+搜索通道：115 WebAPI /files/search
 ```
 
-#### OpenAPI
+这条结果很关键：Test8 的认证模式识别已经正确确认当前设备实际走 **115 WebAPI**，但我们重构出来的 `/files/search` 请求仍然返回合法的 0 条。因此问题已经不能再归因于 OpenAPI/WebAPI 混用；真正差异仍在 **Test5 之前原版 `115Search` 的实际请求合同/关键词处理/请求结构**。看到合法空数组不代表请求与原版一致。
 
-使用：
+状态：Test8 = `failed-device-validation-search-zero-results`，不再继续在它上面猜 `aid/type/cid` 等参数。
+
+### Test9 处理原则
+
+Test9 不再重写搜索 API，也不再把 `getFiles()` 的 request 模板改造成另一个端点。安装器直接从手机已经保存的 Test4/Test3/Test2/Test1/Stable 规则缓存中，提取 **Test5 之前的完整 `115Search` 页面源码**，原样恢复到当前规则：
 
 ```text
-https://proapi.115.com/open/ufile/search
+当前 Test8
+→ 读取手机本地旧规则快照
+→ 找到 version < 2026092225 的 115Search
+→ 原样替换当前 115Search
+→ 其它页面全部保持 Test8 当前状态
 ```
 
-核心参数：
+恢复候选按新到旧：
 
-- `search_value`
-- `limit`
-- `offset`
-- `fc=1`：只看文件夹
-- `fc=2`：只看文件
-- `type=1/2/3/4/5`：文档 / 图片 / 音频 / 视频 / 压缩包
+1. `115_12104_file_manage_ux_test.json`
+2. `115_12103_file_manage_test.json`
+3. `115_12102_batch_manage_test.json`
+4. `115_12101_recycle_clear_test.json`
+5. `115_stable_120_rule.json`
 
-返回字段按开放平台合同读取：
+这条搜索运行链就是用户此前实机能让 `ipx-641` 返回约 6 条结果的同一 lineage。若手机缓存已经被清理，安装器会直接停止，不覆盖当前规则，避免再生成一个不可验证的新搜索实现。
 
-- `file_id`
-- `parent_id`
-- `file_name`
-- `file_size`
-- `pick_code`
-- `user_utime`
-- `file_category`：`0=文件夹`、`1=文件`
+### 保留项
 
-#### WebAPI
-
-使用：
-
-```text
-https://webapi.115.com/files/search
-```
-
-恢复成熟 WebAPI 搜索参数：
-
-- `aid=7`
-- `cid=0`
-- `format=json`
-- `search_value`
-- `offset / limit`
-- `count_folders=1`
-- `o / asc`
-- `type=1/2/3/4/5/6`：文件夹 / 文档 / 图片 / 视频 / 音频 / 压缩包
-
-返回字段继续兼容 `fid / cid / n / s / pc / fc / t`。
-
-### 结果行为
-
-- 文件夹：真实目录 ID → `115FileManage`，不返回空 URL；
-- 视频：继续使用现有 `player.resolve()`；
-- 其它文件：进入 `115FileInfo`；
-- 搜索页保留全部 / 文件夹 / 视频 / 图片 / 音频 / 文档 / 压缩包筛选；
-- WebAPI 排序由服务器完成，OpenAPI 排序在当前页结果上本地完成；
 - 首页搜索框右侧确认按钮继续保留；
-- 不修改登录、磁链、离线、播放器、文件管理、批量操作和回收站协议；
-- 不增加后台轮询或并发搜索。
+- 当前 File Management V8 / File Information / FileOps / BatchOps / FolderPicker 全部保留；
+- 清空回收站、普通删除、批量删除/复制/移动保留；
+- 登录、Cookie/m115、磁链离线、播放器全部不动；
+- Test8 实验搜索页仅备份为隐藏 `115SearchModernDebug`，不再作为正常搜索入口。
 
-如果仍为 0 条，页面会明确显示当前识别到的搜索通道（`115开放平台 /open/ufile/search` 或 `115 WebAPI /files/search`），下一轮可以直接按真实运行模式继续定位，不再盲猜。
+### 当前已知边界
 
-### Test8 实机验收
+Test9 首要目标是 **先把“能搜到”恢复**。旧搜索页此前已经确认存在“搜索结果里的文件夹点击空链接”的老问题，因此这版不把它虚构为已经修好。只要 `ipx-641` 恢复约 6 条结果，下一步必须在 **不动已恢复请求链** 的前提下，只修改结果渲染/目录跳转，把真实目录 ID 接入 `115FileManage`。
 
-1. 使用已知关键词 `ipx-641`，应恢复旧版约 6 条结果；
-2. 点击 `ipx-641`、`ipx-641-C` 两个目录，应直接打开而不是“链接为空”；
-3. 点击 `ipx-641-3.mp4` 等视频，应继续走现有 115 播放链；
-4. 验证“文件夹 / 视频”至少两个类型筛选；
-5. 切换一次名称或时间排序；
-6. 首页搜索框右侧搜索按钮仍显示并可用；
-7. 回归确认文件管理、新建/重命名、批量删除/复制/移动、清空回收站、磁链离线、登录均未受影响。
+当前状态：`pending-device-validation-search-recovery`。
 
-模块：`apps/cloud/pan115/modules/search_v3.js`  
-模块快照：`9383dad6bf441d3c15360e57ef5b16e5e17c4cfc`  
-安装器：`apps/cloud/pan115/releases/1.2.1-test.8/installer.js`
+## 1.2.1-test.8 / Build 2026092228 — 双认证搜索尝试（实机失败）
 
-当前状态：`pending-device-validation-search-dual-auth`。
+Test8 先从 `client.getFiles()` 判断当前实际认证模式：
+
+```text
+/open/ufile/files → OpenAPI Bearer → /open/ufile/search
+/files            → WebAPI Cookie  → /files/search
+```
+
+并分别处理两套字段和类型映射。用户实机页面明确显示当前为 `115 WebAPI /files/search`，但 `ipx-641` 仍为 0 条，说明模式识别正确但合成的 WebAPI 搜索请求仍与原版工作链不一致。
+
+状态：`failed-device-validation-search-zero-results`，`supersededBy=1.2.1-test.9`。
 
 ## 1.2.1-test.7 / Build 2026092227 — 旧搜索恢复兜底（未实机验证即被 Test8 取代）
 
-### 当前实机结论
-
-用户用同一个已知关键词 `ipx-641` 连续验证：
-
-- Test4 及更早的旧搜索页：可返回约 **6 条结果**；
-- Test5：改写搜索请求后变成 **0 条**；
-- Test6：把 `aid=7` 改成 `aid=1`，并继续把 `getFiles()` 的认证传输改写到 `/files/search`，实机仍然是 **0 条**。
-
-Test7 原计划停止猜请求合同，直接从手机旧安装缓存恢复 Test5 之前的 `115Search`。这仍然保留为应急恢复思路，但会同时恢复旧搜索页“目录点击空链接”的已知缺陷。Test8 找到 OpenAPI/WebAPI 认证模式差异后，以协议正确的双模式搜索替代 Test7，因此 Test7 未进入实机验收。
-
-状态：`superseded-before-device-validation`，`supersededBy=1.2.1-test.8`。
+Test7 首次提出停止猜请求合同，直接从手机旧安装缓存恢复 Test5 之前的 `115Search`。当时未实机验证即被 Test8 取代。Test9 在 Test8 再次失败后正式回到这条恢复路线，并允许从 Test8 直接覆盖。
 
 ## 1.2.1-test.6 / Build 2026092226 — 搜索 aid/transport 热修（实机失败）
 
-Test5 后尝试：
+- `/files/search` 尝试 `aid=1`；
+- 捕获当前 `getFiles()` 已认证 request 结构再改写搜索；
+- 恢复首页输入框右侧确认按钮。
 
-- `/files/search` 参数从 `aid=7` 改回 `aid=1`；
-- 不再优先调用签名不确定的 `filesSearch()`；
-- 捕获当前 `getFiles()` 的已认证 request 结构，再将 URL/参数替换成搜索请求；
-- 同时恢复首页输入框右侧确认按钮。
-
-用户实机确认 `ipx-641` 仍为 0 条。后续进一步确认真正问题不只是 `aid`，而是 **OpenAPI Bearer 与 WebAPI Cookie 两套认证/端点体系不能混用**。
-
-状态：`failed-device-validation-search-zero-results`。
+用户实机确认 `ipx-641` 仍为 0 条。状态：`failed-device-validation-search-zero-results`。
 
 ## 1.2.1-test.5 / Build 2026092225 — 搜索页重构（实机失败）
 
-目标是解决旧搜索页“目录点击空链接”和 HTML 裸显，并加入筛选/排序/分页。新页面能正常渲染，但同一 `ipx-641` 从旧页的约 6 条结果退化为 0 条。
+目标是解决旧搜索页“目录点击空链接”和 HTML 裸显，并加入筛选/排序/分页。新页面能正常渲染，但同一 `ipx-641` 从旧页约 6 条结果退化为 0 条。
 
 状态：`failed-device-validation-search-zero-results`。
 
@@ -155,7 +98,7 @@ Test5 后尝试：
 - 批量管理保持源目录上下文；
 - 目标目录选择器加入导航、当前目录新建、最近目标。
 
-Test4 本身没有收到整版明确实机通过结论。
+Test4 本身没有收到整版明确实机通过结论，但其 `115Search` 仍属于 Test5 之前、用户已证明能搜到 `ipx-641` 的旧搜索 lineage。
 
 ## 1.2.1-test.3 / Build 2026092223 — 新建 / 重命名 / 单项复制移动
 
@@ -233,12 +176,14 @@ function playBy115(url) {
 - 历史高并发轮询；
 - 普通删除猜 `client.request()` 参数顺序；
 - Test5 的单一路径搜索推断链；
-- Test6 的“无视当前认证模式，捕获 `getFiles()` 后统一改成 WebAPI `/files/search`”方案；
+- Test6 的“捕获 `getFiles()` 后统一改成 WebAPI `/files/search`”方案；
 - 仅修改 `aid=7/1` 就假定搜索合同正确；
 - 把 OpenAPI Bearer 请求直接改到 WebAPI Cookie 端点，或反向混用；
+- Test8 的“识别认证模式后即可合成等价搜索请求”假设；
 - 看到合法空数组就把请求判定为正确；
-- 未经实机验证就把 Test3～Test8 标记为 deviceValidated。
+- 在恢复旧搜索请求链前继续叠加新的筛选/排序协议；
+- 未经实机验证就把 Test3～Test9 标记为 deviceValidated。
 
 ## 当前恢复/开发边界
 
-Stable 1.2.0 不动。Test1 清空回收站、Test2 批量删除/复制/移动已实机通过。当前 Test8 只针对搜索认证模式和结果跳转修复；搜索实机闭环前不继续扩大搜索协议改动。若 `ipx-641` 仍为 0 条，必须以页面显示的真实搜索通道继续定位，不再盲改 `aid` 或跨认证体系复用请求。
+Stable 1.2.0 不动。Test1 清空回收站、Test2 批量删除/复制/移动已实机通过。当前 Test9 只恢复 Test5 前已经能工作的搜索运行链；先确认 `ipx-641` 恢复结果。恢复后下一步只修搜索结果的文件夹跳转/显示，不改搜索请求本身，然后再继续文件管理优化。
