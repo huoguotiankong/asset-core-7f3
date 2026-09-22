@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.16",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.16",
+  "build": 2026092217,
+  "ruleVersion": 2026092217,
+  "basedOn": {
+    "version": "1.2.0-test.15",
+    "build": 2026092216
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.16/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "keep the validated recycle-bin list and restore path from Test15 unchanged",
+    "add recycle-bin long-press permanent delete with explicit irreversible confirmation",
+    "probe cleanRecycleBin/deleteRecycleBin/removeRecycleBin/recyclebinClean and OpenAPI request fallback",
+    "expand file delete-to-recycle-bin probing to delete/deleteFiles/deleteFile/removeFiles/removeFile/trashFiles/trashFile/fsDelete",
+    "fall back to the authenticated client request path POST /open/ufile/delete when available",
+    "when no delete path exists, report related client method names instead of misreporting login failure",
+    "keep Stable 1.1.0 and existing login/offline/player modules unchanged"
+  ],
+  "moduleSnapshot": {
+    "commit": "36e6b89963356ff7c08920a48b34d7fe9e5f82c9",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v3.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v3.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
