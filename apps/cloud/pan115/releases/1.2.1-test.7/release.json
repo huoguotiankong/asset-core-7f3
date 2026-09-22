@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.7",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.7",
+  "build": 2026092227,
+  "ruleVersion": 2026092227,
+  "basedOn": {
+    "version": "1.2.1-test.6",
+    "build": 2026092226,
+    "deviceValidated": false,
+    "note": "User device confirmed Test6 still returned zero results for the known keyword ipx-641. Test5/Test6 both replaced the previously working legacy search request path, so Test7 stops guessing the request contract and restores the exact pre-Test5 115Search page from the device-local Test4/Stable installer snapshot."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.7/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "legacy-search-runtime-recovery",
+  "features": [
+    "restore the exact 115Search page that existed before Test5 by reading the locally saved Test4/Test3/Test2/Test1/Stable rule snapshots on the user's device",
+    "prefer the newest pre-Test5 snapshot, normally 115_12104_file_manage_ux_test.json, which is the same runtime lineage that demonstrably returned six results for ipx-641",
+    "do not issue any new guessed /files/search request and do not reuse a getFiles transport for a different endpoint",
+    "retain the current Test6 homepage search confirmation button by only restoring the 115Search page, not the homepage or other pages",
+    "leave File Management V8, File Information, FileOps, BatchOps, FolderPicker, recycle-bin, login, magnet/offline flow and player unchanged",
+    "fail closed without overwriting the installed rule if no valid pre-Test5 local snapshot can be recovered"
+  ],
+  "recoverySnapshots": [
+    "hiker://files/cache/115_12104_file_manage_ux_test.json",
+    "hiker://files/cache/115_12103_file_manage_test.json",
+    "hiker://files/cache/115_12102_batch_manage_test.json",
+    "hiker://files/cache/115_12101_recycle_clear_test.json",
+    "hiker://files/cache/115_stable_120_rule.json"
+  ],
+  "status": "pending-device-validation-search-recovery",
+  "updatedAt": "2026-09-22"
+}
