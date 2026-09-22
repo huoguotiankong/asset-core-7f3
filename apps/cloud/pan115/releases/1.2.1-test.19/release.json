@@ -29,7 +29,8 @@
     "accept both broken Test18 and known-good Test17 as direct upgrade bases",
     "do not touch search, offline center, account center, recycle bin, login, magnet focusMode or file-operation protocols"
   ],
-  "tradeoff": "Recent-play automatic capture and long-press video favorite entry from File Management are temporarily disabled until they are reintroduced as a fully materialized module rather than runtime source-string injection.",
-  "status": "pending-device-validation-hotfix",
+  "tradeoff": "Recent-play automatic capture and long-press video favorite entry from File Management are temporarily disabled until they are reintroduced with a smaller exported helper and syntax gate.",
+  "deviceResult": "User confirmed File Management recovered normally after Test19.",
+  "status": "device-validated-hotfix",
   "updatedAt": "2026-09-22"
 }
