@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.12",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.12",
+  "build": 2026092213,
+  "ruleVersion": 2026092213,
+  "basedOn": {
+    "version": "1.2.0-test.11",
+    "build": 2026092212,
+    "reason": "Fix APP-home internal route rule parameter encoding"
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.12/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "changes": [
+    "Keep rule=115.简 literal in hiker://page routes instead of percent-encoding the rule title",
+    "Continue encoding business parameters such as cid, cname, kw, add and sc",
+    "Preserve Test11 APP-style homepage layout and all existing backend pages unchanged"
+  ],
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
