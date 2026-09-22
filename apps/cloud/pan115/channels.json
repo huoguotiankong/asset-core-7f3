@@ -16,21 +16,21 @@
       "mode": "local-clone-patch",
       "recommended": true,
       "status": "device-validated",
-      "desc": "Test18实机通过后原样晋级：磁链低频安全链、海阔视界保存目录、精简首页、文件管理、回收站列表/还原/永久删除、普通删除到回收站。"
+      "desc": "已验证正式基线。"
     },
     {
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.17",
-      "build": 2026092237,
-      "ruleVersion": 2026092237,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.17/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.17/installer.js",
-      "mode": "in-place-self-use-test",
+      "version": "1.2.1-test.19",
+      "build": 2026092239,
+      "ruleVersion": 2026092239,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.19/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.19/installer.js",
+      "mode": "in-place-self-use-test-hotfix",
       "recommended": false,
-      "status": "pending-device-validation-file-management-phase3",
-      "desc": "Test16账号/容量/设置中心已实机反馈正常。Test17进入文件管理UX Phase3：增加独立常用目录页、收藏目录、最近访问、保留面包屑快速回到真实目录，并优化文件类型图标和短提示；不改搜索、离线、账号、回收站和文件操作协议。"
+      "status": "pending-device-validation-hotfix",
+      "desc": "紧急修复Test18文件管理JS编译错误：文件管理回退到已验证Test17 V9；保留独立最近播放页，但暂时撤销文件管理内自动历史/收藏注入。"
     },
     {
       "channel": "candidate",
@@ -43,7 +43,7 @@
       "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
       "recommended": false,
       "status": "promoted-to-stable",
-      "desc": "历史1.1.0候选基线，保留用于回溯。"
+      "desc": "历史候选基线。"
     }
   ]
 }
