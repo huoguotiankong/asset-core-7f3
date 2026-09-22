@@ -43,7 +43,7 @@
     "externalMagnetFocusModeChanged": false,
     "backgroundPolling": false,
     "concurrent115Requests": false,
-    "syntaxGuard": "offline_target_picker_v1.js, account_center_v2.js, offline_center_v4.js and installer.js passed node --check; installer also parses all three replacement modules with new Function before saving"
+    "syntaxGuard": "installer parses offline_target_picker_v1.js, account_center_v2.js and offline_center_v4.js with new Function before saving the rule; any parse failure aborts installation"
   },
   "validationTarget": [
     "Test21 File Management/current-folder search/recent-play behavior does not regress",
