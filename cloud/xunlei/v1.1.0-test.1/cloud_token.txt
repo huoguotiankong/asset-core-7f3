@@ -1,0 +1,2 @@
+云口令，迅雷 1.1.0-test.1 磁链加速测试版，复制整条口令打开海阔即可覆盖导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/07a81b19b092b19c7efe916cb263dd118bff2e9c/cloud/xunlei/v1.1.0-test.1/import_fast_magnet.js@import=js:eval(fetch(input))
