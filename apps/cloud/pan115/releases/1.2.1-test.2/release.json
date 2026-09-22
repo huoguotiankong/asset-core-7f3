@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.2",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.2",
+  "build": 2026092222,
+  "ruleVersion": 2026092222,
+  "basedOn": {
+    "version": "1.2.1-test.1",
+    "build": 2026092221,
+    "deviceValidated": true,
+    "note": "User confirmed recycle-bin clear works on device."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.2/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "file-management-batch",
+  "features": [
+    "keep the device-validated recycle-bin clear from Test1 unchanged",
+    "add a Batch Management entry inside File Management",
+    "support multi-select with current-page select-all and clear-selection",
+    "support batch delete to recycle bin with one confirmation",
+    "support batch copy and batch move through a dedicated target-folder picker",
+    "reuse the authenticated revertRecycleBin request transport instead of guessing Cookie/request signatures",
+    "auto-detect webapi versus OpenAPI transport and map to the matching copy/move/delete endpoint and payload contract",
+    "execute operations sequentially in bounded batches of 100 and cap one action at 1000 selected items",
+    "block move to the same source folder and block copy/move into a selected folder itself",
+    "keep single-item delete, login, original file browsing, magnet/offline flow and player unchanged"
+  ],
+  "moduleSnapshot": {
+    "commit": "e99e050a3bde2271a30d7c52e7785dc1ba4e8c7f",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v6.js",
+    "batchOps": "apps/cloud/pan115/modules/batch_ops_v1.js",
+    "fileBatch": "apps/cloud/pan115/modules/file_batch_v1.js",
+    "folderPicker": "apps/cloud/pan115/modules/folder_picker_v1.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
