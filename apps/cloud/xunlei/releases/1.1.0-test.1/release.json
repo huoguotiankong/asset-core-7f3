@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "xunlei",
+  "name": "迅雷",
+  "channel": "test",
+  "version": "1.1.0-test.1",
+  "build": 11001,
+  "status": "pending-device-validation",
+  "sourceBaseline": "user-uploaded 迅雷.hk小程序(1).zip",
+  "delivery": "cloud-patch-over-installed-rule",
+  "installer": "cloud/xunlei/v1.1.0-test.1/import_fast_magnet.js",
+  "installerCommit": "07a81b19b092b19c7efe916cb263dd118bff2e9c",
+  "requiresInstalledRule": "迅雷",
+  "changes": [
+    "Remove synchronous capacity query from external magnet call page",
+    "Avoid unconditional activity reward requests before every magnet playback",
+    "Replace fixed 1 second offline-task wait with short polling",
+    "Use lighter PLAY detail request and short readiness polling",
+    "Defer temporary-file deletion out of first-play hot path"
+  ],
+  "stable": null,
+  "notes": "Test installer derives from the currently installed 迅雷 rule and patches only the magnet playback hot path."
+}
