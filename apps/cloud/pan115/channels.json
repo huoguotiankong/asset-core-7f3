@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.21",
-      "build": 2026092241,
-      "ruleVersion": 2026092241,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.21/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.21/installer.js",
+      "version": "1.2.1-test.22",
+      "build": 2026092242,
+      "ruleVersion": 2026092242,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.22/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.22/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-folder-search-and-recent-play",
-      "desc": "基于已实机恢复正常的Test19。继续携带Test20的小型最近播放核心，并新增当前目录搜索：只使用现有getFiles，单次最多顺序扫描500项，可手动继续下一批；不碰已验证脆弱的全盘115Search请求链。"
+      "status": "pending-device-validation-offline-target-phase3",
+      "desc": "在不修改Test21文件管理/当前目录搜索/最近播放的前提下，新增可自定义离线保存目录与一键恢复自动选择；离线中心Phase3继续保留进度/速度/剩余时间、单视频直放，并补充失败原因、本页任务统计和按自定义目录重试。"
     },
     {
       "channel": "candidate",
