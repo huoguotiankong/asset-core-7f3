@@ -13,12 +13,12 @@
     "status": "device-validated"
   },
   "currentTest": {
-    "version": "1.2.0-test.2",
-    "build": 2026092203,
-    "ruleVersion": 2026092203,
-    "release": "apps/cloud/pan115/releases/1.2.0-test.2/release.json",
-    "installer": "apps/cloud/pan115/releases/1.2.0-test.2/installer.js",
-    "status": "pending-device-validation"
+    "version": "1.2.0-test.9",
+    "build": 2026092210,
+    "ruleVersion": 2026092210,
+    "release": "apps/cloud/pan115/releases/1.2.0-test.9/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.0-test.9/installer.js",
+    "status": "device-import-validated-home-open"
   },
   "candidate": {
     "version": "1.1.0-rc1",
