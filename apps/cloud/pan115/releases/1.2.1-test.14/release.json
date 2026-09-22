@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.14",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.14",
+  "build": 2026092234,
+  "ruleVersion": 2026092234,
+  "basedOn": {
+    "version": "1.2.1-test.13",
+    "build": 2026092233,
+    "deviceValidated": "partial",
+    "note": "Current device screenshot confirms the new offline center renders correctly, lists completed tasks and shows the cached save directory. The screenshot also exposes UX noise: an overlong input placeholder, technical CID/mode text and raw info_hash values dominate the page. Test14 is UI-only cleanup on top of that working structure."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.14/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "offline-center-compact-input-and-ui-cleanup",
+  "features": [
+    "shorten the offline input placeholder to only 粘贴链接",
+    "remove explanatory text from inside/under the input field; validation details remain in toast errors only when needed",
+    "hide technical CID and internal target-mode strings from the normal save-directory card",
+    "hide raw 40-character info_hash values from normal task rows and move hash copy to long-press actions",
+    "shorten the page/entry title from 离线下载中心（新版） to 离线中心",
+    "preserve task listing, filters, manual refresh, result routing, save-directory priority and the validated external magnet focusMode unchanged"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "searchRequestChanged": false,
+    "externalMagnetFocusModeChanged": false,
+    "offlineApiContractChanged": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false,
+    "uiOnly": true
+  },
+  "validationTarget": [
+    "input box shows only a short 粘贴链接 hint and no long protocol explanation",
+    "save-directory card no longer exposes CID/hiker-cache technical text",
+    "task rows show name plus useful status/size only, not raw info_hash",
+    "long press still provides hash copy and task-record removal",
+    "existing filters, refresh, completed-result navigation and magnet submission remain functional"
+  ],
+  "status": "pending-device-validation-compact-offline-ui",
+  "updatedAt": "2026-09-22"
+}
