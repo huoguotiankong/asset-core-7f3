@@ -1,2 +1,2 @@
-海阔视界首页频道规则￥home_rule_url￥https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/cloud/javdb/v3.9.52-test.1/import_magnetmenu.js
-@import=js:fetch(input)
+云口令，JavDB v3 Test52，复制整条口令打开软件即可导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/cloud/javdb/v3.9.52-test.1/import_magnetmenu.js@import=js:eval(fetch(input))
