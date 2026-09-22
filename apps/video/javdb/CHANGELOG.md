@@ -1,98 +1,92 @@
 # JavDB v3 Changelog
 
-> 2026-09-22 起将此前长篇历史归档到 `CHANGELOG_PRE_3950_20260922.md`。当前文件保留活动基线、最近实机结论、当前修复与回退边界。事实优先级继续为：用户当前实机 > 当前 Shell / Release / 源码 > 本文件 > registry/manifest > 历史归档。
+> 2026-09-22 起将此前长篇历史归档到 `CHANGELOG_PRE_3950_20260922.md`。当前文件保留活动基线、最近实机结论、当前修复与回退边界。事实优先级：用户当前实机 > 当前 Shell / Release / 源码 > 本文件 > registry/manifest > 历史归档。
 
 ## 当前活动边界
 
-- Stable：`3.9.42 / Build2026082301`，继续冻结，是当前业务稳定恢复基线。
-- Latest：仍指向 Stable `3.9.42`，本轮不修改。
-- Test：`3.9.50-test.1 / Build2026092204`。
-- Test Shell：`cloud/javdb/v3.9.50-test.1/javdb_v3.9.50_test1_livehls.txt`，rule version `2026092204`。
-- Test Release：`apps/video/javdb/releases/3.9.50-test.1/release.json`。
+- Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
+- Latest：仍指向 Stable `3.9.42`，不修改。
+- 云仓当前 Test 指针：`3.9.50-test.1 / Build2026092204`；该版已被当前实机证实存在 VIP 首播回归，暂不晋级。
+- 实机专项 Hotfix：`3.9.51-test.1 / Build2026092205`，通过云口令单独验证，暂不切云仓 Test 指针。
 - Base Runtime：`3.9.44-test.1 / Build2026082501` Local-First。
 - Product UI：`3.9.45-test.7 / Build2026082904`。
-- Shared JAV Playback Test：`1.1.0-test.1 / Build11001`，只在第三方播放页按需加载。
-- 当前 Test 未经完整实机验证，不得晋级 Stable。
+- Shared JAV Playback Test：`1.1.0-test.1 / Build11001`，第三方播放页按需加载。
 
 ---
 
-## 2026-09-22 · 3.9.50-test.1 / Build2026092204 · VIP Live HLS No-Preload
+## 2026-09-22 · 3.9.51-test.1 / Build2026092205 · VIP 原始 HLS 隔离验证
 
-### Test49 实机结论
+### Test50 当前实机结论
 
-用户当前设备确认：
+用户截图确认：
 
-1. `3.9.49-test.1` 的播放页面进入速度已经明显恢复，说明“扁平 Local-First + 普通页面不预加载第三方 Playback”方向有效。
-2. 但 VIP 视频拖动进度条后会长时间卡住，甚至一直无法继续播放。
-3. 因此 Test49 的“页面渲染后后台 `cacheM3u8` → `updateItem` 自动把前两条 VIP HLS 换成本地索引”不能继续作为默认播放链。
+- VIP 播放页进入很快，说明 Test49 以来的扁平 Local-First / 延迟第三方 Playback 架构有效。
+- 但 `3.9.50-test.1` 点击开始播放后播放器可长期停在 `0 kb/s`，总时长保持 `00:00`，首次播放本身已经不能接受。
+- 因此 `#noPre#` 在当前 JavDB VIP / 海阔播放器组合中不能继续作为默认方案；当前现象已经不是单纯 Seek 慢，而是播放器未稳定建立媒体时长/数据流。
 
-### 根因判断与修改边界
+### Test51 修改边界
 
-结合 Test49 代码和实机现象，当前首要嫌疑是：VIP HLS/子分片属于带时效或签名的媒体地址，后台提前缓存并把播放行切成本地 m3u8 后，本地索引可能继续引用已经失效、传播异常或不适合长期复用的远端分片 URL。其表现正是“首播正常，Seek 后目标分片长期拉不回来”。
+本轮只做变量隔离，不再增加新的播放加速层：
 
-本轮不再继续扩大 `cacheM3u8`，而是收回到更接近原站的实时媒体链：
+```text
+3.9.50 快速页面架构
+→ VIP playPage 原结果
+→ 仅移除 #noPre#
+→ 不自动 cacheM3u8
+→ 不 updateItem 自动换链
+→ 原始 URL / headers 原样交给播放器
+```
 
-- **彻底移除后台 `cacheM3u8` 预热。**
-- **彻底移除 `updateItem` 自动把正常 VIP 线路换成本地索引。**
-- VIP HLS 正常点击保持原实时直链，只增加 `#noPre#`，避免海阔在用户真正播放前提前预解析/预加载时效媒体地址。
-- JSON 多线路继续保留原 `urls / names / headers` 合同，仅对其中 HLS URL 增加 `#noPre#`，不改 Header 数组。
-- 直接 HLS + inline headers 时，`#noPre#` 放在媒体 URL 与 `;{...}` headers 后缀之间，避免破坏原 Header 合同。
-- 长按保留 **原始VIP播放**：返回完全未修改的原始线路，用于和 `#noPre#` 正常播放做 A/B。
-- 长按保留 **本地索引播放（备用）**：仅用户手动选择时才执行 `cacheM3u8`，不再自动替换正常线路。
+目标是同时保留：
 
-### 保留功能
+1. Test49/Test50 已验证的快速进入播放页；
+2. Test49 在自动换成本地索引前曾出现的快速首次起播；
+3. 去掉 Test49 后台本地索引和 Test50 `#noPre#` 两个干扰变量。
 
-- 磁链大小继续自动换算：如 `4830 → 4.72G`。
-- 继续识别 `高清 / 4K / 字幕 / 日期 / PikPak` 等信息。
-- 真实磁链长按第一项继续为 `调用115`。
-- Test49 已验证的快速播放页架构继续保留。
-- 第三方 MissAV / 123AV / Jable / AV01 / TKTUBE / JavGuru 继续按需加载，本轮不改 Provider Resolver。
+### 发布形态
 
-### 不可变引用
+- Entry：`apps/video/javdb/releases/3.9.51-test.1/local_entry.js`
+- Release：`apps/video/javdb/releases/3.9.51-test.1/release.json`
+- 云口令使用 `cloud/javdb/v3.9.51-test.1/import_rawhls.js` 动态从 Test50 Shell 派生 Test51 导入规则。
+- Stable 3.9.42 不动；当前云仓 Test 指针暂不切换，先等本机 A/B 结果。
 
-- Entry create commit：`8474f9b758cff4141a4ab101c34e5eef42190a52`
-- Entry blob：`8857a9fc4a8245620f7fa6002c82ead3046f66ff`
-- Shell create commit：`4ef54357891e6ec327cd545fc327be939d63bfce`
-- Shell blob：`29e7dcc4f8d469adf07b0eb823a82611cf120cbb`
-- Release metadata commit：`189742c423cf7340cd06c0f53dc9dd7a4c713668`
-- Test pointer commit：`2dd5ac7f52b520b9f1fbfdb6caa08d0691a97b13`
-- Channels commit：`071e054d598d758784f49c7a2999f8aa47dd7ed0`
+### 下一步判定
 
-### 待实机验证
-
-1. VIP 播放页进入速度不能从 Test49 回退。
-2. 正常点击 VIP HLS 是否能快速起播。
-3. 同一视频分别拖到约 10 / 30 / 60 分钟后，是否能在合理时间恢复，而不是长期卡死。
-4. 同一线路长按“原始VIP播放”与普通 `#noPre#` 播放做 A/B，判断瓶颈来自海阔预加载还是服务端/CDN Seek 本身。
-5. “本地索引播放（备用）”只做诊断，不作为正常默认链。
-6. 磁链大小、HD/4K/字幕与“调用115”不能回归。
+- 如果 Test51 首播恢复快速，但 Seek 仍慢：后续直接分析 **原始 master/media playlist、目标 ts/m4s 分片、Header/Cookie/Referer、CDN 响应和播放器 Seek 子请求**，不再使用 `cacheM3u8` 或 `#noPre#` 猜测性优化。
+- 如果 Test51 首播仍停在 `0 kb/s / 00:00`：说明问题已经不在这两个 Overlay，需要回到 Base VIP 线路解析/授权有效期本身检查。
 
 ---
 
-## 2026-09-22 · 3.9.49-test.1 / Build2026092203 · Fast VIP / Warm Seek（已证伪默认自动换链）
+## 2026-09-22 · 3.9.50-test.1 / Build2026092204 · VIP Live HLS No-Preload（当前实机证伪）
+
+### 设计
+
+- 移除 Test49 后台 `cacheM3u8` 预热与 `updateItem` 自动换本地索引。
+- 默认 VIP HLS 增加 `#noPre#`，尝试避免海阔提前预解析时效媒体。
+- 长按保留原始 VIP / 手动本地索引诊断入口。
 
 ### 实机结果
 
+- 播放页进入继续很快。
+- 首次播放出现长期 `0 kb/s / 00:00`，比 Test49 明显回归。
+- 当前设备上 `#noPre#` 不适合作为 JavDB VIP 默认链，Test51 默认撤销。
+
+---
+
+## 2026-09-22 · 3.9.49-test.1 / Build2026092203 · Fast VIP / Warm Seek（自动换链已证伪）
+
 - 播放页进入速度明显改善，扁平 Runtime 方向保留。
-- VIP 正常起播比 3.9.48 更快。
-- 但后台将播放项无感换为 `cacheM3u8` 本地索引后，拖动进度可能长期卡死。
-
-### 结论
-
-`cacheM3u8` 不再视为 JavDB VIP 的默认 Seek 加速器；对可能带签名/时效性的 HLS，不允许后台生成本地索引后自动替换正在给用户使用的正常播放线路。该方案由 `3.9.50-test.1` 撤销。
+- 正常起播比 3.9.48 更快。
+- 但后台 `cacheM3u8 → updateItem` 后，Seek 可长期卡死。
+- 结论：对可能带签名/时效性的 HLS，禁止后台生成本地索引后自动替换正常线路。
 
 ---
 
 ## 2026-09-22 · 3.9.48-test.1 / Build2026092202 · Magnet Meta + VIP Seek 首轮
 
-### 实机结果
-
 - 磁链大小/高清/字幕增强方向有效。
-- VIP `cacheM3u8` 方案使拖动比旧版稍快，但播放页进入和正式起播明显变慢。
-
-### 结论
-
-点击播放时同步建立完整本地 m3u8 索引会把网络与解析成本前移到起播热路径，不能作为默认方案。Test49 将同步缓存移出热路径；Test50 又进一步取消自动本地索引替换。
+- 点击播放时同步 `cacheM3u8` 让拖动略快，但播放页进入和正式起播明显变慢。
+- 结论：同步建立本地 m3u8 索引不能进入 VIP 起播热路径。
 
 ---
 
@@ -100,25 +94,26 @@
 
 ### VIP 播放性能
 
-- “页面快”与“Seek 快”必须分开验证，不能用同一个同步预处理解决全部问题。
+- “页面进入、首次起播、Seek 恢复”必须分开测量。
 - VIP 热路径禁止同步 `cacheM3u8`。
-- 对带签名/时效媒体，禁止后台 `cacheM3u8` 后通过 `updateItem` 自动换掉正常线路。
-- 优先保持原站实时 HLS 合同、原 Header、多线路数组对齐，再判断是否需要播放器侧优化。
-- `#noPre#` 目前只作为“禁止海阔提前预加载时效媒体”的 Test 策略，最终是否保留以实机 A/B 为准。
-- 若 Test50 仍然 Seek 卡顿，下一步优先抓取/对比：master/media playlist、目标分片 URL、Header/Cookie/Referer、CDN 响应、分片时长与播放器对子请求 Header 的实际行为；不再盲目叠加缓存层。
+- 对带签名/时效媒体，禁止后台 `cacheM3u8` 后自动 `updateItem` 替换默认线路。
+- `#noPre#` 已在当前设备出现 `0 kb/s / 00:00` 首播回归，禁止继续作为默认 JavDB VIP 策略，除非后续有新的实机证据。
+- 下一阶段若原始 HLS 首播正常而 Seek 慢，排查顺序固定为：master playlist → media playlist → 目标分片 → Headers/Cookie/Referer → CDN 响应 → 播放器对子请求 Headers/Range/连接复用行为。
+- 不再用更多缓存 Overlay 掩盖底层媒体链问题。
 
 ### 磁链
 
-- 资源纯数字大小当前按 MB 解释并换算 G。
+- 资源纯数字大小按 MB 解释并换算 G。
 - 标题/对象 metadata 用于识别 HD/4K/字幕。
 - 磁链长按第一项固定保留 `调用115`，路由到 `115.简 / 115Offline?add=<magnet>`。
 
 ### 恢复与回退
 
 - 正式恢复入口：Stable `3.9.42 / Build2026082301`。
-- 当前 Test：`3.9.50-test.1 / Build2026092204`，等待 VIP Seek 实机验证。
-- Previous Test：`3.9.49-test.1 / Build2026092203`，播放页快但 Seek 可长期卡死，不作为 recovery base。
-- Previous Test：`3.9.48-test.1 / Build2026092202`，Seek 略改善但播放页/起播回归，不作为 recovery base。
+- 专项验证：`3.9.51-test.1 / Build2026092205`，只验证原始 VIP HLS，不晋级 Stable。
+- Test50：播放页快但首播可 `0 kb/s / 00:00`，不作为恢复基线。
+- Test49：播放页快但自动换本地索引后 Seek 可长期卡死，不作为恢复基线。
+- Test48：Seek 略改善但进入/起播变慢，不作为恢复基线。
 - Local-First 基础回退：`3.9.44-test.1 / Build2026082501`。
 - Pure Local：`3.9.41-local / Build2026082103`。
-- 旧完整历史：`CHANGELOG_PRE_3950_20260922.md`；Local-First 迁移前更早历史仍见 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。
+- 旧完整历史：`CHANGELOG_PRE_3950_20260922.md`；更早历史见 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。
