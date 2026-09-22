@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.21",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.21",
+  "build": 2026092241,
+  "ruleVersion": 2026092241,
+  "basedOn": {
+    "version": "1.2.1-test.19",
+    "build": 2026092239,
+    "deviceValidated": true,
+    "note": "Test19 is the latest explicitly device-validated recovery baseline. Test21 deterministically rebuilds File Management from the immutable Test17 V9 source, carries the small Test20 recent-play hook, and adds current-folder search as a separate bounded module. Test20 itself has not yet been separately device-validated."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.21/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "bounded-current-folder-search-plus-safe-recent-play-carry",
+  "features": [
+    "add a compact 搜索 entry to File Management for searching only the current folder level",
+    "use the already working getFiles directory-list contract instead of touching the fragile global 115Search request chain",
+    "scan at most 5 pages x 100 items per explicit search action; offer 继续扫描 for the next bounded chunk when needed",
+    "search results can open folders, play videos, and open File Information without background polling or concurrency",
+    "keep the Test20 recent-play/store modules installed so recent playback data and the ▶ 最近 entry remain available",
+    "rebuild File Management from the immutable device-validated Test17 V9 source before adding only simple toolbar/playback hooks"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "globalSearchRequestChanged": false,
+    "offlineCenterChanged": false,
+    "accountCenterChanged": false,
+    "recycleChanged": false,
+    "fileOperationProtocolChanged": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false,
+    "folderSearchRequestBound": "maximum 5 sequential getFiles calls per explicit scan action",
+    "syntaxGuard": "folder_search_v1.js and installer.js passed node --check before publication; installer runs new Function() on final File Management/store/history/folder-search sources before saving"
+  },
+  "limitations": [
+    "Current-folder search is intentionally non-recursive and does not enter child folders.",
+    "Very large folders are scanned in bounded 500-item chunks; the user explicitly taps 继续扫描 to inspect the next chunk.",
+    "Test20 recent-play behavior is carried forward but still needs device validation together with this Test21 build."
+  ],
+  "validationTarget": [
+    "File Management opens normally with no JavaScript compile error",
+    "the new 搜索 entry opens a short clean input without verbose helper text",
+    "searching a known filename in the current folder returns matching files/folders",
+    "folder results open the correct directory and video results play normally",
+    "继续扫描 appears only when the current 500-item scan chunk is full and more items may remain",
+    "existing global 115 search, file operations, account center, offline center, recycle bin and external magnet flow do not regress",
+    "▶ 最近 and recent-play recording remain functional if the user tests that path"
+  ],
+  "status": "pending-device-validation-folder-search-and-recent-play",
+  "updatedAt": "2026-09-22"
+}
