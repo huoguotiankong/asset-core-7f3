@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.15",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.15",
+  "build": 2026092216,
+  "ruleVersion": 2026092216,
+  "basedOn": {
+    "version": "1.2.0-test.14",
+    "build": 2026092215
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.15/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "remove Test14 raw Cookie extraction for delete/recycle operations",
+    "reuse the authenticated 115Api.newClient() session for delete, recycle listing and restore",
+    "prefer client.delete/deleteFiles for delete-to-recycle-bin",
+    "prefer client.listRecycleBin/getRecycleBin for recycle listing",
+    "prefer client.revertRecycleBin/restoreRecycleBin for restore",
+    "show explicit missing-driver-method errors instead of false login errors",
+    "keep original My Files, login, offline magnet chain and player unchanged",
+    "no permanent delete or recycle-bin clear"
+  ],
+  "moduleSnapshot": {
+    "commit": "05e712ccadbba45e98acfe7cfe1f4c43a8a4b6b5",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v2.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v2.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
