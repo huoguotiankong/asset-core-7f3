@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.10",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.10",
+  "build": 2026092230,
+  "ruleVersion": 2026092230,
+  "basedOn": {
+    "version": "1.2.1-test.9",
+    "build": 2026092229,
+    "deviceValidated": "partial",
+    "note": "User device confirmed Test9 restored the known-good legacy search request chain: ipx-641 again returns six results and video results play normally. The only confirmed remaining defect is the legacy folder-result empty link."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.10/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "legacy-search-result-folder-navigation-only",
+  "features": [
+    "keep the exact Test9 legacy 115Search request code unchanged",
+    "patch only the rendered search-result list by wrapping the legacy setResult output path",
+    "detect folder-result cards from the legacy directory description and replace only their empty URL",
+    "prefer any directory ID already carried in the rendered item extra metadata",
+    "if the legacy card carries no ID, resolve the folder lazily on click using the existing 115Api search method when discoverable, then fall back to a single low-frequency WebAPI lookup",
+    "route the resolved real folder cid directly into the enhanced 115FileManage page",
+    "strip the legacy literal font tags from the keyword summary without modifying its search input or request logic",
+    "leave video result URLs, login, magnet/offline flow, player, file management, batch operations and recycle-bin behavior untouched"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "searchRequestChanged": false,
+    "backgroundPolling": false,
+    "concurrent115Requests": false,
+    "folderLookupTiming": "only when a folder result is tapped"
+  },
+  "validationTarget": [
+    "search ipx-641 still returns about six results",
+    "ipx-641 and ipx-641-C folder cards open the corresponding directories",
+    "mp4 results continue to play exactly as in Test9",
+    "keyword summary no longer displays literal <font> markup"
+  ],
+  "status": "pending-device-validation-folder-navigation",
+  "updatedAt": "2026-09-22"
+}
