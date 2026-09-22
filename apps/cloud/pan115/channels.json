@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.1-test.1",
-      "build": 2026092221,
-      "ruleVersion": 2026092221,
-      "release": "apps/cloud/pan115/releases/1.2.1-test.1/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.1-test.1/installer.js",
+      "version": "1.2.1-test.2",
+      "build": 2026092222,
+      "ruleVersion": 2026092222,
+      "release": "apps/cloud/pan115/releases/1.2.1-test.2/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.1-test.2/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation-recycle-clear",
-      "desc": "仅增强回收站：新增需要115安全密码和二次确认的清空回收站，顺序快照rid后分批永久删除；其它Stable 1.2.0能力不改。"
+      "status": "pending-device-validation-batch-file-management",
+      "desc": "Test1清空回收站已实机通过；本版继续保留，并在文件管理新增多选、全选本页、批量删除、复制、移动和目标文件夹选择。"
     },
     {
       "channel": "candidate",
