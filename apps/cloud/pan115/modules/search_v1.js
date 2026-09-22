@@ -1,0 +1,128 @@
+(function(){
+var d=[];
+var api=$.require("115Api");
+var client;
+try{client=api.newClient();}catch(e){d.push({title:"115未登录",desc:String(e.message||e),col_type:"text_center_1",url:"hiker://page/115Account?rule=115.简&page=fypage"});setResult(d);return;}
+function q(n,v){var x="";try{x=String(getParam(n,"")||"");}catch(e){}if(x){try{x=decodeURIComponent(x);}catch(e2){}return x;}try{if(typeof MY_PARAMS!=="undefined"&&MY_PARAMS&&MY_PARAMS[n]!=null)return String(MY_PARAMS[n]);}catch(e3){}return v||"";}
+function fmtSize(n){try{return api.tool.formatSize(Number(n||0));}catch(e){return String(n||"");}}
+function fmtTime(v){if(v===undefined||v===null||v==="")return"";var s=String(v);if(/^\d+$/.test(s)){try{var n=Number(s);if(n<100000000000)n*=1000;var dt=new Date(n);function p(x){return x<10?"0"+x:String(x);}return dt.getFullYear()+"-"+p(dt.getMonth()+1)+"-"+p(dt.getDate())+" "+p(dt.getHours())+":"+p(dt.getMinutes());}catch(e){return s;}}return s;}
+function parseObj(v){if(v===undefined||v===null)return v;if(typeof v!=="string")return v;var s=String(v);if(/^\s*</.test(s))throw new Error("115搜索接口返回HTML");try{return JSON.parse(s);}catch(e){return v;}}
+function checkResp(r){r=parseObj(r);if(r&&r.state===false)throw new Error(r.error||r.msg||r.message||"115搜索失败");if(r&&r.errno!==undefined&&Number(r.errno)!==0)throw new Error(r.error||r.msg||r.message||("115返回errno="+r.errno));if(r&&r.code!==undefined&&Number(r.code)!==0&&Number(r.code)!==200)throw new Error(r.message||r.msg||r.error||("115返回code="+r.code));return r;}
+function encodeQuery(o){var a=[];for(var k in o){if(!Object.prototype.hasOwnProperty.call(o,k))continue;var v=o[k];if(v===undefined||v===null||v==="")continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(String(v)));}return a.join("&");}
+function looksListParams(o){if(!o||typeof o!=="object"||o instanceof Array)return false;return o.cid!==undefined||o.offset!==undefined||o.limit!==undefined||o.page_size!==undefined||o.show_dir!==undefined||o.nf!==undefined||o.o!==undefined||o.asc!==undefined;}
+function captureGetFiles(c){
+ if(!c||typeof c.request!=="function"||typeof c.getFiles!=="function")throw new Error("当前115Api缺少可复用的文件列表传输层");
+ var orig=c.request,captured=null,replaced=false;
+ var spy=function(){captured=Array.prototype.slice.call(arguments);return {state:true,count:0,offset:0,limit:1,page_size:1,data:[]};};
+ try{c.request=spy;replaced=(c.request===spy);}catch(e){}
+ if(!replaced)throw new Error("115Api.request不可接管");
+ try{c.getFiles("0",{offset:0,pageSize:1,order:"file_name",asc:"1",showDir:"1"});}catch(e2){}
+ try{c.request=orig;}catch(e3){}
+ if(!captured||!captured.length)throw new Error("未捕获到getFiles的认证请求");
+ return {client:c,orig:orig,args:captured};
+}
+function runSearchByTransport(c,keyword,typeKey,offset,limit,order,asc){
+ var t=captureGetFiles(c),urlHit=false,paramHit=false;
+ var params={aid:"7",cid:"0",format:"json",offset:String(offset),limit:String(limit),search_value:String(keyword),count_folders:"1",o:String(order||"file_name"),asc:String(asc||"1")};
+ if(typeKey==="folder"){params.fc="1";}else if(typeKey!=="all"){var tm={document:2,image:3,video:4,audio:5,archive:6};if(tm[typeKey])params.type=String(tm[typeKey]);}
+ function rewriteUrl(s){
+  var x=String(s||"");
+  if(/^https?:\/\//i.test(x)&&/\/files(?:\?|$)/i.test(x)&&!/\/files\/search/i.test(x)){
+   urlHit=true;return "https://webapi.115.com/files/search?"+encodeQuery(params);
+  }
+  if(/^https?:\/\//i.test(x)&&/\/files\/search(?:\?|$)/i.test(x)){
+   urlHit=true;return "https://webapi.115.com/files/search?"+encodeQuery(params);
+  }
+  if(/^\/files(?:\?|$)/i.test(x)||/^\/files\/search(?:\?|$)/i.test(x)){
+   urlHit=true;return "/files/search?"+encodeQuery(params);
+  }
+  return x;
+ }
+ function rw(v,dep,key){
+  if(dep>10||v===null||v===undefined)return v;
+  if(typeof v==="string"){
+   var s=rewriteUrl(v);
+   if(s!==v)return s;
+   if(/(^|&)(cid|offset|limit|page_size|show_dir|nf|o|asc)=/i.test(v)){paramHit=true;return encodeQuery(params);}
+   return v;
+  }
+  if(v instanceof Array){var a=[];for(var i=0;i<v.length;i++)a.push(rw(v[i],dep+1,""));return a;}
+  if(typeof v==="object"){
+   if(looksListParams(v)){
+    var p={};for(var pk in v)if(Object.prototype.hasOwnProperty.call(v,pk))p[pk]=v[pk];
+    for(var sk in params)if(Object.prototype.hasOwnProperty.call(params,sk))p[sk]=params[sk];
+    delete p.show_dir;delete p.nf;paramHit=true;return p;
+   }
+   var o={};for(var k in v){if(!Object.prototype.hasOwnProperty.call(v,k))continue;o[k]=rw(v[k],dep+1,k);}
+   if((key==="params"||key==="query"||key==="queryParams")&&!paramHit){for(var sk2 in params)if(Object.prototype.hasOwnProperty.call(params,sk2))o[sk2]=params[sk2];paramHit=true;}
+   return o;
+  }
+  return v;
+ }
+ var args=[];for(var z=0;z<t.args.length;z++)args.push(rw(t.args[z],0,""));
+ if(!urlHit){
+  for(var n=0;n<args.length;n++){
+   if(typeof args[n]==="object"&&args[n]&&!(args[n] instanceof Array)){
+    if(args[n].url!==undefined){args[n].url="https://webapi.115.com/files/search";args[n].params=params;urlHit=true;paramHit=true;break;}
+   }
+  }
+ }
+ if(!urlHit)throw new Error("未识别getFiles请求地址，无法安全复用搜索传输");
+ return checkResp(t.orig.apply(t.client,args));
+}
+function runSearch(c,keyword,typeKey,offset,limit,order,asc){
+ var opts={offset:Number(offset),limit:Number(limit),count_folders:1,o:String(order||"file_name"),asc:Number(asc||1)};
+ if(typeKey==="folder")opts.fc=1;else{var tm={document:2,image:3,video:4,audio:5,archive:6};if(tm[typeKey])opts.type=tm[typeKey];}
+ try{if(c&&typeof c.filesSearch==="function")return checkResp(c.filesSearch(String(keyword),opts));}catch(e){}
+ return runSearchByTransport(c,keyword,typeKey,offset,limit,order,asc);
+}
+function resultPack(raw){
+ raw=parseObj(raw);var root=raw;
+ if(root&&root.data&&!(root.data instanceof Array)&&typeof root.data==="object"&&(root.data.data instanceof Array||root.data.files instanceof Array))root=root.data;
+ var arr=[];if(root&&root.data instanceof Array)arr=root.data;else if(root&&root.files instanceof Array)arr=root.files;else if(root&&root.list instanceof Array)arr=root.list;else if(raw instanceof Array)arr=raw;
+ var count=0;if(root&&root.count!==undefined)count=Number(root.count||0);else if(root&&root.total!==undefined)count=Number(root.total||0);else count=arr.length;
+ return {items:arr,count:count,root:root||{}};
+}
+function norm(x){
+ x=x||{};var fileId=String(x.fileId||x.file_id||x.fid||"");var cid=String(x.categoryId||x.category_id||x.cid||"");var pid=String(x.parentId||x.parent_id||x.pid||"");
+ var dir=false;if(x.isDirectory===true||x.is_directory===true||Number(x.isDirectory)===1||Number(x.is_directory)===1)dir=true;else if(!fileId&&cid)dir=true;else if(x.fc!==undefined&&fileId===""&&Number(x.fc)===1)dir=true;
+ var id=dir?(cid||String(x.id||"")):(fileId||String(x.id||""));var parent=dir?(pid||"0"):(cid||pid||"0");
+ return {id:id,parentId:parent,name:String(x.name||x.fileName||x.file_name||x.n||"未命名"),size:Number(x.size||x.fileSize||x.file_size||x.s||0),pickCode:String(x.pickCode||x.pick_code||x.pc||""),sha1:String(x.sha1||x.sha||""),isDirectory:dir,updateTime:x.updateTime||x.userUtime||x.user_utime||x.t||x.mtime||"",createTime:x.createTime||x.create_time||x.tp||"",thumb:String(x.thumbURL||x.thumbUrl||x.thumb_url||x.u||""),raw:x};
+}
+function kindOf(f){if(f.isDirectory)return"folder";try{var k=api.tool.fileKind(f.name);if(k)return String(k);}catch(e){}var s=String(f.name||"").toLowerCase(),m=/\.([a-z0-9]{1,8})$/.exec(s),e=m?m[1]:"";if(/^(mp4|mkv|avi|mov|wmv|flv|ts|m2ts|rmvb|webm|m4v)$/.test(e))return"video";if(/^(jpg|jpeg|png|gif|webp|bmp|heic|avif)$/.test(e))return"image";if(/^(mp3|flac|wav|aac|m4a|ape|ogg|wma)$/.test(e))return"audio";if(/^(pdf|txt|doc|docx|xls|xlsx|ppt|pptx|epub|mobi|azw3|md)$/.test(e))return"document";if(/^(zip|rar|7z|tar|gz|bz2|xz)$/.test(e))return"archive";return"other";}
+function iconOf(k){if(k==="folder")return"📁 ";if(k==="video")return"🎬 ";if(k==="image")return"🖼 ";if(k==="audio")return"🎵 ";if(k==="document")return"📄 ";if(k==="archive")return"🗜 ";return"📦 ";}
+function route(kw,typeKey,sortIdx){return "hiker://page/115Search?rule=115.简&page=fypage&kw="+encodeURIComponent(kw)+"&type="+encodeURIComponent(typeKey)+"&sort="+encodeURIComponent(String(sortIdx));}
+var types=[{k:"all",t:"全部"},{k:"folder",t:"文件夹"},{k:"video",t:"视频"},{k:"image",t:"图片"},{k:"audio",t:"音频"},{k:"document",t:"文档"},{k:"archive",t:"压缩包"}];
+var sorts=[{o:"file_name",a:"1",t:"名称↑"},{o:"file_name",a:"0",t:"名称↓"},{o:"user_utime",a:"0",t:"时间↓"},{o:"user_utime",a:"1",t:"时间↑"},{o:"file_size",a:"0",t:"大小↓"},{o:"file_size",a:"1",t:"大小↑"}];
+var kw=q("kw","").trim(),typeKey=q("type","all"),sortIdx=parseInt(q("sort","0"),10)||0;if(sortIdx<0||sortIdx>=sorts.length)sortIdx=0;var sort=sorts[sortIdx],pageNo=1;try{pageNo=parseInt(MY_PAGE||1,10)||1;}catch(e4){}var limit=50,offset=(pageNo-1)*limit;
+var typeLabel="全部";for(var ti=0;ti<types.length;ti++)if(types[ti].k===typeKey)typeLabel=types[ti].t;
+if(pageNo===1){
+ d.push({title:"搜索115网盘",desc:"输入关键词后回车搜索；文件夹可直接打开，视频可直接播放",col_type:"input",url:$.toString(function(){var t=String(input||"").trim();if(!t)return"toast://请输入关键词";return"hiker://page/115Search?rule=115.简&page=fypage&kw="+encodeURIComponent(t)+"&type=all&sort=0";}),extra:{titleVisible:true,defaultValue:kw}});
+ if(!kw){d.push({title:"输入关键词开始搜索",desc:"支持文件夹、视频、图片、音频、文档、压缩包分类",col_type:"text_center_1"});setResult(d);return;}
+ d.push({title:"关键词："+kw+" · "+typeLabel+" · "+sort.t,col_type:"text_1",extra:{lineVisible:false}});
+ for(var tb=0;tb<types.length;tb++){(function(tp){d.push({title:(tp.k===typeKey?"● ":"")+tp.t,col_type:"text_4",url:route(kw,tp.k,sortIdx)});})(types[tb]);}
+ d.push({title:"⇅ "+sort.t,col_type:"text_4",url:route(kw,typeKey,(sortIdx+1)%sorts.length)});
+ d.push({title:"📁 文件管理",col_type:"text_4",url:"hiker://page/115FileManage?rule=115.简&page=fypage&cid=0&cname="+encodeURIComponent("我的文件")});
+ d.push({title:"↻ 重新搜索",col_type:"text_4",url:$("","输入新的搜索关键词").input(function(){var t=String(input||"").trim();if(!t)return"toast://已取消";return"hiker://page/115Search?rule=115.简&page=fypage&kw="+encodeURIComponent(t)+"&type=all&sort=0";})});
+}
+if(!kw){setResult(pageNo===1?d:[]);return;}
+var raw,err="";try{raw=runSearch(client,kw,typeKey,offset,limit,sort.o,sort.a);}catch(ex){err=String(ex.message||ex);}
+if(err){if(pageNo===1)d.push({title:"搜索失败",desc:err,col_type:"text_center_1"});setResult(pageNo===1?d:[]);return;}
+var pack=resultPack(raw),items=[];for(var ni=0;ni<pack.items.length;ni++){var f=norm(pack.items[ni]);if(f.id)items.push(f);}
+var sig=String(items.length)+"|"+(items[0]?items[0].id:"")+"|"+(items.length?items[items.length-1].id:"");var sigKey="115SearchSigV1_"+encodeURIComponent(kw).slice(0,50)+"_"+typeKey+"_"+sortIdx;var lastSig=getItem(sigKey,"");var noMore=pageNo>1&&(items.length===0||sig===lastSig);if(!noMore)setItem(sigKey,sig);
+if(pageNo===1)d.push({title:"共 "+String(pack.count||items.length)+" 条结果",desc:items.length?"点击文件夹浏览；视频直接播放；其它文件打开信息页":"",col_type:"text_1",extra:{lineVisible:false}});
+if(noMore){setResult([]);return;}
+for(var i=0;i<items.length;i++){
+ var f=items[i],kind=kindOf(f),desc=f.isDirectory?"文件夹":fmtSize(f.size),tm=fmtTime(f.updateTime);if(tm)desc+=(desc?" · ":"")+tm;if(f.isDirectory)desc+=(desc?" · ":"")+"点击打开";
+ var item={title:iconOf(kind)+f.name,desc:desc,col_type:"text_1",url:"hiker://empty",extra:{longClick:[]}};
+ if(f.isDirectory){var trail=[{id:"0",name:"我的文件"}];if(f.parentId&&f.parentId!=="0")trail.push({id:f.parentId,name:"上级目录"});trail.push({id:f.id,name:f.name});item.url="hiker://page/115FileManage?rule=115.简&page=fypage&cid="+encodeURIComponent(f.id)+"&cname="+encodeURIComponent(f.name)+"&trail="+encodeURIComponent(JSON.stringify(trail));}
+ else if(kind==="video")item.url=$().lazyRule(api.player.resolve,JSON.stringify({pc:f.pickCode||"",fid:f.id||"",name:f.name||"",kind:"video"}));
+ else item.url="hiker://page/115FileInfo?rule=115.简&page=fypage&fid="+encodeURIComponent(f.id)+"&name="+encodeURIComponent(f.name)+"&dir=0&size="+encodeURIComponent(String(f.size||0))+"&pc="+encodeURIComponent(f.pickCode||"")+"&sourceCid="+encodeURIComponent(f.parentId||"0")+"&sourceName="+encodeURIComponent("搜索结果所在目录");
+ item.extra.longClick.push({title:"文件信息",js:$.toString(function(id,nm,dir,sz,pc,parent){return "hiker://page/115FileInfo?rule=115.简&page=fypage&fid="+encodeURIComponent(id)+"&name="+encodeURIComponent(nm)+"&dir="+(dir?"1":"0")+"&size="+encodeURIComponent(String(sz||0))+"&pc="+encodeURIComponent(String(pc||""))+"&sourceCid="+encodeURIComponent(String(parent||"0"))+"&sourceName="+encodeURIComponent("搜索结果所在目录");},f.id,f.name,f.isDirectory,f.size,f.pickCode,f.parentId)});
+ if(f.parentId){item.extra.longClick.push({title:"打开所在目录",js:$.toString(function(parent){return "hiker://page/115FileManage?rule=115.简&page=fypage&cid="+encodeURIComponent(String(parent||"0"))+"&cname="+encodeURIComponent("所在目录");},f.parentId)});}
+ item.extra.longClick.push({title:"复制文件ID",js:$.toString(function(id){return"copy://"+String(id||"");},f.id)});
+ d.push(item);
+}
+if(!items.length&&pageNo===1)d.push({title:"没有找到匹配结果",desc:"可以切换类型筛选或修改关键词重试",col_type:"text_center_1"});
+setResult(d);
+})();
