@@ -42,6 +42,9 @@
     "folderPicker": "apps/cloud/pan115/modules/folder_picker_v1.js",
     "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
   },
-  "status": "pending-device-validation",
+  "status": "device-validated-superseded",
+  "deviceValidated": true,
+  "deviceValidationNote": "User confirmed batch delete, copy and move work on device, then requested continued optimization.",
+  "supersededBy": "1.2.1-test.3",
   "updatedAt": "2026-09-22"
 }
