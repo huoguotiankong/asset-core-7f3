@@ -29,7 +29,7 @@
     "add a File Information page with resilient metadata fallbacks, copyable file ID/PickCode/SHA1 and video/folder quick actions",
     "preserve directory context when entering Batch Management and when returning from copy/move target selection",
     "upgrade the target-folder picker with breadcrumb navigation, Root/Up, create-folder-in-place and recent target folders",
-    "keep the validated BatchOps/FileOps transport modules unchanged and continue sequential bounded operations",
+    "keep the existing BatchOps/FileOps authenticated transport modules unchanged while this Test focuses on navigation and UX",
     "do not modify login, magnet/offline flow, player, recycle-bin clear, or the underlying authenticated request contracts"
   ],
   "moduleSnapshot": {
