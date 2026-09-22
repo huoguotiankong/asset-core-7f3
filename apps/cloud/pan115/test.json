@@ -10,9 +10,15 @@
   "baseBuild": 2026092218,
   "release": "apps/cloud/pan115/releases/1.2.0-test.18/release.json",
   "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
-  "status": "pending-device-validation-authenticated-delete-transport-reuse",
-  "stableChanged": false,
+  "status": "promoted-to-stable",
+  "deviceValidated": true,
+  "stableChanged": true,
   "sameTitleImport": true,
+  "promotedTo": {
+    "version": "1.2.0",
+    "build": 2026092220,
+    "release": "apps/cloud/pan115/releases/1.2.0/release.json"
+  },
   "updatedAt": "2026-09-22",
-  "notes": "Test18 keeps the device-validated recycle list/restore/permanent-delete chain unchanged. Normal file/folder deletion no longer guesses client.request signatures: it captures the already working revertRecycleBin authenticated request shape, rewrites only rb/revert→rb/delete and rid→fid[0], then dispatches through the original request function."
+  "notes": "Device validation passed: normal file/folder deletion works. Test18 is frozen and promoted to Stable 1.2.0 without business-logic changes."
 }

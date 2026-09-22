@@ -8,19 +8,19 @@
       "channel": "stable",
       "label": "正式版",
       "name": "115.简",
-      "version": "1.1.0",
-      "build": 2026092111,
-      "ruleVersion": 2026092111,
-      "release": "apps/cloud/pan115/releases/1.1.0/release.json",
-      "installer": "apps/cloud/pan115/releases/1.1.0/installer.js",
+      "version": "1.2.0",
+      "build": 2026092220,
+      "ruleVersion": 2026092220,
+      "release": "apps/cloud/pan115/releases/1.2.0/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0/installer.js",
       "mode": "local-clone-patch",
       "recommended": true,
       "status": "device-validated",
-      "desc": "磁链调用正式版：查重、fileId优先定位、主片直放、多集选集、缓存复用、失败重试。"
+      "desc": "Test18实机通过后原样晋级：磁链低频安全链、海阔视界保存目录、精简首页、文件管理、回收站列表/还原/永久删除、普通删除到回收站。"
     },
     {
       "channel": "test",
-      "label": "测试版（同名覆盖）",
+      "label": "测试版（已晋级）",
       "name": "115.简",
       "version": "1.2.0-test.18",
       "build": 2026092219,
@@ -29,12 +29,12 @@
       "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
-      "status": "pending-device-validation",
-      "desc": "文件管理Phase2删除链修复：普通删除复用已验证revertRecycleBin的认证request传输形态，避免继续猜client.request签名；回收站列表/还原/永久删除保持Test17不变。"
+      "status": "promoted-to-stable",
+      "desc": "设备已验证普通文件/文件夹删除可用；冻结为Stable 1.2.0的晋级来源。"
     },
     {
       "channel": "candidate",
-      "label": "候选版",
+      "label": "历史候选版",
       "name": "115.简·候选",
       "version": "1.1.0-rc1",
       "build": 2026092110,
@@ -43,7 +43,7 @@
       "installer": "apps/cloud/pan115/releases/1.1.0-rc1/installer.js",
       "recommended": false,
       "status": "promoted-to-stable",
-      "desc": "已完成实机验证并原样晋级 Stable 1.1.0。"
+      "desc": "历史1.1.0候选基线，保留用于回溯。"
     }
   ]
 }

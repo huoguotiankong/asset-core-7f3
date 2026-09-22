@@ -5,11 +5,11 @@
   "category": "cloud",
   "mode": "local-clone-patch/self-use",
   "currentStable": {
-    "version": "1.1.0",
-    "build": 2026092111,
-    "ruleVersion": 2026092111,
-    "release": "apps/cloud/pan115/releases/1.1.0/release.json",
-    "installer": "apps/cloud/pan115/releases/1.1.0/installer.js",
+    "version": "1.2.0",
+    "build": 2026092220,
+    "ruleVersion": 2026092220,
+    "release": "apps/cloud/pan115/releases/1.2.0/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.0/installer.js",
     "status": "device-validated"
   },
   "currentTest": {
@@ -18,7 +18,7 @@
     "ruleVersion": 2026092219,
     "release": "apps/cloud/pan115/releases/1.2.0-test.18/release.json",
     "installer": "apps/cloud/pan115/releases/1.2.0-test.18/installer.js",
-    "status": "pending-device-validation"
+    "status": "promoted-to-stable"
   },
   "candidate": {
     "version": "1.1.0-rc1",
