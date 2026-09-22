@@ -1,253 +1,169 @@
 # 115.简 / Pan115 开发记录
 
-状态：**Stable 1.2.0 / Build 2026092220 / 已实机验证；Test 1.2.1-test.6 / Build 2026092226 / 待实机验证**  
+状态：**Stable 1.2.0 / Build 2026092220 / 已实机验证；Test 1.2.1-test.7 / Build 2026092227 / 待实机验证**  
 首次纳入：2026-09-21  
 最近更新：2026-09-22
 
-## 1.2.1-test.6 / Build 2026092226 — 搜索结果恢复 + 首页搜索按钮
+## 1.2.1-test.7 / Build 2026092227 — 恢复设备已证明可搜索的旧搜索链
 
-### Test5 实机失败
+### 当前实机结论
 
-用户覆盖 Test5 后继续用同一个已知关键词 `ipx-641` 实机验证。搜索页 UI、筛选按钮和纯文本摘要都正常显示，但结果从此前旧搜索页的 **6 条** 变成 **0 条**。
+用户用同一个已知关键词 `ipx-641` 连续验证：
 
-这说明 Test5 的“结果渲染/目录点击”重构方向没有直接报错，真正回归发生在搜索请求合同。Test5 不标记通过，已记录为 `failed-device-validation-search-zero-results` 并被 Test6 覆盖。
+- Test4 及更早的旧搜索页：可返回约 **6 条结果**；
+- Test5：改写搜索请求后变成 **0 条**；
+- Test6：把 `aid=7` 改成 `aid=1`，并继续把 `getFiles()` 的认证传输改写到 `/files/search`，实机仍然是 **0 条**。
 
-### 根因收敛
+因此 Test6 判定为 `failed-device-validation-search-zero-results`。这轮停止继续猜 `aid / endpoint / request` 参数。
 
-Test5 参考了另一个 115 Client 的实现，把 WebAPI 搜索请求写成 `aid=7`，同时还优先尝试了当前 Client 是否存在 `filesSearch()`。当前用户原有 115 搜索链此前能够返回 `ipx-641` 的 6 条结果；公开的传统 115 WebAPI `/files/search` 合同大量使用：
+### 根因边界
 
-```text
-GET https://webapi.115.com/files/search
-?aid=1
-&cid=0
-&search_value=<keyword>
-&offset=0
-&limit=...
-&count_folders=1
-&format=json
-```
-
-因此 Test6 不再优先调用签名未知的 `filesSearch()`，而是固定复用当前已登录 `client.getFiles()` 的实际 GET 认证传输，只把业务 URL/参数替换成 `/files/search + aid=1`。
-
-仍然遵守现有安全原则：
-
-- 不自行拼 Cookie；
-- 不猜 `client.request()` 参数顺序；
-- 只捕获当前 `getFiles()` 已实际使用的认证请求模板；
-- 搜索一次只发一个用户触发请求，不引入后台轮询/并发。
-
-### 保留的 Test5 搜索改进
-
-- 搜索结果字段继续统一归一化；
-- 目录结果优先使用真实目录 ID（目录通常 `cid`，父目录 `pid`）；
-- 文件夹点击直接进入 `115FileManage`，不再返回空链接；
-- 视频结果继续复用 `player.resolve()`；
-- 普通文件继续进入 `115FileInfo`；
-- 类型筛选继续：全部 / 文件夹 / 视频 / 图片 / 音频 / 文档 / 压缩包；
-- 排序继续：名称 / 时间 / 大小升降序；
-- 分页继续使用重复页签名保护。
-
-### 首页搜索按钮
-
-用户同时要求首页搜索框右侧恢复明确的搜索按钮。海阔官方 `input` 组件的 `title` 本来就是右侧确定按钮，`extra.titleVisible:false` 会隐藏它。因此 Test6 安装器只在当前首页 `find_rule` 中把现有输入框的 `titleVisible` 恢复为 `true`；不重写输入分流逻辑，原来的：
+Test5/Test6 的共同问题不是 UI，而是把原本已工作的搜索数据链替换成了新的推断实现。事实说明：
 
 ```text
-普通关键词 → 115Search
-115分享链接 → 分享处理
-magnet / ed2k / HTTP → 115Offline
+“某个 client 方法已经完成认证”
+≠
+“可以把该方法的 request 模板跨 endpoint 复用”
 ```
 
-继续保持。
+即使返回的是合法 JSON、`state=true` 或空数组，也不能据此证明改写后的搜索合同正确。
 
-### 模块快照
+### Test7 恢复策略
 
-- Search V2 commit：`b98b9dd68d3340486d32f25a2f7b53b2bded6f5e`
-- 搜索：`apps/cloud/pan115/modules/search_v2.js`
-- 文件管理继续：`apps/cloud/pan115/modules/file_manage_v8.js`
-- 文件信息继续：`apps/cloud/pan115/modules/file_info_v1.js`
-- 新建/重命名继续：`apps/cloud/pan115/modules/file_ops_v1.js`
-- 批量核心继续：`apps/cloud/pan115/modules/batch_ops_v1.js`
-- 批量页继续：`apps/cloud/pan115/modules/file_batch_v2.js`
-- 目标目录页继续：`apps/cloud/pan115/modules/folder_picker_v2.js`
-- 回收站继续：`apps/cloud/pan115/modules/recycle_v5.js`
-- Release：`apps/cloud/pan115/releases/1.2.1-test.6/release.json`
+不再自己构造 `/files/search` 请求。安装器直接从用户设备之前安装 Test4/Test3/Test2/Test1/Stable 时留下的完整规则缓存中，提取 **Test5 之前的原始 `115Search` 页面代码**，再覆盖掉 Test5/Test6 的搜索页。
 
-### Test6 实机验收
-
-优先再次搜索 `ipx-641`：
-
-1. 应重新出现原本约 6 条结果，而不是 0 条；
-2. 点击 `ipx-641` / `ipx-641-C` 目录应进入对应文件夹；
-3. 点击 mp4 应走现有 115 播放链；
-4. 首页输入框右侧应出现搜索确认按钮；
-5. 再验证一次文件夹/视频筛选与一种排序；
-6. 登录、文件管理、批量操作、回收站、磁链播放不得回归。
-
-当前状态：`pending-device-validation-search-hotfix`。
-
-## 1.2.1-test.5 / Build 2026092225 — 云盘搜索专项重构（实机失败：0结果）
-
-### 实机问题
-
-用户在 Test4 后提供搜索 `ipx-641` 的实机截图：115 旧搜索页可正确返回 6 条搜索结果，包括目录 `ipx-641`、`ipx-641-C` 和多个 mp4 文件，但点击目录时海阔提示：
+恢复顺序：
 
 ```text
-链接为空，规则有误！
+hiker://files/cache/115_12104_file_manage_ux_test.json
+→ 115_12103_file_manage_test.json
+→ 115_12102_batch_manage_test.json
+→ 115_12101_recycle_clear_test.json
+→ 115_stable_120_rule.json
 ```
 
-同时搜索页摘要把 HTML 字符串原样显示。Test5 因此首次重写 `115Search`：归一化结果字段、目录使用真实 ID、视频直放、普通文件进入信息页，并补齐筛选/排序/分页。
+只接受 `version < 2026092225` 的规则快照，优先 Test4。Test4 安装器当时没有修改 `115Search`，而用户后续截图已经证明这一运行链能搜索出 `ipx-641` 的结果，因此它是当前最可靠的恢复源。
 
-Test5 UI 和页面结构实机可打开，但同一 `ipx-641` 在新搜索请求中返回 0 条，判定搜索传输合同回归。Test5 已被 Test6 覆盖，不得晋级 Stable。
+### 修改边界
 
-模块：`search_v1.js`；Release：`apps/cloud/pan115/releases/1.2.1-test.5/release.json`。
+本版只恢复 `115Search`，不回退其它当前能力：
 
-## 1.2.1-test.4 / Build 2026092224 — 文件管理导航 / 排序筛选 / 文件信息 / 目标目录体验
+- `file_manage_v8.js` 文件管理继续保留；
+- `file_info_v1.js` 继续保留；
+- `file_ops_v1.js` 新建/重命名继续保留；
+- `batch_ops_v1.js + file_batch_v2.js + folder_picker_v2.js` 继续保留；
+- `recycle_v5.js` 清空回收站继续保留；
+- 登录/Cookie/m115、磁链离线、播放器不改；
+- Test6 已恢复的首页输入框右侧搜索确认按钮继续保留。
 
-Test4 重点优化文件管理产品体验，不扩张 115 认证协议：
+如果设备找不到任何旧规则快照，安装器会直接停止并提示，不覆盖当前规则，避免第三次用猜测方案破坏搜索。
 
-- 根目录 / 上一级 / 面包屑导航；
+### Test7 验收顺序
+
+本轮第一目标只有一个：**先把搜索结果恢复**。
+
+1. 搜索 `ipx-641`，确认是否重新出现原来约 6 条结果；
+2. 如果结果恢复，说明旧搜索数据链找回；
+3. 此时旧页面的两个历史 UI 问题——关键词 HTML 裸显、文件夹点击“链接为空”——可能随旧搜索一起回来，这是本轮有意接受的阶段性回退；
+4. 等搜索结果恢复后，下一版只在这份真实可用的旧 `115Search` 上做最小结果渲染/目录跳转补丁，不再碰请求层。
+
+安装器：`apps/cloud/pan115/releases/1.2.1-test.7/installer.js`  
+Release：`apps/cloud/pan115/releases/1.2.1-test.7/release.json`
+
+当前状态：`pending-device-validation-search-recovery`。
+
+## 1.2.1-test.6 / Build 2026092226 — 搜索 aid/transport 热修（实机失败）
+
+Test5 后尝试：
+
+- `/files/search` 参数从 `aid=7` 改回 `aid=1`；
+- 不再优先调用签名不确定的 `filesSearch()`；
+- 捕获当前 `getFiles()` 的已认证 request 结构，再将 URL/参数替换成搜索请求；
+- 同时恢复首页输入框右侧确认按钮。
+
+用户实机确认 `ipx-641` 仍为 0 条，因此此方案被证伪。**禁止继续把 `getFiles()` 的认证请求模板跨 endpoint 当作通用搜索传输。**
+
+状态：`failed-device-validation-search-zero-results`，已被 Test7 覆盖。
+
+## 1.2.1-test.5 / Build 2026092225 — 搜索页重构（实机失败）
+
+目标是解决旧搜索页“目录点击空链接”和 HTML 裸显，并加入筛选/排序/分页。新页面能正常渲染，但同一 `ipx-641` 从旧页的约 6 条结果退化为 0 条。
+
+状态：`failed-device-validation-search-zero-results`。
+
+## 1.2.1-test.4 / Build 2026092224 — 文件管理 UX
+
+新增/优化：
+
+- 根目录 / 上一级 / 面包屑；
 - 名称、时间、大小升降序；
-- 文件夹 / 视频 / 图片 / 音频 / 文档 / 压缩包 / 其它轻量筛选；
-- 长按文件信息，显示 ID / PickCode / SHA1 / 大小 / 时间等；
-- 批量管理保持原目录上下文；
-- 目标目录选择器增加面包屑、根目录、上一级、目录内新建与最近目标。
+- 文件夹 / 视频 / 图片 / 音频 / 文档 / 压缩包 / 其它筛选；
+- 文件信息页：ID / PickCode / SHA1 / 大小 / 时间；
+- 批量管理保持源目录上下文；
+- 目标目录选择器加入导航、当前目录新建、最近目标。
 
-模块：`file_manage_v8.js`、`file_info_v1.js`、`file_batch_v2.js`、`folder_picker_v2.js`；底层仍复用 `file_ops_v1.js + batch_ops_v1.js + recycle_v5.js`。
-
-Test4 在收到完整实机验收前被 Test5/Test6 覆盖，不标记 deviceValidated。
+Test4 没有修改旧 `115Search`，其安装缓存现在作为 Test7 的首选搜索恢复源。Test4 本身没有收到整版明确实机通过结论。
 
 ## 1.2.1-test.3 / Build 2026092223 — 新建 / 重命名 / 单项复制移动
 
-在已验证 Test2 基础上新增：
+新增：
 
 ```text
 文件管理顶部 → 新建文件夹
-文件/文件夹长按 → 重命名 / 复制到… / 移动到… / 删除到回收站
+长按文件/文件夹 → 重命名 / 复制到… / 移动到… / 删除到回收站
 ```
 
-新建与重命名独立到 `file_ops_v1.js`。认证继续捕获当前已登录 Client 的真实 request 模板，不自行拼 Cookie：
-
-- WebAPI 新建：`/files/add`，`pid + cname`；
-- OpenAPI 新建：`/open/folder/add`，`pid + file_name`；
-- WebAPI 重命名：`/files/edit`，`fid + file_name`；
-- OpenAPI 重命名：`/open/ufile/update`，`file_id + file_name`。
-
-单项复制/移动不另造协议，写入单项选择集后复用 Test2 已验证的 `115BatchOps + 115FolderPicker`。Test3 后续被 Test4/Test5/Test6 覆盖，目前没有独立完整实机通过结论。
+新建/重命名由 `file_ops_v1.js` 隔离；单项复制/移动复用 Test2 已验证的批量核心。未收到整版独立实机通过结论。
 
 ## 1.2.1-test.2 / Build 2026092222 — 批量删除 / 复制 / 移动（已实机验证）
 
-用户明确反馈“可以了”，因此下列能力视为实机通过：
+用户明确反馈可用：
 
-- 文件/文件夹多选、取消；
-- 全选本页、清空选择；
+- 多选 / 取消 / 全选本页 / 清空选择；
 - 批量删除到回收站；
-- 批量复制到目标目录；
-- 批量移动到目标目录；
+- 批量复制；
+- 批量移动；
 - 目标目录选择器。
 
-`batch_ops_v1.js` 复用当前 Client 已认证传输，按 WebAPI/OpenAPI 自动选择 `/rb/delete`、`/files/copy`、`/files/move` 或对应 `/open/ufile/*`；顺序分批执行，不并发，一次最多 1000 项；禁止移动到当前目录和复制/移动到自身。
+所有批量请求顺序分批执行，不并发；一次操作最多 1000 项。移动到当前目录、复制/移动到自身有保护。
 
 ## 1.2.1-test.1 / Build 2026092221 — 清空回收站（已实机验证）
 
-用户明确反馈可用。回收站顶部加入“清空回收站”：
+用户明确反馈可用。流程：
 
 ```text
 输入115安全密码
 → 二次确认不可恢复
-→ 先完整快照 rid
-→ cleanRecycleBin(password, ids)
-→ 小批顺序执行
+→ 完整快照回收站 rid
+→ cleanRecycleBin 分批顺序执行
 → 失败立即停止并报告进度
 ```
 
-最多扫描 200 页 × 40 项；单条还原、单条永久删除保持原逻辑。
-
 ## Stable 1.2.0 / Build 2026092220 — Test18 原样晋级（已实机验证）
 
-用户实机确认 `1.2.0-test.18 / Build 2026092219` 普通文件/文件夹删除可用后晋级 Stable。Stable 冻结，不在后续 Test 开发中直接修改。
+稳定基线能力：
 
-已验证普通删除链：
+- 普通文件/文件夹删除到回收站；
+- 回收站列表 / 还原 / 永久删除；
+- 磁链低频安全链；
+- 离线保存目录优先 `根目录/海阔视界 → 云下载/离线下载 → 根目录`；
+- 独立文件管理；
+- 原版登录/Cookie、m115、115 分享、个人文件直链播放保持原合同。
 
-```text
-文件管理长按删除
-→ 复用当前已登录115Api Client
-→ 捕获 revertRecycleBin() 实际 request 认证结构
-→ /rb/revert 改写 /rb/delete
-→ rid 改写 fid[0]
-→ 通过原 request 发出
-→ 文件进入回收站
-```
+普通删除最终采用：捕获已验证 `revertRecycleBin()` 的真实认证 request 结构，仅把 `/rb/revert` 改为 `/rb/delete`、`rid` 改为 `fid[n]`，用户实机确认有效。
 
-Stable 1.2.0 同时保留：
+## 1.2.0 关键历史与禁用事故
 
-- `115Offline?add=` 外部 magnet 调用合同；
-- BTIH/URL 查重、fileId 优先定位、单主片直放、多集选集、缓存与失败重试；
-- 离线目录优先 `根目录/海阔视界 → 云下载/离线下载 → 根目录`；
-- 独立文件管理、回收站列表/还原/永久删除；
-- 原版登录/Cookie、m115 加解密、115 分享、普通文件浏览、`player.resolve()`。
+- Test12：确认 `rule=115.简` 中文规则名不能整体 percent encode；业务参数单独编码。
+- Test13：首页降噪。
+- Test14～18：逐步补齐文件管理、回收站、普通删除，最终进入 Stable 1.2.0。
+- 历史 `1.2.0-test.7` 曾使用多路后台 worker 高频轮询 115，实机造成 HTML 响应和“我的文件”空白。永久禁止后台高频/并发轮询 115。
 
-## 1.2.0 Test9 → Test18 关键演进
+## 长期协议与调用边界
 
-- **Test18 / Build 2026092219**：普通删除不再猜 `client.request()` 参数，改为捕获已验证 `revertRecycleBin()` 的真实认证传输；用户实机确认删除可用。
-- **Test17 / Build 2026092218**：文件管理删除目标切到 `/rb/delete`，回收站列表/还原/永久删除链已可用。
-- **Test16**：回收站长按永久删除，要求 115 安全密码。
-- **Test15**：删除、回收站统一复用 `115Api.newClient()` 当前登录会话。
-- **Test14**：首次加入隔离的 `115FileManage / 115Recycle`。
-- **Test13**：首页降噪，移除过长提示和重复开发信息。
-- **Test12**：确认中文规则名 `rule=115.简` 不整体 percent encode，业务参数单独编码。
-- **Test11**：Test10 首页兼容失败后回到安全基线，用保守 ES5 重建。
-- **Test9**：修复安全磁链状态页安装器，用户确认可导入、首页可打开。
+最初基线来自用户提供的 `115.简.hk小程序`，原规则已具备扫码/Cookie 登录、文件列表、**全盘搜索**、115 分享、离线任务、magnet/ed2k/HTTP(S) 添加、个人网盘直链播放。
 
-## Test7 事故与永久禁用项
-
-Test7 曾使用多路后台 worker 高频轮询离线状态，实机出现：
-
-```text
-磁链页停在提交状态
-离线任务接口返回 <!doctype html>
-“我的文件”空白
-```
-
-覆盖回安全版后恢复。因此永久禁止：
-
-- 多路并发轮询 115 状态；
-- 连续多页高频任务查询；
-- 为追求“实时”长期后台访问 115；
-- 任何会影响普通网盘请求稳定性的状态跟踪。
-
-## Stable 1.1.0 / Build 2026092111
-
-建立最初稳定 magnet 播放合同：
-
-```text
-其它小程序传 magnet
-→ 115Offline?add=
-→ BTIH / URL 查重
-→ 已有任务复用 / 新任务提交
-→ 完成后优先 task.fileId
-→ 视频：player.resolve
-→ 目录：受控扫描视频
-→ 单主片直放 / 多集进入选集
-```
-
-目录扫描受控在约 4 层、500 项；sample/preview/trailer/试看/预告/花絮/广告等噪声降权。
-
-## 基线与长期协议事实
-
-最初基线来自用户提供的 `115.简.hk小程序`。原规则已具备扫码/Cookie 登录、文件列表、全盘搜索、115 分享、离线任务、magnet/ed2k/HTTP(S) 添加、个人网盘直链播放。
-
-长期确认：
-
-- `addOfflineTaskURIs()` 是离线添加入口；
-- `listOfflineTask()` 的 `file_id` 对应离线结果 `fileId`；
-- `wp_path_id` 是离线目标目录；
-- `player.resolve()` 通过 PickCode/fileId 获取直链并附带所需 Header；
-- 普通删除、回收站、文件写操作必须复用当前登录 Client 的真实认证传输，禁止凭空猜 Cookie/request 形态；
-- 搜索属于普通云盘能力，magnet 不得送入 `115Search?kw=`。
-
-## 对外稳定磁链调用协议
-
-调用方固定使用：
+磁链外部调用固定：
 
 ```js
 function playBy115(url) {
@@ -256,26 +172,19 @@ function playBy115(url) {
 }
 ```
 
-禁止：
+禁止 magnet → `115Search?kw=`。
 
-```js
-"hiker://page/115Search?rule=115.简&page=fypage&kw=" + encodeURIComponent(url)
-```
-
-后者已实机证明只会把 magnet 当普通文件搜索词。
-
-## 已证伪 / 禁止恢复方案
+## 已证伪 / 禁止恢复
 
 - 自行重写完整 115 magnet 协议层；
-- 完整远程 JSON 直接作为 `home_rule_url` 的旧失败方案；
-- `$.require("hiker://page/115Api?rule=115.简")` 跨规则模块加载；
-- `fetch(hiker://home) + eval` 强行跨规则复用模块；
-- magnet → `115Search?kw=`；
-- Test7 多路后台轮询；
-- 普通删除继续猜 `client.request()` 参数顺序；
-- Test5 的 `aid=7 + 优先 filesSearch()` 搜索传输；
-- 在 Test3/Test4/Test5 未获实机明确通过时虚构 deviceValidated 状态。
+- Test7 历史高并发轮询；
+- 普通删除猜 `client.request()` 参数顺序；
+- Test5 的新搜索 request 推断链；
+- Test6 的“捕获 `getFiles()` 认证传输后跨 endpoint 改成 `/files/search`”方案；
+- 仅修改 `aid=7/1` 就假定搜索合同正确；
+- 看到合法空数组就把请求判定为正确；
+- 未经实机验证就把 Test3～Test7 标记为 deviceValidated。
 
-## 后续开发边界
+## 当前恢复/开发边界
 
-Stable 1.2.0 继续作为日常恢复基线。Test1 清空回收站、Test2 批量删除/复制/移动已实机通过；Test3/Test4 没有完整设备通过结论；Test5 搜索请求实机失败；Test6 当前优先验证搜索结果恢复和目录点击。搜索通过后再继续收敛当前目录搜索、批量选择体验、文件属性和 UI，不得为了文件管理/搜索改动登录、磁链播放、原播放器或恢复高频访问。
+Stable 1.2.0 不动。Test1 清空回收站、Test2 批量删除/复制/移动已实机通过。当前 Test7 只负责恢复 Test5 之前真实可用的搜索数据链；搜索恢复前不继续扩展搜索筛选、排序或协议层。等 `ipx-641` 结果恢复后，再从真实旧 `115Search` 做“目录点击 + 文本显示”最小补丁，并继续实机闭环。
