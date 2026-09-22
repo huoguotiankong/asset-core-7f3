@@ -32,7 +32,8 @@
   ],
   "evidence": {
     "fileManagerModule": "apps/cloud/pan115/modules/file_manage_v8.js",
-    "contract": "File Management V8 reads fid=String(f.fileId), isDir=!!f.isDirectory, then uses that same fileId as cid when opening a directory. Test11 incorrectly treated fileId as a file-only fid and required a separate cid field."
+    "contract": "File Management V8 reads fid=String(f.fileId), isDir=!!f.isDirectory, then uses that same fileId as cid when opening a directory. Test11 incorrectly treated fileId as a file-only fid and required a separate cid field.",
+    "deviceResult": "User confirmed Test12 works; the normalized folder fileId is accepted as the folder cid and the previously failing search-folder navigation is closed."
   },
   "safety": {
     "stableChanged": false,
@@ -47,6 +48,6 @@
     "mp4 search results continue to play",
     "keyword summary remains plain text"
   ],
-  "status": "pending-device-validation-normalized-folder-fileId",
+  "status": "device-validated-search-folder-navigation",
   "updatedAt": "2026-09-22"
 }
