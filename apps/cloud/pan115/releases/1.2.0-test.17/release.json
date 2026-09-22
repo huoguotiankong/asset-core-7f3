@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.17",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.17",
+  "build": 2026092218,
+  "ruleVersion": 2026092218,
+  "basedOn": {"version":"1.2.0-test.16","build":2026092217},
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.17/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "features": [
+    "fix file delete fallback to use authenticated client.request with full webapi.115.com/rb/delete URL",
+    "POST fid[0] to move normal files/folders into recycle bin",
+    "keep validated recycle list and restore behavior unchanged",
+    "permanent recycle deletion now calls existing client.cleanRecycleBin directly",
+    "ask for 115 security password only at permanent-delete action time and do not store it",
+    "remove broken relative /open/ufile/delete and /open/rb/del request fallbacks",
+    "do not modify login, original My Files, offline magnet chain or player"
+  ],
+  "moduleSnapshot": {
+    "commit": "f4540003f89b619a788b96fadf6eb19a1f936ba9",
+    "fileManage": "apps/cloud/pan115/modules/file_manage_v4.js",
+    "recycle": "apps/cloud/pan115/modules/recycle_v4.js"
+  },
+  "status": "pending-device-validation",
+  "updatedAt": "2026-09-22"
+}
