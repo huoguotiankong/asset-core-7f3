@@ -22,15 +22,15 @@
       "channel": "test",
       "label": "测试版（同名覆盖）",
       "name": "115.简",
-      "version": "1.2.0-test.13",
-      "build": 2026092214,
-      "ruleVersion": 2026092214,
-      "release": "apps/cloud/pan115/releases/1.2.0-test.13/release.json",
-      "installer": "apps/cloud/pan115/releases/1.2.0-test.13/installer.js",
+      "version": "1.2.0-test.14",
+      "build": 2026092215,
+      "ruleVersion": 2026092215,
+      "release": "apps/cloud/pan115/releases/1.2.0-test.14/release.json",
+      "installer": "apps/cloud/pan115/releases/1.2.0-test.14/installer.js",
       "mode": "in-place-self-use-test",
       "recommended": false,
       "status": "pending-device-validation",
-      "desc": "自用首页精简版：保留Test12路由修复，去除搜索框右侧长提示、底部状态/Build说明和冗余副标题。"
+      "desc": "文件管理Phase2：新增独立文件管理页、长按删除到回收站、回收站列表与还原；不改原我的文件、115Api、磁链与播放器。"
     },
     {
       "channel": "candidate",
