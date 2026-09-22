@@ -13,12 +13,12 @@
     "status": "device-validated"
   },
   "currentTest": {
-    "version": "1.2.1-test.3",
-    "build": 2026092223,
-    "ruleVersion": 2026092223,
-    "release": "apps/cloud/pan115/releases/1.2.1-test.3/release.json",
-    "installer": "apps/cloud/pan115/releases/1.2.1-test.3/installer.js",
-    "status": "pending-device-validation-create-rename-quick-actions"
+    "version": "1.2.1-test.4",
+    "build": 2026092224,
+    "ruleVersion": 2026092224,
+    "release": "apps/cloud/pan115/releases/1.2.1-test.4/release.json",
+    "installer": "apps/cloud/pan115/releases/1.2.1-test.4/installer.js",
+    "status": "pending-device-validation-file-manager-ux"
   },
   "candidate": {
     "version": "1.1.0-rc1",
