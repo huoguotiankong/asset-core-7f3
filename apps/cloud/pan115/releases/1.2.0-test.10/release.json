@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.0-test.10",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.0-test.10",
+  "build": 2026092211,
+  "ruleVersion": 2026092211,
+  "basedOn": {
+    "version": "1.2.0-test.9",
+    "build": 2026092210,
+    "deviceValidated": true,
+    "note": "User confirmed Test9 imports and current 115 home opens normally."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.0-test.10/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "home-ui-only",
+  "features": [
+    "rebuild the home page into an app-style information architecture without changing 115Api or protocol pages",
+    "hero connection state and unified smart search input",
+    "quick access to my files, cached root/海阔视界 folder, offline downloads and 115 share links",
+    "surface favorites, history, recycle bin and account when those pages exist in the installed rule",
+    "add dedicated magnet/tool section and copyable 115Offline external-call contract",
+    "retain Test9 safe single-worker low-frequency magnet page unchanged",
+    "retain root/海阔视界 -> 云下载/离线下载 -> root destination policy",
+    "keep program title 115.简 so existing login/Cookie namespace is reused"
+  ],
+  "frozenUnchanged": [
+    "115Api",
+    "login/cookie/qr",
+    "my files and normal file list pages",
+    "115 share protocol implementation",
+    "offline protocol implementation from Test9",
+    "player.resolve",
+    "m115 crypto"
+  ],
+  "validation": [
+    "home should open without network blocking",
+    "my files must still open normally",
+    "smart search must route normal keyword to 115Search, magnet/ed2k/http to 115Offline, and 115 share link to 115Share",
+    "cached 海阔视界 shortcut should open its folder when CID exists",
+    "existing Test9 magnet playback behavior must remain unchanged",
+    "program title remains 115.简 and current login remains valid"
+  ],
+  "status": "pending-device-ui-validation",
+  "updatedAt": "2026-09-22"
+}
