@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.9",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.9",
+  "build": 2026092229,
+  "ruleVersion": 2026092229,
+  "basedOn": {
+    "version": "1.2.1-test.8",
+    "build": 2026092228,
+    "deviceValidated": false,
+    "note": "User device confirmed Test8 correctly detected the WebAPI branch but still returned zero results for the known-good keyword ipx-641. Therefore endpoint/mode detection alone is not sufficient and the rewritten search request must be abandoned until the exact legacy request contract is recovered."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.9/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "exact-legacy-search-runtime-recovery",
+  "features": [
+    "restore the exact pre-Test5 115Search page from the user's local Test4/Test3/Test2/Test1/Stable snapshots instead of synthesizing another /files/search request",
+    "prefer the newest available pre-Test5 snapshot, normally the Test4 local cache that demonstrably returned about six results for ipx-641",
+    "keep the Test8 experimental search page under a hidden 115SearchModernDebug path for later comparison without using it as the normal search route",
+    "retain the homepage right-side search confirmation button",
+    "leave File Management V8, File Information, FileOps, BatchOps, FolderPicker, recycle-bin, login, magnet/offline flow and player unchanged",
+    "fail closed and do not overwrite the installed rule if no valid pre-Test5 snapshot can be recovered"
+  ],
+  "knownBoundary": "Test9 is intentionally a request-path recovery build. It restores the previously working search request exactly. The old search page still has the known folder-result empty-link behavior; after search results are confirmed recovered, the next change must patch only result navigation/rendering while preserving this recovered request chain.",
+  "recoverySnapshots": [
+    "hiker://files/cache/115_12104_file_manage_ux_test.json",
+    "hiker://files/cache/115_12103_file_manage_test.json",
+    "hiker://files/cache/115_12102_batch_manage_test.json",
+    "hiker://files/cache/115_12101_recycle_clear_test.json",
+    "hiker://files/cache/115_stable_120_rule.json"
+  ],
+  "status": "pending-device-validation-search-recovery",
+  "updatedAt": "2026-09-22"
+}
