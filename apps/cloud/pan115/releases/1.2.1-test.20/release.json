@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "pan115-1.2.1-test.20",
+  "appId": "pan115",
+  "name": "115.简",
+  "channel": "test",
+  "version": "1.2.1-test.20",
+  "build": 2026092240,
+  "ruleVersion": 2026092240,
+  "basedOn": {
+    "version": "1.2.1-test.19",
+    "build": 2026092239,
+    "deviceValidated": true,
+    "note": "User confirmed the Test19 emergency rollback restored File Management. Test20 reintroduces only recent-play capture through a small exported helper module and a pre-save syntax gate."
+  },
+  "installer": "apps/cloud/pan115/releases/1.2.1-test.20/installer.js",
+  "delivery": {
+    "mode": "in-place-self-use-test",
+    "ruleTitle": "115.简",
+    "overwritesSameTitle": true,
+    "preservesLoginNamespace": true,
+    "createsSecondRule": false
+  },
+  "scope": "safe-playback-history-phase1-retry",
+  "features": [
+    "restore the Test17 File Management V9 source from its immutable validated commit before adding playback-history hooks",
+    "add a compact ▶ 最近 entry to File Management",
+    "record up to 50 recent videos only when a video is explicitly played from File Management",
+    "route playback tracking through a small exported 115PlayStore module instead of embedding a large nested longClick source fragment",
+    "add a V2 recent-play page with 最近 / 收藏 tabs, replay, open-source-folder, remove and clear actions",
+    "allow videos already present in recent history to be added to or removed from local favorites",
+    "all recent/favorite data remains local UI state and adds no background or list-time 115 requests"
+  ],
+  "safety": {
+    "stableChanged": false,
+    "searchChanged": false,
+    "offlineCenterChanged": false,
+    "accountCenterChanged": false,
+    "recycleChanged": false,
+    "fileOperationProtocolChanged": false,
+    "networkRequestsAddedForHistory": false,
+    "badTest18SourceInherited": false,
+    "syntaxGuard": "Node syntax checks were run on play_store_v1.js, play_history_v2.js and installer.js before publication; installer also calls new Function() on the final File Management source, store and history modules before saving the rule."
+  },
+  "limitations": [
+    "This retry intentionally does not add a File Management long-press video-favorite hook; favorites are toggled from the recent-play page after a video has been played.",
+    "Search and OfflineResult playback are not patched in this slice so their established stable chains remain untouched."
+  ],
+  "validationTarget": [
+    "File Management opens without a JavaScript compile error",
+    "existing Test17 folder favorites/recent folders, sort/filter and file operations remain normal",
+    "File Management shows ▶ 最近",
+    "playing one video from File Management still starts playback and creates a recent record",
+    "最近 page can replay that video and open its original directory",
+    "long-pressing an item in 最近 can add/remove it from 收藏",
+    "clearing recent or favorites only clears local history data"
+  ],
+  "status": "pending-device-validation-play-history-safe-retry",
+  "updatedAt": "2026-09-22"
+}
