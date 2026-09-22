@@ -35,6 +35,9 @@
     "commit": "976eb266c5bb55bba43b6676eb379cf50655ae0c",
     "recycle": "apps/cloud/pan115/modules/recycle_v5.js"
   },
-  "status": "pending-device-validation",
+  "status": "device-validated-superseded",
+  "deviceValidated": true,
+  "deviceValidationNote": "User confirmed recycle-bin clear works on device before proceeding to Test2.",
+  "supersededBy": "1.2.1-test.2",
   "updatedAt": "2026-09-22"
 }
