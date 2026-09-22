@@ -11,7 +11,7 @@
     "version": "1.2.1-test.6 / test.7 recovery line",
     "build": 2026092226,
     "deviceValidated": false,
-    "note": "Test5 and Test6 both returned zero results for a keyword that the legacy search had already proved valid. Further inspection confirmed the current 115 client can run in either WebAPI Cookie mode or OpenAPI Bearer mode; the previous search rewrite always forced a WebAPI search endpoint onto the captured file-list transport."
+    "note": "Test5/Test6 both returned zero results. Test8 added OpenAPI/WebAPI mode detection."
   },
   "installer": "apps/cloud/pan115/releases/1.2.1-test.8/installer.js",
   "delivery": {
@@ -23,23 +23,17 @@
   },
   "scope": "dual-auth-search-repair",
   "features": [
-    "detect the real authenticated file-list mode from client.getFiles() before searching",
-    "OpenAPI mode: preserve Bearer authentication and retarget /open/ufile/files to GET /open/ufile/search",
-    "WebAPI mode: preserve Cookie authentication and retarget /files to /files/search with the established aid=7 search contract",
-    "use the correct OpenAPI search fields: file_id, parent_id, file_name, file_size, pick_code, user_utime and file_category",
-    "use OpenAPI fc/type mappings and WebAPI type mappings separately instead of sharing one incompatible filter mapping",
-    "folder results route the real folder ID into enhanced File Management; videos continue through the existing player resolver; other files open File Information",
-    "retain the visible homepage search confirmation button and all Test4+ file-management/recycle/magnet/login modules unchanged",
-    "no concurrent polling and no extra background requests"
+    "detect OpenAPI Bearer vs WebAPI Cookie file-list mode",
+    "route to the corresponding search endpoint",
+    "retain enhanced result navigation and homepage search button"
   ],
   "moduleSnapshot": {
     "commit": "9383dad6bf441d3c15360e57ef5b16e5e17c4cfc",
     "search": "apps/cloud/pan115/modules/search_v3.js"
   },
-  "evidence": [
-    "115 Open Platform search contract: GET /open/ufile/search with Bearer access_token; search_value/limit/offset required; fc=1 folder, fc=2 file; type 1 document, 2 image, 3 audio, 4 video, 5 archive; directory result file_category=0 and file file_category=1",
-    "maintained WebAPI driver contract: /files/search uses aid=7, cid=0, search_value, offset, limit, type, count_folders, o and asc"
-  ],
-  "status": "pending-device-validation-search-dual-auth",
+  "status": "failed-device-validation-search-zero-results",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.9",
+  "failure": "User screenshot at 14:34 confirmed the runtime correctly identified 115 WebAPI /files/search, but the known-good keyword ipx-641 still returned 0 results. Therefore authentication-mode detection was correct but the synthesized search request contract still differed from the legacy working implementation.",
   "updatedAt": "2026-09-22"
 }
