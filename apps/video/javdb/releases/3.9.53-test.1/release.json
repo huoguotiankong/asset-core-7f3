@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.53-test.1",
+  "build": 2026092207,
+  "baseVersion": "3.9.52-test.1",
+  "baseBuild": 2026092206,
+  "entry": "apps/video/javdb/releases/3.9.53-test.1/local_entry.js",
+  "mode": "guangya-magnet-handoff-fix-overlay",
+  "status": "pending-device-validation",
+  "changes": [
+    "Replace only the 光鸭 long-press action in JavDB magnet cards",
+    "Use the verified Guangya v2 magnet handoff: hiker://page/magnet?rule=光鸭云盘&realurl=<encoded magnet>",
+    "Do not reuse the old 光鸭 item handler that currently resolves to copy://",
+    "Keep menu order: 115, 迅雷, PikPak, 光鸭, 123, 复制磁链",
+    "Keep magnet metadata and VIP playback behavior unchanged"
+  ],
+  "stableUnchanged": "3.9.42",
+  "cloudTestPointerUnchanged": "3.9.50-test.1"
+}
