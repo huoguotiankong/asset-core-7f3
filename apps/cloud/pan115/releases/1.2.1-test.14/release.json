@@ -46,6 +46,9 @@
     "long press still provides hash copy and task-record removal",
     "existing filters, refresh, completed-result navigation and magnet submission remain functional"
   ],
-  "status": "pending-device-validation-compact-offline-ui",
+  "status": "pending-device-validation-superseded",
+  "deviceValidated": false,
+  "supersededBy": "1.2.1-test.15",
+  "supersededReason": "User asked to continue the planned optimization before Test14 received a separate device-validation report; Test15 carries the compact UI forward and adds the next offline-center slice.",
   "updatedAt": "2026-09-22"
 }
