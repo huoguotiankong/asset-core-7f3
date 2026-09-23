@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": null,
+  "modules": [
+    {"name":"core","path":"apps/cloud/pikpak/releases/0.1.0-test.1/core.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"runtime","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.1"},
+  "status": "pending-device-validation",
+  "notes": "基于用户上传 PikPak v1 做架构级 Test1 重构：分离认证、FileProvider、播放、UI、页面与 Runtime；移除首页 referral 副作用和空白界面设置；密码不再持久化；新增个人盘浏览、公开分享、Magnet 快速秒传/离线回退、离线任务、创建文件夹、重命名、回收站、创建分享、容量、API 线路与根目录搜索。首轮保持原 1.23.0 登录签名档，避免 UI 与协议同时大改。"
+}
