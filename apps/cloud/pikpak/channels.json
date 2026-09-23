@@ -10,25 +10,25 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.11",
+      "version": "0.1.0-test.12",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10113,
-      "displayVersion": "Test 0.1.0-test.11 · Build 10113",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v11_b10113.txt",
+      "build": 10114,
+      "displayVersion": "Test 0.1.0-test.12 · Build 10114",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v12_b10114.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test11 官方网页会话接管版；绕开当前账号/IP触发的密码登录 captcha/init 频控。",
+      "desc": "PikPak Test12 官方网页登录 Access Token 直连优先版；避免登录成功后立即再次触发 refresh/captcha 风控请求。",
       "highlights": [
-        "用户实机再次确认 Android 账号密码链在 captcha/init 阶段直接返回 ErrorCode 4002 / operation too frequent",
-        "公开的 OpenList 当前 PikPak 驱动亦有同类近期问题，官方文档建议此时改用官方网页/App登录后的 Refresh Token",
-        "账号页主入口改为海阔 X5 打开官方 mypikpak.com，不再鼓励连续重复密码登录",
-        "官方网页登录成功后自动扫描同源 localStorage 的 credentials_/deviceid/captcha，提取 Web Refresh Token、Device ID 与当前 Captcha",
-        "Web Refresh Token 使用 Web client 2.0.0 / mypikpak.com 恢复 access token，并切换为 Web API Session",
-        "保留 Test10 Android 认证代码作为底层兼容，但 Test11 主 UI 不再直接暴露密码登录框",
-        "保留首页、个人盘、公开分享、播放、多线路、下载、Magnet、离线任务和文件管理",
-        "保留跨小程序 Magnet session 与退出调用页临时文件回收语义；普通个人文件和手动离线任务不参与清理"
+        "用户实机确认账号密码链在 captcha/init 阶段持续返回 ErrorCode 4002 / operation too frequent",
+        "主登录继续使用海阔 X5 打开 PikPak 官方 mypikpak.com，账号密码不交给本小程序",
+        "网页登录成功后读取 credentials 中当前 access_token + refresh_token",
+        "检测到 access_token 时直接建立 Web API Session，不再立即额外执行 refresh-token 换票和主动 captcha refresh",
+        "只有 Access Token 缺失或后续过期时才使用 Web Refresh Token",
+        "保留 Test11 的 Web 请求兼容层及 Test10 Android 底层兼容，但账号密码 API 直登不作为主入口",
+        "保留个人盘、公开分享、播放、多线路、下载、Magnet、离线任务和文件管理",
+        "保留跨小程序 Magnet session 与退出调用页临时文件回收；普通个人文件和手动离线任务不参与清理"
       ]
     }
   ]
