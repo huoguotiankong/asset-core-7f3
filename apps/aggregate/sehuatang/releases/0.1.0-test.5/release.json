@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.4",
+    "build": 10104,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json",
+    "status": "superseded-by-cookie-persistence-flow"
+  },
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-cookie-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "notes": "Test5：参考 dy2020 旧规则的 X5/fba 验证流程。年龄确认保留一次人工点击；确认完成后自动检测真实页面、捕获并保存 WebView Cookie，再自动进入登录/签到目标页。"
+}
