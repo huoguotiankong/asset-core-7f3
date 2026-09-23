@@ -22,5 +22,5 @@
   ],
   "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
   "status": "pending-device-validation",
-  "notes": "Test4 针对实机确认的 PikPak 风控验证流程：Captcha init 返回 review/验证 URL 时进入海阔内嵌官方验证页，完成验证后使用同一 captcha token 继续 signin；修正 Test3 Web client secret 末尾误码，并按当前实现补 email/phone_number meta。密码只保存在临时 MyVar，成功/取消后清除。"
+  "notes": "Test4 针对实机确认的 PikPak 风控验证流程：Captcha init/signin 返回 review 与验证 URL 时进入海阔内嵌官方验证页；X5 跳转拦截器会捕获验证完成后回调 URL 中的 captcha_token（若 PikPak 仍使用原 token 则继续沿用），再继续 signin。同步修正 Test3 Web client secret 末尾误码，并补 email/phone_number meta。密码只保存在临时 MyVar，成功/取消后清除。"
 }
