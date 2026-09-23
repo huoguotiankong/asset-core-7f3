@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.28",
-  "defaultBuild": 10128,
-  "testVersion": "0.1.0-test.28",
-  "testBuild": 10128,
-  "testShellVersion": "0.1.0-test.28",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v28_b10128.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v28_b10128.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.28/release.json",
+  "defaultVersion": "0.1.0-test.29",
+  "defaultBuild": 10129,
+  "testVersion": "0.1.0-test.29",
+  "testBuild": 10129,
+  "testShellVersion": "0.1.0-test.29",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v29_b10129.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v29_b10129.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.29/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test28-guide-card-boundary-preview",
+    "stage": "test29-guide-thread-preview-enrichment",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.27",
-    "note": "Test27排版已由实机确认正确，但Guide预览图仍缺失；Test28改为Guide专用卡片边界解析，修复图片落在错误切片之外的问题。"
+    "previousTest": "0.1.0-test.28",
+    "note": "Test28实机确认卡片排版正确但Guide DOM仍不给原生层可用预览图；Test29改为并发读取各主题真实mobile帖子正文提取预览图，并用帖子页Referer加载。"
   }
 }
