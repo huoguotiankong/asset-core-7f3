@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.21",
-  "baseVersion": "0.1.0-test.20",
+  "version": "0.1.0-test.22",
+  "baseVersion": "0.1.0-test.21",
   "targetVersion": "0.1.0",
-  "build": 10121,
-  "shellVersion": "0.1.0-test.21",
-  "shellRuleVersion": 2026092321,
+  "build": 10122,
+  "shellVersion": "0.1.0-test.22",
+  "shellRuleVersion": 2026092322,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v21_b10121.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v21_b10121.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v22_b10122.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.20",
-    "build": 10120,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.20/release.json"
+    "version": "0.1.0-test.21",
+    "build": 10121,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json"
   },
-  "notes": "三个话题改为手机网页版风格卡片：作者/时间独立行、标题+摘要、最多3张真实预览图、底部回复/点赞/观看；预览图携带Cookie/Referer，保持mobile=2优先。"
+  "notes": "Test21排版已接近手机版，但三个话题预览图仍灰块。Test22直接从渲染后的mobile=2 DOM记录img.currentSrc和CSS background-image，并扩展lazy/background图片属性；保留Test15成熟作者/标题解析，预览图去掉#originalSize#避免失效单图撑出大空白。"
 }
