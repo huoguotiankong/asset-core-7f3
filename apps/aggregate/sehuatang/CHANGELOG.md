@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.16 / Build 10116 / 待实机验证**  
+状态：**0.1.0-test.17 / Build 10117 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,14 +10,74 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v16_b10116.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v16_b10116.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.16/release.json`
-- Test16 继承 Test1~Test15，并新增：
-  - `releases/0.1.0-test.16/core.js`
-  - `releases/0.1.0-test.16/forum.js`
-  - `releases/0.1.0-test.16/thread.js`
-  - `releases/0.1.0-test.16/patch_category_polish_v16.js`
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v17_b10117.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v17_b10117.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.17/release.json`
+- Test17 继承 Test1~Test16，并新增：
+  - `releases/0.1.0-test.17/forum.js`
+  - `releases/0.1.0-test.17/patch_compact_filters_v17.js`
+
+## 0.1.0-test.17 / Build 10117 — 紧凑帖子卡片、子板块独立分类与排序
+
+### Test16 实机反馈
+
+1. 普通帖子目录中，标题/简介/双图/评论数/观看量已经能展示，但卡片底部到下一条作者行之间仍存在明显大块留白，整体密度偏低；
+2. 用户要求在不牺牲观感的前提下进一步压缩帖子目录垂直间距；
+3. 官网 mobile=2 的每个子板块自身还存在独立分类，例如“全部 / 国产无码 / 主播录制 / 360水滴 / 厕所偷拍 …”；
+4. 同一子板块还存在独立排序栏，例如“全部主题 / 最新 / 热门 / 精华 / 按发帖 / 按回复”；
+5. 这些分类与排序不是六个一级分类的固定全局配置，必须按当前子板块真实手机端页面动态读取，不能只为“亚洲有码原创”硬编码；
+6. Test16 已确认的评论页、图片补图顺序、作者信息独立行、搜索和页内刷新翻页继续保留。
+
+### Test17 修复
+
+1. **帖子卡片垂直密度收紧**
+   - Test16 的评论/观看统计使用独立 `rich_text`，实机会产生偏大的组件留白；
+   - Test17 改为一行三列紧凑统计位，只在右侧显示 `💬 / 👍 / 👁`，保持弱化灰色视觉；
+   - 作者头像/名字/角色/发布时间仍为独立一行；
+   - 标题、摘要和最多两张预览图继续保持当前结构；
+   - 卡片之间仅保留轻量分隔，不重新引入大块空白。
+
+2. **每个子板块动态解析自己的分类标签**
+   - 从当前 `mobile=2` 已完成年龄/Cookie 状态的真实渲染 HTML 中读取论坛链接；
+   - 按当前 fid 过滤，只接收属于当前子板块的筛选 URL；
+   - 自动识别 `typeid / sortid / filter=typeid / filter=sortid` 等 Discuz 分类参数；
+   - 使用横向 `scroll_button` 呈现，分类数量多时可横向滚动；
+   - 不把某一子板块的分类复制给其它板块。
+
+3. **每个子板块动态解析排序栏**
+   - 从当前手机端真实链接识别“全部主题 / 最新 / 热门 / 精华 / 按发帖 / 按回复 / 最新发表 / 最新回复”等入口；
+   - 保留官网返回的真实 href，而不是自行猜 URL 参数；
+   - 若某个子板块没有某项排序，则原生页不伪造该入口。
+
+4. **筛选、排序、翻页都不增加返回栈**
+   - 每个子板块使用独立 `sht_forum_filter_v17_<fid>` 保存当前筛选 URL；
+   - 点击分类/排序时重置到第 1 页并 `refreshPage(false)`；
+   - 上一页/下一页继续使用当前页变量刷新；
+   - 连续切换分类、排序、翻十几页后，系统返回仍只返回一次到上一级页面。
+
+5. **手机端优先原则继续保持**
+   - 分类/排序解析与主题卡片均优先使用 `mobile=2` 渲染页；
+   - PC 页面只在手机端完全取不到主题或预览图严重不足时最小化补数据；
+   - 在线视频仍保留双列 `movie_2`；其它分类继续普通卡片，不相互影响。
+
+### Test17 静态门禁
+
+- `releases/0.1.0-test.17/forum.js`：本地 `node --check` 通过；
+- `patch_compact_filters_v17.js`：本地 `node --check` 通过；
+- `bootstrap_test_v17_b10117.js`：本地 `node --check` 通过；
+- Test17 `release.json`：本地 JSON 解析通过；
+- Test17 Shell：外层规则 JSON 与内层 `pages` JSON 均解析通过；
+- Shell 数值 `version=2026092317`；
+- Release / Bootstrap / Shell 全部明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test17 实机优先验收
+
+1. 打开“亚洲有码原创”，确认卡片之间的大块空白明显减少，但作者行、标题、双图和底部统计仍清晰；
+2. 确认顶部出现该子板块自己的分类标签，例如官网存在的“全部 / 国产无码 / 主播录制 / 360水滴 …”；
+3. 确认第二行出现“全部主题 / 最新 / 热门 / 精华 / 按发帖 / 按回复”等官网真实排序；
+4. 点击任一分类，再切“热门/精华/按回复”，确认内容随官网筛选变化；
+5. 连续筛选并翻 3~5 页，再按系统返回，确认没有叠加多层页面；
+6. 再打开其它一级分类下的不同子板块，确认其分类/排序来自自身页面，而不是复制“亚洲有码原创”的标签。
 
 ## 0.1.0-test.16 / Build 10116 — 评论分离、图片正文顺序与目录信息美化
 
@@ -58,7 +118,7 @@
 5. **在线视频与其它分类保持差异化**
    - 在线视频 group 1 继续使用 `movie_2` 双列视频卡片；
    - 普通 BT / 图片 / 文学 / 综合板块仍使用作者行 + 标题 + 简介 + 预览图卡片；
-   - 对设备分组缓存失效时，增加 `中文字幕 / 国产成人自拍 / 亚洲视频 / 经典三级 / 在线视频` 等名称兜底识别，不把“高清中文字幕”等原创 BT 板块误判为在线视频。
+   - 对设备分组缓存失效时，增加 `中文字幕 / 亚洲日韩自拍视频 / 亚洲视频 / 经典三级 / 在线视频` 等名称兜底识别，不把“高清中文字幕”等原创 BT 板块误判为在线视频。
 
 6. **保持当前已验证链路**
    - 搜索继续继承 Test11 已实机正常的 `search.php` 表单提交 + `searchid`；
@@ -141,4 +201,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 只保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test16 实机闭环 → 图片正文顺序 / 评论页 / 底部统计 / 作者信息行 → 再继续 Guide 与首页分类精修。
+- 当前下一步：Test17 实机闭环 → 卡片密度 / 子板块分类 / 排序 / 筛选后翻页 → 再继续首页与 Guide 精修。
