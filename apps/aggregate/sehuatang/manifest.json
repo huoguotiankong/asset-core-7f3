@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.21",
-  "defaultBuild": 10121,
-  "testVersion": "0.1.0-test.21",
-  "testBuild": 10121,
-  "testShellVersion": "0.1.0-test.21",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v21_b10121.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v21_b10121.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json",
+  "defaultVersion": "0.1.0-test.22",
+  "defaultBuild": 10122,
+  "testVersion": "0.1.0-test.22",
+  "testBuild": 10122,
+  "testShellVersion": "0.1.0-test.22",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v22_b10122.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test21-mobile-guide-card-preview",
+    "stage": "test22-guide-preview-dom-extraction",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.20",
-    "note": "根据Test20实机反馈：三个话题内容已恢复，但原生排版与预览图仍明显弱于手机网页；Test21改用成熟移动帖子卡片解析与图片请求头。"
+    "previousTest": "0.1.0-test.21",
+    "note": "Test21实机确认三个话题卡片排版方向正确但预览图仍未显示；Test22改为从渲染后mobile DOM提取currentSrc/CSS background-image并调整原生预览组件。"
   }
 }
