@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.19",
-  "defaultBuild": 10119,
-  "testVersion": "0.1.0-test.19",
-  "testBuild": 10119,
-  "testShellVersion": "0.1.0-test.19",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v19_b10119.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v19_b10119.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.19/release.json",
+  "defaultVersion": "0.1.0-test.20",
+  "defaultBuild": 10120,
+  "testVersion": "0.1.0-test.20",
+  "testBuild": 10120,
+  "testShellVersion": "0.1.0-test.20",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v20_b10120.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v20_b10120.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.20/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test19-home-pagination-filter-separation",
+    "stage": "test20-mobile-account-guide-repair",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.18",
-    "note": "根据Test18实机反馈：修复首页滚到底后整页重复追加；分类和排序改为独立选择器并严格隔离；统计继续弱化。"
+    "previousTest": "0.1.0-test.19",
+    "note": "根据Test19实机反馈：账号/签到改为mobile=2；三个话题使用独立mobile guide + 年龄确认/Cookie同会话解析，PC仅兜底。"
   }
 }
