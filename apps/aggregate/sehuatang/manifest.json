@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.24",
-  "defaultBuild": 10124,
-  "testVersion": "0.1.0-test.24",
-  "testBuild": 10124,
-  "testShellVersion": "0.1.0-test.24",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v24_b10124.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v24_b10124.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.24/release.json",
+  "defaultVersion": "0.1.0-test.25",
+  "defaultBuild": 10125,
+  "testVersion": "0.1.0-test.25",
+  "testBuild": 10125,
+  "testShellVersion": "0.1.0-test.25",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v25_b10125.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.25/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test24-guide-rendered-dom-image-map",
+    "stage": "test25-guide-web-first",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.23",
-    "note": "Test23实机继续失败后，Test24把Guide图片解析从返回HTML属性猜测切换为WebView真实渲染DOM按tid直接采集，并复用普通子版块C.imageUrl显示链。"
+    "previousTest": "0.1.0-test.24",
+    "note": "Test24实机仍无法把Guide手机网页图片稳定搬到原生图片组件，并带来明显WebView解析等待；Test25将三个话题切为mobile=2 X5直显，同时拦截帖子链接回原生详情。"
   }
 }
