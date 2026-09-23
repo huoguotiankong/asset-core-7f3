@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.8 / Build 10108 / 待实机验证**  
+状态：**0.1.0-test.9 / Build 10109 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,85 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v8_b10108.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v8_b10108.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json`
-- Test8 直接继承 Test1~Test7，并叠加 `releases/0.1.0-test.8/patch_forum_visual_v8.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v9_b10109.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v9_b10109.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.9/release.json`
+- Test9 直接继承 Test1~Test8，并叠加 `releases/0.1.0-test.9/patch_forum_runtime_v9.js`。
+
+## 0.1.0-test.9 / Build 10109 — 请求结果结构校验、分类重建、帖子详情恢复与独立图标
+
+### Test8 实机反馈
+
+1. 六个一级分类仍然全部只有 1 个子板块，说明 Test8 的“一级板块页面 / forum.php 区间 / Test7 fallback”三条链都没有取得真实子板块集合；
+2. 帖子详情出现明显回归：页面诊断可得到约 `151~155 万字` HTML，但没有 `#postlist > div`，正文直接判空；
+3. “最新发表 / 最新热门 / 最新精华”三项仍取不到主题，实机热门页落到 `forum.php?mod=guide&view=hot&page=1` 后仍为 0 主题；
+4. 原帖、回复、网页版、搜索等 `icon_small_4` 仍显示空圆形/统一占位，不是明确的功能图标；
+5. Test8 首页访问状态与 Cookie 仍正常，普通原创 BT 板块可取得约 36 条主题，因此本轮不回退年龄确认/Cookie 基线，只修运行链判定、分类、详情与图标。
+
+### Test9 根因与修复
+
+1. **禁止再用 HTML 长度判断“请求成功”**
+   - Test8 共用 `fetchPage()`：只要 `fetchPC()` 返回长度大于 600 就直接接受，不再进入 WebView；
+   - 实机已经证明“HTML 超过 150 万字”仍可能不是目标帖子 DOM，因此“内容很多”不等于“拿到了正确页面”；
+   - Test9 按业务页面使用不同成功条件：
+     - 论坛：必须出现真实 forum 链接；
+     - 主题列表：必须出现 `tid/thread-*` 主题链接；
+     - 帖子：必须出现 `#postlist / .t_fsz / .t_f / postmessage_* / .message` 等正文结构；
+   - `fetchPC()` 解析失败后即使 HTML 很长，也继续执行 WebView，不再被错误页短路。
+
+2. **六大类改为“旧成功平铺结果优先 + 多策略重建”**
+   - Test5 后实机曾成功取得约 45 个真实板块，Test4 缓存键 `sht_forum_cache_v4` 因此具有设备侧已验证价值；
+   - Test9 首选复用该旧成功缓存，再生成独立 `sht_forum_flat_v9`；
+   - 若旧缓存不存在，则分别对 `forum.php?mobile=2 / mobile=no / 无 mobile` 执行 `fetch + WebView`，选板块数最多的真实结果；
+   - 分组同时尝试：根 fid 顺序区间、`.bmw/.bm/.bm_c/.fl_tb` 结构块、六个一级分类名称源码区间、一级板块页；
+   - 只接受 2~20 个子板块的合理候选为主结果，避免误把整站 40+ 板块塞进单一分类；
+   - 新缓存键为 `sht_forum_groups_v9`，不受 Test7/Test8 错误缓存污染。
+
+3. **最新 / 热门 / 精华恢复为强制双链**
+   - 仍优先从真实论坛页发现对应导航 href；
+   - 同时保留标准 `newthread / hot / digest` URL；
+   - 每个入口同时尝试 `mobile=no / mobile=2 / 原始 URL`；
+   - 每个 URL 都先 `fetchPC` 解析，0 主题则继续 WebView，再解析；不再因为返回正文很长而停止。
+
+4. **帖子详情恢复 PC / Mobile / WebView 多变体**
+   - 优先 PC `mobile=no`，其次 `mobile=2`，最后无 mobile；
+   - 每个变体只有检测到真实帖子 DOM 才算成功，否则继续 WebView；
+   - 楼层仍优先 `#postlist > div → .t_fsz → .t_f`；
+   - 增加 `.t_fsz / div.t_f / td.t_f / [id^=postmessage_] / .message` 直接正文兜底，降低单一父容器变化造成的整页失效；
+   - 保留 Test8 的“文字 rich_text + 图片原生 `pic_1_full`”方案，待帖子正文链恢复后继续实机验证图片是否真正显示。
+
+5. **主题标题继续去噪**
+   - 明确过滤“本帖最后由…编辑”、发表于/回复于等元数据候选，避免它们再次成为详情页标题；
+   - 继续按同一 tid 聚合标题与右侧预览图候选。
+
+6. **功能图标改为独立 SVG 资源**
+   - 新增 `assets/icons/v1/`：账号、签到、搜索、设置、网页版、原帖、回复、复制、板块等图标；
+   - `icon_small_4` 直接加载各自真实图标，不再用“统一 Logo + 标题 emoji”假装图标；
+   - 一级分类 emoji 仅作为轻量文本标识，不替代操作图标。
+
+7. **保持不动**
+   - Test7 已实机正常的访问状态 / Cookie 逻辑继续继承；
+   - magnet BTIH 去重、115 / 迅雷 / PikPak / 复制继续保留；
+   - 视频直链与 `video://` 嗅探逻辑继续保留；
+   - Stable / Latest / 根 `registry.json` 继续不建立。
+
+### Test9 静态门禁
+
+- `patch_forum_runtime_v9.js`：本地 `node --check` 通过后才上传；
+- `bootstrap_test_v9_b10109.js`：本地 `node --check` 通过；
+- Test9 `release.json`：本地 JSON 解析通过；
+- Test9 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092309`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test9 实机优先验收
+
+1. 首页依次切换六个一级分类：重点看“原创BT电影”是否从 1 个恢复到多个子板块，并继续检查其余五类；
+2. 打开“最新发表 / 最新热门 / 最新精华”，确认三项至少能取得真实主题，而不是 0 主题诊断页；
+3. 打开 Test8 中报“HTML 150 万字但无正文”的同一帖子，确认正文恢复；
+4. 继续检查正文图片是否由 `pic_1_full` 真正显示；
+5. 查看“网页版 / 搜索 / 原帖 / 回复 / 复制链接 / 设置”等入口，确认显示不同的真实 SVG 图标；
+6. 若仍失败，设置页“最近诊断”现在会记录每个 fetch/WebView 变体的 HTML 长度和是否命中目标结构，可据此只修失败链。
 
 ## 0.1.0-test.8 / Build 10108 — 子板块、主题预览图与正文图片原生渲染
 
@@ -303,4 +378,4 @@
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量/WebView Cookie 容器。
 - 不把 `.net/.com` 做成每次首屏并发探活固定税。
 - Test 阶段不晋级 Stable，不登记根 `registry.json`。
-- 下一阶段优先：Test8 实机闭环 → 修复仍失败的单点模块 → 确认子板块/主题预览图/正文图片/magnet云播/在线视频播放 → 再处理原生登录状态、签到、回复和 UI 精修。
+- 下一阶段优先：Test9 实机闭环 → 确认六大类真实子板块 / 三个话题入口 / 帖子正文 / 正文图片 / 右侧预览图 / 操作图标 → 再处理原生登录状态、签到、回复和 UI 精修。
