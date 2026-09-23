@@ -1,0 +1,37 @@
+/* PikPak Test11 Build10113 - official Web session / Refresh Token handoff */
+(function(C){
+    var W={
+        name:'web',client_id:'YUMx5nI8ZU8Ap8pm',client_secret:'dbw2OtmVEeuUvIptb1Coyg',client_version:'2.0.0',package_name:'mypikpak.com',
+        user_agent:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0 Mobile Safari/537.36',
+        redirect_uri:'xlaccsdk01://xbase.cloud/callback?state=harbor',
+        salts:['C9qPpZLN8ucRTaTiUMWYS9cQvWOE','+r6CQVxjzJV6LCV','F','pFJRC','9WXYIDGrwTCz2OiVlgZa90qpECPD6olt','/750aCr4lm/Sly/c','RB+DT/gZCrbV','','CyLsf7hdkIRxRm215hl','7xHvLi2tOYP0Y92b','ZGTXXxu8E/MIWaEDB+Sm/','1UI3','E7fP5Pfijd+7K+t6Tg/NhuLq0eEUVChpJSkrKxpO','ihtqpG6FMt65+Xk+tWUH2','NhXXU9rg4XXdzo7u5o']
+    };
+    var oldRefresh=C.refreshAccess,oldAuthHeaders=C.authHeaders,oldPublicHeaders=C.publicHeaders,oldRequest=C.request,oldRequestDrive=C.requestDrive,oldRequestPublic=C.requestPublic,oldRequestUser=C.requestUser;
+    function trim(v){return String(v==null?'':v).replace(/^\s+|\s+$/g,'');}
+    function isWeb(){var s=C.session();return !!(s&&String(s._auth_profile||'').toLowerCase()==='web');}
+    function did(v){v=trim(v);var m=v.match(/[0-9a-f]{32}/i);if(m)v=m[0].toLowerCase();else v=trim(C.item('device_id_web',''));if(!/^[0-9a-f]{32}$/i.test(v))v=md5('pikpak-web|'+String(new Date().getTime())+'|'+String(Math.random()));C.set('device_id_web',v);return v;}
+    function sign(ts,deviceId){var s=W.client_id+W.client_version+W.package_name+deviceId+String(ts);for(var i=0;i<W.salts.length;i++)s=md5(s+W.salts[i]);return '1.'+s;}
+    function baseHeaders(deviceId,captcha,content){var h={'X-Device-ID':deviceId,'User-Agent':W.user_agent,'X-Client-ID':W.client_id,'X-Client-Version':W.client_version};if(captcha)h['X-Captcha-Token']=String(captcha);if(content!==false)h['Content-Type']='application/json; charset=utf-8';return h;}
+    function rawUser(path,method,body,h,timeout){var r=C.raw('https://user.mypikpak.com'+path,method,body,h,timeout||10000);if(r&&r._network_error)r=C.raw('https://user.mypikpak.net'+path,method,body,h,timeout||10000);return r;}
+    function rawDrive(url,method,body,h,timeout){var r=C.raw(url,method,body,h,timeout||8000);if(r&&r._network_error&&/mypikpak\.com/i.test(url))r=C.raw(String(url).replace('.mypikpak.com','.mypikpak.net'),method,body,h,timeout||8000);return r;}
+    function refreshWebAccess(refreshToken,deviceId){var s=C.session(),rt=trim(refreshToken||((s&&s.refresh_token)||C.item('refresh_token',''))),d=did(deviceId||((s&&s._device_id)||''));if(!rt)return {error:'NO_REFRESH_TOKEN',error_description:'缺少 Web Refresh Token'};var body={client_id:W.client_id,client_secret:W.client_secret,grant_type:'refresh_token',refresh_token:rt},h=baseHeaders(d,'',true);h['User-Agent']='';var r=rawUser('/v1/auth/token?client_id='+W.client_id,'POST',body,h,10000);if(r&&!r.error&&!r.error_code&&r.access_token){if(!r.refresh_token)r.refresh_token=rt;r._auth_profile='web';r._device_id=d;C.saveSession(r,W,d);C.set('auth_profile','web');C.set('device_id_web',d);return r;}return r;}
+    function webAuthHeaders(){var s=C.session(),d=did(s&&s._device_id),h=baseHeaders(d,C.item('captcha_token',''),false);if(s&&s.access_token)h.Authorization='Bearer '+s.access_token;return h;}
+    function webPublicHeaders(){return baseHeaders(did(''),C.item('captcha_token',''),false);}
+    function freq(o){var t=C.errorText(o);return String((o&&o.error_code)||'')==='10'||/operation is too frequent|too frequent|操作频繁/i.test(t);}
+    function actionOf(method,url){var m=String(url||'').match(/^[a-z]+:\/\/[^/]+([^?#]*)/i);return String(method||'GET').toUpperCase()+':'+(m&&m[1]?m[1]:'/');}
+    function refreshWebCaptcha(action,userId){var s=C.session(),d=did(s&&s._device_id),uid=trim(userId||((s&&s.sub)||C.item('user_id',''))),ts=String(new Date().getTime()),meta={client_version:W.client_version,package_name:W.package_name,user_id:uid,timestamp:ts,captcha_sign:sign(ts,d)},body={action:String(action||'GET:/drive/v1/files'),captcha_token:trim(C.item('captcha_token','')),client_id:W.client_id,device_id:d,meta:meta,redirect_uri:W.redirect_uri},h=baseHeaders(d,'',true);if(s&&s.access_token)h.Authorization='Bearer '+s.access_token;var r=rawUser('/v1/shield/captcha/init?client_id='+W.client_id,'POST',body,h,10000);if(r&&r.captcha_token)C.set('captcha_token',String(r.captcha_token));return r;}
+    function webRequest(method,url,body,opt){opt=opt||{};method=String(method||'GET').toUpperCase();var auth=opt.auth!==false,s=C.session(),r,h;if(auth&&!s.access_token){r=refreshWebAccess('',s&&s._device_id);if(!r||r.error||r.error_code||!r.access_token)return r;s=C.session();}h=auth?webAuthHeaders():webPublicHeaders();if(opt.headers){for(var k in opt.headers)h[k]=opt.headers[k];}r=rawDrive(url,method,body,h,opt.timeout||8000);if(auth&&C.isAuthError(r)&&!opt._authRetried){var rr=refreshWebAccess('',s&&s._device_id);if(rr&&!rr.error&&!rr.error_code&&rr.access_token){opt._authRetried=true;return webRequest(method,url,body,opt);}return rr||r;}if(C.isCaptchaError(r)&&!freq(r)&&!opt._captchaRetried){var cap=refreshWebCaptcha(actionOf(method,url),auth?String((s&&s.sub)||C.item('user_id','')):'');if(cap&&cap.captcha_token){opt._captchaRetried=true;return webRequest(method,url,body,opt);}return cap||r;}return r;}
+    function importWebCredential(o){o=o||{};var rt=trim(o.refresh_token||o.refreshToken),d=did(o.device_id||o.deviceId||''),cap=trim(o.captcha_token||o.captchaToken||''),sub=trim(o.sub||o.user_id||o.userId||''),access=trim(o.access_token||o.accessToken||'');if(!rt)return {error:'NO_REFRESH_TOKEN',error_description:'没有从 PikPak 官方网页读取到 Refresh Token'};if(cap)C.set('captcha_token',cap);var seed={refresh_token:rt,_auth_profile:'web',_device_id:d};if(sub)seed.sub=sub;if(access)seed.access_token=access;C.saveSession(seed,W,d);C.set('auth_profile','web');C.set('device_id_web',d);var r=refreshWebAccess(rt,d);if(!r||r.error||r.error_code||!r.access_token){C.clearSession();return r||{error:'WEB_REFRESH_FAILED',error_description:'Web Refresh Token 恢复失败'};}if(cap)C.set('captcha_token',cap);if(!cap){var cr=refreshWebCaptcha('GET:/drive/v1/files',String(r.sub||sub||''));if(cr&&freq(cr))C.set('last_login_issue','frequency');}return r;}
+    C.webAuthProfile=W;
+    C.importWebCredential=importWebCredential;
+    C.refreshWebAccess=refreshWebAccess;
+    C.refreshWebCaptcha=refreshWebCaptcha;
+    C.isWebSession=isWeb;
+    C.refreshAccess=function(){return isWeb()?refreshWebAccess('',C.session()&&C.session()._device_id):oldRefresh();};
+    C.authHeaders=function(){return isWeb()?webAuthHeaders():oldAuthHeaders();};
+    C.publicHeaders=function(){return isWeb()?webPublicHeaders():oldPublicHeaders();};
+    C.request=function(method,url,body,opt){return isWeb()?webRequest(method,url,body,opt):oldRequest(method,url,body,opt);};
+    C.requestDrive=function(method,path,body,opt){return isWeb()?webRequest(method,'https://api-drive.mypikpak.com'+path,body,opt||{}):oldRequestDrive(method,path,body,opt);};
+    C.requestPublic=function(method,path,body,opt){if(isWeb()){opt=opt||{};opt.auth=false;return webRequest(method,'https://api-drive.mypikpak.com'+path,body,opt);}return oldRequestPublic(method,path,body,opt);};
+    C.requestUser=function(method,path,body,opt){if(isWeb()){opt=opt||{};opt.auth=false;return webRequest(method,'https://user.mypikpak.com'+path,body,opt);}return oldRequestUser(method,path,body,opt);};
+})(PikPakCore);
