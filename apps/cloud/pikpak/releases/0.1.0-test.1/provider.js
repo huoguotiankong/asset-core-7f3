@@ -1,0 +1,37 @@
+/* PikPak 0.1.0-test.1 Provider - drive/share/magnet/task capabilities */
+var PikPakProvider=(function(C){
+    function q(obj){var a=[];for(var k in obj){if(obj[k]!==undefined&&obj[k]!==null)a.push(encodeURIComponent(k)+'='+encodeURIComponent(String(obj[k])));}return a.join('&');}
+    function listFiles(parentId,pageToken,limit,order){
+        var filters=JSON.stringify({phase:{eq:'PHASE_TYPE_COMPLETE'},trashed:{eq:false}});
+        var qs=q({parent_id:parentId||'',page_token:pageToken||'',with_audit:'true',thumbnail_size:'SIZE_LARGE',filters:filters,limit:limit||500,order:order||'NAME_ASC'});
+        return C.requestDrive('GET','/drive/v1/files?'+qs,null,{});
+    }
+    function getFile(id,usage){var qs=q({_magic:'2021',usage:usage||'PLAY',thumbnail_size:'SIZE_LARGE',with:'subtitle_files'});return C.requestDrive('GET','/drive/v1/files/'+encodeURIComponent(id)+'?'+qs,null,{});}
+    function about(force){if(!force&&C.quotaFresh(600000)){var old=C.getQuotaCache();if(old&&old.quota)return old;}var r=C.requestDrive('GET','/drive/v1/about',null,{});if(r&&r.quota)C.cacheQuota(r);return r;}
+    function createFolder(name,parentId){return C.requestDrive('POST','/drive/v1/files',{kind:'drive#folder',name:String(name||'').trim(),parent_id:parentId||''},{});}
+    function rename(id,name){return C.requestDrive('PATCH','/drive/v1/files/'+encodeURIComponent(id),{name:String(name||'').trim()},{});}
+    function trash(ids){if(!(ids instanceof Array))ids=[ids];return C.requestDrive('POST','/drive/v1/files:batchTrash',{ids:ids},{});}
+    function deletePermanent(ids){if(!(ids instanceof Array))ids=[ids];return C.requestDrive('POST','/drive/v1/files:batchDelete',{ids:ids,space:''},{});}
+    function createShare(ids,passCode,days){if(!(ids instanceof Array))ids=[ids];var body={file_ids:ids,share_to:'publiclink',expiration_days:days==null?-1:Number(days),pass_code_option:passCode?'REQUIRED':'NOT_REQUIRED'};if(passCode)body.pass_code=passCode;return C.requestDrive('POST','/drive/v1/share',body,{});}
+    function parseShareInput(text){text=String(text||'').replace(/[\r\n]+/g,' ').trim();var m=text.match(/https?:\/\/(?:www\.)?(?:mypikpak\.(?:com|net)|pikpak\.me|pikpakdrive\.com)\/s\/([A-Za-z0-9_-]+)/i);if(!m)return null;var p=text.match(/(?:密码|提取码|pass(?:code)?)[\s:：=]*([A-Za-z0-9_-]{1,16})/i);return {share_id:m[1],pass_code:p?p[1]:'',raw:text};}
+    function shareRoot(shareId,passCode,pageToken){var qs=q({share_id:shareId,pass_code:passCode||'',page_token:pageToken||'',pass_code_token:'',thumbnail_size:'SIZE_LARGE',folders_first:'true',limit:100,order:'NAME_ASC'});return C.requestPublic('GET','/drive/v1/share?'+qs,null,{});}
+    function shareDetail(shareId,parentId,passToken,pageToken){var qs=q({share_id:shareId,parent_id:parentId||'',pass_code_token:passToken||'',page_token:pageToken||'',thumbnail_size:'SIZE_LARGE',folders_first:'true',limit:100,order:'NAME_ASC'});return C.requestPublic('GET','/drive/v1/share/detail?'+qs,null,{});}
+    function shareFileInfo(shareId,fileId,passToken){var qs=q({share_id:shareId,file_id:fileId,pass_code_token:passToken||'',folder_id:''});return C.requestPublic('GET','/drive/v1/share/file_info?'+qs,null,{});}
+    function resolveMagnet(magnet){
+        var body={urls:String(magnet||''),page_size:500,thumbnail_type:'FROM_HASH'};
+        var res=C.requestPublic('POST','/drive/v1/resource/list?client_id='+encodeURIComponent(C.clientId),body,{});
+        if(!res||!res.list||!(res.list.resources instanceof Array))return {raw:res,name:'',files:[]};
+        var top=res.list.resources,files=[],rootName=top.length?String(top[0].name||''):'',singleRoot=top.length===1&&top[0]&&top[0].is_dir;
+        function walk(arr,prefix,depth){if(depth>8||!(arr instanceof Array))return;for(var i=0;i<arr.length;i++){var it=arr[i]||{},name=String(it.name||'');if(!name)continue;var path=prefix?prefix+'/'+name:name;if(it.is_dir||it.dir){walk(it.dir&&it.dir.resources?it.dir.resources:[],path,depth+1);continue;}var meta=it.meta||{};files.push({id:String(it.id||''),name:name,path:path,size:Number(it.file_size||0),hash:String(meta.hash||''),mime_type:String(meta.mime_type||''),icon:String(meta.icon||''),file_index:it.file_index==null?'':String(it.file_index)});}}
+        if(singleRoot)walk(top[0].dir&&top[0].dir.resources?top[0].dir.resources:[],'',1);else walk(top,'',0);return {raw:res,name:rootName,files:files};
+    }
+    function instantCreate(file,parentId){file=file||{};if(!file.hash)return {error:'NO_GCID',error_description:'该文件没有秒传哈希'};var body={kind:'drive#file',name:file.name||'PikPak临时文件',size:String(file.size||0),hash:file.hash,upload_type:'UPLOAD_TYPE_RESUMABLE',parent_id:parentId||'',body:{duration:'',width:'',height:''},objProvider:{provider:'UPLOAD_TYPE_UNKNOWN'}};return C.requestDrive('POST','/drive/v1/files',body,{});}
+    function createOffline(url,parentId,name,fileIndex){var u={url:String(url||'')};if(fileIndex!==undefined&&fileIndex!==null&&String(fileIndex)!=='')u.files=[String(fileIndex)];var body={kind:'drive#file',name:name||'',upload_type:'UPLOAD_TYPE_URL',url:u,parent_id:parentId||'',folder_type:''};return C.requestDrive('POST','/drive/v1/files',body,{});}
+    function tasks(pageToken,phase){var filter='';if(phase&&phase!=='ALL')filter=JSON.stringify({phase:{in:phase}});var qs=q({type:'offline',thumbnail_size:'SIZE_SMALL',limit:100,page_token:pageToken||'',with:'reference_resource',filters:filter});return C.requestDrive('GET','/drive/v1/tasks?'+qs,null,{});}
+    function taskById(id){var filters=JSON.stringify({id:{in:String(id)}}),qs=q({type:'offline',page_token:'',filters:filters,with:'reference_resource'});return C.requestDrive('GET','/drive/v1/tasks?'+qs,null,{});}
+    function waitTaskFile(taskId){var waits=[0,120,180,260,420,650,900,1200];for(var i=0;i<waits.length;i++){if(waits[i]>0)java.lang.Thread.sleep(waits[i]);var r=taskById(taskId),t=r&&r.tasks&&r.tasks.length?r.tasks[0]:null;if(t&&t.file_id)return String(t.file_id);if(t&&t.phase==='PHASE_TYPE_ERROR')return '';}return '';}
+    function deleteTasks(ids,deleteFiles){if(!(ids instanceof Array))ids=[ids];var qs=q({task_ids:ids.join(','),delete_files:deleteFiles?'true':'false'});return C.requestDrive('DELETE','/drive/v1/tasks?'+qs,null,{});}
+    function queueTemp(id){if(!id)return;var a=C.readJsonItem('temp_files',[]);if(!(a instanceof Array))a=[];for(var i=a.length-1;i>=0;i--)if(String(a[i].id)===String(id))a.splice(i,1);a.push({id:String(id),ts:new Date().getTime()});if(a.length>30)a=a.slice(a.length-30);C.writeJsonItem('temp_files',a);}
+    function cleanupTemps(force){if(!C.loggedIn())return;var a=C.readJsonItem('temp_files',[]);if(!(a instanceof Array)||!a.length)return;var now=new Date().getTime(),del=[],keep=[];for(var i=0;i<a.length;i++){if(del.length<10&&(force||now-Number(a[i].ts||0)>900000))del.push(String(a[i].id));else keep.push(a[i]);}if(del.length){var r=deletePermanent(del);if(r&&r.error)keep=keep.concat(a.filter(function(x){return del.indexOf(String(x.id))>=0;}));}C.writeJsonItem('temp_files',keep);}
+    return {listFiles:listFiles,getFile:getFile,about:about,createFolder:createFolder,rename:rename,trash:trash,deletePermanent:deletePermanent,createShare:createShare,parseShareInput:parseShareInput,shareRoot:shareRoot,shareDetail:shareDetail,shareFileInfo:shareFileInfo,resolveMagnet:resolveMagnet,instantCreate:instantCreate,createOffline:createOffline,tasks:tasks,taskById:taskById,waitTaskFile:waitTaskFile,deleteTasks:deleteTasks,queueTemp:queueTemp,cleanupTemps:cleanupTemps};
+})(PikPakCore);
