@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.5",
-  "defaultBuild": 10105,
-  "testVersion": "0.1.0-test.5",
-  "testBuild": 10105,
-  "testShellVersion": "0.1.0-test.5",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v5_b10105.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v5_b10105.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json",
+  "defaultVersion": "0.1.0-test.4",
+  "defaultBuild": 10104,
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "0.1.0-test.4",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test5-automatic-age-gate-access",
+    "stage": "test4-forum-parser-and-account-flow",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.4",
-    "note": "参考用户提供的 dy2020 旧规则：采用 x5_webview_single + 注入 JS + fba.getCookie/putVar，实现年龄确认页自动点击与 Cookie 持久化，再进入登录/签到目标页；验证码和人机验证保持官方网页处理。"
+    "previousTest": "0.1.0-test.3",
+    "note": "第三轮实机已证明论坛 WebView 可获得真实主题，但 Parser 把时长当标题、图片为空且标准 guide 路由不匹配；Test4 按真实移动端结构继续收敛。"
   }
 }
