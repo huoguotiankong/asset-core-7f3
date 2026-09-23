@@ -7,19 +7,20 @@
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
   "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10110,
+  "defaultBuild": 10111,
   "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
+  "testBuild": 10111,
   "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10110.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10/release.json",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10111.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10111.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10-b10111/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test10-official-web-token-login",
+    "stage": "uploaded-v1-to-test10-current-android-auth-b10111",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test10 根据实机与当前 PikPak/OpenList 风控事实，将官方网页登录 + Web Refresh Token 自动接回设为推荐登录路径：验证码和第三方授权完全由 PikPak 官方网页完成，小程序只读取登录后 credentials 中的 refresh_token；API 账号密码直登保留备用。继承 Test9 验证兼容、Test7 Magnet 会话级安全回收及全部文件/播放能力。"
+    "supersedesUnvalidatedBuild": 10110,
+    "note": "Test10 Build10111 放弃 Web 2.0 / 官方网页登录候选，恢复并升级到现行 PikPak Android 认证档；现有 UI、播放、Magnet、临时文件回收和 handoff 模块保持原边界。"
   }
 }
