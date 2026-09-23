@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json",
+    "status": "superseded-after-device-feedback-guide-thread-ui"
+  },
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-cookie-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js"},
+    {"name":"ux-thread-access-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_ux_thread_access.js"},
+    {"name":"stability-polish-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.7/patch_stability_polish.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.7"},
+  "notes": "Test7：恢复最新/热门/精华动态入口；六大类按真实根fid定位对应论坛块；拆分站点可访问与Cookie状态；正文图片属性兼容、磁链视觉去重、回复编号修正，并增加在线视频海阔嗅探播放入口。"
+}
