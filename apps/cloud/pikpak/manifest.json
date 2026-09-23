@@ -7,20 +7,20 @@
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
   "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10111,
+  "defaultBuild": 10112,
   "testVersion": "0.1.0-test.10",
-  "testBuild": 10111,
+  "testBuild": 10112,
   "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10111.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10111.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10-b10111/release.json",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10112.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10112.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10-b10112/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test10-current-android-auth-b10111",
+    "stage": "uploaded-v1-to-test10-clean-android-auth-b10112",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10110,
-    "note": "Test10 Build10111 放弃 Web 2.0 / 官方网页登录候选，恢复并升级到现行 PikPak Android 认证档；现有 UI、播放、Magnet、临时文件回收和 handoff 模块保持原边界。"
+    "supersedesUnvalidatedBuild": 10111,
+    "note": "Test10 Build10112 从活动运行链彻底移除 Web 2.0 认证补丁，使用现行 Android YNxT9w7GMdWvEOKa + com.pikcloud.pikpak 认证；现有 UI、播放、Magnet、handoff 与会话级回收保持。"
   }
 }

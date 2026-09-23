@@ -3,7 +3,7 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 23:31",
+  "updatedAt": "2026-09-23",
   "channels": [
     {
       "channel": "test",
@@ -13,24 +13,23 @@
       "version": "0.1.0-test.10",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10111,
-      "displayVersion": "Test 0.1.0-test.10 · Build 10111",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v10_b10111.txt",
+      "build": 10112,
+      "displayVersion": "Test 0.1.0-test.10 · Build 10112",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v10_b10112.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "PikPak 全量重构测试版；Build10111 放弃 Web 2.0 登录，账号密码认证恢复到现行 Android YNxT9w7GMdWvEOKa + com.pikcloud.pikpak 链。",
+      "desc": "PikPak Test10 清洁 Android 认证版；活动模块链不再加载 Web 2.0 认证补丁。",
       "highlights": [
-        "账号密码主链改为 Android client 1.53.2，不再使用 Web 2.0 client",
-        "登录前 captcha/init 按当前 Android 契约只提交账号 identity meta",
-        "登录成功后再为 Drive 请求生成 Android captcha_sign，并使用当前 8-salt 链",
-        "device_id 使用 md5(username+password)，并生成 Android devicesign/User-Agent",
-        "如 Android captcha/init 明确返回官方验证 URL，继续沿用现有 X5 验证页接回登录",
-        "Refresh Token 登录继续保留，并按 Android profile 恢复会话",
-        "现有首页、文件浏览、公开分享、播放、多线路、Magnet 与离线任务保持不变",
-        "跨小程序 Magnet 仍建立独立 session，退出调用页只将本次临时文件移入回收站",
+        "账号密码使用 Android client 1.53.2 / YNxT9w7GMdWvEOKa / com.pikcloud.pikpak",
+        "登录前 captcha/init 按当前 Android 契约提交 identity meta；登录成功后为 Drive 刷新 Android captcha_sign",
+        "活动加载链彻底移除 Web 2.0 core/auth/captcha 补丁，避免旧包装层干扰",
+        "首次升级清除旧 Web 验证临时状态；旧 Web-profile 会话不继续冒充已登录",
+        "保留首页、个人盘、公开分享、播放、多线路、下载、Magnet、离线任务和文件管理",
+        "保留跨小程序 Magnet session；退出调用页只将本次临时文件移入回收站",
         "普通个人文件和手动离线任务不参与退出清理",
-        "未实机验收的 Web 登录 Build10110 已冻结，不再作为当前 Test"
+        "Refresh Token 登录按 Android profile 恢复",
+        "Build10110 Web 登录候选与 Build10111 中间候选均冻结，仅用于审计"
       ]
     }
   ]
