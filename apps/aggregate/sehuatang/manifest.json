@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.9",
-  "defaultBuild": 10109,
-  "testVersion": "0.1.0-test.9",
-  "testBuild": 10109,
-  "testShellVersion": "0.1.0-test.9",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v9_b10109.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v9_b10109.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.9/release.json",
+  "defaultVersion": "0.1.0-test.10",
+  "defaultBuild": 10110,
+  "testVersion": "0.1.0-test.10",
+  "testBuild": 10110,
+  "testShellVersion": "0.1.0-test.10",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v10_b10110.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v10_b10110.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.10/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test9-validated-runtime-group-thread-guide-icons",
+    "stage": "test10-guide-age-thread-gallery-cloud-icons",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.8",
-    "note": "根据Test8实机反馈：修复仅按HTML长度判成功造成的帖子详情/guide回归；分类改为旧45板块缓存优先与多策略重建；操作入口使用独立SVG图标。"
+    "previousTest": "0.1.0-test.9",
+    "note": "根据Test9实机反馈：搜索保持不动；guide三入口单独执行年龄确认并回写Cookie；帖子详情按网站样式收敛为三列预览图；115/迅雷/PikPak补独立图标。"
   }
 }
