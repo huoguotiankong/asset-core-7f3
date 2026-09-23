@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.13 / Build 10113 / 待实机验证**  
+状态：**0.1.0-test.14 / Build 10114 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,64 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v13_b10113.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v13_b10113.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.13/release.json`
-- Test13 继承 Test1~Test12，并叠加 `releases/0.1.0-test.13/patch_mobile_cards_nav_v13.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v14_b10114.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v14_b10114.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.14/release.json`
+- Test14 继承 Test1~Test13，并叠加 `releases/0.1.0-test.14/patch_mobile_cards_hotfix_v14.js`。
+
+## 0.1.0-test.14 / Build 10114 — Test13 详情崩溃热修与卡片摘要边界修复
+
+### Test13 实机反馈
+
+1. **列表真实预览图方向已经生效**：在“亚洲有码原创”等手机端主题列表中，部分真实帖子已经能够显示 2 张左右并排预览图，说明“mobile=2 + 卡片区间提取 + 懒加载滚动”的方向正确；
+2. 主题卡片文字摘要仍有明显污染：会混入上一条帖子、日期、页码、作者、广告文字，甚至出现 `target="_blank" class="js-randomBg ..."` 一类残留 HTML 属性；
+3. 点击帖子详情直接报错：`ReferenceError: “d” 未定义`，错误行约为 Test13 patch 第 126 行；
+4. 当前错误属于 Test13 新增层自身回归，不是站点 DOM / Cookie / 年龄确认异常，因此不应回退已经出现效果的手机端双图预览与页内翻页设计。
+
+### Test14 根因与修复
+
+1. **帖子详情 ReferenceError 已定位为确定代码 Bug**
+   - Test13 的 `thread()` 中直接执行 `d.push(...)`，但函数局部变量声明里漏掉了 `d=[]`；
+   - 因此任何能正常进入 `thread()` 的帖子都会在渲染第一批组件时直接抛出 `ReferenceError`；
+   - Test14 显式恢复 `var d=[]`，其它 Test12/Test13 已建立的手机端正文请求链、图片逐张全宽、磁链云播和回复逻辑保持不变。
+
+2. **主题卡片边界从“第一次 tid 出现”改为“最佳标题锚点”**
+   - Test13 为了捕获整张帖子卡片，从 `firstIndex - 600` 开始截取源码；
+   - 实机已经证明这会切进上一条卡片或 HTML 标签中间，导致摘要出现上一帖文本和半截属性；
+   - Test14 对同一 tid 先评分选出最佳真实标题，再使用该标题的 `titleIndex` 作为当前卡片起点；
+   - 当前卡片终点使用下一条主题的最佳标题 `titleIndex`；
+   - 不再从标题前方倒退 600 字符，因此避免跨卡片污染，同时仍能保留标题之后的简介和 1~2 张预览图。
+
+3. **摘要清洗增强**
+   - 删除 `target/class/style/href/src/id/data-*` 等属性残片；
+   - 清理上一页/下一页/回复/浏览/隐藏置顶帖等导航噪声；
+   - 清理连续分页数字串、日期和已知广告残片；
+   - 优先保留 `【影片名称】/【出演女优】/【影片容量】` 等内容型字段；
+   - 摘要最长约 170 字，避免一条卡片塞进过多元数据。
+
+4. **继续保留已实机出现效果的 Test13 能力**
+   - 普通板块继续 `mobile=2` 主链；
+   - 手机 WebView 继续滚动触发 lazy-load 图片；
+   - 单帖最多 2 张 `pic_2` 预览图；
+   - “上一页 / 下一页 / 回第1页”继续使用 `putMyVar + refreshPage(false)` 原页刷新，不增加返回栈；
+   - 搜索继续继承 Test11 已实机正常的真实表单提交方案；
+   - Stable / Latest / 根 `registry.json` 继续不建立。
+
+### Test14 静态门禁
+
+- `patch_mobile_cards_hotfix_v14.js`：本地 `node --check` 通过；
+- `bootstrap_test_v14_b10114.js`：本地 `node --check` 通过；
+- Test14 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092314`；
+- Release / Bootstrap / Shell 均明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test14 实机优先验收
+
+1. 重新进入刚才报错的同一帖子，确认详情页不再出现 `d 未定义`；
+2. 检查正文仍按手机网页版顺序逐张全宽显示图片；
+3. 回到“亚洲有码原创 / 高清中文字幕”等主题列表，确认双图预览仍在；
+4. 重点观察标题下摘要：不应再出现 `target/class/style` 残片，也不应大段混入上一条帖子；
+5. 连续翻 3~5 页后按系统返回，继续确认页内刷新没有增加返回层级。
 
 ## 0.1.0-test.13 / Build 10113 — 手机端帖子卡片预览、正文全宽图片、原页内翻页
 
@@ -71,14 +125,6 @@
 - Test13 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
 - Shell 数值 `version=2026092313`，低于 32 位有符号整数上限；
 - Release / Bootstrap / Shell 均明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
-
-### Test13 实机优先验收
-
-1. 打开“高清中文字幕”等普通板块，对照手机网页版：至少部分有图片的帖子应在标题/摘要下面显示 1~2 张真实预览图，而不是纯文字列表；
-2. 连续点击“下一页”到第 3~5 页，再按系统返回，确认只返回一次就离开主题列表；同时测试“回第1页”；
-3. 打开刚才同一个有多张正文图片的帖子，确认图片变成逐张全宽显示，不再两列/三列挤在一起；
-4. 对照之前空白图片位置，确认实际可显示图片数量是否继续增加；
-5. 搜索回归一次，确认 Test13 没有破坏已经正常的搜索。
 
 ## 0.1.0-test.12 / Build 10112 — 手机端优先主题预览、正文图片顺序还原
 
@@ -163,4 +209,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 只保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test13 实机闭环 → 列表真实预览图 / 正文全宽图片 / 原页内翻页 → 再继续 Guide 与 UI 精修。
+- 当前下一步：Test14 实机闭环 → 帖子详情崩溃 / 列表摘要 / 双图预览 / 页内翻页 → 再继续 Guide 与 UI 精修。
