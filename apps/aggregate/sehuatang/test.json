@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.8",
-  "baseVersion": "0.1.0-test.7",
+  "version": "0.1.0-test.9",
+  "baseVersion": "0.1.0-test.8",
   "targetVersion": "0.1.0",
-  "build": 10108,
-  "shellVersion": "0.1.0-test.8",
-  "shellRuleVersion": 2026092308,
+  "build": 10109,
+  "shellVersion": "0.1.0-test.9",
+  "shellRuleVersion": 2026092309,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v8_b10108.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v8_b10108.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.9/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v9_b10109.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v9_b10109.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.7",
-    "build": 10107,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json"
+    "version": "0.1.0-test.8",
+    "build": 10108,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json"
   },
-  "notes": "第六轮实机反馈修复：子板块不再从根bm块误提取，改为逐个一级板块页面解析；补回首页与操作图标；主题列表从整条主题容器提取右侧预览图；正文图片改为原生pic_1_full组件带Cookie/Referer渲染。"
+  "notes": "第七轮实机反馈修复：Test8 的通用 fetchPage 仅按 HTML 长度判成功，导致约150万字错误页面阻断 WebView，连带破坏帖子正文及 guide；Test9 改为按论坛/主题列表/帖子正文真实 DOM 校验，失败则继续 WebView；六大类重建优先复用旧约45板块设备缓存并多策略分组；网页版/原帖/回复/复制/设置使用独立SVG图标。"
 }
