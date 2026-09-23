@@ -1,0 +1,16 @@
+/* PikPak 0.1.0-test.4 Runtime Patch - captcha review workflow */
+(function(C,Pages,R){
+    var baseModule=R.module;
+    function put(k,v){try{putMyVar(k,String(v==null?'':v));}catch(e){}}
+    function get(k){try{return String(getMyVar(k,'')||'');}catch(e){return '';}}
+    function clearOne(k){try{clearMyVar(k);}catch(e){}}
+    function clearVerify(clearPassword){clearOne('pikpak_v2_verify_url');clearOne('pikpak_v2_verify_token');clearOne('pikpak_v2_verify_user');if(clearPassword){clearOne('pikpak_v2_login_pass');clearOne('pikpak_v2_login_user');}}
+    function saveChallenge(r,user){put('pikpak_v2_verify_user',user||'');put('pikpak_v2_verify_token',r&&r.captcha_token?r.captcha_token:'');put('pikpak_v2_verify_url',r&&r.verify_url?r.verify_url:'');}
+    function loginSuccess(){clearVerify(true);toast('登录成功');try{refreshPage(false);}catch(e){try{refreshPage();}catch(e2){}}return 'hiker://empty';}
+    function loginAction(user,pass){user=String(user||'').trim();pass=String(pass||'');put('pikpak_v2_login_user',user);put('pikpak_v2_login_pass',pass);showLoading('正在连接 PikPak…');var r=C.beginPasswordLogin(user,pass);hideLoading();if(r&&!r.error&&r.access_token)return loginSuccess();if(r&&r.needsVerification){saveChallenge(r,user);if(!r.verify_url)toast('PikPak 已要求验证，正在进入验证页；如页面为空请点“重新加载验证”');return 'hiker://page/pikpakVerify?rule=PikPak&simple=true';}clearOne('pikpak_v2_login_pass');return 'toast://'+C.errorText(r);}
+    function verifyContinueAction(){var user=get('pikpak_v2_verify_user')||get('pikpak_v2_login_user'),pass=get('pikpak_v2_login_pass'),token=get('pikpak_v2_verify_token');if(!user||!pass)return 'toast://登录临时信息已失效，请返回账号页重新输入';if(!token)return 'toast://验证令牌为空，请先点“重新加载验证”';showLoading('正在确认验证结果…');var r=C.finishPasswordLogin(user,pass,token);hideLoading();if(r&&!r.error&&r.access_token){clearVerify(true);toast('验证通过，登录成功');try{back(false);}catch(e){try{back();}catch(e2){}}return 'hiker://empty';}if(r&&r.needsVerification){saveChallenge(r,user);if(r.verify_url){toast('验证尚未完成或已刷新，请继续完成验证');try{refreshPage(false);}catch(e3){try{refreshPage();}catch(e4){}}return 'hiker://empty';}return 'toast://验证尚未通过，请确认上方 PikPak 验证已经完成';}return 'toast://'+C.errorText(r);}
+    function verifyReloadAction(){var user=get('pikpak_v2_verify_user')||get('pikpak_v2_login_user'),pass=get('pikpak_v2_login_pass'),old=get('pikpak_v2_verify_token');if(!user||!pass)return 'toast://登录临时信息已失效，请返回账号页重新输入';showLoading('正在重新获取验证页面…');var r=C.refreshPasswordChallenge(user,pass,old);hideLoading();if(r&&r.captcha_token){saveChallenge(r,user);toast(r.verify_url?'验证页面已刷新':'已取得新验证令牌');try{refreshPage(false);}catch(e){try{refreshPage();}catch(e2){}}return 'hiker://empty';}return 'toast://'+C.errorText(r);}
+    function verifyCancelAction(){clearVerify(true);toast('已取消验证并清除临时密码');try{back(false);}catch(e){try{back();}catch(e2){}}return 'hiker://empty';}
+    R.module=function(){var m=baseModule();m.version='0.1.0-test.4';m.build=10104;m.loginAction=loginAction;m.verify=Pages.verify;m.verifyContinueAction=verifyContinueAction;m.verifyReloadAction=verifyReloadAction;m.verifyCancelAction=verifyCancelAction;return m;};
+    R.version='0.1.0-test.4';R.build=10104;
+})(PikPakCore,PikPakPages,PikPakRemoteRuntime);
