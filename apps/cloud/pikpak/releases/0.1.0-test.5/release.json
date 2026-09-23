@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.5",
+  "build": 10105,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.4",
+  "modules": [
+    {"name":"core-base","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"core-test4-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"core-test5-fix","path":"apps/cloud/pikpak/releases/0.1.0-test.5/core_fix.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"provider-test5-safe-cleanup","path":"apps/cloud/pikpak/releases/0.1.0-test.5/provider_patch.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.5"},
+  "status": "pending-device-validation",
+  "notes": "Test5 完成 PikPak review 人机验证闭环：验证 URL 缺失时生成官方 spritePuzzle 地址，X5 验证页通过 URL 拦截/JS 注入捕获验证后的 captcha_token 并自动继续 signin，保留手动继续作为兜底。临时 Magnet 播放文件只处理本程序队列，超过15分钟或手动清理时移入回收站，不再永久删除。"
+}
