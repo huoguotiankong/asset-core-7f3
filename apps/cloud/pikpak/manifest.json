@@ -6,20 +6,20 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.8",
-  "defaultBuild": 10108,
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "0.1.0-test.8",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v8_b10108.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.8/release.json",
+  "defaultVersion": "0.1.0-test.9",
+  "defaultBuild": 10109,
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "0.1.0-test.9",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v9_b10109.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.9/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test8-live-captcha-watch",
+    "stage": "uploaded-v1-to-modular-test9-current-txcaptcha-contract",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test8 修复官方安全验证完成后 SPA 不跳转导致无法自动接回：X5 持续监听主页面/iframe 地址栏 captcha_token 与成功状态，新 token 出现后自动继续 signin；完整继承 Test7 会话级安全回收。"
+    "note": "Test9 在 Test8 验证监听基础上修正当前 PikPak Web 2.0 安全验证契约：fallback 改为 txCaptcha、action POST:/v1/auth/signin、event signin_check、xbase callback，并将 txCaptcha 正确识别为挑战页而不是完成回调。继承跨小程序 Magnet 会话级安全回收。"
   }
 }
