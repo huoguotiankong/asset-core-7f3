@@ -1,0 +1,17 @@
+/* 色花堂 Remote Test Bootstrap 0.1.0-test.13 - immutable overlay loader */
+var SEHUATANG_BOOT_CONFIG={id:'sehuatang-test',branch:'main',repoRawRoot:'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/',version:'0.1.0-test.13',build:10113,modules:[
+{name:'runtime-base',path:'apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js',ver:10101},
+{name:'native-index-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js',ver:10102},
+{name:'topic-render-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js',ver:10103},
+{name:'forum-product-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js',ver:10104},
+{name:'access-cookie-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js',ver:10105},
+{name:'ux-thread-access-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_ux_thread_access.js',ver:10106},
+{name:'stability-polish-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.7/patch_stability_polish.js',ver:10107},
+{name:'forum-visual-v8',path:'apps/aggregate/sehuatang/releases/0.1.0-test.8/patch_forum_visual_v8.js',ver:10108},
+{name:'forum-runtime-v9',path:'apps/aggregate/sehuatang/releases/0.1.0-test.9/patch_forum_runtime_v9.js',ver:10109},
+{name:'thread-visual-v10',path:'apps/aggregate/sehuatang/releases/0.1.0-test.10/patch_thread_visual_v10.js',ver:10110},
+{name:'forum-cards-search-v11',path:'apps/aggregate/sehuatang/releases/0.1.0-test.11/patch_forum_cards_search_v11.js',ver:10111},
+{name:'mobile-order-v12',path:'apps/aggregate/sehuatang/releases/0.1.0-test.12/patch_mobile_order_v12.js',ver:10112},
+{name:'mobile-cards-nav-v13',path:'apps/aggregate/sehuatang/releases/0.1.0-test.13/patch_mobile_cards_nav_v13.js',ver:10113}
+]};
+var SeHuaTangBoot={loadOnly:function(){var root=SEHUATANG_BOOT_CONFIG.repoRawRoot+SEHUATANG_BOOT_CONFIG.branch+'/',loaded=[],i,m,url;for(i=0;i<SEHUATANG_BOOT_CONFIG.modules.length;i++){m=SEHUATANG_BOOT_CONFIG.modules[i];url=root+m.path+'?sehuatang_release=0.1.0-test.13';require(url,{headers:{'Cache-Control':'no-cache'}},m.ver);loaded.push({name:m.name,url:url});}if(typeof SeHuaTangRemoteRuntime==='undefined'||String(SeHuaTangRemoteRuntime.version)!=='0.1.0-test.13')throw new Error('色花堂 Test13 运行时校验失败');return{ok:true,release:{id:'sehuatang-test',version:'0.1.0-test.13',build:10113},loaded:loaded};},module:function(){this.loadOnly();return SeHuaTangRemoteRuntime.module();},info:function(){return{managerVersion:'direct-loader',current:{id:'sehuatang-test',version:'0.1.0-test.13',build:10113}};},check:function(){return{ok:true,current:{id:'sehuatang-test',version:'0.1.0-test.13',build:10113},hasUpdate:false};},update:function(){return{ok:false,changed:false,error:'测试版采用完整导入口令覆盖更新'};},rollback:function(){return{ok:false,error:'需要时覆盖导入 Test12'};},reinstall:function(){return this.loadOnly();}};
