@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.1",
+  "baseVersion": "uploaded-v1",
+  "targetVersion": "0.1.0",
+  "build": 10101,
+  "shellVersion": "0.1.0-test.1",
+  "shellRuleVersion": 2026092301,
+  "managerVersion": "direct-loader",
+  "delivery": "remote-immutable-direct-loader",
+  "release": "apps/cloud/pikpak/releases/0.1.0-test.1/release.json",
+  "bootstrap": "apps/cloud/pikpak/bootstrap_test_v1_b10101.js",
+  "rule": "apps/cloud/pikpak/pikpak_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-09-23",
+  "status": "active-test-pending-device-validation",
+  "previousTest": null,
+  "notes": "首次全量产品/架构重构 Test：修复空白设置弹窗，重做首页与文件列表，隔离 Token 生命周期和分页状态，删除 referral 自动副作用，加入安全登录、公开分享、Magnet 快速播放、离线任务和文件管理能力。"
+}
