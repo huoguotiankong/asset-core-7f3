@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.2",
+  "modules": [
+    {"name":"core","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.3/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.3/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.3"},
+  "status": "pending-device-validation",
+  "notes": "修复账号密码登录：新登录从旧 Android 1.23.0 认证档切换到当前 Web 2.0.0 认证档，更新 client_id、client_secret、captcha salts、redirect 和请求头；已有旧会话保留 legacy 刷新兼容。对 result:review/value:review 风控响应转换为明确账号验证提示，不再把内部 captcha meta 原样吐给用户。"
+}
