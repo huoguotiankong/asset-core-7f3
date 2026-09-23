@@ -3,30 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 22:45",
+  "updatedAt": "2026-09-23 23:03",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.22",
-      "baseVersion": "0.1.0-test.21",
+      "version": "0.1.0-test.23",
+      "baseVersion": "0.1.0-test.22",
       "targetVersion": "0.1.0",
-      "build": 10122,
-      "displayVersion": "Test 0.1.0-test.22 · Build 10122",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt",
+      "build": 10123,
+      "displayVersion": "Test 0.1.0-test.23 · Build 10123",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v23_b10123.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "三个话题预览图DOM提取修复。",
+      "desc": "三个话题预览图真实候选筛选，完全对齐普通子版块图片输出链。",
       "highlights": [
-        "保留Test21作者/标题/摘要/统计卡片结构，只针对预览图链继续修复",
-        "WebView渲染后记录img.currentSrc，覆盖浏览器已经真正加载出来的图片地址",
-        "同时读取CSS background-image与data-original/data-src/data-lazy-src/file/zoomfile等属性",
-        "预览图移除#originalSize#，单张预览也不再使用pic_1_full，避免失败图片撑出整屏灰块",
-        "三个话题继续mobile=2优先，普通板块/搜索/帖子详情等稳定模块不动",
-        "Stable/Latest继续未建立，等待Test22实机验证"
+        "实机已确认普通子版块预览图正常，因此Test23不再修改海阔图片组件/请求头层",
+        "Guide WebView优先保留data-original/data-src/data-lazy-src/file/zoomfile等真实源，避免currentSrc占位图抢优先级",
+        "只有naturalWidth/naturalHeight达到阈值时才接受currentSrc/src",
+        "原生预览重新使用与普通板块一致的C.imageUrl(Cookie/Referer/#originalSize#)",
+        "三个话题作者/标题/摘要/统计排版及mobile=2优先保持不变",
+        "Stable/Latest继续未建立，等待Test23实机验证"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
