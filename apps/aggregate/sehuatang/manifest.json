@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.7",
-  "defaultBuild": 10107,
-  "testVersion": "0.1.0-test.7",
-  "testBuild": 10107,
-  "testShellVersion": "0.1.0-test.7",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v7_b10107.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v7_b10107.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json",
+  "defaultVersion": "0.1.0-test.8",
+  "defaultBuild": 10108,
+  "testVersion": "0.1.0-test.8",
+  "testBuild": 10108,
+  "testShellVersion": "0.1.0-test.8",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v8_b10108.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v8_b10108.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test7-guide-access-fid-thread-media-polish",
+    "stage": "test8-category-preview-native-image",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.6",
-    "note": "根据Test6后续实机反馈：恢复最新/热门/精华主题链；六大类按真实根fid定位；站点可访问状态与Cookie拆分；正文图片、BTIH磁链去重、回复编号和在线视频嗅探播放继续收敛。"
+    "previousTest": "0.1.0-test.7",
+    "note": "根据Test7实机反馈：逐个一级板块页面解析真实子板块；恢复图标；从主题容器提取右侧预览图；正文图片切到原生pic_1_full带Cookie/Referer渲染。"
   }
 }
