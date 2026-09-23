@@ -2,6 +2,66 @@
 
 > 2026-09-23 开始由 `asset-core-7f3@main` 正式维护。当前基线来自用户上传的 `PikPak.hk小程序(1).zip`，原规则 `version=1`；此前仓库没有 PikPak Stable/Test 元数据，因此本轮从 Test 通道建立治理，不直接创建 Stable。
 
+## 2026-09-23 · 0.1.0-test.5 / Build10105 · 安全验证自动接回 + 临时文件安全回收
+
+### 实机事实与 Test4 边界
+
+- 用户实机确认账号密码登录会收到 `result:review`，官方 PikPak 随后弹出“请完成验证”的交互式风控页面。
+- Test4 已能识别 review 并提供内嵌验证页，但只假设“验证后继续使用原 captcha token”，且当 Captcha init 没直接返回 `verify_url` 时仍可能没有可加载地址。
+- 因此 Test4 不作为完成态，Test5 继续补齐“验证 URL → 浏览器验证 → 新 captcha token → signin”的实际闭环。
+
+### Test5 登录链
+
+```text
+账号 + 密码（临时 MyVar）
+→ Captcha init
+→ 普通通过：直接 signin
+→ result:review
+→ 若 API 有 url：直接使用
+→ 若 API 无 url：根据 captcha_token / DeviceId 生成官方 spritePuzzle 验证地址
+→ hiker://page/pikpakVerify
+→ x5_webview_single 完成 PikPak 官方人机验证
+→ urlInterceptor + JS 注入观察验证跳转
+→ 捕获验证后的 captcha_token / loading 回调
+→ hiker://page/pikpakVerifyDone
+→ 使用捕获 token + 同一账号/DeviceId 继续 signin
+→ 保存 access_token / refresh_token
+→ 清除临时密码和验证状态
+```
+
+- 不绕过或模拟人机验证，仍由 PikPak 官方验证页面完成。
+- 自动回调失败时保留“验证完成，继续登录”按钮作为兜底。
+- 账号密码只在本次验证流程的 `MyVar` 中暂存；登录成功、取消验证或重新安装时清理。
+- 账号页增加“继续安全验证”，避免验证过程中误返回后只能重新输入。
+
+### Magnet 临时文件清理修正
+
+此前 Test1~Test4 的临时文件队列虽然只登记本程序创建的 Magnet/秒传对象，但清理时调用的是 `batchDelete` 永久删除。Test5 改为：
+
+- 只处理 `temp_files` 队列中由本程序登记的文件 ID，普通网盘文件和用户主动创建的离线文件不参与自动清理。
+- 自动清理仍采用延迟策略：下一次 Magnet 处理时只清理已超过约 15 分钟的临时对象，避免当前播放、拖动进度条或播放器重取分片时文件过早失效。
+- 手动“清理临时播放文件”只处理该临时队列。
+- 清理动作由永久 `batchDelete` 改为 `batchTrash`，进入 PikPak 回收站，可恢复，不再永久删除。
+- 当前尚未宣称具备可靠的“播放器退出瞬间”回调；在海阔实机确认退出回调契约前，不用未经验证的退出即删方案。
+
+### Test5 实机验收重点
+
+1. 账号密码登录触发 review 后自动进入“PikPak 安全验证”。
+2. 验证区域正常加载，不再出现只有提示没有验证内容。
+3. 完成人机验证后应自动进入验证完成页并继续登录；若未自动跳转，点击“验证完成，继续登录”兜底。
+4. 登录后首页显示已登录并正常列出根目录文件。
+5. 盘内视频验证原画/转码和拖动进度条。
+6. 从其他小程序调用 Magnet 播放，确认临时文件不会在播放开始时立即删除。
+7. 15 分钟后或手动清理，确认仅临时对象进入回收站，普通文件不受影响。
+
+### 当前状态
+
+- Test：`0.1.0-test.5 / Build10105`
+- Stable：尚未建立。
+- 发布状态：`pending-device-validation`。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.4 / Build10104 · 官方人机验证闭环
 
 ### 新的实机事实
