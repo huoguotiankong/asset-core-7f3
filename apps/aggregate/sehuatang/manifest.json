@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.14",
-  "defaultBuild": 10114,
-  "testVersion": "0.1.0-test.14",
-  "testBuild": 10114,
-  "testShellVersion": "0.1.0-test.14",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v14_b10114.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v14_b10114.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.14/release.json",
+  "defaultVersion": "0.1.0-test.15",
+  "defaultBuild": 10115,
+  "testVersion": "0.1.0-test.15",
+  "testBuild": 10115,
+  "testShellVersion": "0.1.0-test.15",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v15_b10115.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v15_b10115.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.15/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test14-thread-crash-card-summary-hotfix",
+    "stage": "test15-category-aware-mobile-layout",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.13",
-    "note": "根据Test13实机反馈：修复帖子详情d未定义崩溃；主题列表摘要改用最佳标题锚点边界并清理HTML属性/跨卡片噪声；双图预览与页内刷新翻页继续保留。"
+    "previousTest": "0.1.0-test.14",
+    "note": "根据Test14实机反馈：在线视频使用双列视频卡片；普通帖子作者信息独立行；色花文学优先恢复短标题；色花图片正文增加手机端整页图片兜底；搜索和页内翻页继续保持。"
   }
 }
