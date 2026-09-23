@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.19",
-  "baseVersion": "0.1.0-test.18",
+  "version": "0.1.0-test.20",
+  "baseVersion": "0.1.0-test.19",
   "targetVersion": "0.1.0",
-  "build": 10119,
-  "shellVersion": "0.1.0-test.19",
-  "shellRuleVersion": 2026092319,
+  "build": 10120,
+  "shellVersion": "0.1.0-test.20",
+  "shellRuleVersion": 2026092320,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.19/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v19_b10119.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v19_b10119.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.20/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v20_b10120.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v20_b10120.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.18",
-    "build": 10118,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.18/release.json"
+    "version": "0.1.0-test.19",
+    "build": 10119,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.19/release.json"
   },
-  "notes": "修复首页fypage自动翻页造成子板块后重复追加搜索/话题/论坛分类；子板块分类与排序改为两个独立select选择器，排序词即使携带typeid也不会混入分类；统计信息继续弱化在卡片底部。"
+  "notes": "账号、签到改为直接打开mobile=2手机页面；最新发表/热门/精华改为独立mobile=2 guide解析链，先在同一WebView会话处理18+并同步Cookie，手机端无主题时才最小PC兜底。"
 }
