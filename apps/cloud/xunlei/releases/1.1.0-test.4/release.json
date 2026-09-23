@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "xunlei",
+  "channel": "test-experimental",
+  "version": "1.1.0-test.4",
+  "build": 11004,
+  "baseVersion": "1.1.0-test.3",
+  "baseBuild": 11003,
+  "installer": "cloud/xunlei/v1.1.0-test.4/import_auth_syntax_fix.js",
+  "mode": "installed-rule-overlay",
+  "status": "pending-device-validation",
+  "deviceFeedback": "Test3 fails to compile in Hiker JSEngine: SyntaxError string literal not terminated at line 172.",
+  "changes": [
+    "Replace the Test3 login() function with a Hiker-safe version that contains no escaped newline inside generated source",
+    "Repair an already-installed Test3 rule even when the broken login string contains a real LF/CRLF inside the quoted literal",
+    "Keep Test3 signin/refresh GET+POST auth recovery logic unchanged",
+    "Keep Test1/Test2 magnet playback and landing reliability logic unchanged"
+  ],
+  "stableUnchanged": true
+}
