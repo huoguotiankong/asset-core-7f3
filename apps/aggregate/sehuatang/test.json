@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.23",
-  "baseVersion": "0.1.0-test.22",
+  "version": "0.1.0-test.24",
+  "baseVersion": "0.1.0-test.23",
   "targetVersion": "0.1.0",
-  "build": 10123,
-  "shellVersion": "0.1.0-test.23",
-  "shellRuleVersion": 2026092323,
+  "build": 10124,
+  "shellVersion": "0.1.0-test.24",
+  "shellRuleVersion": 2026092324,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.23/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v23_b10123.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v23_b10123.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.24/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v24_b10124.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v24_b10124.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.22",
-    "build": 10122,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json"
+    "version": "0.1.0-test.23",
+    "build": 10123,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.23/release.json"
   },
-  "notes": "Test22实机确认Guide仍灰图，但普通子版块预览图正常。Test23不再优先currentSrc占位图：WebView仅标记真实图片候选，优先lazy/original/file/zoomfile，currentSrc/src需natural尺寸合格；输出完全复用普通板块C.imageUrl链。"
+  "notes": "Test23实机仍无法显示Guide预览图。Test24绕过返回HTML的运行时DOM差异：在mobile=2 WebView真实渲染完成后按tid直接采集可见图片，fba.putVar保存tid->URL映射，原生侧再使用普通子版块已经验证的C.imageUrl链显示。"
 }
