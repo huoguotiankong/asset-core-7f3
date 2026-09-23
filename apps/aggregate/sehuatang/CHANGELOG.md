@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.21 / Build 10121 / 待实机验证**  
+状态：**0.1.0-test.22 / Build 10122 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,62 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v21_b10121.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v21_b10121.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json`
-- Test21 继承 Test1~Test20，并新增：`releases/0.1.0-test.21/patch_guide_cards_v21.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v22_b10122.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json`
+- Test22 继承 Test1~Test21，并新增：`releases/0.1.0-test.22/patch_guide_preview_v22.js`。
+
+## 0.1.0-test.22 / Build 10122 — 三个话题预览图 DOM 提取修复
+
+### Test21 实机反馈
+
+1. 最新热门等三个话题的原生卡片排版已经接近手机网页版，作者、标题、摘要、统计层级方向正确；
+2. 同一 `mobile=2` 网页能正常显示三张真实预览图，但原生页仍然不显示图片；
+3. 原生页在仅识别到一张失效图片时会出现大块灰色空白，说明 Test21 的图片来源识别和 `pic_1_full + #originalSize#` 组合都不适合 guide 预览；
+4. 本轮只修三个话题预览图，不扩大普通板块、搜索、帖子详情、评论页、账号/签到等已稳定模块修改面。
+
+### Test22 修复
+
+1. **直接读取浏览器实际加载后的图片地址**
+   - 三个话题继续优先 `mobile=2` WebView；
+   - WebView 在滚动触发懒加载后，把每个 `<img>` 的 `currentSrc / src / data-original / data-src / data-lazy-src / file / zoomfile` 写入 `data-sht-resolved-src`；
+   - Parser 优先使用这个“浏览器已经真正加载过”的地址，而不是继续猜 lazy 属性。
+
+2. **补齐 CSS 背景图链**
+   - 手机 guide 卡片的预览图不保证全部是普通 `<img>`；
+   - Test22 遍历渲染后的 DOM，用 `getComputedStyle(...).backgroundImage` 记录为 `data-sht-bg`；
+   - Parser 同时解析 `background-image:url(...)`、`data-sht-bg` 和普通 lazy 图片属性；
+   - 仍过滤 avatar、smiley、static/image、loading、placeholder 等非帖子预览资源。
+
+3. **保留 Test15/Test21 已验证的作者与标题 Parser**
+   - 优先继续使用 `parseCardsV15`，保留作者头像、名字、时间、标题评分、摘要等成熟逻辑；
+   - Test22 只对同一主题卡片的图片集合重新做 DOM 增强提取；
+   - 成熟 Parser 无结果时才使用 Test22 guide fallback。
+
+4. **避免失效单图撑出整屏空白**
+   - 话题预览图不再追加 `#originalSize#`；
+   - 3 张图使用 `pic_3`，1~2 张统一使用较紧凑的 `pic_2`，不再使用 `pic_1_full`；
+   - 图片仍携带移动 UA、Cookie、Referer。
+
+5. **诊断增强**
+   - `guide.preview.v22` 记录 mode / page / 主题数 / 提取到的预览图总数；
+   - 页面标题区同时显示本页主题数与预览图数量，便于区分“没有提取到图”和“提取到图但图片加载失败”。
+
+### Test22 静态门禁
+
+- `patch_guide_preview_v22.js`：本地 `node --check` 通过；
+- `bootstrap_test_v22_b10122.js`：本地 `node --check` 通过；
+- Test22 `release.json`：本地 JSON 解析通过；
+- Test22 Shell：外层规则 JSON及内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092322`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test22 实机优先验收
+
+1. 打开“最新热门”并对照其“手机版”：同一带三张预览图的主题，原生页应出现对应预览图；
+2. 再检查“最新发表 / 最新精华”，确认不是只修单一 guide；
+3. 若仍不显示，先看标题下方“本页 X 条主题 · Y 张预览图”：若 `Y=0` 说明 DOM 提取仍未命中，若 `Y>0` 但仍灰图则继续修图片请求/组件链；
+4. 不重新测试搜索和普通板块，除非出现回归。
 
 ## 0.1.0-test.21 / Build 10121 — 三个话题手机网页卡片化与预览图修复
 
@@ -159,4 +211,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 只保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test21 实机闭环 → 三个话题标题 / 作者行 / 预览图 / 统计 / 翻页 → 再继续整体视觉精修。
+- 当前下一步：Test22 实机闭环 → 三个话题预览图 → 再继续整体视觉精修。
