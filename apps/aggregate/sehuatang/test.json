@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.13",
-  "baseVersion": "0.1.0-test.12",
+  "version": "0.1.0-test.14",
+  "baseVersion": "0.1.0-test.13",
   "targetVersion": "0.1.0",
-  "build": 10113,
-  "shellVersion": "0.1.0-test.13",
-  "shellRuleVersion": 2026092313,
+  "build": 10114,
+  "shellVersion": "0.1.0-test.14",
+  "shellRuleVersion": 2026092314,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.13/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v13_b10113.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v13_b10113.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.14/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v14_b10114.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v14_b10114.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.12",
-    "build": 10112,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.12/release.json"
+    "version": "0.1.0-test.13",
+    "build": 10113,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.13/release.json"
   },
-  "notes": "第十一轮实机反馈修复：搜索继续保持Test11已验证实现；帖子正文图片不再连续图片三列网格，改成按手机网页版顺序逐张全宽显示；普通板块改为按相邻tid边界提取整张手机端帖子卡片并最多展示2张预览图，WebView滚动两轮触发懒加载；板块翻页改成putMyVar+refreshPage同页刷新，不再每翻一页压入一个新页面。"
+  "notes": "第十二轮实机热修：修复Test13帖子详情thread()漏声明d导致ReferenceError；主题列表摘要不再从标题前600字符开始截取，改按最佳标题锚点到下一主题标题锚点，清理HTML属性残片、跨卡片文字和广告噪声；保留Test13真实双图预览与原页内刷新翻页。"
 }
