@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.6",
-  "baseVersion": "0.1.0-test.5",
+  "version": "0.1.0-test.7",
+  "baseVersion": "0.1.0-test.6",
   "targetVersion": "0.1.0",
-  "build": 10106,
-  "shellVersion": "0.1.0-test.6",
-  "shellRuleVersion": 2026092306,
+  "build": 10107,
+  "shellVersion": "0.1.0-test.7",
+  "shellRuleVersion": 2026092307,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v6_b10106.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v6_b10106.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v7_b10107.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v7_b10107.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.5",
-    "build": 10105,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json"
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json"
   },
-  "notes": "第四轮实机修复：自动点击18+年龄确认并保存Cookie；首页论坛板块改为6个大类横向切换、当前类二列子板块；帖子详情按旧成熟规则的PC #postlist/.t_fsz/.t_f结构重写，并保留磁链云播。"
+  "notes": "第五轮实机反馈修复：最新/热门/精华列表统一到Cookie-aware请求链；六大类按真实根fid定位；访问状态与Cookie拆分；正文图片属性兼容、magnet按BTIH去重、回复编号修正；在线视频增加直链与海阔video嗅探入口。"
 }
