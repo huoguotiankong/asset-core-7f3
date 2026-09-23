@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "xunlei",
+  "channel": "test-experimental",
+  "version": "1.1.0-test.3",
+  "build": 11003,
+  "baseVersion": "1.1.0-test.2",
+  "baseBuild": 11002,
+  "installer": "cloud/xunlei/v1.1.0-test.3/import_auth_sync_fix.js",
+  "installerCommit": "7d274b324a5f3ee1c68ef4e1e854f51bf7d9cad4",
+  "mode": "installed-rule-overlay",
+  "status": "pending-device-validation",
+  "deviceFeedback": "User reports login UI succeeds but video playback still reports not logged in.",
+  "changes": [
+    "Treat core sessionID login and drive API authorization as two distinct auth stages",
+    "Exchange sessionID for authorization/refresh_token before reporting login success",
+    "Repair both protected GET and POST requests with one-shot refresh-token or sessionID re-auth and retry",
+    "Stop using stored mobile number as proof of login state",
+    "Clear stale account-scoped auth/cache state when a new core login succeeds",
+    "Keep password input transient and clear legacy persisted password during installer import"
+  ],
+  "stableUnchanged": true
+}
