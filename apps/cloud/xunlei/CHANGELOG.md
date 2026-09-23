@@ -32,6 +32,56 @@ JavDB 等外部规则
 
 ---
 
+## 2026-09-23 · 1.1.0-test.4 / Build11004 · Test3 登录语法兼容修复
+
+### 用户实机现象
+
+导入 Test3 后，进入迅雷直接报：
+
+```text
+迅雷解析失败！
+SyntaxError: 字符串文字没有限制
+行数：172
+```
+
+说明 Test3 还没有进入登录或网络请求阶段，`hanshu` 模块已经在海阔 JSEngine 编译阶段失败。
+
+### 根因
+
+Test3 的 `login()` 失败提示使用了带 `\n` 的字符串。该函数并不是直接源码，而是先作为 Installer 模板字符串生成，再写入 `pages[hanshu].rule`，随后由海阔再次 `Function/eval` 编译。两层字符串转义后，换行被写成真实 LF，最终形成类似：
+
+```js
+toast(msg + "
+请尝试手机号验证码登录");
+```
+
+因此产生未终止字符串字面量，整份 `hanshu` 无法解析。
+
+### Test4 修复
+
+- 直接整段替换 Test3 的 `login()`，失败提示改成不包含转义换行的单行字符串。
+- 对已经安装并损坏的 Test3 增加 LF/CRLF 定点清理，因此不要求先删除当前迅雷，也不要求回退 Test2。
+- 保留 Test3 的 `signin / refresh_token / ensureAuth / GET+POST 自动恢复` 逻辑不变。
+- 保留 Test1/Test2 的磁链起播和 `task.file_id` 落盘可靠性逻辑不变。
+- 本地用“已写入真实换行的损坏 Test3 hanshu”模拟覆盖后，修复结果重新通过 JavaScript 语法检查。
+
+### 当前交付
+
+- Installer：`cloud/xunlei/v1.1.0-test.4/import_auth_syntax_fix.js`
+- Installer 固定 Commit：`a3e1194be7f34c442e8314faf8a3a13093d659c1`
+- Release：`apps/cloud/xunlei/releases/1.1.0-test.4/release.json`
+- Stable/Latest 仍不切换，等待实机确认 Test4 能正常进入迅雷并继续验证真实登录授权链。
+
+### Test4 实机验收
+
+1. 直接覆盖当前报语法错的 Test3。
+2. 打开迅雷，首先确认不再出现 `行数 172 / 字符串文字` 语法错误。
+3. 账号管理执行退出后重新登录。
+4. 登录成功时必须看到 `登录成功，云盘授权已同步`。
+5. 再验证盘内视频播放和外部磁链调用播放。
+
+---
+
 ## 2026-09-23 · 1.1.0-test.3 / Build11003 · 登录授权状态同步修复
 
 ### 用户实机现象
