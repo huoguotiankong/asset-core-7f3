@@ -3,33 +3,33 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 22:46",
+  "updatedAt": "2026-09-23 23:20",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.9",
+      "version": "0.1.0-test.10",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10109,
-      "displayVersion": "Test 0.1.0-test.9 · Build 10109",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v9_b10109.txt",
+      "build": 10110,
+      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v10_b10110.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "PikPak 全量重构测试版；Test9 将账号密码登录的人机验证 fallback 更新到当前 Web 2.0 txCaptcha 契约，并继续保留 Test8 验证成功监听和 Test7 跨小程序 Magnet 会话级安全回收。",
+      "desc": "PikPak 全量重构测试版；Test10 将官方网页登录 + 自动读取 Web Refresh Token 设为推荐登录方式，避免持续触发 captcha/init/signin 的 operation too frequent 风控；API 直登保留备用。",
       "highlights": [
-        "账号密码登录遇到 review 时进入海阔内嵌 PikPak 官方安全验证页",
-        "fallback 验证页改为当前 txCaptcha，action=POST:/v1/auth/signin，event=signin_check，redirect=xbase callback",
-        "txCaptcha 初始页面不会再被误判为验证完成；官方 callback / 新 token / 成功状态才继续 signin",
-        "验证页持续监听主地址、iframe captcha_token 与成功状态，并保留手动继续登录兜底",
-        "跨小程序 Magnet 调用建立独立 session，只标记本次调用创建的临时播放文件",
-        "调用页关闭时将本 session 临时文件移入 PikPak 回收站，不永久删除",
-        "普通个人网盘文件和用户手动创建的离线任务不参与退出清理",
-        "其它已登记临时播放文件超过15分钟或手动清理时进入回收站",
-        "首页、文件浏览、公开分享、Magnet、离线任务、文件管理和双 API 线路继续保留"
+        "账号页新增官方网页登录（推荐）入口，邮箱/手机号/第三方账号和验证码全部在 PikPak 官方网页完成",
+        "登录后自动扫描 mypikpak.com localStorage/sessionStorage 中 credentials / refresh_token，并接回小程序 API 会话",
+        "小程序不读取、不保存官方网页密码；只持久保存后续 API 刷新所需的 Refresh Token 会话",
+        "Refresh Token 手动导入继续保留",
+        "账号密码 API 直登降级为备用并明确提示风控风险，避免反复触发 operation too frequent",
+        "Test9 txCaptcha 直登验证链继续保留，便于兼容不触发限流的账号",
+        "跨小程序 Magnet 调用仍建立独立 session，退出调用页只将本次临时文件移入回收站",
+        "普通个人文件和手动离线任务不参与退出清理",
+        "首页、文件浏览、公开分享、Magnet、离线任务、播放与文件管理继续保留"
       ]
     }
   ]
