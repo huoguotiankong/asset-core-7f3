@@ -3,32 +3,30 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-24",
+  "updatedAt": "2026-09-23",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.12",
+      "version": "0.1.0-test.13",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10114,
-      "displayVersion": "Test 0.1.0-test.12 · Build 10114",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v12_b10114.txt",
+      "build": 10115,
+      "displayVersion": "Test 0.1.0-test.13 · Build 10115",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v13_b10115.txt",
       "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-24",
+      "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "PikPak Test12 官方网页登录 Access Token 直连优先版；避免登录成功后立即再次触发 refresh/captcha 风控请求。",
+      "desc": "PikPak Test13 fixes the official Web login route to open the drive application rather than the marketing landing page.",
       "highlights": [
-        "用户实机确认账号密码链在 captcha/init 阶段持续返回 ErrorCode 4002 / operation too frequent",
-        "主登录继续使用海阔 X5 打开 PikPak 官方 mypikpak.com，账号密码不交给本小程序",
-        "网页登录成功后读取 credentials 中当前 access_token + refresh_token",
-        "检测到 access_token 时直接建立 Web API Session，不再立即额外执行 refresh-token 换票和主动 captcha refresh",
-        "只有 Access Token 缺失或后续过期时才使用 Web Refresh Token",
-        "保留 Test11 的 Web 请求兼容层及 Test10 Android 底层兼容，但账号密码 API 直登不作为主入口",
-        "保留个人盘、公开分享、播放、多线路、下载、Magnet、离线任务和文件管理",
-        "保留跨小程序 Magnet session 与退出调用页临时文件回收；普通个人文件和手动离线任务不参与清理"
+        "用户实机截图确认 Test12 打开 PikPak 下载宣传页后变空白，尚未到凭据接管阶段",
+        "官方 X5 网页登录入口改为 https://mypikpak.com/drive/all",
+        "保留 Test12 credentials 捕获、当前 Access Token 直连及 Web profile Refresh Token 恢复",
+        "不再尝试 Android 账号密码 captcha/init 登录",
+        "Drive、播放、下载、Magnet、分享、任务和文件管理模块保持不变",
+        "待用户海阔实机验证；Stable 保持不变"
       ]
     }
   ]

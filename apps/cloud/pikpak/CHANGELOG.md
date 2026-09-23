@@ -1,3 +1,18 @@
+## 2026-09-23 · 0.1.0-test.13 / Build10115 · 修正官方网页登录入口
+
+### 实机反馈与修正
+
+用户提供的 Test12 截图显示 X5 实际打开 PikPak 下载宣传首页，随后页面空白。这说明流程尚未进入官方登录表单或凭据接管阶段；问题在网页登录入口 URL，而不是 Access/Refresh Token 恢复。Test13 将 X5 入口从站点宣传根路径改为官方网盘应用路由 `https://mypikpak.com/drive/all`。凭据扫描、Token 桥接、Web profile 与 Refresh Token 恢复逻辑继续沿用 Test12，不再碰 Android 账号密码 captcha/init 路径。
+
+- 新增不可变模块：`releases/0.1.0-test.13-b10115/pages_web_entry_patch.js`；调整入口及说明。
+- 新增 Test13 Bootstrap、Shell、Release、runtime identity；Shell 数值版本提升至 2026092403，缓存构建号提升至 10115。
+- registry、manifest、test、channels 统一指向 Test13；Stable 未改。
+- 发布前检查覆盖 JS 语法、Bootstrap/Release/Shell 引用与运行时身份；官方 X5 登录及 Drive/播放/Magnet/文件管理待用户实机验收。
+
+当前 Test：`0.1.0-test.13 / Build10115`；Stable 尚未建立。
+
+---
+
 # PikPak 小程序 Changelog
 
 ## 2026-09-24 · 0.1.0-test.12 / Build10114 · 官方网页 Access Token 优先
