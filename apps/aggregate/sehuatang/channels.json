@@ -3,30 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 23:10",
+  "updatedAt": "2026-09-23 23:40",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.24",
-      "baseVersion": "0.1.0-test.23",
+      "version": "0.1.0-test.25",
+      "baseVersion": "0.1.0-test.24",
       "targetVersion": "0.1.0",
-      "build": 10124,
-      "displayVersion": "Test 0.1.0-test.24 · Build 10124",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v24_b10124.txt",
+      "build": 10125,
+      "displayVersion": "Test 0.1.0-test.25 · Build 10125",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "三个话题预览图改为直接从已渲染手机DOM按tid采集。",
+      "desc": "三个话题改为手机网页直显，解决原生预览灰图并降低进入等待。",
       "highlights": [
-        "Test23实机仍灰图，进一步确认问题不是普通子版块已验证的图片输出链",
-        "不再依赖fetchCodeByWebView返回HTML是否保留JS动态改写属性",
-        "WebView真实渲染后按tid定位帖子卡片，直接读取已加载图片和CSS背景图",
-        "通过fba.putVar保存tid到预览图URL映射，原生侧再复用C.imageUrl输出",
-        "找不到可信图片时宁可不显示预览，不再输出灰色占位图",
-        "普通子版块/搜索/帖子详情/评论页等稳定模块不动"
+        "连续Test21~24实机证明：Guide网页图片正常、普通子版块原生图正常，但Guide图片搬运到原生组件持续失败",
+        "最新发表/最新热门/最新精华改用x5_webview_single直接渲染mobile=2官网页面，不再先隐藏WebView采集再生成原生列表",
+        "保留声明式18+自动确认和Cookie同步，不绕过验证码/真人验证",
+        "通过urlInterceptor识别tid/thread链接并打开原生shtThread，继续使用原生详情、评论页、磁链云播",
+        "字体资源继续拦截，取消三次滚动采图和DOM映射等待，目标是明显缩短话题入口首屏时间",
+        "普通子版块、搜索、帖子详情、评论页等稳定模块不动"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
