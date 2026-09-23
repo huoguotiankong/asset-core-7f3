@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.10",
+  "build": 10111,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.9",
+  "variant": "android-auth-rebuild",
+  "modules": [
+    {"name":"core-base","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"core-test10-android-auth","path":"apps/cloud/pikpak/releases/0.1.0-test.10-android-b10111/core_android_patch.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"provider-test5-safe-cleanup","path":"apps/cloud/pikpak/releases/0.1.0-test.5/provider_patch.js"},
+    {"name":"provider-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/provider_patch.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-test5-verification","path":"apps/cloud/pikpak/releases/0.1.0-test.5/pages_patch.js"},
+    {"name":"pages-test7-cleanup-semantics","path":"apps/cloud/pikpak/releases/0.1.0-test.7/pages_patch.js"},
+    {"name":"pages-test10-android-auth","path":"apps/cloud/pikpak/releases/0.1.0-test.10-android-b10111/pages_android_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-test5-verification","path":"apps/cloud/pikpak/releases/0.1.0-test.5/runtime_patch.js"},
+    {"name":"runtime-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/runtime_patch.js"},
+    {"name":"runtime-test10-android-auth","path":"apps/cloud/pikpak/releases/0.1.0-test.10-android-b10111/runtime_android_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.10","build":10111},
+  "status": "pending-device-validation",
+  "notes": "Rebuilt Test10 from Test9 feature baseline but removed Web 2.0 signin modules. Account/password login now follows current Android profile: client YNxT9w7GMdWvEOKa, package com.pikcloud.pikpak, client 1.53.2, SDK 2.0.6.206003, current Android captcha algorithms and Android device/UA contract. Existing UI, playback, Magnet and handoff-scoped recycle-bin cleanup remain unchanged."
+}
