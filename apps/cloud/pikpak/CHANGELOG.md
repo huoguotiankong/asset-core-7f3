@@ -2,6 +2,54 @@
 
 > 2026-09-23 起由 `asset-core-7f3@main` 正式维护。初始基线来自用户上传 `PikPak.hk小程序(1).zip`（原规则 version=1）。Stable 尚未建立，当前只走 Test 通道。
 
+## 2026-09-23 · 0.1.0-test.9 / Build10109 · 当前 txCaptcha 登录验证契约修复
+
+### 新定位
+
+Test8 已经增加 URL / iframe / DOM 持续监听，但继续核对当前 PikPak Web 2.0 登录验证后发现，更前一层的 fallback 验证 URL 仍沿用了旧契约：
+
+```text
+/captcha/v2/spritePuzzle.html
++ action=POST:https://user.../v1/auth/signin
++ event=shield-captcha-init
++ redirect_uri=https://mypikpak.com/loading
+```
+
+当前 PikPak Web 2.0 的登录安全验证页面已经使用：
+
+```text
+/captcha/v2/txCaptcha.html
++ action=POST:/v1/auth/signin
++ event=signin_check
++ redirect_uri=xlaccsdk01://xbase.cloud/callback?state=harbor
+```
+
+如果仍按旧 action/event 完成验证，即使页面视觉上显示验证完成，真正的 signin action 也可能没有被正确放行，随后继续 signin 会再次进入 review，表现为一直卡在验证页。
+
+### Test9 修复
+
+- fallback 验证地址切换到 `txCaptcha.html`。
+- `action` 固定为 `POST:/v1/auth/signin`，不再拼完整 user host URL。
+- `event` 改为 `signin_check`。
+- redirect 改为当前 XBASE callback：`xlaccsdk01://xbase.cloud/callback?state=harbor`。
+- 如果 PikPak API 已直接返回 `txCaptcha` 验证 URL，则优先原样使用，不覆盖服务端参数。
+- Test8 的 `urlInterceptor` 增加 `txCaptcha` 挑战页识别：初始 URL 中即使带原 captcha token，也绝不能误判成“验证已完成”。
+- 捕获 XBASE callback 时，即使回调没有附带新 token，也会使用本次已验证的原 token 主动继续 signin。
+- 继续保留 Test8 的 URL / iframe / DOM 成功状态 watcher，以及手动“验证完成，继续登录”兜底。
+- 安装 Test9 时主动清除旧版本遗留的验证 URL / token / 临时密码，避免继续打开 Test7/Test8 已失效的 challenge；已有正式登录 Session 不主动删除。
+
+### Test9 实机验收
+
+1. 覆盖导入 Test9 后重新输入账号密码。
+2. 登录触发 review 时，应出现 PikPak 当前官方安全验证组件，而不是直接进入“验证完成”假状态。
+3. 完成拼图/人机验证后，应自动接回 signin；若没有自动接回，点击“验证完成，继续登录”应完成登录或给出真实错误。
+4. 登录成功后验证根目录和盘内视频播放。
+5. 再验证外部小程序 Magnet 调用与退出回收：仅本次调用临时文件进入回收站，个人文件/手动离线文件不得受影响。
+
+当前：Test `0.1.0-test.9 / Build10109`；Stable 尚未建立；状态 `pending-device-validation`。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.8 / Build10108 · 官方验证完成后不跳转修复
 
 ### 实机现象
@@ -32,7 +80,7 @@ Test5/Test7 只在 `x5_webview_single` 页面加载和 URL 导航拦截时读取
 4. 登录成功后测试根目录、盘内视频播放。
 5. 再测试外部小程序调用 Magnet，确认退出调用页只回收本次临时文件。
 
-当前：Test `0.1.0-test.8 / Build10108`；Stable 尚未建立；状态 `pending-device-validation`。
+当前：Test `0.1.0-test.8 / Build10108`；Stable 尚未建立；状态 `superseded-by-test9-before-device-validation`。
 
 ---
 
@@ -80,7 +128,7 @@ Test5/Test7 只在 `x5_webview_single` 页面加载和 URL 导航拦截时读取
 ### 0.1.0-test.5 / Build10105
 
 - 实机确认账号密码登录会遇到 `result:review` 和 PikPak 官方“请完成验证”。
-- 验证 URL 缺失时根据 captcha token / DeviceId 构造官方 spritePuzzle 验证地址。
+- 验证 URL 缺失时根据 captcha token / DeviceId 构造官方 spritePuzzle 验证地址；该 fallback 在 Test9 确认已落后于当前 txCaptcha 契约。
 - `x5_webview_single` + URL 拦截/JS 注入捕获验证后的 captcha token，自动进入验证完成页继续 signin；保留手动继续兜底。
 - 临时 Magnet 播放文件只处理本程序 `temp_files` 队列；超过约 15 分钟或手动清理时改用 `batchTrash` 进入回收站，不再永久删除。
 
