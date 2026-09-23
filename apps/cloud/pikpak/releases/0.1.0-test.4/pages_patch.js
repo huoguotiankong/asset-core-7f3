@@ -6,7 +6,18 @@
         try{url=String(getMyVar('pikpak_v2_verify_url','')||'');}catch(e2){}
         d.push({title:'请完成 PikPak 官方验证',desc:'在下面的验证区域按提示完成人机验证。完成后不要重新输入账号密码，直接点击“验证完成，继续登录”。',url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}});
         if(url){
-            d.push({title:'PikPak 验证',url:url,col_type:'x5_webview_single',desc:'list&&screen-260',extra:{canBack:true,showProgress:true,ua:typeof MOBILE_UA==='undefined'?'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/127.0 Mobile Safari/537.36':MOBILE_UA}});
+            var interceptor=$.toString(function(){
+                try{
+                    var u=String(input||''),m=u.match(/[?&]captcha_token=([^&#]+)/i);
+                    if(m&&m[1]){
+                        var t=decodeURIComponent(m[1]);
+                        if(t){putMyVar('pikpak_v2_verify_token',t);toast('已捕获 PikPak 验证结果，请点击“验证完成，继续登录”');}
+                    }
+                    if(/^xlaccsdk/i.test(u))return true;
+                }catch(e){}
+                return false;
+            });
+            d.push({title:'PikPak 验证',url:url,col_type:'x5_webview_single',desc:'list&&screen-260',extra:{canBack:true,showProgress:true,urlInterceptor:interceptor,ua:typeof MOBILE_UA==='undefined'?'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/127.0 Mobile Safari/537.36':MOBILE_UA}});
         }else{
             d.push({title:'验证页面地址尚未取得',desc:'点击下方“重新加载验证”重新向 PikPak 获取验证页面。',url:'hiker://empty',col_type:'text_center_1'});
         }
