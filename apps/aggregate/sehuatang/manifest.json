@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.11",
-  "defaultBuild": 10111,
-  "testVersion": "0.1.0-test.11",
-  "testBuild": 10111,
-  "testShellVersion": "0.1.0-test.11",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v11_b10111.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v11_b10111.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.11/release.json",
+  "defaultVersion": "0.1.0-test.12",
+  "defaultBuild": 10112,
+  "testVersion": "0.1.0-test.12",
+  "testBuild": 10112,
+  "testShellVersion": "0.1.0-test.12",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v12_b10112.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v12_b10112.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.12/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test11-forum-cards-pagination-guide-session-search",
+    "stage": "test12-mobile-first-preview-ordered-thread-media",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.10",
-    "note": "根据Test10实机反馈：主题列表改为原网站式多图卡片；增加显式分页；guide改为同WebView会话年龄桥接；搜索重写为真实表单提交/searchid分页。"
+    "previousTest": "0.1.0-test.11",
+    "note": "根据Test11实机反馈：搜索已正常；普通板块和帖子详情改为mobile=2优先；预览图不足时PC仅按tid补图；正文图片按原文顺序穿插显示，扩展真实图片属性识别。"
   }
 }
