@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.13",
-  "defaultBuild": 10115,
-  "testVersion": "0.1.0-test.13",
-  "testBuild": 10115,
-  "testShellVersion": "0.1.0-test.13",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v13_b10115.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v13_b10115.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.13-b10115/release.json",
+  "defaultVersion": "0.1.0-test.14",
+  "defaultBuild": 10116,
+  "testVersion": "0.1.0-test.14",
+  "testBuild": 10116,
+  "testShellVersion": "0.1.0-test.14",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v14_b10116.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v14_b10116.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.14-b10116/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test13-official-web-drive-entry-b10115",
+    "stage": "uploaded-v1-to-test14-web-login-bootstrap-path-fix-b10116",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10114,
-    "note": "Test13 changes the official Web login route to /drive/all because device screenshots showed the root URL rendered marketing then blank. Token handoff retained. Pending device validation; Stable does not exist."
+    "supersedesUnvalidatedBuild": 10115,
+    "note": "Test14 fixes a missing reused-module path in Test13's bootstrap, retaining the /drive/all login route and Web token handoff. Pending device validation; Stable unchanged."
   }
 }

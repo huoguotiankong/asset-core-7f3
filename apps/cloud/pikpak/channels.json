@@ -10,23 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.13",
+      "version": "0.1.0-test.14",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10115,
-      "displayVersion": "Test 0.1.0-test.13 · Build 10115",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v13_b10115.txt",
+      "build": 10116,
+      "displayVersion": "Test 0.1.0-test.14 · Build 10116",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v14_b10116.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "PikPak Test13 fixes the official Web login route to open the drive application rather than the marketing landing page.",
+      "desc": "PikPak Test14 fixes a Bootstrap dependency path found on device; official Web login remains /drive/all.",
       "highlights": [
-        "用户实机截图确认 Test12 打开 PikPak 下载宣传页后变空白，尚未到凭据接管阶段",
-        "官方 X5 网页登录入口改为 https://mypikpak.com/drive/all",
-        "保留 Test12 credentials 捕获、当前 Access Token 直连及 Web profile Refresh Token 恢复",
-        "不再尝试 Android 账号密码 captcha/init 登录",
-        "Drive、播放、下载、Magnet、分享、任务和文件管理模块保持不变",
-        "待用户海阔实机验证；Stable 保持不变"
+        "Test13 实机报错定位为 pages_meta_patch.js 依赖路径错误，不是登录凭据问题",
+        "修正 Bootstrap 指向原有不可变 Test12 pages_meta_patch.js",
+        "继续使用 Test13 已改好的官方网页登录入口 /drive/all",
+        "保留现有官方网页凭据捕获与 Web Session 恢复，不更改 Android 密码登录",
+        "尚待海阔实机重新验证；Stable 保持不变"
       ]
     }
   ]

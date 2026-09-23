@@ -1,3 +1,16 @@
+## 2026-09-23 · 0.1.0-test.14 / Build10116 · 修复 Test13 Bootstrap 模块路径
+
+Test13 首次实机启动直接报错。截图中的远程 URL 显示 Bootstrap 请求了 Test13 目录下不存在的 `pages_meta_patch.js`。这是 Test13 生成 Bootstrap 时把沿用的 Test12 模块路径一并改写造成的；与网页登录、账号和 Token 无关。Test14 将该模块路径恢复到不可变 Test12 资产位置，网页登录仍使用 Test13 中的 `/drive/all` 入口模块，Web 凭据接管逻辑不变。
+
+- 新增 Test14 Bootstrap、Release、Shell、runtime identity；数值 Shell version=2026092404，build=10116。
+- 所有 Bootstrap 模块路径按 Release 清单复核；引用历史不可变模块时保留其真实版本路径。
+- registry、manifest、test、channels 统一指向 Test14；Stable 未改。
+- 待用户海阔实机验证启动、登录及后续 Drive 功能。
+
+当前 Test：`0.1.0-test.14 / Build10116`；Stable 尚未建立。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.13 / Build10115 · 修正官方网页登录入口
 
 ### 实机反馈与修正
