@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.27",
-  "defaultBuild": 10127,
-  "testVersion": "0.1.0-test.27",
-  "testBuild": 10127,
-  "testShellVersion": "0.1.0-test.27",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v27_b10127.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v27_b10127.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.27/release.json",
+  "defaultVersion": "0.1.0-test.28",
+  "defaultBuild": 10128,
+  "testVersion": "0.1.0-test.28",
+  "testBuild": 10128,
+  "testShellVersion": "0.1.0-test.28",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v28_b10128.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v28_b10128.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.28/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test27-guide-mobile-dom-parity",
+    "stage": "test28-guide-card-boundary-preview",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.26",
-    "note": "Test26速度改善但Guide快速fetch丢失预览图；Test27与普通子版块统一使用mobile=2渲染DOM主链并增加短缓存。"
+    "previousTest": "0.1.0-test.27",
+    "note": "Test27排版已由实机确认正确，但Guide预览图仍缺失；Test28改为Guide专用卡片边界解析，修复图片落在错误切片之外的问题。"
   }
 }
