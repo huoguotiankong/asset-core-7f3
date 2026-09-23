@@ -2,6 +2,62 @@
 
 > 2026-09-23 起由 `asset-core-7f3@main` 正式维护。初始基线来自用户上传 `PikPak.hk小程序(1).zip`（原规则 version=1）。Stable 尚未建立，当前只走 Test 通道。
 
+## 2026-09-24 · 0.1.0-test.12 / Build10114 · 官方网页 Access Token 直连优先
+
+### 实机与问题边界
+
+用户在 Test10 Build10112 实机再次确认：账号密码登录仍在 `captcha/init` 阶段直接返回 `ErrorCode 4002 / Your operation is too frequent`。因此当前阶段不再继续围绕账号密码登录链做重试型补丁。
+
+Test11 Build10113 已把主入口切到 PikPak 官方网页，并能从官方网页本机存储读取 Web Refresh Token / Device ID / Captcha。但复核 Test11 代码发现：官方网页 `credentials_*` 中其实已经存在当前有效 `access_token`，Test11 页面虽然读取了它，却没有把它传给接管页；Core 因而在每次网页登录接管后仍强制执行一次 Refresh Token 换票，并随后主动刷新 Drive Captcha。对于当前已经触发 PikPak 风控的账号/IP，这两次额外认证请求没有必要，且可能继续触发频控。
+
+### Test12 修正
+
+新的主认证链：
+
+```text
+账号 → PikPak 官方网页登录
+→ 用户在官方 mypikpak.com 完成正常登录/第三方授权
+→ X5 同源脚本扫描 credentials_*（localStorage / sessionStorage）
+→ 同时读取当前 access_token + refresh_token
+→ access_token 已存在：直接保存为 Web API Session，不立即 refresh，不主动 captcha/init
+→ access_token 缺失：才使用 Web Refresh Token 恢复
+→ 后续 Access Token 真正过期：再自动 Refresh
+→ 返回 PikPak 首页继续个人盘 / 播放 / Magnet / 离线
+```
+
+Test12 不改变 Test11 的 Web request/profile 兼容层，也不改 Provider、Playback、Magnet、handoff 和临时文件回收语义。
+
+### 新增不可变资产
+
+- `releases/0.1.0-test.12-b10114/core_access_first_patch.js`
+  - 覆盖 `importWebCredential()`。
+  - 有官方网页 `access_token` 时直接建立 `_auth_profile=web` 会话。
+  - 保存 Refresh Token 供后续过期刷新，但当前接管不主动换票。
+- `releases/0.1.0-test.12-b10114/pages_access_first_patch.js`
+  - 官方网页 bridge 将 `access_token + refresh_token + device_id + captcha + sub` 一起传给接管页。
+  - 同时扫描 `localStorage` 与 `sessionStorage`。
+- `releases/0.1.0-test.12-b10114/pages_meta_patch.js`
+  - 设置页显示真实 Test12 / Build10114 运行信息。
+- `releases/0.1.0-test.12-b10114/runtime_version_patch.js`
+  - 最终 Runtime identity = `0.1.0-test.12 / Build10114`。
+- `bootstrap_test_v12_b10114.js`
+- `pikpak_remote_test_v12_b10114.txt`
+
+本轮新增 JavaScript 已执行 `node --check` 语法门禁，包括 Test12 Core/Page/Meta/Runtime 与 Bootstrap，均通过。
+
+### 实机验收顺序
+
+1. 覆盖导入 Test12 Build10114。
+2. 进入 `账号`，应只看到 `官方网页登录（推荐）` 和手动 Web Refresh Token 备用入口，不再出现账号密码输入框。
+3. 打开官方网页登录；如果网页已经登录，进入网盘首页后停留数秒；未登录则在官方页面正常完成登录。
+4. 预期自动跳到 `PikPak 登录接管`，并提示直接接入官方网页当前 Access Token。
+5. 返回首页验证容量、根目录文件列表、文件夹浏览和盘内视频播放。
+6. 登录链通过后，再回归 Magnet、离线任务、跨小程序 handoff 和退出调用页临时文件回收。
+
+当前：Test `0.1.0-test.12 / Build10114`；Stable 尚未建立；状态 `pending-device-validation`。
+
+---
+
 ## 2026-09-24 · 0.1.0-test.11 / Build10113 · 官方网页会话接管候选
 
 ### 实机起点
@@ -167,7 +223,7 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 
 ### 0.1.0-test.7 / Build10107
 - 外部小程序 Magnet 调用建立独立 session。
-- 调用页关闭时仅将本 session 临时播放文件移入 PikPak 回收站。
+- 调用页关闭时仅将本 session 临时播放文件移入回收站。
 - 普通个人文件、手动离线文件不参与退出清理；临时播放链禁止永久删除。
 
 ### 0.1.0-test.5 / Build10105
