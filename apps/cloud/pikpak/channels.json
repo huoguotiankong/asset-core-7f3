@@ -1,0 +1,36 @@
+{
+  "schema": 4,
+  "id": "pikpak",
+  "name": "PikPak",
+  "versionPolicy": "test-first-v1",
+  "updatedAt": "2026-09-23 20:52",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "pikpak-test",
+      "name": "PikPak",
+      "version": "0.1.0-test.1",
+      "baseVersion": "uploaded-v1",
+      "targetVersion": "0.1.0",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v1_b10101.txt",
+      "mode": "remote-direct-loader",
+      "updatedAt": "2026-09-23",
+      "recommended": true,
+      "desc": "基于上传 PikPak v1 的首轮全量重构，Stable 尚未建立，等待实机验证。",
+      "highlights": [
+        "首页改为账号状态 + 快捷动作 + 统一输入 + 我的文件，删除空白设置弹窗",
+        "Core / Provider / Playback / UI / Pages / Runtime 六层拆分",
+        "继承旧登录会话但不再保存明文密码，并统一 access/refresh/captcha 生命周期",
+        "公开 PikPak 分享可免登录浏览与播放",
+        "Magnet 先解析 GCID 秒传，失败再回退离线任务",
+        "新增离线任务、创建文件夹、重命名、回收站、创建公开分享、容量刷新",
+        "API .com / .net 双线路和网络失败自动一次降级",
+        "所有分页状态按页面/目录隔离，不再共用全局 page_token",
+        "删除启动 referral / join_promoting / 固定 sleep 的非核心副作用"
+      ]
+    }
+  ]
+}
