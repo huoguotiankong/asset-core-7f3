@@ -2,6 +2,56 @@
 
 > 2026-09-23 开始由 `asset-core-7f3@main` 正式维护。当前基线来自用户上传的 `PikPak.hk小程序(1).zip`，原规则 `version=1`；此前仓库没有 PikPak Stable/Test 元数据，因此本轮从 Test 通道建立治理，不直接创建 Stable。
 
+## 2026-09-23 · 0.1.0-test.4 / Build10104 · 官方人机验证闭环
+
+### 新的实机事实
+
+用户进一步在 PikPak 官方端验证：该邮箱账号使用账号密码登录时并非普通失败，而是会弹出“请完成验证”的官方风控验证层。因此 `result:review` 不能只转换成错误提示；完整登录链必须保留 captcha token 并让用户真正完成官方验证。
+
+### Test4 登录链
+
+```text
+账号 + 密码（仅临时 MyVar）
+→ POST /v1/shield/captcha/init
+→ 无验证：直接 /v1/auth/signin
+→ result:review / 返回 verification URL
+→ hiker://page/pikpakVerify
+→ x5_webview_single 打开 PikPak 官方验证 URL
+→ 用户完成人机验证
+→ “验证完成，继续登录”
+→ 使用同一 captcha token + 同一 DeviceId 再次 /v1/auth/signin
+→ 保存 access_token / refresh_token
+→ 清除临时密码与验证状态
+```
+
+### 修复点
+
+- 新增独立 `pikpakVerify` 安全验证页，不尝试绕过官方验证码。
+- 验证页使用海阔 `x5_webview_single` 内嵌 PikPak 返回的官方验证 URL，并提供“验证完成，继续登录 / 重新加载验证 / 取消验证”三个明确动作。
+- 验证期间账号密码只保存在 `MyVar`，登录成功或取消时立即清除；不写入 Item、仓库或远程模块。
+- `finishPasswordLogin()` 复用首次 Captcha init 返回的 captcha token 和由账号密码稳定派生的 DeviceId，避免重新初始化导致刚完成的验证失效。
+- Captcha 过期时允许重新初始化验证页，而不是重复吐出内部 meta。
+- 修正 Test3 Web 认证档 client secret 尾部误写的一个额外字符。
+- 登录前 Captcha meta 同时按当前实现提供 `email` / `phone_number`，保留 `username` 兼容字段。
+- 登录请求优先 `user.mypikpak.net`，仅网络错误时回退 `.com`。
+- Test3 的旧 Android 会话兼容、Drive/Share/Magnet/Playback/UI 重构全部保持不变。
+
+### 实机验收重点
+
+1. 账号密码登录触发风控时应自动进入“PikPak 安全验证”页面，而不是弹出 `result:review` 原始信息。
+2. 验证区域应加载官方验证内容。
+3. 完成验证后点击“验证完成，继续登录”，应返回账号页/首页并显示已登录。
+4. 登录后验证根目录列表和盘内视频播放。
+5. 若验证页为空，记录验证页截图；若验证完成后仍提示未通过，记录按钮后的 toast，用于判断 X5 Cookie/Token 是否需要进一步桥接。
+
+### 当前状态
+
+- Test：`0.1.0-test.4 / Build10104`
+- Stable：尚未建立。
+- 发布状态：`pending-device-validation`。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.3 / Build10103 · 账号密码登录协议修复
 
 ### 实机问题
