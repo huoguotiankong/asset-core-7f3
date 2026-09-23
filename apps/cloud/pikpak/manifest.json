@@ -6,20 +6,20 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.9",
-  "defaultBuild": 10109,
-  "testVersion": "0.1.0-test.9",
-  "testBuild": 10109,
-  "testShellVersion": "0.1.0-test.9",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v9_b10109.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v9_b10109.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.9/release.json",
+  "defaultVersion": "0.1.0-test.10",
+  "defaultBuild": 10110,
+  "testVersion": "0.1.0-test.10",
+  "testBuild": 10110,
+  "testShellVersion": "0.1.0-test.10",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10110.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10110.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test9-current-txcaptcha-contract",
+    "stage": "uploaded-v1-to-modular-test10-official-web-token-login",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test9 在 Test8 验证监听基础上修正当前 PikPak Web 2.0 安全验证契约：fallback 改为 txCaptcha、action POST:/v1/auth/signin、event signin_check、xbase callback，并将 txCaptcha 正确识别为挑战页而不是完成回调。继承跨小程序 Magnet 会话级安全回收。"
+    "note": "Test10 根据实机与当前 PikPak/OpenList 风控事实，将官方网页登录 + Web Refresh Token 自动接回设为推荐登录路径：验证码和第三方授权完全由 PikPak 官方网页完成，小程序只读取登录后 credentials 中的 refresh_token；API 账号密码直登保留备用。继承 Test9 验证兼容、Test7 Magnet 会话级安全回收及全部文件/播放能力。"
   }
 }
