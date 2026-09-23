@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.3",
+  "modules": [
+    {"name":"core-base","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"core-verify-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-settings-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.3/pages_patch.js"},
+    {"name":"pages-verify-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-test3-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.3/runtime_patch.js"},
+    {"name":"runtime-verify-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.4"},
+  "status": "pending-device-validation",
+  "notes": "Test4 针对实机确认的 PikPak 风控验证流程：Captcha init 返回 review/验证 URL 时进入海阔内嵌官方验证页，完成验证后使用同一 captcha token 继续 signin；修正 Test3 Web client secret 末尾误码，并按当前实现补 email/phone_number meta。密码只保存在临时 MyVar，成功/取消后清除。"
+}
