@@ -1,5 +1,32 @@
 # PikPak 小程序 Changelog
 
+## 2026-09-24 · 0.1.0-test.12 / Build10114 · 官方网页 Access Token 优先
+
+### Test11 后续收敛
+
+Test11 已从账号密码登录切换至 PikPak 官方网页会话接管。Test12 保留该架构，并从 mypikpak.com 同源 `credentials` 同时读取当前 Access Token 与 Refresh Token。若 Access Token 存在，先直接用 Web profile 建立 API Session，不在登录接管完成后立即额外请求 Refresh Token 或主动刷新 Captcha；Access Token 缺失或后续 API 明确返回未认证时，才调用 Web profile 的 Refresh Token 路径。
+
+```text
+官方 mypikpak.com X5 登录
+→ 读取 credentials / deviceid / captcha
+→ 保存 _auth_profile=web、当前 Access Token 与 Refresh Token
+→ 首次 Drive 请求使用 Web client 与 api-drive.mypikpak.com
+→ Token 后续失效时用 Web profile 刷新
+```
+
+### 恢复链与验证
+
+- 当前 `test.json`、`channels.json` 指向 Test12 Build10114；Test11 Build10113 与 Test10 Build10112 保留为不可变历史候选。
+- Release 声明的全部模块、Bootstrap 和 Shell 路径已逐项确认存在。
+- 所有 Test12 JavaScript 模块及 Bootstrap 已通过 `node --check`。
+- 本地模拟确认：有网页 Access Token 时不会立即请求 `/v1/auth/token`；Drive 请求使用 Web client、Web Bearer token 与 `api-drive.mypikpak.com`；模拟 Access Token 失效后，刷新请求使用 Web client 和 `user.mypikpak.com`，不会落回 Android Refresh Token 档。
+- 海阔 X5 网页注入、浏览器本地凭据捕获、Token 查询参数桥接、真实 PikPak API、个人盘/播放/Magnet/文件操作尚未做实机验收；本候选保持 `pending-device-validation`，不得建立 Stable。
+- 附件基线：用户上传 `PikPak.hk小程序(1).zip`，原始规则 version=1；本分支历史恢复记录在 Test10/Test11 项中。
+
+当前 Test：`0.1.0-test.12 / Build10114`；Stable 尚未建立。
+
+---
+
 > 2026-09-23 起由 `asset-core-7f3@main` 正式维护。初始基线来自用户上传 `PikPak.hk小程序(1).zip`（原规则 version=1）。Stable 尚未建立，当前只走 Test 通道。
 
 ## 2026-09-24 · 0.1.0-test.12 / Build10114 · 官方网页 Access Token 直连优先

@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10112,
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10112,
-  "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v10_b10112.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v10_b10112.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.10-b10112/release.json",
+  "defaultVersion": "0.1.0-test.12",
+  "defaultBuild": 10114,
+  "testVersion": "0.1.0-test.12",
+  "testBuild": 10114,
+  "testShellVersion": "0.1.0-test.12",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v12_b10114.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v12_b10114.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.12-b10114/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test10-clean-android-auth-b10112",
+    "stage": "uploaded-v1-to-test12-official-web-access-first-b10114",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10111,
-    "note": "Test10 Build10112 从活动运行链彻底移除 Web 2.0 认证补丁，使用现行 Android YNxT9w7GMdWvEOKa + com.pikcloud.pikpak 认证；现有 UI、播放、Magnet、handoff 与会话级回收保持。"
+    "supersedesUnvalidatedBuild": 10113,
+    "note": "Test12 Build10114 continues Test11's official mypikpak.com Web session handoff. It imports the current Web Access Token directly when available, stores the Web profile and refresh token, and defers refresh until needed. Android password captcha/init is not the primary auth path. Pending real-device validation; Stable does not exist."
   }
 }
