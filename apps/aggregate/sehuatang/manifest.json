@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10110,
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
-  "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v10_b10110.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.10/release.json",
+  "defaultVersion": "0.1.0-test.11",
+  "defaultBuild": 10111,
+  "testVersion": "0.1.0-test.11",
+  "testBuild": 10111,
+  "testShellVersion": "0.1.0-test.11",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v11_b10111.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v11_b10111.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.11/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test10-guide-age-thread-gallery-cloud-icons",
+    "stage": "test11-forum-cards-pagination-guide-session-search",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.9",
-    "note": "根据Test9实机反馈：搜索保持不动；guide三入口单独执行年龄确认并回写Cookie；帖子详情按网站样式收敛为三列预览图；115/迅雷/PikPak补独立图标。"
+    "previousTest": "0.1.0-test.10",
+    "note": "根据Test10实机反馈：主题列表改为原网站式多图卡片；增加显式分页；guide改为同WebView会话年龄桥接；搜索重写为真实表单提交/searchid分页。"
   }
 }
