@@ -2,6 +2,80 @@
 
 > 2026-09-23 起由 `asset-core-7f3@main` 正式维护。初始基线来自用户上传 `PikPak.hk小程序(1).zip`（原规则 version=1）。Stable 尚未建立，当前只走 Test 通道。
 
+## 2026-09-24 · 0.1.0-test.11 / Build10113 · 官方网页会话接管候选
+
+### 实机起点
+
+用户覆盖导入 Test10 Build10112 后再次实机确认：账号密码点击登录时，在密码提交前的 Android `captcha/init` 阶段仍直接返回：
+
+```text
+PikPak Android 登录验证初始化失败:
+Your operation is too frequent, please try again later
+```
+
+因此 Test10 已证明：即使 Android client 1.53.2、当前 8-step salts、`device_id=md5(username+password)`、Android UA/devicesign 和 identity meta 均按现行公开驱动契约实现，当前账号/IP 风控仍可在登录验证码初始化阶段直接拦截。
+
+同期核对 OpenList 公开资料发现：2026-08-26 的 PikPak 驱动 Issue 已出现同类 `ErrorCode 4002 / captcha_invalid / operation too frequent`；其当前文档明确建议该状态下停止反复账号密码登录，改由 PikPak 官方网页或官方 App 正常授权登录后取得 Refresh Token，再恢复第三方会话。
+
+### Test11 产品决策
+
+Test11 不再继续围绕账号密码 `captcha/init → signin` 叠补丁，也不再把密码框作为账号页主入口。新的主认证链：
+
+```text
+账号 → 官方网页登录（推荐）
+→ 海阔 X5 打开 https://mypikpak.com/
+→ 用户只在 PikPak 官方页面完成登录 / Google 等第三方授权
+→ 同源注入监听 mypikpak.com localStorage
+→ 自动读取 credentials_* / deviceid / captcha_*
+→ 提取 Web Refresh Token + Device ID + 当前 Captcha
+→ Web client 2.0.0 刷新 access token
+→ 保存 _auth_profile=web 会话
+→ 回到 PikPak 首页继续文件 / 播放 / Magnet
+```
+
+官方网页凭据读取只发生在用户设备的同源 X5 页面；账号密码不交给小程序，不写入仓库。回调只把当前会话所需的 Refresh Token / Device ID / Captcha 交给本地 PikPak 规则运行时。
+
+### Web Session 认证档
+
+```text
+client_id      = YUMx5nI8ZU8Ap8pm
+client_secret  = PikPak Web 当前公开驱动对应值
+client_version = 2.0.0
+package_name   = mypikpak.com
+主 user host   = user.mypikpak.com
+主 drive host  = api-drive.mypikpak.com
+备用           = *.mypikpak.net
+```
+
+Test11 新增 Web Session request 层：
+- 优先复用官方网页当前 `captcha_*` Token，避免接管成功后立即再次触发验证码初始化。
+- Access Token 失效时仅使用 Web Refresh Token 刷新。
+- 必须刷新 Drive Captcha 时才使用 Web 15-step `captcha_sign`，且检测到 `operation too frequent` 后不做递归重试。
+- 保留 Test10 Android Core 作为底层兼容/历史恢复，不再由 Test11 账号主页面直接触发密码登录。
+
+### 活动模块边界
+
+Test11 在 Test10 Build10112 基线上只新增三层不可变补丁：
+
+- `core_web_token_patch.js`：Web Token / Device ID / Captcha 会话导入、刷新与 profile-aware request。
+- `pages_web_token_patch.js`：官方网页登录 X5、localStorage bridge、账号页和设置页。
+- `runtime_web_token_patch.js`：Web 登录页面导出与手动 Web Refresh Token 导入。
+
+Provider、Playback、Magnet、handoff、临时文件回收继续沿用 Test10 已有链路，不在本轮无关重构。
+
+### 实机验收顺序
+
+1. 覆盖导入 Test11 Build10113。
+2. 进入 `账号`，应不再显示账号密码输入框，主入口为 `官方网页登录（推荐）`。
+3. 打开后在 PikPak 官方网页完成正常登录；若网页版原本已经登录，保持页面数秒即可。
+4. 预期自动跳转到 `PikPak 登录接管` 并显示登录成功。
+5. 返回首页验证容量、根目录文件列表和盘内视频播放。
+6. 登录链通过后，再回归外部 Magnet 调用、离线创建、播放与退出回收。
+
+当前：Test `0.1.0-test.11 / Build10113`；Stable 尚未建立；状态 `pending-device-validation`。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.10 / Build10112 · 清洁 Android 认证候选
 
 ### 实机起点
