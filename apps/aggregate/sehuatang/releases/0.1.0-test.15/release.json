@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.15",
+  "build": 10115,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.14",
+    "build": 10114,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.14/release.json",
+    "status": "superseded-after-device-feedback-category-layout"
+  },
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-cookie-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js"},
+    {"name":"ux-thread-access-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_ux_thread_access.js"},
+    {"name":"stability-polish-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.7/patch_stability_polish.js"},
+    {"name":"forum-visual-v8","path":"apps/aggregate/sehuatang/releases/0.1.0-test.8/patch_forum_visual_v8.js"},
+    {"name":"forum-runtime-v9","path":"apps/aggregate/sehuatang/releases/0.1.0-test.9/patch_forum_runtime_v9.js"},
+    {"name":"thread-visual-v10","path":"apps/aggregate/sehuatang/releases/0.1.0-test.10/patch_thread_visual_v10.js"},
+    {"name":"forum-cards-search-v11","path":"apps/aggregate/sehuatang/releases/0.1.0-test.11/patch_forum_cards_search_v11.js"},
+    {"name":"mobile-order-v12","path":"apps/aggregate/sehuatang/releases/0.1.0-test.12/patch_mobile_order_v12.js"},
+    {"name":"mobile-cards-nav-v13","path":"apps/aggregate/sehuatang/releases/0.1.0-test.13/patch_mobile_cards_nav_v13.js"},
+    {"name":"mobile-cards-hotfix-v14","path":"apps/aggregate/sehuatang/releases/0.1.0-test.14/patch_mobile_cards_hotfix_v14.js"},
+    {"name":"category-layout-v15","path":"apps/aggregate/sehuatang/releases/0.1.0-test.15/patch_category_layout_v15.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.15"},
+  "notes": "Test15：在线视频分类改成双列视频卡片；普通帖子作者头像/名字/角色/时间独立一行；色花文学优先恢复短标题；色花图片帖子若正文容器无图则从手机端渲染整页补图；搜索与页内翻页保持不动。"
+}
