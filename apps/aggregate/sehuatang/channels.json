@@ -1,0 +1,36 @@
+{
+  "schema": 4,
+  "id": "sehuatang",
+  "name": "色花堂",
+  "versionPolicy": "test-first-v1",
+  "updatedAt": "2026-09-23 14:47",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "sehuatang-test",
+      "name": "色花堂",
+      "version": "0.1.0-test.1",
+      "baseVersion": null,
+      "targetVersion": "0.1.0",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v1_b10101.txt",
+      "mode": "remote-direct-loader",
+      "updatedAt": "2026-09-23",
+      "recommended": true,
+      "desc": "首版基础功能：原生论坛浏览 + WebView 账号动作 + 帖子磁链云播分发。",
+      "highlights": [
+        "Discuz 移动站论坛分区自动识别",
+        "板块主题列表与帖子详情原生展示",
+        "帖子图片与 magnet 自动提取",
+        "115.简 / 迅雷 / PikPak 一键调用",
+        "登录 / 签到 / 回复保守采用同域 WebView",
+        "全站主题搜索含网页兜底",
+        "域名可手动切换 org/net/com",
+        "无 Stable，等待实机验证"
+      ],
+      "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
+    }
+  ]
+}
