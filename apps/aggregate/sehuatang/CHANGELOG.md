@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.25 / Build 10125 / 待实机验证**  
+状态：**0.1.0-test.26 / Build 10126 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,12 +10,53 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v25_b10125.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.25/release.json`
-- Test25 继承 Test1~Test24，并新增：`releases/0.1.0-test.25/patch_guide_webview_v25.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v26_b10126.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v26_b10126.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.26/release.json`
+- Test26 继承 Test1~Test25，并新增：`releases/0.1.0-test.26/patch_guide_native_fast_v26.js`。
 
-## 0.1.0-test.25 / Build 10125 — 三个话题改为 mobile=2 网页直显
+## 0.1.0-test.26 / Build 10126 — 撤销 Guide 网页直显，恢复原生话题页
+
+### Test25 实机反馈
+
+1. 三个话题直接显示 `mobile=2` 网页后，官网图片与卡片当然可以正常显示；
+2. 但用户明确要求“话题分类仍然是海阔原生页面”，不能点击入口后直接变成网站页面；
+3. 因此 Test25 的 web-first 方案虽然绕过了图片灰图问题，但改变了产品交互边界，判定不接受；
+4. Test24 之前的另一个问题是进入三个话题比普通子板块明显慢，主要来自隐藏 WebView 多段滚动与 DOM 图片采集。
+
+### Test26 修正
+
+1. **恢复原生 Guide 卡片**
+   - 最新发表 / 最新热门 / 最新精华再次由 `shtForum` 原生列表渲染；
+   - 不再使用 `x5_webview_single` 作为话题主页面；
+   - “手机版”仅保留为辅助按钮，不会自动跳转网页。
+
+2. **优化进入速度**
+   - 首选一次 `mobile=2` 普通请求并直接调用已验证的 `parseCardsV15`；
+   - 只有主题解析少于 3 条时才调用隐藏 WebView 兜底；
+   - WebView 兜底不再执行 Test24 的三段滚动采图 / tid 映射流程；
+   - mobile 仍失败时才最小化 PC fallback。
+
+3. **保持原生详情能力**
+   - 原生话题卡片继续跳 `shtThread`；
+   - 评论页、磁链、115 / 迅雷 / PikPak、视频嗅探继续走现有原生链；
+   - 普通子板块、搜索、首页、账号/签到等模块不动。
+
+4. **图片问题状态**
+   - Test26 先撤回不符合产品要求的网页直显方案；
+   - Guide 预览图仍复用普通卡片 Parser 与 `C.imageUrl()`，继续等待实机验证；
+   - 若仍灰图，后续不再通过“整页 WebView 直显”规避，而是在原生 Guide 内继续单点解决图片资源链。
+
+### Test26 静态门禁
+
+- `patch_guide_native_fast_v26.js`：本地 `node --check` 通过；
+- `bootstrap_test_v26_b10126.js`：本地 `node --check` 通过；
+- `release.json / test.json / channels.json / manifest.json`：本地 JSON 解析通过；
+- Test26 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092326`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+## 0.1.0-test.25 / Build 10125 — 三个话题改为 mobile=2 网页直显（实机否决）
 
 ### Test24 实机反馈
 
@@ -62,29 +103,13 @@
    - 账号 / 签到 mobile=2；
    - 首页六大类与首页单页守卫。
 
-### Test25 静态门禁
-
-- `patch_guide_webview_v25.js`：本地 `node --check` 通过；
-- `bootstrap_test_v25_b10125.js`：本地 `node --check` 通过；
-- `release.json / test.json / channels.json / manifest.json`：本地 JSON 解析通过；
-- Test25 Shell：外层规则 JSON与内层 `pages` JSON 解析通过；
-- Shell 数值 `version=2026092325`，低于 32 位有符号整数上限；
-- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
-
-### Test25 实机优先验收
-
-1. 打开“最新热门”：首屏应直接出现官网 mobile 卡片和真实预览图，不再先等待几十秒生成原生卡片；
-2. “最新发表 / 最新精华”同样检查图片与进入速度；
-3. 在 Guide 手机页面点任意帖子，确认能跳回色花堂原生帖子详情，而不是丢失磁链云播能力；
-4. 若帖子链接拦截在某种伪静态 URL 下未命中，仅修 urlInterceptor，不再回退原生 Guide 图片搬运方案。
-
 ## 0.1.0-test.24 / Build 10124 — Guide WebView DOM 图片映射（实机未通过）
 
 - WebView 中按 tid 定位帖子卡片并读取实际渲染图片；
 - 使用 `fba.putVar` 保存 `tid -> image[]`；
 - 原生侧仍使用普通板块 `C.imageUrl()` 输出；
 - 实机结果：Guide 原生预览图仍灰图，同时隐藏 WebView 采集显著拖慢页面进入；
-- 结论：Test25 不再沿用“WebView采图 → 原生图片组件重放”作为 Guide 主链。
+- 结论：Test25 一度改为网页直显，但实机交互被否决，Test26 已恢复原生。
 
 ## 0.1.0-test.23 / Build 10123 — Guide 图片候选与普通板块对齐（实机未通过）
 
@@ -185,4 +210,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test25 实机验证三个 Guide 的网页直显速度、图片和“点击帖子回原生详情”链路，再继续整体视觉精修。
+- 当前下一步：Test26 实机确认三个话题恢复原生页面和进入速度；Guide 预览图若仍灰图，再继续单点处理图片资源链，不再用整页网页直显规避。
