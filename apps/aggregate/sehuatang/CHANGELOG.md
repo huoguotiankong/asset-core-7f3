@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.1 / Build 10101 / 待实机验证**  
+状态：**0.1.0-test.2 / Build 10102 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,9 +10,72 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v1_b10101.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v1_b10101.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.1/release.json`
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v2_b10102.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v2_b10102.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.2/release.json`
+
+
+## 0.1.0-test.2 / Build 10102 — 首次实机原生入口修复
+
+### 实机事实
+
+用户 2026-09-23 首次实机截图确认 Test1 可以启动，但首页“论坛分区”显示“未识别到板块”，只能看到网页版兜底入口；同时“最新主题”使用 `movie_1 + logo` 导致右侧 logo 过大。判定 Test1 原生数据入口未完成，不可晋级。
+
+### 根因与修复
+
+1. Test1 论坛列表 fallback 使用 `forum.php?forumlist=1&mobile=2`，并不属于当前模板可靠入口。Test2 改为四级链：
+
+```text
+portal.php?mod=index&mobile=2
+→ forum.php?mobile=2
+→ forum.php?mobile=no
+→ fetchCodeByWebView(forum.php?mobile=2) 只取渲染后 HTML
+→ 原生 Parser / Renderer
+```
+
+最后一级只用 WebView 获取源码，最终仍渲染海阔原生页面，不把网页当 UI。
+
+2. `addMobile()` 修正：URL 已存在任意 `mobile=2/no/yes` 时不再追加第二个 mobile 参数，保证 PC forum index 能真正请求 `mobile=no`。
+
+3. Forum/Thread 链接识别放宽：
+   - `fid` 与 `mod=forumdisplay` 不再要求固定 query 顺序；
+   - `tid` 与 `mod=viewthread` 不再要求固定 query 顺序；
+   - 继续支持 `forum-<fid>-<page>.html` / `thread-<tid>-...html`；
+   - anchor parser 同时支持双引号、单引号、无引号 href；
+   - anchor 文本为空时尝试 `title/aria-label`。
+
+4. 板块成功后缓存 6 小时，避免每次首页都触发 WebView fallback。
+
+5. 首页视觉修复：
+   - 删除 Test1 巨大 logo 的“最新主题” `movie_1`；
+   - 改成轻量 `text_1` 的 最新 / 热门 / 精华 三个原生主题入口；
+   - 真实论坛板块也先使用紧凑文本行，待数据结构稳定后再做更精美卡片 UI。
+
+### 交付结构
+
+Test2 采用 overlay：冻结 Test1 `runtime.js`，只新增 `patch_native_index.js` 覆盖首页与主题列表入口，避免磁链/帖子/账号模块在同一轮被无必要重写。
+
+### 保持不动
+
+- 登录 / 签到 / 回复仍先走同域 WebView；
+- 115 `115Offline?add=` 合同不变；
+- 迅雷 `diaoyong#magnet` 合同不变；
+- PikPak deep link 不变；
+- Stable/Latest/根 registry 仍不建立。
+
+### 静态门禁
+
+- `patch_native_index.js` 与 Bootstrap：`node --check` 通过；
+- Test2 fixture 新增验证：`fid` 在 `mod` 前、无引号 href、伪静态论坛/主题 URL 均能识别；
+- Test1 的正文图片过滤与 2 条带参数 magnet 完整提取继续回归通过。
+
+### Test2 实机优先验收
+
+1. 覆盖导入后首页“论坛分区”是否直接出现真实板块；
+2. 首页最新/热门/精华不再出现巨大 logo；
+3. 任意板块是否进入原生主题列表；
+4. 任意主题是否进入原生帖子详情；
+5. 如果仍未识别板块，直接截图首页和设置页最底部“最近阶段”，下一版按真实返回层继续收敛。
 
 ## 0.1.0-test.1 / Build 10101 — Phase 1 基础论坛 + 磁链云播
 
