@@ -6,20 +6,20 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.2",
-  "defaultBuild": 10102,
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "0.1.0-test.2",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v2_b10102.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.2/release.json",
+  "defaultVersion": "0.1.0-test.3",
+  "defaultBuild": 10103,
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "0.1.0-test.3",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v3_b10103.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.3/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test2",
+    "stage": "uploaded-v1-to-modular-test3-web-auth",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test2 = Test1 全量重构 + 海阔原生 select 设置页兼容修复；等待实机验证后再继续协议档升级与 Stable 规划。"
+    "note": "Test3 在 Test2 全量重构基础上修复账号密码登录：新登录切换到当前 Web 2.0.0 认证档，旧会话保留 legacy 兼容，并明确处理 result:review 风控响应。"
   }
 }
