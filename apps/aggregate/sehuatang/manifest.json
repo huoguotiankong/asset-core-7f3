@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.3",
-  "defaultBuild": 10103,
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "0.1.0-test.3",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v3_b10103.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json",
+  "defaultVersion": "0.1.0-test.4",
+  "defaultBuild": 10104,
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "0.1.0-test.4",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test3-rendered-topic-list-recovery",
+    "stage": "test4-forum-parser-and-account-flow",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.2",
-    "note": "根据第二轮实机截图修复热门/板块主题列表为空：新增 WebView 渲染源码与 PC 页面兜底，并把解析诊断直接展示到页面。"
+    "previousTest": "0.1.0-test.3",
+    "note": "第三轮实机已证明论坛 WebView 可获得真实主题，但 Parser 把时长当标题、图片为空且标准 guide 路由不匹配；Test4 按真实移动端结构继续收敛。"
   }
 }
