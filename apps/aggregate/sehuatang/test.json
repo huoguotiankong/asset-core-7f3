@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.16",
-  "baseVersion": "0.1.0-test.15",
+  "version": "0.1.0-test.17",
+  "baseVersion": "0.1.0-test.16",
   "targetVersion": "0.1.0",
-  "build": 10116,
-  "shellVersion": "0.1.0-test.16",
-  "shellRuleVersion": 2026092316,
+  "build": 10117,
+  "shellVersion": "0.1.0-test.17",
+  "shellRuleVersion": 2026092317,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.16/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v16_b10116.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v16_b10116.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.17/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v17_b10117.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v17_b10117.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.15",
-    "build": 10115,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.15/release.json"
+    "version": "0.1.0-test.16",
+    "build": 10116,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.16/release.json"
   },
-  "notes": "评论与正文分离；色花图片补图提前到楼主正文后、评论前；复制链接改评论页；作者信息独立行；回复/观看量移动到卡片底部弱化显示；搜索与页内翻页保持不动。"
+  "notes": "普通帖子目录压缩卡片底部留白；每个子板块动态解析手机端自身分类筛选与全部主题/最新/热门/精华/按发帖/按回复排序；筛选、排序、翻页全部原页刷新，不增加返回栈。"
 }
