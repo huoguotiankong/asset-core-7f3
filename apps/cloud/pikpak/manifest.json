@@ -1,0 +1,25 @@
+{
+  "schema": 4,
+  "id": "pikpak",
+  "name": "PikPak",
+  "category": "cloud",
+  "mode": "remote-test",
+  "test": "apps/cloud/pikpak/test.json",
+  "channels": "apps/cloud/pikpak/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "0.1.0-test.1",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v1_b10101.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/cloud/pikpak/CHANGELOG.md",
+  "migration": {
+    "stage": "uploaded-v1-to-modular-test1",
+    "managerVersion": "direct-loader",
+    "stableExists": false,
+    "sourceVersion": 1,
+    "note": "首轮从用户上传旧式单体规则纳入 main 正式治理；等待海阔实机验证后再继续协议档升级与 Stable 规划。"
+  }
+}
