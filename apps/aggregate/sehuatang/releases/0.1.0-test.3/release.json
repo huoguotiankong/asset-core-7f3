@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.2/release.json",
+    "status": "superseded-after-device-feedback-topic-list-empty"
+  },
+  "modules": [
+    {"name": "runtime-base", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name": "native-index-patch", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name": "topic-render-patch", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"}
+  ],
+  "verify": {"global": "SeHuaTangRemoteRuntime", "property": "version", "equals": "0.1.0-test.3"},
+  "notes": "Test3：主题列表新增 fetch→WebView 渲染源码→PC fetch→PC WebView 四级链，并在失败页直接显示返回长度/链接数/页面标题诊断。"
+}
