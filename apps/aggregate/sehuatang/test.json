@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.3",
-  "baseVersion": "0.1.0-test.2",
+  "version": "0.1.0-test.4",
+  "baseVersion": "0.1.0-test.3",
   "targetVersion": "0.1.0",
-  "build": 10103,
-  "shellVersion": "0.1.0-test.3",
-  "shellRuleVersion": 2026092303,
+  "build": 10104,
+  "shellVersion": "0.1.0-test.4",
+  "shellRuleVersion": 2026092304,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v3_b10103.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v3_b10103.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v4_b10104.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.2",
-    "build": 10102,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.2/release.json"
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json"
   },
-  "notes": "第二轮实机修复：主题列表由普通 fetch 扩展为 fetch→WebView 渲染源码→PC fetch→PC WebView 四级链；失败页直接输出字符数、链接数、页面标题等诊断。"
+  "notes": "第三轮实机修复：同一帖子按 tid 聚合后选择最佳标题，过滤纯时长/日期/通用链接；提取真实缩略图；论坛首页优先解析完整 forum 页面；最新发表/最新热门/最新精华改为动态发现真实导航；账号入口拆为年龄确认→网页登录→签到。"
 }
