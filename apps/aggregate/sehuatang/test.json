@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.5",
-  "baseVersion": "0.1.0-test.4",
+  "version": "0.1.0-test.6",
+  "baseVersion": "0.1.0-test.5",
   "targetVersion": "0.1.0",
-  "build": 10105,
-  "shellVersion": "0.1.0-test.5",
-  "shellRuleVersion": 2026092305,
+  "build": 10106,
+  "shellVersion": "0.1.0-test.6",
+  "shellRuleVersion": 2026092306,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v5_b10105.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v5_b10105.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v6_b10106.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v6_b10106.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.4",
-    "build": 10104,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json"
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json"
   },
-  "notes": "参考 dy2020 旧规则实现一次人工年龄确认后的自动 Cookie 持久化：X5 检测确认页消失并进入真实论坛后保存 fba Cookie，再自动跳转到登录/签到；不自动点击年龄确认按钮。"
+  "notes": "第四轮实机修复：自动点击18+年龄确认并保存Cookie；首页论坛板块改为6个大类横向切换、当前类二列子板块；帖子详情按旧成熟规则的PC #postlist/.t_fsz/.t_f结构重写，并保留磁链云播。"
 }
