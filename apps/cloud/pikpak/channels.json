@@ -3,34 +3,37 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 21:05",
+  "updatedAt": "2026-09-23 21:58",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.2",
+      "version": "0.1.0-test.3",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v2_b10102.txt",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v3_b10103.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "PikPak 首轮全量重构测试版；Test2 修正设置页原生选择器兼容性，Stable 尚未建立。",
+      "desc": "PikPak 全量重构测试版；Test3 修复账号密码登录协议和 review 风控提示，Stable 尚未建立。",
       "highlights": [
         "首页改为账号状态 + 快捷动作 + 统一输入 + 我的文件，删除空白设置弹窗",
         "Core / Provider / Playback / UI / Pages / Runtime 六层拆分",
-        "继承旧登录会话但不再保存明文密码，并统一 access/refresh/captcha 生命周期",
+        "新账号密码登录切换到 Web 2.0.0 认证档，更新 client/captcha/redirect 请求参数",
+        "已有旧会话继续按 Android 1.23.0 legacy 档刷新，避免强制所有用户重新登录",
+        "result:review / value:review 风控响应改为明确账号验证提示，不再展示内部 meta",
+        "登录密码不写入 Item，输入完成后清理临时密码变量",
         "公开 PikPak 分享可免登录浏览与播放",
         "Magnet 先解析 GCID 秒传，失败再回退离线任务",
         "新增离线任务、创建文件夹、重命名、回收站、创建公开分享、容量刷新",
         "API .com / .net 双线路和网络失败自动一次降级",
         "所有分页状态按页面/目录隔离，不再共用全局 page_token",
         "删除启动 referral / join_promoting / 固定 sleep 的非核心副作用",
-        "设置页使用海阔原生 $(数组).select()，不再使用未验证的 select://"
+        "设置页使用海阔原生 $(数组).select()"
       ]
     }
   ]
