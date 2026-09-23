@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.30",
-  "baseVersion": "0.1.0-test.29",
+  "version": "0.1.0-test.31",
+  "baseVersion": "0.1.0-test.30",
   "targetVersion": "0.1.0",
-  "build": 10130,
-  "shellVersion": "0.1.0-test.30",
-  "shellRuleVersion": 2026092401,
+  "build": 10131,
+  "shellVersion": "0.1.0-test.31",
+  "shellRuleVersion": 2026092402,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v30_b10130.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.29",
-    "build": 10129,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.29/release.json"
+    "version": "0.1.0-test.30",
+    "build": 10130,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json"
   },
-  "notes": "Test29实机已确认Guide预览图片恢复。Test30保持当前页面和图片逻辑不变，重点把帖子详情/评论请求从隐藏WebView优先改为mobile直取优先，并加入3分钟单槽HTML复用缓存；只有直取失败才进入PC/WebView兜底。"
+  "notes": "Test30实机确认帖子详情明显提速。Test31继续优化普通子板块、Guide首次进入和搜索：普通板块快速mobile直取满足主题/预览门槛才使用，Guide改轻量WebView阻断图片视频网络，搜索优先复用searchid/短缓存并尝试直接POST，任何快速链失败均回退旧稳定实现。"
 }
