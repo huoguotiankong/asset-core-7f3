@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.8",
-  "defaultBuild": 10108,
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "0.1.0-test.8",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v8_b10108.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json",
+  "defaultVersion": "0.1.0-test.9",
+  "defaultBuild": 10109,
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "0.1.0-test.9",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v9_b10109.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.9/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test8-category-preview-native-image",
+    "stage": "test9-validated-runtime-group-thread-guide-icons",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.7",
-    "note": "根据Test7实机反馈：逐个一级板块页面解析真实子板块；恢复图标；从主题容器提取右侧预览图；正文图片切到原生pic_1_full带Cookie/Referer渲染。"
+    "previousTest": "0.1.0-test.8",
+    "note": "根据Test8实机反馈：修复仅按HTML长度判成功造成的帖子详情/guide回归；分类改为旧45板块缓存优先与多策略重建；操作入口使用独立SVG图标。"
   }
 }
