@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.5",
-  "defaultBuild": 10105,
-  "testVersion": "0.1.0-test.5",
-  "testBuild": 10105,
-  "testShellVersion": "0.1.0-test.5",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v5_b10105.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v5_b10105.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json",
+  "defaultVersion": "0.1.0-test.6",
+  "defaultBuild": 10106,
+  "testVersion": "0.1.0-test.6",
+  "testBuild": 10106,
+  "testShellVersion": "0.1.0-test.6",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v6_b10106.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v6_b10106.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test5-manual-age-confirm-cookie-persistence",
+    "stage": "test6-auto-age-grouped-forums-thread-detail",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.4",
-    "note": "参考用户提供的 dy2020 旧规则：X5 页面保留人工年龄确认，确认完成后由注入 JS 检测真实页面并通过 fba.getCookie/putVar 保存 Cookie，再自动进入登录或签到；不自动替用户确认年龄。"
+    "previousTest": "0.1.0-test.5",
+    "note": "根据第四轮实机反馈：年龄确认改为自动点击并持久化Cookie；首页45板块改为六大类横向切换+当前类二列子板块；帖子详情切换到用户提供成熟规则验证过的PC #postlist/.t_fsz/.t_f解析链。"
   }
 }
