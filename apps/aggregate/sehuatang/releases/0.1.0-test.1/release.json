@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": null,
+  "modules": [
+    {
+      "name": "runtime",
+      "path": "apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "SeHuaTangRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.1"
+  },
+  "notes": "Phase 1：原生论坛分区/主题/帖子/搜索骨架，浏览器登录/签到/回复，帖子磁链自动识别并调用 115.简、迅雷和 PikPak。无 Stable，等待海阔实机验证。"
+}
