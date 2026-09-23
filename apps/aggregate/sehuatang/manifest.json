@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.20",
-  "defaultBuild": 10120,
-  "testVersion": "0.1.0-test.20",
-  "testBuild": 10120,
-  "testShellVersion": "0.1.0-test.20",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v20_b10120.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v20_b10120.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.20/release.json",
+  "defaultVersion": "0.1.0-test.21",
+  "defaultBuild": 10121,
+  "testVersion": "0.1.0-test.21",
+  "testBuild": 10121,
+  "testShellVersion": "0.1.0-test.21",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v21_b10121.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v21_b10121.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test20-mobile-account-guide-repair",
+    "stage": "test21-mobile-guide-card-preview",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.19",
-    "note": "根据Test19实机反馈：账号/签到改为mobile=2；三个话题使用独立mobile guide + 年龄确认/Cookie同会话解析，PC仅兜底。"
+    "previousTest": "0.1.0-test.20",
+    "note": "根据Test20实机反馈：三个话题内容已恢复，但原生排版与预览图仍明显弱于手机网页；Test21改用成熟移动帖子卡片解析与图片请求头。"
   }
 }
