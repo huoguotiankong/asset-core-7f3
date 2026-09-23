@@ -3,29 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 15:42",
+  "updatedAt": "2026-09-23 15:55",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.3",
-      "baseVersion": "0.1.0-test.2",
+      "version": "0.1.0-test.4",
+      "baseVersion": "0.1.0-test.3",
       "targetVersion": "0.1.0",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v3_b10103.txt",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "第二轮实机主题列表修复：普通请求失败后自动使用 WebView 渲染源码，并继续尝试 PC 页面；失败时直接显示真实返回诊断。",
+      "desc": "第三轮实机修复：主题标题/缩略图解析、完整论坛板块、真实话题导航、年龄确认→登录账号流程。",
       "highlights": [
-        "主题列表 fetch → WebView → PC fetch → PC WebView 四级数据链",
-        "兼容 tid / ptid / thread-伪静态链接并标准化到真实主题",
-        "失败页显示返回字符数、链接数、识别主题数、页面 title",
-        "首页、帖子、115 / 迅雷 / PikPak 合同保持前版不动",
-        "仍无 Stable，等待第三轮实机结果"
+        "同一 tid 聚合候选链接，过滤 00:24:34 这类时长并选择真正帖子标题",
+        "能从帖子缩略图链接提取真实图片；无图时退回 text_1，不再显示空白占位图",
+        "论坛分区优先从 forum 页面解析，不再优先拿 Portal 的 5 个快捷入口",
+        "最新发表 / 最新热门 / 最新精华按官网当前移动端导航动态发现",
+        "账号设置明确拆分为 ①年龄确认 ②网页登录 ③签到，不自动绕过 18+ 首访页",
+        "Stable/Latest 继续保持未建立"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
