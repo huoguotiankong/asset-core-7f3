@@ -3,30 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 19:35",
+  "updatedAt": "2026-09-23 19:50",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.10",
-      "baseVersion": "0.1.0-test.9",
+      "version": "0.1.0-test.11",
+      "baseVersion": "0.1.0-test.10",
       "targetVersion": "0.1.0",
-      "build": 10110,
-      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v10_b10110.txt",
+      "build": 10111,
+      "displayVersion": "Test 0.1.0-test.11 · Build 10111",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v11_b10111.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "guide独立年龄确认 + 网站式帖子预览图库 + 云播独立图标。",
+      "desc": "网站式主题卡片 + 显式翻页 + guide会话年龄桥接 + 原生搜索重写。",
       "highlights": [
-        "搜索保持Test9已实机正常实现，不扩大修改面",
-        "最新发表/最新热门/最新精华分别通过WebView处理18+首访并回写Cookie，再解析主题",
-        "帖子详情改为正文信息+三列预览图库+磁链云播+回复，更接近原网站信息密度",
-        "过滤小尺寸图、表情、static/image等资源，避免无关小图被放大成全屏图片",
-        "115/迅雷/PikPak/复制以及原帖/回复/网页版等使用独立SVG图标",
-        "Stable/Latest继续保持未建立，等待Test10实机验证"
+        "主题列表改为标题/摘要+最多6张三列预览图，尽量贴近原网站帖子卡片信息结构",
+        "同页跨主题重复出现3次以上的图片视为头像/公共图并过滤，避免右侧反复显示同一头像",
+        "板块页增加上一页/第N页/下一页显式按钮，不再依赖MY_PAGE隐式翻页",
+        "最新发表/最新热门/最新精华从已通过年龄确认的forum页同一WebView会话进入guide，再回写Cookie",
+        "搜索改为在真实search.php页面自动填写并提交表单；若取得searchid则支持后续分页",
+        "Stable/Latest继续保持未建立，等待Test11实机验证"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
