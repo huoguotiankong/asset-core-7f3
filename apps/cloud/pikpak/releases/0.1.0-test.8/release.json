@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.8",
+  "build": 10108,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.7",
+  "modules": [
+    {"name":"core-base","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"core-test4-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"core-test5-fix","path":"apps/cloud/pikpak/releases/0.1.0-test.5/core_fix.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"provider-test5-safe-cleanup","path":"apps/cloud/pikpak/releases/0.1.0-test.5/provider_patch.js"},
+    {"name":"provider-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/provider_patch.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/pages_patch.js"},
+    {"name":"pages-test7","path":"apps/cloud/pikpak/releases/0.1.0-test.7/pages_patch.js"},
+    {"name":"pages-test8","path":"apps/cloud/pikpak/releases/0.1.0-test.8/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/runtime_patch.js"},
+    {"name":"runtime-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/runtime_patch.js"},
+    {"name":"runtime-test7-id","path":"apps/cloud/pikpak/releases/0.1.0-test.7/runtime_patch.js"},
+    {"name":"runtime-test8-id","path":"apps/cloud/pikpak/releases/0.1.0-test.8/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.8"},
+  "status": "pending-device-validation",
+  "notes": "修复官方安全验证完成后不跳转导致卡在验证页：X5 内持续监听地址栏/iframe captcha_token 与页面成功状态，捕获新 token 后自动进入 verifyDone 并继续 signin。完整继承 Test7 的跨小程序会话级回收与回收站安全语义。"
+}
