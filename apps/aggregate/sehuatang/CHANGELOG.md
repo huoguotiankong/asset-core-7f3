@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.9 / Build 10109 / 待实机验证**  
+状态：**0.1.0-test.10 / Build 10110 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,77 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v9_b10109.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v9_b10109.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.9/release.json`
-- Test9 直接继承 Test1~Test8，并叠加 `releases/0.1.0-test.9/patch_forum_runtime_v9.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v10_b10110.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v10_b10110.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.10/release.json`
+- Test10 直接继承 Test1~Test9，并叠加 `releases/0.1.0-test.10/patch_thread_visual_v10.js`。
+
+## 0.1.0-test.10 / Build 10110 — guide 独立年龄确认、网站式帖子预览图库与云播图标
+
+### Test9 实机反馈
+
+1. 原生搜索已可正常使用，本轮保持搜索实现不动；
+2. 帖子详情正文已经恢复，但正文图片按 `pic_1_full` 逐张全宽展示时信息密度过低，且某些小图/表情会被放大成巨大图片；用户希望更接近原网站：正文信息后直接看到全部预览图，并以多图紧凑布局浏览；
+3. 原网站同一帖子可一次展示多张预览图，当前原生详情应保留全部正文图片，而不是只强调单张全屏大图；
+4. 115 / 迅雷 / PikPak 云播按钮仍缺少明确图标；
+5. “最新发表 / 最新热门 / 最新精华”三个 guide 入口依旧取不到内容；结合普通板块、搜索、帖子正文均已可访问，优先怀疑 guide 页面有自己独立的 18+ 首访/容器 Cookie 状态，没有完全继承首页访问状态。
+
+### Test10 修复
+
+1. **搜索保持不动**
+   - 不覆盖 `search()`，继续使用 Test9/旧链中已经实机确认可用的搜索实现；
+   - 本轮只修改 guide 三入口与帖子详情展示，避免扩大已正常模块的回归面。
+
+2. **三个 guide 入口建立独立年龄确认桥**
+   - `latest / hot / digest` 不再只依赖首页已经保存的年龄状态；
+   - 每个 guide URL 进入 WebView 后独立检测 `满18岁 / over 18 / please click here`；
+   - 命中声明式 18+ 首访页时自动点击对应入口；
+   - 越过首访页后立即通过 `fba.getCookie()` 回写 `sht_web_cookie_v5`，同时标记站点可访问；
+   - 如果年龄确认后被跳回论坛首页，则主动导航回当前 `view=newthread / hot / digest` 目标；
+   - 只有页面真正出现 `tid / thread-*` 主题链接才算完成，不再把空白/跳转页当成功结果；
+   - 仍不尝试绕过验证码、真人验证或其它安全挑战。
+
+3. **帖子详情改成“网站式信息 + 三列预览图库”**
+   - 继续使用 Test9 已恢复的 PC / mobile / WebView 帖子正文请求链，不重写数据获取主链；
+   - 每层正文先显示文本/影片信息，再把该层所有正文图全部提取出来；
+   - 图片使用 `pic_3` 三列原生预览组件连续排列，更接近原网站同一主题内多图并排的浏览方式；
+   - 点击任一缩略图仍可进入 `pics://` 原生图片查看；
+   - 回复继续按楼主 → 回复1 → 回复2 顺序展示，带图回复也使用同样三列预览图库。
+
+4. **过滤误放大的小图和表情**
+   - 新增过滤 `static/image`、smiley、emotion、face、emoji、icon、avatar、logo、loading、none.gif、blank.gif 等资源；
+   - 若图片标签明确同时给出宽高且均不超过 96px，也视为图标/表情，不进入正文预览图库；
+   - 目标是避免 Test9 实机中橙黄色小图被 `pic_1_full` 放大到占据大半屏的现象。
+
+5. **云播按钮补独立图标**
+   - 新增 `cloud115.svg / thunder.svg / pikpak.svg`；
+   - 115、迅雷、PikPak、复制均使用各自独立视觉图标；
+   - 原帖 / 回复 / 复制链接 / 设置继续沿用 Test9 已建立的独立 SVG 图标。
+
+6. **保持不动**
+   - Test9 分类重建与六大类逻辑继续继承；
+   - Test9 普通板块主题列表继续继承；
+   - magnet BTIH 全帖去重、115 / 迅雷 / PikPak 调用链接不改变；
+   - 视频直链与 `video://` 嗅探继续保留；
+   - Stable / Latest / 根 `registry.json` 继续不建立。
+
+### Test10 静态门禁
+
+- `patch_thread_visual_v10.js`：本地 `node --check` 通过；
+- `bootstrap_test_v10_b10110.js`：本地 `node --check` 通过；
+- Test10 `release.json`：本地 JSON 解析通过；
+- Test10 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092310`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test10 实机优先验收
+
+1. 搜索 `ipx-641` 等关键词，确认搜索继续保持 Test9 当前可用状态；
+2. 打开刚才“高清中文字幕”帖子，确认正文图片不再一张全屏巨大显示，而是多张三列预览，可一次看到更多图片；
+3. 检查楼主、回复楼层的图片是否都能显示且点击可放大查看；
+4. 检查 115 / 迅雷 / PikPak / 复制四个磁链动作是否显示不同图标，并保持原调用功能；
+5. 分别打开“最新发表 / 最新热门 / 最新精华”，确认 guide 独立年龄确认后是否恢复真实主题；
+6. 若 guide 仍为空，提供 Test10“设置 → 最近诊断”，诊断会记录独立年龄确认后的 URL、HTML 长度与主题数量。
 
 ## 0.1.0-test.9 / Build 10109 — 请求结果结构校验、分类重建、帖子详情恢复与独立图标
 
@@ -378,4 +445,4 @@
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量/WebView Cookie 容器。
 - 不把 `.net/.com` 做成每次首屏并发探活固定税。
 - Test 阶段不晋级 Stable，不登记根 `registry.json`。
-- 下一阶段优先：Test9 实机闭环 → 确认六大类真实子板块 / 三个话题入口 / 帖子正文 / 正文图片 / 右侧预览图 / 操作图标 → 再处理原生登录状态、签到、回复和 UI 精修。
+- 下一阶段优先：Test10 实机闭环 → 确认三个 guide 入口 / 网站式预览图库 / 云播图标 / 六大类真实子板块 / 右侧主题预览图 → 再处理原生登录状态、签到、回复和 UI 精修。
