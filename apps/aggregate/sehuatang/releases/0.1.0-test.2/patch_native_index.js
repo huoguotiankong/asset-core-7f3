@@ -1,0 +1,45 @@
+/* 色花堂 0.1.0-test.2 / Build 10102 - native forum index recovery patch */
+var SeHuaTangPatchTest2 = (function () {
+    var BASE = SeHuaTangRemoteRuntime;
+    var VERSION = '0.1.0-test.2', BUILD = 10102, RULE_NAME = '色花堂';
+    var DEFAULT_ORIGIN = 'https://sehuatang.org';
+    var UA = 'Mozilla/5.0 (Linux; Android 13; zh-CN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36';
+    var KEY_ORIGIN = 'sht_origin_v1', KEY_DIAG = 'sht_diag_v1', KEY_CACHE = 'sht_forum_cache_v2';
+    var LOGO = 'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg';
+    function s(v){return v==null?'':String(v)}
+    function trim(v){return s(v).replace(/^\s+|\s+$/g,'')}
+    function dec(v){v=s(v);try{return decodeURIComponent(v)}catch(e){return v}}
+    function hdec(v){return s(v).replace(/&amp;/gi,'&').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&nbsp;/gi,' ')}
+    function strip(v){return trim(hdec(v).replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<br\s*\/?\s*>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/\s+/g,' '))}
+    function origin(){var o=trim(getItem(KEY_ORIGIN,DEFAULT_ORIGIN));return /^https?:\/\//i.test(o)?o.replace(/\/+$/,''):DEFAULT_ORIGIN}
+    function originOf(u){var m=s(u).match(/^(https?:\/\/[^\/]+)/i);return m?m[1]:origin()}
+    function abs(h,b){h=hdec(trim(h));if(!h)return'';if(/^https?:\/\//i.test(h))return h;if(/^\/\//.test(h))return'https:'+h;if(/^(javascript:|mailto:|tel:|#)/i.test(h))return'';var o=(s(b).match(/^(https?:\/\/[^\/]+)/i)||[])[1]||origin();if(h.charAt(0)==='/')return o+h;var c=s(b).split('#')[0].split('?')[0];if(c.charAt(c.length-1)!=='/')c=c.replace(/\/[^\/]*$/,'/');return c+h.replace(/^\.\//,'')}
+    function addMobile(u){u=s(u);if(!u||/[?&]mobile=(?:\d+|yes|no)(?:&|$)/i.test(u))return u;return u+(u.indexOf('?')>=0?'&':'?')+'mobile=2'}
+    function pageParam(n,d){var u=s(typeof MY_URL==='undefined'?'':MY_URL),m=u.match(new RegExp('[?&]'+n+'=([^&#]*)'));return m?dec(m[1]):(d==null?'':d)}
+    function headers(u){var o=originOf(u),c='';try{c=getCookie(o)||''}catch(e){}var h={'User-Agent':UA,'Referer':o+'/'};if(c)h.Cookie=c;return h}
+    function diag(stage,u,err){try{setItem(KEY_DIAG,JSON.stringify({stage:stage,origin:originOf(u),error:s(err||'').slice(0,180),time:new Date().getTime()}))}catch(e){}}
+    function req(u,stage){try{var x=s(fetch(u,{headers:headers(u),timeout:9000}));if(x.length<80)throw new Error('页面返回为空或过短');diag(stage,u,'');return x}catch(e){diag(stage,u,e.message||e);throw e}}
+    function anchors(html,base){var out=[],re=/<a\b([^>]*?)href\s*=\s*(?:["']([^"']+)["']|([^\s>]+))([^>]*)>([\s\S]*?)<\/a>/gi,m,a,t,tm;while((m=re.exec(s(html)))!==null){a=(m[1]||'')+' '+(m[4]||'');t=strip(m[5]||'');if(!t){tm=a.match(/\b(?:title|aria-label)\s*=\s*["']([^"']+)["']/i);if(tm)t=strip(tm[1])}out.push({href:abs(m[2]||m[3]||'',base),text:t});if(out.length>6000)break}return out}
+    function forumKey(u){var m=s(u).match(/[?&]fid=(\d+)/i)||s(u).match(/\/forum-(\d+)-\d+\.html/i);return m?m[1]:s(u)}
+    function threadKey(u){var m=s(u).match(/[?&]tid=(\d+)/i)||s(u).match(/\/thread-(\d+)-\d+-\d+\.html/i);return m?m[1]:s(u)}
+    function isForum(u){u=hdec(s(u));return(/forum\.php\?/i.test(u)&&/[?&]mod=forumdisplay(?:&|$)/i.test(u)&&/[?&]fid=\d+/i.test(u))||/\/forum-\d+-\d+\.html(?:[?#]|$)/i.test(u)}
+    function isThread(u){u=hdec(s(u));return(/forum\.php\?/i.test(u)&&/[?&]tid=\d+/i.test(u))||/\/thread-\d+-\d+-\d+\.html(?:[?#]|$)/i.test(u)}
+    function parseForums(html,base){var a=anchors(html,base),out=[],seen={},i,x,k,t;for(i=0;i<a.length;i++){x=a[i];if(!isForum(x.href))continue;t=trim(x.text);if(!t||/^(首页|论坛|返回|更多|发帖|登录|注册|版块|板块)$/i.test(t))continue;k=forumKey(x.href);if(seen[k])continue;seen[k]=1;out.push({id:k,title:t.slice(0,60),url:addMobile(x.href)})}return out.slice(0,120)}
+    function parseThreads(html,base){var a=anchors(html,base),out=[],seen={},i,x,k,t;for(i=0;i<a.length;i++){x=a[i];if(!isThread(x.href))continue;t=trim(x.text);if(!t||t.length<2||/^(回复|查看|最后发表|上一页|下一页|返回)$/i.test(t))continue;k=threadKey(x.href);if(seen[k])continue;seen[k]=1;out.push({id:k,title:t.slice(0,120),url:addMobile(x.href),desc:''})}return out.slice(0,100)}
+    function route(path,p){var u='hiker://page/'+path+'?rule='+RULE_NAME+'&simple=true',k;for(k in(p||{}))if(p.hasOwnProperty(k)&&p[k]!=null)u+='&'+k+'='+encodeURIComponent(s(p[k]));return u}
+    function section(t,d){return{title:t,desc:d||'',url:'hiker://empty',col_type:'text_1',extra:{lineVisible:false}}}
+    function line(){return{col_type:'line'}}
+    function empty(t,d){return{title:t,desc:d||'',url:'hiker://empty',col_type:'text_center_1',extra:{lineVisible:false}}}
+    function web(u){return'x5://'+addMobile(u)}
+    function quick(t,u){return{title:t,img:LOGO,url:u,col_type:'icon_small_4',extra:{lineVisible:false}}}
+    function cacheRead(){try{var x=JSON.parse(getItem(KEY_CACHE,'{}')||'{}');if(x.items&&x.items.length&&new Date().getTime()-Number(x.time||0)<21600000)return x.items}catch(e){}return[]}
+    function cacheWrite(a){try{if(a&&a.length)setItem(KEY_CACHE,JSON.stringify({time:new Date().getTime(),items:a.slice(0,120)}))}catch(e){}}
+    function resolveForums(o){var c=cacheRead(),urls=[o+'/portal.php?mod=index&mobile=2',o+'/forum.php?mobile=2',o+'/forum.php?mobile=no'],i,u,html,list,err='';if(c.length)return{items:c,source:'cache'};for(i=0;i<urls.length;i++){u=urls[i];try{html=req(u,'home.index.'+(i+1));list=parseForums(html,u);if(list.length){cacheWrite(list);return{items:list,source:i===0?'portal':(i===1?'mobile-forum':'pc-forum')}}}catch(e){err=s(e.message||e)}}try{u=o+'/forum.php?mobile=2';html=fetchCodeByWebView(u,{headers:headers(u),timeout:12000,blockRules:['.mp4','.m3u8','.woff','.woff2'],checkJs:$.toString(function(){return document.querySelector('a[href*="forumdisplay"],a[href*="/forum-"]')?'ready':null;})});list=parseForums(s(html),u);if(list.length){cacheWrite(list);diag('home.index.webview',u,'');return{items:list,source:'webview-html'}}if(html)err='WebView 已返回页面，但未识别到板块链接'}catch(e2){err=s(e2.message||e2)}diag('home.index.failed',u||o,err||'未识别到论坛板块');return{items:[],source:'none',error:err}}
+    function withPage(u,p){p=Math.max(1,Number(p||1));u=s(u);if(/\/forum-\d+-\d+\.html(?:\?|$)/i.test(u))return u.replace(/\/forum-(\d+)-\d+\.html/i,'/forum-$1-'+p+'.html');if(/([?&])page=\d+/i.test(u))return u.replace(/([?&])page=\d+/i,'$1page='+p);return u+(u.indexOf('?')>=0?'&':'?')+'page='+p}
+    function home(){var d=[],o=origin(),r,fs=[],i;setPageTitle('色花堂');d.push({title:'搜索主题',desc:'搜索',col_type:'input',url:"(function(){var w=String(input||'').trim();if(!w)return 'toast://请输入关键词';putMyVar('sht_search_kw_v1',w);return 'hiker://page/shtSearch?rule=色花堂&simple=true&kw='+encodeURIComponent(w);})()",extra:{defaultValue:'',titleVisible:true}});d.push(quick('登录',web(o+'/member.php?mod=logging&action=login')));d.push(quick('签到',web(o+'/plugin.php?id=dd_sign:index')));d.push(quick('搜索',route('shtSearch')));d.push(quick('设置',route('shtSettings')));d.push(line());d.push(section('浏览','原生主题列表'));[['最新主题','newthread'],['热门主题','hot'],['精华主题','digest']].forEach(function(x){d.push({title:x[0],desc:'原生主题列表',url:route('shtForum',{sht_url:o+'/forum.php?mod=guide&view='+x[1]+'&mobile=2',sht_name:x[0]}),col_type:'text_1',extra:{lineVisible:false}})});d.push(line());try{r=resolveForums(o);fs=r.items||[];d.push(section('论坛分区',fs.length?'识别到 '+fs.length+' 个板块 · '+r.source:'原生板块解析失败'));for(i=0;i<fs.length;i++)d.push({title:fs[i].title,desc:'进入板块',url:route('shtForum',{sht_url:fs[i].url,sht_name:fs[i].title}),col_type:'text_1',extra:{lineVisible:false}});if(!fs.length){d.push(empty('仍未识别到论坛分区','请打开设置查看最近阶段，把截图发我'));d.push({title:'查看原生源诊断',desc:'本次解析阶段和当前线路',url:route('shtSettings'),col_type:'text_1'})}}catch(e){d.push(empty('首页原生数据加载失败',s(e.message||e).slice(0,160)))}setResult(d)}
+    function forum(){var d=[],seed=pageParam('sht_url',''),name=pageParam('sht_name','主题列表'),pg=Math.max(1,Number(typeof MY_PAGE==='undefined'?1:MY_PAGE||1));setPageTitle(name);if(!seed){setResult([empty('板块参数缺失')]);return}try{var u=withPage(seed,pg),html=req(u,'forum.list.test2'),list=parseThreads(html,u),i;if(pg===1){d.push(quick('网页版',web(seed)));d.push(quick('搜索',route('shtSearch')));d.push(line());d.push(section(name,list.length?'当前页 '+list.length+' 条主题':'当前页暂无主题'))}for(i=0;i<list.length;i++)d.push({title:list[i].title,desc:'查看帖子',url:route('shtThread',{sht_url:list[i].url,sht_name:list[i].title}),col_type:'movie_1',extra:{lineVisible:false}});if(!list.length)d.push(empty('没有解析到主题','若当前板块网页有内容，请把此页截图发我继续适配'))}catch(e){d.push(empty('主题列表加载失败',s(e.message||e).slice(0,160)))}setResult(d)}
+    function module(){var m=BASE.module();m.version=VERSION;m.build=BUILD;m.home=home;m.forum=forum;m._debug=m._debug||{};m._debug.parseForumsTest2=parseForums;m._debug.parseThreadsTest2=parseThreads;return m}
+    var PATCHED={version:VERSION,build:BUILD,module:module};
+    SeHuaTangRemoteRuntime=PATCHED;
+    return PATCHED;
+})();
