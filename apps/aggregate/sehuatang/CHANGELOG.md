@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.30 / Build 10130 / 待实机验证**  
+状态：**0.1.0-test.31 / Build 10131 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,59 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v30_b10130.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json`
-- Test30 继承 Test1~Test29，并新增：`releases/0.1.0-test.30/patch_thread_performance_v30.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json`
+- Test31 继承 Test1~Test30，并新增：`releases/0.1.0-test.31/patch_list_search_performance_v31.js`。
+
+## 0.1.0-test.31 / Build 10131 — 普通板块 / Guide / 搜索继续降延迟
+
+### Test30 实机反馈
+
+1. 用户实机确认帖子详情“确实感觉快了一些”，说明 `mobile=2` 直取优先、PC 次级、隐藏 WebView 最终兜底的方向成立；
+2. 下一阶段按既定性能计划继续处理普通子板块、三个 Guide 首次进入和搜索结果首开；
+3. Test29 已确认 Guide 预览图恢复，因此本轮性能优化不得以牺牲现有预览图、分类/排序、原生排版为代价。
+
+### Test31 性能方案
+
+1. **普通子板块：快速直取优先，但设置图片门禁**
+   - `C.renderList()` 在论坛板块页先尝试 `mobile=2` 直接请求；
+   - 只有同时满足“至少 5 个真实 tid + 至少 2 个 lazy/原图属性”才直接采用；
+   - 不满足时立即回退 Test19/V16 原隐藏 WebView，因此不会为了速度退化成纯文字列表；
+   - 最近同一列表 URL 的可用 HTML 短缓存 2 分钟，返回列表减少重复网络和 WebView。
+
+2. **三个 Guide：保留渲染 DOM，砍掉无意义图片/视频网络**
+   - Guide 仍走 WebView DOM，保证作者、标题、摘要排版与 Test29 一致；
+   - 但 WebView 阻断 jpg/png/webp/gif/视频/字体等重资源，只等待主题 DOM；
+   - 预览图继续由 Test29 的“真实帖子正文并发补图 + tid 12 小时缓存”负责，因此 Guide WebView 本身无需下载预览图片。
+
+3. **搜索：优先复用 searchid 与短缓存**
+   - 同关键词已有 Discuz `searchid` 时，第 1 页和后续页都直接请求结果，不再每次重新启动搜索 WebView；
+   - 搜索结果按“关键词 + 页码”缓存 5 分钟；
+   - 新关键词先读取 formhash 并尝试直接 POST 搜索；
+   - 任何直搜失败都自动回退旧 Test11 WebView 搜索，保证当前已验证可用的搜索能力不丢失。
+
+4. **本轮不改**
+   - Test30 帖子详情/评论页快速链；
+   - Test29 Guide 真实帖子补图；
+   - 普通子板块 UI、分类/排序、帖子详情图片顺序；
+   - 磁链、115、迅雷、PikPak。
+
+### Test31 静态门禁
+
+- `patch_list_search_performance_v31.js`：`node --check` 通过；
+- `bootstrap_test_v31_b10131.js`：`node --check` 通过；
+- `release.json / test.json / channels.json / manifest.json`：JSON 解析通过；
+- Shell 外层规则 JSON与内层 `pages` JSON解析通过；
+- Shell `version=2026092402`；
+- 继续固定 `asset-core-7f3@main`，未新增 `hiker-cloud` 依赖。
+
+### Test31 实机优先验收
+
+1. 同一个普通子板块首次打开是否比 Test30 更快，同时预览图不能丢；
+2. 最新热门 / 最新精华首次进入速度是否下降，预览图仍必须存在；
+3. 同一关键词重复搜索是否明显加快；首次搜索新关键词仍应保持结果正确；
+4. 帖子详情速度不得比 Test30 回退。
 
 ## 0.1.0-test.30 / Build 10130 — 帖子详情/评论页低延迟请求链
 
@@ -201,4 +250,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test30 实机验证帖子详情首开、详情→评论页和短时间重复进入的实际耗时；确认无功能退化后，再继续优化普通子版块/搜索等剩余页面的首开延迟。
+- 当前下一步：Test31 实机验证普通子板块首开、三个 Guide 首开、同关键词重复搜索与新关键词首次搜索速度；确认预览图/分类排序/详情页无退化后，再继续优化首页与跨页面缓存复用。
