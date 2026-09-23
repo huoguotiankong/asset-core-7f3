@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.29",
-  "defaultBuild": 10129,
-  "testVersion": "0.1.0-test.29",
-  "testBuild": 10129,
-  "testShellVersion": "0.1.0-test.29",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v29_b10129.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v29_b10129.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.29/release.json",
+  "defaultVersion": "0.1.0-test.30",
+  "defaultBuild": 10130,
+  "testVersion": "0.1.0-test.30",
+  "testBuild": 10130,
+  "testShellVersion": "0.1.0-test.30",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v30_b10130.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test29-guide-thread-preview-enrichment",
+    "stage": "test30-thread-latency-fast-path",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.28",
-    "note": "Test28实机确认卡片排版正确但Guide DOM仍不给原生层可用预览图；Test29改为并发读取各主题真实mobile帖子正文提取预览图，并用帖子页Referer加载。"
+    "previousTest": "0.1.0-test.29",
+    "note": "Test29预览图已实机验证恢复；Test30只做低风险性能层：帖子详情/评论mobile直取前置、PC次级、WebView最终兜底，并复用最近帖子HTML。"
   }
 }
