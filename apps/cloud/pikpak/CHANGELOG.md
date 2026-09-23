@@ -2,6 +2,40 @@
 
 > 2026-09-23 起由 `asset-core-7f3@main` 正式维护。初始基线来自用户上传 `PikPak.hk小程序(1).zip`（原规则 version=1）。Stable 尚未建立，当前只走 Test 通道。
 
+## 2026-09-23 · 0.1.0-test.8 / Build10108 · 官方验证完成后不跳转修复
+
+### 实机现象
+
+用户完成 PikPak 官方安全验证后，海阔内嵌页停留在“验证完成，继续登录 / 重新加载验证”区域，未自动回到登录成功状态。
+
+### 根因
+
+Test5/Test7 只在 `x5_webview_single` 页面加载和 URL 导航拦截时读取 `captcha_token`。PikPak 验证页完成后存在 SPA 场景：浏览器地址通过前端状态更新/`history.replaceState` 改写 token，但不触发真正页面跳转，因此 `urlInterceptor` 和一次性 JS 注入都收不到新 token。
+
+公开 PikPak API 同类验证流程也要求在浏览器完成验证后，从地址栏取得更新后的 `captcha_token` 再继续 signin。
+
+### Test8 修复
+
+- X5 验证页增加持续 watcher，约每 350ms 检查一次当前地址栏 `captcha_token`。
+- 同时检查 iframe `src` / 可访问的 iframe 当前地址，兼容验证组件嵌套。
+- 捕获到与原 token 不同的新 token 后立即打开 `pikpakVerifyDone`，继续密码 signin。
+- 如果 URL 没变化，但验证页 DOM 已出现“验证成功 / 验证完成 / 验证通过 / verified / passed”等成功状态，则用当前 token 主动确认一次 signin。
+- 继续保留导航 `urlInterceptor`、手动“验证完成，继续登录”、重新加载验证三重兜底。
+- 密码仍只存临时 MyVar，成功/取消后清除。
+- 完整继承 Test7 的跨小程序 Magnet 会话级临时文件回收：退出调用页只回收本 session 临时文件并移入回收站，不永久删除用户文件。
+
+### Test8 实机验收
+
+1. 账号密码登录触发 review。
+2. 完成官方人机验证后，无需手点按钮，应自动进入验证完成页并成功登录。
+3. 如果自动接回未触发，点“验证完成，继续登录”应能完成登录或给出明确验证状态。
+4. 登录成功后测试根目录、盘内视频播放。
+5. 再测试外部小程序调用 Magnet，确认退出调用页只回收本次临时文件。
+
+当前：Test `0.1.0-test.8 / Build10108`；Stable 尚未建立；状态 `pending-device-validation`。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.7 / Build10107 · 跨小程序调用会话级安全回收
 
 ### 当前真实链路
@@ -38,8 +72,6 @@
 3. 退出播放器并关闭调用页后，本次临时文件应进入回收站。
 4. 个人盘普通文件与手动离线文件不得被移动。
 5. 普通 PikPak 内部 Magnet 不应被调用页 session 清理误伤。
-
-当前：Test `0.1.0-test.7 / Build10107`；Stable 尚未建立；状态 `pending-device-validation`。
 
 ---
 
