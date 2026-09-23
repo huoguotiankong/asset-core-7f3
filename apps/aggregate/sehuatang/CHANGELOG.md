@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.6 / Build 10106 / 待实机验证**  
+状态：**0.1.0-test.7 / Build 10107 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,9 +10,111 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v6_b10106.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v6_b10106.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json`
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v7_b10107.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v7_b10107.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json`
+- Test7 直接继承 Test1~Test6 已验证/待验证模块，并叠加 `releases/0.1.0-test.7/patch_stability_polish.js`。
+
+## 0.1.0-test.7 / Build 10107 — 访问状态、主题列表、正文媒体与 UI 收敛
+
+### Test6 后续实机反馈
+
+1. 首页六大类方向正确，但页面信息仍偏重复，分类视觉需要进一步收敛；
+2. “最新发表 / 最新热门 / 最新精华”进入后出现空列表；
+3. 站点实际已能取得论坛数据时，首页仍可能显示“自动年龄确认尚未成功”，属于访问状态假阴性；
+4. 六大类不能简单按前六个 `.bm_c` 顺序绑定，需要按真实根 `fid` 定位对应论坛块；
+5. 帖子正文已能进入真实 `#postlist`，但部分正文图片仍显示占位图/加载图；
+6. 同一个 magnet 在正文与云播区重复出现，视觉噪声较大；
+7. 回复编号受被过滤节点影响，可能出现从“回复 2/3”开始；
+8. 在线视频类帖子正文只出现“视频加载中”等占位文字，没有可直接播放入口。
+
+### Test7 根因与修复
+
+1. **主题列表请求链统一到 Test7 Cookie-aware Runtime**
+   - Test6 只覆盖了 `home/thread`，普通板块与 guide 仍可能落回 Test4 的旧 `forum()`；
+   - Test4 的旧请求只读 WebView 容器 Cookie，未复用 Test5/Test6 保存到 `sht_web_cookie_v5` 的 Cookie；
+   - Test7 自己接管普通板块和 `latest/hot/digest` 的论坛列表请求，统一使用当前 Cookie、PC fetch、WebView fallback 与 `mobile=no` 变体；
+   - 同一 `tid` 继续聚合标题/缩略图候选，过滤时间、纯数字和导航噪声。
+
+2. **最新 / 热门 / 精华入口重新动态发现**
+   - 先从当前真实 `forum.php` 中按“最新发表/最新主题/最新帖子、热门、精华”等文本匹配真实 href；
+   - 文本匹配不到时继续识别 `mod=guide&view=newthread/hot/digest` 链接；
+   - 最后才回退到标准 Discuz guide URL，不再只依赖历史入口。
+
+3. **访问状态与 Cookie 状态彻底拆分**
+   - 新增 `sht_access_ok_v7` 表示“已经越过 18+ 首访页并取得真实论坛结构”；
+   - `sht_web_cookie_v5` 仍只表示 Cookie 容器已经同步；
+   - 首页不再把“没有 Cookie”误判成“年龄确认失败”；
+   - 设置页同时显示站点可访问状态与 Cookie 状态，并保留重新建立访问状态入口。
+
+4. **六大类按真实根 fid 定位论坛块**
+
+```text
+原创BT电影 fid=2
+在线视频区 fid=41
+原档收藏   fid=145
+色花图片   fid=155
+色花文学   fid=154
+综合讨论区 fid=95
+```
+
+- 在 `.bm / .bm_c` 块中查找包含对应根 fid 的真实块，再提取其 `dt/a` 子板块；
+- 某一组解析失败时只回退到该大类自身入口，不伪造其它板块；
+- 分类缓存升级为 `sht_forum_groups_v7`，避免 Test6 错误分组缓存污染。
+
+5. **首页 UI 再收敛**
+   - 最新/热门/精华改为紧凑三列 `text_3`；
+   - 六个一级大类改为两行三列；
+   - 当前大类以下继续使用两列子板块；
+   - 不把诊断/build 等工程信息塞进首屏。
+
+6. **帖子图片兼容增强**
+   - 图片地址按 `zoomfile → file → data-original → data-src → data-echo → data-lazy-src → src` 依次挑选真实地址；
+   - 跳过 `none.gif / loading / blank.gif / avatar / smiley` 等占位资源；
+   - 相对地址转绝对地址，并补 Cookie + Referer + `#originalSize#`；
+   - 清理旧 `src/zoomfile/file/data-*` 属性后只保留一个真实 `src`，避免占位属性重新抢占加载。
+
+7. **磁链按 BTIH 全帖去重**
+   - 不再只按完整 magnet 字符串去重，而是优先按 BTIH hash 去重；
+   - 同一磁链即使 tracker/query 不同也只保留一个云播动作组；
+   - 正文中的 raw magnet 文本/磁链链接移除，仅保留“磁链已识别，云播入口见正文下方”提示；
+   - 115 / 迅雷 / PikPak / 复制四个动作保持不变。
+
+8. **楼层编号修正**
+   - 只对成功提取到有效 `.t_fsz/.t_f` 正文的楼层递增计数；
+   - 第一条有效正文固定为“楼主”，之后连续显示“回复 1 / 回复 2 …”。
+
+9. **在线视频播放入口**
+   - 正文内直接发现 `.m3u8/.mp4` 时提供“直接播放”，并使用 `#isVideo=true#` 强制按视频处理；
+   - 检测到 `<video>`、`<iframe>`、`视频加载中`、`在线播放`、播放器特征但没有直链时，提供海阔 `video://` 自动嗅探入口；
+   - iframe 有实际 src 时优先嗅探 iframe，否则嗅探当前帖子；
+   - 嗅探只过滤图片/字体类无关资源，不预先阻断 `.m3u8/.mp4`。
+
+10. **保持不动**
+   - 搜索功能本轮不扩大修改面；
+   - 登录/验证码/真人验证仍交给官网页面；
+   - 不直接 POST 签到或回复；
+   - Stable / Latest / 根 `registry.json` 继续不建立，Test7 实机通过后再决定下一步。
+
+### Test7 静态门禁
+
+- `patch_stability_polish.js`：`node --check` 通过；上传后 Git blob SHA 与本地已检查文件一致；
+- `bootstrap_test_v7_b10107.js`：`node --check` 通过；上传后 Git blob SHA 与本地已检查文件一致；
+- `release.json`：JSON 解析通过；
+- Test7 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092307`，低于 32 位有符号整数上限；
+- Bootstrap、Release、Shell 全部明确使用 `asset-core-7f3@main`，没有新增 `hiker-cloud` 正式运行依赖。
+
+### Test7 实机优先验收
+
+1. 覆盖导入 Test7 后首页应直接显示六大类两行布局，切换大类后只刷新当前类子板块；
+2. “最新发表 / 最新热门 / 最新精华”三项至少能恢复真实主题列表，标题与缩略图不应退化；
+3. 已能正常看到论坛数据时，首页不应继续显示“年龄确认失败”；设置页应分别显示“站点可访问”和“Cookie”；
+4. 打开带正文图片的帖子，确认图片不再停留在占位图；
+5. 打开带 magnet 的帖子，同一 BTIH 只出现一组 115 / 迅雷 / PikPak / 复制，正文不重复铺 magnet；
+6. 打开多回复帖子，确认顺序为楼主 → 回复1 → 回复2；
+7. 打开在线视频帖子：有直链时测试“直接播放”；只有网页播放器时测试“嗅探播放”，并重点验证拖动/起播是否正常；
+8. 若某一项失败，优先提供对应页面截图和“设置 → 最近诊断”内容，不扩大其它已正常模块的修改面。
 
 ## 0.1.0-test.6 / Build 10106 — 自动年龄确认、分组分类、帖子详情重写
 
@@ -93,16 +195,6 @@
 - Test6 `release.json`：JSON 解析通过；
 - Test6 Shell 外层规则及内层 `pages` JSON：解析通过。
 
-### Test6 实机优先验收
-
-1. 覆盖导入后直接打开首页，看首次 18+ 页面是否无需手动点击即可进入真实论坛数据；
-2. 首页六个大类能否横向切换；
-3. 每次只显示当前大类子板块，且为两列；
-4. 打开之前截图里的 `[综合讨论区]` 任意帖子，确认正文是否真正出现，而不是只显示最后编辑/签名；
-5. 带图片帖子是否在正文内正确显示；
-6. 带 magnet 帖子是否显示 115 / 迅雷 / PikPak / 复制；
-7. 自动登录入口若仍停在年龄页，记录当前按钮 DOM/文字，继续针对性适配。
-
 ## 0.1.0-test.5 / Build 10105 — 年龄确认 Cookie 持久化
 
 - 参考用户提供的 dy2020 旧规则，新增 `shtVerify` X5 页面；
@@ -146,4 +238,4 @@
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量/WebView Cookie 容器。
 - 不把 `.net/.com` 做成每次首屏并发探活固定税。
 - Test 阶段不晋级 Stable，不登记根 `registry.json`。
-- 下一阶段优先：Test6 自动年龄确认闭环 → 分类分组回归 → 帖子正文/图片 → magnet 云播实机闭环 → 再处理原生登录状态、签到、回复和 UI 精修。
+- 下一阶段优先：Test7 实机闭环 → 修复仍失败的单点模块 → 确认分类/主题列表/正文图片/magnet云播/在线视频播放 → 再处理原生登录状态、签到、回复和 UI 精修。
