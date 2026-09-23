@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.9",
+  "build": 10109,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.8",
+    "build": 10108,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json",
+    "status": "superseded-after-device-feedback-runtime-validation"
+  },
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-cookie-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js"},
+    {"name":"ux-thread-access-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_ux_thread_access.js"},
+    {"name":"stability-polish-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.7/patch_stability_polish.js"},
+    {"name":"forum-visual-v8","path":"apps/aggregate/sehuatang/releases/0.1.0-test.8/patch_forum_visual_v8.js"},
+    {"name":"forum-runtime-v9","path":"apps/aggregate/sehuatang/releases/0.1.0-test.9/patch_forum_runtime_v9.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.9"},
+  "notes": "Test9：修复Test8把超长但错误的HTML误当成功结果的问题；分类重建优先复用曾成功取得约45板块的设备缓存并多策略切组；latest/hot/digest与帖子详情均改成内容结构校验后再决定是否继续WebView；补充网页版/原帖/回复/复制/设置等独立SVG图标。"
+}
