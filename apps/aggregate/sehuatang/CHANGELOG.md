@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.4 / Build 10104 / 待实机验证**  
+状态：**0.1.0-test.5 / Build 10105 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,9 +10,59 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v4_b10104.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json`
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v5_b10105.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v5_b10105.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json`
+
+## 0.1.0-test.5 / Build 10105 — 年龄确认 Cookie 持久化
+
+### 用户提供的成熟旧规则结论
+
+用户提供 dy2020 的色花堂旧规则后确认，其验证流程并不是自动点击验证按钮，而是：
+
+```text
+X5 WebView 打开站点
+→ 用户完成网页上的确认/验证
+→ 注入 JS 循环检测真实页面节点
+→ fba.getCookie(host)
+→ fba.putVar(host + 'ck', cookie)
+→ 后续 fetchPC/fetch 主动携带该 Cookie
+```
+
+这说明当前程序应该把“年龄确认动作”和“确认后的 Cookie 捕获/复用”分开，而不是把首次 18+ 页面误当成登录失败。
+
+### Test5 实现
+
+1. 新增 `shtVerify` 页面，使用 `x5_webview_single`。
+2. 首次出现 `满18岁，请点此进入 / If you are over 18` 时由用户手动确认一次；程序不替用户点击年龄确认。
+3. 注入 JS 每隔约 600~900ms 检测页面：
+   - 年龄确认文本仍存在：继续等待；
+   - 已出现真实论坛结构（如 `#threadlisttableid / .bm_c / #waterfall / forum-` 链接等）：判定年龄确认完成；
+   - 通过 `fba.getCookie(location.origin)` / `fba.getCookie(host)` 捕获 WebView Cookie；
+   - 通过 `fba.putVar` 保存 Cookie、确认状态和时间。
+4. 年龄确认完成后自动继续跳转：
+   - 登录模式 → 官方登录页；
+   - 签到模式 → `dd_sign` 官方签到页；
+   - 刷新模式 → 论坛首页。
+5. 设置页改为：
+   - `① 年龄确认后登录`；
+   - `② 网页登录`；
+   - `③ 每日签到`；
+   - 年龄/Cookie 状态；
+   - 重新确认并刷新 Cookie；
+   - Test4 的线路/缓存/最近诊断保留在原设置子页。
+6. 登录验证码、人机验证、账号密码仍完全由官网页面处理，不在规则里保存真实账号密码。
+7. Test4 的论坛板块/主题标题/缩略图 Parser 和 Test1 的 115 / 迅雷 / PikPak 磁链合同保持不动。
+
+### Test5 实机验收
+
+1. 设置 → `① 年龄确认后登录`；
+2. 第一次出现年龄页时手动点一次“满18岁，请点此进入”；
+3. 确认后应自动进入登录页，而不是停在论坛首页；
+4. 返回设置页后应显示“年龄确认状态：已记录”，尽量同时显示“已保存 WebView Cookie”；
+5. 再点 `② 网页登录`，若 Cookie 有效，应不再重复出现年龄确认页；
+6. 登录后测试 `③ 每日签到`；
+7. 如果仍反复弹年龄页，下一步重点核对 `sehuatang.org` 与 `www.sehuatang.org` Cookie 域及 X5 Cookie 共享边界。
 
 ## 0.1.0-test.4 / Build 10104 — 论坛产品结构与 Parser 收敛
 
@@ -58,11 +108,7 @@ forum.php?mobile=2
    - 找不到才使用标准 Discuz fallback。
 
 5. **账号入口顺序修正**
-   - 设置页拆为：
-     1. `首次访问 / 年龄确认`；
-     2. `网页登录`；
-     3. `每日签到`；
-   - 年龄确认由用户在官网页面手动点击，不自动绕过站点 18+ 首访确认；
+   - 设置页拆为：首次访问/年龄确认 → 网页登录 → 每日签到；
    - 验证码/安全验证继续由官方网页完成；
    - Cookie 共享状态继续以海阔实机为准。
 
@@ -72,72 +118,27 @@ forum.php?mobile=2
    - 搜索逻辑暂不扩大修改面；
    - Stable / Latest / 根 registry 仍不建立。
 
-### 静态门禁
-
-- `patch_forum_product.js`：`node --check` 通过；
-- `bootstrap_test_v4_b10104.js`：`node --check` 通过；
-- Test4 `release.json`：JSON 解析通过；
-- Test4 Shell 外层规则与内层 `pages` JSON：解析通过；
-- 自建 fixture 验证：同一 tid 先出现 `00:24:34`，后出现真实标题时，Parser 最终选择真实标题而不是时长。
-
 ### Test4 实机优先验收
 
-1. 覆盖导入 Test4 后首页论坛板块数量是否明显多于 5 个，名称是否更接近官网完整论坛页；
-2. 进入“国产”或其它板块，确认标题不再是 `00:24:34` 这类时长；
-3. 有缩略图的主题是否显示真实图片，无缩略图时是否不再出现默认空白图；
-4. `最新发表 / 最新热门 / 最新精华` 至少两项是否能得到原生主题列表；
-5. 设置 → `① 首次访问 / 年龄确认`，手动确认后返回，再进入 `② 网页登录`，确认是否真正到登录页。
+1. 首页论坛板块数量/名称是否更接近官网完整论坛页；
+2. 进入“国产”等板块，标题不再是纯时长；
+3. 有缩略图主题显示真实图片，无图主题不出现默认占位图；
+4. 最新发表 / 最新热门 / 最新精华至少两项能得到原生主题列表。
 
 ## 0.1.0-test.3 / Build 10103 — 主题列表渲染源码恢复
 
-### 第二轮实机事实
-
-用户 2026-09-23 实机确认 Test2 能进入海阔原生“热门主题”页面，但列表仍显示“当前页暂无主题 / 没有解析到主题”。说明原生页面壳已工作，但 `forum()` 的普通 HTTP 请求没有得到可识别的真实主题列表。
-
-### 修复
-
-1. 保持 Test1 帖子/磁链模块、Test2 首页/板块模块不动，仅新增 Test3 overlay。
-2. 主题列表数据链升级为：
-
-```text
-mobile fetch
-→ mobile fetchCodeByWebView 渲染后 HTML
-→ PC fetch
-→ PC fetchCodeByWebView 渲染后 HTML
-→ 原生 Parser / Renderer
-```
-
-3. Thread URL 识别继续支持：
-   - `forum.php?...tid=<id>`；
-   - `forum.php?...ptid=<id>`，自动标准化为真实 viewthread；
-   - `thread-<tid>-<page>-<mode>.html`。
-4. WebView 只作为隐藏数据获取层，不把网页作为最终 UI。
-5. 若四级链仍失败，原生页面直接显示诊断：
-   - HTML 字符数；
-   - anchor 链接数；
-   - 识别主题数；
-   - 页面 `<title>`；
-   - 具体命中的 fetch / webview / pc-fetch / pc-webview 阶段。
-6. 最近诊断同步写入 `sht_diag_v1`，设置页仍可查看。
-
-### 静态门禁
-
-- `patch_topic_render.js`：`node --check` 通过。
-- `bootstrap_test_v3_b10103.js`：`node --check` 通过。
-- `release.json`：JSON 解析通过。
-- Test Shell 内层 `pages` JSON：解析通过。
+- 原生页面壳已工作，但普通 HTTP 取不到可识别主题。
+- 主题列表数据链升级为：`mobile fetch → mobile WebView HTML → PC fetch → PC WebView HTML`。
+- 支持 `tid / ptid / thread-<tid>`。
+- 失败页直接显示 HTML 字符数、anchor 数、识别主题数、页面 title 和命中阶段。
 
 ## 0.1.0-test.2 / Build 10102 — 原生入口恢复
 
-- Test1 首次实机：首页“论坛分区”未识别，只剩网页兜底；巨大 logo 卡片体验差。
-- 首页数据链改为 `portal → mobile forum → PC forum → WebView HTML`。
-- 放宽 Discuz forum/thread 链接参数顺序、伪静态 URL、无引号 href。
+- Test1 首页只能看到网页兜底；Test2 改为 `portal → mobile forum → PC forum → WebView HTML`。
+- 放宽 forum/thread 链接参数顺序、伪静态 URL、无引号 href。
 - 首页最新/热门/精华改为紧凑原生文本入口。
-- 采用 overlay，仅覆盖首页和主题列表入口；账号和磁链合同保持不变。
 
 ## 0.1.0-test.1 / Build 10101 — 基础论坛 + 磁链云播
-
-### 已实现基础能力
 
 - 原生搜索框、登录/签到/搜索/设置入口；
 - Discuz 论坛分区、主题、帖子 Parser 初版；
@@ -147,12 +148,12 @@ mobile fetch
 - 115：`hiker://page/115Offline?rule=115.简&page=fypage&add=<encoded magnet>`；
 - 迅雷：`hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>`；
 - PikPak：`pikpakapp://mypikpak.com/xpan/main_tab?tab=1&add_url=<magnet>`；
-- 登录/签到/回复首版走同域 WebView，未实机确认前不自行伪造 formhash/POST。
+- 登录/签到/回复首版走同域 WebView。
 
 ## 当前禁用 / 待确认
 
 - 未实机确认前，不直接 POST 签到或回帖。
-- 不保存真实账号、密码、Cookie、formhash。
+- 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量/WebView Cookie 容器。
 - 不把 `.net/.com` 做成每次首屏并发探活固定税。
 - Test 阶段不晋级 Stable，不登记根 `registry.json`。
-- 下一阶段必须先完成：论坛板块 → 主题标题/图片 → 帖子详情 → 磁链云播实机闭环，再继续原生登录状态/签到/回复/UI 精修。
+- 下一阶段优先完成：Test5 年龄确认 Cookie 闭环 → Test4 论坛列表回归 → 帖子详情 → 磁链云播实机闭环。
