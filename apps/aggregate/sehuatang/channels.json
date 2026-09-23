@@ -3,30 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-24 00:50",
+  "updatedAt": "2026-09-24 01:14",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.30",
-      "baseVersion": "0.1.0-test.29",
+      "version": "0.1.0-test.31",
+      "baseVersion": "0.1.0-test.30",
       "targetVersion": "0.1.0",
-      "build": 10130,
-      "displayVersion": "Test 0.1.0-test.30 · Build 10130",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt",
+      "build": 10131,
+      "displayVersion": "Test 0.1.0-test.31 · Build 10131",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test29预览图已实机恢复；Test30保持现有UI和图片链，重点降低帖子详情/评论页等待时间。",
+      "desc": "Test30详情提速已实机确认；Test31继续降低普通子板块、三个话题首次进入和搜索等待时间。",
       "highlights": [
-        "Test29三个话题原生页预览图已实机确认恢复",
-        "帖子详情改为mobile=2直接请求优先，不再一上来等待隐藏WebView",
-        "mobile直取失败后才尝试PC直取，最后才走旧WebView兜底",
-        "最近一个帖子HTML缓存3分钟，详情→评论/重复进入可直接复用",
-        "Guide现有12小时tid预览缓存和3分钟整页缓存继续保留",
-        "普通子版块、搜索、首页、图片排版、magnet/115/迅雷/PikPak不改"
+        "Test30帖子详情/评论页直取优先方案实机确认明显提速",
+        "普通子板块先快速mobile直取，只有主题和预览属性都达标才直接采用，否则自动回退原WebView，不牺牲图片",
+        "三个Guide保持Test29真实帖子页补图，但Guide DOM改轻量WebView：阻断图片/视频下载，只等主题DOM，降低首开成本",
+        "列表最近页面HTML短缓存2分钟，返回同页减少重复网络与WebView",
+        "搜索优先复用Discuz searchid和5分钟结果缓存；新关键词尝试带formhash直接POST，失败自动回退旧稳定WebView搜索",
+        "帖子详情、评论、图片顺序、magnet/115/迅雷/PikPak逻辑不改"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
