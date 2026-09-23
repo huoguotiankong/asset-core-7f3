@@ -3,33 +3,32 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23",
+  "updatedAt": "2026-09-24",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.10",
+      "version": "0.1.0-test.11",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10112,
-      "displayVersion": "Test 0.1.0-test.10 · Build 10112",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v10_b10112.txt",
+      "build": 10113,
+      "displayVersion": "Test 0.1.0-test.11 · Build 10113",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v11_b10113.txt",
       "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-23",
+      "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test10 清洁 Android 认证版；活动模块链不再加载 Web 2.0 认证补丁。",
+      "desc": "PikPak Test11 官方网页会话接管版；绕开当前账号/IP触发的密码登录 captcha/init 频控。",
       "highlights": [
-        "账号密码使用 Android client 1.53.2 / YNxT9w7GMdWvEOKa / com.pikcloud.pikpak",
-        "登录前 captcha/init 按当前 Android 契约提交 identity meta；登录成功后为 Drive 刷新 Android captcha_sign",
-        "活动加载链彻底移除 Web 2.0 core/auth/captcha 补丁，避免旧包装层干扰",
-        "首次升级清除旧 Web 验证临时状态；旧 Web-profile 会话不继续冒充已登录",
+        "用户实机再次确认 Android 账号密码链在 captcha/init 阶段直接返回 ErrorCode 4002 / operation too frequent",
+        "公开的 OpenList 当前 PikPak 驱动亦有同类近期问题，官方文档建议此时改用官方网页/App登录后的 Refresh Token",
+        "账号页主入口改为海阔 X5 打开官方 mypikpak.com，不再鼓励连续重复密码登录",
+        "官方网页登录成功后自动扫描同源 localStorage 的 credentials_/deviceid/captcha，提取 Web Refresh Token、Device ID 与当前 Captcha",
+        "Web Refresh Token 使用 Web client 2.0.0 / mypikpak.com 恢复 access token，并切换为 Web API Session",
+        "保留 Test10 Android 认证代码作为底层兼容，但 Test11 主 UI 不再直接暴露密码登录框",
         "保留首页、个人盘、公开分享、播放、多线路、下载、Magnet、离线任务和文件管理",
-        "保留跨小程序 Magnet session；退出调用页只将本次临时文件移入回收站",
-        "普通个人文件和手动离线任务不参与退出清理",
-        "Refresh Token 登录按 Android profile 恢复",
-        "Build10110 Web 登录候选与 Build10111 中间候选均冻结，仅用于审计"
+        "保留跨小程序 Magnet session 与退出调用页临时文件回收语义；普通个人文件和手动离线任务不参与清理"
       ]
     }
   ]
