@@ -3,28 +3,29 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 23:50",
+  "updatedAt": "2026-09-24 00:05",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.26",
-      "baseVersion": "0.1.0-test.25",
+      "version": "0.1.0-test.27",
+      "baseVersion": "0.1.0-test.26",
       "targetVersion": "0.1.0",
-      "build": 10126,
-      "displayVersion": "Test 0.1.0-test.26 · Build 10126",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v26_b10126.txt",
+      "build": 10127,
+      "displayVersion": "Test 0.1.0-test.27 · Build 10127",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v27_b10127.txt",
       "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-23",
+      "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "三个话题恢复原生卡片，网页只保留为辅助入口；优化为mobile快速请求优先。",
+      "desc": "三个话题继续原生化，加载链与普通子版块统一，恢复真实预览图和手机卡片层级。",
       "highlights": [
-        "撤销Test25三个话题直接网页直显",
-        "最新发表/热门/精华恢复海阔原生卡片",
-        "mobile=2快速fetch优先，只有解析不足才隐藏WebView兜底",
-        "普通子板块/搜索/帖子详情/评论页保持不动"
+        "Guide保持海阔原生页面，不再网页直显",
+        "与普通子版块相同：mobile=2渲染DOM优先，parseCardsV15提取真实lazy预览图",
+        "作者头像/名字/角色/时间独立，标题、摘要、最多3图、评论点赞观看分层显示",
+        "渲染结果缓存3分钟，重复打开/返回话题页减少等待",
+        "普通子版块、搜索、帖子详情、评论页保持不动"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
