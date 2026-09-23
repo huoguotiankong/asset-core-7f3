@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.1/release.json",
+    "status": "superseded-after-device-feedback-native-index-empty"
+  },
+  "modules": [
+    {
+      "name": "runtime-base",
+      "path": "apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "native-index-patch",
+      "path": "apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"
+    }
+  ],
+  "verify": {
+    "global": "SeHuaTangRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.2"
+  },
+  "notes": "Test2 overlay：冻结 Test1 runtime，新增 native-index patch 修复原生首页/主题列表数据链；避免重写已工作磁链与帖子模块。"
+}
