@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.13",
+  "build": 10113,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {"version":"0.1.0-test.12","build":10112,"release":"apps/aggregate/sehuatang/releases/0.1.0-test.12/release.json","status":"superseded-after-device-feedback-mobile-card-images-inplace-pagination"},
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-cookie-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_cookie.js"},
+    {"name":"ux-thread-access-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_ux_thread_access.js"},
+    {"name":"stability-polish-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.7/patch_stability_polish.js"},
+    {"name":"forum-visual-v8","path":"apps/aggregate/sehuatang/releases/0.1.0-test.8/patch_forum_visual_v8.js"},
+    {"name":"forum-runtime-v9","path":"apps/aggregate/sehuatang/releases/0.1.0-test.9/patch_forum_runtime_v9.js"},
+    {"name":"thread-visual-v10","path":"apps/aggregate/sehuatang/releases/0.1.0-test.10/patch_thread_visual_v10.js"},
+    {"name":"forum-cards-search-v11","path":"apps/aggregate/sehuatang/releases/0.1.0-test.11/patch_forum_cards_search_v11.js"},
+    {"name":"mobile-order-v12","path":"apps/aggregate/sehuatang/releases/0.1.0-test.12/patch_mobile_order_v12.js"},
+    {"name":"mobile-cards-nav-v13","path":"apps/aggregate/sehuatang/releases/0.1.0-test.13/patch_mobile_cards_nav_v13.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.13"},
+  "notes": "Test13：普通板块继续mobile=2优先，但改为按相邻tid边界提取整张手机端帖子卡片并最多显示2张预览图；WebView延迟两轮滚动触发懒加载；帖子正文图片按手机网页版顺序逐张全宽显示；板块上一页/下一页改为同页putMyVar+refreshPage，不再叠加返回栈。"
+}
