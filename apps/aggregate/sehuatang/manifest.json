@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.17",
-  "defaultBuild": 10117,
-  "testVersion": "0.1.0-test.17",
-  "testBuild": 10117,
-  "testShellVersion": "0.1.0-test.17",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v17_b10117.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v17_b10117.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.17/release.json",
+  "defaultVersion": "0.1.0-test.18",
+  "defaultBuild": 10118,
+  "testVersion": "0.1.0-test.18",
+  "testBuild": 10118,
+  "testShellVersion": "0.1.0-test.18",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v18_b10118.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v18_b10118.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.18/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test17-compact-board-filter-sort",
+    "stage": "test18-filter-stat-layout-polish",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.16",
-    "note": "根据Test16实机反馈：压缩帖子目录卡片底部留白；动态读取每个子板块手机端分类与排序；筛选、排序、翻页继续原页刷新。"
+    "previousTest": "0.1.0-test.17",
+    "note": "根据Test17实机反馈：修复统计HTML泄漏/空按钮；清理分类排序混排、多重选中和箭头噪声；搜索与页内翻页保持。"
   }
 }
