@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.22",
-  "baseVersion": "0.1.0-test.21",
+  "version": "0.1.0-test.23",
+  "baseVersion": "0.1.0-test.22",
   "targetVersion": "0.1.0",
-  "build": 10122,
-  "shellVersion": "0.1.0-test.22",
-  "shellRuleVersion": 2026092322,
+  "build": 10123,
+  "shellVersion": "0.1.0-test.23",
+  "shellRuleVersion": 2026092323,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v22_b10122.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.23/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v23_b10123.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v23_b10123.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.21",
-    "build": 10121,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json"
+    "version": "0.1.0-test.22",
+    "build": 10122,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json"
   },
-  "notes": "Test21排版已接近手机版，但三个话题预览图仍灰块。Test22直接从渲染后的mobile=2 DOM记录img.currentSrc和CSS background-image，并扩展lazy/background图片属性；保留Test15成熟作者/标题解析，预览图去掉#originalSize#避免失效单图撑出大空白。"
+  "notes": "Test22实机确认Guide仍灰图，但普通子版块预览图正常。Test23不再优先currentSrc占位图：WebView仅标记真实图片候选，优先lazy/original/file/zoomfile，currentSrc/src需natural尺寸合格；输出完全复用普通板块C.imageUrl链。"
 }
