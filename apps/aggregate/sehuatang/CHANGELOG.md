@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.18 / Build 10118 / 待实机验证**  
+状态：**0.1.0-test.19 / Build 10119 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,12 +10,73 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v18_b10118.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v18_b10118.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.18/release.json`
-- Test18 继承 Test1~Test17，并新增：
-  - `releases/0.1.0-test.18/forum.js`
-  - `releases/0.1.0-test.18/patch_filter_stat_polish_v18.js`
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v19_b10119.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v19_b10119.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.19/release.json`
+- Test19 继承 Test1~Test18，并新增：
+  - `releases/0.1.0-test.19/forum.js`
+  - `releases/0.1.0-test.19/patch_home_filter_v19.js`
+
+## 0.1.0-test.19 / Build 10119 — 首页重复分页、筛选分组与底部统计再修正
+
+### Test18 实机反馈
+
+1. 子板块筛选仍有排序项混入分类栏，例如“最新”等排序词在某些 URL 携带当前 `typeid` 时仍被错误识别成分类；
+2. `scroll_button` 数量较多时海阔会自动出现右侧 `>` 并进入统一“请选择”弹窗，导致分类与排序选项再次混在同一个选择面板里；
+3. 首页滚到子板块列表底部后，又继续追加了一整套搜索框、账号/签到/搜索/设置、话题和论坛分类，说明首页被 `fypage` 自动请求了下一页；
+4. 用户要求首页子板块结束后即真正结束，不允许再重复整页内容；
+5. 帖子目录的回复/观看等统计需要继续弱化，不影响当前作者、标题、摘要与双图卡片结构。
+
+### Test19 修复
+
+1. **首页彻底禁止自动分页重复**
+   - `home()` 外层增加 `MY_PAGE` 守卫；
+   - 只有第 1 页真正执行首页构建；
+   - `MY_PAGE > 1` 直接返回空结果；
+   - 解决“子板块已经到底，继续往下又出现搜索框和话题”的重复首页问题。
+
+2. **分类与排序从横向按钮改成两个独立选择器**
+   - 不再依赖大量连续 `scroll_button`；
+   - 页面顶部只保留两个清晰入口：`分类：当前分类`、`排序：当前排序`；
+   - 点击“分类”只出现当前子板块自己的分类列表；
+   - 点击“排序”只出现全部主题 / 最新 / 热门 / 精华 / 按发帖 / 按回复等排序；
+   - 使用项目指南已验证的 `select://` JSON 路由，避免 `$().select` 重载兼容问题。
+
+3. **排序词即使携带 typeid 也不再进入分类**
+   - `最新 / 热门 / 精华 / 按发帖 / 按回复 / 最新发表 / 最新回复` 等先按语义识别为排序；
+   - 只有标题不是排序词时，`typeid/sortid` 才能进入分类集合；
+   - 从解析层而不是仅靠 UI 层解决“排序跑进分类”的根因。
+
+4. **统计信息继续弱化**
+   - 保留卡片底部统计，不放回作者行、标题或摘要；
+   - 统计改为 `text_1` 的次级 `desc`，避免抢占主标题视觉层级；
+   - 回复 / 点赞 / 观看仍按真实解析结果显示。
+
+5. **保持当前已正常能力**
+   - mobile=2 列表优先与 PC 最小补图不变；
+   - 普通帖子双图预览、在线视频双列不变；
+   - 搜索、评论页、色花图片正文补图、文学标题不变；
+   - 分类/排序/上一页/下一页继续 `refreshPage(false)`，不增加返回栈；
+   - Stable / Latest / 根 `registry.json` 继续不建立。
+
+### Test19 静态门禁
+
+- `releases/0.1.0-test.19/forum.js`：本地 `node --check` 通过；
+- `patch_home_filter_v19.js`：本地 `node --check` 通过；
+- `bootstrap_test_v19_b10119.js`：本地 `node --check` 通过；
+- Test19 `release.json`：本地 JSON 解析通过；
+- Test19 Shell：外层规则 JSON 与内层 `pages` JSON 均解析通过；
+- Shell 数值 `version=2026092319`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test19 实机优先验收
+
+1. 首页滑到底：最后一个子板块后应直接结束，不再出现第二套搜索框/话题/论坛分类；
+2. 打开“高清中文字幕 / 动漫原创”等子板块：顶部应只显示“分类：xxx”和“排序：xxx”两个入口；
+3. 点击分类入口，弹窗只出现分类项，不应包含最新/热门/精华/按发帖/按回复；
+4. 点击排序入口，弹窗只出现排序项，不应包含有码高清/无码高清等分类；
+5. 切换分类、排序并翻页，确认仍为当前页刷新且返回栈不累积；
+6. 检查帖子底部统计是否保持弱化，不干扰作者、标题、摘要和双图预览。
 
 ## 0.1.0-test.18 / Build 10118 — 子板块筛选/排序与统计栏排版修正
 
@@ -152,4 +213,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 只保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test18 实机闭环 → 统计行 / 分类栏 / 排序栏 → 再继续帖子目录视觉精修与 Guide 修复。
+- 当前下一步：Test19 实机闭环 → 首页到底 / 分类选择器 / 排序选择器 / 底部统计 → 再继续帖子目录视觉精修与 Guide 修复。
