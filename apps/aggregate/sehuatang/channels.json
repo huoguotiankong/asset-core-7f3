@@ -3,29 +3,29 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 15:25",
+  "updatedAt": "2026-09-23 15:42",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.2",
-      "baseVersion": "0.1.0-test.1",
+      "version": "0.1.0-test.3",
+      "baseVersion": "0.1.0-test.2",
       "targetVersion": "0.1.0",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v2_b10102.txt",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v3_b10103.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "首次实机原生入口修复：论坛板块四级数据链 + 更宽松 Discuz/N5 链接识别，保持登录/签到/回复 WebView 与磁链云播合同不变。",
+      "desc": "第二轮实机主题列表修复：普通请求失败后自动使用 WebView 渲染源码，并继续尝试 PC 页面；失败时直接显示真实返回诊断。",
       "highlights": [
-        "portal → mobile forum → PC forum → WebView 源码四级原生数据链",
-        "兼容 fid/mod 参数顺序、伪静态 URL、无引号 href",
-        "首页最新/热门/精华改为轻量原生文本入口，不再显示巨大 logo",
-        "115 / 迅雷 / PikPak 磁链调用保持 Test1 合同不变",
-        "仍无 Stable，等待第二轮实机截图"
+        "主题列表 fetch → WebView → PC fetch → PC WebView 四级数据链",
+        "兼容 tid / ptid / thread-伪静态链接并标准化到真实主题",
+        "失败页显示返回字符数、链接数、识别主题数、页面 title",
+        "首页、帖子、115 / 迅雷 / PikPak 合同保持前版不动",
+        "仍无 Stable，等待第三轮实机结果"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
