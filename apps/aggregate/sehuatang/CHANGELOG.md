@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.29 / Build 10129 / 待实机验证**  
+状态：**0.1.0-test.30 / Build 10130 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,53 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v29_b10129.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v29_b10129.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.29/release.json`
-- Test29 继承 Test1~Test28，并新增：`releases/0.1.0-test.29/patch_guide_thread_preview_v29.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v30_b10130.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json`
+- Test30 继承 Test1~Test29，并新增：`releases/0.1.0-test.30/patch_thread_performance_v30.js`。
+
+## 0.1.0-test.30 / Build 10130 — 帖子详情/评论页低延迟请求链
+
+### Test29 实机反馈
+
+1. 三个 Guide 原生页面预览图片已经恢复，Test29 “真实帖子页并发补图 + 帖子 Referer”方案实机成立；
+2. 当前主要体验瓶颈转为页面加载速度，尤其帖子详情进入仍明显偏慢；
+3. 代码恢复确认旧帖子链 `threadFetchMobileV12()` 每次先执行最长 24 秒的隐藏 WebView，再考虑普通请求；而 Test29 已实机证明同一站点真实 `mobile=2` 帖子页可被直接请求并提取正文图片，因此旧顺序已经不合理。
+
+### Test30 性能修正
+
+1. **帖子详情请求顺序反转**
+   - 先直接请求真实 `mobile=2` 帖子页，超时控制为 9 秒；
+   - 手机直取拿到 `postlist / postmessage / t_f / message` 等真实正文结构即立即返回；
+   - 手机直取失败后再尝试 PC 直取；
+   - 只有两种直取都失败时，才调用旧 `threadFetchMobileV12` 的隐藏 WebView 链作为最终兼容兜底。
+
+2. **详情与评论共用最近帖子缓存**
+   - 最近一个成功帖子 HTML 以单槽方式缓存 3 分钟；
+   - 从详情进入“评论页”时若仍是同一 tid，直接复用已取 HTML，不重复访问站点；
+   - 短时间返回后重新进入同一帖子也可直接复用；
+   - 只保留一个帖子，且仅缓存不超过约 3.6MB 的 HTML，避免无界累积。
+
+3. **保持已验证能力不动**
+   - 不修改 Test29 Guide 预览图补齐逻辑与 12 小时 tid 缓存 / 3 分钟整页缓存；
+   - 不修改普通子版块排版、搜索、首页、正文图片顺序、评论拆分；
+   - 不修改 magnet、115 / 迅雷 / PikPak、视频嗅探。
+
+### Test30 静态门禁
+
+- `patch_thread_performance_v30.js`：本地 `node --check` 通过；
+- `bootstrap_test_v30_b10130.js`：本地 `node --check` 通过；
+- `release.json / test.json / channels.json / manifest.json`：本地 JSON 解析通过；
+- Test30 Shell 外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell `version=2026092401`；
+- 正式运行依赖仍全部固定在 `asset-core-7f3@main`，没有新增 `hiker-cloud` 依赖。
+
+### Test30 实机优先验收
+
+1. 从普通板块、Guide、搜索结果分别进入帖子详情，首开时间是否明显缩短；
+2. 在帖子详情点“评论页”，应比以前快很多；
+3. 返回后短时间再次进入同一帖子，应接近缓存速度；
+4. 正文图片顺序、磁链、视频、评论页内容不得退化。
 
 ## 0.1.0-test.29 / Build 10129 — Guide 预览图改用真实帖子正文补齐
 
@@ -58,12 +101,11 @@
 - Shell `version=2026092329`；
 - Release / Bootstrap / Shell 固定 `asset-core-7f3@main`，未新增 `hiker-cloud` 依赖。
 
-### Test29 实机优先验收
+### Test29 实机结果
 
-1. 最新热门第一屏是否出现真实预览图；
-2. 顶部是否显示“xx 张预览图”，用于区分“没有提取到URL”和“提取到URL但加载失败”；
-3. 首次进入耗时是否可接受，退出后短时间再进入是否明显变快；
-4. 卡片排版、标题、摘要和统计应保持 Test28 现状不退化。
+- **Guide 预览图片已恢复，实机确认方案成立**；
+- 卡片仍保持原生排版；
+- 下一阶段性能重点转向帖子详情/评论页加载延迟。
 
 ## 0.1.0-test.28 / Build 10128 — Guide 专用卡片边界解析（实机未解决预览图）
 
@@ -159,4 +201,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test29 实机确认“帖子详情并发补图”能否让三个 Guide 原生页真正出现预览图片，同时观察首次加载耗时与缓存收益。
+- 当前下一步：Test30 实机验证帖子详情首开、详情→评论页和短时间重复进入的实际耗时；确认无功能退化后，再继续优化普通子版块/搜索等剩余页面的首开延迟。
