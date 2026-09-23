@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json",
+    "status": "superseded-after-device-feedback-parser-and-account-flow"
+  },
+  "modules": [
+    {"name": "runtime-base", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name": "native-index-patch", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name": "topic-render-patch", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name": "forum-product-patch", "path": "apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"}
+  ],
+  "verify": {"global": "SeHuaTangRemoteRuntime", "property": "version", "equals": "0.1.0-test.4"},
+  "notes": "Test4：依据第二轮实机截图修复主题标题被时长抢占、空图占位、热门/最新/精华路由、论坛板块只识别5项，以及年龄确认与网页登录顺序。"
+}
