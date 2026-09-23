@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.6",
-  "defaultBuild": 10106,
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "0.1.0-test.6",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v6_b10106.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.6/release.json",
+  "defaultVersion": "0.1.0-test.7",
+  "defaultBuild": 10107,
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "0.1.0-test.7",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v7_b10107.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test6-auto-age-grouped-forums-thread-detail",
+    "stage": "test7-guide-access-fid-thread-media-polish",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.5",
-    "note": "根据第四轮实机反馈：年龄确认改为自动点击并持久化Cookie；首页45板块改为六大类横向切换+当前类二列子板块；帖子详情切换到用户提供成熟规则验证过的PC #postlist/.t_fsz/.t_f解析链。"
+    "previousTest": "0.1.0-test.6",
+    "note": "根据Test6后续实机反馈：恢复最新/热门/精华主题链；六大类按真实根fid定位；站点可访问状态与Cookie拆分；正文图片、BTIH磁链去重、回复编号和在线视频嗅探播放继续收敛。"
   }
 }
