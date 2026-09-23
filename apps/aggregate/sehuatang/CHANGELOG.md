@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.27 / Build 10127 / 待实机验证**  
+状态：**0.1.0-test.28 / Build 10128 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,59 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v27_b10127.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v27_b10127.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.27/release.json`
-- Test27 继承 Test1~Test26，并新增：`releases/0.1.0-test.27/patch_guide_mobile_parity_v27.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v28_b10128.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v28_b10128.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.28/release.json`
+- Test28 继承 Test1~Test27，并新增：`releases/0.1.0-test.28/patch_guide_card_boundary_v28.js`。
+
+## 0.1.0-test.28 / Build 10128 — Guide 专用卡片边界解析
+
+### Test27 实机反馈
+
+1. 最新热门 / 最新精华已经恢复为海阔原生页面，作者、标题、摘要、统计的整体排版方向正确；
+2. 但原生话题页仍完全没有预览图，而同一页面的 `mobile=2` 官网可以正常显示 3 张预览图；
+3. 实机截图同时暴露一个关键线索：Test27 第一条原生卡片把官网的“摘要正文”误当成了帖子标题，说明普通子版块 `parseCardsV15` 用“最高标题分数锚点”确定 `titleIndex` 的策略不适合 Guide；
+4. Guide 同一个 `tid` 在一张卡片里会出现多次链接。若把较后的摘要链接当成 `titleIndex`，从该位置到下一主题切片时，真正位于前面的标题/预览图就会被切掉，因此即使 `C.renderList()` 已经把网页图片加载出来，原生解析仍得到 0 张图。
+
+### Test28 修正
+
+1. **标题选择和卡片边界彻底分离**
+   - 每个 `tid` 第一次出现的位置固定为整张 Guide 卡片的 `start`；
+   - 标题仍从同 `tid` 的多个候选链接中评分选择，但标题再也不能改变卡片起点；
+   - 图片、统计、摘要都从 `当前 tid 第一次出现 → 下一个 tid 第一次出现` 的完整区间提取。
+
+2. **预览图直接从完整手机卡片区间提取**
+   - 继续使用 `mobile=2 + C.renderList()`，不改变 Test27 已确认正确的产品形态；
+   - 使用现有 `C.allImages()` 识别 `src / data-original / data-src / data-lazy-src / file / zoomfile / srcset`；
+   - 每帖最多保留 3 张；
+   - 同一图片若跨 3 个以上帖子重复出现则按广告/公共素材过滤，继续过滤头像、smiley、loading、placeholder 等噪声。
+
+3. **保留 Test27 已确认正确的排版**
+   - 作者头像 / 用户名 / 角色 / 时间独立一行；
+   - 标题、摘要、最多 3 图、回复 / 点赞 / 观看按手机卡片层级排列；
+   - 没取到可信图片就不创建灰色占位；
+   - 三个话题仍为海阔原生页面，“手机版”只是辅助入口。
+
+4. **性能与缓存**
+   - 不恢复 Test24 的额外 DOM 采图映射；
+   - 仍只做一轮与普通板块同级别的 `renderList` 主链；
+   - Test28 使用独立 3 分钟缓存键，避免命中 Test27 的无图缓存。
+
+### Test28 静态门禁
+
+- `patch_guide_card_boundary_v28.js`：本地 `node --check` 通过；
+- `bootstrap_test_v28_b10128.js`：本地 `node --check` 通过；
+- `release.json / test.json / channels.json / manifest.json`：本地 JSON 解析通过；
+- Test28 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092328`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test28 实机优先验收
+
+1. 最新热门 / 最新精华第一屏是否出现与手机版一致的 2~3 张真实预览图；
+2. 顶部摘要行若显示“xx 张预览图”，数量应大于 0；
+3. 标题是否恢复成官网真正的帖子标题，而不是把摘要正文当标题；
+4. 点击主题仍进入原生帖子详情，普通子版块 / 搜索 / 评论页不受影响。
 
 ## 0.1.0-test.27 / Build 10127 — Guide 与普通子版块统一 mobile 渲染链
 
@@ -62,12 +111,11 @@
 - Shell 数值 `version=2026092327`，低于 32 位有符号整数上限；
 - Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
 
-### Test27 实机优先验收
+### Test27 实机结果
 
-1. 最新热门 / 最新精华第一屏是否恢复与手机版、普通子版块类似的真实 2~3 张预览图；
-2. 作者、标题、摘要、统计层级是否恢复清晰，不再像 Test26 一样只剩文字长列表；
-3. 首次进入速度与普通子版块比较；短时间退出再进入应命中 3 分钟缓存并明显更快；
-4. 点击 Guide 主题仍进入原生帖子详情。
+- 排版方向已确认正确；
+- 原生 Guide 仍无预览图；
+- 实机截图显示摘要被误当标题，成为 Test28 卡片边界修复的直接证据。
 
 ## 0.1.0-test.26 / Build 10126 — 撤销 Guide 网页直显，恢复原生话题页
 
@@ -187,4 +235,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test27 实机验证 Guide 是否真正恢复预览图，以及首开速度与普通子版块是否接近；若仍无图，下一轮直接比较 Guide 与普通板块 `renderList()` 返回 DOM 的具体差异，不再改产品形态。
+- 当前下一步：Test28 实机验证 Guide 预览图与真实标题是否恢复；如果顶部已经统计到预览图但图片仍不显示，再转向图片请求链本身，不再继续改卡片切片。
