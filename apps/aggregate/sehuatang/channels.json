@@ -3,30 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 23:03",
+  "updatedAt": "2026-09-23 23:10",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.23",
-      "baseVersion": "0.1.0-test.22",
+      "version": "0.1.0-test.24",
+      "baseVersion": "0.1.0-test.23",
       "targetVersion": "0.1.0",
-      "build": 10123,
-      "displayVersion": "Test 0.1.0-test.23 · Build 10123",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v23_b10123.txt",
+      "build": 10124,
+      "displayVersion": "Test 0.1.0-test.24 · Build 10124",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v24_b10124.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "三个话题预览图真实候选筛选，完全对齐普通子版块图片输出链。",
+      "desc": "三个话题预览图改为直接从已渲染手机DOM按tid采集。",
       "highlights": [
-        "实机已确认普通子版块预览图正常，因此Test23不再修改海阔图片组件/请求头层",
-        "Guide WebView优先保留data-original/data-src/data-lazy-src/file/zoomfile等真实源，避免currentSrc占位图抢优先级",
-        "只有naturalWidth/naturalHeight达到阈值时才接受currentSrc/src",
-        "原生预览重新使用与普通板块一致的C.imageUrl(Cookie/Referer/#originalSize#)",
-        "三个话题作者/标题/摘要/统计排版及mobile=2优先保持不变",
-        "Stable/Latest继续未建立，等待Test23实机验证"
+        "Test23实机仍灰图，进一步确认问题不是普通子版块已验证的图片输出链",
+        "不再依赖fetchCodeByWebView返回HTML是否保留JS动态改写属性",
+        "WebView真实渲染后按tid定位帖子卡片，直接读取已加载图片和CSS背景图",
+        "通过fba.putVar保存tid到预览图URL映射，原生侧再复用C.imageUrl输出",
+        "找不到可信图片时宁可不显示预览，不再输出灰色占位图",
+        "普通子版块/搜索/帖子详情/评论页等稳定模块不动"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
