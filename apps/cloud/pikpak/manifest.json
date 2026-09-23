@@ -6,20 +6,20 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.4",
-  "defaultBuild": 10104,
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "0.1.0-test.4",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v4_b10104.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.4/release.json",
+  "defaultVersion": "0.1.0-test.5",
+  "defaultBuild": 10105,
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "0.1.0-test.5",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v5_b10105.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.5/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test4-captcha-verification",
+    "stage": "uploaded-v1-to-modular-test5-captcha-autohandoff",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test4 在 Test3 Web 认证档上接入 PikPak 官方人机验证 URL 与同 token 继续登录流程；账号密码仍仅存临时 MyVar，等待实机验证。"
+    "note": "Test5 在 Test4 官方验证页基础上补齐 captcha_token 自动回收与登录接回；Magnet 临时播放文件改为只处理本程序队列并移入回收站，等待实机验证。"
   }
 }
