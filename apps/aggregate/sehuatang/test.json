@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.11",
-  "baseVersion": "0.1.0-test.10",
+  "version": "0.1.0-test.12",
+  "baseVersion": "0.1.0-test.11",
   "targetVersion": "0.1.0",
-  "build": 10111,
-  "shellVersion": "0.1.0-test.11",
-  "shellRuleVersion": 2026092311,
+  "build": 10112,
+  "shellVersion": "0.1.0-test.12",
+  "shellRuleVersion": 2026092312,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.11/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v11_b10111.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v11_b10111.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.12/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v12_b10112.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v12_b10112.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.10",
-    "build": 10110,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.10/release.json"
+    "version": "0.1.0-test.11",
+    "build": 10111,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.11/release.json"
   },
-  "notes": "第九轮实机反馈修复：主题列表不再使用右侧单图movie_1，而改为标题/摘要+最多6张pic_3预览图，过滤跨帖子重复头像；增加明确上一页/下一页；guide从已通过年龄确认的forum页同一WebView会话跳转；搜索改为真实网页表单提交并复用searchid分页。"
+  "notes": "第十轮实机反馈修复：搜索已确认正常继续继承Test11；普通板块改为mobile=2渲染优先并按同tid从PC仅补预览图；帖子详情改为mobile=2正文优先，文字与图片按原HTML顺序穿插，连续图片才使用网格；扩展图片真实地址属性识别，PC只在手机端缺预览或正文失败时兜底。"
 }
