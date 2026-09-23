@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.1",
+  "modules": [
+    {"name":"core","path":"apps/cloud/pikpak/releases/0.1.0-test.1/core.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.2/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.2/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.2"},
+  "status": "pending-device-validation",
+  "notes": "Test2 在 Test1 全量重构基础上，仅修复发布前门禁发现的设置页选择器兼容风险：移除未验证的 select:// 自定义 URL，改回海阔既有 $(数组).select() 原生选择器；其余认证、Drive、Share、Magnet、Task、Playback、UI 与安全迁移逻辑保持不变。"
+}
