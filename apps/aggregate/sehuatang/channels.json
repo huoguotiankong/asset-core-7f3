@@ -3,29 +3,30 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-24 00:20",
+  "updatedAt": "2026-09-24 00:30",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.28",
-      "baseVersion": "0.1.0-test.27",
+      "version": "0.1.0-test.29",
+      "baseVersion": "0.1.0-test.28",
       "targetVersion": "0.1.0",
-      "build": 10128,
-      "displayVersion": "Test 0.1.0-test.28 · Build 10128",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v28_b10128.txt",
+      "build": 10129,
+      "displayVersion": "Test 0.1.0-test.29 · Build 10129",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v29_b10129.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "保留Test27已确认的原生手机卡片排版，修复Guide帖子卡片边界与预览图归属。",
+      "desc": "Guide排版保持不变，预览图改从真实帖子正文并发补齐，不再依赖Guide DOM图片。",
       "highlights": [
-        "Guide继续保持海阔原生页面与Test27排版",
-        "每个tid第一次出现固定为完整卡片起点，标题选择与卡片边界分离",
-        "预览图从当前tid完整卡片区间提取，不再因摘要被误判成标题而漏图",
-        "过滤跨帖子重复广告图，最多保留3张真实预览图",
-        "普通子版块、搜索、帖子详情、评论页保持不动"
+        "三个话题继续保持海阔原生卡片，不跳网页",
+        "Test28已确认排版正确，本轮只处理Guide预览图数据源",
+        "Guide缺图时用be并发读取真实mobile=2帖子页，直接从楼主正文提取最多3张图片",
+        "图片使用帖子详情页作为Referer，避免Guide页图片链路差异",
+        "按tid缓存12小时、整页缓存3分钟，重复进入明显减轻网络开销",
+        "普通子版块、搜索、帖子详情、评论页不动"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
