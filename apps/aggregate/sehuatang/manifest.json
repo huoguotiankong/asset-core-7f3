@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.13",
-  "defaultBuild": 10113,
-  "testVersion": "0.1.0-test.13",
-  "testBuild": 10113,
-  "testShellVersion": "0.1.0-test.13",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v13_b10113.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v13_b10113.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.13/release.json",
+  "defaultVersion": "0.1.0-test.14",
+  "defaultBuild": 10114,
+  "testVersion": "0.1.0-test.14",
+  "testBuild": 10114,
+  "testShellVersion": "0.1.0-test.14",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v14_b10114.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v14_b10114.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.14/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test13-mobile-card-preview-fullwidth-thread-inplace-pagination",
+    "stage": "test14-thread-crash-card-summary-hotfix",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.12",
-    "note": "根据Test12实机反馈：正文图片改为手机网页版式逐张全宽；板块卡片按相邻tid边界提取手机端真实预览图；翻页改为当前页面refreshPage，避免历史栈叠加；搜索保持已正常实现。"
+    "previousTest": "0.1.0-test.13",
+    "note": "根据Test13实机反馈：修复帖子详情d未定义崩溃；主题列表摘要改用最佳标题锚点边界并清理HTML属性/跨卡片噪声；双图预览与页内刷新翻页继续保留。"
   }
 }
