@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.27",
-  "baseVersion": "0.1.0-test.26",
+  "version": "0.1.0-test.28",
+  "baseVersion": "0.1.0-test.27",
   "targetVersion": "0.1.0",
-  "build": 10127,
-  "shellVersion": "0.1.0-test.27",
-  "shellRuleVersion": 2026092327,
+  "build": 10128,
+  "shellVersion": "0.1.0-test.28",
+  "shellRuleVersion": 2026092328,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.27/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v27_b10127.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v27_b10127.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.28/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v28_b10128.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v28_b10128.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.26",
-    "build": 10126,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.26/release.json"
+    "version": "0.1.0-test.27",
+    "build": 10127,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.27/release.json"
   },
-  "notes": "Test26实机确认速度提升，但Guide快速fetch缺少预览图且作者/摘要层级与官网、普通子版块不一致。Test27改为与普通子版块相同的mobile=2渲染DOM主链，并缓存渲染结果。"
+  "notes": "Test27实机确认原生话题排版已正确，但预览图片仍缺失。Test28修复Guide卡片切片边界：tid首次出现作为卡片起点，避免摘要被误判为标题导致图片落在切片之外。"
 }
