@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.25",
-  "defaultBuild": 10125,
-  "testVersion": "0.1.0-test.25",
-  "testBuild": 10125,
-  "testShellVersion": "0.1.0-test.25",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v25_b10125.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.25/release.json",
+  "defaultVersion": "0.1.0-test.26",
+  "defaultBuild": 10126,
+  "testVersion": "0.1.0-test.26",
+  "testBuild": 10126,
+  "testShellVersion": "0.1.0-test.26",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v26_b10126.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v26_b10126.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.26/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test25-guide-web-first",
+    "stage": "test26-guide-native-fast-rollback",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.24",
-    "note": "Test24实机仍无法把Guide手机网页图片稳定搬到原生图片组件，并带来明显WebView解析等待；Test25将三个话题切为mobile=2 X5直显，同时拦截帖子链接回原生详情。"
+    "previousTest": "0.1.0-test.25",
+    "note": "实机明确要求三个话题保持原生页面；Test26撤销网页直显并减少Guide隐藏WebView开销。"
   }
 }
