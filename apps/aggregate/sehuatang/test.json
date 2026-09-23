@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.5",
-  "baseVersion": "0.1.0-test.4",
+  "version": "0.1.0-test.4",
+  "baseVersion": "0.1.0-test.3",
   "targetVersion": "0.1.0",
-  "build": 10105,
-  "shellVersion": "0.1.0-test.5",
-  "shellRuleVersion": 2026092305,
+  "build": 10104,
+  "shellVersion": "0.1.0-test.4",
+  "shellRuleVersion": 2026092304,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v5_b10105.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v5_b10105.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v4_b10104.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v4_b10104.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.4",
-    "build": 10104,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.4/release.json"
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json"
   },
-  "notes": "参考 dy2020 旧规则的 X5/fba Cookie 流程，新增自动 18+ 年龄确认：检测满18岁/over 18按钮自动点击，保存 WebView Cookie，再跳转到登录/签到目标页；验证码与人机验证仍由官网页面处理。"
+  "notes": "第三轮实机修复：同一帖子按 tid 聚合后选择最佳标题，过滤纯时长/日期/通用链接；提取真实缩略图；论坛首页优先解析完整 forum 页面；最新发表/最新热门/最新精华改为动态发现真实导航；账号入口拆为年龄确认→网页登录→签到。"
 }
