@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.30",
-  "defaultBuild": 10130,
-  "testVersion": "0.1.0-test.30",
-  "testBuild": 10130,
-  "testShellVersion": "0.1.0-test.30",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v30_b10130.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v30_b10130.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json",
+  "defaultVersion": "0.1.0-test.31",
+  "defaultBuild": 10131,
+  "testVersion": "0.1.0-test.31",
+  "testBuild": 10131,
+  "testShellVersion": "0.1.0-test.31",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test30-thread-latency-fast-path",
+    "stage": "test31-list-guide-search-latency",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.29",
-    "note": "Test29预览图已实机验证恢复；Test30只做低风险性能层：帖子详情/评论mobile直取前置、PC次级、WebView最终兜底，并复用最近帖子HTML。"
+    "previousTest": "0.1.0-test.30",
+    "note": "Test30详情提速已实机确认；Test31采用可自动回退的性能层继续优化普通子板块、Guide首开和搜索，保持现有UI/预览图/详情链不变。"
   }
 }
