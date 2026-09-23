@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.22",
-  "defaultBuild": 10122,
-  "testVersion": "0.1.0-test.22",
-  "testBuild": 10122,
-  "testShellVersion": "0.1.0-test.22",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v22_b10122.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v22_b10122.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.22/release.json",
+  "defaultVersion": "0.1.0-test.23",
+  "defaultBuild": 10123,
+  "testVersion": "0.1.0-test.23",
+  "testBuild": 10123,
+  "testShellVersion": "0.1.0-test.23",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v23_b10123.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v23_b10123.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.23/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test22-guide-preview-dom-extraction",
+    "stage": "test23-guide-preview-real-candidate",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.21",
-    "note": "Test21实机确认三个话题卡片排版方向正确但预览图仍未显示；Test22改为从渲染后mobile DOM提取currentSrc/CSS background-image并调整原生预览组件。"
+    "previousTest": "0.1.0-test.22",
+    "note": "Test22实机证明Guide提取到了错误/占位图片，而普通子版块同设备显示正常；Test23将问题边界收窄到Guide图片候选选择，并复用普通板块成熟图片输出链。"
   }
 }
