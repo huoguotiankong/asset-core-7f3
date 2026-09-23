@@ -2,6 +2,40 @@
 
 > 2026-09-23 开始由 `asset-core-7f3@main` 正式维护。当前基线来自用户上传的 `PikPak.hk小程序(1).zip`，原规则 `version=1`；此前仓库没有 PikPak Stable/Test 元数据，因此本轮从 Test 通道建立治理，不直接创建 Stable。
 
+## 2026-09-23 · 0.1.0-test.3 / Build10103 · 账号密码登录协议修复
+
+### 实机问题
+
+用户在 Test2 账号页使用邮箱/密码登录时，界面直接弹出一大段 PikPak Captcha 内部元数据，其中包含 `result:review` / `value:"review"`，无法正常完成登录。
+
+### 根因确认
+
+- Test2 仍沿用上传旧版的 Android `1.23.0` 认证档：`client_id=YNxT9w7GMdWvEOKa`、旧 captcha salts、旧 redirect。
+- 当前公开维护的 PikPak 客户端实现已普遍切换到 Web `2.0.0` 认证档：`client_id=YUMx5nI8ZU8Ap8pm`、新的 captcha salts、`mypikpak.com` package profile 与 `xbase.cloud` redirect。
+- `result:review` / `value:"review"` 是 PikPak 风控审核分支，不应把原始内部 meta 直接展示给用户；若切换当前认证档后仍返回 review，应明确提示用户先在 PikPak 官方端完成账号验证。
+
+### Test3 修改
+
+- 新账号密码登录切换到 Web `2.0.0` 认证档。
+- 更新 Web client id、client secret、captcha sign salts、package name、redirect URI、X-Client-ID/X-Client-Version 请求头。
+- Web 登录 DeviceId 改为基于账号密码稳定派生，避免每次登录随机设备指纹导致风控波动。
+- 登录 Captcha 初始化使用 Web 档 `meta.username` 语义。
+- 新登录成功后会话记录 `_auth_profile=web` 和对应 device id；后续 Access Token 刷新继续使用同一档。
+- 已存在的旧 Android 会话保持 `legacy` 档刷新兼容，避免 Test3 强制所有已登录用户退出重登。
+- Web Refresh Token 刷新按当前公开实现不携带旧 Android client secret；legacy 刷新仍保留旧参数。
+- `error_code=4002` 也纳入 Captcha 失效识别。
+- 对 `result:review` / `value:"review"` 统一转换为“PikPak 风控要求先完成账号验证”的中文提示，不再暴露 client_id、captcha_sign、meta 等内部结构。
+- 设置页运行信息明确显示“新登录 Web 2.0.0 / 旧会话 Android 1.23.0 legacy”。
+
+### 当前状态
+
+- Test：`0.1.0-test.3 / Build10103`
+- Stable：尚未建立。
+- 发布状态：`pending-device-validation`。
+- 实机验收重点：账号密码登录 → 首页根目录 → 盘内视频播放；若仍收到 review，则先确认官方 PikPak 账号本身是否要求验证。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.2 / Build10102 · 设置页海阔原生选择器兼容修复
 
 ### 发布前门禁发现
