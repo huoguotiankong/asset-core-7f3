@@ -3,30 +3,28 @@
   "id": "sehuatang",
   "name": "色花堂",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23 23:40",
+  "updatedAt": "2026-09-23 23:50",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "sehuatang-test",
       "name": "色花堂",
-      "version": "0.1.0-test.25",
-      "baseVersion": "0.1.0-test.24",
+      "version": "0.1.0-test.26",
+      "baseVersion": "0.1.0-test.25",
       "targetVersion": "0.1.0",
-      "build": 10125,
-      "displayVersion": "Test 0.1.0-test.25 · Build 10125",
-      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt",
+      "build": 10126,
+      "displayVersion": "Test 0.1.0-test.26 · Build 10126",
+      "path": "apps/aggregate/sehuatang/sehuatang_remote_test_v26_b10126.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-23",
       "recommended": true,
-      "desc": "三个话题改为手机网页直显，解决原生预览灰图并降低进入等待。",
+      "desc": "三个话题恢复原生卡片，网页只保留为辅助入口；优化为mobile快速请求优先。",
       "highlights": [
-        "连续Test21~24实机证明：Guide网页图片正常、普通子版块原生图正常，但Guide图片搬运到原生组件持续失败",
-        "最新发表/最新热门/最新精华改用x5_webview_single直接渲染mobile=2官网页面，不再先隐藏WebView采集再生成原生列表",
-        "保留声明式18+自动确认和Cookie同步，不绕过验证码/真人验证",
-        "通过urlInterceptor识别tid/thread链接并打开原生shtThread，继续使用原生详情、评论页、磁链云播",
-        "字体资源继续拦截，取消三次滚动采图和DOM映射等待，目标是明显缩短话题入口首屏时间",
-        "普通子版块、搜索、帖子详情、评论页等稳定模块不动"
+        "撤销Test25三个话题直接网页直显",
+        "最新发表/热门/精华恢复海阔原生卡片",
+        "mobile=2快速fetch优先，只有解析不足才隐藏WebView兜底",
+        "普通子板块/搜索/帖子详情/评论页保持不动"
       ],
       "icon": "https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/aggregate/sehuatang/assets/v1/logo.svg"
     }
