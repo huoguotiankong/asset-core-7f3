@@ -32,6 +32,86 @@ JavDB 等外部规则
 
 ---
 
+## 2026-09-23 · 1.1.0-test.3 / Build11003 · 登录授权状态同步修复
+
+### 用户实机现象
+
+- 登录页明确提示“登录成功”。
+- 返回迅雷后，播放视频仍提示“未登录”。
+- 说明“基础账号登录成功”和“云盘 API 已取得可用授权”被旧实现错误地视为同一状态。
+
+### 根因
+
+原始 `login()` / `smslogin()` 在 `/xluser.core.login/v3/login` 或短信登录返回成功后，只保存：
+
+```text
+sessionID
+user_id
+```
+
+随后立即提示“登录成功”，但没有同步调用 `/v1/auth/signin/token` 把 `sessionID` 换成云盘接口实际使用的：
+
+```text
+authorization
+refresh_token
+```
+
+同时旧 `get1error()` 使用 `getItem("authorization") === "undefined"` 这种脆弱判断补登录态，而 `post1error()` 完全没有授权恢复逻辑。磁链创建离线任务 `/drive/v1/files` 恰好走 POST，因此会出现：
+
+```text
+账号登录成功
+→ sessionID 已存在
+→ authorization 仍为空/过期
+→ 创建离线任务 POST 不做补授权
+→ 播放链提示未登录
+```
+
+### Test3 修复
+
+- 登录成功条件改为“两阶段均成功”：
+  1. Core Login 获得 `sessionID`；
+  2. `/v1/auth/signin/token` 成功获得并保存 `authorization + refresh_token`。
+- 只有第二阶段也成功后才提示 `登录成功，云盘授权已同步`；若换 token 失败，直接显示授权同步错误，不再制造假成功状态。
+- 新增统一授权恢复：
+  - 有可用 `authorization` → 直接请求；
+  - access token 失效 → 优先用 `refresh_token` 刷新；
+  - refresh 失败但 `sessionID` 仍有效 → 回退 `signin/token` 重新签发；
+  - 成功后仅重试原请求一次，避免递归/死循环。
+- `GET` 和 `POST` 受保护请求统一走同一授权恢复逻辑；磁链创建、转存、删除等 POST 不再是登录态盲区。
+- 首页/调用页不再把 `mobile` 是否存在当成已登录依据，改看真实授权材料。
+- 新账号登录时清除旧账号的 `authorization / refresh_token / captcha_token / activity TTL / temp queue`，避免跨账号残留状态污染。
+- 登录页密码改为临时 MyVar，不再继续持久保存；导入补丁时清理旧 `passWord` Item。
+
+### 静态与模拟回归
+
+已基于用户上传原始 `迅雷.hk小程序(1).zip` 执行：
+
+1. 补丁后 `hanshu` JavaScript 语法检查通过。
+2. 首次账号登录 → `sessionID` → `signin/token` → `authorization/refresh_token` 模拟链通过。
+3. 受保护 GET 遇到认证失败 → refresh token → 重试一次通过。
+4. 受保护 POST 遇到 `unauthenticated` → refresh token → 重试一次通过。
+5. 原有 Test1/Test2 磁链播放函数不在本轮重写范围，Test3 只覆盖认证函数和登录态展示判断。
+
+### 当前交付
+
+- Installer：`cloud/xunlei/v1.1.0-test.3/import_auth_sync_fix.js`
+- Installer 固定 Commit：`7d274b324a5f3ee1c68ef4e1e854f51bf7d9cad4`
+- Release：`apps/cloud/xunlei/releases/1.1.0-test.3/release.json`
+- 模式继续采用 installed-rule overlay，可覆盖原始上传版、Test1 或 Test2 的认证函数，不要求重装 Stable。
+- Stable/Latest/共享 registry 仍不切换，等待实机登录 + 播放回归。
+
+### Test3 实机验收
+
+1. 先在账号管理执行“退出”。
+2. 重新登录，必须看到 `登录成功，云盘授权已同步`。
+3. 返回首页/调用页，账号状态应显示 `已登录 · 授权已同步`。
+4. 先点一个盘内视频验证普通播放。
+5. 再从外部磁链调用迅雷，进入文件列表并点击视频，确认不再提示未登录。
+6. 连续播放第二个磁链；若 token 期间刷新，仍应自动恢复且不要求重新登录。
+7. 以上实机通过后，再继续回归 Test2 的“文件落盘/起播速度”链路。
+
+---
+
 ## 2026-09-22 · 1.1.0-test.2 / Build11002 · 磁链播放可靠性修复
 
 ### Test1 实机回归
