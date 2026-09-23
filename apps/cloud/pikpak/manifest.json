@@ -6,20 +6,20 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.3",
-  "defaultBuild": 10103,
-  "testVersion": "0.1.0-test.3",
-  "testBuild": 10103,
-  "testShellVersion": "0.1.0-test.3",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v3_b10103.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v3_b10103.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.3/release.json",
+  "defaultVersion": "0.1.0-test.4",
+  "defaultBuild": 10104,
+  "testVersion": "0.1.0-test.4",
+  "testBuild": 10104,
+  "testShellVersion": "0.1.0-test.4",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v4_b10104.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v4_b10104.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.4/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-modular-test3-web-auth",
+    "stage": "uploaded-v1-to-modular-test4-captcha-verification",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "note": "Test3 在 Test2 全量重构基础上修复账号密码登录：新登录切换到当前 Web 2.0.0 认证档，旧会话保留 legacy 兼容，并明确处理 result:review 风控响应。"
+    "note": "Test4 在 Test3 Web 认证档上接入 PikPak 官方人机验证 URL 与同 token 继续登录流程；账号密码仍仅存临时 MyVar，等待实机验证。"
   }
 }
