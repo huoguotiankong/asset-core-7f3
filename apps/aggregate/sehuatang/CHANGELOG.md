@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.20 / Build 10120 / 待实机验证**  
+状态：**0.1.0-test.21 / Build 10121 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,65 +10,72 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v20_b10120.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v20_b10120.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.20/release.json`
-- Test20 继承 Test1~Test19，并新增：`releases/0.1.0-test.20/patch_mobile_guide_v20.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v21_b10121.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v21_b10121.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.21/release.json`
+- Test21 继承 Test1~Test20，并新增：`releases/0.1.0-test.21/patch_guide_cards_v21.js`。
+
+## 0.1.0-test.21 / Build 10121 — 三个话题手机网页卡片化与预览图修复
+
+### Test20 实机反馈
+
+1. 最新发表 / 最新热门 / 最新精华已经重新取得真实主题，说明 Test20 的 mobile=2 guide 会话、年龄确认和 Cookie 链恢复有效；
+2. 原生三个话题仍是简化列表，和手机网页版差异较大；
+3. Test20 主题标题抽取仍会把“本帖最后由 xxx 编辑”一类辅助文本误当标题；
+4. 原生预览图显示灰色占位，而同一 mobile=2 网页中的真实缩略图可正常显示；
+5. 用户要求三个话题尽量复刻手机网页卡片：作者/时间、标题、摘要、多张预览图、底部回复/点赞/观看。
+
+### Test21 修复
+
+1. **三个话题复用成熟手机帖子卡片 Parser**
+   - 优先调用 Test15 已在普通板块实机验证过的 `parseCardsV15`；
+   - 该 Parser 已具备作者、头像、时间、标题评分、摘要、真实图片和重复图过滤；
+   - 只有成熟 Parser 无结果时才进入 Test21 自身的 guide fallback；
+   - fallback 明确过滤“本帖最后由…编辑 / 查看帖子 / 最后回复”等非标题文字。
+
+2. **排版向手机网页版靠拢**
+   - 作者头像 / 名字 / 角色 / 时间独立一行；
+   - 标题与摘要作为主内容；
+   - 每帖最多取 3 张真实预览图，3 张用 `pic_3`、2 张用 `pic_2`、1 张全宽；
+   - 回复 / 点赞 / 观看放在卡片底部弱化显示；
+   - 每条主题之间继续使用分隔线，不重新引入大块空白。
+
+3. **修复预览图灰色占位**
+   - 主题页继续优先 `C.renderList(mobile=2)`，先触发 lazy-load；
+   - 预览图统一通过 `C.imageUrl()` 输出，携带移动 UA、Cookie、Referer 与 `#originalSize#`；
+   - 图片识别继续覆盖 `src / data-original / data-src / data-lazy-src / file / zoomfile / srcset` 等；
+   - mobile WebView 无主题时才降级 mobile fetch，再无结果才 PC 最小兜底。
+
+4. **保持 Test20 已恢复链路**
+   - 账号 / 签到默认 mobile=2；
+   - 三个话题继续同会话年龄确认 / Cookie；
+   - Guide 翻页继续 `refreshPage(false)`，不增加返回栈；
+   - 搜索、普通板块卡片、帖子详情、评论页、分类/排序保持不变。
+
+### Test21 静态门禁
+
+- `patch_guide_cards_v21.js`：本地 `node --check` 通过；
+- `bootstrap_test_v21_b10121.js`：本地 `node --check` 通过；
+- Test21 `release.json` / `test.json` / `channels.json` / `manifest.json`：本地 JSON 解析通过；
+- Test21 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092321`，低于 32 位有符号整数上限；
+- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
+
+### Test21 实机优先验收
+
+1. 最新精华：首两条应恢复正确主题标题，不再出现“本帖最后由…”作为主标题；
+2. 最新精华 / 最新热门 / 最新发表：作者头像与名字独立一行，标题和摘要层级接近手机网页；
+3. 有图片的主题应出现 1~3 张真实缩略图，不再只显示灰色占位；
+4. 底部回复 / 点赞 / 观看信息存在时应弱化显示；
+5. 连续翻 2~3 页后系统返回不应累积页面栈。
 
 ## 0.1.0-test.20 / Build 10120 — 账号/签到手机端化与三个话题恢复
 
-### Test19 后实机反馈
-
-1. 用户明确要求账号、签到等站点页面默认进入手机端网页，而不是桌面网页；
-2. “最新发表 / 最新热门 / 最新精华”再次无法取得主题，实机“最新热门”显示 0 条并进入空状态；
-3. 首页当前访问状态仍显示“站点可访问 · Cookie 已同步”，说明这次不是全站 Cookie 完全丢失，而是三个 guide 入口自己的会话/解析链失效；
-4. 本轮不扩大已经稳定的首页单页守卫、分类/排序选择器、搜索、帖子卡片、评论页和原页翻页修改面。
-
-### Test20 修复
-
-1. **账号 / 签到直接以 mobile=2 为入口**
-   - 账号直接打开：`member.php?mod=logging&action=login&mobile=2`；
-   - 签到直接打开：`plugin.php?id=dd_sign:index&mobile=2`；
-   - 不再先打开站点根页再跳目标页，减少进入桌面版页面的机会；
-   - X5 WebView 继续使用移动 UA；
-   - 遇到当前声明式 18+ 首访页仍自动点击并同步 Cookie / access / age 状态；
-   - 验证码或真人验证继续不绕过。
-
-2. **三个话题不再调用旧 guide 实现**
-   - Test19 的 `sht_auto` 仍回退较早版本 `oldForum()`，实际已再次出现 0 主题；
-   - Test20 对 `latest / hot / digest` 单独接管：
-     - `latest → forum.php?mod=guide&view=newthread&mobile=2`
-     - `hot → forum.php?mod=guide&view=hot&mobile=2`
-     - `digest → forum.php?mod=guide&view=digest&mobile=2`
-   - 第一优先使用 `mobile=2` WebView，同一个会话内处理年龄确认并保存 Cookie；
-   - 从渲染后的真实 `tid / thread-*` 链接重建主题列表；
-   - 手机端 WebView 无结果时再尝试手机端 fetch；
-   - 仍无结果才使用 PC 请求作最小兜底，不把 PC 重新升级成默认入口。
-
-3. **Guide 独立翻页**
-   - 三个话题使用独立页码状态；
-   - 上一页 / 回第1页 / 下一页继续 `refreshPage(false)` 当前页刷新，不增加系统返回栈。
-
-4. **诊断增强**
-   - 新增 `guide.mobile.v20` 诊断，记录 mode / page / 实际主题数 / URL；
-   - 若仍为 0 条，可直接点“手机版”查看官网当前 guide 页实际状态，方便区分年龄页、权限页与 Parser 问题。
-
-### Test20 静态门禁
-
-- `patch_mobile_guide_v20.js`：本地 `node --check` 通过；
-- `bootstrap_test_v20_b10120.js`：本地 `node --check` 通过；
-- Test20 `release.json`：本地 JSON 解析通过；
-- Test20 Shell：外层规则 JSON与内层 `pages` JSON 解析通过；
-- Shell 数值 `version=2026092320`，低于 32 位有符号整数上限；
-- Release / Bootstrap / Shell 明确使用 `asset-core-7f3@main`，未新增 `hiker-cloud` 正式运行依赖。
-
-### Test20 实机优先验收
-
-1. 点首页“账号”，确认直接显示手机端登录页面；
-2. 点“签到”，确认直接显示手机端签到页面；
-3. 分别打开最新发表 / 最新热门 / 最新精华，确认能取得真实主题；
-4. 三个话题点击下一页后再返回，确认不累积系统返回栈；
-5. 若某一话题仍为 0，点页面“手机版”并截图官网当前页面，同时查看设置里的最近诊断。
+- 账号直接打开 `member.php?mod=logging&action=login&mobile=2`；
+- 签到直接打开 `plugin.php?id=dd_sign:index&mobile=2`；
+- 三个话题由独立 mobile=2 guide 链接接管，先 WebView 同会话处理年龄确认/Cookie，再 mobile fetch，PC 仅最后兜底；
+- Guide 使用独立页码并 `refreshPage(false)` 原页翻页；
+- 实机确认三个话题已重新取得真实主题，但 Test20 简化卡片标题与图片表现不足，因此由 Test21 接管视觉与图片解析。
 
 ## 0.1.0-test.19 / Build 10119 — 首页单页守卫与分类/排序独立选择器
 
@@ -152,4 +159,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 只保存在海阔本地变量 / WebView Cookie 容器；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test20 实机闭环 → 账号手机端 / 签到手机端 / 最新发表 / 最新热门 / 最新精华 → 再继续页面视觉精修。
+- 当前下一步：Test21 实机闭环 → 三个话题标题 / 作者行 / 预览图 / 统计 / 翻页 → 再继续整体视觉精修。
