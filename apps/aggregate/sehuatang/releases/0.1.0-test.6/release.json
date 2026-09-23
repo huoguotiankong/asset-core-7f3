@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "sehuatang-test",
+  "name": "色花堂",
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": {
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.5/release.json",
+    "status": "superseded-before-user-test-target-loop-hardening"
+  },
+  "modules": [
+    {"name":"runtime-base","path":"apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js"},
+    {"name":"native-index-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js"},
+    {"name":"topic-render-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js"},
+    {"name":"forum-product-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js"},
+    {"name":"access-gate-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_gate.js"},
+    {"name":"access-state-patch","path":"apps/aggregate/sehuatang/releases/0.1.0-test.6/patch_access_state.js"}
+  ],
+  "verify": {"global":"SeHuaTangRemoteRuntime","property":"version","equals":"0.1.0-test.6"},
+  "notes": "Test6：在 Test5 自动年龄确认基础上增加 sessionStorage 目标页状态，避免登录成功回论坛后被注入脚本再次拉回登录页。"
+}
