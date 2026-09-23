@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.24",
-  "baseVersion": "0.1.0-test.23",
+  "version": "0.1.0-test.25",
+  "baseVersion": "0.1.0-test.24",
   "targetVersion": "0.1.0",
-  "build": 10124,
-  "shellVersion": "0.1.0-test.24",
-  "shellRuleVersion": 2026092324,
+  "build": 10125,
+  "shellVersion": "0.1.0-test.25",
+  "shellRuleVersion": 2026092325,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.24/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v24_b10124.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v24_b10124.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.25/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v25_b10125.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v25_b10125.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.23",
-    "build": 10123,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.23/release.json"
+    "version": "0.1.0-test.24",
+    "build": 10124,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.24/release.json"
   },
-  "notes": "Test23实机仍无法显示Guide预览图。Test24绕过返回HTML的运行时DOM差异：在mobile=2 WebView真实渲染完成后按tid直接采集可见图片，fba.putVar保存tid->URL映射，原生侧再使用普通子版块已经验证的C.imageUrl链显示。"
+  "notes": "Test24实机确认Guide原生预览仍灰图，且隐藏WebView采集导致三个话题明显慢于普通板块。Test25停止继续复制Guide图片到原生组件：最新发表/热门/精华直接嵌入官网mobile=2 X5页面，图片与排版由浏览器原生渲染；仅注入18+确认/Cookie同步，并拦截帖子链接转回原生shtThread，保留磁链云播等详情能力。"
 }
