@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.7 / Build 10107 / 待实机验证**  
+状态：**0.1.0-test.8 / Build 10108 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,75 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v7_b10107.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v7_b10107.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.7/release.json`
-- Test7 直接继承 Test1~Test6 已验证/待验证模块，并叠加 `releases/0.1.0-test.7/patch_stability_polish.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v8_b10108.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v8_b10108.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.8/release.json`
+- Test8 直接继承 Test1~Test7，并叠加 `releases/0.1.0-test.8/patch_forum_visual_v8.js`。
+
+## 0.1.0-test.8 / Build 10108 — 子板块、主题预览图与正文图片原生渲染
+
+### Test7 实机反馈
+
+1. 首页六个一级分类能够正常显示，但每个一级分类下面仍只有 1 个子板块，实际网站同一大类下存在多个真实子板块；
+2. 首页与若干操作位缺少明确图标，信息识别效率较低；
+3. 主题列表已经能显示真实主题标题，但右侧没有像原网站那样显示帖子预览图；
+4. 帖子正文文字能够解析，正文图片位置仍出现空白/占位区域，图片没有真正显示出来；
+5. Test7 的站点可访问状态和 Cookie 同步已经实机正常，说明本轮不需要回退年龄确认/访问链，只针对分类与图片链修复。
+
+### Test8 根因与修复
+
+1. **子板块解析不再依赖论坛首页根 `.bm` 块**
+   - Test7 以“包含根 fid 的 `.bm/.bm_c`”为边界，但当前站点真实 PC DOM 中该块可能只包含一级入口自身，导致六个分类均退化为 1 个板块；
+   - Test8 改为分别请求六个一级板块自己的 `forum-<fid>-1.html?mobile=no` 页面，从当前一级板块页面提取真实 forum 链接；
+   - 过滤六个根 fid 后保留其余子板块；
+   - 若一级页面仍不足 2 个子板块，再从 `forum.php?mobile=no` 按根 fid 在源码中的位置区间切分；
+   - 最后才回退 Test7 结果，避免再次把错误分组当主链；
+   - 分类缓存独立升级为 `sht_forum_groups_v8`。
+
+2. **首页和操作位补回视觉图标**
+   - Test7 的 `quick()` 漏掉图片字段，`icon_small_4` 只剩空圆形占位；
+   - Test8 恢复 `img/pic_url`，并给账号、签到、搜索、设置及常用入口增加明确文本图标；
+   - 六个一级大类增加轻量 emoji 视觉标识；
+   - 子板块切换为 `icon_2`，避免纯文本堆叠。
+
+3. **主题列表右侧预览图改为“整条主题容器”提取**
+   - Test7 只检查标题 `<a>` 标签内部的 `<img>`，而当前 Discuz 列表的预览图通常位于同一个 `tbody/li` 主题容器的其它位置；
+   - Test8 为每个 tid 记录源码位置，优先截取其所属 `tbody`，其次 `li`，最后使用邻近源码上下文；
+   - 在整条主题容器中按 `data-original / data-src / data-echo / data-lazy-src / zoomfile / file / src` 搜索图片；
+   - 过滤 avatar、smiley、logo、loading、none.gif、blank.gif 等非主题图；
+   - 识别到预览图后继续使用海阔 `movie_1`，该样式默认图片位于右侧，贴近原网站主题列表视觉。
+
+4. **正文图片从 rich_text 内联改为原生图片组件**
+   - Test7 将图片 URL 直接改写进 `rich_text` 的 `<img src>`，当前实机仍显示空白块，说明该站图片链在 rich_text 内联环境下对 Header/资源标识支持不稳定；
+   - Test8 保留正文文字为 `rich_text`，先移除其中 `<img>`；
+   - 每张正文图单独生成 `pic_1_full` 原生组件，图片 URL 显式带当前 Cookie + Referer；
+   - `pic_1_full` 宽度铺满屏幕，高度按原图比例自适应；点击图片进入 `pics://` 原生图片查看；
+   - 继续支持 `zoomfile/file/data-original/data-src/data-echo/data-lazy-src/src` 多属性识别。
+
+5. **不扩大其它已正常模块修改面**
+   - Test7 的站点可访问/Cookie 逻辑保留；
+   - latest/hot/digest 动态发现保留；
+   - magnet BTIH 全帖去重及 115 / 迅雷 / PikPak / 复制保留；
+   - 回复编号修正保留；
+   - 视频直链与 `video://` 嗅探保留；
+   - Stable / Latest / 根 `registry.json` 继续不建立。
+
+### Test8 静态门禁
+
+- `patch_forum_visual_v8.js`：本地 `node --check` 通过；
+- `bootstrap_test_v8_b10108.js`：本地 `node --check` 通过；
+- `release.json`：JSON 解析通过；
+- Test8 Shell：外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell 数值 `version=2026092308`，低于 32 位有符号整数上限；
+- Test8 Release / Bootstrap / Shell 均明确指向 `asset-core-7f3@main`，无新增 `hiker-cloud` 运行依赖。
+
+### Test8 实机优先验收
+
+1. 首页依次切换六个一级分类，确认各类不再普遍只有 1 个板块，且数量/名称接近网页真实结构；
+2. 首页账号、签到、搜索、设置不再显示空圆形占位；
+3. 打开原创 BT 等有缩略图的主题列表，确认带图帖子右侧出现预览图；
+4. 打开此前正文图片为空白的帖子，确认图片以原生大图组件真正显示；
+5. 同时回归 magnet 云播、回复编号与视频入口，确认 Test8 没有破坏 Test7 已正常功能。
 
 ## 0.1.0-test.7 / Build 10107 — 访问状态、主题列表、正文媒体与 UI 收敛
 
@@ -238,4 +303,4 @@
 - 不保存真实账号、密码、Cookie、formhash 到仓库；运行态 Cookie 仅保存在海阔本地变量/WebView Cookie 容器。
 - 不把 `.net/.com` 做成每次首屏并发探活固定税。
 - Test 阶段不晋级 Stable，不登记根 `registry.json`。
-- 下一阶段优先：Test7 实机闭环 → 修复仍失败的单点模块 → 确认分类/主题列表/正文图片/magnet云播/在线视频播放 → 再处理原生登录状态、签到、回复和 UI 精修。
+- 下一阶段优先：Test8 实机闭环 → 修复仍失败的单点模块 → 确认子板块/主题预览图/正文图片/magnet云播/在线视频播放 → 再处理原生登录状态、签到、回复和 UI 精修。
