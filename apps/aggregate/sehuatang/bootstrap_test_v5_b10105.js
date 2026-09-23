@@ -1,9 +1,0 @@
-/* 色花堂 Remote Test Bootstrap 0.1.0-test.5 - immutable overlay loader */
-var SEHUATANG_BOOT_CONFIG={id:'sehuatang-test',branch:'main',repoRawRoot:'https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/',version:'0.1.0-test.5',build:10105,modules:[
-{name:'runtime-base',path:'apps/aggregate/sehuatang/releases/0.1.0-test.1/runtime.js',ver:10101},
-{name:'native-index-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.2/patch_native_index.js',ver:10102},
-{name:'topic-render-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.3/patch_topic_render.js',ver:10103},
-{name:'forum-product-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.4/patch_forum_product.js',ver:10104},
-{name:'access-gate-patch',path:'apps/aggregate/sehuatang/releases/0.1.0-test.5/patch_access_gate.js',ver:10105}
-]};
-var SeHuaTangBoot={loadOnly:function(){var root=SEHUATANG_BOOT_CONFIG.repoRawRoot+SEHUATANG_BOOT_CONFIG.branch+'/',loaded=[],i,m,url;for(i=0;i<SEHUATANG_BOOT_CONFIG.modules.length;i++){m=SEHUATANG_BOOT_CONFIG.modules[i];url=root+m.path+'?sehuatang_release=0.1.0-test.5';require(url,{headers:{'Cache-Control':'no-cache'}},m.ver);loaded.push({name:m.name,url:url});}if(typeof SeHuaTangRemoteRuntime==='undefined'||String(SeHuaTangRemoteRuntime.version)!=='0.1.0-test.5')throw new Error('色花堂 Test5 运行时校验失败');return{ok:true,release:{id:'sehuatang-test',version:'0.1.0-test.5',build:10105},loaded:loaded};},module:function(){this.loadOnly();return SeHuaTangRemoteRuntime.module();},info:function(){return{managerVersion:'direct-loader',current:{id:'sehuatang-test',version:'0.1.0-test.5',build:10105}};},check:function(){return{ok:true,current:{id:'sehuatang-test',version:'0.1.0-test.5',build:10105},hasUpdate:false};},update:function(){return{ok:false,changed:false,error:'测试版采用完整导入口令覆盖更新'};},rollback:function(){return{ok:false,error:'需要时覆盖导入 Test4'};},reinstall:function(){return this.loadOnly();}};
