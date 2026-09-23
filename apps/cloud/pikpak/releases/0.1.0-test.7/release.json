@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.5",
+  "modules": [
+    {"name":"core-base","path":"apps/cloud/pikpak/releases/0.1.0-test.3/core.js"},
+    {"name":"core-test4-patch","path":"apps/cloud/pikpak/releases/0.1.0-test.4/core_patch.js"},
+    {"name":"core-test5-fix","path":"apps/cloud/pikpak/releases/0.1.0-test.5/core_fix.js"},
+    {"name":"provider","path":"apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"},
+    {"name":"provider-test5-safe-cleanup","path":"apps/cloud/pikpak/releases/0.1.0-test.5/provider_patch.js"},
+    {"name":"provider-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/provider_patch.js"},
+    {"name":"playback","path":"apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"},
+    {"name":"ui","path":"apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"},
+    {"name":"pages-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"},
+    {"name":"pages-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/pages_patch.js"},
+    {"name":"pages-test7","path":"apps/cloud/pikpak/releases/0.1.0-test.7/pages_patch.js"},
+    {"name":"runtime-base","path":"apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"},
+    {"name":"runtime-test5","path":"apps/cloud/pikpak/releases/0.1.0-test.5/runtime_patch.js"},
+    {"name":"runtime-test6-handoff","path":"apps/cloud/pikpak/releases/0.1.0-test.6/runtime_patch.js"},
+    {"name":"runtime-test7-id","path":"apps/cloud/pikpak/releases/0.1.0-test.7/runtime_patch.js"}
+  ],
+  "verify": {"global":"PikPakRemoteRuntime","property":"version","equals":"0.1.0-test.7"},
+  "status": "pending-device-validation",
+  "notes": "继承 Test5 的 PikPak 官方人机验证自动接回登录。新增跨小程序 Magnet 调用会话生命周期：仅本次调用创建的临时文件在调用页关闭时移入回收站；普通个人文件与手动离线文件不受影响；程序临时播放路径禁止永久 batchDelete。"
+}
