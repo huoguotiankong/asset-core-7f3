@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.2",
-  "baseVersion": "0.1.0-test.1",
+  "version": "0.1.0-test.3",
+  "baseVersion": "0.1.0-test.2",
   "targetVersion": "0.1.0",
-  "build": 10102,
-  "shellVersion": "0.1.0-test.2",
-  "shellRuleVersion": 2026092302,
+  "build": 10103,
+  "shellVersion": "0.1.0-test.3",
+  "shellRuleVersion": 2026092303,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.2/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v2_b10102.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v2_b10102.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.3/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v3_b10103.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v3_b10103.txt",
   "updatedAt": "2026-09-23",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.1",
-    "build": 10101,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.1/release.json"
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.2/release.json"
   },
-  "notes": "首次实机修复：原生论坛分区由 portal→mobile forum→PC forum→WebView 源码四级解析；兼容 fid/mod 参数顺序和无引号 href；首页去掉巨大 logo 卡片。"
+  "notes": "第二轮实机修复：主题列表由普通 fetch 扩展为 fetch→WebView 渲染源码→PC fetch→PC WebView 四级链；失败页直接输出字符数、链接数、页面标题等诊断。"
 }
