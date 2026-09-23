@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.18",
-  "defaultBuild": 10118,
-  "testVersion": "0.1.0-test.18",
-  "testBuild": 10118,
-  "testShellVersion": "0.1.0-test.18",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v18_b10118.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v18_b10118.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.18/release.json",
+  "defaultVersion": "0.1.0-test.19",
+  "defaultBuild": 10119,
+  "testVersion": "0.1.0-test.19",
+  "testBuild": 10119,
+  "testShellVersion": "0.1.0-test.19",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v19_b10119.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v19_b10119.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.19/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test18-filter-stat-layout-polish",
+    "stage": "test19-home-pagination-filter-separation",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.17",
-    "note": "根据Test17实机反馈：修复统计HTML泄漏/空按钮；清理分类排序混排、多重选中和箭头噪声；搜索与页内翻页保持。"
+    "previousTest": "0.1.0-test.18",
+    "note": "根据Test18实机反馈：修复首页滚到底后整页重复追加；分类和排序改为独立选择器并严格隔离；统计继续弱化。"
   }
 }
