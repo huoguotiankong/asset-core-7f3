@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.10",
+  "version": "0.1.0-test.11",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10110,
-  "shellVersion": "0.1.0-test.10",
-  "shellRuleVersion": 2026092404,
+  "build": 10111,
+  "shellVersion": "0.1.0-test.11",
+  "shellRuleVersion": 2026092405,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.10/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v10_b10110.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v10_b10110.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.11/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v11_b10111.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v11_b10111.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.9",
-    "build": 10109,
-    "release": "apps/video/xchina/releases/0.1.0-test.9/release.json"
+    "version": "0.1.0-test.10",
+    "build": 10110,
+    "release": "apps/video/xchina/releases/0.1.0-test.10/release.json"
   },
-  "notes": "Test10 fixes current device regressions: exact quoted .img style cover extraction, clickable video detail tags/model-series links, broader main-container m3u8/mp4 extraction, and removal of ad-prone video:// sniff fallback. No Stable until device validation."
+  "notes": "Test11 bypasses the failed Test10 patch layer and rebuilds around the immutable Test9 reading-source base: exact per-card cover extraction, six-work model preview, source-position-only tags, balanced main-container media extraction, and HLS Host/cacheM3u8 playback handoff. No Stable until device validation."
 }
