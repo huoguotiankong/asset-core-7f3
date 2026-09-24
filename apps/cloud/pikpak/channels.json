@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.19",
+      "version": "0.1.0-test.20",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10121,
-      "displayVersion": "Test 0.1.0-test.19 · Build 10121",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v19_b10121.txt",
+      "build": 10122,
+      "displayVersion": "Test 0.1.0-test.20 · Build 10122",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v20_b10122.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test19 adds whole-drive search and local multi-account Web Session switching.",
+      "desc": "PikPak Test20 fixes whole-drive search and the fresh-account web login flow.",
       "highlights": [
-        "首页新增云盘搜索入口，按文件名全盘分页检索并筛选视频、图片、文件夹",
-        "账号页升级为本机多账号 Web Session 保存、切换、重命名和移除",
-        "切换账号不走账号密码登录，也不再次触发 Android captcha 登录链",
-        "临时播放登记及退出回收按账号隔离，防止切换后误处理其他账号文件",
-        "搜索、多账号切换及既有关键链待实机验证；Stable 保持不变"
+        "搜索改用 PikPak 原生 name.contains 全盘过滤，不再扫描当前批次后本地匹配",
+        "新增账号先清理官方网页本地登录态，再登录并读取新账号 Web Session",
+        "网页退出不会清除小程序已经保存的旧账号 Session",
+        "保留账号切换、重命名、移除及按账号隔离的临时文件回收",
+        "原生搜索与第二账号接入待实机验证；Stable 保持不变"
       ]
     }
   ]
