@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.22",
+      "version": "0.1.0-test.23",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10124,
-      "displayVersion": "Test 0.1.0-test.22 · Build 10124",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v22_b10124.txt",
+      "build": 10125,
+      "displayVersion": "Test 0.1.0-test.23 · Build 10125",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v23_b10125.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test22 removes multi-account state and retains one network-confirmed Web Session.",
+      "desc": "PikPak Test23 keeps single-account Web Session and prioritizes official media playback links for faster start and seeking.",
       "highlights": [
-        "移除本机账号列表、账号切换、重命名和多账号 Session 注册表",
-        "启动时清理 Test19/20 遗留多账号索引，但保留当前单账号 pikpak_v2_session",
-        "网页登录必须捕获真实 Drive 请求的当前 Bearer 后才允许替换本机会话",
-        "保留原生全盘搜索、浏览、播放、Magnet、回收站和文件管理能力",
-        "单账号登录恢复与文件列表待实机验证；Stable 保持不变"
+        "保留 Test22 已实机确认正常的单账号官方 Web Session，不改认证链",
+        "视频默认优先使用 PikPak medias 专用播放线路，原文件直链降为备用",
+        "新建 Magnet 临时文件会等待专用媒体线路就绪，避免过早落到慢速原文件",
+        "首页改为状态卡、四宫格主入口、轻量工具标签和最近输入",
+        "播放首开与拖动待实机验证；Stable 保持不变"
       ]
     }
   ]
