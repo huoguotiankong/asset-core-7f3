@@ -1,8 +1,51 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.12 / Build 10112 — 2026-09-24
+
+状态：**当前 Test；承接用户最新实机反馈，继续收紧女优页、标签、封面和 HLS 播放合同；无 Stable。**
+
+### 当前实机反馈与 Test11 边界
+- [实机确认] Test10 仍存在四个关键问题：女优/模特页作品展示不符合网站“前 6 部 + 全部视频”的产品形态；标签混入 VPN/下载/AI 等广告；套图/漫画封面仍大量空白；视频进入播放器后仍为 `0 kb/s / 00:00`。
+- Test11 在一次客户端处理卡顿期间已写入仓库，但没有获得用户实机验收，因此不得把 Test11 当成已修复版本。Test12 在 Test11 尚未实机验证前继续静态审查并修正两处合同偏差：漫画列表封面 Referer 与内容标签路由。
+
+### 女优 / 模特页
+- 详情页直接展示前 6 部视频作品，解析原站“收录视频数”，并优先提供“查看全部视频 · N”入口；避免把几十/上百部作品一次性铺满详情首屏。
+- 保留原站资料/简介与视频作品分区；没有独立全部视频链接时，才回退当前页展开。
+
+### 标签
+- 女优/模特只允许来自 `.model-container@a` 且 href 确认属于 `/model/` 或 `/models/`。
+- 内容标签严格只读取上传阅读源明确使用的 `.tags` 第 `4 / 1 / 3` 个 div，不再扫描详情页其它 `<a>`。
+- VPN、下载、APP、论坛、加速、推广、广告、一键、AI 脱衣/换脸等明确推广语义全部过滤；内容标签只有匹配现有 `CATEGORY_GROUPS.video` 时才进入海阔分类，未知标签保持不可跳转，禁止再打开广告页面。
+
+### 套图 / 漫画封面
+- 封面第一合同仍为上传阅读源 `.img@style → url(...)`；同时加入历史可用规则的类型精确回退：视频 `data-poster`、套图 `img src`、漫画当前卡片 `img src`。
+- 封面只在当前卡片内部解析，不恢复相邻卡片邻域猜图。
+- **修正 Test11 的 Referer 偏差**：上传夜明空阅读源对列表/详情封面使用 `source.key`，即 `https://xchina.co/`；因此 Test12 对套图、漫画等所有列表/详情封面统一附 `xchina.co` Referer。`litu100.xyz` Referer 只保留给漫画正文图片。
+- 使用独立 `xc_t12_*` 缓存/线路命名空间，避免 Test9/Test10/Test11 的旧缓存干扰封面实机判断。
+
+### 视频 / HLS 播放
+- 正片解析继续严格限定到平衡闭合后的 `main-container`：纯视频只取第一个 quoted m3u8；套图视频在无 m3u8 时才回退 `var domain + var videos`。
+- 继续禁用 `video://` 泛嗅探，避免再次命中广告。
+- HLS 播放不再先做一次同步 `fetch` 预检；点击后直接优先 `cacheM3u8(media,{headers})`，Header 使用 `Host: s2.playhls.com + Referer + Origin + UA + live Cookie`，失败再尝试不带 Host 的 `cacheM3u8`，最后才返回显式 Header 播放地址。
+- 播放诊断保留“推荐播放”和“普通 Header”两条对照链；只有海阔实机出现真实码率、合理总时长并持续推进才算播放完成。
+
+### 架构 / 发布与门禁
+- Test12 继续以 Test9 阅读源重建基线为 Core/Pages，不加载 Test10/Test11 patch：`Test9 categories → Test9 categoryFix → Test9 core → Test12 prepatch → Test9 pages → Test12 postpatch`。
+- Shell：`xchina_remote_test_v12_b10112.txt`，规则 version `2026092406`；Bootstrap：`bootstrap_test_v12_b10112.js`，`minBuild=10112`。
+- `test.json / channels.json / manifest.json` 已切 `0.1.0-test.12 / Build 10112`；Stable 仍不存在。
+- `prepatch.js / postpatch.js / Bootstrap` 本地 `node --check` 通过；Shell 外层 JSON 与 13 个 `pages` 路由解析通过。
+
+### Test12 实机验收
+1. 设置页确认 `Test 0.1.0-test.12 · Build 10112`。
+2. 打开女优/模特详情：首屏应只展示前 6 部视频，并出现全部视频入口和总数。
+3. 视频详情标签不应再出现 VPN、下载、成人 APP、AI 推广等广告；女优标签应能进入海阔模特详情。
+4. 套图与漫画列表重点确认此前空白封面是否恢复；若仍空白，下一轮直接抓具体卡片真实图片 URL/host/响应 Header，不再继续改通用 Parser。
+5. 视频先点主“播放”；失败时进入“播放诊断”依次测试“推荐播放 / 普通 Header”，记录真实码率、总时长与是否持续推进。
+6. 未完成上述实机验证前不得晋级 Stable。
+
 ## 0.1.0-test.11 / Build 10111 — 2026-09-24
 
-状态：**当前 Test；针对 Test10 实机继续暴露的“女优页作品展示不符合预期、标签混入广告、套图/漫画封面仍空白、视频仍 `0 kb/s / 00:00`”重新收敛协议与交付链；无 Stable。**
+状态：**历史 Test；在客户端处理卡顿期间完成仓库写入，但未取得用户实机验收；无 Stable。**
 
 ### 当前实机确认
 - [实机确认] 女优/模特网页本身可以看到大量作品及“收录视频数”，用户要求海阔详情页直接展示前 6 部作品，而不是把所有结果一次性铺满。
@@ -157,7 +200,6 @@
 - 新增播放器最终交付层：显式携带详情页 `Referer`、`Origin`、`User-Agent` 和可用 live Cookie；最终格式统一为 `url#isVideo=true#;{...}`，不再只在解析/预检层携带 Header。
 - 视频详情已拿到直链时直接生成最终播放器 URL，点击不再二次打开播放页、重复请求同一详情页。
 - 播放线路页仍保留 `video://详情页` 作为明确兜底，用于实机判断“直链 Header 交付问题”与“原站需要浏览器媒体提取”两类故障。
-
 ### 架构 / 发布
 - Test7 不叠加 Test6 Runtime；仍从冻结 Test4 做一次确定性变换，并拆成 `runtime_base.js + runtime_pages.js` 两个按 Release 顺序加载的模块，Remote Manager 2.0.1 已确认按 `modules[]` 顺序 `require()` 后再做全局导出校验。
 - 新 Shell：`xchina_remote_test_v7_b10107.txt`，规则 version `2026092401`；新 Bootstrap：`bootstrap_test_v7_b10107.js`，`minBuild=10107`。
