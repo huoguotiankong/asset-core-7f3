@@ -1,6 +1,6 @@
 # 磁力君.简开发记录
 
-状态：**Test6 / 可管理 Provider 搜索待实机验证**  
+状态：**Test7 / PikPak 海阔小程序调用修复待实机验证**  
 首次纳入：2026-09-21
 
 ## 当前基线
@@ -9,6 +9,67 @@
 - 原标题：`磁力君.简`；原规则 version：`20250604`。
 - 原版共 13 个页面：`data / sou / ysfx / Main / Donate.v / configs / ruleManage / ruleEdit / password / import / rules / codetest / SelectTorrent`。
 - Stable 仍保留用户设备中的原版基线，所有新改动先走 `磁力君.简·测试`。
+- 当前活动 Test：`1.0.0-test.7 / Build 2026092401`。
+- Release：`apps/tools/magnet-jun/releases/1.0.0-test.7/release.json`。
+- Installer：`apps/tools/magnet-jun/releases/1.0.0-test.7/installer.js`。
+
+## Test7 · PikPak 外部调用契约修复
+
+### 用户实机问题（2026-09-24）
+
+在 `磁力君.简·测试` 中选择播放模式 `PikPak`，搜索结果可以正常显示，但点击结果后提示：
+
+```text
+【PikPak】未发现外部调用页 diaoyong
+```
+
+用户当前截图同时证明 BT4G 搜索链本身正常，故修改边界只应落在 `MJSearchCore.routeMagnet()` 的 PikPak 调用分支，不应动 Provider、结果列表、精准搜索或其它云盘。
+
+### 根因
+
+Test6 把迅雷 / PikPak / 光鸭 / 123 统一抽象成 `diaoyong` 页面：
+
+```text
+PikPak → hiker://page/diaoyong?rule=PikPak...
+```
+
+但当前 PikPak Test25 的真实 Shell 已明确提供外部调用页：
+
+```text
+path = fxlj
+rule = js:$.require('pikpak').handoff();
+```
+
+PikPak `handoff()` 从 `realurl` 参数读取外部传入的完整 Magnet。因此 `磁力君.简` 继续硬要求 `diaoyong` 已经与当前 PikPak 小程序运行契约不一致。
+
+### Test7 修复
+
+1. `PikPak` 模式优先检测当前海阔小程序的 `fxlj` 页面；存在时调用：
+
+```text
+hiker://page/fxlj?rule=PikPak&page=fypage&realurl=<encodeURIComponent(magnet)>
+```
+
+2. 仍兼容旧 PikPak 类规则：如果没有 `fxlj`、但存在旧 `diaoyong`，继续走旧入口。
+3. 如果检测到 PikPak 规则但两种外部调用页都没有，明确提示 `fxlj / diaoyong` 均不存在；不再把“安装了小程序但协议不同”误报成单纯缺少 `diaoyong`。
+4. 仅覆盖 `PikPak` 分支；Test6 的 Provider Registry、BT4G 等自定义 Provider、115、迅雷、光鸭、123、复制磁链、查询云数据全部保持原实现。
+5. Test7 Installer 从冻结的 Test6 完整规则生成新规则，只追加 `pikpak_handoff_patch.js`，不重写其它页面。
+
+### Test7 静态验证
+
+- `pikpak_handoff_patch.js`：`node --check` 通过。
+- `installer.js`：`node --check` 通过。
+- 路由模拟通过：安装规则名为 `PikPak` 且存在 `fxlj` 时，完整 `magnet:?xt=...&dn=...` 会 URL 编码后放入 `realurl`。
+- 非 PikPak 模式仍回到 Test6 原 `routeMagnet()`，模拟确认 115 等分支不被覆盖。
+- Stable 不改，Test7 继续待实机验证。
+
+### Test7 实机验收
+
+1. 覆盖导入 Test7。
+2. 保持模式为 `PikPak`，搜索任一能直接返回 Magnet 的 Provider（当前截图中的 BT4G 即可）。
+3. 点击结果后应直接进入海阔里的 PikPak 小程序调用页，不再出现“未发现外部调用页 diaoyong”。
+4. PikPak 应收到完整 Magnet 并进入 Magnet 文件/播放链。
+5. 再切换 115 / 迅雷至少各点一次，确认其它云盘调用无回归。
 
 ## 产品目标（2026-09-21）
 
