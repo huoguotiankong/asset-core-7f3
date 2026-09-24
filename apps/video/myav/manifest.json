@@ -16,17 +16,17 @@
   "stableBootstrap": "apps/video/myav/bootstrap_stable_v1_b10112.js",
   "stableRule": "apps/video/myav/myav_remote_stable_v1_b10112.txt",
   "stableRelease": "apps/video/myav/releases/0.1.0/release.json",
-  "testVersion": "0.1.1-test.1",
-  "testBuild": 10201,
-  "testShellVersion": "0.1.1-test.localfirst.1",
-  "testRule": "apps/video/myav/myav_remote_test_localfirst_v1_b10201.txt",
-  "testRelease": "apps/video/myav/releases/0.1.1-test.1/release.json",
-  "testDelivery": "local-first-single-runtime-bundle",
+  "testVersion": "0.1.1-test.5",
+  "testBuild": 10205,
+  "testShellVersion": "0.1.1-test.search-ui.5",
+  "testRule": "apps/video/myav/myav_remote_test_v5_b10205.txt",
+  "testRelease": "apps/video/myav/releases/0.1.1-test.5/release.json",
+  "testDelivery": "thin-overlay-on-local-first-base",
   "changelog": "apps/video/myav/CHANGELOG.md",
   "sourceSite": "https://javlist.me/",
   "icon": "apps/video/myav/assets/icon.svg",
   "migration": {
-    "stage": "stable-010-localfirst-test-011t1-pending-device-validation",
-    "note": "Stable 0.1.0 / Build10112 remains frozen. Test 0.1.1-test.1 / Build10201 rebases from Stable and localizes the complete 23-layer business chain plus Shared JAV Playback and repository icons into one local Runtime bundle."
+    "stage": "stable-010-localfirst-test-011t5-custom-search-icons-pending-device-validation",
+    "note": "Stable 0.1.0 / Build10112 remains frozen. Test5 builds on Test4/Test3 and only redesigns configurable cross-mini-app search placement, icons and local target management."
   }
 }
