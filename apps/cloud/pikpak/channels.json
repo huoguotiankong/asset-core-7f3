@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.17",
+      "version": "0.1.0-test.18",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10119,
-      "displayVersion": "Test 0.1.0-test.17 · Build 10119",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v17_b10119.txt",
+      "build": 10120,
+      "displayVersion": "Test 0.1.0-test.18 · Build 10120",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v18_b10120.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test17 fixes the real-device trash listing and expands the Drive library experience.",
+      "desc": "PikPak Test18 adds native image preview and configurable cross-app Magnet cleanup.",
       "highlights": [
-        "修复 Test16 回收站空列表：跨文件夹查询显式使用 parent_id=*",
-        "新增星标文件、最近文件、文件详情与全盘前 500 项搜索",
-        "新增目录筛选与名称倒序，首页改为 My Pack / 星标 / 最近 / 回收站快捷面板",
-        "保留视频专属播放列表、My Pack Magnet 目标、移动/复制及安全回收语义",
-        "回收站、Magnet 与文件管理待实机验证；Stable 保持不变"
+        "个人盘、公开分享及任务中的图片文件改为海阔图片预览，不再直接下载",
+        "设置页新增跨小程序 Magnet 退出自动回收开关，默认开启",
+        "关闭开关后不登记本次 handoff 临时文件，退出页面后保留 My Pack 文件",
+        "保留 Test17 回收站全盘查询、星标、最近、详情、搜索与文件管理",
+        "图片预览和退出回收开关待实机验证；Stable 保持不变"
       ]
     }
   ]

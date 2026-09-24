@@ -373,3 +373,28 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 当前 Test：0.1.0-test.17 / Build10119；Stable 尚未建立。
 
 ---
+## 2026-09-24 · 0.1.0-test.18 / Build10120 · 图片预览与跨应用退出回收开关
+
+### 用户反馈
+
+- 个人网盘图片点击后被当作下载处理，缺少直接查看图片的体验。
+- 跨小程序调用 PikPak 播放 Magnet 后，需要允许用户决定关闭调用页时是否自动把本次临时播放文件移入回收站。
+
+### Test18 修正
+
+- Personal、Share 和任务文件的图片结果统一追加海阔图片类型标记，点击图片卡直接进入图片预览；下载仍保留在长按菜单。
+- 图片卡使用独立 image class，不进入视频播放列表。
+- 设置页新增“跨小程序 Magnet 退出自动回收”开关，默认开启，以保持原有安全策略。
+- 开启时：跨应用 handoff 创建的文件登记到当前会话，关闭调用页后移入回收站。
+- 关闭时：handoff 文件不登记为临时对象，关闭页面时跳过清理，文件保留在 My Pack。
+- 手动“清理临时播放文件”仍只处理已经登记的对象，不影响普通文件。
+
+### 发布与验收
+
+- 新增不可变 Test18 Provider/Playback/UI/Pages/Runtime/Identity 模块、Release、Bootstrap 与 Shell；Shell version=2026092408，build=10120。
+- 登录、视频播放、Test17 回收站和文件管理链未重写。
+- 图片预览及开关开启/关闭两种 handoff 行为待海阔实机验证；验证前不得建立 Stable。
+
+当前 Test：0.1.0-test.18 / Build10120；Stable 尚未建立。
+
+---
