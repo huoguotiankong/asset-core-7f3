@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.17",
-  "defaultBuild": 10117,
-  "testVersion": "0.1.0-test.17",
-  "testBuild": 10117,
-  "testShellVersion": "0.1.0-test.17",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v17_b10117.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v17_b10117.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.17/release.json",
+  "defaultVersion": "0.1.0-test.18",
+  "defaultBuild": 10118,
+  "testVersion": "0.1.0-test.18",
+  "testBuild": 10118,
+  "testShellVersion": "0.1.0-test.18",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v18_b10118.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v18_b10118.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.18/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test17-media-image-repair",
-    "note": "Device validation required; no Stable."
+    "stage": "test18-diagnostic-only",
+    "note": "Video/image/model avatar issues remain unresolved pending live field evidence."
   }
 }
