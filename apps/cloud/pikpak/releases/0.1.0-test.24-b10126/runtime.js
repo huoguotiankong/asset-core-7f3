@@ -1,0 +1,2 @@
+/* Test24 identity and playback route selection. */
+(function(C,R){var base=R.module;R.version='0.1.0-test.24';R.build=10126;R.module=function(){var m=base();m.setPlaybackRouteAction=function(v){var map={'流畅转码优先':'smooth','原画优先':'origin','官方原顺序':'media','原文件兼容':'raw'};C.set('playback_route',map[String(v||'')]||'smooth');refreshPage(false);return 'toast://已切换默认线路：'+String(v||'流畅转码优先');};m.version='0.1.0-test.24';m.build=10126;return m;};})(PikPakCore,PikPakRemoteRuntime);

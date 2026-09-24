@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.23",
-  "defaultBuild": 10125,
-  "testVersion": "0.1.0-test.23",
-  "testBuild": 10125,
-  "testShellVersion": "0.1.0-test.23",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v23_b10125.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v23_b10125.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.23-b10125/release.json",
+  "defaultVersion": "0.1.0-test.24",
+  "defaultBuild": 10126,
+  "testVersion": "0.1.0-test.24",
+  "testBuild": 10126,
+  "testShellVersion": "0.1.0-test.24",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v24_b10126.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v24_b10126.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.24-b10126/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test23-fast-playback-ui-b10125",
+    "stage": "uploaded-v1-to-test24-quality-route-diagnostic-b10126",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10124,
-    "note": "Test23 keeps the working single official-Web account and moves media-specific playback links ahead of the raw file for faster start and seeking. Stable does not exist pending device validation."
+    "supersedesUnvalidatedBuild": 10125,
+    "note": "Test24 selects smooth transcoded streams first and safely exposes playback API latency, with a compact home layout. Single Web account remains and Stable is unchanged."
   }
 }

@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.23",
+      "version": "0.1.0-test.24",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10125,
-      "displayVersion": "Test 0.1.0-test.23 · Build 10125",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v23_b10125.txt",
+      "build": 10126,
+      "displayVersion": "Test 0.1.0-test.24 · Build 10126",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v24_b10126.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test23 keeps single-account Web Session and prioritizes official media playback links for faster start and seeking.",
+      "desc": "PikPak Test24 exposes smooth transcoded playback routing and safe latency diagnostics, and fixes the clipped home dashboard.",
       "highlights": [
-        "保留 Test22 已实机确认正常的单账号官方 Web Session，不改认证链",
-        "视频默认优先使用 PikPak medias 专用播放线路，原文件直链降为备用",
-        "新建 Magnet 临时文件会等待专用媒体线路就绪，避免过早落到慢速原文件",
-        "首页改为状态卡、四宫格主入口、轻量工具标签和最近输入",
-        "播放首开与拖动待实机验证；Stable 保持不变"
+        "根据 Test23 实机反馈，修复首页状态挤压、重复 Magnet 入口和首屏过长",
+        "默认流畅转码优先；原画、官方原顺序、原文件兼容可切换",
+        "播放诊断仅记录取链毫秒数及线路名称，不保存带签名 URL 或 Token",
+        "单账号官方 Web Session 不变，首帧/拖动仍待实机对照",
+        "Stable 保持不变"
       ]
     }
   ]
