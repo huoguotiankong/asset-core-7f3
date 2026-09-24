@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.4",
+  "version": "0.1.0-test.5",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10104,
-  "shellVersion": "0.1.0-test.4",
-  "shellRuleVersion": 2026092404,
+  "build": 10105,
+  "shellVersion": "0.1.0-test.5",
+  "shellRuleVersion": 2026092405,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.4/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v4_b10104.js",
-  "rule": "apps/video/shise/shise_remote_test_v4_b10104.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.5/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v5_b10105.js",
+  "rule": "apps/video/shise/shise_remote_test_v5_b10105.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.3",
-    "build": 10103,
-    "release": "apps/video/shise/releases/0.1.0-test.3/release.json"
+    "version": "0.1.0-test.4",
+    "build": 10104,
+    "release": "apps/video/shise/releases/0.1.0-test.4/release.json"
   },
-  "notes": "Test4 is the first parser rebuild after device feedback: ss_url avoids page URL collisions; video/model cards use exact item selectors; category links keep their real pagination templates."
+  "notes": "Test5 follows device feedback and the uploaded source contract: raw main-container m3u8 playback first, explicit video series categories with fypage pagination, model-container aggregation, and contentTag detail labels."
 }
