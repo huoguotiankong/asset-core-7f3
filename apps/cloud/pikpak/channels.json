@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.18",
+      "version": "0.1.0-test.19",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10120,
-      "displayVersion": "Test 0.1.0-test.18 · Build 10120",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v18_b10120.txt",
+      "build": 10121,
+      "displayVersion": "Test 0.1.0-test.19 · Build 10121",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v19_b10121.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test18 adds native image preview and configurable cross-app Magnet cleanup.",
+      "desc": "PikPak Test19 adds whole-drive search and local multi-account Web Session switching.",
       "highlights": [
-        "个人盘、公开分享及任务中的图片文件改为海阔图片预览，不再直接下载",
-        "设置页新增跨小程序 Magnet 退出自动回收开关，默认开启",
-        "关闭开关后不登记本次 handoff 临时文件，退出页面后保留 My Pack 文件",
-        "保留 Test17 回收站全盘查询、星标、最近、详情、搜索与文件管理",
-        "图片预览和退出回收开关待实机验证；Stable 保持不变"
+        "首页新增云盘搜索入口，按文件名全盘分页检索并筛选视频、图片、文件夹",
+        "账号页升级为本机多账号 Web Session 保存、切换、重命名和移除",
+        "切换账号不走账号密码登录，也不再次触发 Android captcha 登录链",
+        "临时播放登记及退出回收按账号隔离，防止切换后误处理其他账号文件",
+        "搜索、多账号切换及既有关键链待实机验证；Stable 保持不变"
       ]
     }
   ]

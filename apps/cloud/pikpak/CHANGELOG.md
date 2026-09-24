@@ -398,3 +398,25 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 当前 Test：0.1.0-test.18 / Build10120；Stable 尚未建立。
 
 ---
+
+## 2026-09-24 · 0.1.0-test.19 / Build10121 · 云盘搜索与多账号 Web Session
+
+### Test19 功能
+
+- 首页新增“云盘搜索”入口，按文件名检索全盘非回收站项目；结果采用 `parent_id=*` 分页读取，可筛选全部、视频、图片和文件夹。
+- 海阔规则自身的全局搜索继续识别分享链接与 Magnet；普通关键词改走同一套全盘搜索结果。
+- 账号页升级为本机多账号管理：自动收录当前及后续官方网页登录的 Web Session，支持一键切换、重命名和移除，最多保存 8 个账号。
+- 账号切换只恢复本机已保存的 Web profile Session，不调用账号密码登录，也不进入已确认受 PikPak 风控影响的 Android captcha 登录链。
+- 切换账号会隔离容量缓存、My Pack 缓存和 captcha 状态；Token 仅保存在海阔本机存储，不显示在 UI、日志或云口令中。
+- 临时播放文件队列增加账号归属。手动清理和跨小程序退出自动回收只处理当前账号登记的对象，避免切换账号后误操作其他账号文件。
+- 保留 Test18 图片预览与退出自动回收开关，以及 Test17 回收站、星标、最近、详情和 Test16 文件管理能力。
+
+### 发布与验收
+
+- 新增不可变 Test19 Core/Provider/UI/Pages/Runtime/Identity 模块、Release、Bootstrap 与完整 Shell；Shell version=`2026092409`，build=`10121`。
+- 发布前执行 JavaScript 语法、模块顺序、Shell JSON、远程文件路径与运行时导出检查。
+- 待海阔实机验证：全盘搜索翻页与类型筛选、第二账号网页登录接入、双向切换后目录/播放、账号移除，以及两个账号各自的临时文件回收。验证前不得建立 Stable。
+
+当前 Test：0.1.0-test.19 / Build10121；Stable 尚未建立。
+
+---

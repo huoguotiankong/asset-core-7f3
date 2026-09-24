@@ -1,0 +1,13 @@
+/* PikPak Test19 Build10121 - account-scoped temporary playback cleanup */
+(function(C,P){
+    var KEY='temp_files',ORIGIN='pikpak_v3_temp_origin',SESSION='pikpak_v3_handoff_session';
+    function mine(k){try{return String(getMyVar(k,'')||'');}catch(e){return '';}}
+    function account(){return String(C.currentAccountId&&C.currentAccountId()||'');}
+    function read(){var a=C.readJsonItem(KEY,[]);if(!(a instanceof Array))a=[];var changed=false,aid=account();for(var i=0;i<a.length;i++)if(a[i]&&!a[i].account&&aid){a[i].account=aid;changed=true;}if(changed)C.writeJsonItem(KEY,a);return a;}
+    function write(a){C.writeJsonItem(KEY,a instanceof Array?a:[]);}
+    function norm(x){x=x||{};return {id:String(x.id||''),ts:Number(x.ts||0),origin:String(x.origin||'legacy'),session:String(x.session||''),account:String(x.account||'')};}
+    function trash(ids){if(!ids.length)return {ok:true,count:0};var r=P.trash(ids);if(r&&(r.error||r.error_code))return r;return {ok:true,count:ids.length};}
+    P.queueTemp=function(id){id=String(id||'');if(!id)return;var origin=mine(ORIGIN)||'internal';if(origin==='handoff'&&P.handoffAutoTrashEnabled&& !P.handoffAutoTrashEnabled())return;var a=read(),e={id:id,ts:new Date().getTime(),origin:origin,session:mine(SESSION),account:account()};for(var i=a.length-1;i>=0;i--)if(String(a[i]&&a[i].id||'')===id&&String(a[i]&&a[i].account||'')===e.account)a.splice(i,1);a.push(e);if(a.length>80)a=a.slice(a.length-80);write(a);};
+    P.cleanupTemps=function(force){if(!C.loggedIn())return {error:'NOT_LOGGED_IN',error_description:'请先登录 PikPak'};var a=read(),aid=account(),now=new Date().getTime(),ids=[],keep=[];for(var i=0;i<a.length;i++){var e=norm(a[i]),eligible=e.account===aid&&(force||(e.ts>0&&now-e.ts>900000));if(e.id&&eligible&&ids.length<20)ids.push(e.id);else keep.push(a[i]);}if(!ids.length)return {ok:true,moved:0,kept:keep.length};var r=trash(ids);if(!r||r.error||r.error_code)return r||{error:'TRASH_FAILED'};write(keep);return {ok:true,moved:ids.length,kept:keep.length};};
+    P.cleanupHandoffSession=function(session){session=String(session||'');if(!session)return {ok:true,moved:0};if(!C.loggedIn())return {error:'NOT_LOGGED_IN',error_description:'登录状态已失效'};var a=read(),aid=account(),ids=[],keep=[];for(var i=0;i<a.length;i++){var e=norm(a[i]);if(e.id&&e.account===aid&&e.origin==='handoff'&&e.session===session&&ids.length<20)ids.push(e.id);else keep.push(a[i]);}if(!ids.length)return {ok:true,moved:0};var r=trash(ids);if(!r||r.error||r.error_code)return r||{error:'TRASH_FAILED'};write(keep);return {ok:true,moved:ids.length,kept:keep.length};};
+})(PikPakCore,PikPakProvider);

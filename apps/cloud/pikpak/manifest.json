@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.18",
-  "defaultBuild": 10120,
-  "testVersion": "0.1.0-test.18",
-  "testBuild": 10120,
-  "testShellVersion": "0.1.0-test.18",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v18_b10120.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v18_b10120.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/release.json",
+  "defaultVersion": "0.1.0-test.19",
+  "defaultBuild": 10121,
+  "testVersion": "0.1.0-test.19",
+  "testBuild": 10121,
+  "testShellVersion": "0.1.0-test.19",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v19_b10121.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v19_b10121.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.19-b10121/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test18-image-preview-cleanup-toggle-b10120",
+    "stage": "uploaded-v1-to-test19-cloud-search-multi-account-b10121",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10119,
-    "note": "Test18 adds native image preview and a configurable cross-app Magnet exit cleanup policy. Stable does not exist pending device validation."
+    "supersedesUnvalidatedBuild": 10120,
+    "note": "Test19 adds whole-drive search, local multi-account Web Session switching, and account-scoped temporary cleanup. Stable does not exist pending device validation."
   }
 }
