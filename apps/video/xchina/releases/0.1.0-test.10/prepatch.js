@@ -4,6 +4,7 @@
 (function(K){
   if(!K||String(K.version)!=='0.1.0-test.9'||Number(K.build)!==10109)throw new Error('Test10 prepatch: Test9 Core 未加载');
   var s=K.s,trim=K.trim,decode=K.decode,strip=K.strip,abs=K.abs,origin=K.origin;
+  K.C.baseKey='xc_t10_base';K.C.lastBaseKey='xc_t10_last_base';K.C.cachePrefix='xc_t10_html_';
   function attrQuoted(tag,name){
     var re=new RegExp(name+'\\s*=\\s*(["\\\'])([\\s\\S]*?)\\1','i'),m=re.exec(s(tag));
     return m?decode(m[2]):'';
