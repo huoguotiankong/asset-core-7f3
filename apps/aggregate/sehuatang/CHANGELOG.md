@@ -1,6 +1,6 @@
 # 色花堂海阔小程序 CHANGELOG
 
-状态：**0.1.0-test.31 / Build 10131 / 待实机验证**  
+状态：**0.1.0-test.32 / Build 10132 / 待实机验证**  
 首次建立：2026-09-23
 
 ## 当前恢复基线
@@ -10,10 +10,54 @@
 - 类型：自用远程 Test
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`
 - 当前无 Stable / Latest。
-- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt`
-- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js`
-- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json`
-- Test31 继承 Test1~Test30，并新增：`releases/0.1.0-test.31/patch_list_search_performance_v31.js`。
+- Test Shell：`apps/aggregate/sehuatang/sehuatang_remote_test_v32_b10132.txt`
+- Bootstrap：`apps/aggregate/sehuatang/bootstrap_test_v32_b10132.js`
+- Release：`apps/aggregate/sehuatang/releases/0.1.0-test.32/release.json`
+- Test32 继承 Test1~Test31，并新增：`releases/0.1.0-test.32/patch_pikpak_handoff_v32.js`。
+
+## 0.1.0-test.32 / Build 10132 — PikPak 磁链改走海阔小程序接力页
+
+### 实机问题
+
+1. 用户在帖子详情点击磁链区域的 `PikPak` 后，Android 弹出“海阔视界想要打开 PikPak”的系统应用跳转确认框；
+2. 这说明当前按钮实际执行的是原生 Android PikPak APP Deep Link，而不是调用已经安装在海阔中的 PikPak 小程序；
+3. 恢复当前 `thread.js` 后确认根因是 `magnetActions()` 把 PikPak URL 固定写成 `pikpakapp://mypikpak.com/xpan/main_tab?...&add_url=<magnet>`。
+
+### Test32 修复
+
+1. **禁用色花堂磁链按钮的 `pikpakapp://` 外部 APP 跳转**
+   - 不修改 Test16 已稳定的磁链识别、115、迅雷、复制按钮结构；
+   - 仅在 V32 覆盖层识别 `PikPak + pikpakapp://` 这一个边界并替换目标 URL；
+   - 如果未来旧原生链接无法提取出完整 Magnet，也不再回退打开 Android APP，而是给出海阔 toast 错误。
+
+2. **改用 PikPak 海阔小程序正式外部接力契约**
+   - 目标页：`hiker://page/fxlj?rule=PikPak&page=fypage&realurl=<encodeURIComponent(magnet)>`；
+   - 当前 PikPak Test23 Shell 已定义 `fxlj` 页面并导出 `$.require('pikpak').handoff()`；
+   - `handoff()` 使用 `realurl` 读取外部传入内容，识别 Magnet 后进入 PikPak 原生 Magnet 文件页；
+   - 这样还能继续复用 PikPak 已有 handoff session / 临时播放文件回收语义，而不是绕开小程序直接唤起官方 APP。
+
+3. **修改边界**
+   - 不修改 115、迅雷调用；
+   - 不修改帖子正文、评论页、图片顺序和视频嗅探；
+   - 不修改 Test30 帖子性能链与 Test31 列表 / Guide / 搜索性能链；
+   - 当前仍为 Test，未晋级 Stable。
+
+### Test32 静态门禁
+
+- `patch_pikpak_handoff_v32.js`：`node --check` 通过；
+- 已对包含 `&dn=` 的 Magnet 做转换测试，完整磁链会被 URL 编码后传入 `realurl`；
+- `bootstrap_test_v32_b10132.js`：`node --check` 通过；
+- `release.json / test.json / channels.json / manifest.json`：JSON 解析通过；
+- Shell 外层规则 JSON 与内层 `pages` JSON 解析通过；
+- Shell `version=2026092403`；
+- 继续固定 `asset-core-7f3@main`，未新增 `hiker-cloud` 依赖。
+
+### Test32 实机优先验收
+
+1. 覆盖导入 Test32 后进入任意含 Magnet 的帖子；
+2. 点击 `PikPak`，应直接进入海阔里的 `PikPak` 小程序调用页，不再弹 Android “打开 PikPak”确认框；
+3. PikPak 应收到与色花堂显示一致的完整 Magnet，并正常展示 Magnet 文件列表 / 播放；
+4. 同一处 115、迅雷、复制按钮仍应保持原行为。
 
 ## 0.1.0-test.31 / Build 10131 — 普通板块 / Guide / 搜索继续降延迟
 
@@ -250,4 +294,4 @@
 - 未实机确认前，不直接 POST 签到或回帖；
 - 不保存真实账号、密码、Cookie、formhash 到仓库；
 - Test 阶段不晋级 Stable，不登记根 `registry.json`；
-- 当前下一步：Test31 实机验证普通子板块首开、三个 Guide 首开、同关键词重复搜索与新关键词首次搜索速度；确认预览图/分类排序/详情页无退化后，再继续优化首页与跨页面缓存复用。
+- 当前下一步：优先实机验证 Test32 的 PikPak 调用是否直接进入海阔 PikPak 小程序且完整携带 Magnet；同时确认 115/迅雷无回归。Test31 的普通子板块、Guide 与搜索性能验收继续保留。
