@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.8",
+  "version": "0.1.0-test.9",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10108,
-  "shellVersion": "0.1.0-test.8",
-  "shellRuleVersion": 2026092408,
+  "build": 10109,
+  "shellVersion": "0.1.0-test.9",
+  "shellRuleVersion": 2026092409,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.8/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v8_b10108.js",
-  "rule": "apps/video/shise/shise_remote_test_v8_b10108.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.9/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v9_b10109.js",
+  "rule": "apps/video/shise/shise_remote_test_v9_b10109.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.7",
-    "build": 10107,
-    "release": "apps/video/shise/releases/0.1.0-test.7/release.json"
+    "version": "0.1.0-test.8",
+    "build": 10108,
+    "release": "apps/video/shise/releases/0.1.0-test.8/release.json"
   },
-  "notes": "Test8 preserves Test7 person pagination and structured metadata, and replaces the failing direct media handoff with Hiker video:// exact sniffing for the Shise playhls runtime endpoint."
+  "notes": "Test9 follows the current two-stage player contract: video.html?id -> player.html?id -> player-container src -> runtime media sniff; player initialization no longer blocks ad-network scripts. Current series.html pagination and direct person query paging are also applied."
 }
