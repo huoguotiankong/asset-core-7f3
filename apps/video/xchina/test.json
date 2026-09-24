@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.12",
+  "version": "0.1.0-test.13",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10112,
-  "shellVersion": "0.1.0-test.12",
-  "shellRuleVersion": 2026092406,
+  "build": 10113,
+  "shellVersion": "0.1.0-test.13",
+  "shellRuleVersion": 2026092407,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.12/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v12_b10112.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v12_b10112.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.13/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v13_b10113.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v13_b10113.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.11",
-    "build": 10111,
-    "release": "apps/video/xchina/releases/0.1.0-test.11/release.json"
+    "version": "0.1.0-test.12",
+    "build": 10112,
+    "release": "apps/video/xchina/releases/0.1.0-test.12/release.json"
   },
-  "notes": "Test12 is the current device-validation build: source-exact cover headers and type-specific cover fallbacks, six-work model preview, source-index-only tags, and HLS cacheM3u8 with historical s2.playhls.com Host. No Stable until device validation."
+  "notes": "Test13 follows the uploaded reading source more literally for media extraction/playback, fixes model-all pagination, and removes duplicate/promotional video-detail text. No Stable until device validation."
 }
