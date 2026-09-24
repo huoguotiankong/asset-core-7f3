@@ -1,8 +1,39 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.14 / Build 10114 — 2026-09-24
+
+状态：**当前 Test；根据 Test13 实机结果暂停其它优化，当前版本只处理视频播放；无 Stable。**
+
+### 当前实机事实
+- [实机确认] Test13 对多个真实视频详情仍显示“暂未解析到正片”，播放诊断同样显示没有正片媒体地址。
+- [实机确认] 这意味着 Test13 的 `fetch → main-container → 主站精确重取 → fetchCodeByWebView` 静态源码链仍然拿不到最终播放时才产生的正片地址；继续只扩展静态正则意义不大。
+- 用户明确要求先把播放修复好，播放没有通过前暂停套图封面、漫画封面、女优全部视频和其它 UI 优化。
+
+### Test14 播放策略
+- Test14 不再让视频详情页在渲染阶段等待静态 `main-container` 猜媒体。详情页保留标题、封面、女优/模特和一个主播放按钮，点击后才进入实时媒体捕获。
+- 主播放改用海阔 `webRule://`：让真实网页在 WebKit 中运行，并每约 250 ms 执行资源提取脚本；优先读取 `.main-container video/source`，同时检查 `window._getUrls()`、`fy_bridge_app.getUrls()` 与 `performance.getEntriesByType('resource')`。
+- 只接受明确的 `.m3u8` 正片候选；优先包含 `playhls`、`/hls/`、`master.m3u8`、`index.m3u8` 的地址。
+- 对 `doubleclick / googlesyndication / ads / advert / banner / promo / analytics / tracking / vast / ima` 等广告与统计资源直接排除。
+- 播放页增加三条独立实机链：`WebKit 精准捕获` → `X5 精准捕获` → `M3U8-only 自动提取`。第三条才使用海阔原生 `video://`，但显式 `videoRules=['.m3u8']`，并把 `.mp4` 与广告关键词放入 `videoExcludeRules`，避免 Test9 时代再次把 MP4 广告识别成正片。
+- WebKit/X5 页面项继续携带上传阅读源使用的 Quark UA 和 `Referer: https://xchina.co/`；如果站点先要求验证，则通过设置页 X5 主站验证复用 live Cookie。
+- 本轮不再对任意 CDN 强塞 `Host=s2.playhls.com`；捕获到实际 m3u8 后再根据真实媒体 host 决定后续 Header/缓存处理。
+
+### 修改边界
+- Release 基线保持 Test13 不动，只在最后追加 `releases/0.1.0-test.14/playback_patch.js`：`Test9 categories → Test9 categoryFix → Test9 core → Test13 prepatch → Test9 pages → Test13 postpatch → Test14 playbackPatch`。
+- 不修改 Test13 的列表、搜索、分类、女优/模特、套图、漫画、阅读器等业务实现，避免当前播放攻关继续扩大回归面。
+- Shell：`xchina_remote_test_v14_b10114.txt`，规则 version `2026092408`；Bootstrap：`bootstrap_test_v14_b10114.js`，`minBuild=10114`。
+- `test.json / channels.json / manifest.json` 已切到 `0.1.0-test.14 / Build 10114`；Stable 仍不存在。
+
+### Test14 实机验收
+1. 设置页确认 `Test 0.1.0-test.14 · Build 10114`。
+2. 用 Test13 同一个失败视频直接点 `▶️ 播放`，确认 WebKit 捕获是否能进入真正播放器。
+3. 主播放失败时进入“播放诊断 / 备用引擎”，依次测试：WebKit 精准捕获 → X5 精准捕获 → M3U8-only 自动提取。
+4. 只有出现真实码率、合理总时长、进度持续推进并可拖动后，才能判断播放链成功；只打开播放器、只抓到 URL 或只播放广告均不算成功。
+5. Test14 播放未通过前，不继续其它视觉/列表优化，也不得晋级 Stable。
+
 ## 0.1.0-test.13 / Build 10113 — 2026-09-24
 
-状态：**当前 Test；针对 Test12 实机确认的“视频仍未解析到正片、女优全部视频只显示部分、视频详情夹带重复/推广文本”继续修复；无 Stable。**
+状态：**历史 Test；针对 Test12 实机确认的“视频仍未解析到正片、女优全部视频只显示部分、视频详情夹带重复/推广文本”继续修复；无 Stable。**
 
 ### 当前实机确认
 - [实机确认] Test12 女优/模特详情首屏已能按产品要求展示前 6 部作品并显示收录总数，但点击“查看全部视频”后只得到原站第一页的部分作品，没有随海阔 `MY_PAGE` 继续翻原站分页。
@@ -55,7 +86,7 @@
 
 ### 女优 / 模特页
 - 详情页直接展示前 6 部视频作品，解析原站“收录视频数”，并优先提供“查看全部视频 · N”入口；避免把几十/上百部作品一次性铺满详情首屏。
-- 保留原站资料/简介与视频作品分区；没有独立“全部视频”链接但实际解析到超过 6 部，则提供“查看本页全部作品”入口，不再首屏无限铺卡。
+- 保留原站资料/简介与作品区分层；没有独立“全部视频”链接但实际解析到超过 6 部，则提供“查看本页全部作品”入口，不再首屏无限铺卡。
 
 ### 标签
 - 女优/模特只允许来自 `.model-container@a` 且 href 确认属于 `/model/` 或 `/models/`。
@@ -112,7 +143,7 @@
 ### Test11 套图 / 漫画封面
 - Test11 不加载 Test10 patch，直接从冻结 Test9 阅读源基线重建 pre-pages 修复，避免错误 patch 继续叠加。
 - 封面只在**当前作品卡片自身**查找：优先 `.img@style → url(...)`，再回退当前 `.img` 的 `data-original/data-src/data-lazy-src/src`，最后才读取当前卡片 `<img>`；禁止跨相邻卡片搜索。
-- 新属性读取器按外层 HTML 引号闭合位置解析完整 `style`，避免 CSS `url('...')` 内部单引号造成截断；同时恢复 `\\/`、`\\u002F` 与 HTML 实体。
+- 新属性读取器按外层 HTML 引号闭合位置解析完整 `style`，避免 CSS `url('...')` 内部单引号截断；同时恢复 `\\/`、`\\u002F` 与 HTML 实体。
 - 图片继续使用海阔 `url@headers={...}` 交付；套图使用主站 Referer，漫画列表在当前独立漫画域列表中允许使用漫画域 Referer；不向第三方 CDN 盲发无关 Cookie。
 - Test11 使用独立 `xc_t11_*` 线路/缓存命名空间，避免 Test9/Test10 错误缓存影响本轮判断。
 
@@ -245,6 +276,7 @@
 - 新增播放器最终交付层：显式携带详情页 `Referer`、`Origin`、`User-Agent` 和可用 live Cookie；最终格式统一为 `url#isVideo=true#;{...}`，不再只在解析/预检层携带 Header。
 - 视频详情已拿到直链时直接生成最终播放器 URL，点击不再二次打开播放页、重复请求同一详情页。
 - 播放线路页仍保留 `video://详情页` 作为明确兜底，用于实机判断“直链 Header 交付问题”与“原站需要浏览器媒体提取”两类故障。
+
 ### 架构 / 发布
 - Test7 不叠加 Test6 Runtime；仍从冻结 Test4 做一次确定性变换，并拆成 `runtime_base.js + runtime_pages.js` 两个按 Release 顺序加载的模块，Remote Manager 2.0.1 已确认按 `modules[]` 顺序 `require()` 后再做全局导出校验。
 - 新 Shell：`xchina_remote_test_v7_b10107.txt`，规则 version `2026092401`；新 Bootstrap：`bootstrap_test_v7_b10107.js`，`minBuild=10107`。
@@ -306,7 +338,7 @@
 
 ## 0.1.0-test.5 / Build 10105 — 2026-09-15
 
-状态：**历史 Test；代码门禁与仓库静态回读通过，未完成海阔实机验证；无 Stable。**
+状态：**历史 Test；代码门禁与本地合约 smoke，未完成海阔实机验证；无 Stable。**
 
 ### X5 / Cookie 会话加固
 - 保留 Test4 的小说、套图、漫画、视频、模特、搜索、分类、章节、图片和媒体 Parser，不改业务协议面。
@@ -315,7 +347,7 @@
 - 图片请求按图片 URL 自身域名实时读取可用 Cookie，避免把主站会话无条件泄漏到第三方媒体域。
 - 设置页仅显示“主站/漫画 Cookie 已读取或未读取”，不展示凭据内容。
 - Cloudflare/验证页仍遵循：普通 fetch（现在自动带 live Cookie）→ 限次 WebView 兜底 → stale cache；验证页本身不写入正常 HTML 缓存。
-- Test5 只以冻结 Test4 为唯一 seed 做一次确定性变换，Test1–Test4 均保持不可变；未重新引入 Test1→Test2→Test3 多层补丁链。
+- Test5 只以冻结 Test4 为唯一 seed 做一次确定性变换，不叠加 Test1→Test2→Test3 多层补丁链。
 
 ### Test5 实机验收
 1. 覆盖导入后设置页显示 Test5 / Build 10105。
