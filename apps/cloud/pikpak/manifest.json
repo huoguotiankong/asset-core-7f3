@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.16",
-  "defaultBuild": 10118,
-  "testVersion": "0.1.0-test.16",
-  "testBuild": 10118,
-  "testShellVersion": "0.1.0-test.16",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v16_b10118.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v16_b10118.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/release.json",
+  "defaultVersion": "0.1.0-test.17",
+  "defaultBuild": 10119,
+  "testVersion": "0.1.0-test.17",
+  "testBuild": 10119,
+  "testShellVersion": "0.1.0-test.17",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v17_b10119.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v17_b10119.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.17-b10119/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test16-drive-management-b10118",
+    "stage": "uploaded-v1-to-test17-trash-scope-library-b10119",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10117,
-    "note": "Test15 login, Drive browsing and playback are real-device confirmed. Test16 adds file management, recycle bin, My Pack Magnet destination, video-only playlists and UI improvements. Stable does not exist pending device validation."
+    "supersedesUnvalidatedBuild": 10118,
+    "note": "Test17 fixes the real-device recycle query using parent_id=* and adds starred/recent/detail/global-search/filter/UI enhancements. Stable does not exist pending device validation."
   }
 }

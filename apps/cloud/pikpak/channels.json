@@ -10,23 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.16",
+      "version": "0.1.0-test.17",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10118,
-      "displayVersion": "Test 0.1.0-test.16 · Build 10118",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v16_b10118.txt",
+      "build": 10119,
+      "displayVersion": "Test 0.1.0-test.17 · Build 10119",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v17_b10119.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test16 builds on the device-confirmed Web login and playback baseline with Drive management and video-focused playback.",
+      "desc": "PikPak Test17 fixes the real-device trash listing and expands the Drive library experience.",
       "highlights": [
-        "Test15 已由实机确认官方网页登录、个人网盘浏览和视频在线播放成功",
-        "个人盘与 Magnet 播放列表只给视频标记 playlist，Magnet 页面过滤文件夹和非视频",
-        "跨小程序 Magnet 播放文件默认创建到 My Pack，退出调用页仍按会话移入回收站",
-        "新增回收站浏览、还原、永久删除和清空",
-        "新增文件/文件夹移动、复制目标目录选择，以及标题解码和 UI 优化",
-        "Magnet 与文件管理待实机验证；Stable 保持不变"
+        "修复 Test16 回收站空列表：跨文件夹查询显式使用 parent_id=*",
+        "新增星标文件、最近文件、文件详情与全盘前 500 项搜索",
+        "新增目录筛选与名称倒序，首页改为 My Pack / 星标 / 最近 / 回收站快捷面板",
+        "保留视频专属播放列表、My Pack Magnet 目标、移动/复制及安全回收语义",
+        "回收站、Magnet 与文件管理待实机验证；Stable 保持不变"
       ]
     }
   ]

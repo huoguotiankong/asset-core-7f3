@@ -347,3 +347,29 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 当前 Test：`0.1.0-test.16 / Build10118`；Stable 尚未建立。
 
 ---
+## 2026-09-24 · 0.1.0-test.17 / Build10119 · 修复回收站全盘查询并增强文件库
+
+### Test16 实机反馈
+
+用户确认文件可以通过 batchTrash 删除，但 Test16 回收站页面始终为空。复核当前 PikPak 客户端实现后确认：回收站、星标和全盘列表不是普通根目录查询，必须显式传递特殊范围 parent_id=*。Test16 的 listTrash() 省略了该字段，因此只得到空列表。
+
+### Test17 修正与增强
+
+- 回收站查询改为 GET /drive/v1/files?parent_id=*&filters={trashed.eq:true}，保留分页、还原、永久删除和清空。
+- 新增星标/取消星标与“星标文件”页；星标列表同样使用全盘范围。
+- 新增“最近文件”页，按修改时间查看跨文件夹项目。
+- 搜索由仅根目录扩大为全盘范围的前 500 个项目，并继续兼容分享链接、Magnet 和 HTTP 输入。
+- 新增文件详情页，可查看大小、时间、ID、父目录、Hash，并直接下载、星标、移动或复制。
+- 新增目录筛选：全部、仅视频、仅文件夹；排序新增名称倒序。
+- 首页重排为容量状态、My Pack、星标、最近、回收站、离线任务和常用操作，继续保持原生轻量 UI。
+- 保留 Test15 已验证的网页登录/个人盘/播放，保留 Test16 的视频专属 playlist、My Pack Magnet 目标和安全回收策略。
+
+### 发布与验收
+
+- 新增不可变 Test17 Provider/UI/Pages/Runtime/Identity 模块、Release、Bootstrap 与 Shell；Shell version=2026092407，build=10119。
+- 发布前执行 JavaScript 语法、模块顺序、Shell JSON、远程路径及运行时导出检查。
+- 待实机验证：回收站可见性、还原/永久删除/清空、星标、移动/复制、全盘搜索、Magnet My Pack 与退出回收。验证前不得建立 Stable。
+
+当前 Test：0.1.0-test.17 / Build10119；Stable 尚未建立。
+
+---
