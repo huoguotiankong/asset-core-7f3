@@ -10,22 +10,21 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.24",
+      "version": "0.1.0-test.25",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10126,
-      "displayVersion": "Test 0.1.0-test.24 · Build 10126",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v24_b10126.txt",
+      "build": 10127,
+      "displayVersion": "Test 0.1.0-test.25 · Build 10127",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v25_b10127.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test24 exposes smooth transcoded playback routing and safe latency diagnostics, and fixes the clipped home dashboard.",
+      "desc": "Restores Test23 playable media-line contract after Test24 device regression, retaining compact home.",
       "highlights": [
-        "根据 Test23 实机反馈，修复首页状态挤压、重复 Magnet 入口和首屏过长",
-        "默认流畅转码优先；原画、官方原顺序、原文件兼容可切换",
-        "播放诊断仅记录取链毫秒数及线路名称，不保存带签名 URL 或 Token",
-        "单账号官方 Web Session 不变，首帧/拖动仍待实机对照",
-        "Stable 保持不变"
+        "恢复 Test23 多线路播放器输出和官方 media 原顺序",
+        "移除 Test24 未经验证的双层视频标记与默认画质重排",
+        "保留紧凑首页与单账号官方 Web 登录",
+        "首帧与拖动须实机验证，Stable 不变"
       ]
     }
   ]

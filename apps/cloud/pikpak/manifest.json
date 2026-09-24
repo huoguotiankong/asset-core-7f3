@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.24",
-  "defaultBuild": 10126,
-  "testVersion": "0.1.0-test.24",
-  "testBuild": 10126,
-  "testShellVersion": "0.1.0-test.24",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v24_b10126.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v24_b10126.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.24-b10126/release.json",
+  "defaultVersion": "0.1.0-test.25",
+  "defaultBuild": 10127,
+  "testVersion": "0.1.0-test.25",
+  "testBuild": 10127,
+  "testShellVersion": "0.1.0-test.25",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v25_b10127.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v25_b10127.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.25-b10127/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test24-quality-route-diagnostic-b10126",
+    "stage": "test25-restore-test23-player-contract-b10127",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10125,
-    "note": "Test24 selects smooth transcoded streams first and safely exposes playback API latency, with a compact home layout. Single Web account remains and Stable is unchanged."
+    "supersedesUnvalidatedBuild": 10126,
+    "note": "Test25 restores Test23 known player output and preserves Test24 compact home; device validation pending, Stable unchanged."
   }
 }

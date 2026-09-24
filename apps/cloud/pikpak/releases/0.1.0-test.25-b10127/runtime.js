@@ -1,0 +1,2 @@
+/* PikPak Test25 Build10127 - playback preference export and identity */
+(function(C,R){var base=R.module;R.version='0.1.0-test.25';R.build=10127;R.module=function(){var m=base();m.setPlaybackRouteAction=function(v){C.set('playback_route',String(v||'').indexOf('原文件')===0?'raw':'media');toast('播放线路已切换：'+(C.item('playback_route','media')==='raw'?'原文件优先':'官方流媒体优先'));refreshPage(false);return 'hiker://empty';};m.version='0.1.0-test.25';m.build=10127;return m;};})(PikPakCore,PikPakRemoteRuntime);
