@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "magnetjun-test",
+  "appId": "magnetjun",
+  "name": "磁力君.简",
+  "version": "1.0.0-test.1",
+  "build": 10101,
+  "shellVersion": "1.0.0-test.1",
+  "shellRuleVersion": 2026092501,
+  "delivery": "managed-remote-runtime",
+  "release": "apps/tools/magnetjun/releases/1.0.0-test.1/release.json",
+  "rule": "apps/tools/magnetjun/magnetjun_remote_test_v1_b10101.txt",
+  "entryRef": "19645c8047699d914958c46296b11847feff651e",
+  "shellRef": "299297dca3c6eca663020d3b5f70e411cf2c8992",
+  "updatedAt": "2026-09-25",
+  "status": "active-test-awaiting-device-validation",
+  "deviceValidation": {
+    "level": "pending-first-managed-runtime",
+    "pending": [
+      "home/search page startup",
+      "external search with searchTerms",
+      "aggregate multi-source search",
+      "single-source filter",
+      "PikPak/115/迅雷/光鸭/123 handoff",
+      "source enable-disable",
+      "search history",
+      "metadata page",
+      "legacy config compatibility"
+    ]
+  },
+  "notes": "Visible application name is 磁力君.简. The word test is used only for the release channel and must not appear in the application title."
+}
