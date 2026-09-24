@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.10",
+  "version": "0.1.0-test.11",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10110,
-  "shellVersion": "0.1.0-test.10",
-  "shellRuleVersion": 2026092410,
+  "build": 10111,
+  "shellVersion": "0.1.0-test.11",
+  "shellRuleVersion": 2026092411,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.10/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v10_b10110.js",
-  "rule": "apps/video/shise/shise_remote_test_v10_b10110.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.11/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v11_b10111.js",
+  "rule": "apps/video/shise/shise_remote_test_v11_b10111.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.9",
-    "build": 10109,
-    "release": "apps/video/shise/releases/0.1.0-test.9/release.json"
+    "version": "0.1.0-test.10",
+    "build": 10110,
+    "release": "apps/video/shise/releases/0.1.0-test.10/release.json"
   },
-  "notes": "Test10 fixes the device-confirmed /video/id-<id>.html detail form, derives player.html?id=<id>, then continues Test9 player-container src and runtime media sniffing."
+  "notes": "Test11 keeps the Test10 player chain but replaces immediate video:// capture with webRule polling that skips short preroll videos and waits for a post-ad or long-form media request."
 }
