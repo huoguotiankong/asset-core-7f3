@@ -1,0 +1,2 @@
+/* PikPak Test22 Build10124 - single-account dashboard entry */
+(function(C,UI){var base=UI.homeHeader;UI.homeHeader=function(){var d=base(),logged=C.loggedIn(),hasSearch=false,i;for(i=0;i<d.length;i++){if(String(d[i].title||'').indexOf('云盘搜索')>=0)hasSearch=true;if(String(d[i].title||'').indexOf('账号')>=0)d[i].title='👤 账号';}if(logged&&!hasSearch)d.splice(1,0,{title:'🔍 云盘搜索',url:UI.route('pikpakSearch'),col_type:'scroll_button'});return d;};})(PikPakCore,PikPakUI);

@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.21",
-  "defaultBuild": 10123,
-  "testVersion": "0.1.0-test.21",
-  "testBuild": 10123,
-  "testShellVersion": "0.1.0-test.21",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v21_b10123.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v21_b10123.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.21-b10123/release.json",
+  "defaultVersion": "0.1.0-test.22",
+  "defaultBuild": 10124,
+  "testVersion": "0.1.0-test.22",
+  "testBuild": 10124,
+  "testShellVersion": "0.1.0-test.22",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v22_b10124.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v22_b10124.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test21-web-session-rotation-recovery-b10123",
+    "stage": "uploaded-v1-to-test22-single-account-web-session-b10124",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10122,
-    "note": "Test21 repairs rotated Web refresh_token sessions and coherent credential capture while retaining Test20 search and account work. Stable does not exist pending device validation."
+    "supersedesUnvalidatedBuild": 10123,
+    "note": "Test22 removes multi-account storage and retains one official Web Session confirmed by an actual Drive Bearer request. Stable does not exist pending device validation."
   }
 }

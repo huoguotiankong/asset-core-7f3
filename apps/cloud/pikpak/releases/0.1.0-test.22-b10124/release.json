@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "id": "pikpak-test",
+  "name": "PikPak",
+  "version": "0.1.0-test.22",
+  "build": 10124,
+  "ref": "main",
+  "baseStable": null,
+  "previousTest": "0.1.0-test.21",
+  "variant": "single-account-network-confirmed-web-session",
+  "modules": [
+    {
+      "name": "core-base",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.3/core.js"
+    },
+    {
+      "name": "core-test11-web-token-handoff",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.11-b10113/core_web_token_patch.js"
+    },
+    {
+      "name": "core-test12-access-first",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.12-b10114/core_access_first_patch.js"
+    },
+    {
+      "name": "core-test22-single-web-session",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/core_single_web_session_patch.js"
+    },
+    {
+      "name": "provider",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.1/provider.js"
+    },
+    {
+      "name": "provider-test5-safe-cleanup",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.5/provider_patch.js"
+    },
+    {
+      "name": "provider-test6-handoff",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.6/provider_patch.js"
+    },
+    {
+      "name": "provider-test16-drive-management",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/provider_drive_patch.js"
+    },
+    {
+      "name": "provider-test17-library",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.17-b10119/provider_library_patch.js"
+    },
+    {
+      "name": "provider-test18-cleanup-setting",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/provider_cleanup_setting_patch.js"
+    },
+    {
+      "name": "provider-test20-native-search",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.20-b10122/provider_native_search_patch.js"
+    },
+    {
+      "name": "playback",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.1/playback.js"
+    },
+    {
+      "name": "playback-test16-my-pack",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/playback_drive_patch.js"
+    },
+    {
+      "name": "playback-test18-image-preview",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/playback_image_patch.js"
+    },
+    {
+      "name": "ui",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.1/ui.js"
+    },
+    {
+      "name": "ui-test16-drive",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/ui_drive_patch.js"
+    },
+    {
+      "name": "ui-test17-library",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.17-b10119/ui_library_patch.js"
+    },
+    {
+      "name": "ui-test18-image",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/ui_image_patch.js"
+    },
+    {
+      "name": "ui-test22-single-account",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/ui_single_account_patch.js"
+    },
+    {
+      "name": "pages-base",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.1/pages.js"
+    },
+    {
+      "name": "pages-test5-verification-runtime-contract",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.5/pages_patch.js"
+    },
+    {
+      "name": "pages-test7-cleanup-semantics",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.7/pages_patch.js"
+    },
+    {
+      "name": "pages-test11-web-token-handoff",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.11-b10113/pages_web_token_patch.js"
+    },
+    {
+      "name": "pages-test15-web-session-bridge",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.15-b10117/pages_web_session_bridge.js"
+    },
+    {
+      "name": "pages-test16-drive",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/pages_drive_patch.js"
+    },
+    {
+      "name": "pages-test17-library",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.17-b10119/pages_library_patch.js"
+    },
+    {
+      "name": "pages-test18-settings",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/pages_settings_patch.js"
+    },
+    {
+      "name": "pages-test21-web-session-rotation",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.21-b10123/pages_web_session_rotation_patch.js"
+    },
+    {
+      "name": "pages-test22-single-account",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/pages_single_account_patch.js"
+    },
+    {
+      "name": "runtime-base",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "runtime-test5-verification",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.5/runtime_patch.js"
+    },
+    {
+      "name": "runtime-test6-handoff",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.6/runtime_patch.js"
+    },
+    {
+      "name": "runtime-test11-web-token-handoff",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.11-b10113/runtime_web_token_patch.js"
+    },
+    {
+      "name": "runtime-test16-drive",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.16-b10118/runtime_drive_patch.js"
+    },
+    {
+      "name": "runtime-test17-library",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.17-b10119/runtime_library_patch.js"
+    },
+    {
+      "name": "runtime-test18-settings",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.18-b10120/runtime_settings_patch.js"
+    },
+    {
+      "name": "runtime-test22-single-account",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/runtime_single_account_patch.js"
+    },
+    {
+      "name": "runtime-test22-identity",
+      "path": "apps/cloud/pikpak/releases/0.1.0-test.22-b10124/runtime_version_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "PikPakRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.22",
+    "build": 10124
+  },
+  "status": "pending-device-validation",
+  "notes": "Test22 removes the Test19/20 multi-account registry and account-scoped session switching. Only one official Web Session is retained, and Web handoff now requires a bearer observed on a real Drive request before replacing the local session. Stable remains absent."
+}

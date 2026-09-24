@@ -471,3 +471,34 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 当前 Test：0.1.0-test.21 / Build10123；Stable 尚未建立。
 
 ---
+
+## 2026-09-24 · 0.1.0-test.22 / Build10124 · 撤销多账号并恢复单账号模型
+
+### Test21 实机反馈与决策
+
+- Web Session 轮换恢复仍未让个人网盘文件恢复显示。
+- 用户明确要求停止多账号方向，只保留一个 PikPak 账号；不再继续修补账号列表和切换链。
+
+### Test22 架构收敛
+
+- 从活动 Release 中移除 Test19 多账号 Core、账号作用域临时文件模块、账号搜索页 Runtime 和 Test20 多账号导出链。
+- 同时移除仍会在首次迁移时清除 Web Session 的 Test10 Android Auth/Migration/Page/Runtime 模块，活动链不再混入 Android refreshAccess/captcha 登录实现。
+- 启动时清理 `accounts`、`current_account_id` 等多账号索引，只保留现有 `pikpak_v2_session` 作为唯一当前会话；再次网页登录会直接替换它。
+- 账号页删除添加账号、切换、重命名和移除账号功能，只提供当前单账号状态、官方网页登录同步和清除本机会话。
+- 临时播放文件恢复为单账号队列，继续遵守跨小程序 Magnet 退出自动回收开关。
+
+### 登录恢复修正
+
+- 网页会话接管不再仅凭 localStorage、sessionStorage 或 IndexedDB 自动返回。
+- 必须在官方文件页捕获到真实 Fetch/XHR Drive 请求中的 Bearer，才允许写入本机单账号 Session；网页存储仅用于补充同一网页登录态的 Refresh Token、device_id 等字段。
+- 保留 Test21 的失效诊断与首页/文件夹恢复入口；继续禁止 Android 账号密码/captcha 登录。
+
+### 发布与验收
+
+- 新增不可变 Test22 Core/UI/Pages/Runtime/Identity 模块、Release、Bootstrap 与完整 Shell；Shell version=`2026092412`，build=`10124`。
+- 保留原生全盘搜索、个人盘浏览、视频/图片播放、My Pack Magnet、离线任务、回收站、移动/复制、星标/最近/详情和临时文件清理。
+- 待海阔实机验证：官方网页进入文件页并产生 Drive 请求后能自动接回；首页文件出现；退出重进仍可读取；云盘搜索和播放正常。验证前不得建立 Stable。
+
+当前 Test：0.1.0-test.22 / Build10124；Stable 尚未建立。
+
+---

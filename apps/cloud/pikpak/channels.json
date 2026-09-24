@@ -10,22 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.21",
+      "version": "0.1.0-test.22",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10123,
-      "displayVersion": "Test 0.1.0-test.21 · Build 10123",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v21_b10123.txt",
+      "build": 10124,
+      "displayVersion": "Test 0.1.0-test.22 · Build 10124",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v22_b10124.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test21 repairs Web Session token rotation and restores cloud file access.",
+      "desc": "PikPak Test22 removes multi-account state and retains one network-confirmed Web Session.",
       "highlights": [
-        "识别 invalid refresh token / refreshed by other process，并提供官方网页会话恢复入口",
-        "网页捕获改为按来源优先级保存同一凭据对象，避免新 Access Token 与旧 Refresh Token 混用",
-        "刷新成功后把轮换后的新 Refresh Token 原子写回当前账号，不再生成重复账号快照",
-        "继续保留 Test20 原生全盘搜索、新增账号流程和既有文件/播放能力",
-        "会话恢复、文件列表和账号切换待实机验证；Stable 保持不变"
+        "移除本机账号列表、账号切换、重命名和多账号 Session 注册表",
+        "启动时清理 Test19/20 遗留多账号索引，但保留当前单账号 pikpak_v2_session",
+        "网页登录必须捕获真实 Drive 请求的当前 Bearer 后才允许替换本机会话",
+        "保留原生全盘搜索、浏览、播放、Magnet、回收站和文件管理能力",
+        "单账号登录恢复与文件列表待实机验证；Stable 保持不变"
       ]
     }
   ]
