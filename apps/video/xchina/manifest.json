@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.9",
-  "defaultBuild": 10109,
-  "testVersion": "0.1.0-test.9",
-  "testBuild": 10109,
-  "testShellVersion": "0.1.0-test.9",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v9_b10109.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v9_b10109.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.9/release.json",
+  "defaultVersion": "0.1.0-test.10",
+  "defaultBuild": 10110,
+  "testVersion": "0.1.0-test.10",
+  "testBuild": 10110,
+  "testShellVersion": "0.1.0-test.10",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v10_b10110.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v10_b10110.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.10/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test9-reader-source-contract-rebuild",
-    "note": "Test9 is a clean source-contract rebuild from the uploaded 2025-11-13 reading source. It replaces Test7 generic card/media heuristics with exact cover/content/media contracts and keeps Stable absent until device validation."
+    "stage": "test10-cover-tags-ad-safe-playback-device-fix",
+    "note": "Test10 keeps Test9 source-contract assets immutable, fixes quoted style cover extraction and dependency rebinding, adds clickable video detail tags, expands main-container media extraction, and removes ad-prone video sniff fallback."
   }
 }
