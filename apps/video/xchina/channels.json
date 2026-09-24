@@ -10,24 +10,24 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.9",
+      "version": "0.1.0-test.10",
       "targetVersion": "0.1.0",
-      "build": 10109,
-      "displayVersion": "Test 0.1.0-test.9 · Build 10109",
-      "path": "apps/video/xchina/xchina_remote_test_v9_b10109.txt",
+      "build": 10110,
+      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
+      "path": "apps/video/xchina/xchina_remote_test_v10_b10110.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test9：不再继续修补 Test7，按上传的夜明空小黄书阅读源重新建立列表、封面、分类、正文和媒体协议；视频默认按阅读源原始媒体地址免嗅直连。",
+      "desc": "Test10：针对当前实机继续修复套图/漫画封面、视频详情标签和真实播放链；关闭会误嗅广告的 video:// 兜底。",
       "highlights": [
-        "列表优先按阅读源真实 item fiction/photo/comic/amateur/video 结构解析",
-        "套图/漫画封面严格优先读取 .img@style 的 url(...)，列表封面 Referer 固定使用 xchina.co",
-        "漫画正文图片 Referer 单独使用 litu100.xyz，小说/漫画/套图/自拍正文使用阅读源指定容器",
-        "完整迁入阅读源当前小说、漫画、套图工作室/专辑和视频系列分类路由",
-        "视频从 main-container 优先读取 quoted m3u8；无 m3u8 时支持 var domain + var videos",
-        "播放主链改为阅读源语义的原始媒体地址免嗅直连，Header 兼容与 video:// 只做回退",
-        "保留 X5 同会话验证、主/备用线路与 Test9 独立缓存命名空间",
-        "无 Stable，需海阔实机确认封面和真实播放后再晋级"
+        "封面解析不再被 style 内部单引号截断，直接读取 .img 标签完整 style 再解析 url(...) ",
+        "重新绑定 listResult/parseCards，确保页面真正执行新的封面解析而不是继续走旧闭包",
+        "视频详情新增可点击标签，优先从 video-detail/tags/model-container 的真实链接提取模特、系列等标签",
+        "媒体解析扩展到 main-container 内相对/绝对/转义 m3u8、结构化 url/file/src 和 var videos MP4",
+        "过滤明显广告/统计媒体候选，取消 video:// 网页嗅探，避免广告伪播放",
+        "播放线路仅保留免嗅原始媒体和 Header 兼容两类可验证候选",
+        "继续保留阅读源定义的漫画正文独立 Referer、主/备用线路和 X5 验证链",
+        "无 Stable，需海阔实机确认封面、标签和正片播放后再晋级"
       ]
     }
   ]
