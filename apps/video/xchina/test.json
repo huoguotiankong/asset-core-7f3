@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.6",
+  "version": "0.1.0-test.7",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10106,
-  "shellVersion": "0.1.0-test.6",
-  "shellRuleVersion": 2026091502,
+  "build": 10107,
+  "shellVersion": "0.1.0-test.7",
+  "shellRuleVersion": 2026092401,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.6/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v6_b10106.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v6_b10106.txt",
-  "updatedAt": "2026-09-15",
+  "release": "apps/video/xchina/releases/0.1.0-test.7/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v7_b10107.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v7_b10107.txt",
+  "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.5",
-    "build": 10105,
-    "release": "apps/video/xchina/releases/0.1.0-test.5/release.json"
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/video/xchina/releases/0.1.0-test.6/release.json"
   },
-  "notes": "Test6 decodes and applies the uploaded reader-source hidden content rules, adds exact content scopes, media-domain live Cookie handoff, and the missing fiction tag-2 category. No Stable until device validation."
+  "notes": "Test7 preserves Test6 content scopes and X5 live Cookie, fixes list cover/card binding and duplicate leakage, simplifies home/detail hierarchy, and changes video playback to an explicit Referer/Origin/UA/Cookie player handoff with sniff fallback. No Stable until device validation."
 }
