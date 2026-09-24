@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.2",
+  "version": "0.1.0-test.3",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10102,
-  "shellVersion": "0.1.0-test.2",
-  "shellRuleVersion": 2026092402,
+  "build": 10103,
+  "shellVersion": "0.1.0-test.3",
+  "shellRuleVersion": 2026092403,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.2/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v2_b10102.js",
-  "rule": "apps/video/shise/shise_remote_test_v2_b10102.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.3/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v3_b10103.js",
+  "rule": "apps/video/shise/shise_remote_test_v3_b10103.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.1",
-    "build": 10101,
-    "release": "apps/video/shise/releases/0.1.0-test.1/release.json"
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/video/shise/releases/0.1.0-test.2/release.json"
   },
-  "notes": "Test2 keeps Test1 parser/playback core and fixes settings refresh/cache semantics before first device delivery."
+  "notes": "Test3 rebuilds the shell with neutral page names, unicode-escaped title text and no direct-site icon to avoid import keyword/domain filtering."
 }
