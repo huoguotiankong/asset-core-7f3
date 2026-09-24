@@ -27,26 +27,11 @@
     "docs/INCIDENT_LOCAL_FIRST_TRANSITIVE_DEPENDENCY_AND_LAZY_REENTRY_20260825.md"
   ],
   "categories": [
-    {
-      "id": "video",
-      "name": "视频影视"
-    },
-    {
-      "id": "comic",
-      "name": "漫画"
-    },
-    {
-      "id": "cloud",
-      "name": "网盘"
-    },
-    {
-      "id": "tools",
-      "name": "工具"
-    },
-    {
-      "id": "aggregate",
-      "name": "聚合"
-    }
+    {"id": "video", "name": "视频影视"},
+    {"id": "comic", "name": "漫画"},
+    {"id": "cloud", "name": "网盘"},
+    {"id": "tools", "name": "工具"},
+    {"id": "aggregate", "name": "聚合"}
   ],
   "apps": [
     {
@@ -304,13 +289,13 @@
       "channels": "apps/video/myav/channels.json",
       "rule": "apps/video/myav/myav_remote_stable_v1_b10112.txt",
       "bootstrap": "apps/video/myav/bootstrap_stable_v1_b10112.js",
-      "testVersion": "0.1.1-test.1",
-      "testBuild": 10201,
-      "testRule": "apps/video/myav/myav_remote_test_localfirst_v1_b10201.txt",
-      "testRelease": "apps/video/myav/releases/0.1.1-test.1/release.json",
+      "testVersion": "0.1.1-test.2",
+      "testBuild": 10202,
+      "testRule": "apps/video/myav/myav_remote_test_v2_b10202.txt",
+      "testRelease": "apps/video/myav/releases/0.1.1-test.2/release.json",
       "changelog": "apps/video/myav/CHANGELOG.md",
-      "migration": "stable-010-localfirst-test-011t1-basic-device-validated",
-      "testDelivery": "local-first-single-runtime-bundle"
+      "migration": "stable-010-localfirst-test-011t2-magnet-search-pending-device-validation",
+      "testDelivery": "thin-overlay-on-local-first-base"
     },
     {
       "id": "pornhub",
