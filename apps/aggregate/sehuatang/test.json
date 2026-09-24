@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "sehuatang-test",
   "name": "色花堂",
-  "version": "0.1.0-test.31",
-  "baseVersion": "0.1.0-test.30",
+  "version": "0.1.0-test.32",
+  "baseVersion": "0.1.0-test.31",
   "targetVersion": "0.1.0",
-  "build": 10131,
-  "shellVersion": "0.1.0-test.31",
-  "shellRuleVersion": 2026092402,
+  "build": 10132,
+  "shellVersion": "0.1.0-test.32",
+  "shellRuleVersion": 2026092403,
   "managerVersion": "direct-loader",
   "delivery": "remote-immutable-direct-loader",
-  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json",
-  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js",
-  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt",
+  "release": "apps/aggregate/sehuatang/releases/0.1.0-test.32/release.json",
+  "bootstrap": "apps/aggregate/sehuatang/bootstrap_test_v32_b10132.js",
+  "rule": "apps/aggregate/sehuatang/sehuatang_remote_test_v32_b10132.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.30",
-    "build": 10130,
-    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.30/release.json"
+    "version": "0.1.0-test.31",
+    "build": 10131,
+    "release": "apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json"
   },
-  "notes": "Test30实机确认帖子详情明显提速。Test31继续优化普通子板块、Guide首次进入和搜索：普通板块快速mobile直取满足主题/预览门槛才使用，Guide改轻量WebView阻断图片视频网络，搜索优先复用searchid/短缓存并尝试直接POST，任何快速链失败均回退旧稳定实现。"
+  "notes": "Test32修复帖子磁链PikPak按钮误走Android pikpakapp://外部APP的问题：改为调用海阔PikPak小程序的fxlj外部接力页并通过realurl传入完整磁链；115、迅雷及Test31其它逻辑不改。"
 }
