@@ -3,7 +3,7 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-stable-localfirst-test-v2",
-  "updatedAt": "2026-09-25 00:30",
+  "updatedAt": "2026-09-25 01:25",
   "channels": [
     {
       "channel": "stable",
@@ -33,24 +33,27 @@
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.1-test.4",
+      "version": "0.1.1-test.5",
       "baseVersion": "0.1.0",
       "baseBuild": 10112,
       "targetVersion": "0.1.1",
-      "build": 10204,
-      "displayVersion": "Test 0.1.1-test.4 · 自定义搜索适配修复",
-      "path": "apps/video/myav/myav_remote_test_v4_b10204.txt",
+      "build": 10205,
+      "displayVersion": "Test 0.1.1-test.5 · 自定义搜索图标化",
+      "path": "apps/video/myav/myav_remote_test_v5_b10205.txt",
       "mode": "remote-local-first-overlay",
       "updatedAt": "2026-09-25",
       "recommended": false,
-      "desc": "保留 Test3 已实机验证通过的磁力云盘调用，只修复页面型搜索小程序的跨程序搜索参数合同。",
+      "desc": "继承 Test4 页面型搜索适配与 Test3 已验证磁链调用；参照 JavDB v3 将自定义搜索移动到快捷操作下方，并增加站点图标和配置管理。",
       "highlights": [
-        "Test3 的 115 / 迅雷 / PikPak / 光鸭等磁力调用逻辑继续继承",
-        "磁力君.简直接调用 sou 页面并通过 searchTerms 传入番号/关键词",
-        "可自动识别 search_url 含 searchTerms=** 且具有 sou/搜索页的目标规则",
-        "普通目标继续使用 hiker://search，rule 保持原始中文规则名",
-        "本机已保存的自定义搜索目标配置继续保留",
-        "Stable / Latest 不变，等待实机验证"
+        "自定义搜索从影片资料底部移动到快捷操作图标组之后",
+        "站点默认使用 icon_round_small_4 图标卡，可切换 icon_small_4",
+        "新增 显示名@@小程序名@@图片链接 配置格式",
+        "图片链接留空时优先自动读取目标小程序 icon",
+        "旧版 显示名|规则名 与现有 myav_external_search_targets_v1 配置继续兼容",
+        "管理页支持添加、修改、删除、排序、清空和展示样式切换",
+        "MyAv 搜索页的自定义搜索目标同步使用图标卡",
+        "115 / 迅雷 / PikPak / 光鸭 / 123 磁链调用完全继承已验证 Test3",
+        "Stable / Latest 不变，等待实机截图验收"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
