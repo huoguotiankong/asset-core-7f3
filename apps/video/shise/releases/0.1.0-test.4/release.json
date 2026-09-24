@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.4",
+  "build": 10104,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "runtime",
+      "path": "apps/video/shise/releases/0.1.0-test.4/runtime.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.4"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/shise/releases/0.1.0-test.3/release.json"
+  },
+  "notes": "Test4 is a consolidated runtime rebuild from device feedback: isolated ss_url page parameters, exact .item.video/.item.model card contracts, real category-path templates and pagination."
+}
