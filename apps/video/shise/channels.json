@@ -3,29 +3,30 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 13:26",
+  "updatedAt": "2026-09-24 13:50",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.4",
+      "version": "0.1.0-test.5",
       "targetVersion": "0.1.0",
-      "build": 10104,
-      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
-      "path": "apps/video/shise/shise_remote_test_v4_b10104.txt",
+      "build": 10105,
+      "displayVersion": "Test 0.1.0-test.5 · Build 10105",
+      "path": "apps/video/shise/shise_remote_test_v5_b10105.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "实机反馈修复：重建详情 URL 传递、人物列表解析、分类真实路径与分页，收敛为单一 Test4 Runtime。",
+      "desc": "第二轮实机反馈修复：播放回归阅读源 main-container m3u8 契约，分类启用明确 series 分页与 fypage，人物改从视频卡 model-container 汇总，详情补 contentTag 标签。",
       "highlights": [
-        "详情页不再使用通用 url 参数，改为独立 ss_url，避免海阔页面字段冲突导致无协议地址",
-        "视频列表按 .item.video，人物列表按 .item.model 精确解析，不再依赖邻域猜测",
-        "分类页只展示真实分类入口，并把分类路径转成 {page} 分页模板",
-        "分类内容页会随 fypage 请求原站对应页，不再重复首页内容",
-        "安装 Shell 继续沿用 Test3 的中性命名与空图标策略",
-        "无 Stable，等待本轮详情 / 人物 / 分类分页实机验证"
+        "纯视频主播放优先交付 main-container 中的原始 m3u8，不再把泛解析媒体地址和自定义 Header 当主线路",
+        "播放线路页保留原始直链、Header 兼容和网页嗅探三档验证",
+        "分类使用阅读源明确的 /videos/series-.../{page}.html 路由，而不是从首页导航猜分类",
+        "分类和人物列表入口显式使用 page=fypage，支持继续向下加载第 2、3 页",
+        "人物列表从每页 .item.video 内的 model-container 实时汇总，不再依赖空的 /models.html",
+        "详情页读取 contentTag 并显示标签",
+        "无 Stable，等待 Test5 实机复测"
       ]
     }
   ]
