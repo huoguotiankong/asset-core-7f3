@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.2",
+  "build": 10102,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "runtimeBase",
+      "path": "apps/video/shise/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "runtimePatch",
+      "path": "apps/video/shise/releases/0.1.0-test.2/runtime_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.2"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.1",
+    "build": 10101,
+    "release": "apps/video/shise/releases/0.1.0-test.1/release.json"
+  },
+  "notes": "Test2 preserves Test1 parser/playback core and corrects settings cache/refresh semantics without mutating Test1."
+}
