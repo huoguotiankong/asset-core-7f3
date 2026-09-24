@@ -9,14 +9,14 @@
       "label": "测试通道",
       "id": "magnetjun-test",
       "name": "磁力君.简",
-      "version": "1.0.0-test.1",
-      "build": 10101,
-      "displayVersion": "Test 1.0.0-test.1 · 首次纳管重构",
-      "path": "apps/tools/magnetjun/magnetjun_remote_test_v1_b10101.txt",
-      "mode": "remote-managed-runtime",
+      "version": "1.0.0-test.2",
+      "build": 10102,
+      "displayVersion": "Test 1.0.0-test.2 · 自包含纳管重构",
+      "path": "apps/tools/magnetjun/magnetjun_remote_test_v2_b10102.txt",
+      "mode": "self-contained-managed-runtime",
       "updatedAt": "2026-09-25",
       "recommended": false,
-      "desc": "将之前独立测试使用的磁力君.简正式纳入 asset-core-7f3 管理；应用显示名不带测试字样。",
+      "desc": "将之前独立测试使用的磁力君.简正式纳入 asset-core-7f3 管理；应用显示名不带测试字样，默认搜索适配器已收进正式运行仓。",
       "highlights": [
         "标准化外部搜索 searchTerms 合同",
         "MyAv/JavDB 可直接传番号并自动进入聚合搜索",
@@ -25,7 +25,8 @@
         "搜索历史与搜索源启停管理",
         "兼容旧版 ciliSimpleRules 本地规则配置",
         "移除旧版每日自动覆盖程序代码的更新链",
-        "默认搜索源基线固定到 2025-06-08 不可变上游提交",
+        "默认常用搜索源代码内置于 asset-core-7f3 Runtime",
+        "Test1 在实机前废弃，避免执行外部上游适配器代码",
         "等待海阔实机验证后再建立 Stable"
       ]
     }
