@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "magnet-jun",
   "name": "磁力君.简",
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-24",
   "channels": [
     {
       "channel": "stable",
@@ -17,15 +17,15 @@
       "channel": "test",
       "label": "测试版",
       "name": "磁力君.简·测试",
-      "version": "1.0.0-test.6",
-      "build": 2026092106,
-      "ruleVersion": 2026092106,
-      "release": "apps/tools/magnet-jun/releases/1.0.0-test.6/release.json",
-      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js",
+      "version": "1.0.0-test.7",
+      "build": 2026092401,
+      "ruleVersion": 2026092401,
+      "release": "apps/tools/magnet-jun/releases/1.0.0-test.7/release.json",
+      "installer": "apps/tools/magnet-jun/releases/1.0.0-test.7/installer.js",
       "mode": "local-clone-patch",
       "recommended": false,
       "status": "device-validation-pending",
-      "desc": "Test5 全新 Provider 搜索继续保留，并加入独立规则仓：可新增/导入/删除/禁用/移动/置顶/重置/清空搜索规则；列表顺序即聚合优先级；兼容原版 find/findAliUrl 规则格式。"
+      "desc": "Test6可管理Provider搜索完整保留；Test7修复PikPak调用：优先进入当前PikPak小程序fxlj接力页并通过realurl传入完整磁链，旧diaoyong仅作兼容后备。"
     }
   ]
 }
