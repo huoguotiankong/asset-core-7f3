@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.6",
-  "defaultBuild": 10106,
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "0.1.0-test.6",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v6_b10106.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.6/release.json",
+  "defaultVersion": "0.1.0-test.7",
+  "defaultBuild": 10107,
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "0.1.0-test.7",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v7_b10107.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.7/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test6-decoded-content-contracts",
-    "note": "Test6 keeps immutable Test4 as recovery seed and folds in Test5 session hardening plus decoded reader-source body/image/media contracts."
+    "stage": "test7-list-detail-playback-device-fix",
+    "note": "Test7 keeps immutable Test4 as the recovery seed, preserves Test6 content/session contracts, and fixes list-card binding, UI hierarchy, and player header handoff for current device regressions."
   }
 }
