@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10110,
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
-  "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v10_b10110.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.10/release.json",
+  "defaultVersion": "0.1.0-test.11",
+  "defaultBuild": 10111,
+  "testVersion": "0.1.0-test.11",
+  "testBuild": 10111,
+  "testShellVersion": "0.1.0-test.11",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v11_b10111.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v11_b10111.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.11/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test10-cover-tags-ad-safe-playback-device-fix",
-    "note": "Test10 keeps Test9 source-contract assets immutable, fixes quoted style cover extraction and dependency rebinding, adds clickable video detail tags, expands main-container media extraction, and removes ad-prone video sniff fallback."
+    "stage": "test11-device-feedback-rebuild",
+    "note": "Test11 bypasses Test10 patches, keeps Test9 source-derived base immutable, and rebuilds current device fixes for exact covers, six-work model preview, clean source-position tags, balanced media extraction, and Host/cacheM3u8 HLS handoff."
   }
 }
