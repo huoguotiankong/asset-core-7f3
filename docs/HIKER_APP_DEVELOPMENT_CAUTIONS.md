@@ -543,6 +543,15 @@ HTML 更慢、更脆；仅必要兜底。
 ## 49. Token 刷新必须有生命周期模型
 读取 → 提前判断过期 → refresh → 刷新失败再登录。
 
+## 49A. 旋转 Refresh Token 必须只有一个当前所有者
+同一网页登录态被网页、小程序或多个进程同时刷新时，服务端可能立即废弃旧 Refresh Token。实现必须：
+
+- 刷新成功后原子保存响应中的新 Access Token 与新 Refresh Token，不能只替换 Access Token。
+- 多账号存储以稳定账号 ID 绑定刷新结果；refresh 响应缺少 `sub/user_id` 时合并旧身份字段，禁止按新 Token 哈希生成重复账号。
+- 网页捕获凭据必须按同一响应/同一存储对象成对更新；禁止分别“挑最长”的 Access Token 与 Refresh Token，否则会拼出不存在的混合会话。
+- 收到 `invalid refresh token` / `refreshed by other process` 时停止重复 refresh；若官方网页仍登录，优先重新捕获当前 Web Session，再决定是否要求用户登录。
+- 页面只展示恢复入口与可读诊断，Token 明文不得进入 UI、日志、云口令或仓库。
+
 ## 50. 异步任务轮询必须有上限
 创建 → 轮询 → 超时/失败 → 可重试；禁止无限循环。
 

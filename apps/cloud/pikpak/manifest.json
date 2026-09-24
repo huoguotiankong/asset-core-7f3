@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.20",
-  "defaultBuild": 10122,
-  "testVersion": "0.1.0-test.20",
-  "testBuild": 10122,
-  "testShellVersion": "0.1.0-test.20",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v20_b10122.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v20_b10122.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.20-b10122/release.json",
+  "defaultVersion": "0.1.0-test.21",
+  "defaultBuild": 10123,
+  "testVersion": "0.1.0-test.21",
+  "testBuild": 10123,
+  "testShellVersion": "0.1.0-test.21",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v21_b10123.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v21_b10123.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.21-b10123/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test20-native-search-fresh-account-b10122",
+    "stage": "uploaded-v1-to-test21-web-session-rotation-recovery-b10123",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10121,
-    "note": "Test20 replaces batch-local search with native name.contains filtering and adds a fresh-account web reset flow. Stable does not exist pending device validation."
+    "supersedesUnvalidatedBuild": 10122,
+    "note": "Test21 repairs rotated Web refresh_token sessions and coherent credential capture while retaining Test20 search and account work. Stable does not exist pending device validation."
   }
 }

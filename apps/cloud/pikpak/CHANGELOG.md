@@ -445,3 +445,29 @@ Build10112 的活动模块链不再加载 Test4/Test5/Test9 的 Web auth/captcha
 当前 Test：0.1.0-test.20 / Build10122；Stable 尚未建立。
 
 ---
+
+## 2026-09-24 · 0.1.0-test.21 / Build10123 · 修复 Web Session 令牌轮换失效
+
+### Test20 实机反馈
+
+- 首页仍显示“Web Session 已连接”，但个人网盘文件全部无法读取。
+- Drive 接口返回 `invalid refresh token ... has been refreshed by other process`，说明官方网页或其他会话已轮换 Refresh Token，而小程序仍保存旧值；这不是文件列表被删除或搜索接口故障。
+
+### Test21 修正
+
+- 新增 Web Session 失效识别：检测 `invalid refresh token` / `refreshed by other process` 后停止把它当成普通列表错误，并在首页、文件夹页显示“重新读取网页登录会话”入口。
+- 恢复链继续只使用官方 PikPak 网页，不回退账号密码/Android captcha 登录；网页仍登录时无需再次输入账号密码。
+- 重写网页凭据捕获策略：优先实际 Fetch/XHR Token 响应和 Bearer 请求，其次 IndexedDB、sessionStorage、localStorage；按完整凭据对象更新，不再以 Token 字符串长度决定新旧，避免新 Access Token 与旧 Refresh Token 混合。
+- 刷新成功后合并保留账号身份、Web profile 和 device_id，并把轮换后的新 Refresh Token 写回当前账号记录；修复 refresh 响应缺少 sub 时产生重复账号快照或保留旧 Token 的问题。
+- Access Token 接回成功后立即恢复文件读取；只有 Access Token 过期且 Refresh Token 再次被外部轮换时才要求重新同步网页会话。
+- 保留 Test20 原生全盘搜索与新增账号流程，以及此前个人盘、播放、图片、回收站、Magnet、文件管理和临时文件清理能力。
+
+### 发布与验收
+
+- 新增不可变 Test21 Core/Pages/Runtime/Identity 模块、Release、Bootstrap 与完整 Shell；Shell version=`2026092411`，build=`10123`。
+- 发布前执行 JavaScript 语法、模块顺序、Shell JSON、会话轮换模拟、运行时导出及远程路径检查。
+- 待海阔实机验证：从仍登录的官方网页恢复会话后首页文件立即出现；退出重进仍可读取；云盘搜索可命中已存在文件夹；多账号切换后各账号目录正确。验证前不得建立 Stable。
+
+当前 Test：0.1.0-test.21 / Build10123；Stable 尚未建立。
+
+---
