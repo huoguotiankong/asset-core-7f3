@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "runtimeBase",
+      "path": "apps/video/shise/releases/0.1.0-test.1/runtime.js"
+    },
+    {
+      "name": "runtimePatch2",
+      "path": "apps/video/shise/releases/0.1.0-test.2/runtime_patch.js"
+    },
+    {
+      "name": "runtimePatch3",
+      "path": "apps/video/shise/releases/0.1.0-test.3/runtime_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.3"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.2",
+    "build": 10102,
+    "release": "apps/video/shise/releases/0.1.0-test.2/release.json"
+  },
+  "notes": "Test3 keeps the Test2 runtime chain and adds an import-compatibility patch; the install shell uses neutral route labels, unicode-escaped title text and no direct-site icon."
+}
