@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.14",
+  "version": "0.1.0-test.15",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10114,
-  "shellVersion": "0.1.0-test.14",
-  "shellRuleVersion": 2026092408,
+  "build": 10115,
+  "shellVersion": "0.1.0-test.15",
+  "shellRuleVersion": 2026092409,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.14/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v14_b10114.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v14_b10114.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.15/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v15_b10115.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v15_b10115.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.13",
-    "build": 10113,
-    "release": "apps/video/xchina/releases/0.1.0-test.13/release.json"
+    "version": "0.1.0-test.14",
+    "build": 10114,
+    "release": "apps/video/xchina/releases/0.1.0-test.14/release.json"
   },
-  "notes": "Test14 freezes non-playback work and focuses only on playback: live WebKit/X5 m3u8 resource capture, strict m3u8-only filtering, MP4/ad exclusion, and native m3u8-only fallback. No Stable until real device playback succeeds."
+  "notes": "Test15 freezes failed Test14 and uses the uploaded reading source exact playback rule: main-container first quoted m3u8. A separate fallback only considers network m3u8 after webpage video duration exceeds 10 seconds. No Stable until device playback succeeds."
 }
