@@ -1,0 +1,32 @@
+{
+  "schema": 4,
+  "id": "shise",
+  "name": "视色",
+  "versionPolicy": "test-first",
+  "updatedAt": "2026-09-24 12:54",
+  "channels": [
+    {
+      "channel": "test",
+      "label": "测试版",
+      "id": "shise-test",
+      "name": "视色",
+      "version": "0.1.0-test.1",
+      "targetVersion": "0.1.0",
+      "build": 10101,
+      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
+      "path": "apps/video/shise/shise_remote_test_v1_b10101.txt",
+      "mode": "remote/self-use",
+      "updatedAt": "2026-09-24",
+      "recommended": true,
+      "desc": "首个 Test：原生视频浏览、分类、搜索、女优/模特、详情、多线路播放、收藏/历史入口与 X5 会话验证。",
+      "highlights": [
+        "shise.me 与 xchina.co 共享同类页面结构，独立实现轻量视频客户端，不复用小黄书业务 Runtime",
+        "列表封面兼容 lazy/srcset/CSS URL 并做同标题同封面去重",
+        "详情页 Hero + 主播放按钮 + 女优/标签 + 推荐",
+        "播放解析支持 var videos / source / m3u8 / mp4，直链携带 Referer / Origin / UA / live Cookie",
+        "直链失败保留 video:// 网页嗅探兜底",
+        "无 Stable，必须完成海阔实机验证后再晋级"
+      ]
+    }
+  ]
+}
