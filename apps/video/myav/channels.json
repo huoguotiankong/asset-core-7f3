@@ -3,7 +3,7 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-stable-localfirst-test-v2",
-  "updatedAt": "2026-09-24 22:30",
+  "updatedAt": "2026-09-25 00:30",
   "channels": [
     {
       "channel": "stable",
@@ -33,26 +33,24 @@
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.1-test.3",
+      "version": "0.1.1-test.4",
       "baseVersion": "0.1.0",
       "baseBuild": 10112,
       "targetVersion": "0.1.1",
-      "build": 10203,
-      "displayVersion": "Test 0.1.1-test.3 · 中文规则路由修复",
-      "path": "apps/video/myav/myav_remote_test_v3_b10203.txt",
+      "build": 10204,
+      "displayVersion": "Test 0.1.1-test.4 · 自定义搜索适配修复",
+      "path": "apps/video/myav/myav_remote_test_v4_b10204.txt",
       "mode": "remote-local-first-overlay",
-      "updatedAt": "2026-09-24",
+      "updatedAt": "2026-09-25",
       "recommended": false,
-      "desc": "修复 Test2 实机确认的中文 rule= 百分号编码故障；按迅雷/PikPak上传包真实调用合同修正云盘交接，并修复自定义跨小程序搜索。",
+      "desc": "保留 Test3 已实机验证通过的磁力云盘调用，只修复页面型搜索小程序的跨程序搜索参数合同。",
       "highlights": [
-        "规则名不再 encodeURIComponent，避免海阔把 %E... 当成小程序名",
-        "迅雷固定使用 diaoyong?rule=迅雷&page=fypage#<magnet>",
-        "PikPak 固定使用 fxlj?rule=PikPak&realurl=<encoded magnet>",
-        "115 使用 115Offline?rule=115.简&page=fypage&add=<encoded magnet>",
-        "光鸭继续动态发现真实页面，但 rule 使用原始中文规则名",
-        "自定义搜索使用 hiker://search?s=<keyword>&rule=<原始规则名>",
-        "保留 Test2 已配置的本机自定义搜索目标",
-        "等待海阔实机验证，Stable / Latest 不变"
+        "Test3 的 115 / 迅雷 / PikPak / 光鸭等磁力调用逻辑继续继承",
+        "磁力君.简直接调用 sou 页面并通过 searchTerms 传入番号/关键词",
+        "可自动识别 search_url 含 searchTerms=** 且具有 sou/搜索页的目标规则",
+        "普通目标继续使用 hiker://search，rule 保持原始中文规则名",
+        "本机已保存的自定义搜索目标配置继续保留",
+        "Stable / Latest 不变，等待实机验证"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
