@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "appId": "myav",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.1-test.4",
+  "build": 10204,
+  "baseStable": {"version":"0.1.0","build":10112,"release":"apps/video/myav/releases/0.1.0/release.json"},
+  "previousTest": {"version":"0.1.1-test.3","build":10203,"release":"apps/video/myav/releases/0.1.1-test.3/release.json","status":"magnet-cloud-handoff-device-validated-external-search-incomplete"},
+  "baseRuntime": {"version":"0.1.1-test.3","build":10203,"entry":"apps/video/myav/releases/0.1.1-test.3/local_entry.js","entryRef":"9bce0b2471f58f73c5abc0b4484b022e808fb18a"},
+  "entry": {"path":"apps/video/myav/releases/0.1.1-test.4/local_entry.js","ref":"83d59bc3eadc1ed3c56bae50d9a6e8e4bac2d03a"},
+  "shell": {"path":"apps/video/myav/myav_remote_test_v4_b10204.txt","ref":"170b0dd4f529093567045160e2e9d373b9097dce","ruleVersion":2026092501},
+  "fixes": [
+    "Preserve Test3 verified magnet cloud handoff",
+    "Detect external search targets whose search_url contains searchTerms=** and whose pages expose sou/search page",
+    "MagnetJun.Simple uses direct page/sou with raw Chinese rule name and encoded searchTerms",
+    "Fallback targets continue to use hiker://search with raw rule name",
+    "Existing local external-search target configuration is preserved"
+  ],
+  "evidence": {
+    "device": "Test3 magnet cloud handoff works; MagnetJun.Simple opens page titled with keyword but input remains blank and search does not start",
+    "uploadedRule": "磁力君.简.hk小程序.zip",
+    "sourceFinding": "sou reads getMyVar('s') || MY_PARAMS.searchTerms || getParam('searchTerms'), while generic hiker search path does not provide a usable sou searchTerms parameter in this device flow"
+  },
+  "status": "awaiting-device-validation",
+  "stableTouched": false
+}
