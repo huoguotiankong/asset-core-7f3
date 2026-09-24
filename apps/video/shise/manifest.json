@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/shise/test.json",
   "channels": "apps/video/shise/channels.json",
-  "defaultVersion": "0.1.0-test.6",
-  "defaultBuild": 10106,
-  "testVersion": "0.1.0-test.6",
-  "testBuild": 10106,
-  "testShellVersion": "0.1.0-test.6",
-  "testBootstrap": "apps/video/shise/bootstrap_test_v6_b10106.js",
-  "testRule": "apps/video/shise/shise_remote_test_v6_b10106.txt",
-  "testRelease": "apps/video/shise/releases/0.1.0-test.6/release.json",
+  "defaultVersion": "0.1.0-test.7",
+  "defaultBuild": 10107,
+  "testVersion": "0.1.0-test.7",
+  "testBuild": 10107,
+  "testShellVersion": "0.1.0-test.7",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v7_b10107.js",
+  "testRule": "apps/video/shise/shise_remote_test_v7_b10107.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.7/release.json",
   "changelog": "apps/video/shise/CHANGELOG.md",
   "source": "https://shise.me/",
   "stableExists": false,
   "migration": {
-    "stage": "test6-device-ad-and-live-metadata-fix",
-    "note": "Test6 keeps the Test5 modular base and applies a targeted device-fix module after device testing proved the first m3u8 was a 16-second advertisement and the borrowed contentTag/model-container assumptions did not match current Shise markup."
+    "stage": "test7-person-pagination-and-metadata",
+    "note": "Test7 keeps the Test6 playback chain unchanged and isolates device-confirmed person pagination plus detail metadata classification. Person detail entries now use fypage and derive later pages from the site's actual next-page link."
   }
 }
