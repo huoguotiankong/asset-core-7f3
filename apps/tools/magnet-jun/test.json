@@ -3,18 +3,20 @@
   "appId": "magnet-jun",
   "name": "磁力君.简",
   "channel": "test",
-  "version": "1.0.0-test.6",
-  "build": 2026092106,
-  "ruleVersion": 2026092106,
-  "release": "apps/tools/magnet-jun/releases/1.0.0-test.6/release.json",
-  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js",
+  "version": "1.0.0-test.7",
+  "build": 2026092401,
+  "ruleVersion": 2026092401,
+  "release": "apps/tools/magnet-jun/releases/1.0.0-test.7/release.json",
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.7/installer.js",
   "previousTests": [
     {"version":"1.0.0-test.1","build":2026092101,"status":"device-failed-title-coupled-updater-eval"},
     {"version":"1.0.0-test.2","build":2026092102,"status":"device-failed-search-empty"},
     {"version":"1.0.0-test.3","build":2026092103,"status":"device-failed-search-empty-after-cache-isolation"},
     {"version":"1.0.0-test.4","build":2026092104,"status":"device-failed-search-empty-legacy-search-chain-abandoned"},
-    {"version":"1.0.0-test.5","build":2026092105,"status":"superseded-by-managed-provider-registry"}
+    {"version":"1.0.0-test.5","build":2026092105,"status":"superseded-by-managed-provider-registry"},
+    {"version":"1.0.0-test.6","build":2026092106,"status":"superseded-after-pikpak-handoff-contract-change"}
   ],
   "status": "device-validation-pending",
-  "updatedAt": "2026-09-21"
+  "updatedAt": "2026-09-24",
+  "notes": "Test7只修复PikPak外部调用契约：当前PikPak使用fxlj页面并通过realurl接收完整magnet；兼容旧diaoyong作为后备，其它云盘与Provider搜索不改。"
 }
