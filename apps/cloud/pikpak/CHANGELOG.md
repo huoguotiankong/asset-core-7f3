@@ -1,3 +1,22 @@
+## 2026-09-24 · 0.1.0-test.15 / Build10117 · 网页会话本机变量与网络捕获桥
+
+### 实机结论
+
+Test14 已在海阔实机成功打开 `/drive/all` 并完成 PikPak 官方网页登录，网页中能看到用户个人文件夹；返回小程序后仍显示“未登录”。因此入口与官方登录已经通过，失败点收敛为“网页会话捕获/回传没有完成”。Test10～Test14 采用的 localStorage credentials 扫描和把完整 Token 塞入 hiker 查询参数的方案没有实机成功证据。
+
+### Test15 修正
+
+- Web 会话捕获扩展为 localStorage、sessionStorage、IndexedDB，并监听网页 Fetch/XHR 的 Authorization Bearer、Device ID、Captcha 与认证响应。
+- 捕获结果通过 `fy_bridge_app.putVar` 写入海阔本机变量，只用不含 Token 的短路由打开接管页，避免超长/敏感查询参数导致跳转失败。
+- 账号页增加“已读取网页登录会话”兜底入口：若自动打开接管页失败，返回账号页可手动接入本机暂存会话。
+- 保留 Test13 已验证能进入网盘的 `https://mypikpak.com/drive/all`，保留 Test12 Access Token 优先和 Test11 Web profile；不恢复 Android 账号密码 captcha/init。
+- 新增不可变 Test15 Page Bridge、Meta、Runtime、Release、Bootstrap 与 Shell；Shell version=2026092405，build=10117。
+- Stable 未建立，登录与个人盘 API 仍待海阔实机验证。
+
+当前 Test：`0.1.0-test.15 / Build10117`；Stable 尚未建立。
+
+---
+
 ## 2026-09-23 · 0.1.0-test.14 / Build10116 · 修复 Test13 Bootstrap 模块路径
 
 Test13 首次实机启动直接报错。截图中的远程 URL 显示 Bootstrap 请求了 Test13 目录下不存在的 `pages_meta_patch.js`。这是 Test13 生成 Bootstrap 时把沿用的 Test12 模块路径一并改写造成的；与网页登录、账号和 Token 无关。Test14 将该模块路径恢复到不可变 Test12 资产位置，网页登录仍使用 Test13 中的 `/drive/all` 入口模块，Web 凭据接管逻辑不变。

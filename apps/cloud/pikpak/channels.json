@@ -3,29 +3,30 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-23",
+  "updatedAt": "2026-09-24",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.14",
+      "version": "0.1.0-test.15",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10116,
-      "displayVersion": "Test 0.1.0-test.14 · Build 10116",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v14_b10116.txt",
+      "build": 10117,
+      "displayVersion": "Test 0.1.0-test.15 · Build 10117",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v15_b10117.txt",
       "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-23",
+      "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "PikPak Test14 fixes a Bootstrap dependency path found on device; official Web login remains /drive/all.",
+      "desc": "PikPak Test15 repairs the confirmed gap between successful official Web login and local app session import.",
       "highlights": [
-        "Test13 实机报错定位为 pages_meta_patch.js 依赖路径错误，不是登录凭据问题",
-        "修正 Bootstrap 指向原有不可变 Test12 pages_meta_patch.js",
-        "继续使用 Test13 已改好的官方网页登录入口 /drive/all",
-        "保留现有官方网页凭据捕获与 Web Session 恢复，不更改 Android 密码登录",
-        "尚待海阔实机重新验证；Stable 保持不变"
+        "Test14 实机确认官方网页已正常登录并显示个人网盘，但小程序仍为未登录",
+        "Token 不再通过超长 hiker 查询参数传递，改用 fy_bridge_app.putVar 写入海阔本机变量并用短路由接管",
+        "网页会话捕获扩展为 localStorage、sessionStorage、IndexedDB、Fetch 与 XHR 双通道",
+        "账号页提供已捕获会话的手动接入兜底",
+        "保留 /drive/all 官方入口、Web profile 与 Access Token 优先策略",
+        "待实机验证自动返回和个人盘 API；Stable 保持不变"
       ]
     }
   ]

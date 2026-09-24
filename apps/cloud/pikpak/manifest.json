@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.14",
-  "defaultBuild": 10116,
-  "testVersion": "0.1.0-test.14",
-  "testBuild": 10116,
-  "testShellVersion": "0.1.0-test.14",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v14_b10116.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v14_b10116.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.14-b10116/release.json",
+  "defaultVersion": "0.1.0-test.15",
+  "defaultBuild": 10117,
+  "testVersion": "0.1.0-test.15",
+  "testBuild": 10117,
+  "testShellVersion": "0.1.0-test.15",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v15_b10117.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v15_b10117.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.15-b10117/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "uploaded-v1-to-test14-web-login-bootstrap-path-fix-b10116",
+    "stage": "uploaded-v1-to-test15-web-session-var-network-bridge-b10117",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10115,
-    "note": "Test14 fixes a missing reused-module path in Test13's bootstrap, retaining the /drive/all login route and Web token handoff. Pending device validation; Stable unchanged."
+    "supersedesUnvalidatedBuild": 10116,
+    "note": "Test15 responds to real-device proof that Web login succeeds but token handoff does not. It uses a Hiker local-variable bridge plus Web storage and network capture. Pending device validation; Stable does not exist."
   }
 }
