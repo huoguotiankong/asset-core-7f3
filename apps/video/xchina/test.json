@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.7",
+  "version": "0.1.0-test.9",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10107,
-  "shellVersion": "0.1.0-test.7",
-  "shellRuleVersion": 2026092401,
+  "build": 10109,
+  "shellVersion": "0.1.0-test.9",
+  "shellRuleVersion": 2026092403,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.7/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v7_b10107.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v7_b10107.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.9/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v9_b10109.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v9_b10109.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.6",
-    "build": 10106,
-    "release": "apps/video/xchina/releases/0.1.0-test.6/release.json"
+    "version": "0.1.0-test.7",
+    "build": 10107,
+    "release": "apps/video/xchina/releases/0.1.0-test.7/release.json"
   },
-  "notes": "Test7 preserves Test6 content scopes and X5 live Cookie, fixes list cover/card binding and duplicate leakage, simplifies home/detail hierarchy, and changes video playback to an explicit Referer/Origin/UA/Cookie player handoff with sniff fallback. No Stable until device validation."
+  "notes": "Test9 is rebuilt from the uploaded NightSky reading-source contracts instead of patching Test7: exact CSS cover extraction and Referer policy, source-defined search/categories/content containers, and raw direct media handoff first with header/sniff fallbacks. No Stable until device validation."
 }
