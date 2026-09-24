@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.3",
+  "version": "0.1.0-test.4",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10103,
-  "shellVersion": "0.1.0-test.3",
-  "shellRuleVersion": 2026092403,
+  "build": 10104,
+  "shellVersion": "0.1.0-test.4",
+  "shellRuleVersion": 2026092404,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.3/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v3_b10103.js",
-  "rule": "apps/video/shise/shise_remote_test_v3_b10103.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.4/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v4_b10104.js",
+  "rule": "apps/video/shise/shise_remote_test_v4_b10104.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.2",
-    "build": 10102,
-    "release": "apps/video/shise/releases/0.1.0-test.2/release.json"
+    "version": "0.1.0-test.3",
+    "build": 10103,
+    "release": "apps/video/shise/releases/0.1.0-test.3/release.json"
   },
-  "notes": "Test3 rebuilds the shell with neutral page names, unicode-escaped title text and no direct-site icon to avoid import keyword/domain filtering."
+  "notes": "Test4 is the first parser rebuild after device feedback: ss_url avoids page URL collisions; video/model cards use exact item selectors; category links keep their real pagination templates."
 }
