@@ -3,30 +3,31 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 14:18",
+  "updatedAt": "2026-09-24 14:43",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.8",
+      "version": "0.1.0-test.9",
       "targetVersion": "0.1.0",
-      "build": 10108,
-      "displayVersion": "Test 0.1.0-test.8 · Build 10108",
-      "path": "apps/video/shise/shise_remote_test_v8_b10108.txt",
+      "build": 10109,
+      "displayVersion": "Test 0.1.0-test.9 · Build 10109",
+      "path": "apps/video/shise/shise_remote_test_v9_b10109.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "第五轮实机修复：保留 Test7 人物分页与结构化详情元数据，播放改为海阔 video:// 精准匹配视色 playhls 运行时媒体端点。",
+      "desc": "第六轮实机播放修复：按当前视色两级播放器链解析 player-container 内真实 src，再在内层播放器运行时嗅探正片媒体。",
       "highlights": [
-        "立即播放不再直接交付 Test6 静态媒体候选",
-        "使用海阔 video:// + videoRules 精准匹配 s1.playhls.com/m3u8.php?",
-        "通过 videoExcludeRules / blockRules 排除 69lover、realsrv、广告脚本与图片请求",
-        "播放诊断提供播放器页精准嗅探、详情页精准嗅探和宽松 HLS 三档验证",
-        "沿用 Test7 人物详情 page=fypage + 原站 next/数字分页解析",
-        "沿用 Test7 人物 / 分类 / 系列厂牌 / 编号 / 日期 / 普通标签分区",
-        "无 Stable，等待 Test8 实机验证"
+        "播放链改为 video.html?id → player.html?id → player-container src → m3u8/mp4",
+        "主播放优先嗅探 player-container 提取出的内层播放器，而不是提前停在 player.html",
+        "播放器初始化阶段不再 block 广告网络脚本，避免站点自身反广告拦截导致媒体不启动",
+        "videoExcludeRules 继续排除广告媒体候选，但不阻断初始化依赖",
+        "播放诊断直接展示详情页、player.html、内层 src 三层地址",
+        "分类同步采用当前 series.html?id=<id>&page=<page> 路由",
+        "人物 query-id 页面第 2 页起直接追加 page 参数，补足仅 12 条的问题",
+        "无 Stable，等待 Test9 实机验证"
       ]
     }
   ]
