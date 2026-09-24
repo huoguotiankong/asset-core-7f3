@@ -1,5 +1,34 @@
 # 视色 CHANGELOG
 
+## 0.1.0-test.2 / Build 10102 — 2026-09-24
+
+状态：**首个实机交付 Test；代码/发布合同门禁通过，等待海阔实机验证；无 Stable。**
+
+### 相对 Test1
+- 保留 Test1 已通过语法门禁的列表、分类、搜索、女优/模特、详情、媒体解析与 Header 交付核心。
+- Test1 Release 保持不可变，不直接覆盖 `runtime.js`。
+- 修正设置页“清理页面缓存”的语义问题：Test1 的按钮无法保证删除哈希命名的 HTML 缓存，因此 Test2 移除该误导操作，改为明确的“刷新当前页面 + 缓存约 3 分钟自动过期”提示。
+- Test2 通过第二模块 `runtime_patch.js` 覆盖设置页，并把 Runtime 版本提升为 `0.1.0-test.2 / Build 10102`；后续若继续大改会重新收敛成单一 Runtime，避免长期堆叠补丁。
+
+### 发布合同
+- Release：`apps/video/shise/releases/0.1.0-test.2/release.json`。
+- 模块：Test1 immutable Runtime + Test2 settings patch。
+- Bootstrap：`bootstrap_test_v2_b10102.js`，`minBuild=10102`。
+- Shell：`shise_remote_test_v2_b10102.txt`，规则 version `2026092402`。
+- `test.json / channels.json / manifest.json` 已全部切换到 Test2。
+- 仍不写 Stable；首轮实机通过后再决定 Candidate/Stable 与根规则仓库登记。
+
+### Test2 实机验收
+1. 覆盖导入 Test2，设置页应显示 `Test 0.1.0-test.2 · Build 10102`。
+2. 首页检查封面、标题、番号/时长是否正确绑定，向下翻页是否正常。
+3. 分类页检查是否能读取站点真实分类并进入对应结果。
+4. 搜索一个明确番号或关键词，检查结果是否正常。
+5. 女优页进入人物详情，检查人物信息与关联影片。
+6. 视频详情检查 Hero、主播放、人物/标签、推荐层级。
+7. 播放至少测试一条：总时长、码率、拖动进度；若直链失败，再测试 `video://` 网页嗅探兜底。
+8. 如出现 403 / Just a moment / 空列表：设置 → X5 打开当前线路完成验证 → 返回刷新，并观察 Cookie 状态。
+9. 未完成上述回归前不得晋级 Stable。
+
 ## 0.1.0-test.1 / Build 10101 — 2026-09-24
 
 状态：**首个 Test；代码/发布合同门禁通过，等待海阔实机验证；无 Stable。**
