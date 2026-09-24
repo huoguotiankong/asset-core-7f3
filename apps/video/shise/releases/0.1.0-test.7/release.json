@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/shise/releases/0.1.0-test.5/core.js"
+    },
+    {
+      "name": "pages",
+      "path": "apps/video/shise/releases/0.1.0-test.5/pages.js"
+    },
+    {
+      "name": "deviceFix",
+      "path": "apps/video/shise/releases/0.1.0-test.6/runtime_patch.js"
+    },
+    {
+      "name": "pagingMetaFix",
+      "path": "apps/video/shise/releases/0.1.0-test.7/runtime_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.7"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/video/shise/releases/0.1.0-test.6/release.json"
+  },
+  "notes": "Test7 is a focused UI/data fix: person detail pages use fypage and real next-link pagination; video detail metadata is separated into person/category/series/code/date/tags. Playback remains on the Test6 candidate chain for isolated follow-up."
+}
