@@ -3,14 +3,14 @@
   if(!K||!R||R.version!=='0.1.0-test.15')throw Error('Test16 requires Test15');
   var oldDetail=R.detail, oldList=R.list, oldReader=R.reader, oldMedia=R.media;
   var C=K.C, S=K.s, D=K.decode, page=K.page, param=K.param, safe=K.safeDecode;
-  function clean(u,base){u=D(S(u)).replace(/\\u002[fF]/g,'/').replace(/\\\//g,'/').trim();if(!u||/^(?:data:|javascript:|about:|blob:)/i.test(u))return '';return K.abs(u,base);}
+  function clean(u,base){u=D(S(u)).replace(/\\u002[fF]/g,'/').replace(/\\\//g,'/');u=K.trim(u);if(!u||/^(?:data:|javascript:|about:|blob:)/i.test(u))return '';return K.abs(u,base);}
   function imageScope(html,type){var sel=type==='comic'?'.comic-img-box&&Html':type==='amateur'?'.amateur-image&&Html':'.photo-image&&Html';return K.domHtml(html,sel)||'';}
   K.extractImages=function(html,url,type){
     var scope=imageScope(html,type),out=[],seen={},m,u,attrs,re,css;
     if(!scope)return out;
     re=/<(?:img|source)\b[^>]*>/ig;
     while((m=re.exec(scope))){attrs=m[0];u='';
-      for(var a of ['data-original','data-src','data-lazy-src','data-url','src','srcset']){
+      var names=['data-original','data-src','data-lazy-src','data-url','src','srcset'];for(var ai=0;ai<names.length;ai++){var a=names[ai];
         var x=attrs.match(new RegExp('(?:^|\\s)'+a+'\\s*=\\s*(["\\\'])([\\s\\S]*?)\\1','i'));
         if(x&&x[2]){u=x[2].split(',')[0].trim().split(/\s+/)[0];if(u&&!/^(?:data:|about:)/i.test(u))break;}
       }
@@ -24,7 +24,7 @@
   function cardImage(block,base,type){var tag=(S(block).match(/<[^>]*class=["\'][^"\']*\bimg\b[^"\']*["\'][^>]*>/i)||[])[0]||'',st='',m,u='';
     m=tag.match(/\bstyle\s*=\s*"([\s\S]*?)"/i)||tag.match(/\bstyle\s*=\s*'([\s\S]*?)'(?=\s|>)/i);if(m)st=m[1];
     m=st.match(/url\(\s*(["']?)([^"')]+)\1\s*\)/i);if(m)u=m[2];
-    if(!u){for(var a of ['data-original','data-src','data-lazy-src','data-poster','src']){m=S(block).match(new RegExp('(?:^|\\s)'+a+'\\s*=\\s*(["\\\'])([^"\\\']+)\\1','i'));if(m&&m[2]&&!/^(?:data:|about:)/i.test(m[2])){u=m[2];break;}}}
+    if(!u){var names=['data-original','data-src','data-lazy-src','data-poster','src'];for(var ai=0;ai<names.length;ai++){var a=names[ai];m=S(block).match(new RegExp('(?:^|\\s)'+a+'\\s*=\\s*(["\\\'])([^"\\\']+)\\1','i'));if(m&&m[2]&&!/^(?:data:|about:)/i.test(m[2])){u=m[2];break;}}}
     return clean(u,base);
   }
   var originalCard=K.cardFromBlock;
