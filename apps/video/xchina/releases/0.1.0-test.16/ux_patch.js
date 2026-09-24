@@ -20,6 +20,17 @@
     while((m=css.exec(scope))){u=clean(m[2],url);if(u&&!seen[u]){seen[u]=1;out.push(u);}}
     return out;
   };
+  // The original card parser can truncate style="...url(\'...\')..." at the inner quote.
+  function cardImage(block,base,type){var tag=(S(block).match(/<[^>]*class=["\'][^"\']*\bimg\b[^"\']*["\'][^>]*>/i)||[])[0]||'',st='',m,u='';
+    m=tag.match(/\bstyle\s*=\s*"([\s\S]*?)"/i)||tag.match(/\bstyle\s*=\s*'([\s\S]*?)'(?=\s|>)/i);if(m)st=m[1];
+    m=st.match(/url\(\s*(["']?)([^"')]+)\1\s*\)/i);if(m)u=m[2];
+    if(!u){for(var a of ['data-original','data-src','data-lazy-src','data-poster','src']){m=S(block).match(new RegExp('(?:^|\\s)'+a+'\\s*=\\s*(["\\\'])([^"\\\']+)\\1','i'));if(m&&m[2]&&!/^(?:data:|about:)/i.test(m[2])){u=m[2];break;}}}
+    return clean(u,base);
+  }
+  var originalCard=K.cardFromBlock;
+  K.cardFromBlock=function(block,base,type){var item=originalCard(block,base,type),img=cardImage(block,base,type);if(item&&img){item.rawImg=img;item.img=K.coverFor(img,base,type);}return item;};
+  K.parseCards=function(html,base,type){var blocks=K.cardBlocks(html,type),out=[],seen={};for(var i=0;i<blocks.length;i++){var item=K.cardFromBlock(blocks[i],base,type);if(item&&!seen[item.href]){seen[item.href]=1;out.push(item);}}return out;};
+  K.listResult=function(type,path){var r=K.fetchPage(path,type);return{r:r,items:K.parseCards(r.html,r.url,type)};};
   // A comic image is hosted independently; photo pages keep the main-site referer.
   K.contentImage=function(u,type){var ref=type==='comic'?C.comic+'/':C.primary+'/';u=clean(u,ref);if(!u)return'';var h={'User-Agent':C.ua,'Referer':ref};var cookie=K.cookieFor(u);if(cookie)h.Cookie=cookie;return u+'@headers='+JSON.stringify(h);};
   R.reader=function(){var type=param('t','');if(type==='fiction')return oldReader();var url=safe(param('xc_url','')),res=K.fetchPage(url,type),imgs=K.extractImages(res.html,res.url,type),d=[];setPageTitle(type==='comic'?'🎨 漫画阅读':'🖼️ 套图阅读');if(!imgs.length)d.push(K.empty('图片暂未解析','可通过原站入口核对当前页'));for(var i=0;i<imgs.length;i++){var img=K.contentImage(imgs[i],type);d.push({title:'',img:img,pic_url:img,url:img,col_type:'pic_1_full',extra:{lineVisible:false}});}d.push({title:'🌐 原站',url:'web://'+url,col_type:'text_1'});setResult(d);};
