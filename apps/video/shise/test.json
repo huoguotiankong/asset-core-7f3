@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "channel": "test",
+  "id": "shise-test",
+  "name": "视色",
+  "version": "0.1.0-test.1",
+  "baseVersion": null,
+  "targetVersion": "0.1.0",
+  "build": 10101,
+  "shellVersion": "0.1.0-test.1",
+  "shellRuleVersion": 2026092401,
+  "managerVersion": "2.0.1",
+  "delivery": "remote/self-use",
+  "release": "apps/video/shise/releases/0.1.0-test.1/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v1_b10101.js",
+  "rule": "apps/video/shise/shise_remote_test_v1_b10101.txt",
+  "updatedAt": "2026-09-24",
+  "status": "active-test-pending-device-validation",
+  "previousTest": null,
+  "notes": "Initial Test. Native Hiker UI for video list/category/search/models/detail/playback, X5 session verification, live Cookie image/media headers, stale cache and sniff fallback."
+}
