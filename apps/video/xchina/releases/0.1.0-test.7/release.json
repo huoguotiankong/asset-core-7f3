@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.7",
+  "build": 10107,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "runtimeBase",
+      "path": "apps/video/xchina/releases/0.1.0-test.7/runtime_base.js"
+    },
+    {
+      "name": "runtimePages",
+      "path": "apps/video/xchina/releases/0.1.0-test.7/runtime_pages.js"
+    }
+  ],
+  "verify": {
+    "global": "XChinaRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.7"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/video/xchina/releases/0.1.0-test.6/release.json"
+  },
+  "notes": "Test7 keeps immutable Test4 as recovery seed in a two-module one-pass transform; fixes list cover/card binding, streamlines home/detail UI, and fixes player header handoff with explicit sniff fallback."
+}
