@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "appId": "myav",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.1-test.2",
+  "build": 10202,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10112,
+    "release": "apps/video/myav/releases/0.1.0/release.json"
+  },
+  "previousTest": {
+    "version": "0.1.1-test.1",
+    "build": 10201,
+    "release": "apps/video/myav/releases/0.1.1-test.1/release.json",
+    "status": "basic-local-first-runtime-device-validated"
+  },
+  "baseRuntime": {
+    "version": "0.1.1-test.1",
+    "build": 10201,
+    "entry": "apps/video/myav/releases/0.1.1-test.1/local_entry.js",
+    "entryRef": "a59c57bb599a622c53e3ffca689aa94f98636f23",
+    "delivery": "local-first-single-runtime-bundle"
+  },
+  "entry": {
+    "path": "apps/video/myav/releases/0.1.1-test.2/local_entry.js",
+    "ref": "9a8db2505e8e76522769ffaa5407aeb747eb71a5"
+  },
+  "shell": {
+    "path": "apps/video/myav/myav_remote_test_v2_b10202.txt",
+    "ref": "131c8e03cdc40d6c9a5b1788050f5963ff272fd5",
+    "ruleVersion": 2026092420
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/myav-test/b10202/",
+    "entry": "local_entry.js",
+    "baseEntry": "base_011t1_entry.js"
+  },
+  "features": {
+    "magnetLongPress": ["115", "迅雷", "PikPak", "光鸭", "123", "复制磁链"],
+    "dynamicCloudPageDiscovery": ["迅雷", "PikPak", "光鸭", "123"],
+    "externalSearch": "device-local configurable targets via hiker://search?s=<keyword>&rule=<rule>",
+    "externalSearchSurfaces": ["detail", "search", "settings"]
+  },
+  "verify": {
+    "runtimeGlobal": "MyAvLocal",
+    "version": "0.1.1-test.2",
+    "build": 10202,
+    "businessBase": "0.1.1-test.1 / Build10201"
+  },
+  "delivery": {
+    "mode": "thin-overlay-on-local-first-base",
+    "normalStartup": "Test2 local Entry -> cached/fixed Test1 Local-First Entry -> local Runtime bundle",
+    "stableTouched": false,
+    "testOnly": true
+  },
+  "notes": "Low-intrusion Test overlay. Reuses the device-validated Test1 Local-First business runtime and only overrides magnet long-press routing plus configurable cross-mini-app search UI. Stable 0.1.0 and Latest are unchanged pending real-device validation."
+}
