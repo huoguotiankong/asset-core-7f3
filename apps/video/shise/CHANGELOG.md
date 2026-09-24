@@ -1,5 +1,38 @@
 # 视色 CHANGELOG
 
+## 0.1.0-test.9 / Build 10109 — 2026-09-24
+
+状态：**第六轮实机反馈后的两级播放器链修复；已发布 Test9，等待正片播放与分页复测；无 Stable。**
+
+### Test8 实机结果
+- [实机确认] Test8 “立即播放”仍提示“播放异常，或者网络不可用”，说明仅在 `player.html?id=...` 页面使用 `video://` 精准嗅探仍不足以启动真实媒体链。
+- [实机确认] 原站播放器页此前显示反广告拦截提示；Test8 同时通过 `blockRules` 阻断多个广告网络域，存在由我们自己的拦截策略破坏播放器初始化的风险。
+- [实机确认] 人物详情链已经能展示第一页 12 条作品，但仍需要可靠的后续分页。
+
+### 当前站点合同重新核对
+- [公开当前规则确认] 当前视色视频卡把 `video.html?id=<id>` 转换为 `player.html?id=<id>` 作为播放入口。
+- [公开当前规则确认] `player.html` 还不是最终播放器；需要先截取 `.player-container`，再读取其中的 `src`，以该内层地址作为实际播放器页，最后从运行时请求中嗅探 `s1.playhls.com/m3u8.php?` / m3u8 / mp4。
+- [公开当前规则确认] 当前分类路由为 `series.html?id=<cateId>&page=<catePg>`；不再把旧 `/videos/series-.../<page>.html` 结构视为当前事实。
+
+### Test9 修复
+- Test5-Test8 全部保持不可变；Test9 新增独立 `twoStagePlayerFix` 模块。
+- 主播放链改为：`video.html?id` → `player.html?id` → `.player-container src` → 对内层播放器执行 `video://` 运行时嗅探。
+- `videoRules` 同时接受 `s1.playhls.com/m3u8.php? / playhls / vodcdn.shise.me / play.shise.me / player.shise.me / xxw-oss.shise.me / .m3u8 / .mp4`；`videoExcludeRules` 仍排除广告媒体候选。
+- 播放器初始化阶段不再阻断广告脚本域；`blockRules` 仅压缩图片和字体，避免站点反广告拦截检测导致真正播放器不启动。
+- 播放诊断页直接展示三层地址：详情页 → `player.html` → `player-container src`，并允许分别嗅探内层播放器与 `player.html` 回退链。
+- 分类页切换为当前明确的 `series.html?id=...&page={page}` 路由。
+- 人物详情若 URL 为 query-id 结构，第 2 页起直接追加/替换 `page=N`，用于突破第一页固定 12 条的边界；其他人物页面仍回退 Test7 的 next/数字分页逻辑。
+- 详情元数据兼容当前 `series.html?id=...` 分类链接，并继续过滤数量后缀和导航噪声。
+
+### Test9 重点回归
+1. 覆盖导入 Test9，设置页确认 `Test 0.1.0-test.9 · Build 10109`。
+2. 用刚才同一条失败视频直接点“立即播放”；若仍失败，进入“播放诊断”。
+3. “播放诊断”应至少显示 `①详情页 / ②player.html / ③实际播放器 src`；如第③层为空，截图该页面即可继续精确修复。
+4. 若第③层存在但仍播放失败，分别测试“嗅探内层播放器”和“回退：嗅探 player.html”，记录哪一层报错。
+5. 打开 `狐不妖` 等人物详情持续下滑，确认作品能超过 12 条且不重复第一页。
+6. 分类任选一项下滑 2-3 页，确认 `series.html?id=&page=` 分页生效。
+7. 正片播放和分页核心链未实机通过前不得晋级 Stable。
+
 ## 0.1.0-test.8 / Build 10108 — 2026-09-24
 
 状态：**第五轮实机反馈后的播放链专项修复；保留 Test7 人物分页和结构化详情元数据；无 Stable。**
