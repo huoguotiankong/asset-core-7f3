@@ -16,8 +16,8 @@
      re=/<(?:iframe|script)\b[^>]*\bsrc\s*=\s*(["'])([^"']+)\1/ig;while((m=re.exec(html))&&scriptSrc.length<5){src=K.abs(m[2],r.url);if(src)scriptSrc.push(host(src)+src.replace(/^https?:\/\/[^/]+/i,'').replace(/[?#].*$/,'').slice(-48));}for(i=0;i<scriptSrc.length;i++)d.push(line('资源 '+(i+1),scriptSrc[i]));
    }else d.push(line('未记录视频','先打开一个视频的“播放诊断”，再回来查看'));
    d.push(K.section('🖼️ 第一张封面','显示解析器得到的原始地址；空值意味着提取失败'));
-   try{photo=K.listResult('photo',K.listPath('photo',1));as=photo.items||[];for(i=0;i<Math.min(2,as.length);i++)d.push(line('套图 '+(i+1)+' · '+(as[i].rawImg?'有地址':'无地址'),short(as[i].rawImg)));if(!as.length)d.push(line('套图列表未取得卡片',photo.r.url));}catch(e1){d.push(line('套图列表异常',s(e1)));}
-   try{comic=K.listResult('comic',K.listPath('comic',1));as=comic.items||[];for(i=0;i<Math.min(2,as.length);i++)d.push(line('漫画 '+(i+1)+' · '+(as[i].rawImg?'有地址':'无地址'),short(as[i].rawImg)));if(!as.length)d.push(line('漫画列表未取得卡片',comic.r.url));}catch(e2){d.push(line('漫画列表异常',s(e2)));}
+   try{photo={r:K.fetchPage(K.listPath('photo',1),'photo',{noWeb:true,timeout:6000})};photo.items=K.parseCards(photo.r.html,photo.r.url,'photo');as=photo.items||[];for(i=0;i<Math.min(2,as.length);i++)d.push(line('套图 '+(i+1)+' · '+(as[i].rawImg?'有地址':'无地址'),short(as[i].rawImg)));if(!as.length)d.push(line('套图列表未取得卡片',photo.r.url));}catch(e1){d.push(line('套图列表异常',s(e1)));}
+   try{comic={r:K.fetchPage(K.listPath('comic',1),'comic',{noWeb:true,timeout:6000})};comic.items=K.parseCards(comic.r.html,comic.r.url,'comic');as=comic.items||[];for(i=0;i<Math.min(2,as.length);i++)d.push(line('漫画 '+(i+1)+' · '+(as[i].rawImg?'有地址':'无地址'),short(as[i].rawImg)));if(!as.length)d.push(line('漫画列表未取得卡片',comic.r.url));}catch(e2){d.push(line('漫画列表异常',s(e2)));}
    d.push(K.section('👩 模特头像','先打开任一模特页再回到此页'));
    try{u=getItem('xc_diag_model_v1','');}catch(e3){u='';}if(u){try{model=K.fetchPage(u,'model',{noWeb:true});var info=K.modelMeta(model.html,model.url);d.push(line('头像候选',short(info.cover)));}catch(e4){d.push(line('头像提取异常',s(e4)));}}else d.push(line('未记录模特',''));
    setResult(d);
