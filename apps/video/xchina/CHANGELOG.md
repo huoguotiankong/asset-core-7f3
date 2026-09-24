@@ -1,8 +1,55 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.7 / Build 10107 — 2026-09-24
+
+状态：**当前 Test；针对用户当前实机截图暴露的列表封面/重复卡、详情层级和视频 `0 kb/s / 00:00` 做专项修复，等待海阔实机回归；无 Stable。**
+
+### 当前实机问题与修改边界
+- [实机确认] 套图列表出现多张空白封面，且“最新热门套图”等导航/聚合项被误识别为作品卡；视频列表还出现同标题同封面的重复项。
+- [实机确认] 视频详情页只有封面、标题、类型和“播放 / 视频1 / 原站”三个弱层级入口，信息与主操作层级不足。
+- [实机确认] 当前视频直链进入海阔播放器后出现约 `3 kb/s`、`00:00 / 00:00`，说明“页面已解析到媒体 URL”不等于“播放器交付链可用”。
+- 本轮不改 Test6 已确认的正文作用域、漫画独立域、X5 会话模型和主/备用域容错；Test4 继续作为不可变 recovery seed。
+
+### 列表 / 封面
+- `firstImg()` 扩展支持 `data-original / data-src / data-lazy-src / data-url / data-bg / data-background / poster / src / srcset / CSS url(...)`，并先做 HTML/转义斜杠恢复。
+- `parseCards()` 从旧版“锚点前 1000 + 后 2600 字符”的大范围上下文收紧为“当前锚点自身优先 + 小邻域兜底”，降低上一张/下一张卡片标题与封面串绑。
+- 增加 `title + image` 视觉签名去重，解决不同 URL 指向同一展示卡造成的重复项。
+- 对无图片且标题明显属于“最新/热门/更多/全部/分类”等导航语义的条目不再建立作品卡，避免导航项混进三列内容网格。
+
+### UI / 详情
+- 首页首屏操作收敛为“搜索 / 分类 / 模特 / 设置”；“验证网站 / 发布页”下沉到设置页，减少内容首屏按钮堆叠。
+- 视频详情把播放升级为独立主操作：已有媒体时显示 `▶ 立即播放`，多线路仅额外显示“线路 N”；无稳定直链才显示 `▶ 嗅探播放`。
+- 详情首屏显示内容类型及媒体/章节/分页数量；简介改为独立信息块，不再与播放按钮平级堆叠。
+- 小说/漫画保留章节/阅读主链，套图/自拍继续保留看图、附带视频和分页入口。
+
+### 播放链
+- 保留 Test6 `main-container`、quoted m3u8、`var domain + var videos` 的媒体提取契约，并优先使用结构化 `var videos` 候选。
+- 新增播放器最终交付层：显式携带详情页 `Referer`、`Origin`、`User-Agent` 和可用 live Cookie；最终格式统一为 `url#isVideo=true#;{...}`，不再只在解析/预检层携带 Header。
+- 视频详情已拿到直链时直接生成最终播放器 URL，点击不再二次打开播放页、重复请求同一详情页。
+- 播放线路页仍保留 `video://详情页` 作为明确兜底，用于实机判断“直链 Header 交付问题”与“原站需要浏览器媒体提取”两类故障。
+
+### 架构 / 发布
+- Test7 不叠加 Test6 Runtime；仍从冻结 Test4 做一次确定性变换，并拆成 `runtime_base.js + runtime_pages.js` 两个按 Release 顺序加载的模块，Remote Manager 2.0.1 已确认按 `modules[]` 顺序 `require()` 后再做全局导出校验。
+- 新 Shell：`xchina_remote_test_v7_b10107.txt`，规则 version `2026092401`；新 Bootstrap：`bootstrap_test_v7_b10107.js`，`minBuild=10107`。
+- Test7 Release、Bootstrap、Shell 均使用 `asset-core-7f3@main`，不增加 `hiker-cloud` 正式运行依赖。
+- 根规则仓库仍必须保持小黄书 `entryType=single`，不得恢复 Test6 已证实会把远程 channel metadata 带入规则仓库首页热路径的 `channel-group` 交付。
+
+### 已完成门禁
+- `runtime_base.js` 与 `runtime_pages.js` 本地 `node --check` 通过；GitHub 回读后 Base blob 与本地语法检查版本一致。
+- Shell 外层 JSON、`pages` 内层 JSON 本地解析通过，包含 13 个页面路由。
+- Release → 两个 Runtime 模块、Bootstrap → Release、Shell → Bootstrap 的路径/build/version 合同已建立。
+
+### 本次实机验收
+1. 覆盖导入 Test7，设置页确认 `0.1.0-test.7 / Build 10107`。
+2. 首页分别切“套图/视频”：确认空白封面显著减少或消失，“最新热门套图”等导航项不再混入作品网格，截图中重复视频卡不再重复。
+3. 打开同一个“憧憬下的性勾引”等视频详情：确认主操作变为 `▶ 立即播放` 或明确的 `▶ 嗅探播放`，详情信息层级正常。
+4. 直链播放重点确认：码率不再停在极低值、总时长不再固定 `00:00`、进度能够持续推进；若仍失败，再测试“网页嗅探兜底”，并记录是直链失败还是兜底可播。
+5. 回归小说长正文、漫画章节/图片、套图分页/附带视频、搜索、分类、模特关联作品和 X5 验证链。
+6. 未完成上述实机验证前不得晋级 Stable。
+
 ## 0.1.0-test.6 / Build 10106 — 2026-09-15
 
-状态：**当前 Test；隐藏正文规则已解码并完成本地合约 smoke，待海阔实机验证；无 Stable。**
+状态：**历史 Test；隐藏正文规则已解码并完成本地合约 smoke，未完成本轮实机回归；无 Stable。**
 
 ### 规则仓库交付补充（2026-09-15）
 - 首次把小黄书以 `channel-group + channelsPath` 直接加入根 `manifest.json` 后，用户实机出现“我的规则仓库”整页白屏/持续刷新；回退根 `manifest.json + manifest_meta.json` 到 20 项已知正常目录后立即恢复。
