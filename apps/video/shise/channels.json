@@ -3,30 +3,30 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 14:23",
+  "updatedAt": "2026-09-24 14:18",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.7",
+      "version": "0.1.0-test.8",
       "targetVersion": "0.1.0",
-      "build": 10107,
-      "displayVersion": "Test 0.1.0-test.7 · Build 10107",
-      "path": "apps/video/shise/shise_remote_test_v7_b10107.txt",
+      "build": 10108,
+      "displayVersion": "Test 0.1.0-test.8 · Build 10108",
+      "path": "apps/video/shise/shise_remote_test_v8_b10108.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "第四轮实机定向修复：人物详情增加真实分页链，视频详情元数据拆分为人物、分类、系列/厂牌、编号、日期和普通标签；播放链保持 Test6 单独后续处理。",
+      "desc": "第五轮实机修复：保留 Test7 人物分页与结构化详情元数据，播放改为海阔 video:// 精准匹配视色 playhls 运行时媒体端点。",
       "highlights": [
-        "人物详情入口改用 page=fypage，支持继续向下加载",
-        "优先读取原站 next/下一页/数字分页链接，不再直接猜人物分页 URL",
-        "详情页把人物、分类、系列/厂牌、编号、日期和普通标签分区显示",
-        "过滤 >、更多、纯数字等无意义标签项",
-        "人物详情仍复用现有视频卡片与详情链",
-        "播放候选算法本轮保持 Test6 不变，避免和分页/元数据修复互相干扰",
-        "无 Stable，等待 Test7 实机验证"
+        "立即播放不再直接交付 Test6 静态媒体候选",
+        "使用海阔 video:// + videoRules 精准匹配 s1.playhls.com/m3u8.php?",
+        "通过 videoExcludeRules / blockRules 排除 69lover、realsrv、广告脚本与图片请求",
+        "播放诊断提供播放器页精准嗅探、详情页精准嗅探和宽松 HLS 三档验证",
+        "沿用 Test7 人物详情 page=fypage + 原站 next/数字分页解析",
+        "沿用 Test7 人物 / 分类 / 系列厂牌 / 编号 / 日期 / 普通标签分区",
+        "无 Stable，等待 Test8 实机验证"
       ]
     }
   ]
