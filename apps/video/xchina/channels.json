@@ -10,24 +10,23 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.12",
+      "version": "0.1.0-test.13",
       "targetVersion": "0.1.0",
-      "build": 10112,
-      "displayVersion": "Test 0.1.0-test.12 · Build 10112",
-      "path": "apps/video/xchina/xchina_remote_test_v12_b10112.txt",
+      "build": 10113,
+      "displayVersion": "Test 0.1.0-test.13 · Build 10113",
+      "path": "apps/video/xchina/xchina_remote_test_v13_b10113.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test12：继续按实机收紧女优页、标签、封面和播放；不再把广告区、漫画正文 Referer 或旧错误缓存带入列表链。",
+      "desc": "Test13：修复女优全部视频分页，清理视频详情推广/重复信息，并按上传阅读源真实 Header 与 main-container 合同继续修播放。",
       "highlights": [
-        "女优/模特详情直接展示前 6 部视频作品，并提供全部视频入口和原站收录总数",
-        "视频标签严格只读 model-container 与阅读源 .tags div.4/div.1/div.3，未知/广告项不再外跳",
-        "套图/漫画封面优先按 .img@style，另补视频 data-poster、套图 img src、漫画 img src 精确回退",
-        "所有列表/详情封面统一使用阅读源 source.key 即 xchina.co Referer；litu100 仅保留漫画正文图片",
-        "纯视频只读 main-container 第一个 quoted m3u8，套图视频才回退 var domain + var videos",
-        "HLS 优先 cacheM3u8，并携带历史可用 Host=s2.playhls.com + Referer/Origin/UA/live Cookie；保留普通 Header 对照",
-        "继续禁用会命中广告的 video:// 泛嗅探",
-        "Test12 使用独立 xc_t12 缓存/线路命名空间；无 Stable，等待海阔实机验证"
+        "女优/模特详情仍只预览前 6 部，查看全部视频后按原站 pager 自动翻页，不再只停留在第一页部分作品",
+        "模特页标题/简介改为独立资料提取，避免把第一部作品标题和整块作品列表误当模特资料",
+        "视频详情不再展示通用 video-detail 简介块，直接去除重复标题、重复模特、推广、VPN/AI/下载等噪音文本",
+        "视频正片优先用 DOM 提取 main-container，失败后按阅读源固定 xchina.co Referer 精确重取主站页面，再尝试 WebView 渲染后的 main-container",
+        "播放 Header 回归上传阅读源真实合同：UA + Referer=https://xchina.co/ + live Cookie；不再默认强制详情页 Referer/Origin，也不对非 s2 主机强塞 Host",
+        "继续禁用会误命中广告的 video:// 泛嗅探；没有正片时明确失败",
+        "Test13 使用独立 xc_t13 缓存/线路命名空间；无 Stable，等待海阔实机验证"
       ]
     }
   ]
