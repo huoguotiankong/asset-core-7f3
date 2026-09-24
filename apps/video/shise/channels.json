@@ -3,28 +3,29 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 13:12",
+  "updatedAt": "2026-09-24 13:26",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.3",
+      "version": "0.1.0-test.4",
       "targetVersion": "0.1.0",
-      "build": 10103,
-      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
-      "path": "apps/video/shise/shise_remote_test_v3_b10103.txt",
+      "build": 10104,
+      "displayVersion": "Test 0.1.0-test.4 · Build 10104",
+      "path": "apps/video/shise/shise_remote_test_v4_b10104.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "导入兼容修复：安装壳使用中性页面名称，移除站点直连图标；运行时功能保持内容浏览、分类、搜索、人物、详情和播放。",
+      "desc": "实机反馈修复：重建详情 URL 传递、人物列表解析、分类真实路径与分页，收敛为单一 Test4 Runtime。",
       "highlights": [
-        "安装壳不再直接出现高风险展示词",
-        "安装壳移除 shise.me favicon 直连",
-        "规则标题以 JSON Unicode 形式保存，导入后仍显示“视色”",
-        "Test3 沿用 Test1 + Test2 运行链并增加轻量兼容补丁",
-        "无 Stable，继续等待海阔实机验证"
+        "详情页不再使用通用 url 参数，改为独立 ss_url，避免海阔页面字段冲突导致无协议地址",
+        "视频列表按 .item.video，人物列表按 .item.model 精确解析，不再依赖邻域猜测",
+        "分类页只展示真实分类入口，并把分类路径转成 {page} 分页模板",
+        "分类内容页会随 fypage 请求原站对应页，不再重复首页内容",
+        "安装 Shell 继续沿用 Test3 的中性命名与空图标策略",
+        "无 Stable，等待本轮详情 / 人物 / 分类分页实机验证"
       ]
     }
   ]
