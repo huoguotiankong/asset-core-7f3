@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/shise/test.json",
   "channels": "apps/video/shise/channels.json",
-  "defaultVersion": "0.1.0-test.8",
-  "defaultBuild": 10108,
-  "testVersion": "0.1.0-test.8",
-  "testBuild": 10108,
-  "testShellVersion": "0.1.0-test.8",
-  "testBootstrap": "apps/video/shise/bootstrap_test_v8_b10108.js",
-  "testRule": "apps/video/shise/shise_remote_test_v8_b10108.txt",
-  "testRelease": "apps/video/shise/releases/0.1.0-test.8/release.json",
+  "defaultVersion": "0.1.0-test.9",
+  "defaultBuild": 10109,
+  "testVersion": "0.1.0-test.9",
+  "testBuild": 10109,
+  "testShellVersion": "0.1.0-test.9",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v9_b10109.js",
+  "testRule": "apps/video/shise/shise_remote_test_v9_b10109.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.9/release.json",
   "changelog": "apps/video/shise/CHANGELOG.md",
   "source": "https://shise.me/",
   "stableExists": false,
   "migration": {
-    "stage": "test8-playhls-sniff-and-person-paging",
-    "note": "Test8 preserves immutable Test7 person paging/metadata fixes and overlays exact Hiker video:// sniffing for the public Shise playhls runtime endpoint after Test6 direct media handoff still failed on device."
+    "stage": "test9-two-stage-player-contract",
+    "note": "Test9 overlays the current video.html -> player.html -> player-container src playback contract after Test8 device playback still failed; Stable remains blocked pending device validation."
   }
 }
