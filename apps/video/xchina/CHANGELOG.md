@@ -1,8 +1,49 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.9 / Build 10109 — 2026-09-24
+
+状态：**当前 Test；依据用户上传 `✈️ 小黄书-夜明空` 阅读源重新建立协议层，等待海阔实机验证；无 Stable。**
+
+### 当前实机事实与重建原因
+- [实机确认] Test7 视频仍进入播放器后 `0 kb/s / 00:00`，因此 Test7 的强制 Header 播放包装不能继续作为主链。
+- [实机确认] Test7 视频封面已能显示，但漫画、套图仍大量空白，说明继续扩大通用邻域猜图不是正确方向。
+- 用户要求直接参考项目来源中上传的小黄书阅读书源重新升级，并继续强化免嗅播放、图标与整体 UI。
+- Test9 不再叠加 Test7 / Test6 / Test4 字符串 Patch，改为依据上传阅读源的真实列表、封面、正文、分类与媒体契约重新建立 Runtime。
+
+### 上传阅读源确认的真实契约
+- 主站为 `https://xchina.co/`；漫画独立站为 `https://litu100.xyz`；发布页为 `https://xiaohuangshu.me`。
+- 列表内容按 `fiction / photo / comic / amateur / video` item 结构读取；封面规则优先读取 `.img@style` 并从 `url('...')` 取得真实图片地址，而不是先扫描附近任意 `<img>`。
+- 阅读源对列表/详情封面统一使用主站 Referer；漫画正文图片才使用漫画独立站 Referer。Test9 按这个边界拆开封面与正文图片交付。
+- 小说正文使用 `.fiction-body@p@html`；漫画正文使用 `.comic-img-box@html`；套图使用 `.photo-image@html`；自拍使用 `.amateur-image@html`。
+- 视频与带视频套图从 `main-container` 读取；优先取 quoted m3u8，无 m3u8 时按 `var domain + var videos` 组合媒体地址。
+- 搜索路由重新按阅读源确认：小说 `/fictions/keyword-...`、套图 `/photos/keyword-...`、视频 `/videos/keyword-...`、漫画独立域 `/comics/kk-...`。
+- 阅读源的 `loginCheckJs` 明确把 `Just a moment` 作为验证状态处理；Test9 保留 X5 同会话验证与 live Cookie 读取。
+- 阅读源 2025-11-04 的视频修复最终直接返回真实媒体 URL；Test9 因此把原始媒体地址作为第一播放路径，不再把 Test7 的强制 `Origin/Referer/Cookie` 包装当主链。
+
+### Test9 架构 / UI / 播放
+- Release 显式拆成 `categories → categoryFix → core → pages`，由 Remote Manager 按序加载并最终校验 `XChinaRemoteRuntime.version=0.1.0-test.9`。
+- 首页/分类/设置继续使用海阔原生组件，增加小说、套图、漫画、视频、搜索、分类、模特、设置等语义图标。
+- 完整迁入上传阅读源当前小说标签、漫画状态/地区、套图专辑/工作室和视频系列路由，不再使用旧版少量猜测分类。
+- 视频详情第一主操作为 `▶️ 免嗅直连`：按阅读源原始媒体 URL 直接交给海阔播放器；播放线路页另保留 `Header 兼容` 和 `video://` 嗅探作为诊断/回退。
+- Test9 使用独立 `xc_t9_*` 线路、状态与页面缓存命名空间；Shell rule version `2026092403`，Bootstrap `minBuild=10109`。
+- 主站绝对详情 URL 重新支持按 path 在最近成功线路 / `xchina.co` / `xchina001.ink` 间回退；漫画绝对域继续保持独立处理。
+
+### 发布边界与门禁
+- app-local `test.json / channels.json / manifest.json` 已切到 Test9；Release、Bootstrap、Shell 和实际模块均位于 `asset-core-7f3@main`。
+- Test9 当前只用于直接云口令覆盖验证；根规则仓库展示卡暂不切换，避免未实机验证版本进入目录热路径。
+- Stable 仍不存在；未确认漫画/套图封面与真实视频播放前不得晋级 Stable。
+
+### Test9 实机验收
+1. 覆盖导入后在设置页确认 `Test 0.1.0-test.9 · Build 10109`。
+2. 首页分别切“套图 / 漫画”，重点确认之前的大片空白封面是否恢复。
+3. 视频详情先点 `▶️ 免嗅直连`，完成标准为出现真实码率、真实总时长且进度持续推进。
+4. 免嗅失败时进入播放线路，依次测试 `免嗅 1 → Header 兼容 1 → 网页嗅探兜底`，记录哪一级首次成功。
+5. 回归小说搜索/目录/长正文、漫画章节/正文、套图分页/附带视频、分类和 X5 验证。
+6. 若封面仍失败，必须依据具体作品页面实际 style URL / Referer 继续修，不再恢复通用邻域猜图。
+
 ## 0.1.0-test.7 / Build 10107 — 2026-09-24
 
-状态：**当前 Test；针对用户当前实机截图暴露的列表封面/重复卡、详情层级和视频 `0 kb/s / 00:00` 做专项修复，等待海阔实机回归；无 Stable。**
+状态：**历史 Test；针对用户当前实机截图暴露的列表封面/重复卡、详情层级和视频 `0 kb/s / 00:00` 做专项修复，实机证明播放与部分封面仍未解决；无 Stable。**
 
 ### 当前实机问题与修改边界
 - [实机确认] 套图列表出现多张空白封面，且“最新热门套图”等导航/聚合项被误识别为作品卡；视频列表还出现同标题同封面的重复项。
