@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.9",
+  "version": "0.1.0-test.10",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10109,
-  "shellVersion": "0.1.0-test.9",
-  "shellRuleVersion": 2026092403,
+  "build": 10110,
+  "shellVersion": "0.1.0-test.10",
+  "shellRuleVersion": 2026092404,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.9/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v9_b10109.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v9_b10109.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.10/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v10_b10110.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v10_b10110.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.7",
-    "build": 10107,
-    "release": "apps/video/xchina/releases/0.1.0-test.7/release.json"
+    "version": "0.1.0-test.9",
+    "build": 10109,
+    "release": "apps/video/xchina/releases/0.1.0-test.9/release.json"
   },
-  "notes": "Test9 is rebuilt from the uploaded NightSky reading-source contracts instead of patching Test7: exact CSS cover extraction and Referer policy, source-defined search/categories/content containers, and raw direct media handoff first with header/sniff fallbacks. No Stable until device validation."
+  "notes": "Test10 fixes current device regressions: exact quoted .img style cover extraction, clickable video detail tags/model-series links, broader main-container m3u8/mp4 extraction, and removal of ad-prone video:// sniff fallback. No Stable until device validation."
 }
