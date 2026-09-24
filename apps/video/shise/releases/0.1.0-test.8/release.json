@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.8",
+  "build": 10108,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/shise/releases/0.1.0-test.5/core.js"
+    },
+    {
+      "name": "pages",
+      "path": "apps/video/shise/releases/0.1.0-test.5/pages.js"
+    },
+    {
+      "name": "deviceFix",
+      "path": "apps/video/shise/releases/0.1.0-test.6/runtime_patch.js"
+    },
+    {
+      "name": "pagingMetaFix",
+      "path": "apps/video/shise/releases/0.1.0-test.7/runtime_patch.js"
+    },
+    {
+      "name": "playhlsSniffFix",
+      "path": "apps/video/shise/releases/0.1.0-test.8/runtime_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.8"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.7",
+    "build": 10107,
+    "release": "apps/video/shise/releases/0.1.0-test.7/release.json"
+  },
+  "notes": "Test8 preserves Test7 paging/metadata fixes and replaces the failing direct candidate handoff with Hiker video:// exact sniffing for Shise's public playhls runtime endpoint."
+}
