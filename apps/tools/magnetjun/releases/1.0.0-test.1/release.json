@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "magnetjun-test",
+  "appId": "magnetjun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.1",
+  "build": 10101,
+  "sourceBaseline": {
+    "type": "uploaded-hk-miniapp",
+    "file": "磁力君.简.hk小程序.zip",
+    "ruleVersion": 20250604,
+    "upstreamAdapterCommit": "5f652b003410a8518d2879b3e99db2d27ef6bc43",
+    "upstreamAdapterVersion": "20250608"
+  },
+  "entry": {
+    "path": "apps/tools/magnetjun/releases/1.0.0-test.1/local_entry.js",
+    "ref": "19645c8047699d914958c46296b11847feff651e"
+  },
+  "shell": {
+    "path": "apps/tools/magnetjun/magnetjun_remote_test_v1_b10101.txt",
+    "ref": "299297dca3c6eca663020d3b5f70e411cf2c8992",
+    "ruleVersion": 2026092501
+  },
+  "features": {
+    "appTitle": "磁力君.简",
+    "externalSearchContract": "hiker://page/magnetSearch?rule=磁力君.简&page=fypage&searchTerms=<keyword>",
+    "searchModes": ["聚合", "精准"],
+    "magnetHandoff": ["PikPak", "115", "迅雷", "光鸭", "123", "复制磁链", "查询元数据", "海阔视界"],
+    "sourceManagement": true,
+    "searchHistory": true,
+    "legacyConfigMigration": "hiker://files/rules/LoyDgIk/ciliSimpleRules.json"
+  },
+  "architecture": {
+    "mode": "managed-remote-runtime",
+    "runtimeRoot": "hiker://files/rules/asset-core-local/magnetjun/b10101/",
+    "oldDailySelfUpdateRemoved": true,
+    "adapterBaselinePinned": true,
+    "adapterBaselineNote": "Search adapter set is pinned to the last uploaded-test baseline commit instead of following upstream master."
+  },
+  "verify": {
+    "runtimeGlobal": "MagnetJunLocal",
+    "version": "1.0.0-test.1",
+    "build": 10101,
+    "deviceStatus": "pending"
+  },
+  "stableTouched": false,
+  "notes": "First managed project version of the previously standalone 磁力君.简 test mini-app. The visible app name contains no 测试 suffix; test only describes the release channel."
+}
