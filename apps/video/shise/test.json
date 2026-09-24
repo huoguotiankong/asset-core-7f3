@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.7",
+  "version": "0.1.0-test.8",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10107,
-  "shellVersion": "0.1.0-test.7",
-  "shellRuleVersion": 2026092407,
+  "build": 10108,
+  "shellVersion": "0.1.0-test.8",
+  "shellRuleVersion": 2026092408,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.7/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v7_b10107.js",
-  "rule": "apps/video/shise/shise_remote_test_v7_b10107.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.8/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v8_b10108.js",
+  "rule": "apps/video/shise/shise_remote_test_v8_b10108.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.6",
-    "build": 10106,
-    "release": "apps/video/shise/releases/0.1.0-test.6/release.json"
+    "version": "0.1.0-test.7",
+    "build": 10107,
+    "release": "apps/video/shise/releases/0.1.0-test.7/release.json"
   },
-  "notes": "Test7 focuses on device-confirmed UI/data gaps: person detail uses real next-link fypage pagination and detail metadata is split into person/category/series/code/date/tags. Playback remains on Test6 for isolated follow-up."
+  "notes": "Test8 preserves Test7 person pagination and structured metadata, and replaces the failing direct media handoff with Hiker video:// exact sniffing for the Shise playhls runtime endpoint."
 }
