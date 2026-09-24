@@ -3,29 +3,30 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 15:06",
+  "updatedAt": "2026-09-24 15:14",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.10",
+      "version": "0.1.0-test.11",
       "targetVersion": "0.1.0",
-      "build": 10110,
-      "displayVersion": "Test 0.1.0-test.10 · Build 10110",
-      "path": "apps/video/shise/shise_remote_test_v10_b10110.txt",
+      "build": 10111,
+      "displayVersion": "Test 0.1.0-test.11 · Build 10111",
+      "path": "apps/video/shise/shise_remote_test_v11_b10111.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "第七轮实机播放修复：修正当前真实 /video/id-<id>.html 详情 URL 的 ID 识别，再生成 player.html?id=<id> 继续两级播放器链。",
+      "desc": "第八轮实机播放修复：Test10 已能进入真实播放器，但自动嗅探优先命中约 17 秒 69Lover 前贴片；Test11 改用 webRule 等待正片。",
       "highlights": [
-        "根据 Test9 实机诊断补充 /video/id-<id>.html ID 提取",
-        "详情 URL 例如 /video/id-6a9ef101ddcea.html 会转换为 player.html?id=6a9ef101ddcea",
-        "继续沿用 player-container src → 内层播放器 → m3u8/mp4 的 Test9 播放链",
-        "播放诊断新增明确显示已解析视频 ID",
-        "Test9 分类、人物分页和结构化详情元数据保持不变",
-        "无 Stable，等待 Test10 实机验证"
+        "保留 Test10 /video/id-<id>.html → player.html?id=<id> → player-container src 播放链",
+        "默认播放从 video:// 改为 webRule 自定义轮询，不再遇到第一个可播放媒体就立即返回",
+        "检测到 ≤45 秒视频时主动推进到末尾并标记为前贴片",
+        "只在检测到长视频或广告之后新增的 HLS/MP4 请求时交付播放器",
+        "为内层播放器设置 player.html Referer 和当前 UA",
+        "播放诊断保留原始自动嗅探对照项，便于确认前贴片行为",
+        "无 Stable，等待 Test11 正片播放实机验证"
       ]
     }
   ]
