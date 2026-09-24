@@ -34,6 +34,7 @@
   K.modelMeta=function(html,url){var m=oldModel(html,url),raw='';
     try{raw=K.domUrl(html,'.model-avatar&&img&&data-original',url)||K.domUrl(html,'.model-avatar&&img&&data-src',url)||K.domUrl(html,'.model-avatar&&img&&src',url)||K.domUrl(html,'.model-info&&img&&src',url)||'';}catch(e){}
     if(raw)m.cover=K.abs(raw,url); // Direct image URL: model avatar is not necessarily served with the primary domain Referer.
+    if(/这个人很懒/.test(m.desc))m.desc='这个人很懒，什么都没留下';
     return m;
   };
   function videoDetail(){
