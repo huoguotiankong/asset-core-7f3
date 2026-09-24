@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/xchina/test.json",
   "channels": "apps/video/xchina/channels.json",
-  "defaultVersion": "0.1.0-test.14",
-  "defaultBuild": 10114,
-  "testVersion": "0.1.0-test.14",
-  "testBuild": 10114,
-  "testShellVersion": "0.1.0-test.14",
-  "testBootstrap": "apps/video/xchina/bootstrap_test_v14_b10114.js",
-  "testRule": "apps/video/xchina/xchina_remote_test_v14_b10114.txt",
-  "testRelease": "apps/video/xchina/releases/0.1.0-test.14/release.json",
+  "defaultVersion": "0.1.0-test.15",
+  "defaultBuild": 10115,
+  "testVersion": "0.1.0-test.15",
+  "testBuild": 10115,
+  "testShellVersion": "0.1.0-test.15",
+  "testBootstrap": "apps/video/xchina/bootstrap_test_v15_b10115.js",
+  "testRule": "apps/video/xchina/xchina_remote_test_v15_b10115.txt",
+  "testRelease": "apps/video/xchina/releases/0.1.0-test.15/release.json",
   "changelog": "apps/video/xchina/CHANGELOG.md",
   "source": "https://xchina.co/",
   "stableExists": false,
   "migration": {
-    "stage": "test14-playback-only-network-capture",
-    "note": "Test14 freezes non-playback work and appends one isolated playback patch after Test13: WebKit/X5 live m3u8 capture plus a strict m3u8-only native fallback with MP4/ad exclusion."
+    "stage": "test15-playback-source-exact",
+    "note": "Test15 freezes failed Test14 and returns to the uploaded reading-source video contract: first quoted m3u8 in main-container; only a separate fallback can use network capture after a >10s duration gate."
   }
 }
