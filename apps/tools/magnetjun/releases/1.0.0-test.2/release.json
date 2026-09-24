@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "magnetjun-test",
+  "appId": "magnetjun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.2",
+  "build": 10102,
+  "base": {
+    "version": "1.0.0-test.1",
+    "build": 10101,
+    "release": "apps/tools/magnetjun/releases/1.0.0-test.1/release.json",
+    "status": "superseded-before-device-test"
+  },
+  "sourceBaseline": {
+    "type": "uploaded-hk-miniapp",
+    "file": "磁力君.简.hk小程序.zip",
+    "ruleVersion": 20250604
+  },
+  "entry": {
+    "path": "apps/tools/magnetjun/releases/1.0.0-test.2/local_entry.js",
+    "ref": "da6c7d4ea695bbf6dc8a985df53e7205cd223d9d"
+  },
+  "shell": {
+    "path": "apps/tools/magnetjun/magnetjun_remote_test_v2_b10102.txt",
+    "ref": "1457d5c4b85c1b914a79f817b61040fd077240f3",
+    "ruleVersion": 2026092502
+  },
+  "features": {
+    "appTitle": "磁力君.简",
+    "externalSearchContract": "hiker://page/magnetSearch?rule=磁力君.简&page=fypage&searchTerms=<keyword>",
+    "searchModes": ["聚合", "精准"],
+    "builtinSources": ["BTDigg", "BT4G", "磁力多", "搜番", "磁力酷", "磁力狐", "东京图书馆", "SOBT", "BTSOW", "磁力发", "磁力地球"],
+    "magnetHandoff": ["PikPak", "115", "迅雷", "光鸭", "123", "复制磁链", "查询元数据", "海阔视界"],
+    "sourceManagement": true,
+    "searchHistory": true,
+    "legacyConfigMigration": "hiker://files/rules/LoyDgIk/ciliSimpleRules.json"
+  },
+  "architecture": {
+    "mode": "self-contained-managed-runtime",
+    "runtimeRoot": "hiker://files/rules/asset-core-local/magnetjun/b10102/",
+    "oldDailySelfUpdateRemoved": true,
+    "externalExecutableAdapterDependencyRemoved": true,
+    "formalRuntimeSource": "asset-core-7f3@main"
+  },
+  "verify": {
+    "runtimeGlobal": "MagnetJunLocal",
+    "version": "1.0.0-test.2",
+    "build": 10102,
+    "deviceStatus": "pending"
+  },
+  "stableTouched": false,
+  "notes": "Test2 replaces the Test1 pinned-upstream executable adapter dependency with built-in adapters in asset-core-7f3. Visible app name remains 磁力君.简; test only describes the release channel."
+}
