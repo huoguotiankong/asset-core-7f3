@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/shise/test.json",
   "channels": "apps/video/shise/channels.json",
-  "defaultVersion": "0.1.0-test.2",
-  "defaultBuild": 10102,
-  "testVersion": "0.1.0-test.2",
-  "testBuild": 10102,
-  "testShellVersion": "0.1.0-test.2",
-  "testBootstrap": "apps/video/shise/bootstrap_test_v2_b10102.js",
-  "testRule": "apps/video/shise/shise_remote_test_v2_b10102.txt",
-  "testRelease": "apps/video/shise/releases/0.1.0-test.2/release.json",
+  "defaultVersion": "0.1.0-test.3",
+  "defaultBuild": 10103,
+  "testVersion": "0.1.0-test.3",
+  "testBuild": 10103,
+  "testShellVersion": "0.1.0-test.3",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v3_b10103.js",
+  "testRule": "apps/video/shise/shise_remote_test_v3_b10103.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.3/release.json",
   "changelog": "apps/video/shise/CHANGELOG.md",
   "source": "https://shise.me/",
   "stableExists": false,
   "migration": {
-    "stage": "test2-initial-device-delivery",
-    "note": "Test2 is the first device-delivery build; Test1 is retained immutable and Test2 only corrects settings refresh semantics."
+    "stage": "test3-import-filter-compat",
+    "note": "Test3 rebuilds the install shell with neutral labels and no direct-site icon after device import reported a prohibited-word rejection."
   }
 }
