@@ -6,7 +6,7 @@
 
 - 套图/漫画列表封面：仅在当前作品卡片内读取完整 CSS style 的 url()、懒加载属性，重建实际列表解析链，避免旧闭包继续调用旧解析器。失败卡片的真实图片地址和 HTTP 响应尚待设备诊断。
 - 套图/漫画正文：按目标容器读取 img/source 的 data-original、data-src、data-lazy-src、src/srcset 和 CSS url()，相对路径依据当前页面补全；漫画正文沿用漫画域 Referer，套图沿用主站 Referer。拒绝 data:/about: 占位地址。
-- 模特详情保留 6 部预览；全部视频链接明确携带 `page=fypage`，列表按 `MY_PAGE` 请求原站分页。加入 `xc_model_favorites_v1` 本地收藏和设置页入口。模特名称、封面、作品数量仍来自原站资料。
+- 模特详情保留 6 部预览；全部视频链接明确携带 `page=fypage`，列表按 `MY_PAGE` 请求原站分页。加入 `xc_model_favorites_v1` 本地收藏和独立收藏页面（保留原设置页）。模特名称、封面、作品数量仍来自原站资料。
 - 首页收敛为类型切换与搜索/分类/模特/收藏入口；新增本程序 SVG 图标。SVG 在海阔图标加载器的渲染需要实机确认。
 - 播放继续沿用 Test15 的精准 M3U8 和时长门禁备用链；用户报告当前不能播放，故本版没有宣称修复完成，也不得晋级 Stable。下一轮需要同一视频的四条播放诊断结果、码率和时长，才能区分网页提取失败与媒体分片加载失败。
 - 运行链：Test9 categories/categoryFix/core → Test13 prepatch/pages/postpatch → Test15 playbackPatch → Test16 uxPatch；Shell version `2026092410`，Bootstrap/Release/元数据 Build 10116。
