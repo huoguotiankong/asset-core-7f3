@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "shise-test",
+  "appId": "shise",
+  "name": "视色",
+  "channel": "test",
+  "version": "0.1.0-test.6",
+  "build": 10106,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/shise/releases/0.1.0-test.5/core.js"
+    },
+    {
+      "name": "pages",
+      "path": "apps/video/shise/releases/0.1.0-test.5/pages.js"
+    },
+    {
+      "name": "deviceFix",
+      "path": "apps/video/shise/releases/0.1.0-test.6/runtime_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "ShiseRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.6"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.5",
+    "build": 10105,
+    "release": "apps/video/shise/releases/0.1.0-test.5/release.json"
+  },
+  "notes": "Test6 targets current device failures without mutating Test5: m3u8 candidate ranking with manifest-duration probing and short-ad rejection, multi-structure tags/people extraction, and live category discovery from the current site."
+}
