@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "shise-test",
   "name": "视色",
-  "version": "0.1.0-test.6",
+  "version": "0.1.0-test.7",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10106,
-  "shellVersion": "0.1.0-test.6",
-  "shellRuleVersion": 2026092406,
+  "build": 10107,
+  "shellVersion": "0.1.0-test.7",
+  "shellRuleVersion": 2026092407,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/shise/releases/0.1.0-test.6/release.json",
-  "bootstrap": "apps/video/shise/bootstrap_test_v6_b10106.js",
-  "rule": "apps/video/shise/shise_remote_test_v6_b10106.txt",
+  "release": "apps/video/shise/releases/0.1.0-test.7/release.json",
+  "bootstrap": "apps/video/shise/bootstrap_test_v7_b10107.js",
+  "rule": "apps/video/shise/shise_remote_test_v7_b10107.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.5",
-    "build": 10105,
-    "release": "apps/video/shise/releases/0.1.0-test.5/release.json"
+    "version": "0.1.0-test.6",
+    "build": 10106,
+    "release": "apps/video/shise/releases/0.1.0-test.6/release.json"
   },
-  "notes": "Test6 uses device-confirmed ad behavior to rank m3u8 candidates by context and real playlist duration, rejects short ad streams, broadens people/tag extraction, and discovers current categories from live site links."
+  "notes": "Test7 focuses on device-confirmed UI/data gaps: person detail uses real next-link fypage pagination and detail metadata is split into person/category/series/code/date/tags. Playback remains on Test6 for isolated follow-up."
 }
