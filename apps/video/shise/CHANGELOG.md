@@ -1,5 +1,30 @@
 # 视色 CHANGELOG
 
+## 0.1.0-test.10 / Build 10110 — 2026-09-24
+
+状态：**第七轮实机反馈后的播放入口修复；根据 Test9 诊断修正真实详情 URL 的 ID 提取；无 Stable。**
+
+### Test9 实机结果
+- [实机确认] “播放诊断”中详情页实际为 `https://shise.me/video/id-6a9ef101ddcea.html`，而不是此前按公开规则假定的 `video.html?id=<id>`。
+- [实机确认] Test9 诊断显示 `② player.html = 未解析`、`未提取到 player-container src`；因此 Test9 尚未真正进入两级播放器链，失败点在详情 ID 提取阶段，而不是 m3u8 嗅探阶段。
+- [代码复核] Test9 `videoId()` 只识别 query `?id=` 和 HTML 内 `video/player.html?id=`，遗漏 `/video/id-<id>.html`，与本次实机截图完全吻合。
+
+### Test10 修复
+- Test5-Test9 Release 全部保持不可变；Test10 新增独立 `legacyDetailIdFix` 模块。
+- `videoId()` 增加 `/video/id-<id>.html`、`/player/id-<id>.html` 和通用 `id-<id>.html` 识别，同时保留原 query-id 兼容。
+- 对本次实机地址 `/video/id-6a9ef101ddcea.html`，会生成 `https://shise.me/player.html?id=6a9ef101ddcea`，然后继续 Test9 的 `.player-container src` → 内层播放器 → m3u8/mp4 嗅探链。
+- 详情 Hero 增加已识别视频 ID，便于快速确认入口解析是否生效。
+- 播放诊断新增“解析到的视频 ID”；如果② `player.html` 已出现但③仍为空，下一轮只处理 `player.html` 返回内容，不再改详情 ID。
+- Test9 分类、人物分页、结构化详情元数据和播放器初始化策略全部保留。
+
+### Test10 重点回归
+1. 覆盖导入 Test10，设置页确认 `Test 0.1.0-test.10 · Build 10110`。
+2. 仍使用本轮同一条 `渴望精子的女人` 测试；详情 Hero 应出现 `ID 6a9ef101ddcea`。
+3. 先点“立即播放”；如果仍失败，再打开“播放诊断”。
+4. 播放诊断中“解析到的视频 ID”应为 `6a9ef101ddcea`，②应至少生成 `https://shise.me/player.html?id=6a9ef101ddcea`。
+5. 若③出现实际播放器 src，测试“嗅探内层播放器”；若③仍为空，只需截图该诊断页即可继续针对 player.html 内容修复。
+6. 正片播放未实机通过前不得晋级 Stable。
+
 ## 0.1.0-test.9 / Build 10109 — 2026-09-24
 
 状态：**第六轮实机反馈后的两级播放器链修复；已发布 Test9，等待正片播放与分页复测；无 Stable。**
