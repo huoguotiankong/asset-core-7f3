@@ -1,0 +1,2 @@
+云口令，MyAv 0.1.1-test.2，复制整条口令打开海阔视界即可导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/8d8c5e01b61ccb89047148db827eb197b0379e44/cloud/myav/v0.1.1-test.2/import_test2.js@import=js:eval(fetch(input))
