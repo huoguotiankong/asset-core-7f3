@@ -3,23 +3,23 @@
   "channel": "test",
   "id": "xchina-test",
   "name": "小黄书",
-  "version": "0.1.0-test.17",
+  "version": "0.1.0-test.18",
   "baseVersion": null,
   "targetVersion": "0.1.0",
-  "build": 10117,
-  "shellVersion": "0.1.0-test.17",
-  "shellRuleVersion": 2026092411,
+  "build": 10118,
+  "shellVersion": "0.1.0-test.18",
+  "shellRuleVersion": 2026092412,
   "managerVersion": "2.0.1",
   "delivery": "remote/self-use",
-  "release": "apps/video/xchina/releases/0.1.0-test.17/release.json",
-  "bootstrap": "apps/video/xchina/bootstrap_test_v17_b10117.js",
-  "rule": "apps/video/xchina/xchina_remote_test_v17_b10117.txt",
+  "release": "apps/video/xchina/releases/0.1.0-test.18/release.json",
+  "bootstrap": "apps/video/xchina/bootstrap_test_v18_b10118.js",
+  "rule": "apps/video/xchina/xchina_remote_test_v18_b10118.txt",
   "updatedAt": "2026-09-24",
   "status": "active-test-pending-device-validation",
   "previousTest": {
-    "version": "0.1.0-test.16",
-    "build": 10116,
-    "release": "apps/video/xchina/releases/0.1.0-test.16/release.json"
+    "version": "0.1.0-test.17",
+    "build": 10117,
+    "release": "apps/video/xchina/releases/0.1.0-test.17/release.json"
   },
-  "notes": "Test17 removes device-failed empty webRule, restores source image scan and adds image header diagnostics; device playback still unverified."
+  "notes": "Diagnostic-only Test18 shows actual page media structure and raw image URLs; functionality not yet repaired."
 }
