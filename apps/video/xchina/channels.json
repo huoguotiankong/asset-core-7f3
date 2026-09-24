@@ -10,23 +10,23 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.13",
+      "version": "0.1.0-test.14",
       "targetVersion": "0.1.0",
-      "build": 10113,
-      "displayVersion": "Test 0.1.0-test.13 · Build 10113",
-      "path": "apps/video/xchina/xchina_remote_test_v13_b10113.txt",
+      "build": 10114,
+      "displayVersion": "Test 0.1.0-test.14 · Build 10114",
+      "path": "apps/video/xchina/xchina_remote_test_v14_b10114.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test13：修复女优全部视频分页，清理视频详情推广/重复信息，并按上传阅读源真实 Header 与 main-container 合同继续修播放。",
+      "desc": "Test14：暂停其它优化，只攻视频播放；从实际 WebView 网络请求精准捕获正片 m3u8，并严格排除 MP4/广告资源。",
       "highlights": [
-        "女优/模特详情仍只预览前 6 部，查看全部视频后按原站 pager 自动翻页，不再只停留在第一页部分作品",
-        "模特页标题/简介改为独立资料提取，避免把第一部作品标题和整块作品列表误当模特资料",
-        "视频详情不再展示通用 video-detail 简介块，直接去除重复标题、重复模特、推广、VPN/AI/下载等噪音文本",
-        "视频正片优先用 DOM 提取 main-container，失败后按阅读源固定 xchina.co Referer 精确重取主站页面，再尝试 WebView 渲染后的 main-container",
-        "播放 Header 回归上传阅读源真实合同：UA + Referer=https://xchina.co/ + live Cookie；不再默认强制详情页 Referer/Origin，也不对非 s2 主机强塞 Host",
-        "继续禁用会误命中广告的 video:// 泛嗅探；没有正片时明确失败",
-        "Test13 使用独立 xc_t13 缓存/线路命名空间；无 Stable，等待海阔实机验证"
+        "本轮不再修改套图、漫画、女优分页等非播放模块，避免故障面继续扩大",
+        "视频详情不再等待 Test13 静态 main-container 猜媒体，点击播放直接进入实时资源捕获",
+        "主播放使用 webRule WebKit 捕获 main-container / window._getUrls / fy_bridge_app.getUrls / performance resource 中真实 m3u8",
+        "播放专项页提供 WebKit 精准捕获、X5 精准捕获、M3U8-only 原生 video 三条独立验证链",
+        "只接受 .m3u8；原生兜底明确排除 .mp4 以及 ads/advert/banner/promo/analytics/tracking 等广告统计资源",
+        "仍使用 xchina.co 同路径和主站会话；需要验证时先在设置中完成 X5 主站验证",
+        "没有实机出现真实码率、合理时长和持续进度前，不认为播放已经修复，也不晋级 Stable"
       ]
     }
   ]
