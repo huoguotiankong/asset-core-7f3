@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "appId": "myav",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.1-test.5",
+  "build": 10205,
+  "baseStable": {"version":"0.1.0","build":10112,"release":"apps/video/myav/releases/0.1.0/release.json"},
+  "previousTest": {"version":"0.1.1-test.4","build":10204,"release":"apps/video/myav/releases/0.1.1-test.4/release.json","status":"external-search-adapter-active"},
+  "baseRuntime": {"version":"0.1.1-test.4","build":10204,"entry":"apps/video/myav/releases/0.1.1-test.4/local_entry.js","entryRef":"83d59bc3eadc1ed3c56bae50d9a6e8e4bac2d03a"},
+  "entry": {"path":"apps/video/myav/releases/0.1.1-test.5/local_entry.js","ref":"e172090ffefcd96bf263ba484091cf40f0ea7d68"},
+  "shell": {"path":"apps/video/myav/myav_remote_test_v5_b10205.txt","ref":"f358f1f7e0d835d93daa73179c0e52c28ffd119e","ruleVersion":2026092504},
+  "features": {
+    "customSearchPlacement": "detail quick-actions immediately after existing action icons",
+    "customSearchDefaultStyle": "icon_round_small_4",
+    "customSearchOptionalStyle": "icon_small_4",
+    "customSearchConfig": "displayName@@ruleName@@iconUrl",
+    "legacyConfig": "displayName|ruleName and existing myav_external_search_targets_v1 remain compatible",
+    "iconDiscovery": "explicit iconUrl -> installed rule icon -> magnet fallback -> app/search fallback",
+    "searchAdapter": "inherits Test4 page/signature-aware routing",
+    "magnetCloudHandoff": "inherits Test3 device-confirmed cloud handoff"
+  },
+  "scope": {
+    "changed": ["custom search detail placement", "custom search icon cards", "custom search settings UI", "target icon persistence/discovery"],
+    "untouched": ["magnet parser", "115/迅雷/PikPak/光鸭/123 handoff", "login", "A/B/C/D data chains", "filters", "entities", "favorites", "history", "MissAV/123AV/Jable playback"]
+  },
+  "verify": {
+    "runtimeGlobal": "MyAvLocal",
+    "version": "0.1.1-test.5",
+    "build": 10205,
+    "deviceStatus": "pending"
+  },
+  "stableTouched": false,
+  "notes": "JavDB-v3-style custom-search UX overlay. Moves custom search directly below Quick Actions and displays configured targets as icon cards. Stable/Latest remain unchanged pending device screenshots."
+}
