@@ -4,30 +4,38 @@
   "id": "magnetjun-test",
   "appId": "magnetjun",
   "name": "磁力君.简",
-  "version": "1.0.0-test.1",
-  "build": 10101,
-  "shellVersion": "1.0.0-test.1",
-  "shellRuleVersion": 2026092501,
-  "delivery": "managed-remote-runtime",
-  "release": "apps/tools/magnetjun/releases/1.0.0-test.1/release.json",
-  "rule": "apps/tools/magnetjun/magnetjun_remote_test_v1_b10101.txt",
-  "entryRef": "19645c8047699d914958c46296b11847feff651e",
-  "shellRef": "299297dca3c6eca663020d3b5f70e411cf2c8992",
+  "version": "1.0.0-test.2",
+  "build": 10102,
+  "shellVersion": "1.0.0-test.2",
+  "shellRuleVersion": 2026092502,
+  "delivery": "self-contained-managed-runtime",
+  "release": "apps/tools/magnetjun/releases/1.0.0-test.2/release.json",
+  "rule": "apps/tools/magnetjun/magnetjun_remote_test_v2_b10102.txt",
+  "entryRef": "da6c7d4ea695bbf6dc8a985df53e7205cd223d9d",
+  "shellRef": "1457d5c4b85c1b914a79f817b61040fd077240f3",
   "updatedAt": "2026-09-25",
   "status": "active-test-awaiting-device-validation",
+  "previousTest": {
+    "version": "1.0.0-test.1",
+    "build": 10101,
+    "status": "superseded-before-device-test",
+    "reason": "formal runtime still executed pinned external adapter code"
+  },
   "deviceValidation": {
     "level": "pending-first-managed-runtime",
     "pending": [
       "home/search page startup",
       "external search with searchTerms",
+      "MyAv custom search handoff",
       "aggregate multi-source search",
       "single-source filter",
       "PikPak/115/迅雷/光鸭/123 handoff",
+      "result long-press cloud menu",
       "source enable-disable",
       "search history",
       "metadata page",
-      "legacy config compatibility"
+      "legacy ciliSimpleRules compatibility"
     ]
   },
-  "notes": "Visible application name is 磁力君.简. The word test is used only for the release channel and must not appear in the application title."
+  "notes": "Visible application name is 磁力君.简. Test2 is the first device-test target and contains its default executable search adapters in asset-core-7f3 rather than executing an external upstream runtime."
 }
