@@ -3,7 +3,7 @@
   "id": "myav",
   "name": "MyAv",
   "versionPolicy": "remote-stable-localfirst-test-v2",
-  "updatedAt": "2026-08-25 21:22",
+  "updatedAt": "2026-09-24 20:20",
   "channels": [
     {
       "channel": "stable",
@@ -17,13 +17,13 @@
       "mode": "remote",
       "updatedAt": "2026-08-23",
       "recommended": true,
-      "desc": "首个 MyAv 正式版，由 Test11 晋级；本轮 Local-First 仅在 Test 验证，Stable 不变。",
+      "desc": "首个 MyAv 正式版，由 Test11 晋级；后续增强继续先走 Test，Stable 不变。",
       "highlights": [
         "有码 / 欧美 / 国产 / 无码多频道资料",
         "高级筛选结果链与完整 Ttype=2 控制链分离",
         "九类片商 / 演员 / TAG 索引与实体页",
         "影片收藏与演员收藏独立本地保存及独立排版",
-        "磁力点击复制，长按调用迅雷 / PikPak / 123云盘 / 光鸭云盘",
+        "磁力点击复制，长按调用云盘小程序",
         "MissAV / 123AV / Jable 共享播放 SDK"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
@@ -33,26 +33,26 @@
       "label": "测试版",
       "id": "myav-test",
       "name": "MyAv",
-      "version": "0.1.1-test.1",
+      "version": "0.1.1-test.2",
       "baseVersion": "0.1.0",
       "baseBuild": 10112,
       "targetVersion": "0.1.1",
-      "build": 10201,
-      "displayVersion": "Test 0.1.1-test.1 · Local-First",
-      "path": "apps/video/myav/myav_remote_test_localfirst_v1_b10201.txt",
-      "mode": "remote-local-first",
-      "updatedAt": "2026-08-25",
+      "build": 10202,
+      "displayVersion": "Test 0.1.1-test.2 · 云盘调用 + 自定义搜索",
+      "path": "apps/video/myav/myav_remote_test_v2_b10202.txt",
+      "mode": "remote-local-first-overlay",
+      "updatedAt": "2026-09-24",
       "recommended": false,
-      "desc": "从 Stable 0.1.0 重新 rebase；首次安装完整本地 Runtime，后续正常启动使用本地 Entry + require(file://)，不加载 Remote Manager/远程 Runtime。",
+      "desc": "继承已完成基础实机验证的 0.1.1-test.1 Local-First Runtime，只叠加磁力云盘调用和本机自定义跨小程序搜索。",
       "highlights": [
-        "23 层 Stable MyAv 业务模块原顺序冻结",
-        "28 个源码/资产单元组成完整本地执行闭包",
-        "Shared JAV Playback 1.0.0-test.4 与 test.2 基线一并本地化",
-        "Provider lazyRule/select 点击时重新进入本地 myav",
-        "123AV 图标与 MyAv 仓库图标进入本地包",
-        "Settings 不再提供会重新 require Bootstrap 的 Remote Manager 维护动作",
-        "Stable 0.1.0 / Latest 不变",
-        "等待海阔实机验证"
+        "磁力长按固定为 115 → 迅雷 → PikPak → 光鸭 → 123 → 复制磁链",
+        "115 使用 115Offline + add 完整磁链",
+        "迅雷 / PikPak / 光鸭 / 123 优先读取已安装规则 pages 并匹配真实入口",
+        "光鸭沿用 JavDB V3 动态页面发现思路，不再写死不存在的 magnet page",
+        "详情页与搜索页增加自定义跨小程序搜索",
+        "搜索目标仅保存在本机，可从已安装规则选择或手动添加",
+        "线路 A/B/C/D、登录、详情解析、收藏与第三方播放继承 Test1，不主动重写",
+        "等待海阔实机验证，Stable / Latest 不变"
       ],
       "icon": "https://thumbsnap.com/i/uc3CZiMx.jpg"
     }
