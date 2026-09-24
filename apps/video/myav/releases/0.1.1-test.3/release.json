@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "myav-test",
+  "appId": "myav",
+  "name": "MyAv",
+  "channel": "test",
+  "version": "0.1.1-test.3",
+  "build": 10203,
+  "baseStable": {"version":"0.1.0","build":10112,"release":"apps/video/myav/releases/0.1.0/release.json"},
+  "previousTest": {"version":"0.1.1-test.2","build":10202,"release":"apps/video/myav/releases/0.1.1-test.2/release.json","status":"device-failed-chinese-rule-url-encoding"},
+  "baseRuntime": {"version":"0.1.1-test.2","build":10202,"entry":"apps/video/myav/releases/0.1.1-test.2/local_entry.js","entryRef":"9a8db2505e8e76522769ffaa5407aeb747eb71a5"},
+  "entry": {"path":"apps/video/myav/releases/0.1.1-test.3/local_entry.js","ref":"9bce0b2471f58f73c5abc0b4484b022e808fb18a"},
+  "shell": {"path":"apps/video/myav/myav_remote_test_v3_b10203.txt","ref":"31db0645769f12228ed342e0e2160d392f948677","ruleVersion":2026092423},
+  "cloudImport": {"path":"cloud/myav/v0.1.1-test.3/import_test3.js","ref":"62c361d14e22a4501f8ab80c104277a06c10054c","token":"cloud/myav/v0.1.1-test.3/cloud_token.txt"},
+  "fixes": [
+    "Cross-rule Chinese names are no longer encodeURIComponent encoded in rule=",
+    "Xunlei uses uploaded rule contract hiker://page/diaoyong?rule=迅雷&page=fypage#<magnet>",
+    "PikPak uses uploaded rule contract hiker://page/fxlj?rule=PikPak&realurl=<encoded magnet>",
+    "115 uses verified 115Offline?rule=115.简&page=fypage&add=<encoded magnet>",
+    "Guangya keeps dynamic page discovery but passes raw Chinese rule name",
+    "Custom external search uses hiker://search?s=<keyword>&rule=<raw rule name>",
+    "Existing myav_external_search_targets_v1 configuration is preserved"
+  ],
+  "evidence": {
+    "device": "Test2 screenshots showed %E... encoded rule names and not-found errors for 迅雷 / 115.简 / 磁力君.简",
+    "projectIncident": "docs/INCIDENT_CHINESE_RULE_ROUTE_ENCODING_20260823.md",
+    "uploadedRules": ["迅雷.hk小程序(1).zip", "PikPak.hk小程序(1).zip", "磁力君.简.hk小程序.zip"]
+  },
+  "status": "awaiting-device-validation",
+  "stableTouched": false
+}
