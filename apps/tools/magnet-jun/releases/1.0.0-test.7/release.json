@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "id": "magnet-jun-test7",
+  "appId": "magnet-jun",
+  "name": "磁力君.简",
+  "channel": "test",
+  "version": "1.0.0-test.7",
+  "build": 2026092401,
+  "ruleVersion": 2026092401,
+  "base": {
+    "version": "1.0.0-test.6",
+    "build": 2026092106,
+    "installer": "apps/tools/magnet-jun/releases/1.0.0-test.6/installer.js"
+  },
+  "installer": "apps/tools/magnet-jun/releases/1.0.0-test.7/installer.js",
+  "modules": [
+    {
+      "name": "pikpak-handoff-compat",
+      "path": "apps/tools/magnet-jun/releases/1.0.0-test.7/pikpak_handoff_patch.js",
+      "immutableCommit": "5f53138fe79fb74a3f195ac27ae90aabb5b676e3"
+    }
+  ],
+  "changes": [
+    "fix PikPak mode incorrectly requiring legacy diaoyong page",
+    "prefer current PikPak Hiker mini-app fxlj handoff with realurl magnet parameter",
+    "retain legacy diaoyong fallback for older PikPak-compatible rules",
+    "leave 115/迅雷/光鸭/123 routes and Provider search architecture unchanged"
+  ],
+  "validation": {
+    "patchSyntax": "passed",
+    "installerSyntax": "passed",
+    "routeSimulation": "passed-fxlj-realurl-complete-magnet",
+    "deviceValidation": "pending"
+  }
+}
