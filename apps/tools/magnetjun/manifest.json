@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "magnetjun",
+  "name": "磁力君.简",
+  "category": "tools",
+  "mode": "remote-test/self-use",
+  "description": "磁力聚合搜索、搜索源管理与云盘小程序调用。",
+  "test": "apps/tools/magnetjun/test.json",
+  "channels": "apps/tools/magnetjun/channels.json",
+  "changelog": "apps/tools/magnetjun/CHANGELOG.md",
+  "current": {
+    "channel": "test",
+    "version": "1.0.0-test.1",
+    "build": 10101,
+    "rule": "apps/tools/magnetjun/magnetjun_remote_test_v1_b10101.txt",
+    "release": "apps/tools/magnetjun/releases/1.0.0-test.1/release.json"
+  },
+  "stable": null,
+  "updatedAt": "2026-09-25"
+}
