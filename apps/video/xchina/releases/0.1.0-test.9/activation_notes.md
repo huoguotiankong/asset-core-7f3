@@ -1,0 +1,1 @@
+Test9 activation boundary: app-local Test metadata only until device validation. Root rule-repository card and Stable remain unchanged. Test9 must be imported by its full cloud command for first validation.
