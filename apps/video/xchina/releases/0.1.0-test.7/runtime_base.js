@@ -121,6 +121,6 @@ var XChinaTest7Builder=(function(){
 "  }"
   ]),'content/media parser');
 
-  src=src.split('[\"古典玄幻\",\"/fictions/tag-8/{page}.html\"],[\"绿帽主题\"').join('[\"古典玄幻\",\"/fictions/tag-8/{page}.html\"],[\"学生校园\",\"/fictions/tag-2/{page}.html\"],[\"绿帽主题\"');
+  src=src.split('["古典玄幻","/fictions/tag-8/{page}.html"],["绿帽主题"').join('["古典玄幻","/fictions/tag-8/{page}.html"],["学生校园","/fictions/tag-2/{page}.html"],["绿帽主题"');
   return {VERSION:VERSION,BUILD:BUILD,src:src,swap:swap,block:block};
 })();
