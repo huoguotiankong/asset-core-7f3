@@ -10,21 +10,21 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.17",
+      "version": "0.1.0-test.18",
       "targetVersion": "0.1.0",
-      "build": 10117,
-      "displayVersion": "Test 0.1.0-test.17 · Build 10117",
-      "path": "apps/video/xchina/xchina_remote_test_v17_b10117.txt",
+      "build": 10118,
+      "displayVersion": "Test 0.1.0-test.18 · Build 10118",
+      "path": "apps/video/xchina/xchina_remote_test_v18_b10118.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test17：修复播放空链接，恢复阅读源图片扫描，并提供图片请求线路切换。",
+      "desc": "定位版：采集页面媒体结构、封面原始地址和模特头像候选。",
       "highlights": [
-        "取消实机报错的 webRule 空链接主播放",
-        "有 M3U8 则直连；没有时打开原网页播放器并展示诊断",
-        "套图/漫画正文优先采用上传阅读源的原图地址提取规则",
-        "图片阅读页可切源站 Referer、图片域 Referer、无 Header",
-        "模特头像尝试原图直连并清理简介"
+        "确认 Test17 视频页面 HTML 约 7.3 万字符但 M3U8 为 0",
+        "显示全页/主容器 M3U8、video/iframe/script 计数",
+        "显示套图和漫画首页前两张封面的原始地址",
+        "显示近期访问模特页提取的头像地址",
+        "本版不宣称播放、图片或头像已修复"
       ]
     }
   ]
