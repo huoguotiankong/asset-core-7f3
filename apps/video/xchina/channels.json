@@ -10,24 +10,24 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.11",
+      "version": "0.1.0-test.12",
       "targetVersion": "0.1.0",
-      "build": 10111,
-      "displayVersion": "Test 0.1.0-test.11 · Build 10111",
-      "path": "apps/video/xchina/xchina_remote_test_v11_b10111.txt",
+      "build": 10112,
+      "displayVersion": "Test 0.1.0-test.12 · Build 10112",
+      "path": "apps/video/xchina/xchina_remote_test_v12_b10112.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test11：按当前实机重新收敛封面、女优页、标签和播放链；直接绕开失败的 Test10 patch 层。",
+      "desc": "Test12：继续按实机收紧女优页、标签、封面和播放；不再把广告区、漫画正文 Referer 或旧错误缓存带入列表链。",
       "highlights": [
-        "套图/漫画封面重新按当前卡片自身 .img@style 精确取图，不跨卡猜图；兼容 CSS 内层引号和转义",
-        "女优/模特详情直接展示前 6 部视频作品，并优先提供原站全部视频入口",
-        "视频标签只读取 model-container 与阅读源明确的 .tags div.4/div.1/div.3 位置，过滤 VPN/下载/APP/推广等广告标签",
-        "视频媒体只读取平衡后的 main-container：纯视频取第一个 quoted m3u8，套图视频才回退 var domain + var videos",
-        "HLS 播放点击阶段增加旧小黄书规则已使用的 Host=s2.playhls.com 尝试，并优先 cacheM3u8 保持分片请求 Header",
-        "保留普通 Header 播放作为诊断对照，不再使用会误命中广告的 video:// 网页嗅探",
-        "Test11 使用独立 xc_t11 缓存/线路命名空间，避免 Test9/Test10 错误缓存干扰",
-        "无 Stable，需海阔实机确认封面、6作品、标签和真实播放后再晋级"
+        "女优/模特详情直接展示前 6 部视频作品，并提供全部视频入口和原站收录总数",
+        "视频标签严格只读 model-container 与阅读源 .tags div.4/div.1/div.3，未知/广告项不再外跳",
+        "套图/漫画封面优先按 .img@style，另补视频 data-poster、套图 img src、漫画 img src 精确回退",
+        "所有列表/详情封面统一使用阅读源 source.key 即 xchina.co Referer；litu100 仅保留漫画正文图片",
+        "纯视频只读 main-container 第一个 quoted m3u8，套图视频才回退 var domain + var videos",
+        "HLS 优先 cacheM3u8，并携带历史可用 Host=s2.playhls.com + Referer/Origin/UA/live Cookie；保留普通 Header 对照",
+        "继续禁用会命中广告的 video:// 泛嗅探",
+        "Test12 使用独立 xc_t12 缓存/线路命名空间；无 Stable，等待海阔实机验证"
       ]
     }
   ]
