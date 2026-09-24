@@ -10,23 +10,22 @@
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.14",
+      "version": "0.1.0-test.15",
       "targetVersion": "0.1.0",
-      "build": 10114,
-      "displayVersion": "Test 0.1.0-test.14 · Build 10114",
-      "path": "apps/video/xchina/xchina_remote_test_v14_b10114.txt",
+      "build": 10115,
+      "displayVersion": "Test 0.1.0-test.15 · Build 10115",
+      "path": "apps/video/xchina/xchina_remote_test_v15_b10115.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "Test14：暂停其它优化，只攻视频播放；从实际 WebView 网络请求精准捕获正片 m3u8，并严格排除 MP4/广告资源。",
+      "desc": "Test15：只修播放。冻结 Test14 的 1 秒错误候选，主链严格复刻上传阅读源：main-container 内第一个 quoted m3u8。",
       "highlights": [
-        "本轮不再修改套图、漫画、女优分页等非播放模块，避免故障面继续扩大",
-        "视频详情不再等待 Test13 静态 main-container 猜媒体，点击播放直接进入实时资源捕获",
-        "主播放使用 webRule WebKit 捕获 main-container / window._getUrls / fy_bridge_app.getUrls / performance resource 中真实 m3u8",
-        "播放专项页提供 WebKit 精准捕获、X5 精准捕获、M3U8-only 原生 video 三条独立验证链",
-        "只接受 .m3u8；原生兜底明确排除 .mp4 以及 ads/advert/banner/promo/analytics/tracking 等广告统计资源",
-        "仍使用 xchina.co 同路径和主站会话；需要验证时先在设置中完成 X5 主站验证",
-        "没有实机出现真实码率、合理时长和持续进度前，不认为播放已经修复，也不晋级 Stable"
+        "Test14 实机出现 00:01/00:01，确认 currentSrc/泛网络候选会先抓到短预播，不再作为主链",
+        "主播放只读取 main-container 内第一个带引号的 .m3u8，与上传夜明空阅读源 /video 正文规则一致",
+        "不再在主链返回 video.currentSrc/source，也不按第一个 performance m3u8 直接播放",
+        "备用网络链只有网页 video.duration > 10 秒后才放行 m3u8，过滤 1 秒预播和常见广告/统计资源",
+        "Test15 直接基于 Test13，完全不加载已实机失败的 Test14 playback patch",
+        "本轮继续冻结套图/漫画/女优分页/UI；播放实机成功前不晋级 Stable"
       ]
     }
   ]
