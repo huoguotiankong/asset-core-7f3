@@ -6,20 +6,20 @@
   "mode": "remote-test/self-use",
   "test": "apps/aggregate/sehuatang/test.json",
   "channels": "apps/aggregate/sehuatang/channels.json",
-  "defaultVersion": "0.1.0-test.31",
-  "defaultBuild": 10131,
-  "testVersion": "0.1.0-test.31",
-  "testBuild": 10131,
-  "testShellVersion": "0.1.0-test.31",
-  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v31_b10131.js",
-  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v31_b10131.txt",
-  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.31/release.json",
+  "defaultVersion": "0.1.0-test.32",
+  "defaultBuild": 10132,
+  "testVersion": "0.1.0-test.32",
+  "testBuild": 10132,
+  "testShellVersion": "0.1.0-test.32",
+  "testBootstrap": "apps/aggregate/sehuatang/bootstrap_test_v32_b10132.js",
+  "testRule": "apps/aggregate/sehuatang/sehuatang_remote_test_v32_b10132.txt",
+  "testRelease": "apps/aggregate/sehuatang/releases/0.1.0-test.32/release.json",
   "changelog": "apps/aggregate/sehuatang/CHANGELOG.md",
   "migration": {
-    "stage": "test31-list-guide-search-latency",
+    "stage": "test32-pikpak-miniapp-handoff",
     "managerVersion": "direct-loader",
     "stableExists": false,
-    "previousTest": "0.1.0-test.30",
-    "note": "Test30详情提速已实机确认；Test31采用可自动回退的性能层继续优化普通子板块、Guide首开和搜索，保持现有UI/预览图/详情链不变。"
+    "previousTest": "0.1.0-test.31",
+    "note": "Test32 only replaces the 色花堂→PikPak magnet invocation boundary: Android deep link is disabled and the Hiker PikPak fxlj handoff contract is used instead."
   }
 }
