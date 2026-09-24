@@ -3,30 +3,30 @@
   "id": "shise",
   "name": "视色",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24 13:50",
+  "updatedAt": "2026-09-24 14:02",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "shise-test",
       "name": "视色",
-      "version": "0.1.0-test.5",
+      "version": "0.1.0-test.6",
       "targetVersion": "0.1.0",
-      "build": 10105,
-      "displayVersion": "Test 0.1.0-test.5 · Build 10105",
-      "path": "apps/video/shise/shise_remote_test_v5_b10105.txt",
+      "build": 10106,
+      "displayVersion": "Test 0.1.0-test.6 · Build 10106",
+      "path": "apps/video/shise/shise_remote_test_v6_b10106.txt",
       "mode": "remote/self-use",
       "updatedAt": "2026-09-24",
       "recommended": true,
-      "desc": "第二轮实机反馈修复：播放回归阅读源 main-container m3u8 契约，分类启用明确 series 分页与 fypage，人物改从视频卡 model-container 汇总，详情补 contentTag 标签。",
+      "desc": "第三轮实机修复：短广告 m3u8 不再直接当正片，新增实际清单时长探测、iframe 候选扫描、动态人物/标签/分类解析。",
       "highlights": [
-        "纯视频主播放优先交付 main-container 中的原始 m3u8，不再把泛解析媒体地址和自定义 Header 当主线路",
-        "播放线路页保留原始直链、Header 兼容和网页嗅探三档验证",
-        "分类使用阅读源明确的 /videos/series-.../{page}.html 路由，而不是从首页导航猜分类",
-        "分类和人物列表入口显式使用 page=fypage，支持继续向下加载第 2、3 页",
-        "人物列表从每页 .item.video 内的 model-container 实时汇总，不再依赖空的 /models.html",
-        "详情页读取 contentTag 并显示标签",
-        "无 Stable，等待 Test5 实机复测"
+        "播放候选不再取第一个 m3u8，而是结合上下文与 m3u8 实际时长排序",
+        "45 秒以内候选强降权，针对实机出现的 16 秒广告流",
+        "同时扫描 main-container、整页和 iframe 播放页候选",
+        "详情标签增加 contentTag / tags / keywords / 标签链接多级回退",
+        "人物页增加 model / actor / star 等链接与纯文本人物名搜索回退",
+        "分类页改为运行时读取视色当前真实 /videos/... 分类链接，不再硬套小黄书分类 ID",
+        "无 Stable，等待 Test6 实机验证"
       ]
     }
   ]
