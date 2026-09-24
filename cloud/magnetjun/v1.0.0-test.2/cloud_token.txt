@@ -1,0 +1,2 @@
+云口令，磁力君.简 1.0.0-test.2，复制整条口令打开海阔视界即可导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/a6470dd3cc666078a38f40ffb23fa7b728a55d0c/cloud/magnetjun/v1.0.0-test.2/import_test2_direct.js@import=js:eval(fetch(input))
