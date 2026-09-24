@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.17",
+  "build": 10117,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "categories",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/categories.js"
+    },
+    {
+      "name": "categoryFix",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/category_fix.js"
+    },
+    {
+      "name": "coreBase",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/core.js"
+    },
+    {
+      "name": "prepatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.13/prepatch.js"
+    },
+    {
+      "name": "pagesBase",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/pages.js"
+    },
+    {
+      "name": "postpatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.13/postpatch.js"
+    },
+    {
+      "name": "playbackPatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.15/playback_patch.js"
+    },
+    {
+      "name": "uxPatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.16/ux_patch.js"
+    },
+    {
+      "name": "repairPatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.17/repair_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "XChinaRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.17"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.16",
+    "build": 10116,
+    "release": "apps/video/xchina/releases/0.1.0-test.16/release.json"
+  },
+  "notes": "Fix empty webRule, restore uploaded-source image scan, expose image header variants; pending device validation."
+}
