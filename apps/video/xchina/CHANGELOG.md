@@ -1,8 +1,47 @@
 # 小黄书 CHANGELOG
 
+## 0.1.0-test.10 / Build 10110 — 2026-09-24
+
+状态：**当前 Test；针对用户当前实机确认的“套图/漫画封面仍空白、视频详情缺少标签、免嗅播放失败且网页嗅探命中广告”做专项修复；无 Stable。**
+
+### 当前实机确认
+- [实机确认] Test9 套图与漫画列表仍有大量空白封面，说明 Test9 虽已采用阅读源 `.img@style` 语义，但实际 `.img` 标签 `style="...url('...')..."` 在通用属性正则里仍会被内部单引号提前截断。
+- [实机确认] 视频详情可以显示标题、封面和简介，但类似“萌崽儿”等模特/系列信息仍只混在简介文本里，缺少独立标签入口。
+- [实机确认] Test9 页面没有按阅读源契约解析到媒体直链；`video://` 网页嗅探会命中广告，因此不能继续作为播放兜底。
+
+### 封面链修复
+- Test10 在 Test9 Core 与 Pages 之间增加 pre-pages 修复层，直接扫描卡片内 `.img` 标签并使用**成对引号回溯**读取完整 `style` 属性，避免 `url('...')` 内部单引号截断外层双引号属性。
+- 封面继续遵守上传阅读源事实：列表/详情封面统一使用主站 Referer；漫画正文图片才使用 `litu100.xyz` Referer。
+- 不只替换导出的 `cardFromBlock()`：同时重建 `parseCards()` 与 `listResult()`，避免 Test9 原有词法闭包继续绑定旧解析器，确保首页/分类/搜索真正进入新封面链。
+- Test10 切换到独立 `xc_t10_*` base/last/cache 命名空间，避免 Test9 页面缓存干扰本轮封面与媒体判断。
+
+### 视频详情标签
+- 新增 `detailTags()`：优先从 `video-detail / tags / model-container` 内真实 `<a href>` 提取标签并去重。
+- 视频详情在主操作前显示 `🏷️ 标签` 横向按钮；模特链接进入模特详情，视频系列/标签进入对应列表，其余保留原站链接。
+- 标签只使用页面真实文本/链接，不从简介语义猜造标签；过滤“更多/登录/注册/推广/广告”等导航或推广项。
+
+### 播放链修复
+- `main-container` 媒体提取从 Test9“仅绝对 quoted m3u8”扩大为：相对/绝对/转义 m3u8、`src/file/url/play_url/video_url/m3u8_url`、`var domain + var videos`、`video/source src`。
+- 媒体 token 统一恢复 `\\/`、`\\u002F`、HTML `&amp;`，再按详情页或 `var domain` 组成最终绝对地址。
+- 只接受明确 `.m3u8/.mp4` 候选，并过滤 `ads/advert/banner/doubleclick/googlesyndication/tracking/analytics` 等明显广告/统计 URL。
+- **取消 `video://` 网页嗅探兜底。** 当未识别到真实媒体时明确显示“未解析到真实视频”，宁可失败也不把广告伪装成正片。
+- 播放诊断页仅保留两条可验证链：`免嗅原始媒体` 与 `Header兼容`，用于继续定位直链本身还是 Referer/UA/Cookie 交付问题。
+
+### 架构 / 发布
+- Test10 保持 Test9 上传阅读源重建资产不可变，Release 顺序为：`Test9 categories → Test9 categoryFix → Test9 core → Test10 prepatch → Test9 pages → Test10 postpatch`。
+- post-pages 修复层重建视频详情/播放诊断/设置，并最终把 `XChinaRemoteRuntime.version/build` 提升为 `0.1.0-test.10 / 10110`；Release verify 以该版本为准。
+- Shell：`xchina_remote_test_v10_b10110.txt`，规则 version `2026092404`；Bootstrap：`bootstrap_test_v10_b10110.js`，`minBuild=10110`。
+- app-local `test.json / channels.json / manifest.json` 已切 Test10；Stable 仍不存在。
+
+### 本地门禁与验收
+- `prepatch.js`、`postpatch.js` 已通过 `node --check`；封面合成 smoke 已验证 `style="background-image:url('https://...webp')"` 能取得完整 URL；转义 `https:\\/\\/cdn/...m3u8` 能还原为真实媒体地址。
+- Shell 外层 JSON 与 `pages` 内层 JSON 已解析通过，共 13 个页面路由。
+- 实机重点：①套图/漫画封面是否恢复；②视频详情是否出现“萌崽儿”等真实可点击标签；③详情是否直接出现免嗅播放；④若仍无媒体，播放诊断应明确失败且不再播放广告；⑤免嗅与 Header兼容哪一条首次成功。
+- 未完成上述实机验证前不得晋级 Stable。
+
 ## 0.1.0-test.9 / Build 10109 — 2026-09-24
 
-状态：**当前 Test；依据用户上传 `✈️ 小黄书-夜明空` 阅读源重新建立协议层，等待海阔实机验证；无 Stable。**
+状态：**历史 Test；依据用户上传 `✈️ 小黄书-夜明空` 阅读源重新建立协议层，实机证明漫画/套图封面与播放仍未完全解决；无 Stable。**
 
 ### 当前实机事实与重建原因
 - [实机确认] Test7 视频仍进入播放器后 `0 kb/s / 00:00`，因此 Test7 的强制 Header 播放包装不能继续作为主链。
@@ -116,7 +155,7 @@
 ### 本地门禁
 - `node --check`：Test6 Runtime Bundle / Bootstrap 通过。
 - 合成页面 smoke：小说嵌套正文可完整提取；漫画目标容器外图片不会混入；`var domain + var videos` 可生成多条 MP4；媒体域 live Cookie 能进入播放 Header。
-- Shell 外层 JSON 与 `pages` 内层 JSON 解析通过，规则 version `2026091502`。
+- Shell 外层 JSON 与 `pages` 内层 JSON 本地解析通过，规则 version `2026091502`。
 - Release/Test/Manifest/Channels JSON 结构检查通过。
 
 ### 实机验收
