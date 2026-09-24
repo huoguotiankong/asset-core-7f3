@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "xchina-test",
+  "appId": "xchina",
+  "name": "小黄书",
+  "channel": "test",
+  "version": "0.1.0-test.15",
+  "build": 10115,
+  "ref": "main",
+  "baseStable": null,
+  "modules": [
+    {
+      "name": "categories",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/categories.js"
+    },
+    {
+      "name": "categoryFix",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/category_fix.js"
+    },
+    {
+      "name": "coreBase",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/core.js"
+    },
+    {
+      "name": "prepatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.13/prepatch.js"
+    },
+    {
+      "name": "pagesBase",
+      "path": "apps/video/xchina/releases/0.1.0-test.9/pages.js"
+    },
+    {
+      "name": "postpatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.13/postpatch.js"
+    },
+    {
+      "name": "playbackPatch",
+      "path": "apps/video/xchina/releases/0.1.0-test.15/playback_patch.js"
+    }
+  ],
+  "verify": {
+    "global": "XChinaRemoteRuntime",
+    "property": "version",
+    "equals": "0.1.0-test.15"
+  },
+  "promotedFrom": null,
+  "previousTest": {
+    "version": "0.1.0-test.14",
+    "build": 10114,
+    "release": "apps/video/xchina/releases/0.1.0-test.14/release.json"
+  },
+  "notes": "Test15 is playback-only and deliberately skips failed Test14. Device evidence showed Test14 returned a 1-second candidate because currentSrc/network capture was allowed before the uploaded reading-source contract. Test15 returns to the exact source rule: first quoted m3u8 inside main-container, with a separate >10s duration-gated network fallback."
+}
