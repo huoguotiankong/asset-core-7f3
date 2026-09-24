@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/shise/test.json",
   "channels": "apps/video/shise/channels.json",
-  "defaultVersion": "0.1.0-test.4",
-  "defaultBuild": 10104,
-  "testVersion": "0.1.0-test.4",
-  "testBuild": 10104,
-  "testShellVersion": "0.1.0-test.4",
-  "testBootstrap": "apps/video/shise/bootstrap_test_v4_b10104.js",
-  "testRule": "apps/video/shise/shise_remote_test_v4_b10104.txt",
-  "testRelease": "apps/video/shise/releases/0.1.0-test.4/release.json",
+  "defaultVersion": "0.1.0-test.5",
+  "defaultBuild": 10105,
+  "testVersion": "0.1.0-test.5",
+  "testBuild": 10105,
+  "testShellVersion": "0.1.0-test.5",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v5_b10105.js",
+  "testRule": "apps/video/shise/shise_remote_test_v5_b10105.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.5/release.json",
   "changelog": "apps/video/shise/CHANGELOG.md",
   "source": "https://shise.me/",
   "stableExists": false,
   "migration": {
-    "stage": "test4-device-parser-rebuild",
-    "note": "Test4 replaces the Test1-Test3 chained runtime with one consolidated runtime after device feedback exposed URL-parameter collision, model-selector mismatch, and category pagination errors."
+    "stage": "test5-source-contract-rebuild",
+    "note": "Test5 replaces Test4 assumptions for playback/categories/models with contracts derived from the uploaded same-family reading source and current device feedback."
   }
 }
