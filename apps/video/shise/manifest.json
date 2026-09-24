@@ -1,0 +1,24 @@
+{
+  "schema": 4,
+  "id": "shise",
+  "name": "视色",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/shise/test.json",
+  "channels": "apps/video/shise/channels.json",
+  "defaultVersion": "0.1.0-test.1",
+  "defaultBuild": 10101,
+  "testVersion": "0.1.0-test.1",
+  "testBuild": 10101,
+  "testShellVersion": "0.1.0-test.1",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v1_b10101.js",
+  "testRule": "apps/video/shise/shise_remote_test_v1_b10101.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.1/release.json",
+  "changelog": "apps/video/shise/CHANGELOG.md",
+  "source": "https://shise.me/",
+  "stableExists": false,
+  "migration": {
+    "stage": "initial-test1-native-video-client",
+    "note": "New app. Test-only until current Hiker device validates homepage/search/models/detail/image and playback chains."
+  }
+}
