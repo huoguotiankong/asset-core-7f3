@@ -6,19 +6,19 @@
   "mode": "remote-test/self-use",
   "test": "apps/video/shise/test.json",
   "channels": "apps/video/shise/channels.json",
-  "defaultVersion": "0.1.0-test.10",
-  "defaultBuild": 10110,
-  "testVersion": "0.1.0-test.10",
-  "testBuild": 10110,
-  "testShellVersion": "0.1.0-test.10",
-  "testBootstrap": "apps/video/shise/bootstrap_test_v10_b10110.js",
-  "testRule": "apps/video/shise/shise_remote_test_v10_b10110.txt",
-  "testRelease": "apps/video/shise/releases/0.1.0-test.10/release.json",
+  "defaultVersion": "0.1.0-test.11",
+  "defaultBuild": 10111,
+  "testVersion": "0.1.0-test.11",
+  "testBuild": 10111,
+  "testShellVersion": "0.1.0-test.11",
+  "testBootstrap": "apps/video/shise/bootstrap_test_v11_b10111.js",
+  "testRule": "apps/video/shise/shise_remote_test_v11_b10111.txt",
+  "testRelease": "apps/video/shise/releases/0.1.0-test.11/release.json",
   "changelog": "apps/video/shise/CHANGELOG.md",
   "source": "https://shise.me/",
   "stableExists": false,
   "migration": {
-    "stage": "test10-legacy-detail-id-player-fix",
-    "note": "Test10 fixes the device-confirmed /video/id-<id>.html detail URL contract before continuing player.html -> player-container src -> runtime media resolution."
+    "stage": "test11-smart-preroll-filter",
+    "note": "Test11 keeps the confirmed Test10 player chain and replaces immediate video:// capture with webRule polling so the ~17s preroll can be skipped before returning the main media URL."
   }
 }
