@@ -3,28 +3,28 @@
   "id": "xchina",
   "name": "小黄书",
   "versionPolicy": "test-first",
-  "updatedAt": "2026-09-24",
+  "updatedAt": "2026-09-25",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "xchina-test",
       "name": "小黄书",
-      "version": "0.1.0-test.18",
+      "version": "0.1.0-test.19",
       "targetVersion": "0.1.0",
-      "build": 10118,
-      "displayVersion": "Test 0.1.0-test.18 · Build 10118",
-      "path": "apps/video/xchina/xchina_remote_test_v18_b10118.txt",
+      "build": 10119,
+      "displayVersion": "Test 0.1.0-test.19 · Build 10119",
+      "path": "apps/video/xchina/xchina_remote_test_v19_b10119.txt",
       "mode": "remote/self-use",
-      "updatedAt": "2026-09-24",
+      "updatedAt": "2026-09-25",
       "recommended": true,
-      "desc": "定位版：采集页面媒体结构、封面原始地址和模特头像候选。",
+      "desc": "套图、漫画和头像图片改用实际页面 Referer；套图详情去除推广信息；视频原站故障期间暂缓。",
       "highlights": [
-        "确认 Test17 视频页面 HTML 约 7.3 万字符但 M3U8 为 0",
-        "显示全页/主容器 M3U8、video/iframe/script 计数",
-        "显示套图和漫画首页前两张封面的原始地址",
-        "显示近期访问模特页提取的头像地址",
-        "本版不宣称播放、图片或头像已修复"
+        "封面与正文图片按实际获取页面域名构建 Referer",
+        "模特头像恢复同页面 Header，保留图片线路切换",
+        "套图详情删去推广文字与过长标签串",
+        "视频链保持现状，需等待原站恢复后验证",
+        "仍需手机实机验收图片效果"
       ]
     }
   ]
