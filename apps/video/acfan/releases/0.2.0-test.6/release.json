@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "acfan-test",
+  "name": "ACFAN",
+  "version": "0.2.0-test.6",
+  "build": 10206,
+  "ref": "main",
+  "baseTest": "0.1.0-test.5",
+  "modules": [
+    {"name":"core","path":"apps/video/acfan/releases/0.2.0-test.6/core.js"},
+    {"name":"protocol","path":"apps/video/acfan/releases/0.2.0-test.6/protocol.js"},
+    {"name":"provider-models","path":"apps/video/acfan/releases/0.2.0-test.6/provider.js"},
+    {"name":"image","path":"apps/video/acfan/releases/0.2.0-test.6/image.js"},
+    {"name":"playback","path":"apps/video/acfan/releases/0.2.0-test.6/playback.js"},
+    {"name":"ui","path":"apps/video/acfan/releases/0.2.0-test.6/ui.js"},
+    {"name":"pages","path":"apps/video/acfan/releases/0.2.0-test.6/pages.js"},
+    {"name":"runtime","path":"apps/video/acfan/releases/0.2.0-test.6/runtime.js"}
+  ],
+  "sidecars": [
+    {"name":"image-decoder","path":"apps/video/acfan/releases/0.2.0-test.6/image_decoder.js","page":"acfanT6Image"}
+  ],
+  "verify":{"global":"ACFAN6Runtime","property":"version","equals":"0.2.0-test.6"},
+  "status":"pending-device-validation",
+  "notes":"Clean Product Reset: no login, no games; complete native catalog/search/rank/discover/detail/comment/comic/fiction/audio/community/AI/local-library/settings/diagnostics surface; current bootstrap is immutable Test6."
+}

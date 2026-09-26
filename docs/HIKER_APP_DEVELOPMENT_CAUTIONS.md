@@ -1099,3 +1099,17 @@ fresh last-good
 ## 文件卡误入播放器列表
 
 不要为了统一样式给目录页所有卡片都设置 `extra.cls = "playlist ..."`。海阔播放器会把带 `playlist` 的非视频卡一并收入列表，表现为播放器列表出现文件夹、图片或附件。应在渲染层集中判断媒体类型：仅视频卡添加 `playlist`，文件夹和普通文件使用独立 class；Magnet 展开后的条目还需用扩展名兜底识别视频。
+
+---
+
+## 动态端点配置禁止只支持对象键，或按顶级域名一刀切过滤
+
+2026-09-26 ACFAN Test5 复核发现：官方 `acfun.json` 当前返回 URL 字符串数组；旧 `extractHosts()` 递归到字符串后直接返回，因此一个候选都没有收集，同时还用 `/\.work$/` 排除当前轮换站点。结果是配置明明正常返回，运行时却长期退回过期静态 Host。
+
+固定规则：
+
+- 配置解析必须覆盖 object / array / scalar string 三种形状。
+- 不按 `.work/.site/.cc` 等 TLD 黑名单删除业务候选。
+- 配置 URL 必须先分类为 H5/API/Image/Media 未确认候选；根数组不能默认等同 API Host。
+- 候选只有通过对应业务探针后才能写 last-good；H5 返回 200 但内容是 `Site Unavailable` 也不算健康。
+- 端点发现 fixture 至少包含：对象字段、字符串数组、混合嵌套、HTML 错误页、HTTP 405/403 与有效 JSON。

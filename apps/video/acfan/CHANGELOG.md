@@ -3,13 +3,46 @@
 > 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 不作为本程序运行依赖；但旧 Stable 中经实机验证成功的协议事实可以作为恢复依据。
 
 ## 当前基线
-- Test：`0.1.0-test.5 / Build10105 / Shell 2026091910`
+- Test：`0.2.0-test.6 / Build10206 / Shell 2026092601`
 - Stable：不存在
-- Test Shell：`apps/video/acfan/acfan_remote_test_v5_b10105.txt`
-- Bootstrap：`apps/video/acfan/bootstrap_test_v5_b10105.js`
-- Release：`apps/video/acfan/releases/0.1.0-test.5/release.json`
+- Test Shell：`apps/video/acfan/acfan_remote_test_v6_b10206.txt`
+- Bootstrap：`apps/video/acfan/bootstrap_test_v6_b10206.js`
+- Release：`apps/video/acfan/releases/0.2.0-test.6/release.json`
 - 当前网站终端：`https://aasf.wwvgadm0.work/mobile`
-- Test1~Test4 已冻结，不原地覆盖。
+- Test1~Test5 已冻结，不原地覆盖。
+
+## 2026-09-26 · 0.2.0-test.6 · Clean Product Reset
+
+### 当前要求与产品边界
+- 根据用户当前要求重新写 ACFAN：**不实现账号登录，不包含游戏分类**；其余公开网站/App 功能尽可能恢复。
+- UI 参考用户提供的 R星精选样本，但不照抄其粉色按钮墙、旧接口或全量 God Object；采用搜索 + 五项快捷入口 + 频道 + 内容 Feed 的原生页面地图。
+- Test6 仍是自用远程测试版，没有 Stable；UI、图片、播放、漫画阅读必须经用户当前海阔实机截图/点击闭环。
+
+### 研究证据
+- `[源码确认]` APK 1.9.7 当前可见能力包括：Station、视频分类/标签、短视频、漫画、小说/有声、社区、热搜、评论、AI Square、收藏/书架与播放相关 API；游戏能力存在但本版明确排除。
+- `[源码确认]` 当前官方配置 `acfun.json` 返回字符串数组形式的轮换 `.work` 网站域名。旧 Test5 的 `extractHosts()` 不会收集数组中的字符串，并额外排除 `.work`，属于确定的 Endpoint Discovery 缺陷。
+- `[网络复核]` 开发环境访问用户给出的 `/mobile` 与部分轮换站点返回 `Site Unavailable`；这不覆盖用户手机当前可访问事实，网站终端继续允许自定义地址并等待实机验证。
+- `[源码确认]` R星精选样本使用原生搜索、五项导航、多内容分类、同页状态切换和按媒体语义选择卡片；Test6 只继承信息层级与交互语法。
+
+### Test6 实现
+- 新建不可变 Release `0.2.0-test.6 / Build10206`，Core / Protocol / Provider+Models / Image / Playback / UI / Pages / Runtime 全部使用 T6 独立命名空间与页面别名。
+- 页面覆盖：首页、十个公开频道（精选/里番/动漫/视频/短视频/漫画/小说/有声/社区/AI）、搜索状态机、热搜、热榜、发现、详情、评论、漫画 Reader、小说/有声 Reader、收藏历史、网站终端、设置与诊断。
+- 登录与所有写操作未实现；社区和 AI 广场按只读内容消费。
+- 分类/筛选/排序全部在同一页面状态内刷新，不用重复 `hiker://page` 堆返回栈。
+- 视频、漫画、小说/有声、社区与 AI 分别进入独立详情合同；播放器队列不混入收藏/评论/设置。
+- 保留旧实机验证协议：游客 `POST user/traveler/`、`encData` AES/CBC、相对图片 + imgDomain、仅 asigoo `_480` + 前100字节 XOR、漫画 `chapterList → chapterInfo → domain + imgList`。
+- 视频使用 `GET video/can/watch` 原生优先，POST 仅兼容后备；网站终端保持显式次级兜底。
+- 关键播放 lazyRule 每次通过 `$.require('acfanT6')` 重新进入当前 T6 Bootstrap/Release，禁止只 eval 历史 Core。
+- 动态配置明确拆分：根数组/普通域名视为 H5 网站候选；只有语义键明确为 API 的地址才进入 API 候选；API 写入前必须通过真实请求。
+
+### Test6 实机验收
+1. 覆盖导入后标题必须显示 `ACFAN·T6`，设置页版本为 `0.2.0-test.6 / Build10206`。
+2. 首页检查搜索、首页/热榜/发现/收藏/设置五项入口、十个内容频道，以及连续切换频道后的返回栈。
+3. 分别验证精选、里番、动漫、视频、短视频、漫画、小说、有声、社区、AI 的首屏数据与封面。
+4. 验证热搜、跨类型搜索、热榜、详情、评论、本地收藏与历史。
+5. 验证视频原生播放；失败时使用网页播放，并反馈播放器是否出画面、进度能否持续、远距离拖动是否正常。
+6. 验证漫画目录/章节全屏阅读、小说正文、有声音频；Reader 顶部是否仍被标题栏永久占用必须截图确认。
+7. 若 API/封面/目录失败，进入“设置 → 实机诊断”，复制运行环境和对应频道探针。
 
 ## 2026-09-19 · 0.1.0-test.5 · Restore Device-Validated Contracts
 
