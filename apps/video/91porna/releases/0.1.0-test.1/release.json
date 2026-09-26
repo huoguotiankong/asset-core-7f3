@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "91porna-test",
+  "name": "91porna",
+  "version": "0.1.0-test.1",
+  "build": 10101,
+  "ref": "main",
+  "modules": [
+    {"name":"core","path":"apps/video/91porna/releases/0.1.0-test.1/core.js"}
+  ],
+  "verify": {"global":"P91Runtime","property":"version","equals":"0.1.0-test.1"},
+  "status": "pending-device-validation",
+  "notes": "Initial native test: complete site category catalog, native video list/search/detail, source-like two-column collections with alphabet filters, and local collection favorites. No Stable exists yet."
+}
