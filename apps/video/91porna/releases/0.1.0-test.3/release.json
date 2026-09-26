@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "91porna-test",
+  "name": "91porna",
+  "version": "0.1.0-test.3",
+  "build": 10103,
+  "ref": "main",
+  "baseTest": "0.1.0-test.2",
+  "modules": [
+    {
+      "name": "core",
+      "path": "apps/video/91porna/releases/0.1.0-test.3/core.js"
+    }
+  ],
+  "verify": {
+    "global": "P91Runtime",
+    "property": "version",
+    "equals": "0.1.0-test.3"
+  },
+  "status": "pending-device-validation",
+  "notes": "Test3: video list changed to movie_2 two-column cards; home hot/update/original/month tabs use in-page state refresh instead of navigation; verified current source categories now_hot/new_update; cover recovery expands dynamic attributes and JSON image fields, then uses bounded batchFetch detail-page enrichment with 3-day cache and header-aware image URLs."
+}
