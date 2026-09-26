@@ -3,29 +3,29 @@
   "id": "91porna",
   "name": "91porna",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-26 23:22",
+  "updatedAt": "2026-09-26 23:55",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "91porna-test",
       "name": "91porna",
-      "version": "0.1.0-test.2",
+      "version": "0.1.0-test.3",
       "targetVersion": "0.1.0",
-      "build": 10102,
-      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
-      "path": "apps/video/91porna/91porna_remote_test_v2_b10102.txt",
+      "build": 10103,
+      "displayVersion": "Test 0.1.0-test.3 · Build 10103",
+      "path": "apps/video/91porna/91porna_remote_test_v3_b10103.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-26",
       "recommended": true,
-      "desc": "实机修复版：封面识别、详情封面、占位降级与首页/合集 UI 清理。",
+      "desc": "实机 UI/封面第二轮修复：双列视频、首页页内 Tab、封面并发补全缓存。",
       "highlights": [
-        "业务代码继续放在 GitHub main 的版本化 release，云口令只保留轻量 Shell/Bootstrap 入口",
-        "封面识别覆盖 src/data-src/data-original/srcset/background-image 等常见字段",
-        "过滤 menu/logo/icon/loading/placeholder 等非业务图片，详情优先 og:image",
-        "列表无真实封面时降级为文本卡片，避免大面积默认占位图",
-        "去除 Test1 分区标题脏引号，调整首页快捷入口与合集排版",
-        "仍为 Test；封面、合集、播放继续以海阔实机截图验证"
+        "视频首页、分类、搜索统一使用 movie_2 一行两列卡片",
+        "正在播放/当前最热/最近更新/91原创/本月最热改为首页页内刷新，不再产生导航栈",
+        "当前最热使用源站 now_hot，最近更新使用 new_update",
+        "封面解析覆盖任意 data-*、srcset、background-image 与 JSON 图片字段",
+        "列表图片不足时最多 16 路并发读取详情页 og:image/图片字段并缓存 3 天",
+        "图片携带 User-Agent/Referer headers；未解析到封面时使用应用 Logo 占位，避免灰块"
       ]
     }
   ]
