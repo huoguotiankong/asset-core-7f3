@@ -2453,3 +2453,21 @@ Config response
 - H5 候选要用 HTML/路由特征验证，API 候选要用游客会话或轻量 JSON schema 验证，图片区与媒体区同理。
 - 配置解析器要有 array/string/object fixture，避免后端只改数据形状就让发现链全空。
 - 已有 last-good 时首屏优先使用；配置发现和多候选探活仍只在失败或用户主动刷新时运行。
+
+---
+
+## 私有图片命名空间与解码器回归（2026-09-26）
+
+部分 APP API 返回的封面不是完整 URL，而是 `jhimage/...` 一类私有路径。推荐图片管线：
+
+```text
+原始字段
+→ 识别 http/data/file 与私有命名空间
+→ 私有路径映射已确认 Image CDN
+→ 明文 magic 检测
+→ 必要时执行已验证解密
+→ 新版本独立缓存
+→ Renderer
+```
+
+分类切换页同时应缓存成功的 Station/Class/Tag 元数据。筛选刷新只请求内容列表，不重复串行探测全部 Host 和分类接口；缓存更新遵循“新数据有效才替换，失败保留 last-good”。

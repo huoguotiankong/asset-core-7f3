@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "acfan-test",
+  "name": "ACFAN",
+  "version": "0.2.1-test.7",
+  "build": 10207,
+  "ref": "main",
+  "baseTest": "0.2.0-test.6",
+  "modules": [
+    {"name":"core","path":"apps/video/acfan/releases/0.2.1-test.7/core.js"},
+    {"name":"protocol","path":"apps/video/acfan/releases/0.2.1-test.7/protocol.js"},
+    {"name":"provider-models","path":"apps/video/acfan/releases/0.2.1-test.7/provider.js"},
+    {"name":"image","path":"apps/video/acfan/releases/0.2.1-test.7/image.js"},
+    {"name":"playback","path":"apps/video/acfan/releases/0.2.1-test.7/playback.js"},
+    {"name":"ui","path":"apps/video/acfan/releases/0.2.1-test.7/ui.js"},
+    {"name":"pages","path":"apps/video/acfan/releases/0.2.1-test.7/pages.js"},
+    {"name":"runtime","path":"apps/video/acfan/releases/0.2.1-test.7/runtime.js"}
+  ],
+  "sidecars": [
+    {"name":"image-decoder","path":"apps/video/acfan/releases/0.2.1-test.7/image_decoder.js","page":"acfanT7Image"}
+  ],
+  "verify":{"global":"ACFAN7Runtime","property":"version","equals":"0.2.1-test.7"},
+  "status":"pending-device-validation",
+  "notes":"Test7 device fixes: restore verified jhimage/CDN XOR cover decoding, add discovery feed and independent channel routing, cache taxonomy to avoid category-switch stalls, and expand videoUrl/playPath/previewUrl playback routes with automatic H5 fallback. No login or games; Stable unchanged."
+}

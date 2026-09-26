@@ -3,13 +3,36 @@
 > 全新重写程序，App ID `acfan`。旧 `apps/video/acfun` 不作为本程序运行依赖；但旧 Stable 中经实机验证成功的协议事实可以作为恢复依据。
 
 ## 当前基线
-- Test：`0.2.0-test.6 / Build10206 / Shell 2026092601`
+- Test：`0.2.1-test.7 / Build10207 / Shell 2026092602`
 - Stable：不存在
-- Test Shell：`apps/video/acfan/acfan_remote_test_v6_b10206.txt`
-- Bootstrap：`apps/video/acfan/bootstrap_test_v6_b10206.js`
-- Release：`apps/video/acfan/releases/0.2.0-test.6/release.json`
+- Test Shell：`apps/video/acfan/acfan_remote_test_v7_b10207.txt`
+- Bootstrap：`apps/video/acfan/bootstrap_test_v7_b10207.js`
+- Release：`apps/video/acfan/releases/0.2.1-test.7/release.json`
 - 当前网站终端：`https://aasf.wwvgadm0.work/mobile`
-- Test1~Test5 已冻结，不原地覆盖。
+- Test1~Test6 已冻结，不原地覆盖。
+
+## 2026-09-26 · 0.2.1-test.7 · 实机四项修复
+
+### 实机反馈
+- 首页与详情卡片有标题、播放量，但全部封面为空白。
+- 发现页只有频道和工具入口，没有真正的发现内容。
+- 视频详情“立即播放”提示未取得原生播放地址。
+- 顶部频道与二级分类切换会持续加载。
+
+### 根因与修复
+- `[实机+旧成功链]` 当前封面包含 `jhimage/...` 相对路径。Test6 只给 `.asigoo.com` 走解码器，并把已验证的 v0.4 解码器改写为未验证实现，导致 `jhimage → cdn.ukaim.com → XOR` 链断开。Test7 恢复已验证解码器、补回 `cdn.ukaim.com`，同时使用全新 T7 图片缓存隔离空白旧缓存。
+- Provider 新增 `coverPicture/videoImg/imagePath/picture` 等 APK 字段，并把列表响应的 `imgDomain/imageDomain/cdnDomain` 继承到内容实体。
+- 发现页新增热搜、十频道入口和“今日发现”真实内容区；频道入口进入独立内容页，不再依赖 `hiker://home@...` 返回首页。
+- Station/Class/Tag/漫画/小说/社区分类元数据只在成功时写缓存，切换筛选时优先复用，API Host 已建立后最多探测两条线路，减少长时间阻塞。
+- 播放明确收集 APK 已确认的 `videoUrl / playPath / previewUrl / m3u8H`，调用 GET `video/can/watch` 刷新，再组合 H5 decode、`/api/m3u8/play`、`/m3u8/play`、CDN 直连与 playback credential 线路。没有媒体 path 时自动打开网站终端，不再只 Toast 失败。
+- 登录、账号写操作和游戏分类仍未实现；Stable 继续不存在，Test7 必须实机验收。
+
+### Test7 实机验收
+1. 覆盖导入后标题显示 `ACFAN·T7`，首页首屏和任一详情页应出现真实封面。
+2. 发现页应在频道图标下方显示“今日发现”内容卡片。
+3. 从首页依次进入里番、动漫、视频并切换二级标签；首次可短暂加载，后续切换应明显加快且不应一直卡住。
+4. 视频详情点“立即播放”，在播放器线路中优先试“网页解码”，再试“原生接口/CDN”；若完全无 path 应自动进入网站终端。
+5. 若仍异常，复制“实机诊断”的 `imageRaw/imageResolved/imageRendered/imageError/lastDiag`。
 
 ## 2026-09-26 · 0.2.0-test.6 · Clean Product Reset
 

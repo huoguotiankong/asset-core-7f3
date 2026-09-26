@@ -1113,3 +1113,13 @@ fresh last-good
 - 配置 URL 必须先分类为 H5/API/Image/Media 未确认候选；根数组不能默认等同 API Host。
 - 候选只有通过对应业务探针后才能写 last-good；H5 返回 200 但内容是 `Site Unavailable` 也不算健康。
 - 端点发现 fixture 至少包含：对象字段、字符串数组、混合嵌套、HTML 错误页、HTTP 405/403 与有效 JSON。
+
+## APP 私有图片路径不能只按 URL 域名决定解码（2026-09-26）
+
+ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。根因是 API 返回 `jhimage/...` 私有相对路径，运行时没有先映射到 APP 图片 CDN，并把已验证的图片解码器重写为未验证实现。
+
+- 先识别私有路径命名空间（如 `jhimage/`），再映射已确认 CDN；不能把它当普通相对 URL。
+- 图片是否需要解密，应综合“原始路径命名空间 + CDN + 文件 magic”，不能只判断 `.asigoo.com`。
+- 解码器升级必须保留 JPEG/PNG/GIF/WebP magic 检测、XOR/AES 范围和 InputStream 返回合同；不得为了代码更短改写已实机成功版本。
+- 图片修复升版必须使用新缓存目录，避免旧空文件继续伪装成修复无效。
+- 诊断至少输出 raw / resolved / rendered / decoder error 四段，禁止只记录最终空白 UI。
