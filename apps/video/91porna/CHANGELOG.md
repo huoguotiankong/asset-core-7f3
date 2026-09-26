@@ -3,11 +3,35 @@
 ## 当前基线
 
 - 当前通道：Test，仅测试版，无 Stable。
-- 当前版本：`0.1.0-test.1` / Build `10101`。
-- Shell：`apps/video/91porna/91porna_remote_test_v1_b10101.txt`。
-- Bootstrap：`apps/video/91porna/bootstrap_test_v1_b10101.js`。
-- Release：`apps/video/91porna/releases/0.1.0-test.1/release.json`。
+- 当前版本：`0.1.0-test.2` / Build `10102`。
+- Shell：`apps/video/91porna/91porna_remote_test_v2_b10102.txt`。
+- Bootstrap：`apps/video/91porna/bootstrap_test_v2_b10102.js`。
+- Release：`apps/video/91porna/releases/0.1.0-test.2/release.json`。
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`。
+
+## 2026-09-26 · 0.1.0-test.2
+
+### 实机问题与根因
+
+- Test1 实机确认：视频列表和合集封面大面积失败；详情页错误抓到导航图片；分区标题出现 `““””` 脏字符；缺封面时仍使用大图卡导致整页默认占位图，整体 UI 观感差。
+- Test1 的云口令可以正常作为远程 Shell，但后续临时 Test2 曾错误尝试把完整业务代码内联到导入口令。该做法会让口令异常冗长，并把业务文案/协议字段直接暴露给海阔导入违禁词扫描，已废弃。
+
+### Test2 修复
+
+- 恢复标准自用远程架构：短 Shell → GitHub `main` Bootstrap → versioned Release → `require(..., build)` 本地缓存。业务代码不再内联进云口令。
+- 图片解析扩展到 `src/data-src/data-original/data-lazy/srcset/data-bg/background-image/poster` 等常见字段。
+- 新增非业务图片过滤：`menu/logo/icon/avatar/loading/placeholder/nav/banner` 等不再作为封面。
+- 详情与合集详情优先读取 `og:image/twitter:image`，再回退正文图片。
+- 图片输出恢复 UA/Referer Header；无真实封面时降级纯文本卡片，不再强制显示大面积占位图。
+- 分区标题改为原生简洁文本，去掉 Test1 的脏引号；首页快捷入口与合集页重新整理。
+- 合集收藏使用 v2 独立状态 Key，避免 Test1 缓存污染。
+
+### 待实机验证
+
+- 首页/当前最热/最近更新真实封面是否恢复。
+- 精选合集封面、数量、字母筛选及合集详情封面。
+- 详情页是否不再抓到导航图。
+- 播放仍沿用结构化直链优先 + `video://` 兜底，后续继续单独优化。
 
 ## 2026-09-26 · 0.1.0-test.1
 
