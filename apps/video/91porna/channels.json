@@ -3,29 +3,29 @@
   "id": "91porna",
   "name": "91porna",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-26 22:40",
+  "updatedAt": "2026-09-26 23:22",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "91porna-test",
       "name": "91porna",
-      "version": "0.1.0-test.1",
+      "version": "0.1.0-test.2",
       "targetVersion": "0.1.0",
-      "build": 10101,
-      "displayVersion": "Test 0.1.0-test.1 · Build 10101",
-      "path": "apps/video/91porna/91porna_remote_test_v1_b10101.txt",
+      "build": 10102,
+      "displayVersion": "Test 0.1.0-test.2 · Build 10102",
+      "path": "apps/video/91porna/91porna_remote_test_v2_b10102.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-09-26",
       "recommended": true,
-      "desc": "首版原生测试：完整分类 + 视频浏览搜索 + 原站风格合集 + 合集本地收藏。",
+      "desc": "实机修复版：封面识别、详情封面、占位降级与首页/合集 UI 清理。",
       "highlights": [
-        "按源站当前侧栏收录 91视频、短视频、吃瓜、AI、日本AV、动漫、精选合集、小说等核心分组",
-        "首页、分类、搜索、视频详情采用海阔原生组件",
-        "精选合集采用双列横图、视频数量和字母筛选，贴近原网站浏览结构",
-        "合集支持本机收藏并提供独立“我的合集”页面",
-        "播放优先提取 m3u8/mp4，未命中时进入 video:// 网页辅助兜底",
-        "无 Stable；需要实机验证封面、列表、合集与播放后再继续升版"
+        "业务代码继续放在 GitHub main 的版本化 release，云口令只保留轻量 Shell/Bootstrap 入口",
+        "封面识别覆盖 src/data-src/data-original/srcset/background-image 等常见字段",
+        "过滤 menu/logo/icon/loading/placeholder 等非业务图片，详情优先 og:image",
+        "列表无真实封面时降级为文本卡片，避免大面积默认占位图",
+        "去除 Test1 分区标题脏引号，调整首页快捷入口与合集排版",
+        "仍为 Test；封面、合集、播放继续以海阔实机截图验证"
       ]
     }
   ]
