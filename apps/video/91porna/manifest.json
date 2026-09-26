@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "91porna",
+  "name": "91porna",
+  "category": "video",
+  "mode": "remote-test/self-use",
+  "test": "apps/video/91porna/test.json",
+  "channels": "apps/video/91porna/channels.json",
+  "changelog": "apps/video/91porna/CHANGELOG.md",
+  "updatedAt": "2026-09-26"
+}
