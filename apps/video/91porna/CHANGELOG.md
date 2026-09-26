@@ -3,11 +3,34 @@
 ## 当前基线
 
 - 当前通道：Test，仅测试版，无 Stable。
-- 当前版本：`0.1.0-test.2` / Build `10102`。
-- Shell：`apps/video/91porna/91porna_remote_test_v2_b10102.txt`。
-- Bootstrap：`apps/video/91porna/bootstrap_test_v2_b10102.js`。
-- Release：`apps/video/91porna/releases/0.1.0-test.2/release.json`。
+- 当前版本：`0.1.0-test.3` / Build `10103`。
+- Shell：`apps/video/91porna/91porna_remote_test_v3_b10103.txt`。
+- Bootstrap：`apps/video/91porna/bootstrap_test_v3_b10103.js`。
+- Release：`apps/video/91porna/releases/0.1.0-test.3/release.json`。
 - 正式运行仓：`huoguotiankong/asset-core-7f3@main`。
+
+## 2026-09-26 · 0.1.0-test.3
+
+### 实机反馈
+
+- Test2 实机确认：视频/合集封面仍大量失败；视频列表一行一列仍偏松散；点击“当前最热 / 最近更新”等会创建新的二级页面，不符合筛选/Tab 的同页状态切换语义。
+
+### Test3 修复
+
+- 视频首页、视频分类和视频搜索统一改为 `movie_2` 一行两列卡片；标题与简介压缩到更适合双列卡片的密度。
+- 首页“正在播放 / 当前最热 / 最近更新 / 91原创 / 本月最热”改为 `putMyVar + refreshPage(false)` 原地切换，不再创建新 `hiker://page` 导航栈。
+- 根据 2026-09-26 当前源站实测，修正分类参数：当前最热为 `now_hot`，最近更新为 `new_update`；保留 `play / original / now_month_hot`。
+- 图片解析器增加任意 `data-* / *src* / *image* / *cover* / *thumb* / *poster*` 属性扫描，以及脚本 JSON 图片字段、`srcset`、`background-image`。
+- 列表封面增加有界并发补全：最多 16 个详情页通过 `batchFetch` 并发读取 `og:image`/详情图片，结果缓存 3 天；避免串行 N+1 假死。
+- 图片继续使用 `@headers={User-Agent,Referer}` 合同；未获得真实封面时使用应用 Logo 作为受控 fallback，不再显示系统灰色空白块。
+- 首页快捷入口恢复正式 SVG 图标，不再使用 Emoji 作为主图标体系。
+
+### 待实机验证
+
+- 首次打开首页时前 16 个视频封面是否通过详情补全恢复；再次刷新/进入后缓存是否继续补齐。
+- 精选合集前 16 个封面是否恢复，以及字母切换后是否继续原页刷新。
+- 当前最热/最近更新连续切换 5 次后，返回 1 次是否直接离开首页，不产生页面栈。
+- 双列卡片标题、封面比例与信息密度是否需要继续收紧。
 
 ## 2026-09-26 · 0.1.0-test.2
 
