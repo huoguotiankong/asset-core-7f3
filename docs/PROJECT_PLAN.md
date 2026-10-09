@@ -583,3 +583,29 @@ Provider/API
 ```
 
 读取后必须继续定位目标程序当前真实版本和 CHANGELOG，不能仅凭总纲直接开发。
+
+---
+
+## 22. 海阔兼容客户端参考：DeepCloud Desktop（2026-10-09）
+
+### 22.1 事实与定位
+
+- 参考项目：`Mowen559/deepcloud-releases`，发行页 `https://github.com/Mowen559/deepcloud-releases/releases/tag/v0.2.10`，README：`https://github.com/Mowen559/deepcloud-releases/blob/main/README.md`。
+- 2026-10-09 已核实：发行版本 `v0.2.10` 面向 Windows x64，公开提供安装器、`app.asar`、增量包及 Hub 可执行文件；当前可见发行仓主要是分发/文档，不等于完整开发源码。
+- 作者 README 宣称以 WebOS V3 微内核为基础：ActionBus、AppManifest、Web Worker 沙箱、HostAdapter（DOM/网络/加解密等兼容能力）、Sidecar、规则导入/订阅及多源搜索。v0.2.7—v0.2.10 更新日志提到规则分组/格式容错、页面滚动修复、媒体嗅探、播放历史和断点续播、引擎独立更新、ASAR 热更新修复。
+- 上述属于**作者文档与发行说明**，不是本项目对 DeepCloud 的实机验证，也不代表已完整兼容本项目的小程序。用户指出该软件仍处于开发完善期且有较多 Bug。
+- README 声称 MIT 授权，但 2026-10-09 仓库根目录未找到 `LICENSE` 文件；在确认完整授权范围前，**不能推定二进制/ASAR 可自由复制、改造或分发**。
+
+### 22.2 本项目吸收的架构原则
+
+- 将“海阔规则/API 兼容合同”与“宿主平台实现”分离：`Rule Loader → JS Runtime + HostAdapter → Route/State/Storage/Network/Parser → UI/Media/Native Bridges`。
+- 优先沉淀独立、可运行的兼容测试集和错误分类，再决定是 APK 定向增强、独立兼容 Android 容器，或两路并行。Windows Electron ASAR 不应当作 Android 可直接复用的源码。
+- 可参考声明驱动插件、权限边界、模块化 ActionBus、组件能力抽象、播放进度状态契约、热更新校验/回退；不得引入对第三方发行包的强制运行依赖。
+- 兼容验证矩阵：本地/口令/订阅导入，复杂嵌套规则、远程 Shell/Bootstrap/`require`、版本号整数/字符串兼容、`hiker://page` 与 `hiker://files` 路由、`lazyRule`、刷新/动态项/页面事件、Cookie/Header/网络代理、存储与账号隔离、图片/加解密、媒体嗅探/HLS/选集/断点续播、返回栈/滚动/生命周期。
+- 从当前已验证 Stable 中挑代表性规则做脱敏回归样本；所有兼容率应以对应宿主实机测试统计，不把 README 功能宣称当成通过记录。
+- 保护现有 Android 海阔安装、个人规则和数据：增强版默认独立包名并存、单独签名、先做备份/数据迁移/恢复验证；禁止直接覆盖已验证 Stable。
+
+### 22.3 当前决策
+
+先作为长期参考资料与技术路线研究项收录，**没有开始 APK 改造或发布**。下一步在拿到用户当前海阔原版 APK 并完成逆向审计、公开核心源码差异与许可审计后，基于代表性规则实机兼容结果择优确定开发路线。
+
