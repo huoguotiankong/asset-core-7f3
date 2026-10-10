@@ -66,3 +66,12 @@
 - 未验证任何一个现有小程序在独立宿主上的运行兼容率。
 
 > 修订原则：以后发现动态事实与本报告静态推断冲突时，以实机证据和实际调用路径为准，并更新本报告；不得将“包里存在代码/库”误写为“该功能实机正常”。
+
+## 六、第二轮方法级审计（2026-10-11）
+
+已对同一 SHA-256 的 8.83 APK 实际 DEX 进行 method_ids、code_item、方法注解和调用引用分析。方法级专项报告：[`docs/HIKER_ANDROID_883_METHOD_AUDIT_20261011.md`](HIKER_ANDROID_883_METHOD_AUDIT_20261011.md)。
+
+已验证重点：`JSEngine` 160 个 `@JSAnnotation` 注解方法（17 个别名）；Rhino `runScript/evalJS/initRequire` 调用；`fetch → HttpHelper` 与 `require0` 远程/本地缓存分支；页面结果/动态列表事件；播放器 `HttpParser → PlayerChooser → VideoPlayerActivity` 的调用依赖；ExoPlayer 2 真实方法调用和多个外置播放器入口。与公开旧源码仅 100 个注解条目形成明显差异。
+
+注意：仅为静态分析；方法存在不等于分支执行，不等于真机通过，也不等于已经完成重构。
+
