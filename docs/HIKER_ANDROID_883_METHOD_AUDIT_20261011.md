@@ -83,3 +83,8 @@ Hiker rule / hiker:// protocol
 ## 8. 第三轮深入追踪索引
 
 新增 `docs/HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md`，继续核对实际 ExoPlayer 2.15.1、四类 MediaSource 构建、`VideoCacheHolder` 极速播放代理接入、`PlayerFastPlayOfficer` 设置、`Hikerurl.js` 的 `$` DSL 和缓存模块、JS 注解参数/返回值 wrapper。仍为静态研究，未修改 APK、未实机验证。
+
+## 9. 第四轮参数注解与 DSL 模拟索引
+
+继续研究见 `docs/HIKER_ANDROID_883_JS_COMPATIBILITY_AUDIT_20261011.md`：160 个 JS 方法、295 个带参数注解的参数位，16 个默认值和 7 类运行上下文注入；通过 APK `Hikerurl.js` 的独立解析与隔离 Node VM 研究发现重复 `let id`、嵌套 `$.importParam` 保存/恢复失配、异常缺少 finally、首次远程 JS 内容识别可能误拒等**未真机证实**风险。原始 APK 无修改。
+
