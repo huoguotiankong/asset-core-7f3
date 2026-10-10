@@ -630,3 +630,12 @@ Provider/API
 - `VideoCacheHolder.getProxyUrl` 确认被标准和浮窗播放器初始化回调引用；官方已有 `PlayerFastPlayOfficer` 的极速播放、线程、黑名单、缓存清理选项。日后升级播放器先把 URI/Headers/Proxy/Seek/字幕/弹幕/进度拆为独立兼容合同，不能全量替换。
 - `JSEngine.getFunctionStr` 依赖 `@Parameter` 默认值、返回类型和上下文包装；APK `assets/Hikerurl.js` 还实现 `$().rule/lazyRule/select/image`、`$.require` 模块缓存和预处理导入。独立容器不能只复刻 160 个注解方法。
 - 新技术路线不变：原版 8.83 APK 只读；先契约与原版真实行为基准，再开发隔离 Test，不触碰当前 Stable 或原版数据。
+
+## 26. 海阔 8.83 第四轮：JS 参数注解与模块装载风险（2026-10-11）
+
+- 已新增专项研究：[`docs/HIKER_ANDROID_883_JS_COMPATIBILITY_AUDIT_20261011.md`](HIKER_ANDROID_883_JS_COMPATIBILITY_AUDIT_20261011.md)。分析样本仍为上传的 8.83 APK，同一 SHA-256；未修改任何运行代码、APK、Stable/Test 指针。
+- 实际 DEX：160 个 `@JSAnnotation` 方法、306 个 Java 参数位、295 个带 `@Parameter` 的参数位、16 个显式默认值、17 个 alias、176 个唯一导出名。还确认 `callbackKey/ruleKey/urlKey/typeKey/dirKey/evalKey/ruleTitleKey` 的原生注入契约。
+- 8.83 的 `getFunctionStr` 与公开旧源码存在差异；未来兼容客户端应以 **8.83 DEX 注解/运行行为** 为准，不能从旧源码直接生成 API 包装。
+- 内置 `Hikerurl.js` 的 `$.require.eval` 存在标准 JS 引擎不接受的重复 `let id` 声明，且模块装载中有上下文保存/恢复属性不一致和异常恢复不足的静态风险。已在单行语法修正后的隔离 Node VM 下重现状态丢失和合法 CommonJS 内容被启发式识别拒绝；**未真机复现，不能宣称原版实际故障或已经修复**。
+- 下一步：非侵入式原版 Rhino 基线测试 + JS 桥接契约测试，再决定独立实验宿主设计；保留原版规则和用户数据。
+
