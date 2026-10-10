@@ -623,3 +623,10 @@ Provider/API
 - 关键方案：先建立版本化 JS API/路由/PlayData 兼容测试，不直接覆盖原包；媒体升级使用独立引擎抽象，先保持原来的请求头、线路、懒解析、外置播放器、播放进度和弹幕字幕合同。
 - 资料属于静态方法级审计，尚未构建或实机测试增强包。
 
+## 25. 海阔 8.83 第三轮：媒体代理与 JS DSL（2026-10-11）
+
+- 新研究基线：[`docs/HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md`](HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md)，明确区分 APK 方法直接调用证据与真机表现。
+- 实际 8.83 APK 的 `ExoPlayerLibraryInfo` 自报 `2.15.1`，`WholeMediaSource` 包含 Progressive/HLS/DASH/SmoothStreaming 构建分支。
+- `VideoCacheHolder.getProxyUrl` 确认被标准和浮窗播放器初始化回调引用；官方已有 `PlayerFastPlayOfficer` 的极速播放、线程、黑名单、缓存清理选项。日后升级播放器先把 URI/Headers/Proxy/Seek/字幕/弹幕/进度拆为独立兼容合同，不能全量替换。
+- `JSEngine.getFunctionStr` 依赖 `@Parameter` 默认值、返回类型和上下文包装；APK `assets/Hikerurl.js` 还实现 `$().rule/lazyRule/select/image`、`$.require` 模块缓存和预处理导入。独立容器不能只复刻 160 个注解方法。
+- 新技术路线不变：原版 8.83 APK 只读；先契约与原版真实行为基准，再开发隔离 Test，不触碰当前 Stable 或原版数据。
