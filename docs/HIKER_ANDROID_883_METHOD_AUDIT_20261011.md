@@ -79,3 +79,7 @@ Hiker rule / hiker:// protocol
 - Android 16 独立安装、权限、迁移、数据备份的可恢复性验证。
 
 > 本任务仅研究且未修改任何既有小程序或 APK，也未改变 Stable/Test/Release 元数据。
+
+## 8. 第三轮深入追踪索引
+
+新增 `docs/HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md`，继续核对实际 ExoPlayer 2.15.1、四类 MediaSource 构建、`VideoCacheHolder` 极速播放代理接入、`PlayerFastPlayOfficer` 设置、`Hikerurl.js` 的 `$` DSL 和缓存模块、JS 注解参数/返回值 wrapper。仍为静态研究，未修改 APK、未实机验证。
