@@ -2471,3 +2471,13 @@ Config response
 ```
 
 分类切换页同时应缓存成功的 Station/Class/Tag 元数据。筛选刷新只请求内容列表，不重复串行探测全部 Host 和分类接口；缓存更新遵循“新数据有效才替换，失败保留 last-good”。
+
+## 附录：8.83 客户端内核结构验证（2026-10-11）
+
+由用户提供的 `海阔视界-8.83.apk` 静态逆向确认，后续维护远程规则/播放器应额外理解下面的宿主分层：
+
+- **三种 require 不等价**：Rhino `requirejs` 初始化、Java 桥接 `JSEngine.require/requireCache/fetchCache`、`assets/Hikerurl.js` 内的 `$.require`（JS Module._cache、相对路径/页面/URL 转换）存在不同实现路径。排查缓存和导入错误前先确定实际命中哪一层。
+- **海阔 $ 规则 DSL 不仅是语法糖**：`Hikerurl.js` 还控制 `rule/lazyRule/select/input/image` 序列化、预处理 include 和模块注入。更换原生环境或做兼容客户端时应实机对照这些行为。
+- **JS 返回类型取决于原生包装**：8.83 的 `JSEngine.getFunctionStr` 使用方法、`@Parameter` 默认值、返回类型注解和 Java 反射生成 wrapper，且含 JSON.parse/parseInt/BOOL/InputStream 等转换；不能把所有接口统一当成文本返回。
+- **播放链要分段观测**：Exif/播放地址解析之后，仍有 `PlayData`/headers、`UriProxy`、`MediaSource`、HTTP 数据源、`VideoCacheHolder` 极速代理、播放器 seek、进度恢复。播放或拖动缓慢时先对照直连/代理/缓存设置，不仅仅归咎解码器版本。
+- 精确静态事实与未验证边界详见 `docs/HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md`；静态证据不得代替实机回归。
