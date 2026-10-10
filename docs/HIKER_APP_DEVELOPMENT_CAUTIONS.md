@@ -1123,3 +1123,12 @@ ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。�
 - 解码器升级必须保留 JPEG/PNG/GIF/WebP magic 检测、XOR/AES 范围和 InputStream 返回合同；不得为了代码更短改写已实机成功版本。
 - 图片修复升版必须使用新缓存目录，避免旧空文件继续伪装成修复无效。
 - 诊断至少输出 raw / resolved / rendered / decoder error 四段，禁止只记录最终空白 UI。
+
+## 8.83 原生兼容专项注意事项（2026-10-11）
+
+- **源于样本的未真机验证风险**：APK `assets/Hikerurl.js` 中 `$.require.eval` 含与形参同名的 `let id`，用 Node.js 22 直接语法检查出现 `Identifier 'id' has already been declared`。不能将原版 Rhino 的特殊兼容行为直接复制到 V8/QuickJS 等运行时；标准 JS 兼容转换需单独完成并验证。
+- `Module.prototype.load` 保存 `$.inputParam` 但恢复 `$.importParam`，且未用 `finally` 包围临时状态修改。最小语法修正后的隔离环境出现嵌套上下文丢失、异常时临时参数残留。**属于候选缺陷而非已证明的 8.83 实机 Bug**；设计新宿主时强制异常回滚，不得复刻此隐患。
+- `$.require` 的 `isJsCode` 通过少量关键字检测内容，隔离桩验证 `module.exports = {...}` 可能被首次远程加载分支误拒。不同缓存/路由入口行为有别，不能据此判定全部远程模块有问题。
+- 8.83 DEX `@Parameter` 注解包含 `ruleKey/ruleTitleKey/callbackKey/evalKey/dirKey` 等宿主注入，Java 签名长度不等于规则调用显式参数数。旧公开源码包装默认值和上下文处理与当前 8.83 不一致，禁止复制老版本 `getFunctionStr` 来实现新版兼容。
+- 完整证据和回归方案：`docs/HIKER_ANDROID_883_JS_COMPATIBILITY_AUDIT_20261011.md`。所有静态和 Node VM 结论必须经 Android 8.83 真机对照才能宣布可用/修复。
+
