@@ -49,3 +49,7 @@ Rule Import + Version / Bootstrap
 - 原版 8.83 不动、不覆盖；不得靠猜测导出用户应用的私有签名/数据。
 - 现有 asset-core-7f3@main 仍是海阔小程序唯一正式发布源；本档案仅作为客户端研究，不创建新的正式运行依赖。
 - 当前无后台研究/自动测试，用户无需为本轮承担实机测试；真正开展 Android B/D/F 验证时需明确提出测试步骤和证据。
+
+## 第七轮补充：Android Manifest 与非侵入式探针（2026-10-11）
+
+专项：`docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`。静态 Android Manifest 已明确 100 个组件、外部入口、固定 Provider authority 及 Target SDK 30 到 31+ 的迁移约束。已离线生成两条互不覆盖的原版测试规则（6 个 JS 代码段 Node 语法检查通过），可验证 UI 分组、多级路由、动态更新、规则名跨程序跳转和数据状态隔离。**全部尚未在原版 8.83 手机上实际运行**。Gate A（静态）取得补充，Gate B（真机）仍未满足，Gate D（独立 Android 构建）未满足，Gate E（数据迁移）未满足，全面重构暂不开工。
