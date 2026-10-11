@@ -1145,3 +1145,11 @@ ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。�
 - **targetSdk 升级要独立验证**：原版 8.83 targetSdk 30，部分 Activity/Receiver 带 intent-filter 却未显式声明 exported；新客户端以 API 31+ 为目标时必须显式声明，并调整 PendingIntent 及存储权限/Android 行为。不能直接把原始 Manifest 拷过去只改 targetSdk。
 - **权限不必无条件继承**：原版声明 35 项权限、`MANAGE_EXTERNAL_STORAGE`、`SYSTEM_ALERT_WINDOW` 等。声明不等于已授权；新宿主应设计每种功能的最小权限、受控 Dex/Native 扩展和用户显式授权的数据迁移。
 - 完整证据 `docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`。新生成离线探针仅过 Node JS 语法，**0 项原版 Android 真机验证**，禁止声明“兼容成功/可以正式替换”。
+
+## 第八轮：文件共享 authority 与 cleartext 兼容边界（2026-10-11）
+
+- 用户上传的 8.83 APK `resources.arsc` 已还原先前未解析的 AndroidX FileProvider 为 `com.example.hikerview.provider`，不同于 AppUpdater 的 `com.example.hikerview.fileProvider`。未来独立安装包必须**分别**更名、核对 `content://` URI、引用资源/静态字符串、权限与临时授予，而不是把两个 Provider 混成一个。
+- APK `res/xml/network_security_config` 实际 `base-config cleartextTrafficPermitted=true`，与 manifest 全局明文允许一致。新版必须有旧规则 HTTP 兼容策略和可审查的敏感凭据/安全默认设置，不应默认复制更宽松的全局策略。
+- APK 更新器 FileProvider 的 `app_updater_paths` 包含 `root-path path=/`，静态可见共享路径较宽；其 Provider manifest 为 `exported=false`、`grantUriPermissions=true`，不能仅凭 XML 判定真实安全漏洞。未来应缩小路径与显式 URI 授权。
+- 两个离线测试探针通过 6/6 Node 语法和静态路径引用检查，**仍没有 Rhino/Android 实机证据**。详见 `docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`。
+
