@@ -670,3 +670,10 @@ Provider/API
 - 已生成两个**完全离线、未实机验证**的原版测试探针（Main/Target），涵盖组件组合、两级页面、onClose、动态 updateItem、规则名跨应用跳转、HostContext 与存储隔离。6 段 JS 已通过语法检查，但实际兼容 0 项验证，禁止视为实机通过。
 - 未来 targetSdk 升到 31+ 时，带过滤器组件需要明确的 `android:exported`、PendingIntent 可变性及 Android 新权限/存储适配。35 项权限属于 Manifest 声明，不能默认全部照搬。
 - 开工 Gate：静态材料基本足够开始**隔离最小宿主实验设计**，尚不具备正式全面重写/替换原版条件；后续优先原版端无侵入性回归与数据迁移验收。
+
+## 31. 8.83 第八轮：APK 资源表与探针离线验证（2026-10-11）
+
+- 已建档 [`docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`](HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md)：从实际 APK `resources.arsc` 解开 `@0x7f12002a`，通用 FileProvider authority 为 **`com.example.hikerview.provider`**；同时解析网络安全 XML（`base-config cleartextTrafficPermitted=true`）及普通/更新器 FileProvider Paths，后者含宽路径 `root-path /`，但 `exported=false`，未经授权链证据不可直接定性为安全漏洞。
+- 两份受控 Probe ZIP 已通过离线 CRC、`rule.json`、字符串化子页、两规则路由引用检查；6 段 JS 均通过 Node 22 语法检查，调用的 8.83 Native JS 方法存在于 DEX 合约。**尚未通过任何真机行为测试**。
+- 当前推荐先完成原版 Android 真机 `Target → Main` 的无害回归（UI 组合、A/B 返回、动态 updateItem、跨规则调用）后，再将隔离 Android 最小宿主列入可验证工程。原版和 Stable 保持不变。
+
