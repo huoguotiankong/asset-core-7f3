@@ -639,3 +639,10 @@ Provider/API
 - 内置 `Hikerurl.js` 的 `$.require.eval` 存在标准 JS 引擎不接受的重复 `let id` 声明，且模块装载中有上下文保存/恢复属性不一致和异常恢复不足的静态风险。已在单行语法修正后的隔离 Node VM 下重现状态丢失和合法 CommonJS 内容被启发式识别拒绝；**未真机复现，不能宣称原版实际故障或已经修复**。
 - 下一步：非侵入式原版 Rhino 基线测试 + JS 桥接契约测试，再决定独立实验宿主设计；保留原版规则和用户数据。
 
+## 27. 海阔 Android 8.83 重构开工门槛（2026-10-11）
+
+- 第五轮研究文档：[`docs/HIKER_ANDROID_883_REWRITE_READINESS_20261011.md`](HIKER_ANDROID_883_REWRITE_READINESS_20261011.md)。对用户提供的 **20 个 .hk小程序 ZIP** 做不联网/不执行脚本的静态调用候选扫描，覆盖 rule/require/附带 JS 模块和 data.zip/data2.zip。160 个 8.83 注解方法中有 117 个在样本文本中发现名称候选；动态页面、`hiker://page`、`$.require`、懒规则在各 19/20 个样本中出现。词法匹配不等于兼容率，且没有覆盖在线动态 JS。
+- 重要边界：部分高级规则包附带 QuickJS wrapper、2 个 DEX 和 1 个 ARM64 SO；不能简单假设全部规则都是 Rhino 纯脚本，需要分层的 native/Dex 可选可信插件机制。
+- 官方公开历史 `Hikerurl.js` v2 与 8.83 APK 内 v6 有明显架构差异，旧仓也没有验证为可直接编译的完整项目。独立重写应基于 8.83 兼容合同和用户原版实机行为，而不是以老源码替代新版。
+- **当前决策：尚不开始全面重构。** Gate：8.83 API/路由/PlayData 合同、原版 Android 真机行为基线、至少 8 维代表性规则回归、独立包名签名与 Android 16 最小宿主可行性、备份恢复/授权/Native 安全边界。达标后再宣布可以按模块正式重构；播放器 F 可独立迭代，但先保持原 PlayData/Header/Proxy/进度合同。
+
