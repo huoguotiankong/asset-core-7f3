@@ -35,7 +35,7 @@
 | 文本中出现 `x5_webview_single` 字面量特征 | 6/20 |
 | 文本中出现 `addListener('onClose', ...)` 特征 | 12/20 |
 
-- `rule.json` 主规则 `col_type` 分布：`movie_3` 12、`movie_3_marquee` 2、`text_center_1` 2，其余 `text_1/movies_2/movie_1_vertical_pic/pic_1_card` 各 1（其中正确键为 `movie_2`）。
+- `rule.json` 主规则 `col_type` 分布：`movie_3` 12、`movie_3_marquee` 2、`text_center_1` 2，其余 `text_1`、`movie_2`、`movie_1_vertical_pic`、`pic_1_card` 各 1。
 - 有 18 个程序在 `pages` 对象中声明 `movie_3` 页面作为一种预设；部分页面 `col_type` 为空，表示必须结合默认组件策略才能解读。
 - 补充的可识别 UI token 覆盖面远宽于 `rule.json` 一级/子页面声明：`movie_3`、`input` 各出现于 20/20 的源码文本，但它们也可能存在于内嵌 JS 库、字符串或注释中，**不能据此称 20 个程序都实际展示过 input 控件**。
 - 这 291 个是打包 `pages` 声明的静态数量，不包括远程动态 JS 临时生成的页面，更不代表 291 个用户可见导航页面。
