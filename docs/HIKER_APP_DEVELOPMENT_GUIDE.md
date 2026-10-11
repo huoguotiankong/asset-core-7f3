@@ -2494,3 +2494,10 @@ Config response
 - **System Intent != Hiker URI**：APK `ResolveIntentActivity` 对 hiker/http(s)/file/content/magnet/ed2k/ftp 等系统 Intent 注册多个过滤器，而规则 `hiker://page` 由原生 PageParser/运行上下文管理。编写跨规则调用的规则时应明确是 Android 外部入口、规则内路由、还是云盘接管/分享操作，分别验证传参与返回栈。
 - 独立兼容客户端必须保留“旧规则名称寻址”的向后兼容协议，同时内部用稳定 appId；新客户端包名、Provider authority 与外部 Intent Filter 的配置不等于原版，不能直接复用全部系统级入口。
 - 8.83 Android 组件/权限的事实清单和未实机验证的非侵入式 UI/Route 探针详见 `docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`，研究探针没有业务登录/网络/远程依赖，可用于后续最小兼容回归，不可视作已通过的测试。
+
+## 附录：8.83 资源 ID → FileProvider / 明文网络配置（2026-10-11）
+
+- 从 APK `resources.arsc` 解码得原版通用 FileProvider authority 为 `com.example.hikerview.provider`（manifest `@0x7f12002a`）；与 ShareDocumentsProvider、MTDataFilesProvider 和 AppUpdaterFileProvider 等同时存在。未来客户端独立包名时应逐 authority 重新配置、核对 URI grant 和文件导出/导入。
+- `network_security_config` 不是未知占位：实际 `base-config cleartextTrafficPermitted=true`；旧小程序有 HTTP 兼容需要，但新版可在 Host Capability 层按程序区分敏感凭据传输与普通资源读取。
+- 第八轮静态验证工具检查两个无害探针的 `rule.json`、子页路径、跨规则引用和 6 个 JS 语法段；全部通过**离线**检查，不替代原版 8.83 真机运行。完整研究见 `docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`。
+
