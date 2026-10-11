@@ -653,3 +653,11 @@ Provider/API
 - 具体产品与架构蓝图：[`docs/HIKER_NEXT_PRODUCT_BLUEPRINT_20261011.md`](HIKER_NEXT_PRODUCT_BLUEPRINT_20261011.md)。提出向下兼容 facade、版本化 UI 扩展、Inter-App Router、Player Next、DevTools/可选 AI 辅助、受控插件权限和完整回退。
 - 与此前 Gate 衔接：仅 API/播放兼容通过不足以宣布“重构准备完毕”；还必须验证至少一组高度定制 UI、多页面返回栈、跨小程序调用、动态局部更新的**真实原版设备行为和新宿主复现方案**。原版 8.83 保持不变，未来增强 Test 必须独立安装。
 
+## 29. 8.83 原生 UI 与跨小程序路由第六轮研究（2026-10-11）
+
+- 研究档案：[`docs/HIKER_ANDROID_883_UI_ROUTER_AUDIT_20261011.md`](HIKER_ANDROID_883_UI_ROUTER_AUDIT_20261011.md)，继续使用上传的 8.83 APK 固定 SHA-256 和 20 个 ZIP 样本，仅做静态研究，没有修改任何 Stable、Shell、APK。
+- 真实 DEX `ArticleColTypeEnum.<clinit>` 中检测到 56 次 UI 组件字符串常量引用、55 个去重类型字符串，涵盖 `flex_button/scroll_button/card_pic_2_2_left/icon_5/icon_5_no_crop` 等。以当前 APK 为兼容基线，不直接复刻旧版公开枚举。
+- 20 个 ZIP 共声明 291 个 `pages` 子页面，19/20 存在 `hiker://page` 和动态更新词法特征，13/20 包含带 `rule=` 的页面链接候选（**静态词法≠真实调用/兼容通过**）。
+- 8.83 `PageParser` 真实代码中出现 `rule`、`title = ?` 和 `hiker://page/`；历史官方 PageParser 使用标题查找目标程序。未来宿主需要 **StableAppId + LegacyRuleName** 双身份，保留旧链接和 `hiker://` 路由，不能擅自把规则名替换成内部 ID。
+- 下一代 UI 渲染器必须先完成 `col_type` 的组件组合/布局编译、原生网页行、动态局部刷新和页面滚动/返回状态，不应仅逐行直接渲染 JS item。已经列出 19 个拟议 UI/Router/DSL/InterApp/Migration 用例，**目前全部未执行原版真机验证**。
+- 判定不变：这轮增加了真实 UI/路由静态证据，但尚不能宣布全面重构开工；下一实证阶段优先原版 8.83 的页面组合、跨规则调用、返回栈实机行为对照。
