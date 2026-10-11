@@ -1138,3 +1138,10 @@ ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。�
 - **不能逐 item 平铺 UI**：官方文档明确 `flex_button/scroll_button/card_pic_2_2` 有连续项合并语义；`x5_webview_single` 有嵌入网页与返回/浮窗约束。独立 UI 容器中需要分组/layout pass 和原生状态管理。
 - **样本覆盖不能代替通过率**：20 个 ZIP 中出现 19/20 的 `hiker://page` 和动态更新词法特征、共 291 个 `pages` 静态声明；误匹配字符串/注释、外部 JS 不全，不能据此宣布 UI 全兼容。
 - 审计基线及 19 项拟议回归测试见 `docs/HIKER_ANDROID_883_UI_ROUTER_AUDIT_20261011.md`。未做原版 8.83 Android 真实测试前，不宣称重构准备完毕。
+
+## 8.83 APK Android Manifest 与并存安装风险（2026-10-11）
+
+- **并存安装不能只替换包名**：实际 8.83 Manifest 有多个固定 `com.example.hikerview.*` Provider authority（部分导出但受系统权限保护）及广泛的外部 Intent 过滤器。测试版若直接复制可能 authority 冲突、`content://` URI 失效，或与原版/其他 APP 争抢磁力/网页链接。必须全链路更名并单独测 Share / Import / DocumentProvider / IntentChooser。
+- **targetSdk 升级要独立验证**：原版 8.83 targetSdk 30，部分 Activity/Receiver 带 intent-filter 却未显式声明 exported；新客户端以 API 31+ 为目标时必须显式声明，并调整 PendingIntent 及存储权限/Android 行为。不能直接把原始 Manifest 拷过去只改 targetSdk。
+- **权限不必无条件继承**：原版声明 35 项权限、`MANAGE_EXTERNAL_STORAGE`、`SYSTEM_ALERT_WINDOW` 等。声明不等于已授权；新宿主应设计每种功能的最小权限、受控 Dex/Native 扩展和用户显式授权的数据迁移。
+- 完整证据 `docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`。新生成离线探针仅过 Node JS 语法，**0 项原版 Android 真机验证**，禁止声明“兼容成功/可以正式替换”。
