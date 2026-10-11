@@ -38,7 +38,7 @@
 | InitializationProvider | `com.example.hikerview.androidx-startup` | false |
 | WorkManagerInitializer | `com.example.hikerview.workmanager-init` | false |
 | AppUpdaterFileProvider | `com.example.hikerview.fileProvider` | false；grantUriPermissions |
-| AndroidX FileProvider | `@0x7f12002a` | false；为资源 ID，真实运行字符串**尚未解析** |
+| AndroidX FileProvider | `com.example.hikerview.provider` | false；已从 `resources.arsc` 的 `string/authority` 解析（2026-10-11 第八轮） |
 
 新包名不能只替换 `applicationId`，必须同步更新 Provider authorities、硬编码 `content://` 引用、AppWidget/Receiver action、file paths、Intent 包名路由等。否则可能与已安装原版冲突。不能假设原版和新包之间能够直接互读私有目录，应使用**用户授权的导出/导入和 SAF**，确认规则、收藏、历史与设置的备份/恢复边界。
 
@@ -63,3 +63,8 @@
 - **已经建立**：原版 Android 外部入口、Provider 固定标识、Manifest 权限的可复跑清单；隔离的原版行为测试素材。
 - **尚缺**：原版实机导入/页面/返回/跨规则调用行为证据；资源 ID authority 的真实字符串；关键 `ResolveIntentActivity` 分支；Android 16 隔离包名的最小原型；数据迁移及真实播放器回归；授权许可边界。
 - **决策**：可以推进纯隔离的实验宿主和自动化兼容工具设计，但**不能宣布整机重写条件成熟或对原版覆盖安装**。
+
+### 第八轮补正：资源表还原（2026-10-11）
+
+先前遗留的 `@0x7f12002a` 已经从 APK `resources.arsc` 明确解码为 `com.example.hikerview.provider`。另解码 `network_security_config` 为 `base-config cleartextTrafficPermitted=true`，普通 `provider_paths` 包含 `external-path/files-path`；更新器 `app_updater_paths` 带 `root-path path=/` 等较大访问路径范围。后者的 Provider `exported=false` 且 `grantUriPermissions=true`，不能仅凭路径配置断定有漏洞。详见 `docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`。离线探针 6/6 Node 语法、JSON/页面路径校验通过，仍 **0 项真机证据**。
+
