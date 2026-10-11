@@ -661,3 +661,12 @@ Provider/API
 - 8.83 `PageParser` 真实代码中出现 `rule`、`title = ?` 和 `hiker://page/`；历史官方 PageParser 使用标题查找目标程序。未来宿主需要 **StableAppId + LegacyRuleName** 双身份，保留旧链接和 `hiker://` 路由，不能擅自把规则名替换成内部 ID。
 - 下一代 UI 渲染器必须先完成 `col_type` 的组件组合/布局编译、原生网页行、动态局部刷新和页面滚动/返回状态，不应仅逐行直接渲染 JS item。已经列出 19 个拟议 UI/Router/DSL/InterApp/Migration 用例，**目前全部未执行原版真机验证**。
 - 判定不变：这轮增加了真实 UI/路由静态证据，但尚不能宣布全面重构开工；下一实证阶段优先原版 8.83 的页面组合、跨规则调用、返回栈实机行为对照。
+
+## 30. 海阔 8.83 Android 宿主入口与迁移研究（2026-10-11）
+
+- 新增专项报告：[`docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`](HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md)，已从用户 8.83 APK 的原生二进制 AndroidManifest 解码确认 63 Activity、16 Service、15 Receiver、6 Provider（合计 100）；静态推定 15 个 exported，**并不代表无条件允许外部访问**。
+- `ResolveIntentActivity` 包含 22 组 Intent Filter，支持 `hiker/http(s)/file/content/magnet/ed2k/ftp` 等声明及多个文件格式候选。系统 Intent 路由 ≠ 小程序内部 `hiker://page` 路由；必须分别建模，并防止新测试包与旧版争抢网页/磁力/分享入口。
+- 多个 Provider authority 使用固定 `com.example.hikerview.*`，因此新包独立安装时除了 applicationId 必须同步改 authority、外部 URI、Widget/Receiver action 和可能硬编码的包名。原包数据不能靠改签名私自读取；应采用用户明确授权的导出/导入及 SAF。
+- 已生成两个**完全离线、未实机验证**的原版测试探针（Main/Target），涵盖组件组合、两级页面、onClose、动态 updateItem、规则名跨应用跳转、HostContext 与存储隔离。6 段 JS 已通过语法检查，但实际兼容 0 项验证，禁止视为实机通过。
+- 未来 targetSdk 升到 31+ 时，带过滤器组件需要明确的 `android:exported`、PendingIntent 可变性及 Android 新权限/存储适配。35 项权限属于 Manifest 声明，不能默认全部照搬。
+- 开工 Gate：静态材料基本足够开始**隔离最小宿主实验设计**，尚不具备正式全面重写/替换原版条件；后续优先原版端无侵入性回归与数据迁移验收。
