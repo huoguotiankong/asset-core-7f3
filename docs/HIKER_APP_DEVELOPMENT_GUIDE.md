@@ -2488,3 +2488,9 @@ Config response
 - `flex_button`、`scroll_button`、`card_pic_2_2` 属于连续项组合语义，设计时需同时确认相邻项的相对顺序、换行、滚动及点击；`x5_webview_single` 还包含独立生命周期、Header、返回、注入脚本和高度约束，不能用通用文本行替代。
 - `hiker://page/<path>?rule=<规则名称>` 与 `hiker://search` 等是宿主动作协议的一部分；8.83 DEX `PageParser.parsePageRule` 含 `title = ?`，历史源码会按标题搜索目标规则。**当前跨小程序身份不可假定有稳定数字 ID**；新宿主应同时兼容旧名称寻址和内部稳定 ID，保留未改写的 URL 原文给 JS。
 - 静态样本：20 个 ZIP 共 291 个 `pages` 声明，19 个存在页面路由和动态更新词法特征；仅用于排定兼容测试优先级，不能当成兼容率。后续为旧 UI 组件和跨程序调用创建最小无害 fixture，再在原版手机上测量布局及返回栈行为。
+
+## 附录：原版海阔 8.83 系统 Intent 与子页面路由分层（2026-10-11）
+
+- **System Intent != Hiker URI**：APK `ResolveIntentActivity` 对 hiker/http(s)/file/content/magnet/ed2k/ftp 等系统 Intent 注册多个过滤器，而规则 `hiker://page` 由原生 PageParser/运行上下文管理。编写跨规则调用的规则时应明确是 Android 外部入口、规则内路由、还是云盘接管/分享操作，分别验证传参与返回栈。
+- 独立兼容客户端必须保留“旧规则名称寻址”的向后兼容协议，同时内部用稳定 appId；新客户端包名、Provider authority 与外部 Intent Filter 的配置不等于原版，不能直接复用全部系统级入口。
+- 8.83 Android 组件/权限的事实清单和未实机验证的非侵入式 UI/Route 探针详见 `docs/HIKER_ANDROID_883_IPC_AND_MIGRATION_AUDIT_20261011.md`，研究探针没有业务登录/网络/远程依赖，可用于后续最小兼容回归，不可视作已通过的测试。
