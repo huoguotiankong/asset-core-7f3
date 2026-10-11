@@ -1132,3 +1132,9 @@ ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。�
 - 8.83 DEX `@Parameter` 注解包含 `ruleKey/ruleTitleKey/callbackKey/evalKey/dirKey` 等宿主注入，Java 签名长度不等于规则调用显式参数数。旧公开源码包装默认值和上下文处理与当前 8.83 不一致，禁止复制老版本 `getFunctionStr` 来实现新版兼容。
 - 完整证据和回归方案：`docs/HIKER_ANDROID_883_JS_COMPATIBILITY_AUDIT_20261011.md`。所有静态和 Node VM 结论必须经 Android 8.83 真机对照才能宣布可用/修复。
 
+## 8.83 UI/路由逆向发现的兼容风险（2026-10-11）
+
+- **静态证据 + 历史源码互证，不是实机 Bug**：8.83 的 `PageParser.parsePageRule` DEX 方法包含 `title = ?`、`rule`、`hiker://page/`；旧公开源码使用小程序标题查找规则。独立客户端如果把 `rule=` 强行解释为新内部 appId，可能使旧跨小程序链接失效；应先按原版实际情况验证重名、改名、缺失和 URI 编码。
+- **不能逐 item 平铺 UI**：官方文档明确 `flex_button/scroll_button/card_pic_2_2` 有连续项合并语义；`x5_webview_single` 有嵌入网页与返回/浮窗约束。独立 UI 容器中需要分组/layout pass 和原生状态管理。
+- **样本覆盖不能代替通过率**：20 个 ZIP 中出现 19/20 的 `hiker://page` 和动态更新词法特征、共 291 个 `pages` 静态声明；误匹配字符串/注释、外部 JS 不全，不能据此宣布 UI 全兼容。
+- 审计基线及 19 项拟议回归测试见 `docs/HIKER_ANDROID_883_UI_ROUTER_AUDIT_20261011.md`。未做原版 8.83 Android 真实测试前，不宣称重构准备完毕。
