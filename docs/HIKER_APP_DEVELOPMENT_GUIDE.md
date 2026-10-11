@@ -2481,3 +2481,10 @@ Config response
 - **JS 返回类型取决于原生包装**：8.83 的 `JSEngine.getFunctionStr` 使用方法、`@Parameter` 默认值、返回类型注解和 Java 反射生成 wrapper，且含 JSON.parse/parseInt/BOOL/InputStream 等转换；不能把所有接口统一当成文本返回。
 - **播放链要分段观测**：JS 懒解析/播放地址解析之后，仍有 `PlayData`/headers、`UriProxy`、`MediaSource`、HTTP 数据源、`VideoCacheHolder` 极速代理、播放器 seek、进度恢复。播放或拖动缓慢时先对照直连/代理/缓存设置，不仅仅归咎解码器版本。
 - 精确静态事实与未验证边界详见 `docs/HIKER_ANDROID_883_MEDIA_AND_COMPAT_AUDIT_20261011.md`；静态证据不得代替实机回归。
+
+## 附录：8.83 原生 UI 枚举与路由协议边界（2026-10-11）
+
+- 从 8.83 APK `ArticleColTypeEnum.<clinit>` 提取到 **55 个去重组件字符串、56 次静态字符串常量引用**，而公开老源码组件枚举缺失 `icon_5/icon_5_no_crop/card_pic_3_center` 等。组件实际渲染逻辑必须继续真机比对；详见 `docs/HIKER_ANDROID_883_UI_ROUTER_AUDIT_20261011.md`。
+- `flex_button`、`scroll_button`、`card_pic_2_2` 属于连续项组合语义，设计时需同时确认相邻项的相对顺序、换行、滚动及点击；`x5_webview_single` 还包含独立生命周期、Header、返回、注入脚本和高度约束，不能用通用文本行替代。
+- `hiker://page/<path>?rule=<规则名称>` 与 `hiker://search` 等是宿主动作协议的一部分；8.83 DEX `PageParser.parsePageRule` 含 `title = ?`，历史源码会按标题搜索目标规则。**当前跨小程序身份不可假定有稳定数字 ID**；新宿主应同时兼容旧名称寻址和内部稳定 ID，保留未改写的 URL 原文给 JS。
+- 静态样本：20 个 ZIP 共 291 个 `pages` 声明，19 个存在页面路由和动态更新词法特征；仅用于排定兼容测试优先级，不能当成兼容率。后续为旧 UI 组件和跨程序调用创建最小无害 fixture，再在原版手机上测量布局及返回栈行为。
