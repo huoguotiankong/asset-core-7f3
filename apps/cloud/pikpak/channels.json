@@ -3,28 +3,28 @@
   "id": "pikpak",
   "name": "PikPak",
   "versionPolicy": "test-first-v1",
-  "updatedAt": "2026-09-24",
+  "updatedAt": "2026-10-16",
   "channels": [
     {
       "channel": "test",
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.25",
+      "version": "0.1.0-test.26",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10127,
-      "displayVersion": "Test 0.1.0-test.25 · Build 10127",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v25_b10127.txt",
+      "build": 10128,
+      "displayVersion": "Test 0.1.0-test.26 · Build 10128",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v26_b10128.txt",
       "mode": "remote-direct-loader",
-      "updatedAt": "2026-09-24",
+      "updatedAt": "2026-10-16",
       "recommended": true,
-      "desc": "Restores Test23 playable media-line contract after Test24 device regression, retaining compact home.",
+      "desc": "Fix Web already logged in but Hiker failed to import session; verify Drive API before accepting new single-account session.",
       "highlights": [
-        "恢复 Test23 多线路播放器输出和官方 media 原顺序",
-        "移除 Test24 未经验证的双层视频标记与默认画质重排",
-        "保留紧凑首页与单账号官方 Web 登录",
-        "首帧与拖动须实机验证，Stable 不变"
+        "完整网页登录存储凭据可直接接管，不强制等待新的 Bearer 请求",
+        "优先最新 Drive Bearer，不混用旧 Refresh Token",
+        "接管前只读检查个人云盘授权；新增账号和设置页登录检测",
+        "保留 Test25 播放器及紧凑首页；仍需海阔实机确认"
       ]
     }
   ]
