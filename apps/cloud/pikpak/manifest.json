@@ -6,21 +6,21 @@
   "mode": "remote-test",
   "test": "apps/cloud/pikpak/test.json",
   "channels": "apps/cloud/pikpak/channels.json",
-  "defaultVersion": "0.1.0-test.25",
-  "defaultBuild": 10127,
-  "testVersion": "0.1.0-test.25",
-  "testBuild": 10127,
-  "testShellVersion": "0.1.0-test.25",
-  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v25_b10127.js",
-  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v25_b10127.txt",
-  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.25-b10127/release.json",
+  "defaultVersion": "0.1.0-test.26",
+  "defaultBuild": 10128,
+  "testVersion": "0.1.0-test.26",
+  "testBuild": 10128,
+  "testShellVersion": "0.1.0-test.26",
+  "testBootstrap": "apps/cloud/pikpak/bootstrap_test_v26_b10128.js",
+  "testRule": "apps/cloud/pikpak/pikpak_remote_test_v26_b10128.txt",
+  "testRelease": "apps/cloud/pikpak/releases/0.1.0-test.26-b10128/release.json",
   "changelog": "apps/cloud/pikpak/CHANGELOG.md",
   "migration": {
-    "stage": "test25-restore-test23-player-contract-b10127",
+    "stage": "test26-verified-web-session-handoff-b10128",
     "managerVersion": "direct-loader",
     "stableExists": false,
     "sourceVersion": 1,
-    "supersedesUnvalidatedBuild": 10126,
-    "note": "Test25 restores Test23 known player output and preserves Test24 compact home; device validation pending, Stable unchanged."
+    "supersedesUnvalidatedBuild": 10127,
+    "note": "Official Web login storage-pair fallback and verified Drive session; new login diagnostic. Single-account and Test25 playback preserved; on-device verification pending."
   }
 }
