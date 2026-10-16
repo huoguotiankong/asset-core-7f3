@@ -1,3 +1,32 @@
+## 2026-10-16 · 0.1.0-test.27 / Build10129 · 播放诊断、可选线路策略与最近播放
+
+### 已确认的新实机基线
+
+- **用户明确反馈 Test26 已能成功登录 PikPak**。将「Test26 官网 Web Session 接管」由原先待实机确认更新为用户实机登录成功。尚未报告 Test26 的完整视频播放、seek、跨程序 Magnet 和回收回归通过，因此这些能力仍需验证。
+- 正式仓库 `asset-core-7f3@main` 为唯一运行源；活动 Test26 Build10128 作为本轮认证和功能基线。尚未建立 Stable，不修改用户已通过的单账号 Web 登录链。
+- 历史 Test24 把双层 `#isVideo=true#` 标记与未经验证的默认线路重排混合，导致 0kb/s/播放异常；Test25 回退到 Test23 后才恢复已知播放器输出格式。本轮**不恢复 Test24 默认重排/双层标记**。
+
+### Test27 新增
+
+- `playback_diagnostics_patch.js`：包裹最终 Test23 播放链，**默认官方顺序、默认缓存模式时直接返回原始播放 JSON 字节串**。新增可选「均衡画质优先（实验）」仅对已返回的 720P/1080P 等线路名称进行稳定重排，保留全部线路及逐项 `headers`、字幕和各 URL 原样，不附加新视频标记；默认关闭。
+- 可选「播放时重新取链」：用户显式开启后，个人非临时视频每次调用 `P.getFile(id,'PLAY')` 重新取得详情再经 Test23 的 `Play.playFromDetail` 输出。用于排查签名地址过期或旧内存缓存，不宣称可修复 CDN/播放器缓冲；默认关闭。
+- 仅写本机非敏感诊断 `playback_diag_v27`：获取播放地址所用毫秒数、个人/分享/Magnet 来源、线路数、首选线路标签、HLS/MP4/未知类型及是否返回字幕。**不写入 URL/Cookie/Token**；只记录取链时长，不代表真实首帧或 seek 时长。
+- 最近播放 `play_history_v27`：最多 30 个非临时个人云盘视频 ID/文件名/大小/时间；点击重新取链播放，可手动清除。Magnet 临时文件不入历史，防止临时回收后产生失效记录。不宣称有独立的跨客户端断点续播功能。
+- 紧凑首页新增「▶ 最近播放」，设置页新增「起播画质偏好」「播放时重新取链」「最近播放」「播放诊断」，保留 Test26 的单账号授权检测、回收开关、目录筛选和原有设置。
+- 新增不可变 51 模块 Release、Bootstrap、完整 Shell（数值版号 `2026101602`），并同步 `test.json/channels.json/manifest.json/registry.json` 到 Test27 Build10129。Test26 Shell/Release 保留作回退。
+
+### 已执行检查与待实机项目
+
+- 新增的 5 个模块均经 JS 语法检查，Bootstrap 和 Release 的 51 个模块顺序完全一致，Shell 18 个页面注册可解析。
+- 模拟 `Play.personal`：默认输出与原播放器 JSON 字符串一致；可选均衡策略将 720P 调整首选而保持其余完整线路；重新取链模式会直接触发最新 `getFile`；诊断/历史存储未包含签名 URL。
+- Mock Runtime/Page/UI 冒烟检查：导出 `playHistory/playDiagnostics/setPlaybackStartupAction/setFreshLinkAction/clearPlayHistoryAction`，首页「最近播放」入口与设置页项目均已创建。
+- **没有真实 PikPak 会员账号 API 联调、海阔 Android 播放首帧/seek 时间验证，不能宣称已经提高 CDN 速度、解决缓冲或达到原生 PikPak APP 效果。** 用户需实机比较默认官方顺序与可选均衡线路，在设置内检查“播放诊断”；若出现异常立刻切回默认顺序并关闭重新取链。
+- 建议验收：个人云盘已有视频的首帧、拖动至 50% 后续播、HLS 与原文件线路手动切换、Magnet 新临时文件、跨程序回收、再次打开视频和最近播放记录是否正确，以及退出重进登录状态不退化。
+
+当前活动 Test：`0.1.0-test.27 / Build10129`，`pending-device-playback-validation`；Stable 尚未建立。
+
+---
+
 ## 2026-10-16 · 0.1.0-test.26 / Build10128 · 网页已登录但小程序会话接管失败
 
 ### 实机问题与源码根因
