@@ -1,3 +1,33 @@
+## 2026-10-16 · 0.1.0-test.26 / Build10128 · 网页已登录但小程序会话接管失败
+
+### 实机问题与源码根因
+
+- 用户反馈：PikPak 官方网页登录成功，但海阔小程序读取会话仍异常。当前反馈尚无 Test26 实机截图或接口返回。
+- Test22～Test25 的账号页仅在 X5 注入逻辑捕获 `networkSeen=true` 的新 Fetch/XHR Bearer 后才将会话回传。**完整有效网页登录凭据已经在官方同源 localStorage/sessionStorage 中**，但如果 X5 注入晚于网页首轮 Drive 请求，或网页复用已加载数据，不产生新的 JS 可见 Bearer，请求就永远不能触发接管。
+- Test22 在「存储中的 Access/Refresh 成对会话」之后接到不同网络 Access Token 时会覆盖 Access、却继续保留旧 Refresh Token，存在后续刷新失败或跨代 Token 混用的风险。
+- Test22 `webDone` 只检查是否读到 `access_token` 即报告接入成功，没有验证 Drive API 是否授权，因而可能出现“已登录但文件列表不可读”的虚假成功。
+
+### 本轮修复 / 保持边界
+
+- 新增 `core_web_session_probe_patch.js`：只读请求官方 `GET /drive/v1/about`，使用捕获的 Access Token，检查个人云盘有效响应；失败分为未授权、验证要求、网络、API 响应，不输出/上传 Token，也不提前覆盖旧会话。
+- 新增 `pages_web_session_recovery_patch.js`：保留同源 X5 会话捕获和本机 `pikpak_web_handoff_v15` 传递通道；允许 **完整 Access/Refresh 配对** 在没有新网络请求时进入验证接管，同时继续优先捕获当前 Drive Bearer。发现网络 Bearer 与已存储 Access 不一致时清空待导入的旧 Refresh，防止配对混用。
+- 新增账号页、设置页“检测当前登录授权”：只读检查小程序当前 Session 的 Drive 接口是否可用；不发起账号密码登录、不直接反复刷新 Token、不显示凭据。
+- 页面接管严格先验证、后保存 Session。校验失败保留旧会话，允许回到官方网页重新捕获；只在已校验成功后清理待接管桥数据。
+- **继续仅单账号**。个人文件、原生搜索、最近/星标、My Pack、Magnet、下载、回收站及临时文件恢复语义保留。沿用 Test25 已恢复的 Test23 播放输出，不恢复 Test24 失败播放器改造。
+- 新建不可变 Test26 Release（46 模块）、Bootstrap、完整 Shell，数值 Shell version=`2026101601`；`test.json` / `channels.json` / `manifest.json` / `registry.json` 指向 Test26。Stable 尚未建立。
+
+### 静态/模拟回归与剩余验证
+
+- 七个新增/交付资源分别完成 JavaScript/JSON/规则壳解析检查，Bootstrap 与 Release 46 项模块路径及顺序相同。
+- 对 X5 注入脚本进行隔离模拟：① 完整同源存储凭据，无新 Drive 请求也能回传；② 网络新 Bearer 不同于旧存储 Access 时，导出的 Refresh Token 清空而非错配。两条均通过。
+- **未做 Android 海阔 8.83 实机测试或 PikPak 真实账户 API 联调，不得称登录已修复完成，不得晋级 Stable。**
+- 实机验证：打开 Test26→账号→官方网页登录→网页已登录时进任意文件夹/刷新→自动接管→返回个人盘文件列表→退出重进仍能读取→设置页检测登录授权→全盘搜索/播放/seek/Magnet/回收设置回归。若校验提示 401/验证码/网络失败，记录非敏感提示与页面截图，禁止粘贴 Token/Cookie。
+- 回退链：Test25 Build10127 Shell/Bootstrap/Release 均保持不变。
+
+当前活动 Test：`0.1.0-test.26 / Build10128`，`pending-device-validation`。
+
+---
+
 ## 2026-09-24 · 0.1.0-test.15 / Build10117 · 网页会话本机变量与网络捕获桥
 
 ### 实机结论
