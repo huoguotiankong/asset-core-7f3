@@ -2501,3 +2501,16 @@ Config response
 - `network_security_config` 不是未知占位：实际 `base-config cleartextTrafficPermitted=true`；旧小程序有 HTTP 兼容需要，但新版可在 Host Capability 层按程序区分敏感凭据传输与普通资源读取。
 - 第八轮静态验证工具检查两个无害探针的 `rule.json`、子页路径、跨规则引用和 6 个 JS 语法段；全部通过**离线**检查，不替代原版 8.83 真机运行。完整研究见 `docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`。
 
+
+
+## 2026-10-16 · 海阔原生播放器优化的安全分层诊断（PikPak Test27）
+
+在 `PlayModel`/多线路 JSON 已经有实机正常播放先例时，首帧慢和 seek 缓冲不能只凭 JS 取链速度判断。分层量测：
+
+1. **Drive/API 取链**：记录 `Date.now()` 前后毫秒数、入口类型、返回线路数量、首选线路名称及 URL 外形分类；不保存带签名的媒体 URL、Cookie、Token、Headers 等凭据。JS 取链耗时不等于播放器首帧耗时。
+2. **Native player/CDN**：在海阔真实播放器里观察冷启动首帧、暂停恢复、跳到 50% 后继续播放所需时间以及线路切换；这些必须实机测量，不能由 `m3u8`/MP4 扩展名推断。
+3. **不可变已验证默认输出**：若上个版本因错误的 `#isVideo=true#` 叠加或 JSON 线路修改发生过 0kb/s 回归，新测试版默认模式直接复用已经验证的 `names/urls/headers/subtitle` 字节输出，实验画质排序只能作为用户显式选择；必须保持 headers 逐项对齐、不重复添加视频标记。
+4. **带签名 URL 缓存**：短时内存缓存可以节省重复播放详情 API，但若出现疑似过期，优先增加用户可选的“每次重新取链”，而不是不加区分地延长 URL 缓存或每次都自动额外发请求。
+5. **历史与临时文件隔离**：最近播放只记录成功取链的非临时个人云盘文件；调用外部程序创建并可能自动回收的 Magnet 临时对象不得自动写入永久播放历史。
+
+PikPak Test27 的导出/语法/mock 检查不代表已完成实际播放首帧/seek 测试；前后数值和优化收益须由用户手机实机对照确认。
