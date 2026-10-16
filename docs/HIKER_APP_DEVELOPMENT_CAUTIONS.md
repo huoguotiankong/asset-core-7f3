@@ -1153,3 +1153,13 @@ ACFAN Test6 实机出现“标题和播放量正常、所有封面空白”。�
 - APK 更新器 FileProvider 的 `app_updater_paths` 包含 `root-path path=/`，静态可见共享路径较宽；其 Provider manifest 为 `exported=false`、`grantUriPermissions=true`，不能仅凭 XML 判定真实安全漏洞。未来应缩小路径与显式 URI 授权。
 - 两个离线测试探针通过 6/6 Node 语法和静态路径引用检查，**仍没有 Rhino/Android 实机证据**。详见 `docs/HIKER_ANDROID_883_HOST_RESOURCES_PROBES_AUDIT_20261011.md`。
 
+
+
+## 2026-10-16 · WebView 网页已登录但桥接要求“新网络请求”导致永远无法同步
+
+- PikPak Test22～Test25 的 X5 JS bridge 只有在本轮注入之后捕获到新的 Fetch/XHR Bearer，才允许把 Session 传入规则。已登录网页可能使用预加载数据、Service Worker 或在注入前已完成初始网络请求；因此“必须新抓到一个 Bearer”不是可依赖的登录成功条件。
+- 对已明确归属同一官方同源的 Access/Refresh **完整配对对象**，可允许作为接管候选；但必须在覆盖既有 Session 前，用一个小范围、只读且真正需要授权的 API 做验证。来源优先级不能代替有效性验证。
+- 若网络层捕获到的 Access 与旧存储 Access 不同，不得把两者和旧 Refresh 拼接。优先接受同一次认证响应内的配对信息；网络只提供 Bearer 时宁可暂时缺失 Refresh，也不能混用可能已被轮换的旧票据。
+- 应提供不打印 Token 的“API 登录授权检测”及失败分级（未授权/验证/网络/API）。`C.loggedIn()` 仅能说明本地保存过 Token，不能证明服务端 Drive API 仍然授信。
+- 当前 Test26 只做静态及隔离桥接模拟，X5 注入时机、API 验证和实际登录恢复仍需海阔 Android 实机验证；不要将源码逻辑推演记作通过实机。
+
