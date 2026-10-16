@@ -10,21 +10,22 @@
       "label": "测试版",
       "id": "pikpak-test",
       "name": "PikPak",
-      "version": "0.1.0-test.26",
+      "version": "0.1.0-test.27",
       "baseVersion": "uploaded-v1",
       "targetVersion": "0.1.0",
-      "build": 10128,
-      "displayVersion": "Test 0.1.0-test.26 · Build 10128",
-      "path": "apps/cloud/pikpak/pikpak_remote_test_v26_b10128.txt",
+      "build": 10129,
+      "displayVersion": "Test 0.1.0-test.27 · Build 10129",
+      "path": "apps/cloud/pikpak/pikpak_remote_test_v27_b10129.txt",
       "mode": "remote-direct-loader",
       "updatedAt": "2026-10-16",
       "recommended": true,
-      "desc": "Fix Web already logged in but Hiker failed to import session; verify Drive API before accepting new single-account session.",
+      "desc": "Test26 login confirmed; playback enhancement with opt-in balanced/fresh-link modes, diagnostics and local play history.",
       "highlights": [
-        "完整网页登录存储凭据可直接接管，不强制等待新的 Bearer 请求",
-        "优先最新 Drive Bearer，不混用旧 Refresh Token",
-        "接管前只读检查个人云盘授权；新增账号和设置页登录检测",
-        "保留 Test25 播放器及紧凑首页；仍需海阔实机确认"
+        "原 Test26 登录状态保持，默认 Test23 播放线路输出不变",
+        "可选 720P/1080P 均衡画质优先；不默认重排线路",
+        "可选每次重新取链以排查短效签名 URL 缓存问题",
+        "播放诊断与最近播放记录，无 Token/媒体 URL 泄露",
+        "待海阔实机对比首帧/拖动缓冲和 Magnet，Stable 尚未建立"
       ]
     }
   ]
