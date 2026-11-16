@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.56-test.1",
+  "build": 2026111602,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "untouched": true
+  },
+  "predecessor": {
+    "version": "3.9.55-test.1",
+    "build": 2026111601
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.56-test.1/local_entry.js",
+    "ref": "3ce263e38a6851c60cd0ec2a8680327477f6604d",
+    "blob": "6455ceb3b53151c102888af03c05e4edfb08e81f"
+  },
+  "authGate": {
+    "path": "apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js",
+    "ref": "ec4d43c44c14d1c830e221d1f366461d8bbcaf5b",
+    "blob": "5bbbb663cd112aaf4a5f0fbb90ccd15e8476472d"
+  },
+  "previousTaxonomy": {
+    "path": "apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js",
+    "ref": "4fa91e8c99413186bda7f21da6e80ff4aa8e827f",
+    "blob": "a4dbeb15a39213f1228422add6efefed5617819f"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.56-test.1/javdb_v3.9.56_test1_authfix.txt",
+    "blob": "419320d943074800c5bd921f1c13ad1f453a25ae",
+    "version": 2026111602,
+    "pages": 44
+  },
+  "observedDeviceError": "Rankings /api/v1/rankings/playback and Filters /api/v1/movies/tags returned JWTVerificationError: 请登录账号 while homepage recommendation succeeded and user reports logged in",
+  "confirmedCodeRootCause": "Base JDB.apiSafe invokes buildApiHeaders('') without a local token; protected category/ranking endpoints still call apiSafe despite token-saving login and apiAuthSafe available.",
+  "changes": [
+    "On authenticated sessions send existing stored token using existing apiAuthSafe raw/bearer strategies for tags/rankings/playback/top; do not modify token value or store credentials in remote metadata.",
+    "On other safe GET endpoints, retry authenticated only after anonymous JWT error.",
+    "Preserve public fallback where explicitly token-authorized endpoint returns an unrelated failure but public endpoint works.",
+    "Failure messages classify no local token vs present token rejected; never auto logout or expose actual token.",
+    "Read-only on-demand diagnostics user/category/ranking and link from More; no requests until user selects a target.",
+    "RankHub5 patch injection is now included, not only filters/home; preserve Test55 taxonomy, lucky, notifications, magnet and current VIP contracts."
+  ],
+  "validation": {
+    "syntax": "pass",
+    "shellJson": "pass",
+    "pages": 44,
+    "mock": [
+      "token present / categories: authorized first, anonymous count 0",
+      "token present / rankings: authorized first, anonymous count 0",
+      "tags dictionary normalization",
+      "rejected JWT reports token-rejected",
+      "no-local-token reports absence without clearing account",
+      "diagnostics idle makes zero additional requests; selected target makes one"
+    ],
+    "pending": [
+      "real API requests with signed headers",
+      "device screen acceptance for 5 categories and rankings",
+      "account/announced valid token comparison",
+      "VIP playback and magnet smoke test"
+    ]
+  },
+  "stableChanged": false,
+  "latestChanged": false,
+  "testPointerChanged": false,
+  "status": "test-only: static+mock passed; Hiker Android and remote backend pending",
+  "updatedAt": "2026-11-16"
+}
