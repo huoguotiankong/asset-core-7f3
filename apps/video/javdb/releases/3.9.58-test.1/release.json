@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.58-test.1",
+  "build": 2026111604,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "3.9.57-test.1",
+    "build": 2026111603
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.58-test.1/local_entry.js",
+    "ref": "828bb95621a0197583b774b095cd5b14c66a283f",
+    "blob": "444963e4061f1cb41cefba106dcbc02fb3325b37"
+  },
+  "authBridge": {
+    "path": "apps/video/javdb/releases/3.9.58-test.1/auth_bridge_patch.js",
+    "ref": "4bde0ce94937c1e9f51d7d7b1a4688b3012e6d72",
+    "blob": "02a1bdf339d455effc1385ba7347faf10a1f382b"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.58-test.1/javdb_v3.9.58_test1_auth_bridge.txt",
+    "blob": "017f830eb98ca14b1c7d9948819fe97450445c4f",
+    "version": 2026111604,
+    "pages": 44
+  },
+  "deps": [
+    {
+      "path": "apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js",
+      "ref": "4fa91e8c99413186bda7f21da6e80ff4aa8e827f"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js",
+      "ref": "ec4d43c44c14d1c830e221d1f366461d8bbcaf5b"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.57-test.1/home_layout_patch.js",
+      "ref": "047bcdaa59fd6140a84dc6aea2deb73cbf67f835"
+    }
+  ],
+  "deviceEvidence": [
+    "2026-11-16 19:36: VIP page 显示 影片信息加载失败 / JWTVerificationError: 请登录账号",
+    "2026-11-16 19:36: Magnet page 显示 磁链加载失败 / 请登录账号",
+    "User previously confirmed JavDB account was logged in; whether local Hiker API token is server-valid remains unverified."
+  ],
+  "confirmedImplementationIssues": [
+    "JDB.playPage() was not included in Test57 core authPatch injection list; JDB.playPage obtains /api/v4/movies/{id} using unauthenticated apiSafe.",
+    "The standalone custom javdb3Magnets module uses its own fetch() with signature and UA but omits Authorization on /api/v1/movies/{id}/magnets; base JDB.apiSafe / apiAuthSafe fixes do not automatically apply.",
+    "Test51 raw HLS #noPre# cleanup is an exact-match wrapper around JDB.playPage(); prepended injection bypasses the original exact-match hook, so Test58 re-applies identical URL-only cleanup."
+  ],
+  "changes": [
+    "Add playPage() to dynamic AuthGate prelude; API JWT causes authorization retry without changing VIP line chooser or play contract.",
+    "Load original custom magnet JS through m.customData() and replace only its local api(path) helper with a call to the central authorized-capable JDB.apiSafe; preserve remainder of custom implementation byte-for-byte.",
+    "Keep previous Guangya magnetic action patch, metadata, filter/sort, cloud long-press callbacks.",
+    "Restore Test51 raw HLS #noPre# cleanup around prefixed JDB.playPage result, preserving headers and avoiding player rewrites.",
+    "Separate local cache root b2026111604 and pinned immutable source refs."
+  ],
+  "validation": {
+    "syntax": "passed",
+    "originalSource": "Original 6.1 KB javdb3Magnets source extracted from gzip customData; only API helper replaced; remaining source byte-identical",
+    "simulated": [
+      "Real module wrapper with fake baseline and JWT-denying public API: magnets uses public /api/v1/movies/{id}/magnets then authorized retry and displays result",
+      "VIP metadata uses public /api/v4/movies/{id} then authorized retry and emits play row",
+      "VIP HLS #noPre# stripped for direct and JSON URL arrays while preserving headers",
+      "Existing Shell 44 pages; stable latest active Test pointers unchanged"
+    ],
+    "pending": [
+      "User Android Hiker after importing Test58",
+      "Real server JWT validity and VIP rights",
+      "VIP playback first frame and seek",
+      "Magnet rows metadata and long-click handlers",
+      "Other account-authenticated endpoints"
+    ]
+  },
+  "status": "isolated-test-only, static and mock verified; device/server acceptance pending",
+  "stableChanged": false,
+  "latestChanged": false,
+  "testPointerChanged": false,
+  "updatedAt": "2026-11-16"
+}
