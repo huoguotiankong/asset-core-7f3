@@ -2514,3 +2514,17 @@ Config response
 5. **历史与临时文件隔离**：最近播放只记录成功取链的非临时个人云盘文件；调用外部程序创建并可能自动回收的 Magnet 临时对象不得自动写入永久播放历史。
 
 PikPak Test27 的导出/语法/mock 检查不代表已完成实际播放首帧/seek 测试；前后数值和优化收益须由用户手机实机对照确认。
+
+## 2026-11-16 · Core / Custom / searchFind 统一鉴权覆盖审计法
+
+来自 JavDB Test59 的通用实践：任何「已登录却部分页面报 JWT」都应按路由和执行作用域建立表格，而不是只修改业务 API 函数。
+
+1. **先读真实 Shell**：除了 `pages`，必须检查 `find_rule`、`search_url`、`searchFind`、`detail_find_rule`；这些入口可能分别通过 `m.core` 和 `m.custom` 执行，不共享 JS 变量和 API 注入。
+2. **解压实际运行构建**：包括合并过的 gzip Core、Custom 源码、Product UI Patch，以及中间 Test 的多层 wrapper。用搜索方式查 `fetch/request/apiSafe/apiAuthSafe/apiPost`，逐条映射到真实调用者，不可仅查看文件名猜测函数引用。
+3. **GET 与写操作分级**：可对已证实的只读受保护请求使用本地持有的授权客户端，并对 JWT 做有限次重试；写操作的 Content-Type、鉴权模式、签名、幂等性必须单独验证，不能复用 GET 的补丁。
+4. **保留外层功能装饰器**：如果从 `m.custom` 改由 Core eval 执行，必须重新检查原先 UI/元数据/长按/播放 URL 的每层包装器，否则列表可显示却丢功能。
+5. **动态注入完整性**：对固定 `JDB.method();` 类零参数 Core 页面，可以使用受限正则统一装载共享协议适配层；对任意 JS、第三方 Provider 或自定义 route 不做全局注入。
+6. **差异最小化和回归**：原始 Custom 替换某个网络 helper 时，检查 helper 前后源码完全一致；模拟无 Token、有效 Token、JWT 拒绝、HTTP 非鉴权失败、公开成功 5 种情况，再检查实际 UI、媒体 Header 和帐号状态。
+7. **诊断隐私**：只显示请求类型、是否存在 Token、授权结果及脱敏错误，永远不输出密码、Token、Cookie、原始完整 Header；账号退出须经用户明确操作或可重复验证的授权结论。
+
+上述属于通用方法。JavDB 的具体路径、历史兼容补丁和未验证风险记录在 `apps/video/javdb/releases/3.9.59-test.1/AUTH_SURFACE_AUDIT.md`。
