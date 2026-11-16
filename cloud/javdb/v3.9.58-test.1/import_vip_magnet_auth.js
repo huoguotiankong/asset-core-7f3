@@ -8,7 +8,7 @@
   for(var j=0;j<pages.length;j++)paths.push(String(pages[j]&&pages[j].path||''));
   if(Number(o.version)!==2026111604||paths.indexOf('javdb3Play')<0||paths.indexOf('javdb3Magnets')<0||paths.indexOf('javdb3AuthDiag')<0)
     throw new Error('JavDB Test58 VIP/磁链页面或版本不一致');
-  if(s.indexOf('828bb95621a0197583b774b095cd5b14c66a283f')<0)
+  if(s.indexOf('156a382bda2de1b177d55ce0314e45e3b8492165')<0)
     throw new Error('JavDB Test58 入口未绑定最新修复');
   return s;
 })()
