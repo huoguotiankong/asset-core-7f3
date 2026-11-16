@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.55-test.1",
+  "build": 2026111601,
+  "apksample": {
+    "filename": "jdb_official_v1.9.39.4_RC.apk",
+    "variant": "RC",
+    "runtime": "Flutter AOT",
+    "source": "user-upload",
+    "analysis": "static strings/routes only; no authenticated live API or original Android behavior verification"
+  },
+  "base": {
+    "stable": {
+      "version": "3.9.42",
+      "build": 2026082301,
+      "untouched": true
+    },
+    "experimental": {
+      "version": "3.9.54-test.1",
+      "build": 2026092208,
+      "deviceValidated": false
+    },
+    "vip": "3.9.51-test.1 raw HLS (not fully device validated)"
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.55-test.1/local_entry.js",
+    "ref": "e44708a6e03caf425c7ce742b8d00087faa5d0d6",
+    "blob": "418675122275a391e37da9ca23bef3d8e487730d"
+  },
+  "patch": {
+    "path": "apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js",
+    "ref": "4fa91e8c99413186bda7f21da6e80ff4aa8e827f",
+    "blob": "a4dbeb15a39213f1228422add6efefed5617819f"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.55-test.1/javdb_v3.9.55_test1_apk1939.txt",
+    "blob": "979145077588e642f5e86885631cd71c6aa05279",
+    "version": 2026111601,
+    "pages": 43
+  },
+  "changes": [
+    "Normalize /api/v2/tags grouped dictionary responses without rewriting tag IDs",
+    "Guard /api/v1/movies/tags filter syntax; retry failed sorting using release desc",
+    "On actual API failures only, permit narrow multi-tag / base playable fallback with visible notice",
+    "Manual clear complex filter action; no silent reset of user state",
+    "Add experimental authenticated Lucky page backed by /api/v1/movies/lucky",
+    "Add read-only account Notifications page backed by /api/v2/users/notifications",
+    "Preserve previous magnet routing and playback code without new playback overlay"
+  ],
+  "intentionallyDeferred": [
+    "Advanced Search route request body/signature not yet confirmed",
+    "ED2K extraction/rendering and first seed badge response fields not yet confirmed",
+    "Feedback conversation image upload requires live authenticated contract",
+    "Offline MP4 download is native APP work, not copied into Hiker rule",
+    "No Android player, signed HLS or live network acceptance tests performed"
+  ],
+  "status": "static-syntax-and-mocked-contract-tested; pending Hiker device and real API acceptance",
+  "stableChanged": false,
+  "testPointerChanged": false,
+  "latestChanged": false,
+  "updatedAt": "2026-11-16"
+}
