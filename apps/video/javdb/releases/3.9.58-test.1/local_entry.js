@@ -82,8 +82,8 @@ function module(){
     return oldCustom.call(m,key);
   };
   m.core=function(call){
-    var s=String(call||'').replace(/\\s+/g,'');
-    if(/^JDB\\.(home|filters|category|rankHub5|rank|actorHub4|moreHub5|luckyPage|notificationsPage|authDiagPage|preview|playPage)\\(\\);?$/.test(s)){
+    var s=String(call||'').replace(/\s+/g,'');
+    if(/^JDB\.(home|filters|category|rankHub5|rank|actorHub4|moreHub5|luckyPage|notificationsPage|authDiagPage|preview|playPage)\(\);?$/.test(s)){
       var prefix=prelude();
       if(s==='JDB.home();')prefix+='eval('+JSON.stringify(homePatch())+');';
       if(s==='JDB.playPage();'){
