@@ -1203,3 +1203,9 @@ JavDB Test58 源码已证实：压缩 customData 的 javdb3Magnets 不调用 JDB
 VIP playPage 的 Test51 版本有严格的 JDB.playPage() 字符串匹配后处理，专门移除旧版本导致 0kb/s 起播回归的 #noPre#。如果在调用前加入 eval(prefix) 导致字符串不相等，后处理就会失效。新增任何 Core 动态补丁时，要检查旧包装层以调用字符串匹配的拦截器，必要时保留等价输出后处理，严禁默默覆盖视频头/播放 URL 或重启自动 M3U8 缓存。
 
 本轮仅通过静态和假 API 合同验证，仍需真实海阔 Android / 官方 API 授权确认。
+
+## 2026-11-16 · 用 Core eval 接管 Custom 功能会绕过上层功能包装器
+
+JavDB Test58 在解决磁链独立 API 无 Authorization 后，曾准备通过 JDB Core eval 直接执行原磁链模块。虽然模块主体源码相同，但原 Test50、Test52 的磁链 metadata 和六项长按菜单实际是 m.custom 外部包装器：改走 Core eval 会绕过这些增强层，导致“认证已修好但功能倒退”。
+
+处理方式：任何模块入口迁移都必须建立旧运行时包装链调用图，明确原始实现、每层拦截 patch、输出修饰器以及它们的执行顺序。必要时从已钉住版本源码还原旧装饰器，再有序应用；回归不只测接口成功，还应断言菜单顺序、元数据字段、播放 URL/headers 不回退。真实 Android 设备仍必须验证。
