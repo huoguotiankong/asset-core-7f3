@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.57-test.1",
+  "build": 2026111603,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "untouched": true
+  },
+  "predecessor": {
+    "version": "3.9.56-test.1",
+    "build": 2026111602
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.57-test.1/local_entry.js",
+    "ref": "1e420a7b9d627f0d4c67aa35c717bcbc9cf0757d",
+    "blob": "d5b914feb34841cd13ae6cec73556860e1f9874b"
+  },
+  "homeLayout": {
+    "path": "apps/video/javdb/releases/3.9.57-test.1/home_layout_patch.js",
+    "ref": "047bcdaa59fd6140a84dc6aea2deb73cbf67f835",
+    "blob": "e479865fcacbd544fea2a43ee2f67edcdfc422ec"
+  },
+  "auth": {
+    "path": "apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js",
+    "ref": "ec4d43c44c14d1c830e221d1f366461d8bbcaf5b"
+  },
+  "tax": {
+    "path": "apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js",
+    "ref": "4fa91e8c99413186bda7f21da6e80ff4aa8e827f"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.57-test.1/javdb_v3.9.57_test1_preview_home.txt",
+    "blob": "81f76634f47c2b1ee6e0f957b5bf9a1d2e217428",
+    "version": 2026111603,
+    "pages": 44
+  },
+  "device": {
+    "observed": "2026-11-16 19:19 screenshot: JAVDB v3 homepage five icon quick actions broken into two rows by oversized Lucky tile; preview page returns JWTVerificationError despite homepage recommendation success",
+    "userStatedLoggedIn": true
+  },
+  "rootCauses": [
+    "JDB.preview() uses /api/v4/movies/{id} via plain apiSafe; Test56 core interception excluded JDB.preview(), so its JWT-retry wrapper was never active on preview page.",
+    "Test55's large text_2 Lucky tile was inserted at index 2 among five icon_5 home shortcuts, breaking the native 5-item grouping and producing visually uneven two-row navigation."
+  ],
+  "changes": [
+    "Enable Test56 AuthGate on JDB.preview() page so JWT errors on /api/v4/movies/{id} trigger authorized GET retry; do not change token values or authentication method.",
+    "Remove oversized Lucky homepage tile and place single compact Lucky scroll_button beside existing content tabs; preserve contiguous original five icon_5 shortcuts.",
+    "Search prompt typography simplified; remove redundant date overlay from homepage movie_2/movie_3 thumbnails while preserving ID/rating badges and personal cover layout settings.",
+    "Keep JDB.preview() original image URL construction and pics:// display contract; do not rewrite unverified image paths.",
+    "All other detail, media playback, magnet and login code untouched."
+  ],
+  "validation": {
+    "static": "pass",
+    "simulated": {
+      "preview": "fake public /api/v4/movies/{id} JWT -> existing authenticated retry -> preview card rendered",
+      "home": "quick icons exactly five and contiguous; Lucky only one horizontal scroll tab; metadata trims date but retains number and rating",
+      "shell": "44 pages; javdb3Preview and javdb3AuthDiag declared; numeric version build and pinned entry",
+      "pending": [
+        "real Android Hiker preview imagery",
+        "same-ID preview page authenticated API response",
+        "homepage screenshots light/dark and scroll",
+        "VIP play/magnet regression"
+      ]
+    }
+  },
+  "stableChanged": false,
+  "latestChanged": false,
+  "activeTestChanged": false,
+  "status": "test-only pending Hiker real-device verification",
+  "updatedAt": "2026-11-16"
+}
