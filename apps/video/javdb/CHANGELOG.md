@@ -2,6 +2,40 @@
 
 > 2026-09-22 起将此前长篇历史归档到 `CHANGELOG_PRE_3950_20260922.md`。当前文件保留活动基线、最近实机结论、当前修复与回退边界。事实优先级：用户当前实机 > 当前 Shell / Release / 源码 > 本文件 > registry/manifest > 历史归档。
 
+## 2026-11-16 · 3.9.55-test.1 / Build2026111601 · 官方 APP 1.9.39.4 RC 分类兼容与新功能试验
+
+### 恢复基线
+- Stable **仍为 3.9.42 / Build2026082301**；latest 不变；活动 Test 指针仍为 3.9.50-test.1（有已记录的 VIP 首播回归）。
+- 本次基于 Test54 实验代码派生，继承 Test51 原始 HLS 回退及 Test54 光鸭动态路由（两者仍含待实机确认项）；未修改 Stable 或活动 Test 指针。
+- 新规则壳 **Test55 / 2026111601** 共 43 个页面（原 Test50 41 页 + 随机推荐、站内通知）。
+
+### APK 静态证据
+- 用户上传：jdb_official_v1.9.39.4_RC.apk，约 27 MB，Flutter AOT。
+- ARM64 libapp.so 明确包含 API 路由：/api/v2/tags、/api/v1/movies/tags、/api/v1/advanced_search、/api/v1/movies/lucky、/api/v2/users/notifications、/api/v2/users/read_notifications、/api/v1/users/feedback。
+- APK 中还找到 TodayFirstMagnets、YesterdayFirstMagnets、Ed2kFileLink、LuckyPage、FeedbackConversationPage、search_advanced_entry 等符号。仅说明客户端包含相应代码，不证明新 API 的完整参数、签名与服务端成功响应。
+- 官方 1.9.39 公测记录列出组合高级搜索、随机推荐、通知/反馈对话、短评改版、今日/昨日首种、ED2K、后台模糊与原生离线下载增强；原生下载与任务界面模糊并非 JS 海阔规则可等价复制的能力。
+- 分类接口仍见于新 APK；不能根据“部分分类失效”直接推断整个 API 删除。已有请求合同：/api/v2/tags?type=0..4，然后 /api/v1/movies/tags?filter_by={type}:t:{main}:{extra}:{year}:{duration}:{month}。
+
+### 本轮修复（隔离在新 Test 代码）
+- taxonomy_features_patch.js：将 tags 字典响应兼容为分组数组，校验分类 filter 结构；API 真正失败时尝试安全排序回退或缩窄复杂标签。**正确返回的空列表不自动切换到不相关分类。**
+- 分类回退时在 UI 明示原因及请求参数；新增「重置复杂筛选」，用户自行决定是否清空年份/月份/时长/标签。
+- 仅向 home / filters / category / moreHub5 / luckyPage / notificationsPage 注入补丁；不改 VIP 播放与磁链 Provider 链。
+- 「手气不错」：接入 /api/v1/movies/lucky，只在检测到登录 token 时发起只读授权请求；支持换组、兼容多种列表响应结构。
+- 「站内通知」：只读请求 /api/v2/users/notifications，不修改已读状态。
+- **未宣称实现** Advanced Search 的新请求体/签名、ED2K 数据字段、客服反馈会话/图片上传、下载 MP4 或后台系统隐私模糊；均需进一步证据与实机验证。
+
+### 发布形态与回归
+- Entry：apps/video/javdb/releases/3.9.55-test.1/local_entry.js
+- Patch：apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js
+- Release：apps/video/javdb/releases/3.9.55-test.1/release.json
+- Shell：cloud/javdb/v3.9.55-test.1/javdb_v3.9.55_test1_apk1939.txt
+- 导入：cloud/javdb/v3.9.55-test.1/import_apk1939.js，cloud_token.txt
+- 已通过：JS 语法、Shell JSON 结构、43 页面、build=2026111601、模拟接口排序回退与 tags 字典归一、模拟新增页面渲染。
+- 尚未通过：真实官方 API 的签名/返回、海阔 Android 实机加载、0～4 类完整筛选、VIP 起播与 Seek、磁链长按及光鸭。
+- 回退：当前 Stable 3.9.42，Test55 只通过独立云口令交付，活动渠道元数据暂不切换。
+
+---
+
 ## 当前活动边界
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
