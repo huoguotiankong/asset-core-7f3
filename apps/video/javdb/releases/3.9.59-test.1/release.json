@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "id": "javdb-v3",
+  "channel": "test-experimental",
+  "version": "3.9.59-test.1",
+  "build": 2026111605,
+  "baseStable": {
+    "version": "3.9.42",
+    "build": 2026082301,
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "3.9.58-test.1",
+    "build": 2026111604
+  },
+  "entry": {
+    "path": "apps/video/javdb/releases/3.9.59-test.1/local_entry.js",
+    "ref": "ec84100da1f7e8fff91458ed34b69e25f538aefe",
+    "blob": "f3c9dd5461038cf75c532ff67032b5fbb0ee967b"
+  },
+  "searchAuditPatch": {
+    "path": "apps/video/javdb/releases/3.9.59-test.1/search_auth_audit_patch.js",
+    "ref": "4439435ce2a0bd85171e3833c08d87e99e84a8bc",
+    "blob": "8c7bafe027f2ccd9ef8ee37343b33774be3bce1a"
+  },
+  "shell": {
+    "path": "cloud/javdb/v3.9.59-test.1/javdb_v3.9.59_test1_search_auth.txt",
+    "version": 2026111605,
+    "pages": 44,
+    "blob": "41dbd35ff9fd3d5b251b41febb509ff399c9f160"
+  },
+  "audit": {
+    "path": "apps/video/javdb/releases/3.9.59-test.1/AUTH_SURFACE_AUDIT.md",
+    "ref": "04598e961f9da58f4255a4d54da743854415b566",
+    "blob": "cec6e191ac522ae07cfa8545836ca50c4417e6c5"
+  },
+  "dependencies": [
+    {
+      "path": "apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js",
+      "ref": "4fa91e8c99413186bda7f21da6e80ff4aa8e827f"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js",
+      "ref": "ec4d43c44c14d1c830e221d1f366461d8bbcaf5b"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.57-test.1/home_layout_patch.js",
+      "ref": "047bcdaa59fd6140a84dc6aea2deb73cbf67f835"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.58-test.1/auth_bridge_patch.js",
+      "ref": "4bde0ce94937c1e9f51d7d7b1a4688b3012e6d72"
+    },
+    {
+      "path": "apps/video/javdb/releases/3.9.58-test.1/magnet_legacy_compat.js",
+      "ref": "a909e582393d5efa0cd4b8756b47eb1d441a1538"
+    }
+  ],
+  "deviceEvidence": "2026-11-16 20:25 user screenshot: JavDB Search meyd-831 returns JWTVerificationError 请登录账号; user previously confirmed logged in",
+  "confirmedRootCause": "Both custom javdb3Search and Hiker __searchFind bypass JDB API client with their own signed fetch lacking Authorization, so the Test56-58 AuthGate did not apply.",
+  "changes": [
+    "Replace only original jdbApiPath(path,params) helper in both compressed custom search variants with call to centralized JDB.apiSafe; preserve sorting, filters, history, pagination and entity fallback byte for byte.",
+    "Expand Core gate to all zero-argument JDB.method() pages, eliminating manual allowlist omissions while leaving unknown complex JS and third-party custom modules untouched.",
+    "Read-only endpoint diagnostics: local token existence, profile, search meyd-831, tags, rankings; never display credential material, do not send extra requests until user taps a diagnostic.",
+    "Retain Test58 magnet bridge and Test50/52/54 legacy menu chain and Test51 raw VIP HLS #noPre# cleanup; no further playback or login mutation.",
+    "Keep standalone changelog and audit risks for review like POST and account auto-logout on JWT failure."
+  ],
+  "validation": {
+    "static": "passed",
+    "mock": [
+      "Actual 12,462-byte javdb3Search and 12,193-byte __searchFind gzip sources: only the helper changed; 2 actual-source syntax checks passed",
+      "Mock full wrapper normal Search and Hiker global searchFind: public JWT -> authorized call -> MEYD-831 movie row rendered",
+      "Mock libraryHub4 Core no longer missed by allowlist, API fallback succeeded",
+      "Mock VIP metadata JWT auth and original HLS URL without #noPre# preserving header",
+      "Diagnostics default view produces zero network calls"
+    ],
+    "notVerified": [
+      "Real JavDB APP API accepts saved local token",
+      "All Core pages runtime on user Hiker Android",
+      "Actual searches/filters/rankings/preview/VIP/magnet returned proper media",
+      "Review like POST needs Authorization",
+      "Account auto-logout policy with invalid token"
+    ]
+  },
+  "status": "test-only: source + simulated integration passed; physical Android and live server acceptance pending",
+  "stableChanged": false,
+  "latestChanged": false,
+  "testPointerChanged": false,
+  "updatedAt": "2026-11-16"
+}
