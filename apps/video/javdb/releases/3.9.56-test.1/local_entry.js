@@ -10,7 +10,7 @@ var PATCH_LOCAL=ROOT+'taxonomy_features_patch.js',PATCH_REF='4fa91e8c99413186bda
 var PATCH_PATH='apps/video/javdb/releases/3.9.55-test.1/taxonomy_features_patch.js';
 var PATCH_CACHE='';
 function taxonomyPatch(){if(PATCH_CACHE)return PATCH_CACHE;
-  ensureFile(PATCH_LOCAL,PATCH_REF,PATCH_PATH,'3.9.56-test.1');
+  ensureFile(PATCH_LOCAL,PATCH_REF,PATCH_PATH,'3.9.55-test.1');
   PATCH_CACHE=String(readFile(PATCH_LOCAL)||'');
   if(bad(PATCH_CACHE)||PATCH_CACHE.indexOf('apk1939Compatibility')<0)throw new Error('分类补丁缺失或损坏');
   return PATCH_CACHE;
