@@ -1209,3 +1209,11 @@ VIP playPage 的 Test51 版本有严格的 JDB.playPage() 字符串匹配后处�
 JavDB Test58 在解决磁链独立 API 无 Authorization 后，曾准备通过 JDB Core eval 直接执行原磁链模块。虽然模块主体源码相同，但原 Test50、Test52 的磁链 metadata 和六项长按菜单实际是 m.custom 外部包装器：改走 Core eval 会绕过这些增强层，导致“认证已修好但功能倒退”。
 
 处理方式：任何模块入口迁移都必须建立旧运行时包装链调用图，明确原始实现、每层拦截 patch、输出修饰器以及它们的执行顺序。必要时从已钉住版本源码还原旧装饰器，再有序应用；回归不只测接口成功，还应断言菜单顺序、元数据字段、播放 URL/headers 不回退。真实 Android 设备仍必须验证。
+
+## 2026-11-16 · 「修好 Core API」不等于修好站内搜索：Hiker searchFind 和 Custom 需要单独审计
+
+JavDB v3 Test59 的真实截图显示搜索 JWTVerificationError。其 Shell 的页面搜索 `javdb3Search` 和系统 `searchFind: custom('__searchFind')` 都调用压缩 Custom 中独立的 `jdbApiPath`，单独 fetch 官方 API，缺少 Authorization，因此 Test56～58 的 Core AuthGate 对这两个入口毫无影响。
+
+以后修复登录/JWT 必须遍历：**Shell 页面路由与 searchFind → Core/Custom 入口 → 真实请求 helper → 最终 Header/签名 → 是否为 GET/POST → 账号状态影响**。不要再通过人工列几个 JDB 方法的白名单判断“全局鉴权完成”；同质 Core 无参页可以在严格格式匹配下统一注入，但复杂调用必须保留原上下文，Custom 只能修改明确的网络 helper，禁止改动画面/菜单/媒体协议。直接接口成功也不等于页面已调用修复版模块，必须用真实运行链模拟及安卓实机截图佐证。
+
+风险边界：旧账号中心收到 JWTVerificationError 会调用 logoutUser 清 Token；旧评论点赞 POST 头未见 Authorization。**写操作、自动退出、凭据存储不得因为单个 GET JWT 故障就自动改写**，应区分当前账号仍有效、Token 已失效、单端点合同变更、缓存导致旧入口未加载。诊断只展示是否存在本地凭据与受保护端点是否成功，绝不显示 Token 原文。
