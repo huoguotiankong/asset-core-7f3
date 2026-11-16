@@ -43,6 +43,18 @@ function bridge(){
   BRIDGE_CACHE=JavDBAuthBridge3958;
   return BRIDGE_CACHE;
 }
+var COMPAT_LOCAL=ROOT+'magnet_legacy_compat.js',COMPAT_REF='a909e582393d5efa0cd4b8756b47eb1d441a1538';
+var COMPAT_PATH='apps/video/javdb/releases/3.9.58-test.1/magnet_legacy_compat.js',COMPAT_CACHE=null;
+function compat(){
+  if(COMPAT_CACHE)return COMPAT_CACHE;
+  ensureFile(COMPAT_LOCAL,COMPAT_REF,COMPAT_PATH,'3.9.58-test.1');
+  var src=String(readFile(COMPAT_LOCAL)||''),JDBMagnetCompat3958=null;
+  if(bad(src)||src.indexOf('patchMagnetMenu')<0||src.indexOf('patchMagnets')<0)throw new Error('磁链历史增强层损坏');
+  eval(src);
+  if(!JDBMagnetCompat3958||typeof JDBMagnetCompat3958.enhance!=='function')throw new Error('磁链增强层导出异常');
+  COMPAT_CACHE=JDBMagnetCompat3958;
+  return COMPAT_CACHE;
+}
 function bad(t){t=String(t==null?'':t).replace(/^\uFEFF/,'').trim();return !t||/^(?:<!doctype|<html|Bad Gateway|Too Many Requests|Service Unavailable|Gateway Timeout|Not Found|Error\b|Exception\b|HTTP\b|Cannot\b|Couldn(?:'|’)t\b)/i.test(t);}
 function urls(ref,path){return['https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/'+ref+'/'+path,'https://cdn.jsdelivr.net/gh/huoguotiankong/asset-core-7f3@'+ref+'/'+path,'https://github.com/huoguotiankong/asset-core-7f3/raw/'+ref+'/'+path];}
 function ensureFile(local,ref,path,marker){if(fileExist(local)){try{var old=String(readFile(local)||'');if(!bad(old)&&old.indexOf(marker)>=0)return local;}catch(_e){}try{deleteFile(local);}catch(_e2){}}var us=urls(ref,path),es=[],i,s='';for(i=0;i<us.length;i++){try{s=String(fetch(us[i],{timeout:6500,headers:{'Cache-Control':'public, max-age=31536000, immutable'}})||'');if(bad(s)||s.indexOf(marker)<0)throw new Error('无效响应');writeFile(local,s);if(!fileExist(local))throw new Error('写入失败');return local;}catch(e){es.push((i+1)+':'+String(e.message||e));}}throw new Error(path+' 下载失败：'+es.join(' | '));}
@@ -77,7 +89,7 @@ function module(){
         var modules=m.customData(),src=modules&&modules.javdb3Magnets;
         var patched=bridge().magnetSource(src);
         return oldCore.call(m,prelude()+'eval('+JSON.stringify(patched)+');');
-      },patchGuangya);
+      },function(items){return patchGuangya(compat().enhance(items));});
     }
     return oldCustom.call(m,key);
   };
