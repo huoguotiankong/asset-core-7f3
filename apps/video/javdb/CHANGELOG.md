@@ -69,6 +69,38 @@
 
 ---
 
+## 2026-11-16 · 3.9.57-test.1 / Build2026111603 · 预览图 JWT 和首页排版修复
+
+### 用户 19:19 实机事实
+- 首页推荐正常加载；导航处原有五个快捷 icon_5（筛选、排行、演员、收藏、更多）被 Test55 新增的 text_2「手气不错」大卡插在中间，导致 2+3 图标错位。
+- 预览图页返回 JWTVerificationError: 请登录账号。用户已报告账号登录；但没有真实请求证据证明当前规则 Token 有效，不能断言服务器最终授权会通过。
+- 复核当前 gzip Base Core 得出：JDB.preview() 通过 apiSafe('/api/v4/movies/'+id,{}) 请求影片预览；Test56 m.core 的鉴权补丁注入正则未列入 JDB.preview()，故该页面未使用 Test56 已实现的匿名 JWT → 授权重试。
+- Test55 首页补丁把随机推荐 text_2 卡插入五个连续 icon_5 的中间，违反海阔连续组件分组布局语义。
+
+### Test57 修改边界
+- 新入口 apps/video/javdb/releases/3.9.57-test.1/local_entry.js 将 JDB.preview() 纳入现有 AuthGate 注入白名单。继续使用当前 API / 预览图片渲染 / pics:// 合同；匿名 JWT 时才依据规则已存 Token 授权重试，不修改登录态、签名或播放器。
+- 新 UI 模块 apps/video/javdb/releases/3.9.57-test.1/home_layout_patch.js 只在首页第一页输出上修改布局：移除 Test55 大卡，将唯一「🎲 手气不错」改为资讯旁的横向 scroll_button；五个快捷 icon_5 连续一排，不引入新的二级页面栈。
+- 搜索框文案简化、浅色背景；首页两列/三列封面 metadata 去掉 YYYY-MM-DD 日期重复叠加，保留编号、评分、收藏等原数据，不修改用户的封面布局选择。
+- 继承 Test55 分类标签兼容 / Test56 JWT 鉴权与诊断，磁链、VIP、第三方播放、账号功能不变。
+- 缓存根目录改为 b2026111603；Stable 3.9.42、Latest、当前活动 Test 3.9.50-test.1 不动。
+
+### 代码验证
+- 通过 JS 语法、Shell JSON 与 44 页检查，以及隔离假 API：/api/v4/movies/{id} 匿名 JWT → 授权重试成功 → 预览图片条目输出。
+- 隔离 UI 模拟：五图标顺序完全恢复；唯一手气不错入口属于 scroll_button；电影封面描述去除日期但保留编号与评分。
+- **仍待实机**：真实 API 账号授权、预览图图片展示、主页实际样式、VIP 播放与磁链长按回归。不能将静态模拟写成已实机通过。
+- 如果 Test57 预览仍 JWT 拒绝，优先查 更多 → 账号接口诊断 是否通过，禁止要求用户反复退出登录或展示 Token 原文。
+
+### 发布与回退
+- Entry: apps/video/javdb/releases/3.9.57-test.1/local_entry.js
+- UI: apps/video/javdb/releases/3.9.57-test.1/home_layout_patch.js
+- Release: apps/video/javdb/releases/3.9.57-test.1/release.json
+- Shell: cloud/javdb/v3.9.57-test.1/javdb_v3.9.57_test1_preview_home.txt
+- Import: cloud/javdb/v3.9.57-test.1/import_preview_home.js
+- 云口令: cloud/javdb/v3.9.57-test.1/cloud_token.txt
+- Rollback: Stable 3.9.42 / Build2026082301
+
+---
+
 ## 当前活动边界
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
