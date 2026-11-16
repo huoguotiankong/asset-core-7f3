@@ -101,6 +101,41 @@
 
 ---
 
+## 2026-11-16 · 3.9.58-test.1 / Build2026111604 · VIP/磁链 JWT 鉴权补丁链修复
+
+### 用户真实实机反馈（19:36）
+- JavDB VIP 播放页提示「影片信息加载失败 / JWTVerificationError: 请登录账号」。
+- 磁链页提示「磁链加载失败 / 请登录账号」；用户前轮明确反馈账号已登录，不能直接令用户反复退出重登。
+- 当前没有服务端授权抓包，所以不能将此阶段的 JS 修正视为「已通过官方服务器实际鉴权」。
+
+### 当前源码确认的两条独立故障路径
+1. Base JDB.playPage() 使用 JDB.apiSafe('/api/v4/movies/'+id) 读取影片信息；Test57 在 m.core 中动态注入鉴权补丁时遗漏 playPage，导致该页不走 Test56 的 JWT 失败后授权重试。
+2. javdb3Magnets 使用独立 customData 的 JS 程序（原版约 6.1 KB），内部自行实现 api(path) 且 fetch 请求头只携带 jdsignature、UA、accept 等，没有 authorization。此前仅修改 JDB.apiSafe，根本无法作用到 custom 中自建的网络请求，因此仍返回「请登录账号」。
+
+### Test58 维修方案
+- 新建 apps/video/javdb/releases/3.9.58-test.1/auth_bridge_patch.js。修磁链时从 m.customData() 读取真实原始 custom 模块，仅精准替换本地 function api(path) 实现为 JDB.apiSafe(path,{})，由 Test56 AuthGate 在 JWT 失败时有限重试规则内保存 Token 的授权请求。其它磁链列表、质量排序、HD/4K/字幕、115/迅雷/PikPak/光鸭/123/复制菜单代码字节保持不变；找不到原结构时拒绝覆盖而不是猜测。
+- 新建 Test58 local_entry.js：JDB.playPage() 纳入 AuthGate 动态注入；保留现有首页 Test57、分类 Test55、Token 网关 Test56，且独立缓存目录 b2026111604。
+- **注意 HLS 回归**：Test51 的 restoreRaw 对「JDB.playPage();」做的是严格字符串匹配；前缀插入 eval(authPatch) 将绕过旧 hook。Test58 在 JDB.playPage 输出上重施等价 restoreVip，只删除直接 URL、JSON URL 数组中的 #noPre#，保留 headers、播放线路、M3U8、Seek 和长按行为，避免重现 Test50 0kb/s 首播问题。
+- 新磁链 custom 程序经原 Core 作用域 eval 执行，因此可以访问 JDB.apiSafe / API 签名及授权客户端，而不是使用另一套未登录 API。
+- 账号仍以本规则内的 jdb3_token 为准，修复不会自行清除/记录/上传用户 Token；保留账号接口诊断和旧 Stable 回退。
+
+### 已验证与未验证
+- 对真实压缩 customData 的 javdb3Magnets 源码抽取并比对：新旧区别仅限局部 API helper，原有资源列表/筛选/长按逻辑保持原文。
+- Bridge JS 语法通过；Core/Custom 模块模拟通过：旧无 Token 请求 → 模拟 JWT → 现有授权重试 → 磁链数量显示正常；VIP 影片信息同样进入授权重试，播放行 URL 中 #noPre# 仍被移除，Referer/headers 保持不变。
+- **尚未验证**：官方服务端当前是否接受本地 Token，JavDB VIP 会员权限及实际 HLS 起播/Seek，磁链数据与长按真实动作，以及 Android 海阔实机表现。不得将 Test58 标记为 Stable。
+- 如果 Test58 仍提示 JWT，应先打开 更多 → 账号接口诊断，分别对比账号资料与分类/排行接口，再进一步调查服务端 Token 有效性和新的签名合同，不能无条件重试或要求用户反复登录。
+
+### 交付路径
+- Entry: apps/video/javdb/releases/3.9.58-test.1/local_entry.js
+- AuthBridge: apps/video/javdb/releases/3.9.58-test.1/auth_bridge_patch.js
+- Release: apps/video/javdb/releases/3.9.58-test.1/release.json
+- Shell: cloud/javdb/v3.9.58-test.1/javdb_v3.9.58_test1_auth_bridge.txt
+- Import: cloud/javdb/v3.9.58-test.1/import_vip_magnet_auth.js
+- 云口令: cloud/javdb/v3.9.58-test.1/cloud_token.txt
+- Stable: 3.9.42, Latest 和 Test 活动指针不变。
+
+---
+
 ## 当前活动边界
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
