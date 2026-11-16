@@ -142,6 +142,43 @@
 
 ---
 
+## 2026-11-16 · 3.9.59-test.1 / Build2026111605 · 搜索与全 Core 鉴权覆盖
+
+### 20:25 实机反馈与再次确认的根因
+- 用户截图：搜索 MEYD-831，页面显示搜索失败 / JWTVerificationError: 请登录账号。
+- 已从 asset-core-7f3@main 实际读取 3.9.58 的 Shell、Entry、Release，解压 v3.9.41 本地基座 gzip Core 和 15 个 Custom 模块。确定「JAVDB 搜索」`javdb3Search` 与 Shell `searchFind` 的 `__searchFind` 均有独立的 `jdbApiPath`，直接向 `/api/v2/search` 发送仅含签名/UA/accept、缺少 Authorization 的 fetch；实体搜索还会查 `/api/v4/movies/{id}`。
+- Test58 只修了独立磁链，不覆盖这两套搜索 Custom；之前 Test56～58 的 m.core 还采用零散 JDB 方法白名单，存在持续漏修其它 Core 页面的结构性风险。
+- **用户账号显示登录不等于当前规则的 token 已被服务端验证**。未获取设备真实响应前，只确认漏授权的源码根因及模拟修复，不宣称真实搜索已经恢复。
+
+### Test59 修改与边界
+- 新模块：apps/video/javdb/releases/3.9.59-test.1/search_auth_audit_patch.js。
+- 只在 `javdb3Search` 与 `__searchFind` 的独立 Custom 原始源码中替换局部 `jdbApiPath(path,params)` 为统一 `JDB.apiSafe`，继承 Test56 JWT → 本地 Token 授权重试；其余原始搜索过滤、排序、分页、历史、演员/系列/片商/导演/番号回退及卡片渲染不变。
+- Test59 Entry 改为对 `JDB.method();` **全部无参 Core 页面**统一注入 Test55 taxonomy / Test56 AuthGate；不再依赖 `home|rank|play|preview|...` 的人工名单，避免同类遗漏。对复杂 JavaScript、第三方 Custom 不做修改。
+- 独立磁链的 Test58 AuthBridge、Test50/52 元数据/六项长按、Test54 光鸭动态路由和 Test51 VIP HLS #noPre# 清理完整继承，缓存根目录升级到 b2026111605。
+- `更多 → 账号接口诊断` 改为只读按需检测：本地 Token 是否存在、账号资料、搜索 MEYD-831、分类标签、热播日榜。不展示账号、Token、Cookie 或完整请求头，不点击检测就不发诊断网络请求。
+- 新审计报告：apps/video/javdb/releases/3.9.59-test.1/AUTH_SURFACE_AUDIT.md，逐项列出请求栈、修复覆盖、待验证点及已发现未更改风险。
+- 后续风险：旧评论详情点赞 POST /reviews/{id}/like 自建请求头未见 Authorization；旧账号中心在 /api/v1/users JWT 失败时有自动清空本地 Token 的流程。本轮避免猜测签名/POST 写入合同，暂保留原行为，优先等待对应实机证据。
+
+### 实际完成的离线回归
+- 从原 gzip Custom 实际取出两个搜索模块，源码各自只替换 jdbApiPath helper，前后部分逐字相同，JS 语法均通过。
+- 真实模块/包装链模拟：搜索页和全局搜索页在公开端点模拟 JWT 失败后调用已存 Token 的授权客户端，均渲染出 MEYD-831 的模拟影片卡片。
+- 无参 Core 新通配已使此前未被白名单覆盖的 libraryHub4 走统一 AuthGate；模拟 JWT→授权后页面显示成功。
+- VIP 继承测试仍能去掉 #noPre#，保留请求头；新账号诊断默认显示四个检测入口且未自行发网络请求。
+- **未完成**：真实海阔 8.83 安卓上的服务端 JWT/签名/账号权限、搜索数据及分页、VIP 首帧与 Seek、磁链长按实际行为。Test59 不提升 Stable / 活动 Test。
+- 验收建议：Test59 导入后首先搜索 MEYD-831、尝试系统全局搜索，再用「更多 → 账号接口诊断」分别检查账号/搜索/分类/热播；成功后继续回归预览图、VIP、磁链和我的清单。只需返回错误截图，禁止分享 Token/Cookie。
+
+### 发布 / 回退
+- Entry：apps/video/javdb/releases/3.9.59-test.1/local_entry.js
+- Search：apps/video/javdb/releases/3.9.59-test.1/search_auth_audit_patch.js
+- Release：apps/video/javdb/releases/3.9.59-test.1/release.json
+- Audit：apps/video/javdb/releases/3.9.59-test.1/AUTH_SURFACE_AUDIT.md
+- Shell：cloud/javdb/v3.9.59-test.1/javdb_v3.9.59_test1_search_auth.txt
+- 导入：cloud/javdb/v3.9.59-test.1/import_search_auth.js
+- 云口令：cloud/javdb/v3.9.59-test.1/cloud_token.txt
+- Stable：3.9.42 / Build2026082301，Latest 和活动 Test 3.9.50-test.1 不变。
+
+---
+
 ## 当前活动边界
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
