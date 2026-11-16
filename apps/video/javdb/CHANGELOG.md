@@ -119,6 +119,12 @@
 - 新磁链 custom 程序经原 Core 作用域 eval 执行，因此可以访问 JDB.apiSafe / API 签名及授权客户端，而不是使用另一套未登录 API。
 - 账号仍以本规则内的 jdb3_token 为准，修复不会自行清除/记录/上传用户 Token；保留账号接口诊断和旧 Stable 回退。
 
+### 额外发现的包装器回归与最终修正
+- 把 magnet 自定义代码放进 JDB Core eval，虽然保留原 custom 文本，却会**绕过** Test50 patchMagnets（大小/HD/4K/字幕、115）与 Test52 patchMagnetMenu（六项菜单顺序）两个原有 m.custom 包装器。Test58 初版静态审查发现此风险，已在云口令交付前修正。
+- 新增 apps/video/javdb/releases/3.9.58-test.1/magnet_legacy_compat.js，从固定 Test50、Test52 源码提取完整原始相关函数，在授权版磁链数据渲染后按顺序执行 Test50 metadata+115 → Test52 六项菜单 → Test54 光鸭动态跳转。
+- 联合模拟确认条目含 1G / 4K / 2文件，长按严格为 115 → 迅雷 → PikPak → 光鸭 → 123 → 复制磁链；VIP 保留 Referer，移除 #noPre#；两个接口均在模拟匿名 JWT 错误后通过已有 Token 授权重试。
+- 最终发布 Entry Git commit 156a382bda2de1b177d55ce0314e45e3b8492165，Shell / Importer 已同步更新，Release 元数据含完整兼容模块。仍待 Android 实机确认。
+
 ### 已验证与未验证
 - 对真实压缩 customData 的 javdb3Magnets 源码抽取并比对：新旧区别仅限局部 API helper，原有资源列表/筛选/长按逻辑保持原文。
 - Bridge JS 语法通过；Core/Custom 模块模拟通过：旧无 Token 请求 → 模拟 JWT → 现有授权重试 → 磁链数量显示正常；VIP 影片信息同样进入授权重试，播放行 URL 中 #noPre# 仍被移除，Referer/headers 保持不变。
