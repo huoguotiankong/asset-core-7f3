@@ -15,8 +15,8 @@
   },
   "entry": {
     "path": "apps/video/javdb/releases/3.9.58-test.1/local_entry.js",
-    "ref": "828bb95621a0197583b774b095cd5b14c66a283f",
-    "blob": "444963e4061f1cb41cefba106dcbc02fb3325b37"
+    "ref": "156a382bda2de1b177d55ce0314e45e3b8492165",
+    "blob": "b06a56e1243d1b605e94e6fea715df3a985e8790"
   },
   "authBridge": {
     "path": "apps/video/javdb/releases/3.9.58-test.1/auth_bridge_patch.js",
@@ -25,7 +25,7 @@
   },
   "shell": {
     "path": "cloud/javdb/v3.9.58-test.1/javdb_v3.9.58_test1_auth_bridge.txt",
-    "blob": "017f830eb98ca14b1c7d9948819fe97450445c4f",
+    "blob": "ecae598bbb75ec9ad6afa38f6af38b6c830d9734",
     "version": 2026111604,
     "pages": 44
   },
@@ -58,7 +58,8 @@
     "Load original custom magnet JS through m.customData() and replace only its local api(path) helper with a call to the central authorized-capable JDB.apiSafe; preserve remainder of custom implementation byte-for-byte.",
     "Keep previous Guangya magnetic action patch, metadata, filter/sort, cloud long-press callbacks.",
     "Restore Test51 raw HLS #noPre# cleanup around prefixed JDB.playPage result, preserving headers and avoiding player rewrites.",
-    "Separate local cache root b2026111604 and pinned immutable source refs."
+    "Separate local cache root b2026111604 and pinned immutable source refs.",
+    "Restore previous magnet wrappers that are bypassed by core-scope custom eval: Test50 patchMagnets -> Test52 patchMagnetMenu -> Test54 patchGuangya. Exact source definitions copied from pinned test entry files and independently syntax/simulation validated."
   ],
   "validation": {
     "syntax": "passed",
@@ -67,7 +68,8 @@
       "Real module wrapper with fake baseline and JWT-denying public API: magnets uses public /api/v1/movies/{id}/magnets then authorized retry and displays result",
       "VIP metadata uses public /api/v4/movies/{id} then authorized retry and emits play row",
       "VIP HLS #noPre# stripped for direct and JSON URL arrays while preserving headers",
-      "Existing Shell 44 pages; stable latest active Test pointers unchanged"
+      "Existing Shell 44 pages; stable latest active Test pointers unchanged",
+      "Legacy magnet compatibility: example magnet item retained 1G/4K metadata and exactly 115→迅雷→PikPak→光鸭→123→复制磁链 ordering."
     ],
     "pending": [
       "User Android Hiker after importing Test58",
@@ -81,5 +83,11 @@
   "stableChanged": false,
   "latestChanged": false,
   "testPointerChanged": false,
-  "updatedAt": "2026-11-16"
+  "updatedAt": "2026-11-16",
+  "magnetLegacyCompat": {
+    "path": "apps/video/javdb/releases/3.9.58-test.1/magnet_legacy_compat.js",
+    "ref": "a909e582393d5efa0cd4b8756b47eb1d441a1538",
+    "blob": "1a6639dd67d6981c1267d61f7b75f8225bcdaaa2",
+    "behavior": "Reapply original Test50 metadata & 115, Test52 canonical six-action menu, then Test54 Guangya route after authenticated magnet source renders"
+  }
 }
