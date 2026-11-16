@@ -1175,3 +1175,15 @@ JavDB 1.9.39.4 RC APK 的 Flutter AOT 可读字符串继续包含旧分类路由
 - 不在大范围播放/磁链/登录链上注入分类补丁；按需限制到相关页面，先 Test，再完整回归后才允许升 Stable。
 
 本轮 Test55 仅完成静态与模拟验证，真实网络/海阔设备未完成，不能记作分类全部修复。
+
+## 2026-11-16 · JWTVerificationError 不能直接判定用户未登录：先审计实际请求头
+
+JavDB v3 Test55 实机：账号用户明确称已登录；首页推荐成功，筛选和热播榜同时显示「JWTVerificationError: 请登录账号」。解压现用 JS Base Core 后证实，普通 JDB.apiSafe → JDB.api → buildApiHeaders('') **不会发送 Authorization**；该项目另有支持 raw/Bearer 两种模式的 apiAuthSafe，登录 token 本已保存。
+
+新增通用原则：
+- 「已登录」可能代表账号 UI、缓存用户资料、网页 Cookie、原生 APP 会话或当前规则的 API Token，必须逐项区分；不要先清除账号要求重新登录。
+- 鉴权定位先比对**同程序**的成功匿名接口与失败端点，检查最终请求头构造，不能仅因为 API 返回 JWT 错误就归因于签名/Token 过期。
+- 对只读 GET 允许遇到 JWT 错误时**有限一次**授权重试；明确权限端点可以优先使用授权客户端。不能把签名、Authorization/Cookie 原值打印到 UI/仓库/日志。
+- 原始 Token 与 Bearer 的候选只使用当前已验证的授权客户端，不凭空重构登录或写入陌生凭据。
+- 若带 Token 后仍 JWT 拒绝，再单独检查用户资料端点与目标端点，区分凭据失效、接口独立权限、签名或服务器变更；不得把「模拟通过」描述成 Android 实机通过。
+- 修复分页/排行时核对页面真实绑定的 JDB 方法，如 rankHub5，不能只覆盖名称相似但实际没有运行的 rank 方法。
