@@ -36,6 +36,39 @@
 
 ---
 
+## 2026-11-16 · 3.9.56-test.1 / Build2026111602 · 实机 JWTVerificationError 鉴权链修复
+
+### 用户真实实机现象与已确认原因
+- 用户在海阔 JAVDB v3 Test55 实机确认：首页推荐影片能加载；筛选与热播榜显示「JWTVerificationError: 请登录账号」，用户明确表示账号已登录。
+- 本轮实际解压并检查了当前 Local-First 基座 v3.9.41 的 core_00..06（gzip+base64）。证实：JDB.apiSafe 使用 JDB.api，始终通过 buildApiHeaders('') 发送**无 authorization 的请求**；JDB.apiAuthSafe 另有原始 Token / Bearer 自动候选，且登录把 Token 写入 jdb3_token。
+- 当前 APP 服务端对榜单/分类返回的 JWTVerificationError 与未带 Token 的请求合同吻合；但在没有抓取用户实机加密请求的情况下，不能断言“加上 Token 后一定成功”。必须区分「当前海阔进程保存 Token」与「官方 APP / 浏览器账号登录」。
+- Test55 仅重试排序和筛选条件，未修 JWT 鉴权，故不是根因修复。
+
+### Test56 实现
+- 新增 apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js，继承 Test55 分类协议补丁，API 层以本小程序 jdb3_token 为准。
+- 已有 token 时，分类 /api/v1/movies/tags、标签 /api/v2/tags、排行 /api/v1/rankings、热播 /api/v1/rankings/playback、演员月榜 /api/v1/rankings/actors、TOP /api/v1/movies/top 优先通过现有 apiAuthSafe 自动尝试 raw/Bearer 认证，成功直接使用，失败才按预期考虑公开端点回退。
+- 其它只读 GET 的 apiSafe 请求遇到 JWT 错误时仅进行一次授权重试；绝不在未验证身份时重写用户 token、删除账号或假装登录成功。
+- 区分：小程序本地 token 不存在、带 token 后服务端仍拒绝、匿名端点成功、其它 HTTP/API 失败，消息清晰且不打印 token 内容。
+- Test55 所覆盖的 home、filters、more、随机、通知继续兼容；新增加 rankHub5、rank、actorHub4 注入，避免只修首页/筛选而不修实际排行榜渲染函数。
+- 「更多」增加「账号接口诊断」；新增 javdb3AuthDiag 独立页面。默认只显示本地 token 是否存在；点击具体项目再只读检测 /api/v1/users、/api/v1/movies/tags、/api/v1/rankings/playback。诊断不展示 Token/Cookie/个人账号资料，不改已读/收藏。
+- 磁链长按、光鸭动态路由、VIP 播放继续继承 Test55，没有改动媒体 URL/headers 和播放逻辑。
+
+### 安全及验证边界
+- JS 语法、海阔 Shell JSON（44 个页面）和本地假服务端模拟通过：带 token 分类/热播优先授权且无匿名冗余请求，标签字典归一，失败分类、空 token 与 JWT 拒绝诊断。
+- **真实海阔 Android 及官方服务器请求尚未验证**。继续保留 Stable 3.9.42、latest、现有活动 Test 3.9.50-test.1，不宣称修复完全通过，不提升 Stable。
+- 当前实机下一步首先检测：新 Test56 首页、筛选基础类型、排行热播日/周/月；如果继续失败，打开「更多 → 账号接口诊断」，分别点账号资料、分类、热播。不要发送任何 Token/Cookie 原文或完整账号信息。
+- 如「账号资料验证成功、分类/热播失败」：优先检查目标接口的新权限、签名与路由；如账号资料也 JWT 拒绝，先调查当前小程序保存的 token 与服务器有效性，而不是认定用户没有登录。
+
+### 版本与交付
+- Entry：apps/video/javdb/releases/3.9.56-test.1/local_entry.js
+- AuthGate：apps/video/javdb/releases/3.9.56-test.1/auth_gate_patch.js
+- Release：apps/video/javdb/releases/3.9.56-test.1/release.json
+- Shell：cloud/javdb/v3.9.56-test.1/javdb_v3.9.56_test1_authfix.txt
+- 云口令：cloud/javdb/v3.9.56-test.1/cloud_token.txt
+- Restore：Stable 3.9.42 / Build2026082301，未触碰旧 Stable 与旧 Test 版本。
+
+---
+
 ## 当前活动边界
 
 - Stable：`3.9.42 / Build2026082301`，继续冻结，是业务稳定恢复基线。
