@@ -1195,3 +1195,11 @@ JavDB Test55 为首页加入「手气不错」时，在原 5 个连续的 icon_5
 同任务 Test56 只在已知 home/filters/rank 方法中注入 AuthGate，遗漏真正的预览页 JDB.preview()。该页仍使用匿名 apiSafe 查询 /api/v4/movies/{id}，导致原 JWT 错误继续存在。新增跨模块修复规则：列出 Shell 真实页面 method → m.core 动态补丁注入白名单 → 页面内部 API 调用路径，执行覆盖率检查；不得把通用 API Patch 写好但某个页面根本没加载，当作功能已修复。
 
 当前 Test57 仅通过静态与隔离模拟，真实海阔 UI 与图片协议仍待 Android 实机验证。
+
+## 2026-11-16 · 独立 Custom 网络栈不会自动继承 Core 的 JWT 补丁；注入前缀影响播放后处理
+
+JavDB Test58 源码已证实：压缩 customData 的 javdb3Magnets 不调用 JDB.apiSafe，独立实现签名 fetch 且缺失 Authorization。即使修复普通 Core 的 apiSafe/鉴权网关，也不能解决 Custom 页。必须逐页画出 Shell → Core/Custom → 实际请求实现的路径；给 Custom 接入统一认证客户端时只替换其本地 API helper，不可随意改其资源数据处理与菜单。
+
+VIP playPage 的 Test51 版本有严格的 JDB.playPage() 字符串匹配后处理，专门移除旧版本导致 0kb/s 起播回归的 #noPre#。如果在调用前加入 eval(prefix) 导致字符串不相等，后处理就会失效。新增任何 Core 动态补丁时，要检查旧包装层以调用字符串匹配的拦截器，必要时保留等价输出后处理，严禁默默覆盖视频头/播放 URL 或重启自动 M3U8 缓存。
+
+本轮仅通过静态和假 API 合同验证，仍需真实海阔 Android / 官方 API 授权确认。
