@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "appId": "51chigua",
+  "name": "51吃瓜",
+  "channel": "test-experimental",
+  "version": "0.1.1-test.2",
+  "build": 10202,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10106,
+    "release": "apps/video/51chigua/releases/0.1.0/release.json",
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "0.1.1-test.1",
+    "build": 10201
+  },
+  "sourceSnapshot": {
+    "ref": "9bfc77fe270c30bad1228e8a8ea93842c6c9a75f",
+    "originalModules": 10,
+    "assets": 7,
+    "meaning": "Immutable Stable 0.1.0 business chain and original SVG sources"
+  },
+  "entry": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.2/local_entry.js",
+    "ref": "90e09b2b6e0da7a539bdc5ed5e8dcb6c8a56332b",
+    "blob": "c825180edad8e929b7798e41ac0bf49f8c98a020"
+  },
+  "builder": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.2/local_bundle_builder.js",
+    "ref": "0c605dc133c724848134b98a212c8cd7609444f6",
+    "blob": "4c8c9b918818f4105c4bc6291d6558aca6a7d24f"
+  },
+  "localOverlay": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.2/final_local_patch.js",
+    "ref": "57fbba3bc1617541d275051611ef10aa73f8d4e6",
+    "blob": "3b7844852334d36d8dc3371247f11e39a8eec1a8"
+  },
+  "imageCompat": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.2/image_compat_patch.js",
+    "ref": "9afe6d4c059f7921bc3b9a414c5d68194b8ef113",
+    "blob": "a60cb9fcc74aad2222d88104a1265ad2fcbfd09f"
+  },
+  "shell": {
+    "path": "apps/video/51chigua/51chigua_remote_test_localfirst_v2_b10202.txt",
+    "ref": "6a2f8c44280269e3a27dabdc0aaaeae1958fa1a1",
+    "blob": "f4b5c1f608f30b52ae2ec1d1ce51f8324c130fd1",
+    "ruleVersion": 2026112101,
+    "pages": 11
+  },
+  "localFiles": {
+    "root": "hiker://files/rules/asset-core-local/51chigua-test/b10202/",
+    "runtime": "runtime_bundle.js",
+    "builder": "local_bundle_builder.js",
+    "bootstrapShim": "local_bootstrap.js",
+    "assets": "assets/"
+  },
+  "imageChanges": [
+    "Expand lazy cover attribute and srcset/background-image/inline JS extraction before historical parser fallback.",
+    "For historical /xiao/ and /upload/upload/ images, sniff Java InputStream signature: recognizable JPEG/PNG/GIF/BMP/WebP/AVIF/HEIF/ICO/SVG passed as plaintext; unknown bytes use prior AES/CBC/PKCS7 key/IV via Hiker bundled crypto-java.js.",
+    "Preserve existing @headers/User-Agent/Referer/Cookie contract and native movie_2 cards; no style, data-source, playback or comment rewrites.",
+    "Add settings link to cg51ImageDiag with counts of posts/valid covers, source host, encrypted-path counts and auto-vs-direct sample; no private data transmission."
+  ],
+  "validation": {
+    "status": "static+simulated passed; real Android still pending",
+    "syntax": "12 JS modules + new Builder/Entry/Shell pass",
+    "fixture": "5 image markup patterns; 2 article cards with encrypted-path URL and proper headers",
+    "imageMagic": "mock InputStream: JPEG/PNG/WebP/AVIF passthrough; unknown bytes take AES path",
+    "bundle": "19 sources (12 modules + 7 SVG); 73,744-byte runtime generated via source material fixture; no remote code residual",
+    "pending": [
+      "User Android Hiker home cover and detail image actual render",
+      "Test2 Image Diagnostics auto/direct comparison",
+      "Search, categories, comments, DPlayer/HLS, history/favorites smoke tests"
+    ]
+  },
+  "status": "isolated Test2 available for device acceptance, not approved as Stable",
+  "stableChanged": false,
+  "latestChanged": false,
+  "activeTestChanged": false,
+  "updatedAt": "2026-11-21"
+}
