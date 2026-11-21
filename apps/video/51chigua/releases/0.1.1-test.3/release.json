@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "appId": "51chigua",
+  "name": "51吃瓜",
+  "channel": "test-experimental",
+  "version": "0.1.1-test.3",
+  "build": 10203,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10106,
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "0.1.1-test.2",
+    "build": 10202,
+    "deviceResult": "Cover blank; image diagnostic shows no cover URL; numeric descriptions not visible"
+  },
+  "snapshotRef": "9bfc77fe270c30bad1228e8a8ea93842c6c9a75f",
+  "entry": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.3/local_entry.js",
+    "ref": "ca31f864c94cfaeb574271c49b832f8a16a1fcb2",
+    "blob": "e73ac131eb5cb3371b887c134cead0a003f8d26a"
+  },
+  "builder": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.3/local_bundle_builder.js",
+    "ref": "8397b58dfdf0ca48ae0be3e224351e5ae0226129",
+    "blob": "cd39f0d69a796e59863dff806377ad3eb3294846"
+  },
+  "coverSource": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.3/cover_source_patch.js",
+    "ref": "5de1a39fd6fc7b26685b18fa4721780a46258c4f",
+    "blob": "4002004a200753ea5bd64af6ffdd864e313672d6"
+  },
+  "sourceDependencies": [
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/final_local_patch.js",
+      "ref": "57fbba3bc1617541d275051611ef10aa73f8d4e6"
+    },
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/image_compat_patch.js",
+      "ref": "9afe6d4c059f7921bc3b9a414c5d68194b8ef113"
+    }
+  ],
+  "shell": {
+    "path": "apps/video/51chigua/51chigua_remote_test_localfirst_v3_b10203.txt",
+    "blob": "b330b53eda4fe2dacd354a0e7c09cfd42087aafa",
+    "ruleVersion": 2026112102,
+    "pages": 11
+  },
+  "changes": [
+    "Fix diagnostic readability: show website status, HTML length, post count, raw and final cover counts, fallback detail fetch and success counts directly in visible text_1 titles; previous text_2 descriptions were not visible on device.",
+    "For article cards without a valid raw cover URL, batch up to 12 same-site detail HTML requests (or at most 4 sequential if batch unavailable) and recover og:image, twitter:image, article image/JSON-LD/video poster.",
+    "Cache recovered cover URL per article for up to 3 days and cap stored records at 120, avoiding repeated per-detail fetching.",
+    "Preserve Test2 plaintext AES image sniff, original headers, C.image and native 2-column movie cards. No changes to movie media, comments, account, bookmarks or history.",
+    "Log HTML structural marker counts only (img/lazy/source/og:image/article links), do not store image contents or HTML, and avoid cross-article image guessing."
+  ],
+  "validation": {
+    "offline": [
+      "Test3 patch syntax and mock detail HTML cover recovered via og:image",
+      "Repeat homepage call reuses locally cached cover instead of network fetch",
+      "Diagnostic text_1 titles contain explicit numbers and sample auto/raw URL comparison",
+      "Builder simulated with 20 sources: 13 JS + 7 SVG, 81,085 byte runtime, no remote business dependencies",
+      "Shell JSON 11 pages and build 2026112102 cross reference validated"
+    ],
+    "pending": [
+      "Official site actual homepage HTML bytes in Hiker environment",
+      "Article detail metadata available in current source site",
+      "Hiker real JPG/WebP rendering under CDN/Referer/AES",
+      "Home covers after importing Test3 and image diagnostic screenshot"
+    ]
+  },
+  "cacheRoot": "hiker://files/rules/asset-core-local/51chigua-test/b10203/",
+  "status": "Test3 issued for device acceptance; not confirmed cover restored",
+  "stableChanged": false,
+  "latestChanged": false,
+  "activeTestChanged": false,
+  "updatedAt": "2026-11-21"
+}
