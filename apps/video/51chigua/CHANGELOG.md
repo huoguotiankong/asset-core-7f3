@@ -2,6 +2,46 @@
 
 > 当前恢复入口。Local-First 迁移前的 Test1-Test5 / Stable0.1.0 / 图片 AES、评论、播放、分类、搜索完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
+## 2026-11-21 · 0.1.1-test.2 / Build10202 · 首页空白封面兼容维修
+
+### 实机反馈（09:14）与版本边界
+- 用户提供当前手机截图：首页品牌图标、搜索/分类/收藏/历史入口、分类横条、标题都正常显示，但双列文章卡大面积空白，封面图片未显示。
+- 截图并不包含版本/Build，**不能从页面样式推断用户运行的是 Stable0.1.0 还是 Local-First Test1**。本轮继续沿用当前 Test1 的 Local-First 交付架构，并从 Stable 的十层已验证业务模块派生 Test2。
+- 经仓库恢复链确认 Stable0.1.0 / Build10106、Latest、活动 Test1 / Build10201 均不修改。
+- 目前可访问源站 `https://51cg1.com/` 的首页文章文本仍然存在；尚未能从本地受控请求获得用户设备所见封面实际字节，**不能把“源站明文改造/密钥更换”当成已证实原因**。
+
+### 当前源码中确认的风险点
+- Test2 Core 的 `C.image` 对 `/xiao/`、`/upload/upload/` 采取无条件 AES-CBC/PKCS7 解密。若源站某个既有路径改传明文 JPEG/PNG/WebP/AVIF，强制 AES 可能破坏正常图片字节，造成卡片空白。
+- 老 `C.firstImage` 优先只识别少数 `img` 属性（`data-xkrkllgl, data-original, data-src, data-lazy-src, src`）和 `loadBannerDirect/loadImage`。较新的 `data-echo/data-image/data-cover/data-srcset/srcset` 及 CSS background-image 无法提取，导致可能存在文章但 `pic_url` 为空。
+- 截图尚不足以区分实际根因究竟属于 HTML 抓取、图片响应、防盗链、明文/密文、图片解密兼容或图片组件的缓存。因此本次采用**兼容修复 + 可观察诊断**，不宣称实机已完成。
+
+### Test2 修改
+- 在 10 层不可变 Stable 业务链后加载 `final_local_patch.js`（复制 Test1，version/build/root 迁移至 Test2）再加载 `image_compat_patch.js`；原分类、搜索、评论 JSON、详情、DPlayer/HLS、收藏/历史不修改。
+- 封面提取新增懒加载字段、`srcset`、CSS 背景与 JS loader 的受限检测，仍以原文章链接附近的卡片片段为准，避免全站错误拼图。保留原有 `@headers` Cookie / Referer / UA。
+- 对历史 AES 路径，在海阔 `$().image()` InputStream 内先读取并 reset 短图片头，识别 JPEG/PNG/GIF/BMP/WebP/AVIF/HEIF/ICO/SVG 时原样返回；非明文时沿用原 AES-CBC/PKCS7、旧 key/IV 与内置 `hiker://assets/crypto-java.js`。不在 Renderer 层手工解码 Base64 或关闭 InputStream。
+- 新增 `cg51ImageDiag` 原生独立页，「设置与诊断」中可进入：统计首页文章数/提取封面数/加密路径数和主要图片域名，展示一张样本封面的「自动兼容 / 原始直连」两种效果及脱敏路径，不上传私人账号数据。
+- 独立 Local-First 缓存根 `hiker://files/rules/asset-core-local/51chigua-test/b10202/`；新增 Test2 Shell 数值规则版本 `2026112101`，共 11 个页面。
+- 旧 10 个业务模块和 7 个 SVG 仍固定旧 Source Ref `9bfc77fe270c30bad1228e8a8ea93842c6c9a75f`；Test2 overlay `57fbba3bc1617541d275051611ef10aa73f8d4e6`、图片补丁 `9afe6d4c059f7921bc3b9a414c5d68194b8ef113`，按路径分别 pin，不修改原不可变工件。
+
+### 验证层级与回归
+- 通过：新旧链 12 模块语法，模拟 HTML 的 `data-xkrkllgl`、`data-echo`、`srcset`、CSS 背景、JS loader 五种封面提取，以及两个文章条目对应封面 URL 和 `@headers/@js` 构造。
+- 通过：模拟 Java BufferedInputStream 对 JPEG/PNG/WebP/AVIF 直接透传，对非图像字节进入原 AES 解密流程；不随意重写 key/iv。
+- 通过：完整 Builder 以 19 源构造 73,744 字节 Runtime、12 业务模块 + 7 SVG；Runtime/Bootstrap JS 语法、硬禁私人 GitHub 业务依赖检查。
+- **未通过真实安卓实机**：首页封面、详情正文加密图、实际 CDN 响应及 Referer、网络缓存、DPlayer/HLS 播放、收藏/历史点击重入。需要用户 Test2 截图（首页与封面诊断）继续确认。
+- 回退：Stable0.1.0 / Build10106，或原 Test1 / Build10201，均未覆盖。
+
+### 交付
+- Entry：`apps/video/51chigua/releases/0.1.1-test.2/local_entry.js`
+- Builder：`apps/video/51chigua/releases/0.1.1-test.2/local_bundle_builder.js`
+- Final Overlay：`apps/video/51chigua/releases/0.1.1-test.2/final_local_patch.js`
+- Image Patch：`apps/video/51chigua/releases/0.1.1-test.2/image_compat_patch.js`
+- Release：`apps/video/51chigua/releases/0.1.1-test.2/release.json`
+- Shell：`apps/video/51chigua/51chigua_remote_test_localfirst_v2_b10202.txt`
+- Import：`apps/video/51chigua/cloud_import_test2_image.js`
+- 云口令：`apps/video/51chigua/cloud_token_test2_image.txt`
+
+---
+
 ## 当前活动边界
 - Stable：`0.1.0 / Build10106`，继续冻结，是当前业务稳定恢复基线。
 - Latest：仍指向 Stable `0.1.0`，不修改。
