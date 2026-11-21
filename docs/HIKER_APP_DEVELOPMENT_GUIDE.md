@@ -2528,3 +2528,14 @@ PikPak Test27 的导出/语法/mock 检查不代表已完成实际播放首帧/s
 7. **诊断隐私**：只显示请求类型、是否存在 Token、授权结果及脱敏错误，永远不输出密码、Token、Cookie、原始完整 Header；账号退出须经用户明确操作或可重复验证的授权结论。
 
 上述属于通用方法。JavDB 的具体路径、历史兼容补丁和未验证风险记录在 `apps/video/javdb/releases/3.9.59-test.1/AUTH_SURFACE_AUDIT.md`。
+
+## 2026-11-21 · 图片链自动识别与脱敏诊断的可复用流程
+
+51吃瓜 Test2 提炼的图片兼容方法（**静态和模拟已通过，Android 实机仍需验收**）：
+
+- 分开记录四层事实：文章卡确实存在 → 原始 URL 是否提取到 → 资源请求是否携带正确 User-Agent/Referer/Cookie → 资源实际是明文图还是 AES 密文。卡片只剩标题/空白并不能直接证明密钥失效。
+- 图片字段解析采用局部卡片优先：`data-original / data-src / data-echo / data-lazy-src / srcset / CSS background-image / 页面已有 JS loader`，先在具体文章卡内部提取，再做有限上下文兜底，避免跨文章串封面。
+- 只有已确认的加密/可疑图片路径才附加 ImageAdapter 的解密回调；回调中用 BufferedInputStream 的 `mark → read magic bytes → reset` 无损检查 JPEG/PNG/GIF/BMP/WebP/AVIF/ICO，明文立即返回 InputStream，否则调用已有 Crypto/AES 解密；不要使用 string/base64 把整张图片交给普通 UI。
+- 保持 `@headers` 在图像 `@js` 回调之前，保留源站请求头和历史 Crypto Key/IV，不影响播放、页面解析或本地数据模型。
+- 结合测试版独立的「封面诊断」页面显示文章数量、封面数量、图片域名、加密路径统计和自动/原始两种受控图片对照；不展示密码/Cookie，也不上传图片、浏览历史或账号字段。
+- Local-First 多版本同源程序延续不可变原业务快照，新增小补丁用独立 Git Ref 固定，不能让 Builder 默默把所有旧模块切到 `main`，否则丢失已验闭包。
