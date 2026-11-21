@@ -1,0 +1,2 @@
+云口令，51吃瓜 Test4 · 排除公共宣传图与封面归属核验，复制整条口令打开海阔视界导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/51chigua/cloud_import_test4_verified_cover.js@import=js:eval(fetch(input))
