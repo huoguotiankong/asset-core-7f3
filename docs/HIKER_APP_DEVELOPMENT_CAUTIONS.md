@@ -1217,3 +1217,13 @@ JavDB v3 Test59 的真实截图显示搜索 JWTVerificationError。其 Shell 的
 以后修复登录/JWT 必须遍历：**Shell 页面路由与 searchFind → Core/Custom 入口 → 真实请求 helper → 最终 Header/签名 → 是否为 GET/POST → 账号状态影响**。不要再通过人工列几个 JDB 方法的白名单判断“全局鉴权完成”；同质 Core 无参页可以在严格格式匹配下统一注入，但复杂调用必须保留原上下文，Custom 只能修改明确的网络 helper，禁止改动画面/菜单/媒体协议。直接接口成功也不等于页面已调用修复版模块，必须用真实运行链模拟及安卓实机截图佐证。
 
 风险边界：旧账号中心收到 JWTVerificationError 会调用 logoutUser 清 Token；旧评论点赞 POST 头未见 Authorization。**写操作、自动退出、凭据存储不得因为单个 GET JWT 故障就自动改写**，应区分当前账号仍有效、Token 已失效、单端点合同变更、缓存导致旧入口未加载。诊断只展示是否存在本地凭据与受保护端点是否成功，绝不显示 Token 原文。
+
+## 2026-11-21 · 有文章无封面时先分辨空 URL 与图片字节损坏
+
+51吃瓜实机截图：标题与两列卡片布局正常但所有封面空白。**仅凭截图不能判断是 URL 缺失、请求头/Referer、图片目录变为明文、旧 AES key 失效还是 InputStream 解密错误。** 代码排查必须同时检查每篇文章的原始 `rawImg`、最终 `pic_url`、图片字节前 24 字节（不保存私人图片内容）、源站资源路径与最后附加的 `@headers/@js`。
+
+原版 51 吃瓜的 `/xiao/` 和 `/upload/upload/` 采取无条件 AES-CBC 解密。如果源站在相同目录下改发可识别的 JPEG/PNG/WebP/AVIF，强制解密会把合法图片变成垃圾数据。因此 ImageAdapter 中先采用支持 mark/reset 的 BufferedInputStream 识别已知明文格式，无法识别才调用经过证据确认的旧 AES-CBC/PKCS7；不要在解密前关闭/消费后仍返回一个已经耗尽的 InputStream。
+
+封面 DOM 解析可扩展 `data-echo/data-lazy-src/srcset/style background-image`，但应限制在当前文章卡周边，绝不能无边界从首页全文抓第一张图充作所有文章封面。诊断应提供「原始直连 vs 自动处理」两类图、文章/封面提取计数、资源域名与脱敏路径；如果结果不匹配，优先根据设备截图定位具体阶段，不把源码测试说成实机修复成功。
+
+Screenshot 没有显示程序的 Build 时，不得根据 UI 样式擅自判定用户正在运行哪个分支。新 Test 要有独立缓存根和合法数值 Shell version，不能覆盖已验证 Stable 或 Local-First 前一 Test。
