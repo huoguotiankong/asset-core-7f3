@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "appId": "51chigua",
+  "name": "51吃瓜",
+  "channel": "test-experimental",
+  "version": "0.1.1-test.4",
+  "build": 10204,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10106,
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "0.1.1-test.3",
+    "build": 10203,
+    "deviceResult": "All article cards render identical website promotion banner; not article-specific cover."
+  },
+  "snapshotRef": "9bfc77fe270c30bad1228e8a8ea93842c6c9a75f",
+  "entry": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.4/local_entry.js",
+    "ref": "14a3bece199e007b09fbf06fd101e9ac43e40cda",
+    "blob": "5857c294c970b8685d01a53ccac028d977d2b3bf"
+  },
+  "builder": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.4/local_bundle_builder.js",
+    "ref": "a034dea0ada7041fa5030f59e4aeac7c8eeeb014",
+    "blob": "90bf39ac9f54bbf499770e12bd48b0e9cae817da"
+  },
+  "verifiedCover": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.4/verified_cover_patch.js",
+    "ref": "e9449ee17cfb8d6622a3235928d010fba1d0e0f1",
+    "blob": "bd59b549d70c47501d20fe0c3c062f6f4884efde"
+  },
+  "shell": {
+    "path": "apps/video/51chigua/51chigua_remote_test_localfirst_v4_b10204.txt",
+    "blob": "768e5d53e62e61cb07306369726b8f7eef2a20be",
+    "ruleVersion": 2026112103,
+    "pages": 11
+  },
+  "dependencies": [
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/final_local_patch.js",
+      "ref": "57fbba3bc1617541d275051611ef10aa73f8d4e6"
+    },
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/image_compat_patch.js",
+      "ref": "9afe6d4c059f7921bc3b9a414c5d68194b8ef113"
+    }
+  ],
+  "changes": [
+    "Stop treating site-default og:image / common related-page placeholder as article-specific cover; suppress shared resources across different article identities.",
+    "Reject known theme images, generic logo, site promotional images and repeated cover URLs even when valid downloadable images.",
+    "Recover independently verifiable article-specific imagery only, first from list cards and then capped detail article body / metadata; cross-post dedup before caching.",
+    "Do not reuse Test3 cg51_cover_meta_cache_v3: new isolated b10204 local runtime and cg51_verified_cover_cache_v4 records, with 3-day positive and 6-hour no-cover cache.",
+    "Image diagnostic shows readable counts for shared/generic rejection, unique covers, detail requests and cache status.",
+    "Keep original AES-compatible image URL/headers and all previously stable search/category/playback/history/favorites UI without changes."
+  ],
+  "evidence": [
+    "User 2026-11-21 10:58 screenshot: same 51吃瓜 promotional image displayed on every article card with different titles.",
+    "Live article pages on 51cg1.com show shared site-level image resources, while no distinct thumbnail HTML contract was verified for user device.",
+    "Test3 source returns first valid og:image with no per-article identity check; saves it under each article path for 3 days."
+  ],
+  "verification": {
+    "static": [
+      "JS syntax of new patch, builder, entry, generated 20-source runtime passed.",
+      "Image mock: shared 3-post OG image rejected; unique images accepted; repeated list thumbnail replaced by distinct detail image; theme/site-logo image rejected; homepage global meta excluded.",
+      "Simulated positive-cache reuse, short-lived negative cache; new runtime has no Test3 source/cache references.",
+      "Local-First builder 20 sources (13 JS+7 SVG), 83,522-byte simulated bundle; shell v2026112103 with 11 pages."
+    ],
+    "pending": [
+      "Real Hiker 8.83 Android tests: article-specific cover availability and correct matching.",
+      "Actual source HTML may not provide distinct per-article images at all. If unavailable, do not fabricate cover image.",
+      "Details/route performance, playback, comments, history and favorites regression."
+    ]
+  },
+  "status": "isolated Test4, no real device acceptance yet; some cards may intentionally be text-only when no verified cover",
+  "stableChanged": false,
+  "latestChanged": false,
+  "activeTestChanged": false,
+  "updatedAt": "2026-11-21"
+}
