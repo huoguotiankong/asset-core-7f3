@@ -2,6 +2,39 @@
 
 > 当前恢复入口。Local-First 迁移前的 Test1-Test5 / Stable0.1.0 / 图片 AES、评论、播放、分类、搜索完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
+## 2026-11-21 · 0.1.1-test.4 / Build10204 · 文章封面归属验证与通用图片污染隔离
+
+### 用户 10:58 实机结果 / 修正 Test3 的错误结论
+- 用户上传 Test3 实机首页截图：多篇不同标题的文章卡已不再空白，但**每张卡均显示完全相同的 51吃瓜宣传图**，不是文章独立封面。因此 Test3 属于「图可显示但关联错误」，不能晋级 Stable。
+- 核对 Test3 `detailCover`：直接按 `og:image → twitter:image → ...` 返回第一个有效 URL，不验证网站模板图片、是否与文章相关或是否跨文章重复；`cg51_cover_meta_cache_v3` 把误选图片存三天，导致错误长期重复出现。
+- 在当前公开 51cg1.com 文章页面上，不同文章确实可观察到共用主题资源（例如 `/usr/themes/Mirages/images/chigua.png`）。**该证据只能说明通用资源存在，不证明所有文章都没有专属封面**；在没有手机抓到真实图片 HTML/JS 规则前不得虚构 CDN 地址、AES 密钥或文章缩略图 API。
+
+### Test4 实施
+- 新增 `apps/video/51chigua/releases/0.1.1-test.4/verified_cover_patch.js`，直接从 Test2 的已固定页面/图片兼容业务链派生，不加载 Test3 错误 `cover_source_patch.js`。
+- 先处理列表已有图片：同张 URL（规范化掉 Query/Fragment）出现在**不同文章卡**、命中已知网站 Logo/主题资源/默认宣传图片，均不认作文章封面，清除错误 `rawImg/img`。不得把列表附近网站横幅分配给所有文章。
+- 仅对仍无专属封面的文章有限回退对应详情 HTML（批量最多 8 条，批量不可用时顺序最多 3 条），优先对应文章正文内部 IMG，再看文章 meta og:image / twitter:image，最终跨全部文章候选进行重复资源过滤；未找到可信封面就保留缺失状态，不用公共图假扮。
+- 全新缓存 `cg51_verified_cover_cache_v4`，**不读取 Test3 的 `cg51_cover_meta_cache_v3`**；仅经归属验证的图片缓存三天，无图结果最多缓存六小时，防止重复耗时。
+- 「封面诊断 Test4」直接在可见 title 中显示：文章总数、原始 URL 数、通用/重复封面排除数、详情请求数、真正不同的封面命中数、最终有效与缺失数、资源域名及代表性排除原因。
+- Test2 图片明文识别、AES-CBC/PKCS7、图片 headers、文章/搜索/分类、正文、播放、评论、收藏/历史及原有 UI 其它部分保持原运行链。
+- 新规则壳 version=2026112103，缓存根 `b10204`，独立 Test4 云口令；Stable 0.1.0、Latest 和活动 Test1 不动。
+
+### 已验证与限制
+- 隔离模拟验证：三个不同文章的相同 OG 图片全部排除；两个不同文章独立图片正常保留；列表共享图但详情存在各自封面时可恢复；官网主题 Logo 直接排除；首页默认 meta 不作为对应文章图；已验证图片命中可由新缓存复用。
+- 完整 Builder 从 20 个本地来源（13 JS + 7 SVG）组成约 83,522 字节 Runtime，通过 JS 语法、无 Test3 模块/错误缓存引用、固定源码和 Shell 结构检查。
+- **实机尚未验证**。目前源站公开文章 HTML 不一定包含独立缩略图；这意味着部分卡可能仍无图片。正确策略是标识为缺图，而不是再次造出同一张网站海报，更不能宣称封面完全恢复。
+- 后续实机应截首页和「设置与诊断 → 封面诊断 Test4」页面。若最终有效封面数仍为零，需要取得具体文章的 HTML 图片字段／图片 JS 加载协议的可信证据后才能继续接适配器。
+
+### 交付
+- Entry: `apps/video/51chigua/releases/0.1.1-test.4/local_entry.js`
+- Builder: `apps/video/51chigua/releases/0.1.1-test.4/local_bundle_builder.js`
+- Patch: `apps/video/51chigua/releases/0.1.1-test.4/verified_cover_patch.js`
+- Release: `apps/video/51chigua/releases/0.1.1-test.4/release.json`
+- Shell: `apps/video/51chigua/51chigua_remote_test_localfirst_v4_b10204.txt`
+- Import: `apps/video/51chigua/cloud_import_test4_verified_cover.js`
+- 云口令: `apps/video/51chigua/cloud_token_test4_verified_cover.txt`
+
+---
+
 ## 2026-11-21 · 0.1.1-test.3 / Build10203 · 封面无 URL 的详情元数据回退
 
 ### 用户 09:41 实机诊断截图与根因边界
