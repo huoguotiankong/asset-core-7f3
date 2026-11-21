@@ -2,6 +2,41 @@
 
 > 当前恢复入口。Local-First 迁移前的 Test1-Test5 / Stable0.1.0 / 图片 AES、评论、播放、分类、搜索完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
+## 2026-11-21 · 0.1.1-test.3 / Build10203 · 封面无 URL 的详情元数据回退
+
+### 用户 09:41 实机诊断截图与根因边界
+- 用户已打开 Test2 的「51吃瓜 · 封面诊断」，显示「封面修复 Test2」「首页与文章」「封面解析」「无封面 URL」。
+- 由此确认 **Test2 诊断程序在手机上已执行**，但该次诊断没有取得第一张有效的 `rawImg`。**不等于首页或文章一定可访问**：旧诊断的 `text_2` 描述没有正常显示，实际文章数、封面数、HTML 长度均不可见。
+- 因为地址为空，不能继续把 AES 密钥、CBC 图片解密或 CDN 响应当成当前首要原因。用户的实际结果优先于之前的解析模拟。不能宣称 Test2 修好了封面。
+- 再审查了 Core `C.parsePosts`：提取 `/archives/数字/` 文章链接，封面仅搜索本地 HTML 图像及附近上下文。Test2 虽扩展字段，但没有在首页无图时针对单篇文章详情的 `og:image`、`twitter:image`、JSON-LD 等元数据补偿。
+- 外部网页检索只能证实官网可索引文章列表，未能直接取得手机同一 HTML 的真实封面字段、图片字节；**详情 metadata 回退仍属于候选修复，不是已实机证实的当前源站协议**。
+
+### Test3 修改
+- 新模块 `apps/video/51chigua/releases/0.1.1-test.3/cover_source_patch.js` 放在不可变 Stable 业务链、Test2 Local-First 与 AES 兼容模块之后，尽量只处理封面来源和诊断。
+- 首页、分类、搜索渲染前，检查每张文章卡片的原始封面 URL；只有缺失时，有限批量请求同站文章详情（最多 12 个／页；无 batchFetch 时最多顺序 4 个），依次尝试 og:image / twitter:image / 图片 JSON-LD / 视频 poster / 文章正文图片，找不到不借其它文章图片冒充。
+- 成功封面按文章路径缓存三天，存储总记录不超过 120，避免频繁重新请求；沿用原 `C.image()` 的 Referer、User-Agent、Cookie 与 Test2 明文识别/AES 回退，不改播放、评论、历史和收藏。
+- 改写 `R.imageDiag()`，所有关键数值直接出现在 `text_1.title` 中：HTML 长度、首页状态、文章数量、原始/最终封面数、详情请求与元数据命中、缓存命中、img/source/lazy/og:image/链接等 HTML 结构线索；有样本才展示自动兼容与原始直连两张图片，不上传 HTML、图片、账号信息。
+- 新 Local-First 测试缓存 `hiker://files/rules/asset-core-local/51chigua-test/b10203/`，13 JS+7 SVG，共 20 sources；保持 10 层 Stable 业务代码固定原 SHA，Test2 两层及 Test3 修复分别固定独立 Git Ref。
+- Test3 Shell rule version `2026112102`，11 页面，独立云口令，不改 Stable0.1.0、Latest、活动 Test1。
+
+### 验证
+- 模拟「首页文章链接存在但没有 img，详情页 meta og:image 有图」：能够补齐两列卡片 `rawImg` 和 `img`；重复请求从本地缓存命中，不重复发详情请求。
+- 模拟新诊断 `text_1` 直接显示文章/图片/详情请求和图片域名等计数，解决 Test2 数字不显示的诊断缺陷。
+- Builder 以固定源码模拟拼接 20 sources，生成 81,085 字节 Runtime，语法通过、旧远程业务源码依赖门禁通过；Bootstrap 与新规则壳构建检查通过。
+- **待实机验证**：主页是否确有可用的详情元数据；CDN 请求/图片解密是否有效；首页回退请求耗时；搜索分类、正文图及播放器是否回归。
+- 如果 Test3 仍没有封面，只需提供新的「封面诊断 Test3」截图，以数值明确区别 HTML/解析/详情请求/图片显示环节，不继续盲目修改 AES。
+
+### 工件
+- Entry: `apps/video/51chigua/releases/0.1.1-test.3/local_entry.js`
+- Builder: `apps/video/51chigua/releases/0.1.1-test.3/local_bundle_builder.js`
+- Patch: `apps/video/51chigua/releases/0.1.1-test.3/cover_source_patch.js`
+- Release: `apps/video/51chigua/releases/0.1.1-test.3/release.json`
+- Shell: `apps/video/51chigua/51chigua_remote_test_localfirst_v3_b10203.txt`
+- Import: `apps/video/51chigua/cloud_import_test3_cover.js`
+- Token: `apps/video/51chigua/cloud_token_test3_cover.txt`
+
+---
+
 ## 2026-11-21 · Test2 封面实机失败回报与诊断闭环（不晋级）
 
 ### 新实机反馈
