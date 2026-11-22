@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "51chigua-test",
+  "appId": "51chigua",
+  "name": "51吃瓜",
+  "channel": "test-experimental",
+  "version": "0.1.1-test.5",
+  "build": 10205,
+  "baseStable": {
+    "version": "0.1.0",
+    "build": 10106,
+    "untouched": true
+  },
+  "previousTest": {
+    "version": "0.1.1-test.4",
+    "build": 10204,
+    "deviceResult": "User reports covers still fail; no Test4 diagnostic numeric screenshot was supplied."
+  },
+  "referenceArtifact": {
+    "filename": "51吃瓜网.hk小程序.zip",
+    "member": "rule.json",
+    "scope": "Parsed exact article-card cover extraction from user-supplied standalone Hiker rule; did NOT import its home, search, detail or playback implementations."
+  },
+  "snapshotRef": "9bfc77fe270c30bad1228e8a8ea93842c6c9a75f",
+  "entry": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.5/local_entry.js",
+    "ref": "529da67b00a3d33701be2bf8f8c6b23cead4d1cc",
+    "blob": "21d50ebbed24a8896f277f74e7b0dc2930be7d7c"
+  },
+  "builder": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.5/local_bundle_builder.js",
+    "ref": "4d0a5a3b879c246e4396e5e2f70e15c6ef39ef18",
+    "blob": "29c74334fb86e1c4d45401791b9b64a4ac3bf74a"
+  },
+  "articleCardCover": {
+    "path": "apps/video/51chigua/releases/0.1.1-test.5/article_card_cover_patch.js",
+    "ref": "1e4fefae70e3a581e1cdc0bf64ee912ae70f9af8",
+    "blob": "f2b43bc5224e96846ee5061a7d1551e4e72f4d0c"
+  },
+  "shell": {
+    "path": "apps/video/51chigua/51chigua_remote_test_localfirst_v5_b10205.txt",
+    "blob": "19c4104e3f13c1438fb045d7dfb1f95f3da876f0",
+    "ruleVersion": 2026112201,
+    "pages": 11
+  },
+  "unchangedDependencies": [
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/final_local_patch.js",
+      "ref": "57fbba3bc1617541d275051611ef10aa73f8d4e6"
+    },
+    {
+      "path": "apps/video/51chigua/releases/0.1.1-test.2/image_compat_patch.js",
+      "ref": "9afe6d4c059f7921bc3b9a414c5d68194b8ef113"
+    }
+  ],
+  "actualFix": [
+    "Match each list item by exact /archives/{id}/ and its own <article itemtype=http://schema.org/BlogPosting> block.",
+    "Read reference-specific [a-z]-bg-loader-url first, loadBannerDirect second, then inline img attributes within same article only.",
+    "For direct bg-loader assets append ?v=2 and reference AES-CBC PKCS7 @js callback with same observed reference key/IV; for known encrypted loadBannerDirect paths use the same; for unencrypted inline images retain existing C.image header handling.",
+    "Reject generic site/logo images and repeated raw image URL assigned to separate article IDs.",
+    "Do not use Test3 OG fallback or Test4 cross-page default metadata cache; no per-post detail requests needed.",
+    "Constrain adapter to C.home, C.category, C.search output after legacy C.parsePosts to avoid touching detail related content, comments, player, and history.",
+    "Visible per-article cover diagnostics: article block count, exact field source, matched/unique/duplicate/missing counts, CDN domains and deidentified article sample paths."
+  ],
+  "tests": {
+    "offline": [
+      "ZIP rule.json read directly; source exact regex and AES @js implementation inspected.",
+      "Full established Core/Runtime/JavDB-independent 12-module source plus Test5: fixture 4 BlogPosting cards, two shared image URLs excluded, two article-specific thumbnails mapped correctly.",
+      "Home, category, search adapter executes; C.parsePosts for detail related unchanged.",
+      "Full builder compiled 20 sources (13 JS+7 asset placeholders), 80,952-byte simulated runtime with no Test3/Test4 cover cache references and JS syntax valid.",
+      "Shell JSON parses as 11 pages, rule version 2026112201, isolated cache root b10205."
+    ],
+    "pending": [
+      "Device actually displays per-article covers using original attached rule's @js AES chain.",
+      "Live list HTML includes [a-z]-bg-loader-url or loadBannerDirect fields on user's active domain.",
+      "Image CDN request/response and decode under Hiker 8.83.",
+      "Search/category, detail images, video, comments and history regression."
+    ]
+  },
+  "status": "test only; attachment-derived parser static and integration tests passed; device cover acceptance pending",
+  "stableChanged": false,
+  "latestChanged": false,
+  "activeTestChanged": false,
+  "updatedAt": "2026-11-22",
+  "cacheRoot": "hiker://files/rules/asset-core-local/51chigua-test/b10205/"
+}
