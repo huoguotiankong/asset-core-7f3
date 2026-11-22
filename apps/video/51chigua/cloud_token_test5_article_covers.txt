@@ -1,0 +1,2 @@
+云口令，51吃瓜 Test5 · 参考附件修复文章真实封面，复制整条口令打开海阔视界导入
+https://raw.githubusercontent.com/huoguotiankong/asset-core-7f3/main/apps/video/51chigua/cloud_import_test5_article_covers.js@import=js:eval(fetch(input))
