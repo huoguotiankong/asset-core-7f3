@@ -7,7 +7,8 @@
 (function(){
 if(typeof Cg51Core!=='object'||typeof Cg51RemoteRuntime!=='object')
   throw Error('51吃瓜 Test5 需要原 Core 与 Runtime');
-var C=Cg51Core,R=Cg51RemoteRuntime,V='0.1.1-test.5',BUILD=10205,oldParse=C.parsePosts;
+var C=Cg51Core,R=Cg51RemoteRuntime,V='0.1.1-test.5',BUILD=10205,
+  oldHome=C.home,oldCategory=C.category,oldSearch=C.search;
 C.version=V;C.build=BUILD;C.articleCoverVersion=V;R.version=V;R.build=BUILD;
 function S(x){return String(x==null?'':x);}
 function articleId(x){var m=/\/archives\/(\d+)(?:\/|[?#]|$)/i.exec(S(x));return m?m[1]:'';}
@@ -88,8 +89,9 @@ function coverUrl(entry,article){
   var mark=/(?:[?&])v=\d+(?:&|$)/i.test(u)?'':(u.indexOf('?')<0?'?v=2':'&v=2');
   return u+mark+exactAES();
 }
-C.parsePosts=function(html,base){
-  var posts=oldParse.call(C,html,base)||[],r=sourceCards(html,base);
+function applyCover(result){
+  if(!result||!(result.posts instanceof Array))return result;
+  var posts=result.posts,html=result.html,base=result.url,r=sourceCards(html,base);
   var counts={},i,p,id,entry,key,trace={protocol:'BlogPosting + bg-loader-url',
     posts:posts.length,articles:r.stats.article,bg:r.stats.bg,banner:r.stats.banner,
     inline:r.stats.inline,matched:0,duplicates:0,final:0,missing:0,hosts:{},sample:[]};
@@ -112,8 +114,13 @@ C.parsePosts=function(html,base){
     if(trace.sample.length<2)trace.sample.push({id:id,kind:entry.kind,path:C.pathOf(entry.url).replace(/[?#].*$/,'').slice(0,110)});
   }
   C._cardCoverTrace5=trace;
-  return posts;
-};
+  return result;
+}
+// Only list feeds are transformed. Detail's related cards and Settings' internal
+// parsePosts calls remain on the unchanged historical business implementation.
+C.home=function(page){return applyCover(oldHome.call(C,page));};
+C.category=function(u,page){return applyCover(oldCategory.call(C,u,page));};
+C.search=function(q,page){return applyCover(oldSearch.call(C,q,page));};
 R.imageDiag=function(){
   try{setPageTitle('51吃瓜 · 封面协议 Test5');}catch(e){}
   var d=[],trace={},r=null;
