@@ -2,6 +2,51 @@
 
 > 当前恢复入口。Local-First 迁移前的 Test1-Test5 / Stable0.1.0 / 图片 AES、评论、播放、分类、搜索完整历史归档在 `CHANGELOG_PRE_LOCAL_FIRST_20260825.md`。事实优先级：用户当前实机 > main 当前 Shell/Release/源码 > 本文件 > registry/manifest > 历史归档。
 
+## 2026-11-22 · 0.1.1-test.5 / Build10205 · 从用户上传真实 HK 规则恢复文章封面协议
+
+### 用户事实和直接参考
+- 用户确认 **Test4 封面仍然不正确**，并上传 `51吃瓜网.hk小程序.zip`，要求参考原规则优化我们的小程序。该 ZIP 已实际解压，唯一文件为 `rule.json`（约 13.5 KB）。
+- 附件是独立海阔原生规则，`find_rule` 和 `searchFind` 均具备按文章卡片提取封面的实现。其基础协议为：
+  1. `html.split(/<article[^>]*itemtype="http:\/\/schema\.org\/BlogPosting"[^>]*>/)` 将整个 HTML 拆成文章区块，而不是只取 `<img src>` 或在链接附近抓第一张图；
+  2. 用 `/archives/(\d+)/` 匹配文章 ID，并在**该 article 区块中**查找 `/[a-z]-bg-loader-url="([^"]+)"/`；
+  3. 若背景封面属性缺失，检查同卡 `loadBannerDirect('...')`；
+  4. 对 `bg-loader-url` 的图片和 `/xiao/|/upload/upload/|/upload_01/|/uploads/` 中指定图片，附件使用 `thumb + '?v=2' + IMGJS`，其中 `IMGJS='@js='+$.toString(...AES-CBC PKCS7...)` 且 crypto 使用内置 `hiker://assets/crypto-java.js`，key/IV 与我们历史版本相同；
+  5. 可见文章标题和日期来自同一区块 `post-card-title`、`datePublished` 字段。
+- 附件还包含多域名 `BASES` 故障切换、搜索和详情懒加载播放等逻辑。本轮**仅移植已明确的文章封面协议**，不盲目替换我们已经成熟的首页 UX、搜索、详情、评论、播放、收藏、历史。
+
+### 为什么 Test2～Test4 一直没修好
+- Test2 虽补充 `data-src/srcset/img`，却没有以整篇 `BlogPosting` 为单位提取 `[a-z]-bg-loader-url`；
+- Test3 用站点通用 `og:image` 冒充所有文章封面，错误关联曾在用户实机截图中得到确认；
+- Test4 排除了共用宣传图，却仍未找到附件中明确指向的真实封面属性，导致不能正确恢复独立缩略图。
+- 新协议比反复修改 AES 密钥和替换 CDN Host 更有直接证据。**附件源码中存在此协议 ≠ 已证实当前用户选用的域名 100% 采用它，必须实机验证。**
+
+### Test5 的独立模块化修复
+- 新模块：`apps/video/51chigua/releases/0.1.1-test.5/article_card_cover_patch.js`。
+- 在已有 12 层业务/图片兼容代码之后，限定只包装 `C.home/C.category/C.search` 返回的 **文章列表**；通过 `BlogPosting` 区块 + `/archives/{id}/` 精确将封面绑定到文章；优先取 `[a-z]-bg-loader-url`，备用 `loadBannerDirect`，最后仅从当前卡片取普通 img，拒绝站点 Logo 和跨不同文章重复图片。
+- 从附件复用精确的 `?v=2 + @js` AES-CBC/PKCS7 形式处理 bg-loader 封面（以及按附件限定目录的 JS banner），其它普通图片仍走我们原有 `C.image` Header 处理。
+- 不加载 Test3 的 `og:image` 回退，不加载 Test4 封面模块，也不读取 `cg51_cover_meta_cache_v3` / `cg51_verified_cover_cache_v4` 错误缓存；无需详情页多请求来拼封面。
+- **重要隔离**：不全局覆盖 `C.parsePosts`，而是在首页/分类/搜索结果上后处理；因此详情的相关推荐、评论和播放依然用原解析器，不会被错误清空图片。
+- `设置与诊断 → 封面与图片诊断` 改成逐项可见的封面协议统计：BlogPosting 区块数、bg-loader 数量、JS Banner 数量、文章 ID 精确匹配数、去重数、最终独立封面数、图片域名及短路径。
+- 独立 Local-First 根 `hiker://files/rules/asset-core-local/51chigua-test/b10205/`，Shell 数值版本 `2026112201`、11 页面，旧正式 Stable 0.1.0 / Latest 与活动 Test1 不变。
+
+### 离线验证结果和实机门槛
+- 已在**完整原有 Core/Runtime/补丁链**上执行合成的 `<article itemtype="BlogPosting">` HTML，准确识别 bg-loader、`loadBannerDirect`、内联 img；用文章 ID 绑定封面、识别两个不同文章复用 URL 并排除，避免宣传图污染。
+- 同样的封面处理适用于首页、分类与搜索。对文章相关推荐的原始 `C.parsePosts` 函数保持不变。
+- 完整 Local-First Builder（真实 13 个 JS，7 个模拟有效 SVG 资产）生成 20 来源、80,952 字节 Runtime，语法与禁用旧缓存/旧远程业务依赖检查通过。**不是 Android 实机或真实 CDN 解密验证。**
+- 待用户导入 Test5 后检查：首页不同文章是否出现不同封面，分类/搜索是否保持正确；必要时截图「封面诊断 Test5」的文章/BlogPosting/bg-loader/匹配/缺图数。若字段为零，再验证当前域名是否与附件的域名列表返回不同 HTML，不能再次猜测。
+- 不宣布封面已经在设备上修复，不晋级 Stable。
+
+### 本版文件
+- Entry: `apps/video/51chigua/releases/0.1.1-test.5/local_entry.js`
+- Builder: `apps/video/51chigua/releases/0.1.1-test.5/local_bundle_builder.js`
+- Cover: `apps/video/51chigua/releases/0.1.1-test.5/article_card_cover_patch.js`
+- Release: `apps/video/51chigua/releases/0.1.1-test.5/release.json`
+- Shell: `apps/video/51chigua/51chigua_remote_test_localfirst_v5_b10205.txt`
+- Import: `apps/video/51chigua/cloud_import_test5_article_covers.js`
+- Token: `apps/video/51chigua/cloud_token_test5_article_covers.txt`
+
+---
+
 ## 2026-11-21 · 0.1.1-test.4 / Build10204 · 文章封面归属验证与通用图片污染隔离
 
 ### 用户 10:58 实机结果 / 修正 Test3 的错误结论
